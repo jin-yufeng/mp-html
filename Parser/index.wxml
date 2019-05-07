@@ -1,0 +1,234 @@
+<!--Parser-->
+<template name='element'>
+  <!--图片-->
+  <rich-text wx:if="{{item.name=='img'}}" style="display:{{item.attrs.display}}" nodes='{{[item]}}' data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewImg'></rich-text>
+  <!--文本-->
+  <text wx:elif="{{item.type=='text'&&!item.decode}}" decode>{{item.text}}</text>
+  <!--视频-->
+  <video wx:elif="{{item.name=='video'}}" src='{{item.attrs.src}}' loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}" />
+  <!--音频-->
+  <audio wx:elif="{{item.name=='audio'}}" src='{{item.attrs.src}}' loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' poster='{{item.attrs.poster}}' name='{{item.attrs.name}}' author='{{item.attrs.author}}' style="{{item.attrs.style}}" />
+  <!--富文本-->
+  <rich-text wx:else class="{{(item.name||item.type)+'_rich'}}" nodes="{{[item]}}"/>
+</template>
+<!--入口-->
+<slot wx:if="{{!nodes.length}}"></slot>
+<scroll-view scroll-x scroll-y wx:if="{{scroll}}">
+  <template is='rich-text-floor1' data='{{nodes}}' />
+</scroll-view>
+<template wx:else is='rich-text-floor1' data='{{nodes}}' />
+<!--各层级-->
+<template name='rich-text-floor1'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor2' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor2' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor2'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor3' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor3' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor3'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor4' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor4' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor4'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor5' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor5' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor5'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor6' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor6' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor6'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor7' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor7' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor7'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor8' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor8' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor8'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor9' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor9' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor9'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor10' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor10' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor10'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor11' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor11' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor11'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor12' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor12' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor12'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor13' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor13' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor13'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor14' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor14' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor14'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor15' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor15' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor15'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor16' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor16' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor16'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor17' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor17' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor17'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor18' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor18' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor18'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor19' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor19' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor19'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
+      <template is='rich-text-floor20' data='{{nodes:item.children}}' />
+    </navigator>
+    <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
+      <template is='rich-text-floor20' data='{{nodes:item.children}}' />
+    </view>
+  </block>
+</template>
+<template name='rich-text-floor20'>
+  <block wx:for='{{nodes}}' wx:key>
+    <template is='element' data='{{item}}' />
+  </block>
+</template>

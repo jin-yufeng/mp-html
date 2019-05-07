@@ -1,0 +1,56 @@
+<!--pages/test/test.wxml-->
+<view class="page">
+  <view class="page__hd">
+    <view class="page__title">自定义测试</view>
+    <view class="page__desc">您可以输入html字符串或点击下方模板进行测试</view>
+  </view>
+  <view class="page__bd">
+    <view class="weui-cells__title">解析结果</view>
+    <view class="weui-cells weui-cells_after-title" style="padding:10px 15px">
+      <Parser html="{{html}}" />
+    </view>
+    <form bindsubmit='parseHtml' bindreset='clearHtml'>
+      <view class="weui-cells__title">输入字符</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <textarea name="html" value="{{htmlString}}" bindinput="inputHtml" class="weui-textarea" placeholder="请输入数据" style="height:10em" maxlength='-1' />
+          </view>
+        </view>
+      </view>
+      <view style="display:flex;justify-content:center;margin-top:5px;margin-bottom:5px;">
+        <view class="label" data-type="table" bindtap="addTemplate">表格</view>
+        <view class="label" data-type="list" bindtap="addTemplate">列表</view>
+        <view class="label" data-type="img" bindtap="addTemplate">图片</view>
+        <view class="label" data-type="video" bindtap="addTemplate">视频</view>
+        <view class="label" data-type="a" bindtap="addTemplate">链接</view>
+      </view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+            <view class="weui-label">解析模式</view>
+          </view>
+          <view class="weui-cell__bd">
+            <picker name="mode" bindchange="changeMode" value="{{modeIndex}}" range="{{modes}}">
+              <view class="weui-select weui-select_in-select-after">{{modes[modeIndex]}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_select" wx:if="{{modeIndex!=0}}">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
+            <view class="weui-label">代码高亮</view>
+          </view>
+          <view class="weui-cell__bd">
+            <picker name="styles" bindchange="changeStyle" value="{{styleIndex}}" range="{{styles}}">
+              <view class="weui-select weui-select_in-select-after">{{styles[styleIndex]}}</view>
+            </picker>
+          </view>
+        </view>
+      </view>
+      <view class="weui-btn-area">
+        <button class="weui-btn" form-type='submit' type="primary">解析</button>
+        <button class="weui-btn" form-type='reset'>清空</button>
+      </view>
+    </form>
+  </view>
+</view>

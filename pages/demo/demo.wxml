@@ -1,0 +1,12 @@
+<!--pages/demo/demo.wxml-->
+<Parser html='{{html}}' bindlinkpress="downloadfile">
+  <view class="loading-cell">
+    <view class="line-bounce">
+      <text></text>
+      <text></text>
+      <text></text>
+      <text></text>
+      <text></text>
+    </view>
+  </view>
+</Parser>

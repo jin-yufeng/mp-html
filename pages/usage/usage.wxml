@@ -1,0 +1,141 @@
+<!--pages/usage/usage.wxml-->
+<view class="page" style="text-align:justify">
+  <view class="page__hd">
+    <view class="page__title">使用方法</view>
+    <view class="page__desc">Usage</view>
+  </view>
+  <view class="page__bd">
+    <view class="weui-article">
+      <view class="weui-article__h1">前端使用</view>
+      <view class="weui-article__h2">使用步骤</view>
+      <view class="weui-article__section">
+        <Parser html='<ol><li>下载<code>Parser</code>文件夹至小程序目录</li><li>在需要使用页面的<code>json</code>文件中添加</li></ol>' tagStyle="{{tagStyle}}" />
+        <view style="margin-left:10%;">
+          <Parser html="{{json}}" />
+        </view>
+        <Parser html='<ol start=3><li>在需要使用页面的<code>wxml</code>文件中添加</li></ol>' tagStyle="{{tagStyle}}" />
+        <view style="margin-left:10%;">
+          <Parser html="{{wxml}}" />
+        </view>
+        <Parser html='<ol start=4><li>在需要使用页面的<code>js</code>文件中添加</li></ol>' tagStyle="{{tagStyle}}" />
+        <view style="margin-left:10%;">
+          <Parser html="{{js}}" />
+        </view>
+      </view>
+      <view class="weui-article__h2">组件属性</view>
+      <view class="weui-article__section" style="font-size:13px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+        <view style="display:flex;font-weight:bold;">
+          <view class="td" style="width:25%">属性</view>
+          <view class="td" style="width:25%;">类型</view>
+          <view class="td" style="width:15%;">默认</view>
+          <view class="td" style="width:35%;">说明</view>
+        </view>
+        <view wx:for="{{attrs}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+          <view class="td" style="width:25%">{{item.name}}</view>
+          <view class="td" style="width:25%;">
+            <text>{{item.type}}</text>
+          </view>
+          <view class="td" style="width:15%;">{{item.default}}</view>
+          <view class="td" style="width:35%;">{{item.notice}}</view>
+        </view>
+      </view>
+      <view class="weui-article__section">
+        <Parser html='<ul><li>html格式<ol><li><code>String</code>类型：一个html字符串，如："&lt;div&gt;Hello World!&lt;/div&gt;"</li><li><code>Array</code>类型：格式基本同<code>rich-text</code>，对于节点下有图片、链接等的，需要将<code>continue</code>属性设置为<code>true</code>，否则将直接使用<code>rich-text</code>组件渲染，可能导致图片无法预览等问题（此格式传入将不能通过左右滑动查看所有图片）</li><li><code>Object</code>类型：一个形如<code>{nodes: [Array], imgList: [Array], title: "String"}</code>的结构体，nodes数组的格式同上，imgList为所有图片地址的数组，title为文章的标题（不必要，如果传入将设置到页面的标题上）回调函数<code>bindparse</code>的返回值就是该类型的结构体；2,3格式传入可以节省解析时间，提高性能</li></ol></li><br /><li>tagStyle格式<p>一个形如<code>{ name:style }</code>的结构体，name为标签名，style为需要设置的样式</p></li></ul>'
+          tagStyle="{{tagStyle}}" />
+      </view>
+      <view class="weui-article__h2">回调函数</view>
+      <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+        <view style="display:flex;font-weight:bold;">
+          <view class="td" style="width:30%">函数</view>
+          <view class="td" style="width:70%;">说明</view>
+        </view>
+        <view style="display:flex;background-color:#f6f8fa">
+          <view class="td" style="width:30%">bindparse</view>
+          <view class="td" style="width:70%">解析完成时返回（仅当传入的html为字符串类型时调用）返回值是一个形如{nodes: [Array], imgList: [Array], title: "String"}的结构体，nodes是节点数组，imgList是所有图片地址的数组，title是页面标题（可用于转发）可以将该值保存后下次调用时直接作为属性html的值，可节省解析时间</view>
+        </view>
+        <view style="display:flex;">
+          <view class="td" style="width:30%">bindlinkpress</view>
+          <view class="td" style="width:70%">链接点击时返回，返回值是被点击链接的href值，如果该链接不是简单的跳转，可以在此回调函数中进行进一步操作（如附件链接可以在这里下载和打开）</view>
+        </view>
+      </view>
+      <view class="weui-article__h2">基础库要求</view>
+      <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+        <view style="display:flex;font-weight:bold;">
+          <view class="td" style="width:30%">版本</view>
+          <view class="td" style="width:50%;">功能</view>
+          <view class="td" style="width:20%;">覆盖率</view>
+        </view>
+        <view wx:for="{{versions}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+          <view class="td" style="width:30%">{{item.version}}</view>
+          <view class="td" style="width:50%;">{{item.function}}</view>
+          <view class="td" style="width:20%;">{{item.percent}}</view>
+        </view>
+      </view>
+      <view class="weui-article__h1">后端使用</view>
+      <view class="weui-article__h2">使用步骤</view>
+      <view class="weui-article__section">
+        <Parser html="<ol><li>安装支持包</li></ol>"/>
+        <view style="margin-left:10%;">
+          <Parser html="{{npm}}"/>
+        </view>
+        <Parser html="<ol start=2><li>在需要使用的<code>js</code>文件中添加：</li></ol>" tagStyle="{{tagStyle}}"/>
+        <view style="margin-left:10%;">
+          <Parser html="{{node}}"/>
+        </view>
+      </view>
+      <view class="weui-article__h2">参数</view>
+      <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+        <view style="display:flex;font-weight:bold;">
+          <view class="td" style="width:30%">参数</view>
+          <view class="td" style="width:70%;">说明</view>
+        </view>
+        <view style="display:flex;">
+          <view class="td" style="width:30%">html</view>
+          <view class="td" style="width:70%;">html字符串</view>
+        </view>
+        <view style="display:flex;background-color:#f6f8fa">
+          <view class="td" style="width:30%">
+            <text>mode\n(选填)</text>
+          </view>
+          <view class="td" style="width:70%;">解析模式，默认为html，支持的类型有html、website、markdown(md)</view>
+        </view>
+        <view style="display:flex;">
+          <view class="td" style="width:30%">
+            <text>options\n(选填)</text>
+          </view>
+          <view class="td" style="width:70%;">一个形如{styles: "github", tagStyle: {}}的结构体，其中styles是代码高亮的风格，默认为default；tagStyle为默认的标签样式，如{body: "margin: 5px;"}</view>
+        </view>
+      </view>
+      <view class="weui-article__h2">返回值</view>
+      <view class="weui-article__section">
+        一个形如
+        <text class="code">{nodes: [Array], imgList: [Array], title: "String"}</text>的结构体，其中nodes为节点数组，可以直接应用于
+        <text class="code">rich-text</text>组件，imgList为所有图片地址的数组，title为页面标题，整个结构体可以作为
+        <text class="code">Parser</text>组件的参数
+      </view>
+      <view class="weui-article__h1">原理简介</view>
+      <view class="weui-article__section">
+        <text decode>&emsp;&emsp;</text>本插件结合了
+        <text class="code">WxParse</text>中模板循环的方式和
+        <text class="code">rich-text</text>组件，对于节点下有图片、视频、链接等的，通过模板循环的方式显示；否则则直接通过
+        <text class="code">rich-text</text>组件显示。
+        <text decode>\n&emsp;&emsp;</text>通过这样的方式，既解决了
+        <text class="code">WxParse</text>标签数过多（rich-text可以节省大量的标签），层数超过限制无法显示（超过20层的直接使用rich-text显示），无法解析表格，部分样式显示不准确（rich-text的显示效果更好）等缺陷；也弥补了
+        <text class="code">rich-text</text>图片不能预览，链接无法点击，不能显示视频，部分标签不支持（在解析的过程中替换）等问题，从而达到一个更加完美的效果。
+        <text decode>\n&emsp;&emsp;</text>且其轻量化，前后端通用等特点，也使得应用面更加广泛。
+      </view>
+      <view class="weui-article__h1">下载链接</view>
+      <view class="weui-article__section">
+        <Parser html='<div>前端插件包</div><div>&ensp;&ensp;GitHub链接：<a href="https://github.com/jin-yufeng/Parser">长按复制链接</a></div><br /><div>后端node.js加强包</div><div>&ensp;&ensp;npm链接：<a href="https://www.npmjs.com/package/parser-wxapp">长按复制链接</a></div>' />
+      </view>
+      <view class="weui-article__h1">许可</view>
+      <view class="weui-article__section">
+        您可以随意的使用和分享本项目
+      </view>
+      <view class="weui-article__h1">更新日志</view>
+      <view class="weui-article__section">
+        <Parser html="{{upgrade}}" />
+      </view>
+    </view>
+  </view>
+</view>

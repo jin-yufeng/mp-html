@@ -1,0 +1,41 @@
+<!--index.wxml-->
+<view class="page">
+  <view class="page__hd">
+    <view class="page__title">Parser</view>
+    <view class="page__desc">Parser 是一款功能强大的轻量级富文本插件，支持的标签种类丰富，无层数限制，解析效率高，稳定性强。</view>
+  </view>
+  <view class="page__bd page__bd_spacing">
+    <view class="kind-list">
+      <navigator url="../introduction/introduction" class="kind-list__item">
+        <view class="weui-flex kind-list__item-hd">
+          <view class="weui-flex__item">功能介绍</view>
+          <image class="kind-list__img" src="../../images/introduction.png"></image>
+        </view>
+      </navigator>
+      <view bindtap='seedemo' class="kind-list__item">
+        <view class="weui-flex kind-list__item-hd">
+          <view class="weui-flex__item">示例页面</view>
+          <image class="kind-list__img" src="../../images/demo.png"></image>
+        </view>
+      </view>
+      <navigator url="../test/test" class="kind-list__item">
+        <view class="weui-flex kind-list__item-hd">
+          <view class="weui-flex__item">自定义测试</view>
+          <image class="kind-list__img" src="../../images/test.png"></image>
+        </view>
+      </navigator>
+      <navigator url="../usage/usage" class="kind-list__item">
+        <view class="weui-flex kind-list__item-hd">
+          <view class="weui-flex__item">使用方法</view>
+          <image class="kind-list__img" src="../../images/usage.png"></image>
+        </view>
+      </navigator>
+      <view class="kind-list__item">
+        <button class="weui-flex kind-list__item-hd" open-type='contact'>
+          <view class="weui-flex__item">问题反馈</view>
+          <image class="kind-list__img" src="../../images/question.png"></image>
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,33 @@
+/**index.wxss**/
+page {
+  background-color: #f8f8f8;
+}
+.kind-list__item {
+  margin: 10px 0;
+  background-color: #fff;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.kind-list__item:first-child {
+  margin-top: 0;
+}
+.kind-list__img {
+  width: 30px;
+  height: 30px;
+}
+.kind-list__item-hd {
+  padding: 20px;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+  align-items: center;
+}
+button {
+  background-color: white;
+  text-align: left;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+button::after {
+  border: none;
+}
