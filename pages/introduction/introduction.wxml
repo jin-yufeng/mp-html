@@ -6,7 +6,7 @@
   </view>
   <view class="page__bd">
     <view class="weui-article">
-      <view class="weui-article__h1">前端插件包（33.0KB）</view>
+      <view class="weui-article__h1">前端插件包（35.2KB）</view>
       <view class="weui-article__h2">解析style标签</view>
       <view class="weui-article__section">
         支持按以下模式匹配（不支持的匹配模式将被直接忽略）

@@ -91,7 +91,7 @@
   <div>!
   ```  
  
-- 功能强大，支持无限层级，解析速度快，包大小仅约`33.0KB`  
+- 功能强大，支持无限层级，解析速度快，包大小仅约`34.8KB`  
 ## 使用方法 ##
 1. 下载Parser文件夹至小程序目录  
    ![页面结构](http://bmob-cdn-17111.b0.upaiyun.com/2019/05/06/ff92de3340b36dbf803addcf85659e42.png)
@@ -121,13 +121,14 @@
   | 属性 | 类型 | 默认值 | 必填 | 说明 |
   |:----:|:----:|:----:|:----:|:----:|
   | html | String/Object/Array | | 是 | 要显示的富文本数据，具体格式见下方说明 |
+  | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
   | scroll | Boolean | true | 否 | 是否允许页面横向滚动 |
   | selectable | Boolean | true | 否 | 是否允许长按复制链接 |
   | tagStyle | Object |  | 否 | 设置标签的默认样式 |
   
   - html格式：
     1. `string`类型：一个`html`字符串，例如：`<div>Hello World!</div>`
-    2. `object`类型：一个形如`{nodes: [Array], imgList: [Array], title: "String"}`的结构体，其中nodes数组的格式基本同[rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html)，对于该节点下有`img`，`video`，`a`标签的，需要将`continue`属性设置为`true`，否则将直接使用`rich-text`组件渲染，可能导致图片无法预览，链接无法点击等问题，imgList为其中所有图片地址的数组，`title`是页面的标题（不必要，传入将会设置到页面的标题上）回调函数`bindparser`的返回值就是这样的结构体
+    2. `object`类型：一个形如`{nodes: [Array], imgList: [Array], videoNum: Number, title: "String"}`的结构体，其中nodes数组的格式基本同[rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html)，对于该节点下有`img`，`video`，`a`标签的，需要将`continue`属性设置为`true`，否则将直接使用`rich-text`组件渲染，可能导致图片无法预览，链接无法点击等问题，imgList为其中所有图片地址的数组，`videoNum`是视频数量（不必要，用于`autopause`属性）`title`是页面的标题（不必要，传入将会设置到页面的标题上）回调函数`bindparser`的返回值就是这样的结构体
     3. `array`类型：格式要求同上（用此格式传入预览图片时，将`不能`通过左右滑动查看所有图片）  
     4. 使用b, c方法可以节省解析的时间，提高性能
   - 关于tagStyle  
@@ -171,6 +172,10 @@ parser(html).then(function(res){
 ## 许可 ##
 您可以随意的使用和分享本插件
 ## 更新日志 ##
+- 2019.5.10:
+  1. `A` 增加了`autopause`属性，支持选择是否允许在播放视频时自动暂停其他视频播放
+  2. `U` 在视频数量超过3时，仅加载前3个，其他的由图片取代，在受到点击时再进行加载和播放，避免页面卡死
+  3. `U` 在完成样式匹配后移除了节点的`class`和`id`属性，减小了`nodes`数组的大小，加快渲染速度
 - 2019.5.6:
   1. `A` 发布了后端`node.js`支持包 
   2. `U` 支持在`Parser`组件内加入加载提示或动画，将在未加载完成或内容为空时显示，加载完成后自动隐藏

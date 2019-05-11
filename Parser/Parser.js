@@ -132,7 +132,8 @@ Parser.prototype.onend = function() {
   this._callback({
     'nodes': this._cbs.nodes,
     'title': this._tokenizer._title,
-    'imgList': this._cbs.imgList
+    'imgList': this._cbs.imgList,
+    'videoNum': this._cbs.videoNum
   });
 };
 Parser.prototype.write = function(chunk) {

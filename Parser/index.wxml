@@ -5,7 +5,12 @@
   <!--文本-->
   <text wx:elif="{{item.type=='text'&&!item.decode}}" decode>{{item.text}}</text>
   <!--视频-->
-  <video wx:elif="{{item.name=='video'}}" src='{{item.attrs.src}}' loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}" />
+  <block wx:elif="{{item.name=='video'}}">
+    <view wx:if="{{item.attrs.id>'video3'&&!videoControl[item.attrs.id]}}" class="video" style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}" data-id="{{item.attrs.id}}" bindtap="_loadVideo">
+      <view class="triangle_border_right"></view>
+    </view>
+    <video wx:else src='{{item.attrs.src}}' id="{{item.attrs.id}}" loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' autoplay="{{videoControl[item.attrs.id]}}" style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}" data-id="{{item.attrs.id}}" bindplay='_playVideo'/>
+  </block>
   <!--音频-->
   <audio wx:elif="{{item.name=='audio'}}" src='{{item.attrs.src}}' loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' poster='{{item.attrs.poster}}' name='{{item.attrs.name}}' author='{{item.attrs.author}}' style="{{item.attrs.style}}" />
   <!--富文本-->
@@ -14,18 +19,18 @@
 <!--入口-->
 <slot wx:if="{{!nodes.length}}"></slot>
 <scroll-view scroll-x scroll-y wx:if="{{scroll}}">
-  <template is='rich-text-floor1' data='{{nodes}}' />
+  <template is='rich-text-floor1' data='{{nodes,videoControl}}' />
 </scroll-view>
-<template wx:else is='rich-text-floor1' data='{{nodes}}' />
+<template wx:else is='rich-text-floor1' data='{{nodes,videoControl}}' />
 <!--各层级-->
 <template name='rich-text-floor1'>
   <block wx:for='{{nodes}}' wx:key>
-    <template wx:if="{{!item.continue}}" is='element' data='{{item}}' />
+    <template wx:if="{{!item.continue}}" is='element' data='{{item,videoControl}}' />
     <navigator wx:elif="{{item.name=='a'}}" style="{{item.attrs.style}}" url="{{item.attrs.href}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapevent" bindlongpress='copyhref'>
-      <template is='rich-text-floor2' data='{{nodes:item.children}}' />
+      <template is='rich-text-floor2' data='{{nodes:item.children,videoControl}}' />
     </navigator>
     <view wx:else class="{{item.name}}" style="{{item.attrs.style}}">
-      <template is='rich-text-floor2' data='{{nodes:item.children}}' />
+      <template is='rich-text-floor2' data='{{nodes:item.children,videoControl}}' />
     </view>
   </block>
 </template>

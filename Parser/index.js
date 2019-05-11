@@ -1,5 +1,6 @@
 const html2nodes = require('./Parser.js');
 var imgList = [];
+var videoNum = 0;
 Component({
   properties: {
     'html': {
@@ -8,39 +9,63 @@ Component({
       observer: function(html) {
         if (!html) {
           this.setData({
-            nodes: []
+            nodes: [],
+            videoControl: {}
           })
         } else if (typeof html == 'string') {
           var that = this;
           html2nodes(html, this.data.tagStyle).then(function(e) {
-            that.triggerEvent('parse', e);
-            imgList = e.imgList;
+            that.setData({
+              nodes: e.nodes,
+              videoControl: {}
+            },function(){
+              imgList = e.imgList;
+              videoNum = e.videoNum;
+              if (videoNum > 1) {
+                for (var i = 1; i <= videoNum; i++) {
+                  that['video' + i] = wx.createVideoContext('video' + i, that);
+                }
+              }
+            })
             if (e.title) {
               wx.setNavigationBarTitle({
                 title: e.title
               })
             }
-            that.setData({
-              nodes: e.nodes
-            })
+            that.triggerEvent('parse', e);
           });
         } else if (html.constructor == Array) {
-          imgList = [];
           this.setData({
-            nodes: html
+            nodes: html,
+            videoControl: {}
           })
+          imgList = [];
+          videoNum = 0;
         } else if (typeof html == 'object') {
-          imgList = html.imgList;
+          var that=this;
+          this.setData({
+            nodes: html.nodes,
+            videoControl: {}
+          }, function () {
+            imgList = html.imgList;
+            videoNum = html.videoNum ? html.videoNum : 0;
+            if (videoNum > 1) {
+              for (var i = 1; i <= videoNum; i++) {
+                that['video' + i] = wx.createVideoContext('video' + i, that);
+              }
+            }
+          })
           if (html.title) {
             wx.setNavigationBarTitle({
               title: html.title
             })
           }
-          this.setData({
-            nodes: html.nodes
-          })
         }
       }
+    },
+    'autopause': {
+      type: Boolean,
+      value: true
     },
     'scroll': {
       type: Boolean,
@@ -56,6 +81,21 @@ Component({
     },
   },
   methods: {
+    _loadVideo(e) {
+      this.data.videoControl[e.currentTarget.dataset.id] = true;
+      this.setData({
+        videoControl: this.data.videoControl
+      })
+    },
+    _playVideo(e) {
+      if (videoNum > 1 && this.data.autopause) {
+        for (var i = 1; i <= videoNum; i++) {
+          var id = 'video' + i;
+          if (id == e.currentTarget.dataset.id) continue;
+          this[id].pause();
+        }
+      }
+    },
     tapevent(e) {
       this.triggerEvent('linkpress', e.currentTarget.dataset.href)
     },

@@ -94,6 +94,7 @@ var ignoreTag = {
 
 function DomHandler(style, tagStyle) {
   this.imgList = [];
+  this.videoNum=0;
   this.nodes = [];
   this._style = ParseClass(style, tagStyle || {});
   this._tagStack = [];
@@ -143,6 +144,8 @@ DomHandler.prototype.onopentag = function(name, attrs) {
   if (this._style['#' + attrs.id]) attrs.style += (';' + this._style['#' + attrs.id]);
   if (!trustTag[name]) name = 'div';
   if (textTag[name]) element.continue = true;
+  delete attrs.class;
+  delete attrs.id;
   switch (name) {
     case 'div': case 'p':
       if (attrs.align) {
@@ -191,6 +194,7 @@ DomHandler.prototype.onopentag = function(name, attrs) {
     case 'video': case 'audio':
       attrs.loop = attrs.hasOwnProperty('loop');
       attrs.controls = attrs.hasOwnProperty('controls');
+      if (name == 'video') attrs.id = ('video' + (++this.videoNum));
       for (var i = this._tagStack.length - 1; i >= 0; i--) {
         if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
         else break;
