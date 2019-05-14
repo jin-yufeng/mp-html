@@ -11,16 +11,15 @@ Page({
       name: 'html',
       type: 'String\nArray\nObject',
       notice: '见下方说明'
-    },{
+    }, {
+      name: 'html-class',
+      type: 'String',
+      notice: '整个富文本容器的class样式'
+    }, {
       name: 'autopause',
       type: 'Boolean',
       default: 'true',
       notice: '是否允许在播放视频时自动暂停其他视频'
-    }, {
-      name: 'scroll',
-      type: 'Boolean',
-      default: 'true',
-      notice: '是否允许页面横向滑动'
     }, {
       name: 'selectable',
       type: 'Boolean',
@@ -34,11 +33,15 @@ Page({
     versions: [{
       version: ">=2.2.5",
       function: "完全正常",
-      percent: "98.17%"
+      percent: "98.23%"
     }, {
-      version: "1.6.6-2.2.4",
+      version: "1.9.90-2.2.4",
       function: "部分html实体无法显示",
-      percent: "1.71%"
+      percent: "1.55%"
+    }, {
+      version: "1.6.6-1.9.90",
+      function: "html-class属性无法使用；部分html实体无法显示",
+      percent: "0.13%"
     }, {
       version: "<1.6.6",
       function: "无法使用",
@@ -48,6 +51,23 @@ Page({
     node: [{ "children": [{ "children": [{ "text": "const", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;", "class": "hljs-keyword" } }, { "text": " parser=", "type": "text" }, { "children": [{ "text": "require", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "hljs-built_in" } }, { "text": "(", "type": "text" }, { "children": [{ "text": "'parser-node'", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": ");", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "var", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;", "class": "hljs-keyword" } }, { "text": " html=", "type": "text" }, { "children": [{ "text": "\"<div>Hello World!</div>\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": ";", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "parser(html).then(", "type": "text" }, { "children": [{ "children": [{ "text": "function", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;", "class": "hljs-keyword" } }, { "text": "(", "type": "text" }, { "children": [{ "text": "res", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "hljs-params" } }, { "text": ")", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "hljs-function" } }, { "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "console", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "hljs-built_in" } }, { "text": ".log(res);", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "})", "type": "text" }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;", "class": "hljs" } }],
     upgrade: 
   `<ul>
+    <li>2019.5.14：
+      <p>前端：</p>
+      <ol>
+        <li><code>A</code> 增加了<code>html-class</code>属性，可以对整个富文本容器设置样式，包括<code>display</code>、<code>margin</code>、<code>padding</code>等</li>
+        <li><code>D</code> 删除了<code>scroll</code>属性，默认当内容宽度超出页面宽度时允许横向滚动，如要禁止滚动可以在<code>html-class</code>中设置<code>overflow: hidden !important</li>
+        <li><code>F</code> 修复了实体编码的空格<code>&amp;nbsp;</code>在部分情况下失效的问题
+      </ol>
+      <p>后端：</p>
+      <ol>
+        <li><code>A</code> 增加<code>file</code>模式，输入文件路径即可自动打开并解析（仅支持<code>html</code>文件或<code>md</code>文件）</li>
+        <li><code>A</code> 增加支持<code>iframe</code>, <code>frame</code>, <code>embed</code>, <code>object</code>, <code>param</code>等标签</li>
+        <li><code>A</code> 增加支持动态网页模式（使用无头浏览器进行加载）</li>
+        <li><code>U</code> 支持自动补全多媒体标签的<code>src</code>属性（拼接上主域名）</li>
+        <li><code>F</code> 修复子选择器<code>&gt;</code>前后有空格时无法匹配的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.5.10：
       <ol>
         <li><code>A</code> 增加了<code>autopause</code>属性，可以选择是否允许在播放视频时自动暂停其他视频（默认<code>true</code>）</li>

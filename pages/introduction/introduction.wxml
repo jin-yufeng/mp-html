@@ -6,7 +6,7 @@
   </view>
   <view class="page__bd">
     <view class="weui-article">
-      <view class="weui-article__h1">前端插件包（35.2KB）</view>
+      <view class="weui-article__h1">前端插件包（35.0KB）</view>
       <view class="weui-article__h2">解析style标签</view>
       <view class="weui-article__section">
         支持按以下模式匹配（不支持的匹配模式将被直接忽略）
@@ -33,7 +33,7 @@
         <Parser html="{{tagStylecode1}}" />
         <Parser html="{{tagStylecode2}}" />
         <text>解析结果：</text>
-        <Parser html="<code>test</code>" tagStyle="{{tagStyle}}" scroll='{{false}}'/>
+        <Parser html="<code>test</code>" tagStyle="{{tagStyle}}" html-class="inline"/>
       </view>
       <view class="weui-article__h2">自动设置标题</view>
       <view class="weui-article__section">
@@ -43,6 +43,10 @@
       <view class="weui-article__section">
         可以在<text class="code">Parser</text>标签内添加加载提示或动画，将在未加载完成或内容为空时显示，加载完成后自动隐藏，例如：
         <Parser html="{{loadingcode}}"/>
+      </view>
+      <view class="weui-article__h2">支持对整个容器设置<text class="code">class</text></view>
+      <view class="weui-article__section">
+        可以在<text class="code">html-class</text>属性中设置整个富文本容器的样式，包括<text class="code">display</text>、<text class="code">margin</text>、<text class="code">padding</text>等（直接在<text class="code">style</text>中设置可能不生效）
       </view>
       <view class="weui-article__h2">支持丰富的标签</view>
       <view class="weui-article__h3">媒体组件</view>
@@ -133,9 +137,26 @@
           </view>
         </view>
       </view>
+      <view class="weui-article__h2">支持更多的标签</view>
+      <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+        <view style="display:flex;font-weight:bold;">
+          <view class="td" style="width:30%">组件</view>
+          <view class="td" style="width:70%;">属性</view>
+        </view>
+        <view wx:for="{{tags}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+          <view class="td" style="width:30%">{{item.name}}</view>
+          <view class="td" style="width:70%;">
+            <text>{{item.attrs}}</text>
+          </view>
+        </view>
+      </view>
       <view class="weui-article__h2">解析各类实体</view>
       <view class="weui-article__section">
         支持解析各类实体编码（包括中文），前端是通过<text class="code">rich-text</text>组件编码实体，基础库低于<text class="code">2.2.5</text>时部分实体无法显示，可以在后端提前完成编码
+      </view>
+      <view class="weui-article__h2">自动补全地址</view>
+      <view class="weui-article__section">
+        当多媒体标签的<text class="code">src</text>属性是以<text class="code">/</text>开头时，会自动与主域名拼接成完整的地址，避免在小程序端无法显示（主域名可以通过<text class="code">options</text>参数中的<text class="code">domain</text>属性设置，当解析模式为<text class="code">website</text>时将自动获取）
       </view>
       <view class="weui-article__h2">支持代码高亮</view>
       <view class="weui-article__section">
@@ -145,8 +166,15 @@
       </view>
       <view class="weui-article__h2">支持<text class="code">website</text>模式</view>
       <view class="weui-article__section">
-        给入一个网址（必须以<text class="code">http://</text>或<text class="code">https://</text>开头），设置<text class="code">website</text>模式，插件将自动获取该页面的内容并进行解析，可以直接显示一些推送页面（通过<text class="code">js</text>动态加载的内容将无法显示），支持在图片没有<text class="code">src</text>属性时自动将<text class="code">data-src</text>属性赋给<text class="code">src</text>，示例：
+        <view class="weui-article__p">给入一个网址（必须以<text class="code">http://</text>或<text class="code">https://</text>开头），设置<text class="code">website</text>模式，插件将自动获取该页面的内容并进行解析</view>
+        <view class="weui-article__p">支持静态网页模式（速度快但<text class="code">js</text>中动态加载的内容都会被忽略）和动态网页模式（使用无头浏览器进行加载，速度较慢，需要额外安装，需要的空间较大），可通过设置<text class="code">options</text>参数中的<text class="code">engine</text>属性实现；自定义测试页面由于云函数空间大小限制，仅支持静态网页模式</view>
+        <view class="weui-article__p">支持在图片没有<text class="code">src</text>属性时自动将<text class="code">data-src</text>属性赋给<text class="code">src</text></view>
+        示例：
         <Parser html="{{website}}" />
+      </view>
+      <view class="weui-article__h2">支持<text class="code">file</text>模式</view>
+      <view class="weui-article__section">
+        给入一个文件路径，将自动获取内容并进行解析（仅支持<text class="code">html</text>和<text class="code">md</text>文件）
       </view>
       <view class="weui-article__h2">支持<text class="code">markdown</text>模式</view>
       <view class="weui-article__section">

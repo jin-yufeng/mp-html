@@ -97,14 +97,21 @@
           <view class="td" style="width:30%">
             <text>mode\n(选填)</text>
           </view>
-          <view class="td" style="width:70%;">解析模式，默认为html，支持的类型有html、website、markdown(md)</view>
+          <view class="td" style="width:70%;">解析模式，默认为html，支持的类型有html、website、file、markdown(md)</view>
         </view>
         <view style="display:flex;">
           <view class="td" style="width:30%">
             <text>options\n(选填)</text>
           </view>
-          <view class="td" style="width:70%;">一个形如{styles: "github", tagStyle: {}}的结构体，其中styles是代码高亮的风格，默认为default；tagStyle为默认的标签样式，如{body: "margin: 5px;"}</view>
+          <view class="td" style="width:70%;">解析设置，具体见下方说明</view>
         </view>
+      </view>
+      <view class="weui-article__h2">解析设置</view>
+      <view class="weui-article__section">
+        <view>styles：代码高亮风格，默认<text class="code">default</text></view>
+        <view>tagStyle：标签的默认样式，如<text class="code">{body: "margin:5px"}</text></view>
+        <view>domain：主域名，用于自动将多媒体标签的<text class="code">src</text>属性填充完整，解析模式为<text class="code">website</text>时自动获取</view>
+        <view>engine：打开网址的引擎，支持的有<text class="code">default</text>（速度快，无需额外安装，但<text class="code">js</text>中动态加载的内容会被忽略）、<text class="code">puppeteer</text>（使用无头浏览器加载，使用前需要额外安装<text class="code">npm i puppeteer</text>）和phantom（使用无头浏览器加载，使用前需要额外安装<text class="code">npm i phantom</text>）</view>
       </view>
       <view class="weui-article__h2">返回值</view>
       <view class="weui-article__section">

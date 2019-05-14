@@ -18,10 +18,9 @@
 </template>
 <!--入口-->
 <slot wx:if="{{!nodes.length}}"></slot>
-<scroll-view scroll-x scroll-y wx:if="{{scroll}}">
+<view class="html-class" style="overflow:scroll;">
   <template is='rich-text-floor1' data='{{nodes,videoControl}}' />
-</scroll-view>
-<template wx:else is='rich-text-floor1' data='{{nodes,videoControl}}' />
+</view>
 <!--各层级-->
 <template name='rich-text-floor1'>
   <block wx:for='{{nodes}}' wx:key>

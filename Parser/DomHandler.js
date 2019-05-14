@@ -86,6 +86,7 @@ var ignoreTag = {
   rect: true,
   use: true,
   stop: true,
+  source: true,
   polyline: true,
   polygon: true,
   map: true,
@@ -200,10 +201,6 @@ DomHandler.prototype.onopentag = function(name, attrs) {
         else break;
       }
       break;
-    case 'source':
-      var parent = this._tagStack[this._tagStack.length - 1];
-      if (parent && (parent.name == 'video' || parent.name == 'audio')) parent.attrs.src = attrs.src;
-      return;
     case 'center':
       name = 'div';
       attrs.style = 'text-align:center;' + attrs.style;
@@ -236,14 +233,10 @@ DomHandler.prototype.ontext = function(data) {
       lastTag.data += data;
     } else if(/\S/.test(data)){
       var element = {
-        text: data,
+        text: data.replace(/&nbsp;/g,'\u00A0'),
         type: 'text'
       };
-      if (/&#*((?!sp|lt|gt).){2,5};/.test(data)) {
-        element.decode = true;
-        var parent = this._tagStack[this._tagStack.length - 1];
-        if (parent && parent.continue) delete parent.continue;
-      }
+      if (/&#*((?!sp|lt|gt).){2,5};/.test(data)) element.decode = true;
       this._addDomElement(element);
     }
   }

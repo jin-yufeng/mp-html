@@ -2,6 +2,7 @@ const html2nodes = require('./Parser.js');
 var imgList = [];
 var videoNum = 0;
 Component({
+  externalClasses: ['html-class'],
   properties: {
     'html': {
       type: null,
@@ -64,10 +65,6 @@ Component({
       }
     },
     'autopause': {
-      type: Boolean,
-      value: true
-    },
-    'scroll': {
       type: Boolean,
       value: true
     },

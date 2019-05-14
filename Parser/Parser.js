@@ -118,7 +118,6 @@ Parser.prototype.onattribdata = function(value) {
 };
 Parser.prototype.onattribend = function() {
   this._attribname = this._attribname.toLowerCase();
-  this._attribvalue = this._attribvalue.replace(/(^\s*)|(\s*$)/g, '').replace('quot;', '"');
   if (this._attribs && trustAttrs[this._attribname]) {
     this._attribs[this._attribname] = this._attribvalue;
   }

@@ -47,6 +47,16 @@
   ![解析自定义样式](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/27/ca68a4464065829c80c33d056f95a7d2.png)
 - 自动设置标题  
   若`html`中存在`title`标签，将自动把`title`标签的内容设置到页面的标题上，并在回调`bindparse`中返回，可以用于转发  
+- 设置容器的样式  
+  支持在`html-class`属性中设置整个富文本容器的样式，包括`display`、`margin`、`padding`等
+  ```html
+  <Parser html="{{html}}" html-class="contain" />
+  ```
+  ```css
+  .contain{
+    margin:5px;
+  }
+  ```
 - 支持添加加载提示
   可以在`Parser`标签内添加加载提示或动画，将在未加载完成或内容为空时显示，加载完成后自动隐藏，例如：
   ```html
@@ -59,7 +69,6 @@
   |:---:|:---:|
   | video | src, controls, loop, height, width |
   | audio | src, controls, loop, [poster, name, author](https://developers.weixin.qq.com/miniprogram/dev/component/audio.html) |
-  | source | src |
   | u |  |
   | center |  |
   | font | face, color |
@@ -121,10 +130,10 @@
   | 属性 | 类型 | 默认值 | 必填 | 说明 |
   |:----:|:----:|:----:|:----:|:----:|
   | html | String/Object/Array | | 是 | 要显示的富文本数据，具体格式见下方说明 |
+  | html | String | | 否 | 对整个富文本容器设置class样式 |
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
-  | scroll | Boolean | true | 否 | 是否允许页面横向滚动 |
   | selectable | Boolean | true | 否 | 是否允许长按复制链接 |
-  | tagStyle | Object |  | 否 | 设置标签的默认样式 |
+  | tagStyle | Object | | 否 | 设置标签的默认样式 |
   
   - html格式：
     1. `string`类型：一个`html`字符串，例如：`<div>Hello World!</div>`
@@ -145,8 +154,9 @@
   
     | 版本 | 功能 | 覆盖率 |
     |:---:|:---:|:---:|
-    | >=2.2.5 | 全部正常 | 98.17% |
-    | 1.6.6-2.2.4 | 部分html实体无法显示 | 1.71% |
+    | >=2.2.5 | 全部正常 | 98.23% |
+    | 1.9.90-2.2.4 | 部分html实体无法显示 | 1.55% |
+    | 1.6.6-1.9.90 | html-class属性无法使用<br />部分html实体无法显示 | 0.13% |
     | <1.6.6 | 无法使用 | 0.09% |
 - Tips  
     `table`, `ol`, `ul`等标签由于较难通过模板循环的方式显示，将直接通过`rich-text`进行渲染，因此请尽量避免在表格，列表中加入图片或链接，否则将无法预览或点击（但可以正常显示）
@@ -172,6 +182,10 @@ parser(html).then(function(res){
 ## 许可 ##
 您可以随意的使用和分享本插件
 ## 更新日志 ##
+- 2019.5.14:
+  1. `A` 增加了`html-class`属性，可以对整个富文本容器设置样式，包括`display`、`margin`、`padding`等
+  2. `D` 删除了`scroll`属性，默认内容宽度超出页面时允许横向滚动，如要禁止滚动可在`html-class`中设置`overflow:hidden !important`
+  3. `F` 修复了实体编码的空格`&nbsb;`在部分情况下失效的问题
 - 2019.5.10:
   1. `A` 增加了`autopause`属性，支持选择是否允许在播放视频时自动暂停其他视频播放
   2. `U` 在视频数量超过3时，仅加载前3个，其他的由图片取代，在受到点击时再进行加载和播放，避免页面卡死

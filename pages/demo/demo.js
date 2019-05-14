@@ -180,7 +180,7 @@ var html0 = `<style>
               <p>插入和删除文本：<del>我想出去玩</del>，不你不想，<ins>你想学习</ins></p>
               <p>引用：<q>这是一句引用的文字</q>，这是<code>code</code>标签</p>
               <p><strong>粗体</strong>与<i>斜体</i></p>
-              <p>连续&emsp;&emsp;&emsp;空格</p>
+              <p>连续&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;空格</p>
             </p>
           </section>
         </section>
@@ -696,10 +696,10 @@ var html1 = `<title>整体示例</title>
                 </section>
                 <section data-autoskip="1" class="135brush" style="width: 100%;font-size: 14px;text-align:justify;letter-spacing: 1.5px;color:#27bc71;padding: 1em 0px;">
                   <p>
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 赏花佳期：3月—4月
+                    赏花佳期：3月—4月
                   </p>
                   <p>
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 石象湖是西部的郁金香王国，号称花中贵妇的郁金香目前在国内基本上是高成本温室栽培，大面积室外培育仅石象湖一家。与往届相比，今年花会规模更大、品种更多、配套活动更丰富多彩。几百万株郁金香将让游客充分领略到春的气息。
+                    石象湖是西部的郁金香王国，号称花中贵妇的郁金香目前在国内基本上是高成本温室栽培，大面积室外培育仅石象湖一家。与往届相比，今年花会规模更大、品种更多、配套活动更丰富多彩。几百万株郁金香将让游客充分领略到春的气息。
                   </p>
                 </section>
               </section>
