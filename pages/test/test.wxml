@@ -14,7 +14,8 @@
       <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell">
           <view class="weui-cell__bd">
-            <textarea name="html" value="{{htmlString}}" bindinput="inputHtml" class="weui-textarea" placeholder="请输入数据" style="height:10em" maxlength='-1' />
+            <textarea name="html" wx:if="{{!parseing}}" focus="{{focus}}" value="{{htmlString}}" bindinput="inputHtml" class="weui-textarea" placeholder="请输入数据" style="height:10em" maxlength='-1' />
+            <text wx:else bindtap="focus" class="weui-textarea" style="height:10em;word-break:break-all;overflow:hidden">{{htmlString}}</text>
           </view>
         </view>
       </view>

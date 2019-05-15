@@ -4,7 +4,8 @@
     "pages/introduction/introduction",
     "pages/demo/demo",
     "pages/test/test",
-    "pages/usage/usage"
+    "pages/usage/usage",
+    "pages/update/update"
   ],
   "window": {
     "backgroundTextStyle": "light",

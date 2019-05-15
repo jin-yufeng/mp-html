@@ -182,6 +182,9 @@ parser(html).then(function(res){
 ## 许可 ##
 您可以随意的使用和分享本插件
 ## 更新日志 ##
+- 2019.5.15:
+  1. `F` 修复了一个页面内存在多个`Parser`组件时，`imgList`被覆盖而导致预览失效的问题
+  2. `F` 修复了图片设置`float`属性无效的问题
 - 2019.5.14:
   1. `A` 增加了`html-class`属性，可以对整个富文本容器设置样式，包括`display`、`margin`、`padding`等
   2. `D` 删除了`scroll`属性，默认内容宽度超出页面时允许横向滚动，如要禁止滚动可在`html-class`中设置`overflow:hidden !important`

@@ -159,8 +159,10 @@ DomHandler.prototype.onopentag = function(name, attrs) {
         attrs.src = attrs.src || attrs['data-src'];
         delete attrs['data-src'];
       }*/
-      var display = attrs.style.match(/display:([^;]*)/i);
+      var display = attrs.style.match(/display\s*?:([^;]*)/i);
       attrs.display = display ? display[1] : "inline-block";
+      var float = attrs.style.match(/float\s*?:([^;]*)/i);
+      attrs.float = float ? float[1] : '';
       if (!attrs.hasOwnProperty('ignore') && attrs.src) {
         this.imgList.push(attrs.src);
         for (var i = this._tagStack.length - 1; i >= 0; i--) {

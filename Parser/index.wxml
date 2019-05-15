@@ -1,7 +1,7 @@
 <!--Parser-->
 <template name='element'>
   <!--图片-->
-  <rich-text wx:if="{{item.name=='img'}}" style="display:{{item.attrs.display}}" nodes='{{[item]}}' data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewImg'></rich-text>
+  <rich-text wx:if="{{item.name=='img'}}" style="display:{{item.attrs.display}};float:{{item.attrs.float}}" nodes='{{[item]}}' data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewImg'></rich-text>
   <!--文本-->
   <text wx:elif="{{item.type=='text'&&!item.decode}}" decode>{{item.text}}</text>
   <!--视频-->

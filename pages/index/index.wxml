@@ -30,6 +30,12 @@
           <image class="kind-list__img" src="../../images/usage.png"></image>
         </view>
       </navigator>
+      <navigator url="../update/update" class="kind-list__item">
+        <view class="weui-flex kind-list__item-hd">
+          <view class="weui-flex__item">更新日志</view>
+          <image class="kind-list__img" src="../../images/update.png"></image>
+        </view>
+      </navigator>
       <view class="kind-list__item">
         <button class="weui-flex kind-list__item-hd" open-type='contact'>
           <view class="weui-flex__item">问题反馈</view>

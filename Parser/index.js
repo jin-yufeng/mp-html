@@ -1,6 +1,4 @@
 const html2nodes = require('./Parser.js');
-var imgList = [];
-var videoNum = 0;
 Component({
   externalClasses: ['html-class'],
   properties: {
@@ -20,10 +18,10 @@ Component({
               nodes: e.nodes,
               videoControl: {}
             },function(){
-              imgList = e.imgList;
-              videoNum = e.videoNum;
-              if (videoNum > 1) {
-                for (var i = 1; i <= videoNum; i++) {
+              that.imgList = e.imgList;
+              that.videoNum = e.videoNum;
+              if (e.videoNum > 1) {
+                for (var i = 1; i <= e.videoNum; i++) {
                   that['video' + i] = wx.createVideoContext('video' + i, that);
                 }
               }
@@ -40,18 +38,18 @@ Component({
             nodes: html,
             videoControl: {}
           })
-          imgList = [];
-          videoNum = 0;
+          this.imgList = [];
+          this.videoNum = 0;
         } else if (typeof html == 'object') {
           var that=this;
           this.setData({
             nodes: html.nodes,
             videoControl: {}
           }, function () {
-            imgList = html.imgList;
-            videoNum = html.videoNum ? html.videoNum : 0;
-            if (videoNum > 1) {
-              for (var i = 1; i <= videoNum; i++) {
+            that.imgList = html.imgList;
+            that.videoNum = html.videoNum ? html.videoNum : 0;
+            if (that.videoNum > 1) {
+              for (var i = 1; i <= that.videoNum; i++) {
                 that['video' + i] = wx.createVideoContext('video' + i, that);
               }
             }
@@ -85,8 +83,8 @@ Component({
       })
     },
     _playVideo(e) {
-      if (videoNum > 1 && this.data.autopause) {
-        for (var i = 1; i <= videoNum; i++) {
+      if (this.videoNum > 1 && this.data.autopause) {
+        for (var i = 1; i <= this.videoNum; i++) {
           var id = 'video' + i;
           if (id == e.currentTarget.dataset.id) continue;
           this[id].pause();
@@ -112,7 +110,7 @@ Component({
       if (!e.target.dataset.hasOwnProperty('ignore')) {
         wx.previewImage({
           current: e.target.dataset.src,
-          urls: imgList.length ? imgList : [e.target.dataset.src],
+          urls: this.imgList.length ? this.imgList : [e.target.dataset.src],
         })
       }
     }

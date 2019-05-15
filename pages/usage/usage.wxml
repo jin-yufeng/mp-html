@@ -139,10 +139,6 @@
       <view class="weui-article__section">
         您可以随意的使用和分享本项目
       </view>
-      <view class="weui-article__h1">更新日志</view>
-      <view class="weui-article__section">
-        <Parser html="{{upgrade}}" />
-      </view>
     </view>
   </view>
 </view>
