@@ -1,0 +1,217 @@
+<!--parser-wxapp加强包文档-->
+<scroll-view scroll-y scroll-top="{{top}}" scroll-into-view="{{section}}" scroll-with-animation="true" enable-back-to-top style="height:100vh;text-align:justify">
+  <view class="page__hd">
+    <view class="page__title">parser-wxapp加强包</view>
+    <view class="page__desc">说明文档</view>
+  </view>
+  <view class="page__bd">
+    <view class="weui-article">
+      <!--目录-->
+      <view id="catalogue" class="weui-article__h1">目录</view>
+      <view class="weui-article__section">
+        <!--背景介绍-->
+        <view class="weui-article__h2 link" hover-class='link-hover' data-section="background" bindtap="gosection">背景介绍</view>
+        <!--功能介绍-->
+        <view class="weui-article__h2 link" hover-class='link-hover' data-section="introduction" bindtap="gosection">功能介绍</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tagStyle" bindtap="gosection">更多的style匹配模式</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持更多的标签</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="highlight" bindtap="gosection">代码高亮</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="entity" bindtap="gosection">解析实体编码</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="complement" bindtap="gosection">自动补全网址</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="website" bindtap="gosection">支持website模式</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="file" bindtap="gosection">支持file模式</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="markdown" bindtap="gosection">支持markdown模式</view>
+        <!--使用方法-->
+        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="usage" bindtap="gosection">使用方法</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="useStep" bindtap="gosection">使用步骤</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="argument" bindtap="gosection">参数</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="callback" bindtap="gosection">返回值</view>
+        <!--使用方法-->
+        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="download" bindtap="gosection">下载链接</view>
+        <!--更新日志-->
+        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="update" bindtap="gosection">更新日志</view>
+      </view>
+      <!--背景介绍-->
+      <view id="background" class="weui-article__h1">背景介绍</view>
+      <view class="weui-article__section">
+        由于前端对时间和空间的要求，一些功能较为精简，因此另外推出了一个用于
+        <text class="code">node.js</text>的后端加强包，将提供更加强大的功能；且在后端提前解析完成后再传输给前端，可以节省解析的时间，提高性能
+      </view>
+      <!--功能介绍-->
+      <view id="introduction" class="weui-article__h1">功能介绍</view>
+      <view class="weui-article__section">
+        <!--更多的style匹配模式-->
+        <view id="tagStyle" class="weui-article__h2">更多的style匹配模式</view>
+        <view class="weui-article__section">
+          除前端插件包支持的匹配模式外，还支持以下模式：
+          <view style="font-size:12px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;margin-top:10px;margin-bottom:10px;word-break:break-all">
+            <view style="display:flex;font-weight:bold;">
+              <view class="td" style="width:30%">模式</view>
+              <view class="td" style="width:30%;">举例</view>
+              <view class="td" style="width:40%;">匹配</view>
+            </view>
+            <view wx:for="{{stylesMore}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+              <view class="td" style="width:30%">{{item.mode}}</view>
+              <view class="td" style="width:30%;">{{item.example}}</view>
+              <view class="td" style="width:40%;">
+                <text space="ensp">{{item.match}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        <!--支持更多的标签-->
+        <view id="supportTag" class="weui-article__h2">支持更多的标签</view>
+        <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+          <view style="display:flex;font-weight:bold;">
+            <view class="td" style="width:30%">组件</view>
+            <view class="td" style="width:70%;">属性</view>
+          </view>
+          <view wx:for="{{tags}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:30%">{{item.name}}</view>
+            <view class="td" style="width:70%;">
+              <text>{{item.attrs}}</text>
+            </view>
+          </view>
+        </view>
+        <!--代码高亮-->
+        <view id="highlight" class="weui-article__h2">代码高亮</view>
+        <view class="weui-article__section">
+          <text class="code">pre</text>标签内的代码将自动高亮显示，自动检测语言，支持80余种风格（详细可参考
+          <text class="code">highlightjs</text>官网），示例：
+          <Parser html="{{codedemo}}" />
+          <view style="font-size:12px;color:gray;text-align:center;margin-top:-5px;">javascript语言，github-gist风格</view>
+        </view>
+        <!--解析实体编码-->
+        <view id="entity" class="weui-article__h2">解析实体编码</view>
+        <view class="weui-article__section">
+          支持解析各类实体编码（包括中文），前端是通过
+          <text class="code">rich-text</text>组件编码实体，基础库低于
+          <text class="code">2.2.5</text>时部分实体无法显示，可以在后端提前完成编码
+        </view>
+        <!--自动补全网址-->
+        <view id="complement" class="weui-article__h2">自动补全网址</view>
+        <view class="weui-article__section">
+          当多媒体标签的
+          <text class="code">src</text>属性是以
+          <text class="code">/</text>开头时，会自动与主域名拼接成完整的地址，避免在小程序端无法显示（主域名可以通过
+          <text class="code">options</text>参数中的
+          <text class="code">domain</text>属性设置，当解析模式为
+          <text class="code">website</text>时将自动获取）
+        </view>
+        <!--支持website模式-->
+        <view id="website" class="weui-article__h2">支持
+          <text class="code">website</text>模式</view>
+        <view class="weui-article__section">
+          <view class="weui-article__p">给入一个网址（必须以
+            <text class="code">http://</text>或
+            <text class="code">https://</text>开头），设置
+            <text class="code">website</text>模式，插件将自动获取该页面的内容并进行解析</view>
+          <view class="weui-article__p">支持静态网页模式（速度快但
+            <text class="code">js</text>中动态加载的内容都会被忽略）和动态网页模式（使用无头浏览器进行加载，速度较慢，需要额外安装，需要的空间较大），可通过设置
+            <text class="code">options</text>参数中的
+            <text class="code">engine</text>属性实现；自定义测试页面由于云函数空间大小限制，仅支持静态网页模式</view>
+          <view class="weui-article__p">另外，针对推送页面做了以下优化（静态网页模式）：
+            <Parser html="<ol><li>支持在图片没有<code>src</code>属性时自动将<code>data-src</code>属性赋给<code>src</code></li><li>支持从视频的<code>iframe</code>标签解析出真实的视频源地址并进行播放</li><li>支持从音频的<code>qqmusic</code>标签解析出真实的音频源地址并进行播放</li></ol>" tagStyle="{{tagStyle}}" />
+          </view>
+          示例：
+          <Parser html="{{website}}" />
+        </view>
+        <!--支持file模式-->
+        <view id="file" class="weui-article__h2">支持
+          <text class="code">file</text>模式</view>
+        <view class="weui-article__section">
+          给入一个文件路径，将自动获取内容并进行解析（仅支持
+          <text class="code">html</text>和
+          <text class="code">md</text>文件）
+        </view>
+        <!--支持markdown模式-->
+        <view id="markdown" class="weui-article__h2">支持
+          <text class="code">markdown</text>模式</view>
+        <view class="weui-article__section">
+          支持解析markdown，包括表格，代码高亮等，例如：
+          <Parser html="<pre># 示例\n| 标题1 | 标题2 |\n|:---:|:---:|\n| 栏目1 | 栏目2 |</pre>" />
+          <Parser html="{{markdown}}" />
+        </view>
+      </view>
+      <!--使用方法-->
+      <view id="usage" class="weui-article__h1">使用方法</view>
+      <view class="weui-article__section">
+        <!--使用步骤-->
+        <view id="useStep" class="weui-article__h2">使用步骤</view>
+        <view class="weui-article__section">
+          <Parser html="<ol><li>安装支持包</li></ol>" />
+          <view style="margin-left:10%;">
+            <Parser html="{{npm}}" />
+          </view>
+          <Parser html="<ol start=2><li>在需要使用的<code>js</code>文件中添加：</li></ol>" tagStyle="{{tagStyle}}" />
+          <view style="margin-left:10%;">
+            <Parser html="{{node}}" />
+          </view>
+        </view>
+        <!--参数-->
+        <view id="argument" class="weui-article__h2">参数</view>
+        <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+          <view style="display:flex;font-weight:bold;">
+            <view class="td" style="width:30%">参数</view>
+            <view class="td" style="width:70%;">说明</view>
+          </view>
+          <view style="display:flex;">
+            <view class="td" style="width:30%">html</view>
+            <view class="td" style="width:70%;">html字符串</view>
+          </view>
+          <view style="display:flex;background-color:#f6f8fa">
+            <view class="td" style="width:30%">
+              <text>mode\n(选填)</text>
+            </view>
+            <view class="td" style="width:70%;">解析模式，默认为html，支持的类型有html、website、file、markdown(md)</view>
+          </view>
+          <view style="display:flex;">
+            <view class="td" style="width:30%">
+              <text>options\n(选填)</text>
+            </view>
+            <view class="td" style="width:70%;">解析设置，具体见下方说明</view>
+          </view>
+        </view>
+        <view class="weui-article__h2">解析设置</view>
+        <view class="weui-article__section">
+          <view>styles：代码高亮风格，默认
+            <text class="code">default</text>
+          </view>
+          <view>tagStyle：标签的默认样式，如
+            <text class="code">{body: "margin:5px"}</text>
+          </view>
+          <view>domain：主域名，用于自动将多媒体标签的
+            <text class="code">src</text>属性填充完整，解析模式为
+            <text class="code">website</text>时自动获取</view>
+          <view>engine：打开网址的引擎，支持的有
+            <text class="code">default</text>（速度快，无需额外安装，但
+            <text class="code">js</text>中动态加载的内容会被忽略）、
+            <text class="code">puppeteer</text>（使用无头浏览器加载，使用前需要额外安装
+            <text class="code">npm i puppeteer</text>）和phantom（使用无头浏览器加载，使用前需要额外安装
+            <text class="code">npm i phantom</text>）</view>
+        </view>
+        <!--返回值-->
+        <view id="callback" class="weui-article__h2">返回值</view>
+        <view class="weui-article__section">
+          一个形如
+          <text class="code">{nodes: [Array], imgList: [Array], videoNum: Number, title: "String"}</text>的结构体，其中nodes为节点数组，可以直接应用于
+          <text class="code">rich-text</text>组件，imgList为所有图片地址的数组，videoNum为视频的数量，title为页面标题，整个结构体可以作为
+          <text class="code">Parser</text>组件的参数
+        </view>
+      </view>
+      <!--下载链接-->
+      <view id="download" class="weui-article__h1">下载链接</view>
+      <view class="weui-article__section">
+        <Parser html='npm链接：<a href="https://www.npmjs.com/package/parser-wxapp">长按复制链接</a>'/>
+      </view>
+      <!--更新日志-->
+      <view id="update" class="weui-article__h1">更新日志</view>
+      <view class="weui-article__section">
+        <Parser html="{{update}}"/>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<cover-view style="position:fixed;right:15px;bottom:15px;width:35px;height:35px;">
+  <cover-image src="/images/top.png" style="width:100%" mode="widthFix" bindtap="gotop" />
+</cover-view>

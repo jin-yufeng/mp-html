@@ -1,7 +1,7 @@
 <!--Parser-->
 <template name='element'>
   <!--图片-->
-  <rich-text wx:if="{{item.name=='img'}}" style="display:{{item.attrs.display}};float:{{item.attrs.float}}" nodes='{{[item]}}' data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewImg'></rich-text>
+  <rich-text wx:if="{{item.name=='img'}}" style="display:{{item.attrs.display}};{{item.attrs.float?('float:'+item.attrs.float):''}}" nodes='{{[item]}}' data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewImg'></rich-text>
   <!--文本-->
   <text wx:elif="{{item.type=='text'&&!item.decode}}" decode>{{item.text}}</text>
   <!--视频-->
@@ -9,10 +9,10 @@
     <view wx:if="{{item.attrs.id>'video3'&&!videoControl[item.attrs.id]}}" class="video" style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}" data-id="{{item.attrs.id}}" bindtap="_loadVideo">
       <view class="triangle_border_right"></view>
     </view>
-    <video wx:else src='{{item.attrs.src}}' id="{{item.attrs.id}}" loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' autoplay="{{videoControl[item.attrs.id]}}" style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}" data-id="{{item.attrs.id}}" bindplay='_playVideo'/>
+    <video wx:else src='{{item.attrs.src}}' id="{{item.attrs.id}}" loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' autoplay="{{videoControl[item.attrs.id]}}" style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}" data-id="{{item.attrs.id}}" bindplay='_playVideo' binderror="error"/>
   </block>
   <!--音频-->
-  <audio wx:elif="{{item.name=='audio'}}" src='{{item.attrs.src}}' loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' poster='{{item.attrs.poster}}' name='{{item.attrs.name}}' author='{{item.attrs.author}}' style="{{item.attrs.style}}" />
+  <audio wx:elif="{{item.name=='audio'}}" src='{{item.attrs.src}}' loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' poster='{{item.attrs.poster}}' name='{{item.attrs.name}}' author='{{item.attrs.author}}' style="{{item.attrs.style}}" binderror="error"/>
   <!--富文本-->
   <rich-text wx:else class="{{(item.name||item.type)+'_rich'}}" nodes="{{[item]}}"/>
 </template>

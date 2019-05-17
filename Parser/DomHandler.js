@@ -209,7 +209,7 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       break;
     case 'pre':
       name = 'div';
-      attrs.style = 'background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll' + attrs.style;
+      attrs.style = 'background-color:#f6f8fa;padding:5px;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll' + attrs.style;
       break;
     case 'u':
       name = 'span';

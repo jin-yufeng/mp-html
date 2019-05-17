@@ -1,11 +1,10 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/introduction/introduction",
+    "pages/component/component",
+    "pages/nodejs/nodejs",
     "pages/demo/demo",
-    "pages/test/test",
-    "pages/usage/usage",
-    "pages/update/update"
+    "pages/test/test"
   ],
   "window": {
     "backgroundTextStyle": "light",

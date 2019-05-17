@@ -1,0 +1,22 @@
+/* miniprogram/pages/nodejs/nodejs.wxss */
+.link{
+  color:#586c94;
+}
+.link-hover{
+  text-decoration: underline;
+}
+.code {
+  font-style: italic;
+  color: #005cc5;
+  margin-left: 1px;
+  margin-right: 3px;
+  font-family: monospace;
+}
+.td {
+  padding: 3px;
+  border-right: 1px solid #dfe2e5;
+  border-bottom: 1px solid #dfe2e5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

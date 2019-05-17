@@ -1,0 +1,272 @@
+<!--Parser组件说明文档-->
+<scroll-view scroll-y scroll-top="{{top}}" scroll-into-view="{{section}}" scroll-with-animation="true" enable-back-to-top style="height:100vh;text-align:justify">
+  <view class="page__hd">
+    <view class="page__title">Parser组件</view>
+    <view class="page__desc">说明文档</view>
+  </view>
+  <view class="page__bd">
+    <view class="weui-article">
+      <!--目录-->
+      <view id="catalogue" class="weui-article__h1">目录</view>
+      <view class="weui-article__section">
+        <!--功能介绍-->
+        <view class="weui-article__h2 link" hover-class='link-hover' data-section="introduction" bindtap="gosection">功能介绍</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="parseStyle" bindtap="gosection">解析style标签</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tagStyle" bindtap="gosection">设置默认标签样式</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="htmlClass" bindtap="gosection">设置整体容器样式</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="setTitle" bindtap="gosection">自动设置标题</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="addLoading" bindtap="gosection">添加加载提示</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持丰富的标签</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tapEvent" bindtap="gosection">事件效果</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="performance" bindtap="gosection">性能指标</view>
+        <!--使用方法-->
+        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="usage" bindtap="gosection">使用方法</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="useStep" bindtap="gosection">使用步骤</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="attrs" bindtap="gosection">组件属性</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="callback" bindtap="gosection">回调函数</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="libRequire" bindtap="gosection">基础库要求</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="api" bindtap="gosection">api</view>
+        <!--原理简介-->
+        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="theory" bindtap="gosection">原理简介</view>
+        <!--下载链接-->
+        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="download" bindtap="gosection">下载链接</view>
+        <!--更新日志-->
+        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="update" bindtap="gosection">更新日志</view>
+      </view>
+      <!--功能介绍-->
+      <view id="introduction" class="weui-article__h1">功能介绍</view>
+      <view class="weui-article__section">
+        <!--解析style标签-->
+        <view id="parseStyle" class="weui-article__h2">解析
+          <text class="code">style</text>标签</view>
+        <view class="weui-article__section">
+          支持将
+          <text class="code">style</text>标签中的样式解析到各个标签中去，支持按以下模式匹配（不支持的匹配模式将被直接忽略）
+          <view style="font-size:12px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;margin-top:10px;margin-bottom:10px;word-break:break-all">
+            <view style="display:flex;font-weight:bold;">
+              <view class="td" style="width:30%">模式</view>
+              <view class="td" style="width:30%;">举例</view>
+              <view class="td" style="width:40%;">匹配</view>
+            </view>
+            <view wx:for="{{styles}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+              <view class="td" style="width:30%">{{item.mode}}</view>
+              <view class="td" style="width:30%;">{{item.example}}</view>
+              <view class="td" style="width:40%;">
+                <text>{{item.match}}</text>
+              </view>
+            </view>
+          </view>
+          示例：
+          <Parser html="{{stylecode}}"/>
+          <Parser html='<style>.demo{font-style:italic;}#demo2{font-weight:bold;}p{text-align:center;font-size:30px;}</style><p><span class="demo">Hello </span><span id="demo2">World!</span></p>' />
+          <view style="color:gray;text-align:center;font-size:12px;">解析结果</view>
+        </view>
+        <!--设置标签的默认样式-->
+        <view id="tagStyle" class="weui-article__h2">设置标签的默认样式</view>
+        <view class="weui-article__section">
+          可以对标签设置任意自定义的样式，示例：
+          <Parser html="{{tagStylecode}}" />
+          <text>解析结果：</text>
+          <Parser html="<code>test</code>" tagStyle="{{tagStyle}}" html-class="inline" />
+        </view>
+        <!--设置整体容器的样式-->
+        <view id="htmlClass" class="weui-article__h2">设置整体容器的样式</view>
+        <view class="weui-article__section">
+          可以在
+          <text class="code">html-class</text>或
+          <text class="code">html-style</text>属性中设置整个富文本容器的样式，包括
+          <text class="code">display</text>、
+          <text class="code">margin</text>、
+          <text class="code">padding</text>等（直接在
+          <text class="code">style</text>中设置可能不生效），示例：
+          <Parser html="{{htmlStylecode}}" />
+        </view>
+        <!--自动设置标题-->
+        <view id="setTitle" class="weui-article__h2">自动设置标题</view>
+        <view class="weui-article__section">
+          若
+          <text class="code">html</text>中存在
+          <text class="code">title</text>标签，将自动把
+          <text class="code">title</text>标签的内容设置到页面的标题上
+        </view>
+        <!--添加加载提示-->
+        <view id="addLoading" class="weui-article__h2">添加加载提示</view>
+        <view class="weui-article__section">
+          可以在
+          <text class="code">Parser</text>标签内添加加载提示或动画，将在未加载完成或内容为空时显示，加载完成后自动隐藏，示例：
+          <Parser html="{{loadingcode}}" />
+        </view>
+        <!--支持丰富的标签-->
+        <view id="supportTag" class="weui-article__h2">支持丰富的标签</view>
+        <view class="weui-article__h3">媒体标签</view>
+        <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+          <view style="display:flex;font-weight:bold;">
+            <view class="td" style="width:30%">标签</view>
+            <view class="td" style="width:70%;">属性</view>
+          </view>
+          <view wx:for="{{media}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:30%">{{item.name}}</view>
+            <view class="td" style="width:70%;">
+              <text>{{item.attrs}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="weui-article__h3">表格和列表</view>
+        <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+          <view style="display:flex;font-weight:bold;">
+            <view class="td" style="width:30%">标签</view>
+            <view class="td" style="width:70%;">属性</view>
+          </view>
+          <view wx:for="{{table}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:30%">{{item.name}}</view>
+            <view class="td" style="width:70%;">
+              <text>{{item.attrs}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="weui-article__h3">文本标签</view>
+        <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+          <view style="display:flex;font-weight:bold;">
+            <view class="td" style="width:30%">标签</view>
+            <view class="td" style="width:70%;">属性</view>
+          </view>
+          <view wx:for="{{text}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:30%">{{item.name}}</view>
+            <view class="td" style="width:70%;">{{item.attrs}}</view>
+          </view>
+        </view>
+        <view class="weui-article__h3">其他标签</view>
+        <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+          <view style="display:flex;font-weight:bold;">
+            <view class="td" style="width:30%">标签</view>
+            <view class="td" style="width:70%;">属性</view>
+          </view>
+          <view wx:for="{{default}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:30%">{{item.name}}</view>
+            <view class="td" style="width:70%;">{{item.attrs}}</view>
+          </view>
+        </view>
+        <view class="weui-article__h3">附注：</view>
+        <view class="weui-article__section">
+          对于不在上述列表中标签，除个别会被直接移除外，都会被转换为
+          <text class="code">div</text>标签，因此可以使用一些语义化标签，如
+          <text class="code">article</text>，
+          <text class="code">address</text>等
+        </view>
+        <!--事件效果-->
+        <view id="tapEvent" class="weui-article__h2">事件效果</view>
+        <view class="weui-article__section">
+          <view class="weui-article__h3">图片点击</view>
+          <Parser html='<ol><li>点击图片可以预览，左右滑动可以查看所有的图片</li><li>对于一些装饰性的图片，可以对其设置<code>ignore</code>属性，设置后将无法预览</li></ol>' tagStyle="{{tagStyle}}" />
+          <text>\n</text>
+          <view class="weui-article__h3">链接点击</view>
+          <Parser html='<ol><li>点击链接会有下划线和半透明的效果，若链接为小程序路径，则点击时跳转至相应页面；若为外部链接，则长按可复制链接</li><li>点击链接时会触发<code>bindlinkpress</code>事件，并返回相应的链接，可以进行进一步的操作（如文档链接可以在回调中进行下载和打开等）</li></ol>' tagStyle="{{tagStyle}}" />
+        </view>
+        <!--性能指标-->
+        <view id="performance" class="weui-article__h2">性能指标</view>
+        <view class="weui-article__section">
+          解析和渲染效率高；轻量化（包大小仅约
+          <text class="code">35.0KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <Parser html="{{errorcode}}" />
+        </view>
+      </view>
+      <!--使用方法-->
+      <view id="usage" class="weui-article__h1">使用方法</view>
+      <view class="weui-article__section">
+        <!--使用步骤-->
+        <view id="useStep" class="weui-article__h2">使用步骤</view>
+        <view class="weui-article__section">
+          <Parser html='<ol><li>下载<code>Parser</code>文件夹至小程序目录</li><li>在需要使用页面的<code>json</code>文件中添加</li></ol>' tagStyle="{{tagStyle}}" />
+          <view style="margin-left:10%;">
+            <Parser html="{{json}}" />
+          </view>
+          <Parser html='<ol start=3><li>在需要使用页面的<code>wxml</code>文件中添加</li></ol>' tagStyle="{{tagStyle}}" />
+          <view style="margin-left:10%;">
+            <Parser html="{{wxml}}" />
+          </view>
+          <Parser html='<ol start=4><li>在需要使用页面的<code>js</code>文件中添加</li></ol>' tagStyle="{{tagStyle}}" />
+          <view style="margin-left:10%;">
+            <Parser html="{{js}}" />
+          </view>
+        </view>
+        <!--组件属性-->
+        <view id="attrs" class="weui-article__h2">组件属性</view>
+        <view class="weui-article__section" style="font-size:13px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+          <view style="display:flex;font-weight:bold;">
+            <view class="td" style="width:25%">属性</view>
+            <view class="td" style="width:25%;">类型</view>
+            <view class="td" style="width:15%;">默认</view>
+            <view class="td" style="width:35%;">说明</view>
+          </view>
+          <view wx:for="{{attrs}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:25%">{{item.name}}</view>
+            <view class="td" style="width:25%;">
+              <text>{{item.type}}</text>
+            </view>
+            <view class="td" style="width:15%;">{{item.default}}</view>
+            <view class="td" style="width:35%;">{{item.notice}}</view>
+          </view>
+        </view>
+        <view class="weui-article__section">
+          <Parser html='{{format}}' tagStyle="{{tagStyle}}" />
+        </view>
+        <!--回调函数-->
+        <view id="callback" class="weui-article__h2">回调函数</view>
+        <view class="weui-article__section">
+          <Parser html="{{callback}}" tagStyle="{{tagStyle}}"/>
+        </view>
+        <!--基础库要求-->
+        <view id="libRequire" class="weui-article__h2">基础库要求</view>
+        <view class="weui-article__section" style="font-size:14px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
+          <view style="display:flex;font-weight:bold;">
+            <view class="td" style="width:30%">版本</view>
+            <view class="td" style="width:50%;">功能</view>
+            <view class="td" style="width:20%;">覆盖率</view>
+          </view>
+          <view wx:for="{{versions}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:30%">{{item.version}}</view>
+            <view class="td" style="width:50%;">{{item.function}}</view>
+            <view class="td" style="width:20%;">{{item.percent}}</view>
+          </view>
+        </view>
+        <!--api-->
+        <view id="api" class="weui-article__h2">api</view>
+        <view class="weui-article__section">
+          若仅需要解析
+          <text class="code">html</text>字符串并获取结果可以在
+          <text class="code">js</text>中使用本
+          <text class="code">api</text>，接受2个参数，第一个是
+          <text class="code">html</text>字符串，第二个是
+          <text class="code">tagStyle</text>结构体（可选，用于设置标签的默认样式）；返回值格式同
+          <text class="code">bindparse</text>，示例：
+          <Parser html="{{api}}"/>
+        </view>
+      </view>
+      <!--原理简介-->
+      <view id="theory" class="weui-article__h1">原理简介</view>
+      <view class="weui-article__section">
+        <text decode>&emsp;&emsp;</text>本插件结合了
+        <text class="code">WxParse</text>中模板循环的方式和
+        <text class="code">rich-text</text>组件，对于节点下有图片、视频、链接等的，通过模板循环的方式显示；否则则直接通过
+        <text class="code">rich-text</text>组件显示。
+        <text decode>\n&emsp;&emsp;</text>通过这样的方式，既解决了
+        <text class="code">WxParse</text>标签数过多（rich-text可以节省大量的标签），层数超过限制无法显示（超过20层的直接使用rich-text显示），无法解析表格，部分样式显示不准确（rich-text的显示效果更好）等缺陷；也弥补了
+        <text class="code">rich-text</text>图片不能预览，链接无法点击，不能显示视频，部分标签不支持（在解析的过程中替换）等问题，从而达到一个更加完美的效果。
+        <text decode>\n&emsp;&emsp;</text>且其轻量化，前后端通用等特点，也使得应用面更加广泛。
+      </view>
+      <!--下载链接-->
+      <view id="download" class="weui-article__h1">下载链接</view>
+      <view class="weui-article__section">
+        <Parser html='GitHub链接：<a href="https://github.com/jin-yufeng/Parser">长按复制链接</a>'/>
+      </view>
+      <!--更新日志-->
+      <view id="update" class="weui-article__h1">更新日志</view>
+      <view class="weui-article__section">
+        <Parser html="{{update}}"/>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<cover-view style="position:fixed;right:15px;bottom:15px;width:35px;height:35px;">
+  <cover-image src="/images/top.png" style="width:100%" mode="widthFix" bindtap="gotop" />
+</cover-view>

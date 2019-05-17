@@ -5,8 +5,10 @@ page {
 .label {
   font-size: 13px;
   text-align: center;
-  width: 50px;
-  height: 25px;
+  padding-left:8px;
+  padding-right:8px;
+  width: auto;
+  height:25px;
   line-height: 25px;
   border-radius: 5px;
   margin: 5px;

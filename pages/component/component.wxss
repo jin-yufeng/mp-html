@@ -1,15 +1,9 @@
-/* pages/usage/usage.wxss */
-.pre {
-  background-color: #f6f8fa;
-  padding: 5px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  font-size: 13px;
-  color: #24292e;
-  font-family: monospace;
-  white-space: pre;
-  overflow: scroll;
+/* miniprogram/pages/component/component.wxss */
+.link{
+  color:#586c94;
+}
+.link-hover{
+  text-decoration: underline;
 }
 .code {
   font-style: italic;
@@ -25,4 +19,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.inline{
+  display:inline;
 }

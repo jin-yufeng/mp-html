@@ -9,35 +9,38 @@
     <view class="weui-cells weui-cells_after-title" style="padding:10px 15px">
       <Parser html="{{html}}" />
     </view>
-    <form bindsubmit='parseHtml' bindreset='clearHtml'>
+    <form bindsubmit='parseHtml'>
       <view class="weui-cells__title">输入字符</view>
       <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell">
           <view class="weui-cell__bd">
-            <textarea name="html" wx:if="{{!parseing}}" focus="{{focus}}" value="{{htmlString}}" bindinput="inputHtml" class="weui-textarea" placeholder="请输入数据" style="height:10em" maxlength='-1' />
-            <text wx:else bindtap="focus" class="weui-textarea" style="height:10em;word-break:break-all;overflow:hidden">{{htmlString}}</text>
+            <textarea wx:if="{{!parseing}}" focus="{{focus}}" value="{{htmlString}}" bindinput="inputHtml" class="weui-textarea" placeholder="{{modes[modeIndex]}}" style="height:10em" maxlength='-1' />
+            <text wx:else space="nbsp" bindtap="focus" class="weui-textarea" style="height:10em;word-break:break-all;overflow:hidden">{{htmlString}}</text>
           </view>
         </view>
       </view>
       <view style="display:flex;justify-content:center;margin-top:5px;margin-bottom:5px;">
-        <view class="label" data-type="table" bindtap="addTemplate">表格</view>
-        <view class="label" data-type="list" bindtap="addTemplate">列表</view>
-        <view class="label" data-type="img" bindtap="addTemplate">图片</view>
-        <view class="label" data-type="video" bindtap="addTemplate">视频</view>
-        <view class="label" data-type="a" bindtap="addTemplate">链接</view>
+        <block wx:if="{{modeIndex==0}}">
+          <view class="label" data-type="table" bindtap="addTemplate">表格</view>
+          <view class="label" data-type="list" bindtap="addTemplate">列表</view>
+          <view class="label" data-type="img" bindtap="addTemplate">图片</view>
+          <view class="label" data-type="video" bindtap="addTemplate">视频</view>
+          <view class="label" data-type="a" bindtap="addTemplate">链接</view>
+        </block>
+        <block wx:elif="{{modeIndex==1}}">
+          <view class="label" data-type="style" bindtap="addTemplate">多层style匹配</view>
+          <view class="label" data-type="code" bindtap="addTemplate">代码高亮</view>
+        </block>
+        <block wx:elif="{{modeIndex==3}}">
+          <view class="label" data-type="table_md" bindtap="addTemplate">表格</view>
+          <view class="label" data-type="list_md" bindtap="addTemplate">列表</view>
+          <view class="label" data-type="title_md" bindtap="addTemplate">标题</view>
+          <view class="label" data-type="img_md" bindtap="addTemplate">图片</view>
+          <view class="label" data-type="a_md" bindtap="addTemplate">链接</view>
+        </block>
       </view>
-      <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cells weui-cells_after-title" wx:if="{{modeIndex!=0}}">
         <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-            <view class="weui-label">解析模式</view>
-          </view>
-          <view class="weui-cell__bd">
-            <picker name="mode" bindchange="changeMode" value="{{modeIndex}}" range="{{modes}}">
-              <view class="weui-select weui-select_in-select-after">{{modes[modeIndex]}}</view>
-            </picker>
-          </view>
-        </view>
-        <view class="weui-cell weui-cell_select" wx:if="{{modeIndex!=0}}">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
             <view class="weui-label">代码高亮</view>
           </view>
@@ -50,7 +53,7 @@
       </view>
       <view class="weui-btn-area">
         <button class="weui-btn" form-type='submit' type="primary">解析</button>
-        <button class="weui-btn" form-type='reset'>清空</button>
+        <button class="weui-btn" bindtap="clearHtml">清空</button>
       </view>
     </form>
   </view>

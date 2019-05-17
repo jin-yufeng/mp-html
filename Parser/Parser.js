@@ -141,17 +141,21 @@ Parser.prototype.write = function(chunk) {
 };
 
 function html2nodes(data, tagStyle) {
-  return new Promise(function(resolve, reject) {
-    var style = '';
-    data = data.replace(/<style.*?>([\s\S]*?)<\/style>/gi, function() {
-      style += arguments[1];
-      return '';
-    });
-    style=style.toLowerCase();
-    var handler = new DomHandler(style, tagStyle);
-    new Parser(handler, function(res) {
-      resolve(res);
-    }).write(data);
+  return new Promise(function (resolve, reject) {
+    try {
+      var style = '';
+      data = data.replace(/<style.*?>([\s\S]*?)<\/style>/gi, function () {
+        style += arguments[1];
+        return '';
+      });
+      style = style.toLowerCase();
+      var handler = new DomHandler(style, tagStyle);
+      new Parser(handler, function (res) {
+        return resolve(res);
+      }).write(data);
+    } catch (err) {
+      return reject(err);
+    }
   })
 }
 module.exports = html2nodes;

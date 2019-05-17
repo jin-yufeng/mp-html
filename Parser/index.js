@@ -6,37 +6,42 @@ Component({
       type: null,
       value: '',
       observer: function(html) {
+        var that=this;
         if (!html) {
           this.setData({
             nodes: [],
             videoControl: {}
           })
         } else if (typeof html == 'string') {
-          var that = this;
-          html2nodes(html, this.data.tagStyle).then(function(e) {
+          html2nodes(html, this.data.tagStyle).then(res => {
             that.setData({
-              nodes: e.nodes,
+              nodes: res.nodes,
               videoControl: {}
             },function(){
-              that.imgList = e.imgList;
-              that.videoNum = e.videoNum;
-              if (e.videoNum > 1) {
-                for (var i = 1; i <= e.videoNum; i++) {
+              that.imgList = res.imgList;
+              that.videoNum = res.videoNum;
+              if (res.videoNum > 1) {
+                for (var i = 1; i <= res.videoNum; i++) {
                   that['video' + i] = wx.createVideoContext('video' + i, that);
                 }
               }
+              that.triggerEvent('ready', 'ok');
             })
-            if (e.title) {
+            if (res.title) {
               wx.setNavigationBarTitle({
-                title: e.title
+                title: res.title
               })
             }
-            that.triggerEvent('parse', e);
-          });
+            that.triggerEvent('parse', res);
+          }).catch(err => {
+            that.triggerEvent('error', err);
+          })
         } else if (html.constructor == Array) {
           this.setData({
             nodes: html,
             videoControl: {}
+          },function(){
+            that.triggerEvent('ready', 'ok');
           })
           this.imgList = [];
           this.videoNum = 0;
@@ -53,6 +58,7 @@ Component({
                 that['video' + i] = wx.createVideoContext('video' + i, that);
               }
             }
+            that.triggerEvent('ready', 'ok');
           })
           if (html.title) {
             wx.setNavigationBarTitle({
@@ -91,8 +97,11 @@ Component({
         }
       }
     },
+    error(e) {
+      this.triggerEvent('error', e);
+    }, 
     tapevent(e) {
-      this.triggerEvent('linkpress', e.currentTarget.dataset.href)
+      this.triggerEvent('linkpress', e.currentTarget.dataset.href);
     },
     copyhref(e) {
       if (this.data.selectable) {

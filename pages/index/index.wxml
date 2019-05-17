@@ -6,36 +6,24 @@
   </view>
   <view class="page__bd page__bd_spacing">
     <view class="kind-list">
-      <navigator url="../introduction/introduction" class="kind-list__item">
-        <view class="weui-flex kind-list__item-hd">
-          <view class="weui-flex__item">功能介绍</view>
-          <image class="kind-list__img" src="../../images/introduction.png"></image>
+      <block wx:for="{{list}}" wx:key="id">
+        <view class="kind-list__item">
+          <view id="{{item.id}}" class="weui-flex kind-list__item-hd {{item.open ? 'kind-list__item-hd_show' : ''}}" bindtap="kindToggle">
+            <view class="weui-flex__item">{{item.name}}</view>
+            <image class="kind-list__img" src="/images/{{item.id}}.png"></image>
+          </view>
+          <view class="kind-list__item-bd {{item.open ? 'kind-list__item-bd_show' : ''}}">
+            <view class="weui-cells {{item.open ? 'weui-cells_show' : ''}}">
+              <block wx:for="{{item.pages}}" wx:for-item="page" wx:key="{{page.name}}">
+                <navigator url="{{page.url}}" class="weui-cell weui-cell_access">
+                  <view class="weui-cell__bd">{{page.name}}</view>
+                  <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                </navigator>
+              </block>
+            </view>
+          </view>
         </view>
-      </navigator>
-      <view bindtap='seedemo' class="kind-list__item">
-        <view class="weui-flex kind-list__item-hd">
-          <view class="weui-flex__item">示例页面</view>
-          <image class="kind-list__img" src="../../images/demo.png"></image>
-        </view>
-      </view>
-      <navigator url="../test/test" class="kind-list__item">
-        <view class="weui-flex kind-list__item-hd">
-          <view class="weui-flex__item">自定义测试</view>
-          <image class="kind-list__img" src="../../images/test.png"></image>
-        </view>
-      </navigator>
-      <navigator url="../usage/usage" class="kind-list__item">
-        <view class="weui-flex kind-list__item-hd">
-          <view class="weui-flex__item">使用方法</view>
-          <image class="kind-list__img" src="../../images/usage.png"></image>
-        </view>
-      </navigator>
-      <navigator url="../update/update" class="kind-list__item">
-        <view class="weui-flex kind-list__item-hd">
-          <view class="weui-flex__item">更新日志</view>
-          <image class="kind-list__img" src="../../images/update.png"></image>
-        </view>
-      </navigator>
+      </block>
       <view class="kind-list__item">
         <button class="weui-flex kind-list__item-hd" open-type='contact'>
           <view class="weui-flex__item">问题反馈</view>

@@ -8,7 +8,10 @@ Page({
     styles: ['a11y-dark', 'a11y-light', 'agate', 'an-old-hope', 'androidstudio', 'arduino-light', 'arta', 'ascetic', 'atelier-cave-dark', 'atelier-cave-light', 'atelier-dune-dark', 'atelier-dune-light', 'atelier-estuary-dark', 'atelier-estuary-light', 'atelier-forest-dark', 'atelier-forest-light', 'atelier-heath-dark', 'atelier-heath-light', 'atelier-lakeside-dark', 'atelier-lakeside-light', 'atelier-plateau-dark', 'atelier-plateau-light', 'atelier-savanna-dark', 'atelier-savanna-light', 'atelier-seaside-dark', 'atelier-seaside-light', 'atelier-sulphurpool-dark', 'atelier-sulphurpool-light', 'atom-one-dark-reasonable', 'atom-one-dark', 'atom-one-light', 'codepen-embed', 'color-brewer', 'darcula', 'dark', 'darkula', 'default', 'docco', 'dracula', 'far', 'foundation', 'github-gist', 'github', 'gml', 'googlecode', 'grayscale', 'gruvbox-dark', 'gruvbox-light', 'hopscotch', 'hybrid', 'idea', 'ir-black', 'isbl-editor-dark', 'isbl-editor-light', 'kimbie.dark', 'kimbie.light', 'lightfair', 'magula', 'mono-blue', 'monokai-sublime', 'monokai', 'nord', 'obsidian', 'ocean', 'paraiso-dark', 'paraiso-light', 'purebasic', 'qtcreator_dark', 'qtcreator_light', 'railscasts', 'rainbow', 'routeros', 'shades-of-purple', 'solarized-dark', 'solarized-light', 'sunburst', 'tomorrow-night-blue', 'tomorrow-night-bright', 'tomorrow-night-eighties', 'tomorrow-night', 'tomorrow', 'vs', 'vs2015', 'xcode', 'xt256', 'zenburn'],
     styleIndex:36
   },
-  onLoad() {
+  onLoad(e) {
+    this.setData({
+      modeIndex:parseInt(e.mode)
+    })
     htmlString = "";
   },
   inputHtml(e) {
@@ -29,7 +32,29 @@ Page({
         htmlString += '<div style="text-align:center;">\n  <video src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" controls="true"></video>\n</div>';
         break;
       case 'a':
-        htmlString += '<div style="text-align:center">\n  <a href="/pages/introduction/introduction">\n    <img src="http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg" />\n  </a>\n  <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>\n  <br />\n  <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>\n  <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>\n</div>'
+        htmlString += '<div style="text-align:center">\n  <a href="/pages/introduction/introduction">\n    <img src="http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg" />\n  </a>\n  <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>\n  <br />\n  <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>\n  <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>\n</div>';
+        break;
+      case 'style':
+        htmlString += '<style>.demo1 .demo2{\n  text-align:center;\n}\n</style>\n<div class="demo1">\n  <div class="demo2">Hello World!</div>\n</div>';
+        break;
+      case 'code':
+        htmlString += '<pre>function test(){\n  console.log("Hello World!");\n}</pre>';
+        break;
+      case 'table_md':
+        htmlString += '| 标题1 | 标题2 |\n|:---:|:---:|\n| 内容1 | 内容2 |';
+        break;
+      case 'list_md':
+        htmlString += '- 无序列表1\n- 无序列表2\n1. 有序列表1\n2. 有序列表2';
+        break;
+      case 'title_md':
+        htmlString += '# 1号标题 #\n## 2号标题 ##\n### 3号标题 ###';
+        break;
+      case 'img_md':
+        htmlString +='![示例图片](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg)';
+        break;
+      case 'a_md':
+        htmlString +='[GitHub链接](https://github.com/jin-yufeng/Parser)';
+        break;
     }
     this.setData({
       htmlString
@@ -50,9 +75,7 @@ Page({
     this.setData({
       html: "",
       htmlString: "",
-      modeIndex: 0,
-      styleIndex: 36,
-      parseing: false
+      parseing: false,
     })
   },
   focus(){
@@ -62,15 +85,23 @@ Page({
     })
   },
   parseHtml(e) {
-    if (e.detail.value.mode == 0) {
+    if (!htmlString){
+      wx.showModal({
+        title: '失败',
+        content: '内容不能为空！',
+        showCancel:false
+      })
+      return;
+    }
+    if (this.data.modeIndex == 0) {
       var that=this;
       this.setData({
         parseing:true,
-        htmlString: e.detail.value.html,
-        html: e.detail.value.html
+        htmlString: htmlString,
+        html: htmlString
       })
     } else {
-      if (e.detail.value.mode == 2 && !/https*:\/\//.test(e.detail.value.html)){
+      if (this.data.modeIndex == 2 && !/https*:\/\//.test(htmlString)){
         wx.showModal({
           title: '失败',
           content: '无效的网址！网址必须以http://或https://开头',
@@ -83,14 +114,14 @@ Page({
       })
       var that = this;
       var mode;
-      if (e.detail.value.mode == 3) mode = 'markdown';
-      else if (e.detail.value.mode == 2) mode = 'website';
+      if (this.data.modeIndex == 3) mode = 'markdown';
+      else if (this.data.modeIndex == 2) mode = 'website';
       else mode = 'html';
       wx.cloud.init();
       wx.cloud.callFunction({
         name: 'parser',
         data: {
-          data: e.detail.value.html,
+          data: htmlString,
           mode: mode,
           options:{styles:that.data.styles[e.detail.value.styles]}
         },
@@ -98,7 +129,7 @@ Page({
           wx.hideLoading()
           that.setData({
             parseing: true,
-            htmlString: e.detail.value.html,
+            htmlString: htmlString,
             html: res.result,
           })
         },
