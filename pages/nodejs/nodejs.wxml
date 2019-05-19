@@ -36,6 +36,7 @@
       <view class="weui-article__section">
         由于前端对时间和空间的要求，一些功能较为精简，因此另外推出了一个用于
         <text class="code">node.js</text>的后端加强包，将提供更加强大的功能；且在后端提前解析完成后再传输给前端，可以节省解析的时间，提高性能
+        <view style="font-weight:bold;margin-top:5px;">注意：本包的使用需要node.js v7.6.0以上环境，无法直接在小程序前端使用，建议部署在服务器或云函数上</view>
       </view>
       <!--功能介绍-->
       <view id="introduction" class="weui-article__h1">功能介绍</view>
@@ -106,12 +107,8 @@
             <text class="code">http://</text>或
             <text class="code">https://</text>开头），设置
             <text class="code">website</text>模式，插件将自动获取该页面的内容并进行解析</view>
-          <view class="weui-article__p">支持静态网页模式（速度快但
-            <text class="code">js</text>中动态加载的内容都会被忽略）和动态网页模式（使用无头浏览器进行加载，速度较慢，需要额外安装，需要的空间较大），可通过设置
-            <text class="code">options</text>参数中的
-            <text class="code">engine</text>属性实现；自定义测试页面由于云函数空间大小限制，仅支持静态网页模式</view>
-          <view class="weui-article__p">另外，针对推送页面做了以下优化（静态网页模式）：
-            <Parser html="<ol><li>支持在图片没有<code>src</code>属性时自动将<code>data-src</code>属性赋给<code>src</code></li><li>支持从视频的<code>iframe</code>标签解析出真实的视频源地址并进行播放</li><li>支持从音频的<code>qqmusic</code>标签解析出真实的音频源地址并进行播放</li></ol>" tagStyle="{{tagStyle}}" />
+          <view class="weui-article__p">支持以下模式（自定义测试页面由于云函数空间大小限制仅支持静态网页模式）：
+            <Parser html="{{webmode}}" tag-style="{{tagStyle}}"/>
           </view>
           示例：
           <Parser html="{{website}}" />
@@ -143,7 +140,7 @@
           <view style="margin-left:10%;">
             <Parser html="{{npm}}" />
           </view>
-          <Parser html="<ol start=2><li>在需要使用的<code>js</code>文件中添加：</li></ol>" tagStyle="{{tagStyle}}" />
+          <Parser html="<ol start=2><li>在需要使用的<code>js</code>文件中添加：</li></ol>" tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <Parser html="{{node}}" />
           </view>

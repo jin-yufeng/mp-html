@@ -6,6 +6,18 @@ Component({
       type: null,
       value: '',
       observer: function(html) {
+        var showAnimation = wx.createAnimation({
+          duration: this.data["animationDuration"],
+          timingFunction:"ease"
+        });
+        var hideAnimation = wx.createAnimation({
+          duration: this.data["animationDuration"],
+          timingFunction: "ease"
+        });
+        if (this.data["showWithAnimation"]) {
+          hideAnimation.opacity(0).step();
+          showAnimation.opacity(1).step();
+        }
         var that=this;
         if (!html) {
           this.setData({
@@ -16,6 +28,8 @@ Component({
           html2nodes(html, this.data.tagStyle).then(res => {
             that.setData({
               nodes: res.nodes,
+              showAnimation: showAnimation.export(),
+              hideAnimation: hideAnimation.export(),
               videoControl: {}
             },function(){
               that.imgList = res.imgList;
@@ -39,6 +53,8 @@ Component({
         } else if (html.constructor == Array) {
           this.setData({
             nodes: html,
+            showAnimation: showAnimation.export(),
+            hideAnimation: hideAnimation.export(),
             videoControl: {}
           },function(){
             that.triggerEvent('ready', 'ok');
@@ -49,6 +65,8 @@ Component({
           var that=this;
           this.setData({
             nodes: html.nodes,
+            showAnimation: showAnimation.export(),
+            hideAnimation: hideAnimation.export(),
             videoControl: {}
           }, function () {
             that.imgList = html.imgList;
@@ -76,10 +94,22 @@ Component({
       type: Boolean,
       value: true
     },
+    'htmlStyle': {
+      type: String,
+      value: ''
+    },
     'tagStyle': {
       type: Object,
       value: {}
     },
+    'showWithAnimation': {
+      type: Boolean,
+      value: false
+    },
+    'animationDuration': {
+      type: Number,
+      value: 400
+    }
   },
   methods: {
     _loadVideo(e) {

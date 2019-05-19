@@ -17,8 +17,8 @@
   <rich-text wx:else class="{{(item.name||item.type)+'_rich'}}" nodes="{{[item]}}"/>
 </template>
 <!--入口-->
-<slot wx:if="{{!nodes.length}}"></slot>
-<view class="html-class" style="overflow:scroll;">
+<slot wx:if="{{!nodes.length}}" animation="{{hideAnimation}}"></slot>
+<view class="html-class" style="overflow:scroll;opacity:{{showWithAnimation?0:1}};{{htmlStyle}}" animation="{{showAnimation}}">
   <template is='rich-text-floor1' data='{{nodes,videoControl}}' />
 </view>
 <!--各层级-->

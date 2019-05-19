@@ -67,7 +67,7 @@
           可以对标签设置任意自定义的样式，示例：
           <Parser html="{{tagStylecode}}" />
           <text>解析结果：</text>
-          <Parser html="<code>test</code>" tagStyle="{{tagStyle}}" html-class="inline" />
+          <Parser html="<code>test</code>" tag-style="{{tagStyle}}" html-style="display:inline" />
         </view>
         <!--设置整体容器的样式-->
         <view id="htmlClass" class="weui-article__h2">设置整体容器的样式</view>
@@ -157,16 +157,16 @@
         <view id="tapEvent" class="weui-article__h2">事件效果</view>
         <view class="weui-article__section">
           <view class="weui-article__h3">图片点击</view>
-          <Parser html='<ol><li>点击图片可以预览，左右滑动可以查看所有的图片</li><li>对于一些装饰性的图片，可以对其设置<code>ignore</code>属性，设置后将无法预览</li></ol>' tagStyle="{{tagStyle}}" />
+          <Parser html='<ol><li>点击图片可以预览，左右滑动可以查看所有的图片</li><li>对于一些装饰性的图片，可以对其设置<code>ignore</code>属性，设置后将无法预览</li></ol>' tag-style="{{tagStyle}}" />
           <text>\n</text>
           <view class="weui-article__h3">链接点击</view>
-          <Parser html='<ol><li>点击链接会有下划线和半透明的效果，若链接为小程序路径，则点击时跳转至相应页面；若为外部链接，则长按可复制链接</li><li>点击链接时会触发<code>bindlinkpress</code>事件，并返回相应的链接，可以进行进一步的操作（如文档链接可以在回调中进行下载和打开等）</li></ol>' tagStyle="{{tagStyle}}" />
+          <Parser html='<ol><li>点击链接会有下划线和半透明的效果，若链接为小程序路径，则点击时跳转至相应页面；若为外部链接，则长按可复制链接</li><li>点击链接时会触发<code>bindlinkpress</code>事件，并返回相应的链接，可以进行进一步的操作（如文档链接可以在回调中进行下载和打开等）</li></ol>' tag-style="{{tagStyle}}" />
         </view>
         <!--性能指标-->
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <text class="code">35.0KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <text class="code">36.4KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <Parser html="{{errorcode}}" />
         </view>
       </view>
@@ -176,15 +176,15 @@
         <!--使用步骤-->
         <view id="useStep" class="weui-article__h2">使用步骤</view>
         <view class="weui-article__section">
-          <Parser html='<ol><li>下载<code>Parser</code>文件夹至小程序目录</li><li>在需要使用页面的<code>json</code>文件中添加</li></ol>' tagStyle="{{tagStyle}}" />
+          <Parser html='<ol><li>下载<code>Parser</code>文件夹至小程序目录</li><li>在需要使用页面的<code>json</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <Parser html="{{json}}" />
           </view>
-          <Parser html='<ol start=3><li>在需要使用页面的<code>wxml</code>文件中添加</li></ol>' tagStyle="{{tagStyle}}" />
+          <Parser html='<ol start=3><li>在需要使用页面的<code>wxml</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <Parser html="{{wxml}}" />
           </view>
-          <Parser html='<ol start=4><li>在需要使用页面的<code>js</code>文件中添加</li></ol>' tagStyle="{{tagStyle}}" />
+          <Parser html='<ol start=4><li>在需要使用页面的<code>js</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <Parser html="{{js}}" />
           </view>
@@ -194,26 +194,26 @@
         <view class="weui-article__section" style="font-size:13px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;">
           <view style="display:flex;font-weight:bold;">
             <view class="td" style="width:25%">属性</view>
-            <view class="td" style="width:25%;">类型</view>
-            <view class="td" style="width:15%;">默认</view>
-            <view class="td" style="width:35%;">说明</view>
+            <view class="td" style="width:20%;">类型</view>
+            <view class="td" style="width:10%;">默认</view>
+            <view class="td" style="width:45%;">说明</view>
           </view>
           <view wx:for="{{attrs}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
             <view class="td" style="width:25%">{{item.name}}</view>
-            <view class="td" style="width:25%;">
+            <view class="td" style="width:20%;">
               <text>{{item.type}}</text>
             </view>
-            <view class="td" style="width:15%;">{{item.default}}</view>
-            <view class="td" style="width:35%;">{{item.notice}}</view>
+            <view class="td" style="width:10%;">{{item.default}}</view>
+            <view class="td" style="width:45%;">{{item.notice}}</view>
           </view>
         </view>
         <view class="weui-article__section">
-          <Parser html='{{format}}' tagStyle="{{tagStyle}}" />
+          <Parser html='{{format}}' tag-style="{{tagStyle}}" />
         </view>
         <!--回调函数-->
         <view id="callback" class="weui-article__h2">回调函数</view>
         <view class="weui-article__section">
-          <Parser html="{{callback}}" tagStyle="{{tagStyle}}"/>
+          <Parser html="{{callback}}" tag-style="{{tagStyle}}"/>
         </view>
         <!--基础库要求-->
         <view id="libRequire" class="weui-article__h2">基础库要求</view>

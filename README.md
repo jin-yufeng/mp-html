@@ -42,25 +42,30 @@
   }
   ```
   ``` html
-  <Parser html="<code>test</code>" tagStyle="{{tagStyle}}" />
+  <Parser html="<code>test</code>" tag-style="{{tagStyle}}" />
   ```
   ![解析自定义样式](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/27/ca68a4464065829c80c33d056f95a7d2.png)
 - 自动设置标题  
   若`html`中存在`title`标签，将自动把`title`标签的内容设置到页面的标题上，并在回调`bindparse`中返回，可以用于转发  
 - 设置容器的样式  
-  支持在`html-class`属性中设置整个富文本容器的样式，包括`display`、`margin`、`padding`等
+  支持在`html-class`或`html-style`属性中设置整个富文本容器的样式
   ```html
-  <Parser html="{{html}}" html-class="contain" />
+  <Parser html="{{html}}" html-class="contain" html-style="font-size:14px"/>
   ```
   ```css
   .contain{
     margin:5px;
   }
   ```
-- 支持添加加载提示
+- 支持添加加载提示  
   可以在`Parser`标签内添加加载提示或动画，将在未加载完成或内容为空时显示，加载完成后自动隐藏，例如：
   ```html
   <Parser html="{{html}}">加载中...</Parser>
+  ```
+- 支持动画显示效果  
+  通过设置`show-with-animation`属性可以实现内容加载完成后渐显的动画效果
+  ```html
+  <Parser html="{{html}}" show-with-animation animation-duration="500" />
   ```
 - 支持的标签种类丰富，包括`视频`、`表格`等  
   在[`rich-text`](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html)组件的基础上增加支持以下标签: 
@@ -100,7 +105,7 @@
   <div>!
   ```  
  
-- 功能强大，支持无限层级，解析速度快，包大小仅约`35.0KB`  
+- 功能强大，支持无限层级，解析速度快，包大小仅约`36.4KB`  
 ## 使用方法 ##
 1. 下载Parser文件夹至小程序目录  
    ![页面结构](http://bmob-cdn-17111.b0.upaiyun.com/2019/05/06/ff92de3340b36dbf803addcf85659e42.png)
@@ -109,7 +114,7 @@
    ``` json
    {
      "usingComponents": {
-       "Parser":"../../Parser/index"
+       "Parser":"/Parser/index"
      }
    }
    ```
@@ -130,17 +135,20 @@
   | 属性 | 类型 | 默认值 | 必填 | 说明 |
   |:----:|:----:|:----:|:----:|:----:|
   | html | String/Object/Array | | 是 | 要显示的富文本数据，具体格式见下方说明 |
-  | html | String | | 否 | 对整个富文本容器设置class样式 |
+  | html-class | String | | 否 | 对整个富文本容器设置class样式 |
+  | html-style | String | | 否 | 对整个富文本容器设置style样式，可以动态设置 |
+  | tag-style | Object | | 否 | 设置标签的默认样式 |
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
   | selectable | Boolean | true | 否 | 是否允许长按复制链接 |
-  | tagStyle | Object | | 否 | 设置标签的默认样式 |
+  | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
+  | animation-duration | Number | 400 | 否 | 动画持续时间 |
   
   - html格式：
     1. `string`类型：一个`html`字符串，例如：`<div>Hello World!</div>`
     2. `object`类型：一个形如`{nodes: [Array], imgList: [Array], videoNum: Number, title: "String"}`的结构体，其中nodes数组的格式基本同[rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html)，对于该节点下有`img`，`video`，`a`标签的，需要将`continue`属性设置为`true`，否则将直接使用`rich-text`组件渲染，可能导致图片无法预览，链接无法点击等问题，imgList为其中所有图片地址的数组，`videoNum`是视频数量（不必要，用于`autopause`属性）`title`是页面的标题（不必要，传入将会设置到页面的标题上）回调函数`bindparser`的返回值就是这样的结构体
     3. `array`类型：格式要求同上（用此格式传入预览图片时，将`不能`通过左右滑动查看所有图片）  
     4. 使用b, c方法可以节省解析的时间，提高性能
-  - 关于tagStyle  
+  - 关于tag-style  
     可以设置标签的默认样式，如`{ body:"margin:5px" }`  
 
 - 回调函数
@@ -156,15 +164,24 @@
   
     | 版本 | 功能 | 覆盖率 |
     |:---:|:---:|:---:|
-    | >=2.2.5 | 全部正常 | 98.23% |
-    | 1.9.90-2.2.4 | 部分html实体无法显示 | 1.55% |
-    | 1.6.6-1.9.90 | html-class属性无法使用<br />部分html实体无法显示 | 0.13% |
-    | <1.6.6 | 无法使用 | 0.09% |
+    | >=2.2.5 | 全部正常 | 98.28% |
+    | 1.9.90-2.2.4 | 部分html实体无法显示 | 1.46% |
+    | 1.6.6-1.9.90 | html-class属性无法使用<br />部分html实体无法显示 | 0.11% |
+    | <1.6.6 | 无法使用 | 0.08% |
+- api  
+  如果仅需要获取解析结果而不需要显示（或需要对解析结果进行修改后再进行显示）；可使用本api，接受两个参数，第一个是`html`字符串，第二个是`tagStyle`结构体，返回值结构同`bindparse`，示例：
+  ```javascript
+  const html2nodes=require("/Parser/Parser.js");
+  html2nodes("your html").then(res=>{
+    console.log(res);
+  })
+  ```
 - Tips  
     `table`, `ol`, `ul`等标签由于较难通过模板循环的方式显示，将直接通过`rich-text`进行渲染，因此请尽量避免在表格，列表中加入图片或链接，否则将无法预览或点击（但可以正常显示）
 
 ## 后端解析 ##
-&emsp;&emsp;本插件提供了一个配套的后端`node.js`支持包，可以提供更加强大的功能，如匹配多层的`style`，代码高亮，直接打开网址，解析`markdown`等，其返回值可以直接作为本组件的`html`属性的值，在后端提前完成解析后可以节省解析时间，提高性能。  
+&emsp;&emsp;本插件提供了一个配套的后端`node.js`支持包，可以提供更加强大的功能，如匹配多层的`style`，代码高亮，直接打开网址，解析`markdown`等，其返回值可以直接作为本组件的`html`属性的值；且在后端提前完成解析后可以节省解析时间，提高性能。  
+**注意：该包需要node.js v7.6.0以上运行环境，无法直接在小程序前端使用，建议部署在服务器或云函数上**  
 安装方法：
 ```npm
 npm install parser-wxapp
@@ -184,6 +201,9 @@ parser(html).then(function(res){
 ## 许可 ##
 您可以随意的使用和分享本插件
 ## 更新日志 ##
+- 2019.5.19: 
+  1. `A` 增加了`html-style`属性，可以对整个富文本容器设置`style`样式，可通过`wxml`的数据绑定实现动态修改（直接在`style`中设置可能不生效）
+  2. `A` 增加了`show-with-animation`和`animation-duration`属性，支持在显示时使用渐显动画
 - 2019.5.17:
   1. `A` 增加了`bindready`回调，渲染完成时调用
   2. `A` 增加了`binderror`回调，解析错误或加载多媒体资源出错时调用
