@@ -30,9 +30,6 @@ Page({
       name: 'iframe',
       attrs: 'src, width, height, scrolling\nmarginwidth, marginheight'
     }, {
-      name: 'source',
-      attrs: 'src'
-    }, {
       name: 'embed',
       attrs: 'src'
     }, {

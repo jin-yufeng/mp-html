@@ -86,16 +86,17 @@ var ignoreTag = {
   rect: true,
   use: true,
   stop: true,
-  source: true,
   polyline: true,
   polygon: true,
   map: true,
-  canvas: true,
+  canvas: true
 };
 
 function DomHandler(style, tagStyle) {
   this.imgList = [];
-  this.videoNum=0;
+  this.videoNum = 0;
+  this.audioNum = 0;
+  this.bgmusic = false;
   this.nodes = [];
   this._style = ParseClass(style, tagStyle || {});
   this._tagStack = [];
@@ -148,14 +149,16 @@ DomHandler.prototype.onopentag = function(name, attrs) {
   delete attrs.class;
   delete attrs.id;
   switch (name) {
-    case 'div': case 'p':
+    case 'div':
+    case 'p':
       if (attrs.align) {
         attrs.style += (';text-align:' + attrs.align);
         delete attrs.align;
       }
       break;
     case 'img':
-      /*if (attrs['data-src']) {
+      /*如需在没有src时将data-src自动赋给src，请打开这段注释
+        if (attrs['data-src']) {
         attrs.src = attrs.src || attrs['data-src'];
         delete attrs['data-src'];
       }*/
@@ -194,15 +197,41 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       }
       attrs.style = 'color:#366092;display:inline;word-break:break-all;overflow:auto;' + attrs.style;
       break;
-    case 'video': case 'audio':
+    case 'video':
       attrs.loop = attrs.hasOwnProperty('loop');
       attrs.controls = attrs.hasOwnProperty('controls');
-      if (name == 'video') attrs.id = ('video' + (++this.videoNum));
+      attrs.autoplay = attrs.hasOwnProperty('autoplay');
+      attrs.muted = attrs.hasOwnProperty('muted');
+      attrs.id = ('video' + (++this.videoNum));
+      attrs.source = [];
+      if (attrs.src) attrs.source.push(attrs.src);
       for (var i = this._tagStack.length - 1; i >= 0; i--) {
         if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
         else break;
       }
       break;
+    case 'audio':
+      attrs.loop = attrs.hasOwnProperty('loop');
+      attrs.controls = attrs.hasOwnProperty('controls');
+      if (attrs.hasOwnProperty('autoplay') && !this.bgmusic) {
+        attrs.id = "bgmusic";
+        this.bgmusic = true;
+      } else attrs.id = ('audio' + (++this.audioNum));
+      attrs.source = [];
+      if (attrs.src) attrs.source.push(attrs.src);
+      for (var i = this._tagStack.length - 1; i >= 0; i--) {
+        if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
+        else break;
+      }
+      break;
+    case 'source':
+      var parent = this._tagStack[this._tagStack.length - 1];
+      if (parent && (parent.name == 'video' || parent.name == 'audio')) {
+        parent.attrs.source.push(attrs.src);
+        if (!parent.attrs.src) parent.attrs.src = attrs.src;
+      }
+      this._tagStack.push(element);
+      return;
     case 'center':
       name = 'div';
       attrs.style = 'text-align:center;' + attrs.style;
@@ -233,9 +262,9 @@ DomHandler.prototype.ontext = function(data) {
       lastTag.type === 'text'
     ) {
       lastTag.data += data;
-    } else if(/\S/.test(data)){
+    } else if (/\S/.test(data)) {
       var element = {
-        text: data.replace(/&nbsp;/g,'\u00A0'),
+        text: data.replace(/&nbsp;/g, '\u00A0'),
         type: 'text'
       };
       if (/&#*((?!sp|lt|gt).){2,5};/.test(data)) element.decode = true;

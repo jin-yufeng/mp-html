@@ -16,6 +16,7 @@
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="htmlClass" bindtap="gosection">设置整体容器样式</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="setTitle" bindtap="gosection">自动设置标题</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="addLoading" bindtap="gosection">添加加载提示</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="source" bindtap="gosection">多资源加载</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持丰富的标签</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tapEvent" bindtap="gosection">事件效果</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="performance" bindtap="gosection">性能指标</view>
@@ -25,7 +26,7 @@
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="attrs" bindtap="gosection">组件属性</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="callback" bindtap="gosection">回调函数</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="libRequire" bindtap="gosection">基础库要求</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="api" bindtap="gosection">api</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="api" bindtap="gosection">附加功能</view>
         <!--原理简介-->
         <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="theory" bindtap="gosection">原理简介</view>
         <!--下载链接-->
@@ -57,7 +58,7 @@
             </view>
           </view>
           示例：
-          <Parser html="{{stylecode}}"/>
+          <Parser html="{{stylecode}}" />
           <Parser html='<style>.demo{font-style:italic;}#demo2{font-weight:bold;}p{text-align:center;font-size:30px;}</style><p><span class="demo">Hello </span><span id="demo2">World!</span></p>' />
           <view style="color:gray;text-align:center;font-size:12px;">解析结果</view>
         </view>
@@ -95,6 +96,15 @@
           可以在
           <text class="code">Parser</text>标签内添加加载提示或动画，将在未加载完成或内容为空时显示，加载完成后自动隐藏，示例：
           <Parser html="{{loadingcode}}" />
+        </view>
+        <!--多资源加载-->
+        <view id="source" class="weui-article__h2">多资源加载</view>
+        <view class="weui-article__section">
+          可以通过在
+          <text class="code">video</text>和
+          <text class="code">audio</text>标签中设置多个
+          <text class="code">source</text>标签来设置多个来源，组件会按顺序进行加载，若前面的资源链接无法播放，会自动使用下一个链接进行加载，直至最后一个链接；可用于解决平台支持性差异，最大程度避免无法播放，示例：
+          <Parser html="{{source}}" />
         </view>
         <!--支持丰富的标签-->
         <view id="supportTag" class="weui-article__h2">支持丰富的标签</view>
@@ -166,7 +176,7 @@
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <text class="code">36.4KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <text class="code">39.0KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <Parser html="{{errorcode}}" />
         </view>
       </view>
@@ -199,7 +209,7 @@
             <view class="td" style="width:45%;">说明</view>
           </view>
           <view wx:for="{{attrs}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
-            <view class="td" style="width:25%">{{item.name}}</view>
+            <view class="td" style="width:25%"><text>{{item.name}}</text></view>
             <view class="td" style="width:20%;">
               <text>{{item.type}}</text>
             </view>
@@ -213,7 +223,7 @@
         <!--回调函数-->
         <view id="callback" class="weui-article__h2">回调函数</view>
         <view class="weui-article__section">
-          <Parser html="{{callback}}" tag-style="{{tagStyle}}"/>
+          <Parser html="{{callback}}" tag-style="{{tagStyle}}" />
         </view>
         <!--基础库要求-->
         <view id="libRequire" class="weui-article__h2">基础库要求</view>
@@ -229,17 +239,33 @@
             <view class="td" style="width:20%;">{{item.percent}}</view>
           </view>
         </view>
-        <!--api-->
-        <view id="api" class="weui-article__h2">api</view>
+        <!--附加功能-->
+        <view id="api" class="weui-article__h2">附加功能</view>
         <view class="weui-article__section">
-          若仅需要解析
-          <text class="code">html</text>字符串并获取结果可以在
-          <text class="code">js</text>中使用本
-          <text class="code">api</text>，接受2个参数，第一个是
-          <text class="code">html</text>字符串，第二个是
-          <text class="code">tagStyle</text>结构体（可选，用于设置标签的默认样式）；返回值格式同
-          <text class="code">bindparse</text>，示例：
-          <Parser html="{{api}}"/>
+          <view class="weui-article__p">
+            若仅需要解析
+            <text class="code">html</text>字符串并获取结果可以在
+            <text class="code">js</text>中使用本
+            <text class="code">api</text>，接受2个参数，第一个是
+            <text class="code">html</text>字符串，第二个是
+            <text class="code">tagStyle</text>结构体（可选，用于设置标签的默认样式）；返回值格式同
+            <text class="code">bindparse</text>，示例：
+            <Parser html="{{api}}" />
+          </view>
+          <view class="weui-article__p">
+            若需要在图片没有
+            <text class="code">src</text>属性时自动将
+            <text class="code">data-src</text>属性的值赋给
+            <text class="code">src</text>，请将
+            <text class="code">Parser</text>文件夹下的
+            <text class="code">DomHandler.js</text>中160-164行的注释打开
+          </view>
+          <view class="weui-article__p">
+            若需要修改链接受到点击时的样式，可在
+            <text class="code">Parser</text>文件夹下的
+            <text class="code">index.wxss</text>中修改
+            <text class="code">navigator-hover</text>（默认是下划线+半透明）
+          </view>
         </view>
       </view>
       <!--原理简介-->
@@ -257,12 +283,12 @@
       <!--下载链接-->
       <view id="download" class="weui-article__h1">下载链接</view>
       <view class="weui-article__section">
-        <Parser html='GitHub链接：<a href="https://github.com/jin-yufeng/Parser">长按复制链接</a>'/>
+        <Parser html='GitHub链接：<a href="https://github.com/jin-yufeng/Parser">长按复制链接</a>' />
       </view>
       <!--更新日志-->
       <view id="update" class="weui-article__h1">更新日志</view>
       <view class="weui-article__section">
-        <Parser html="{{update}}"/>
+        <Parser html="{{update}}" />
       </view>
     </view>
   </view>

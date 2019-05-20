@@ -29,10 +29,10 @@ Page({
         htmlString += '<div style="text-align:center;">\n  <img src="http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg" />\n<p style="color:gray;font-size:12px;text-align:center">点击图片预览</p>\n</br>\n  <img ignore src="http://bmob-cdn-17111.b0.upaiyun.com/2019/04/14/190f5994407ecad1805d8a3478e64821.gif" width="50%"/>\n  <p style="color:gray;font-size:12px">装饰图片不能预览</p>\n</div>';
         break;
       case 'video':
-        htmlString += '<div style="text-align:center;">\n  <video src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" controls="true"></video>\n</div>';
+        htmlString += '<div style="text-align:center;">\n  <video src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" controls></video>\n</div>';
         break;
       case 'a':
-        htmlString += '<div style="text-align:center">\n  <a href="/pages/introduction/introduction">\n    <img src="http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg" />\n  </a>\n  <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>\n  <br />\n  <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>\n  <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>\n</div>';
+        htmlString += '<div style="text-align:center">\n  <a href="/pages/component/component">\n    <img src="http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg" />\n  </a>\n  <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>\n  <br />\n  <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>\n  <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>\n</div>';
         break;
       case 'style':
         htmlString += '<style>.demo1 .demo2{\n  text-align:center;\n}\n</style>\n<div class="demo1">\n  <div class="demo2">Hello World!</div>\n</div>';

@@ -8,7 +8,7 @@ Component({
       observer: function(html) {
         var showAnimation = wx.createAnimation({
           duration: this.data["animationDuration"],
-          timingFunction:"ease"
+          timingFunction: "ease"
         });
         var hideAnimation = wx.createAnimation({
           duration: this.data["animationDuration"],
@@ -18,11 +18,11 @@ Component({
           hideAnimation.opacity(0).step();
           showAnimation.opacity(1).step();
         }
-        var that=this;
+        var that = this;
         if (!html) {
           this.setData({
             nodes: [],
-            videoControl: {}
+            controls: {}
           })
         } else if (typeof html == 'string') {
           html2nodes(html, this.data.tagStyle).then(res => {
@@ -30,8 +30,9 @@ Component({
               nodes: res.nodes,
               showAnimation: showAnimation.export(),
               hideAnimation: hideAnimation.export(),
-              videoControl: {}
-            },function(){
+              controls: {}
+            }, function() {
+              wx.createAudioContext('bgmusic', that).play();
               that.imgList = res.imgList;
               that.videoNum = res.videoNum;
               if (res.videoNum > 1) {
@@ -55,20 +56,22 @@ Component({
             nodes: html,
             showAnimation: showAnimation.export(),
             hideAnimation: hideAnimation.export(),
-            videoControl: {}
-          },function(){
+            controls: {}
+          }, function() {
+            wx.createAudioContext('bgmusic', that).play();
             that.triggerEvent('ready', 'ok');
           })
           this.imgList = [];
           this.videoNum = 0;
         } else if (typeof html == 'object') {
-          var that=this;
+          var that = this;
           this.setData({
             nodes: html.nodes,
             showAnimation: showAnimation.export(),
             hideAnimation: hideAnimation.export(),
-            videoControl: {}
-          }, function () {
+            controls: {}
+          }, function() {
+            wx.createAudioContext('bgmusic', that).play();
             that.imgList = html.imgList;
             that.videoNum = html.videoNum ? html.videoNum : 0;
             if (that.videoNum > 1) {
@@ -113,9 +116,12 @@ Component({
   },
   methods: {
     _loadVideo(e) {
-      this.data.videoControl[e.currentTarget.dataset.id] = true;
+      this.data.controls[e.currentTarget.dataset.id] = {
+        play: true,
+        index: 0
+      }
       this.setData({
-        videoControl: this.data.videoControl
+        controls: this.data.controls
       })
     },
     _playVideo(e) {
@@ -128,8 +134,20 @@ Component({
       }
     },
     error(e) {
-      this.triggerEvent('error', e);
-    }, 
+      //尝试切换其他来源
+      if (!this.data.controls[e.currentTarget.dataset.id] && e.currentTarget.dataset.source.length > 1) {
+        this.data.controls[e.currentTarget.dataset.id] = {
+          play: false,
+          index: 1
+        }
+      } else if (this.data.controls[e.currentTarget.dataset.id] && e.currentTarget.dataset.source.length > (this.data.controls[e.currentTarget.dataset.id].index + 1)) {
+        this.data.controls[e.currentTarget.dataset.id].index++;
+      }
+      this.setData({
+        controls: this.data.controls
+      })
+      this.triggerEvent('error', { target: e.currentTarget, message: e.detail.errMsg });
+    },
     tapevent(e) {
       this.triggerEvent('linkpress', e.currentTarget.dataset.href);
     },

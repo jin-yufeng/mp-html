@@ -1,7 +1,9 @@
+/* 链接受到点击的hover-class，可自定义修改 */
 .navigator-hover {
   opacity: 0.7;
   text-decoration: underline;
 }
+/* 以下内容不建议修改 */
 .b_rich, .strong_rich, .del_rich, .ins_rich, .em_rich, .i_rich, .sub_rich, .sup_rich, .q_rich, .span_rich, .text_rich, .code_rich, .label_rich{
   display: inline-block;
 }

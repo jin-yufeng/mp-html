@@ -67,13 +67,22 @@
   ```html
   <Parser html="{{html}}" show-with-animation animation-duration="500" />
   ```
+- 支持多资源加载  
+  可以在`video`和`audio`中设置多个`source`标签，组件将按顺序进行加载，若前面的链接无法播放，将自动切换下一个链接进行加载和播放，直到最后一个链接；可用于解决平台差异，最大程度避免无法播放
+  ```html
+  <video controls>
+    <source src="demo1.mov" />
+    <source src="demo2.webm" />
+  </video>
+  ```
 - 支持的标签种类丰富，包括`视频`、`表格`等  
   在[`rich-text`](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html)组件的基础上增加支持以下标签: 
   
   | 标签 | 属性 |
   |:---:|:---:|
-  | video | src, controls, loop, height, width |
-  | audio | src, controls, loop, [poster, name, author](https://developers.weixin.qq.com/miniprogram/dev/component/audio.html) |
+  | video | src, controls, loop, autoplay, muted, height, width |
+  | audio | src, controls, loop, autoplay, [poster, name, author](https://developers.weixin.qq.com/miniprogram/dev/component/audio.html) |
+  | source | src |
   | u |  |
   | center |  |
   | font | face, color |
@@ -105,7 +114,7 @@
   <div>!
   ```  
  
-- 功能强大，支持无限层级，解析速度快，包大小仅约`36.4KB`  
+- 功能强大，支持无限层级，解析速度快，包大小仅约`39.0KB`  
 ## 使用方法 ##
 1. 下载Parser文件夹至小程序目录  
    ![页面结构](http://bmob-cdn-17111.b0.upaiyun.com/2019/05/06/ff92de3340b36dbf803addcf85659e42.png)
@@ -157,7 +166,7 @@
     |:----:|:----:|:----:|
     | bindparser | 在解析完成时调用（仅当传入的html为`字符串`时会调用） | 返回一个`object`，其中`nodes`为解析后的节点数组，`imgList`为图片列表，`title`是页面标题，该`object`可以在下次调用直接作为html属性的值，节省解析的时间 |
     | bindready | 渲染完成时调用 | 返回ok |
-    | binderror | 出错时返回 | 解析错误或加载多媒体资源出错时调用，返回错误原因 |
+    | binderror | 出错时返回 | 解析错误或加载多媒体资源出错时调用，返回一个`object`，其中`message`为错误原因，若由于加载多媒体资源出错还会具有`target`属性，包含该标签的具体信息 |
     | bindlinkpress | 在链接受到点击时调用 | 返回该链接的`href`值，开发者可以在该回调中进行进一步操作，如下载文档和打开等 |
   
 - 关于基础库
@@ -168,14 +177,16 @@
     | 1.9.90-2.2.4 | 部分html实体无法显示 | 1.46% |
     | 1.6.6-1.9.90 | html-class属性无法使用<br />部分html实体无法显示 | 0.11% |
     | <1.6.6 | 无法使用 | 0.08% |
-- api  
-  如果仅需要获取解析结果而不需要显示（或需要对解析结果进行修改后再进行显示）；可使用本api，接受两个参数，第一个是`html`字符串，第二个是`tagStyle`结构体，返回值结构同`bindparse`，示例：
-  ```javascript
-  const html2nodes=require("/Parser/Parser.js");
-  html2nodes("your html").then(res=>{
-    console.log(res);
-  })
-  ```
+- 附加功能  
+  - 若仅需要获取解析结果而不需要显示（或需要对解析结果进行修改后再进行显示），可使用本api，接受两个参数，第一个是`html`字符串，第二个是`tagStyle`结构体，返回值结构同`bindparse`，示例：
+    ```javascript
+    const html2nodes=require("/Parser/Parser.js");
+    html2nodes("your html").then(res=>{
+      console.log(res);
+    })
+    ```  
+  - 若需要图片在没有`src`属性时自动将`data-src`属性赋给`src`（一些网页可能需要），可将`Parser`文件夹下的`DomHandler.js`中的第160-164行的注释打开  
+  - 若需要自定义链接受到点击时的效果，可对`Parser`文件夹下的`index.wxss`中的`navigator-hover`进行修改（默认下划线+半透明）
 - Tips  
     `table`, `ol`, `ul`等标签由于较难通过模板循环的方式显示，将直接通过`rich-text`进行渲染，因此请尽量避免在表格，列表中加入图片或链接，否则将无法预览或点击（但可以正常显示）
 
@@ -201,6 +212,11 @@ parser(html).then(function(res){
 ## 许可 ##
 您可以随意的使用和分享本插件
 ## 更新日志 ##
+- 2019.5.20:
+  1. `A` 增加支持`source`标签（仅限用于`audio`和`video`标签中），设置多个`source`的，会按顺序进行加载，加载失败的，自动加载下一条链接
+  2. `U` `video`标签增加支持`autoplay`和`muted`属性
+  3. `U` `audio`标签增加支持`autoplay`属性（仅允许自动播放一首音乐，若设置多首将仅自动播放第一首）
+  4. `F` 修复了视频数量超过3时，后面的视频无法播放的问题
 - 2019.5.19: 
   1. `A` 增加了`html-style`属性，可以对整个富文本容器设置`style`样式，可通过`wxml`的数据绑定实现动态修改（直接在`style`中设置可能不生效）
   2. `A` 增加了`show-with-animation`和`animation-duration`属性，支持在显示时使用渐显动画

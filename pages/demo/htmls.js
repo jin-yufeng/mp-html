@@ -314,7 +314,7 @@ var demo1 = `<style>
   </section>
   <section data-role="paragraph" style="border: 0px none;">
     <div style="text-align: center;">
-      <a href="/pages/introduction/introduction">
+      <a href="/pages/component/component">
         <img src="http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg"/>
       </a>
       <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>

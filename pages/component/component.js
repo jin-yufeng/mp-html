@@ -34,16 +34,21 @@ Page({
     htmlStylecode: [{ "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "html", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }], "name": "span", "attrs": { "style": ";" } }, { "children": [{ "text": "{{html}}", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "children": [{ "children": [{ "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "html-style", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"margin:5px\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": " />", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }], "name": "span", "attrs": { "style": ";" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;" } }],
     //添加加载提示代码
     loadingcode: [{ "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "html", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{{html}}", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-template-variable" } }, { "children": [{ "children": [{ "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "text": "加载中...", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;", "class": "hljs" } }],
+    //多资源加载示例代码
+    source: [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "video", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "controls", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "source", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "src", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"demo1.mov\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": " />", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "source", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "src", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"dmeo2.webm\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": " />", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "video", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;" } }],
     //支持的标签列表
     media: [{
       name: 'img',
       attrs: 'alt, src, height, width, ignore'
     }, {
       name: 'video',
-      attrs: 'src, controls, loop, height, width'
+      attrs: 'src, controls, loop, autoplay, \nmuted, height, width'
     }, {
       name: 'audio',
-      attrs: 'src, controls, loop, \nposter, name, author'
+      attrs: 'src, controls, loop, autoplay, \nposter, name, author'
+    }, {
+      name: 'source',
+      attrs:'src'
     }],
     table: [{
       name: 'table',
@@ -192,12 +197,12 @@ Page({
       default: 'true',
       notice: '是否允许链接长按复制'
     },{
-        name:'show-with-animation',
+        name:'show-with-\nanimation',
         type: 'Boolean',
         default:'false',
         notice:'是否使用渐显动画效果'
     },{
-        name: 'animation-duration',
+        name: 'animation-\nduration',
         type: 'Number',
         default: '400',
         notice: '动画持续时间（单位ms）'
@@ -228,7 +233,7 @@ Page({
       渲染完成时调用，返回<code>ok</code>
       </li>
       <li style="margin-top:5px;"><code>binderror</code><br/>
-      解析出错或多媒体文件加载错误时调用，返回值为错误原因
+      解析出错或多媒体文件加载错误时调用，返回值为一个结构体，<code>message</code>属性是错误原因；若是加载多媒体文件出错还会包含<code>target</code>属性，含有该标签的具体信息
       </li>
       <li style="margin-top:5px;"><code>bindlinkpress</code><br/>
       链接（<code>a</code>标签）受到点击时调用，返回值是被点击链接的<code>href</code>值，如果该链接不是简单的跳转，可以在此回调函数中进行进一步操作（如附件链接可以在这里下载和打开）
@@ -257,6 +262,15 @@ Page({
     //更新日志
     update:
     `<ul>
+    <li>2019.5.20：
+      <ol>
+        <li><code>A</code> 增加支持<code>source</code>标签（仅限用于<code>video</code>和<code>audio</code>标签中），当设置了多个<code>source</code>时，将按照顺序进行加载，若前面的资源加载失败，则自动加载后面的资源</li>
+        <li><code>U</code> 增加支持<code>video</code>标签的<code>autoplay</code>和<code>muted</code>属性</li>
+        <li><code>U</code> 增加支持<code>audio</code>标签的<code>autoplay</code>属性（自动播放的音乐仅限一首，否则只会自动播放第一首）</li>
+        <li><code>F</code> 修复了超过3个视频时后面的视频无法播放的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.5.19：
       <ol>
         <li><code>A</code> 增加了<code>html-style</code>属性，可以对整个富文本容器设置样式，且可以通过<code>wxml</code>中的数据绑定动态设置</li>
