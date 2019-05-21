@@ -25,5 +25,8 @@ Page({
         }
       })
     }
+  },
+  error(e){
+    console.error(e.detail.message)
   }
 })

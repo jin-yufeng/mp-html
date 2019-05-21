@@ -27,6 +27,7 @@
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="callback" bindtap="gosection">回调函数</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="libRequire" bindtap="gosection">基础库要求</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="api" bindtap="gosection">附加功能</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tips" bindtap="gosection">注意事项</view>
         <!--原理简介-->
         <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="theory" bindtap="gosection">原理简介</view>
         <!--下载链接-->
@@ -58,7 +59,7 @@
             </view>
           </view>
           示例：
-          <Parser html="{{stylecode}}" />
+          <rich-text nodes="{{stylecode}}" />
           <Parser html='<style>.demo{font-style:italic;}#demo2{font-weight:bold;}p{text-align:center;font-size:30px;}</style><p><span class="demo">Hello </span><span id="demo2">World!</span></p>' />
           <view style="color:gray;text-align:center;font-size:12px;">解析结果</view>
         </view>
@@ -66,7 +67,7 @@
         <view id="tagStyle" class="weui-article__h2">设置标签的默认样式</view>
         <view class="weui-article__section">
           可以对标签设置任意自定义的样式，示例：
-          <Parser html="{{tagStylecode}}" />
+          <rich-text nodes="{{tagStylecode}}" />
           <text>解析结果：</text>
           <Parser html="<code>test</code>" tag-style="{{tagStyle}}" html-style="display:inline" />
         </view>
@@ -80,7 +81,7 @@
           <text class="code">margin</text>、
           <text class="code">padding</text>等（直接在
           <text class="code">style</text>中设置可能不生效），示例：
-          <Parser html="{{htmlStylecode}}" />
+          <rich-text nodes="{{htmlStylecode}}" />
         </view>
         <!--自动设置标题-->
         <view id="setTitle" class="weui-article__h2">自动设置标题</view>
@@ -95,7 +96,7 @@
         <view class="weui-article__section">
           可以在
           <text class="code">Parser</text>标签内添加加载提示或动画，将在未加载完成或内容为空时显示，加载完成后自动隐藏，示例：
-          <Parser html="{{loadingcode}}" />
+          <rich-text nodes="{{loadingcode}}" />
         </view>
         <!--多资源加载-->
         <view id="source" class="weui-article__h2">多资源加载</view>
@@ -104,7 +105,7 @@
           <text class="code">video</text>和
           <text class="code">audio</text>标签中设置多个
           <text class="code">source</text>标签来设置多个来源，组件会按顺序进行加载，若前面的资源链接无法播放，会自动使用下一个链接进行加载，直至最后一个链接；可用于解决平台支持性差异，最大程度避免无法播放，示例：
-          <Parser html="{{source}}" />
+          <rich-text nodes="{{source}}" />
         </view>
         <!--支持丰富的标签-->
         <view id="supportTag" class="weui-article__h2">支持丰富的标签</view>
@@ -176,8 +177,8 @@
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <text class="code">39.0KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
-          <Parser html="{{errorcode}}" />
+          <text class="code">40.0KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <rich-text nodes="{{errorcode}}" />
         </view>
       </view>
       <!--使用方法-->
@@ -188,15 +189,15 @@
         <view class="weui-article__section">
           <Parser html='<ol><li>下载<code>Parser</code>文件夹至小程序目录</li><li>在需要使用页面的<code>json</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
-            <Parser html="{{json}}" />
+            <rich-text nodes="{{json}}" />
           </view>
           <Parser html='<ol start=3><li>在需要使用页面的<code>wxml</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
-            <Parser html="{{wxml}}" />
+            <rich-text nodes="{{wxml}}" />
           </view>
           <Parser html='<ol start=4><li>在需要使用页面的<code>js</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
-            <Parser html="{{js}}" />
+            <rich-text nodes="{{js}}" />
           </view>
         </view>
         <!--组件属性-->
@@ -209,7 +210,9 @@
             <view class="td" style="width:45%;">说明</view>
           </view>
           <view wx:for="{{attrs}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
-            <view class="td" style="width:25%"><text>{{item.name}}</text></view>
+            <view class="td" style="width:25%">
+              <text>{{item.name}}</text>
+            </view>
             <view class="td" style="width:20%;">
               <text>{{item.type}}</text>
             </view>
@@ -250,7 +253,7 @@
             <text class="code">html</text>字符串，第二个是
             <text class="code">tagStyle</text>结构体（可选，用于设置标签的默认样式）；返回值格式同
             <text class="code">bindparse</text>，示例：
-            <Parser html="{{api}}" />
+            <rich-text nodes="{{api}}" />
           </view>
           <view class="weui-article__p">
             若需要在图片没有
@@ -265,6 +268,20 @@
             <text class="code">Parser</text>文件夹下的
             <text class="code">index.wxss</text>中修改
             <text class="code">navigator-hover</text>（默认是下划线+半透明）
+          </view>
+        </view>
+        <!--注意事项-->
+        <view id="tips" class="weui-article__h2">注意事项</view>
+        <view class="weui-article__section">
+          <view class="weui-article__p">
+            表格和列表由于较难通过模板循环的方式显示，将直接使用
+            <text class="code">rich-text</text>组件显示，因此请尽量避免在列表和表格中使用图片、链接等组件，否则将出现无法预览和点击等问题（可以正常显示）
+          </view>
+          <view class="weui-article__p">
+            请尽量避免在一个页面内使用过多的
+            <text class="code">Parser</text>组件，由于每个
+            <text class="code">Parser</text>组件都需要对输入的
+            <text class="code">html</text>进行监听（发生改变时进行解析等操作），过多的监听器将占用较大的内存
           </view>
         </view>
       </view>
@@ -293,6 +310,7 @@
     </view>
   </view>
 </scroll-view>
+<!--置顶按钮-->
 <cover-view style="position:fixed;right:15px;bottom:15px;width:35px;height:35px;">
   <cover-image src="/images/top.png" style="width:100%" mode="widthFix" bindtap="gotop" />
 </cover-view>

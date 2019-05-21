@@ -1,5 +1,5 @@
 <!--pages/demo/demo.wxml-->
-<Parser html='{{html}}' bindlinkpress="downloadfile" show-with-animation>
+<Parser html='{{html}}' bindlinkpress="downloadfile" show-with-animation binderror="error">
   <view class="loading-cell">
     <view class="line-bounce">
       <text></text>

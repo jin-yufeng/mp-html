@@ -205,6 +205,8 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       attrs.id = ('video' + (++this.videoNum));
       attrs.source = [];
       if (attrs.src) attrs.source.push(attrs.src);
+      if (!attrs.controls && !attrs.autoplay)
+        console.warn('存在没有controls属性的视频，可能导致无法播放', attrs);
       for (var i = this._tagStack.length - 1; i >= 0; i--) {
         if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
         else break;
@@ -219,6 +221,8 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       } else attrs.id = ('audio' + (++this.audioNum));
       attrs.source = [];
       if (attrs.src) attrs.source.push(attrs.src);
+      if (!attrs.controls && !attrs.hasOwnProperty('autoplay'))
+        console.warn('存在没有controls属性的音乐，可能导致无法播放', attrs);
       for (var i = this._tagStack.length - 1; i >= 0; i--) {
         if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
         else break;

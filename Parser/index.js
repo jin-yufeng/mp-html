@@ -6,19 +6,12 @@ Component({
       type: null,
       value: '',
       observer: function(html) {
-        var showAnimation = wx.createAnimation({
-          duration: this.data["animationDuration"],
-          timingFunction: "ease"
-        });
-        var hideAnimation = wx.createAnimation({
-          duration: this.data["animationDuration"],
-          timingFunction: "ease"
-        });
-        if (this.data["showWithAnimation"]) {
-          hideAnimation.opacity(0).step();
-          showAnimation.opacity(1).step();
-        }
         var that = this;
+        var hideAnimation = {}, showAnimation = {};
+        if (this.data.showWithAnimation) {
+          hideAnimation = { "actions": [{ "animates": [{ "type": "style", "args": ["opacity", 0] }], "option": { "transformOrigin": "50% 50% 0", "transition": { "duration": this.data.animationDuration, "timingFunction": "ease", "delay": 0 } } }] };
+          showAnimation = { "actions": [{ "animates": [{ "type": "style", "args": ["opacity", 1] }], "option": { "transformOrigin": "50% 50% 0", "transition": { "duration": this.data.animationDuration, "timingFunction": "ease", "delay": 0 } } }] };
+        }
         if (!html) {
           this.setData({
             nodes: [],
@@ -28,11 +21,11 @@ Component({
           html2nodes(html, this.data.tagStyle).then(res => {
             that.setData({
               nodes: res.nodes,
-              showAnimation: showAnimation.export(),
-              hideAnimation: hideAnimation.export(),
+              showAnimation,
+              hideAnimation,
               controls: {}
             }, function() {
-              wx.createAudioContext('bgmusic', that).play();
+              wx.createInnerAudioContext('bgmusic', that).play();
               that.imgList = res.imgList;
               that.videoNum = res.videoNum;
               if (res.videoNum > 1) {
@@ -40,7 +33,9 @@ Component({
                   that['video' + i] = wx.createVideoContext('video' + i, that);
                 }
               }
-              that.triggerEvent('ready', 'ok');
+              that.createSelectorQuery().select('.html-class').boundingClientRect(function (res) {
+                that.triggerEvent('ready', res);
+              }).exec();
             })
             if (res.title) {
               wx.setNavigationBarTitle({
@@ -53,25 +48,28 @@ Component({
           })
         } else if (html.constructor == Array) {
           this.setData({
-            nodes: html,
-            showAnimation: showAnimation.export(),
-            hideAnimation: hideAnimation.export(),
+            showAnimation,
+            hideAnimation,
             controls: {}
           }, function() {
-            wx.createAudioContext('bgmusic', that).play();
-            that.triggerEvent('ready', 'ok');
+            wx.createInnerAudioContext('bgmusic', that).play();
+            that.createSelectorQuery().select('.html-class').boundingClientRect(function (res) {
+              that.triggerEvent('ready', res);
+            }).exec();
           })
           this.imgList = [];
           this.videoNum = 0;
         } else if (typeof html == 'object') {
-          var that = this;
+          if (!html.nodes || html.nodes.constructor != Array) {
+            that.triggerEvent('error', { message: "传入的nodes数组格式不正确！应该传入的类型是array，实际传入的类型是："+typeof html.nodes });
+            return;
+          }
           this.setData({
-            nodes: html.nodes,
-            showAnimation: showAnimation.export(),
-            hideAnimation: hideAnimation.export(),
+            showAnimation,
+            hideAnimation,
             controls: {}
           }, function() {
-            wx.createAudioContext('bgmusic', that).play();
+            wx.createInnerAudioContext('bgmusic', that).play();
             that.imgList = html.imgList;
             that.videoNum = html.videoNum ? html.videoNum : 0;
             if (that.videoNum > 1) {
@@ -79,13 +77,17 @@ Component({
                 that['video' + i] = wx.createVideoContext('video' + i, that);
               }
             }
-            that.triggerEvent('ready', 'ok');
+            that.createSelectorQuery().select('.html-class').boundingClientRect(function (res) {
+              that.triggerEvent('ready', res);
+            }).exec();
           })
           if (html.title) {
             wx.setNavigationBarTitle({
               title: html.title
             })
           }
+        } else {
+          this.triggerEvent('error', { message: "错误的类型：" + typeof html });
         }
       }
     },

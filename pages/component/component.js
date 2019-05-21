@@ -216,7 +216,9 @@ Page({
           <li><code>Array</code>类型：格式基本同<code>rich-text</code>，对于节点下有图片、链接等的，需要将<code>continue</code>属性设置为<code>true</code>，否则将直接使用<code>rich-text</code>组件渲染，可能导致图片无法预览等问题（此格式传入将不能通过左右滑动查看所有图片）</li>
           <li><code>Object</code>类型：一个形如<code>{nodes: [Array], imgList: [Array], videoNum: Number, title: "String"}</code>的结构体，nodes数组的格式同上，imgList为所有图片地址的数组，videoNum为视频的数量（不必要，用于<code>autopause</code>属性）title为文章的标题（不必要，如果传入将设置到页面的标题上）回调函数<code>bindparse</code>的返回值就是该类型的结构体</li>
         </ol>
-        <p style="margin-top:5px;">2，3格式传入可以节省解析时间，提高性能</p>
+        <ul>
+          <li style="margin-top:5px;">备注：<code>Array</code>和<code>Object</code>类型传入可以节省解析时间，提高性能</li>
+        </ul>
       </li>
       <br/>
       <li>tag-style格式
@@ -230,7 +232,7 @@ Page({
       当传入的<code>html</code>为字符串类型时，解析完成后调用；返回值是一个形如<code>{nodes: [Array], imgList: [Array], title: "String"}</code>的结构体，<code>nodes</code>是节点数组，<code>imgList</code>是所有图片地址的数组，<code>title</code>是页面标题（可用于转发）可以将该值保存后下次调用时直接作为属性<code>html</code>的值，可节省解析时间
       </li>
       <li style="margin-top:5px;"><code>bindready</code><br/>
-      渲染完成时调用，返回<code>ok</code>
+      渲染完成时调用，返回值是整个组件的<code>NodesRef</code>结构体，包含宽度、高度、位置等信息
       </li>
       <li style="margin-top:5px;"><code>binderror</code><br/>
       解析出错或多媒体文件加载错误时调用，返回值为一个结构体，<code>message</code>属性是错误原因；若是加载多媒体文件出错还会包含<code>target</code>属性，含有该标签的具体信息
@@ -238,12 +240,13 @@ Page({
       <li style="margin-top:5px;"><code>bindlinkpress</code><br/>
       链接（<code>a</code>标签）受到点击时调用，返回值是被点击链接的<code>href</code>值，如果该链接不是简单的跳转，可以在此回调函数中进行进一步操作（如附件链接可以在这里下载和打开）
       </li>
+      <li style="margin-top:5px;">备注：所有回调函数的返回值在<code>e.detail</code>中获取</li>
     </ul>`,
     //基础库要求
     versions: [{
       version: ">=2.2.5",
       function: "完全正常",
-      percent: "98.28%"
+      percent: "98.29%"
     }, {
       version: "1.9.90-2.2.4",
       function: "部分html实体无法显示",
@@ -251,17 +254,25 @@ Page({
     }, {
       version: "1.6.3-1.9.90",
       function: "html-class属性无法使用；部分html实体无法显示",
-      percent: "0.11%"
+      percent: "0.12%"
     }, {
       version: "<1.6.3",
       function: "无法使用",
-      percent: "0.08%"
+      percent: "0.09%"
     }],
     //api
     api: [{ "children": [{ "children": [{ "text": "var", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;" } }, { "text": " html2nodes=", "type": "text" }, { "children": [{ "text": "require", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": "(", "type": "text" }, { "children": [{ "text": "\"/Parser/Parser.js\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": ");", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "html2nodes(", "type": "text" }, { "children": [{ "text": "\"your html\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": ").then(", "type": "text" }, { "children": [{ "children": [{ "text": "function", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;" } }, { "text": "(", "type": "text" }, { "children": [{ "text": "res", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": ")", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "console", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": ".log(res);", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "})", "type": "text" }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;" } }],
     //更新日志
     update:
     `<ul>
+    <li>2019.5.22：
+      <ol>
+        <li><code>U</code> <code>bindready</code>回调将返回整个组件的<code>NodesRef</code>结构体，包含了宽度、高度、位置等信息</li>
+        <li><code>U</code> 提高了传入的<code>html</code>类型为<code>Array</code>或<code>Object</code>时的渲染速度（约10%）</li>
+        <li><code>U</code> 解析时若存在<code>video</code>或<code>audio</code>组件既没有<code>controls</code>属性也没有<code>autoplay</code>属性时会向控制台打印“可能无法播放”的警告</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.5.20：
       <ol>
         <li><code>A</code> 增加支持<code>source</code>标签（仅限用于<code>video</code>和<code>audio</code>标签中），当设置了多个<code>source</code>时，将按照顺序进行加载，若前面的资源加载失败，则自动加载后面的资源</li>
@@ -354,7 +365,7 @@ Page({
     <br />
     <li>2019.4.18：
       <ol>
-        <li><code>A</code> 增加支持<audio>标签</li>
+        <li><code>A</code> 增加支持<code>audio</code>标签</li>
         <li><code>A</code> 增加<code>lazyload</code>属性（图片懒加载）</li>
         <li><code>U</code> 优化<code>a</code>, <code>code</code>, <code>blockquote</code>标签的显示效果</li>
         <li><code>F</code> 修复了已知<code>bug</code></li>
