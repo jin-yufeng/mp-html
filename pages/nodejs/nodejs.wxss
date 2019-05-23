@@ -1,8 +1,8 @@
 /* miniprogram/pages/nodejs/nodejs.wxss */
-.link{
+.link {
   color:#586c94;
 }
-.link-hover{
+.link-hover {
   text-decoration: underline;
 }
 .code {

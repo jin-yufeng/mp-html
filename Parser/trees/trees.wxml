@@ -1,0 +1,41 @@
+<!--节点树-->
+<wxs module="parse">
+  var getStyle = function(style, display) {
+    var res = "";
+    var reg = getRegExp("float\s*:\s*[^;]*", "i");
+    if (reg.test(style)) res += reg.exec(style)[0];
+    var reg = getRegExp("display\s*:\s*[^;]*", "i");
+    if (reg.test(style)) res += (';' + reg.exec(style)[0]);
+    else res += (';display:' + display);
+    return res;
+  }
+  module.exports.getStyle = getStyle;
+</wxs>
+<block wx:for='{{nodes}}' wx:key>
+  <block wx:if="{{!item.continue}}">
+    <!--图片-->
+    <rich-text wx:if="{{item.name=='img'}}" style="{{parse.getStyle(item.attrs.style,'inline-block')}}" nodes='{{[item]}}' data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewEvent'></rich-text>
+    <!--文本-->
+    <text wx:elif="{{item.type=='text'&&!item.decode}}" decode>{{item.text}}</text>
+    <!--视频-->
+    <block wx:elif="{{item.name=='video'}}">
+      <view wx:if="{{item.attrs.id>'media3'&&!controls[item.attrs.id].play}}" class="video" style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}" data-id="{{item.attrs.id}}" bindtap="_loadVideo">
+        <view class="triangle_border_right"></view>
+      </view>
+      <video wx:else src='{{controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src}}' id="{{item.attrs.id}}" loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' autoplay="{{item.attrs.autoplay||controls[item.attrs.id].play}}"
+        class="v" muted="{{item.attrs.muted}}" style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}" data-id="{{item.attrs.id}}" data-source="{{item.attrs.source}}" bindplay='playEvent'
+        binderror="errorEvent" />
+    </block>
+    <!--音频-->
+    <audio wx:elif="{{item.name=='audio'}}" src='{{controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src}}' id="{{item.attrs.id}}" loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' poster='{{item.attrs.poster}}'
+      name='{{item.attrs.name}}' author='{{item.attrs.author}}' style="{{item.attrs.style}}" data-id="{{item.attrs.id}}" data-source="{{item.attrs.source}}" binderror="errorEvent" />
+    <!--富文本-->
+    <rich-text wx:else class="{{item.name||item.type}}" style="{{parse.getStyle(item.attrs.style,'block')}}" nodes="{{[item]}}" />
+  </block>
+  <!--链接-->
+  <navigator wx:elif="{{item.name=='a'}}" url="{{item.attrs.href}}" style="{{item.attrs.style}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapEvent" bindlongpress="longtapEvent">
+    <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+  </navigator>
+  <!--继续递归-->
+  <trees wx:else id="node" class="{{item.name}}" style="{{item.attrs.style}}" nodes="{{item.children}}" controls="{{controls}}" />
+</block>

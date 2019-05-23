@@ -1,6 +1,6 @@
 //index.js
 Page({
-  data:{
+  data: {
     list: [{
       id: 'introduction',
       name: '说明文档',
@@ -10,12 +10,12 @@ Page({
       id: 'demo',
       name: '示例体验',
       open: false,
-        pages: [{ name: '前端功能示例', url: '../demo/demo?index=1' }, { name: '前端综合示例', url: '../demo/demo?index=2' }, { name: '后端综合示例', url: '../demo/demo?index=3' }]
+      pages: [{ name: '前端功能示例', url: '../demo/demo?index=1' }, { name: '前端综合示例', url: '../demo/demo?index=2' }, { name: '后端综合示例', url: '../demo/demo?index=3' }]
     }, {
       id: 'test',
       name: '自定义测试',
       open: false,
-        pages: [{ name: '前端解析', url: '../test/test?mode=0' }, { name: '后端-html模式', url: '../test/test?mode=1' }, { name: '后端-website模式', url: '../test/test?mode=2' }, { name: '后端-markdown模式', url: '../test/test?mode=3' }]
+      pages: [{ name: '前端解析', url: '../test/test?mode=0' }, { name: '后端-html模式', url: '../test/test?mode=1' }, { name: '后端-website模式', url: '../test/test?mode=2' }, { name: '后端-markdown模式', url: '../test/test?mode=3' }]
     }]
   },
   kindToggle: function (e) {

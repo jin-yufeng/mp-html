@@ -108,7 +108,7 @@
             <text class="code">https://</text>开头），设置
             <text class="code">website</text>模式，插件将自动获取该页面的内容并进行解析</view>
           <view class="weui-article__p">支持以下模式（自定义测试页面由于云函数空间大小限制仅支持静态网页模式）：
-            <Parser html="{{webmode}}" tag-style="{{tagStyle}}"/>
+            <Parser html="{{webmode}}" tag-style="{{tagStyle}}" />
           </view>
           示例：
           <Parser html="{{website}}" />
@@ -174,24 +174,26 @@
           <view>styles：代码高亮风格，默认
             <text class="code">default</text>
           </view>
-          <view>tagStyle：标签的默认样式，如
+          <view style="margin-top:5px">tagStyle：标签的默认样式，如
             <text class="code">{body: "margin:5px"}</text>
           </view>
-          <view>domain：主域名，用于自动将多媒体标签的
+          <view style="margin-top:5px">domain：主域名，用于自动将多媒体标签的
             <text class="code">src</text>属性填充完整，解析模式为
             <text class="code">website</text>时自动获取</view>
-          <view>engine：打开网址的引擎，支持的有
+          <view style="margin-top:5px">engine：打开网址的引擎，支持的有
             <text class="code">default</text>（速度快，无需额外安装，但
             <text class="code">js</text>中动态加载的内容会被忽略）、
             <text class="code">puppeteer</text>（使用无头浏览器加载，使用前需要额外安装
             <text class="code">npm i puppeteer</text>）和phantom（使用无头浏览器加载，使用前需要额外安装
             <text class="code">npm i phantom</text>）</view>
+          <view style="margin-top:5px">maxDepth：前端显示时的最大递归深度，为0或负数时代表不限制（默认为0）。层数超过限制时，会直接使用
+            <text class="code">rich-text</text>显示而不再递归，可能导致图片不能预览，链接无法点击，视频和音频无法显示等问题；但过深的深度可能导致渲染时间较长；对于复杂的内容可以适当进行限制</view>
         </view>
         <!--返回值-->
         <view id="callback" class="weui-article__h2">返回值</view>
         <view class="weui-article__section">
           一个形如
-          <text class="code">{nodes: [Array], imgList: [Array], videoNum: Number, title: "String"}</text>的结构体，其中nodes为节点数组，可以直接应用于
+          <text class="code">{nodes: [Array], imgList: [Array], title: "String"}</text>的结构体，其中nodes为节点数组，可以直接应用于
           <text class="code">rich-text</text>组件，imgList为所有图片地址的数组，videoNum为视频的数量，title为页面标题，整个结构体可以作为
           <text class="code">Parser</text>组件的参数
         </view>
@@ -199,12 +201,12 @@
       <!--下载链接-->
       <view id="download" class="weui-article__h1">下载链接</view>
       <view class="weui-article__section">
-        <Parser html='npm链接：<a href="https://www.npmjs.com/package/parser-wxapp">长按复制链接</a>'/>
+        <Parser html='npm链接：<a href="https://www.npmjs.com/package/parser-wxapp">长按复制链接</a>' />
       </view>
       <!--更新日志-->
       <view id="update" class="weui-article__h1">更新日志</view>
       <view class="weui-article__section">
-        <Parser html="{{update}}"/>
+        <Parser html="{{update}}" />
       </view>
     </view>
   </view>

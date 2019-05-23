@@ -13,7 +13,6 @@
         <view class="weui-article__h2 link" hover-class='link-hover' data-section="introduction" bindtap="gosection">功能介绍</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="parseStyle" bindtap="gosection">解析style标签</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tagStyle" bindtap="gosection">设置默认标签样式</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="htmlClass" bindtap="gosection">设置整体容器样式</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="setTitle" bindtap="gosection">自动设置标题</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="addLoading" bindtap="gosection">添加加载提示</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="source" bindtap="gosection">多资源加载</view>
@@ -69,19 +68,7 @@
           可以对标签设置任意自定义的样式，示例：
           <rich-text nodes="{{tagStylecode}}" />
           <text>解析结果：</text>
-          <Parser html="<code>test</code>" tag-style="{{tagStyle}}" html-style="display:inline" />
-        </view>
-        <!--设置整体容器的样式-->
-        <view id="htmlClass" class="weui-article__h2">设置整体容器的样式</view>
-        <view class="weui-article__section">
-          可以在
-          <text class="code">html-class</text>或
-          <text class="code">html-style</text>属性中设置整个富文本容器的样式，包括
-          <text class="code">display</text>、
-          <text class="code">margin</text>、
-          <text class="code">padding</text>等（直接在
-          <text class="code">style</text>中设置可能不生效），示例：
-          <rich-text nodes="{{htmlStylecode}}" />
+          <Parser html="<code>test</code>" tag-style="{{tagStyle}}" style="display:inline;" />
         </view>
         <!--自动设置标题-->
         <view id="setTitle" class="weui-article__h2">自动设置标题</view>
@@ -177,7 +164,7 @@
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <text class="code">40.0KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <text class="code">28.1KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <rich-text nodes="{{errorcode}}" />
         </view>
       </view>
@@ -261,12 +248,12 @@
             <text class="code">data-src</text>属性的值赋给
             <text class="code">src</text>，请将
             <text class="code">Parser</text>文件夹下的
-            <text class="code">DomHandler.js</text>中160-164行的注释打开
+            <text class="code">DomHandler.js</text>中167-170行的注释打开
           </view>
           <view class="weui-article__p">
             若需要修改链接受到点击时的样式，可在
-            <text class="code">Parser</text>文件夹下的
-            <text class="code">index.wxss</text>中修改
+            <text class="code">Parser/trees</text>文件夹下的
+            <text class="code">trees.wxss</text>中修改
             <text class="code">navigator-hover</text>（默认是下划线+半透明）
           </view>
         </view>
@@ -288,12 +275,11 @@
       <!--原理简介-->
       <view id="theory" class="weui-article__h1">原理简介</view>
       <view class="weui-article__section">
-        <text decode>&emsp;&emsp;</text>本插件结合了
-        <text class="code">WxParse</text>中模板循环的方式和
-        <text class="code">rich-text</text>组件，对于节点下有图片、视频、链接等的，通过模板循环的方式显示；否则则直接通过
+        <text decode>&emsp;&emsp;</text>本插件对
+        <text class="code">rich-text</text>组件进行了二次封装，对于节点下有图片、视频、链接等的，通过自定义组件递归的方式显示；否则则直接通过
         <text class="code">rich-text</text>组件显示。
         <text decode>\n&emsp;&emsp;</text>通过这样的方式，既解决了
-        <text class="code">WxParse</text>标签数过多（rich-text可以节省大量的标签），层数超过限制无法显示（超过20层的直接使用rich-text显示），无法解析表格，部分样式显示不准确（rich-text的显示效果更好）等缺陷；也弥补了
+        <text class="code">WxParse</text>标签数过多（rich-text可以节省大量的标签），层数超过限制无法显示（自定义组件递归可以支持无限层级），无法解析表格，部分样式显示不准确（rich-text的显示效果更好）等缺陷；也弥补了
         <text class="code">rich-text</text>图片不能预览，链接无法点击，不能显示视频，部分标签不支持（在解析的过程中替换）等问题，从而达到一个更加完美的效果。
         <text decode>\n&emsp;&emsp;</text>且其轻量化，前后端通用等特点，也使得应用面更加广泛。
       </view>

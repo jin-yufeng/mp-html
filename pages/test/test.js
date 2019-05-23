@@ -6,11 +6,11 @@ Page({
     modes: ['前端解析', '后端-HTML模式', '后端-网址模式', '后端-MarkDown模式'],
     modeIndex: 0,
     styles: ['a11y-dark', 'a11y-light', 'agate', 'an-old-hope', 'androidstudio', 'arduino-light', 'arta', 'ascetic', 'atelier-cave-dark', 'atelier-cave-light', 'atelier-dune-dark', 'atelier-dune-light', 'atelier-estuary-dark', 'atelier-estuary-light', 'atelier-forest-dark', 'atelier-forest-light', 'atelier-heath-dark', 'atelier-heath-light', 'atelier-lakeside-dark', 'atelier-lakeside-light', 'atelier-plateau-dark', 'atelier-plateau-light', 'atelier-savanna-dark', 'atelier-savanna-light', 'atelier-seaside-dark', 'atelier-seaside-light', 'atelier-sulphurpool-dark', 'atelier-sulphurpool-light', 'atom-one-dark-reasonable', 'atom-one-dark', 'atom-one-light', 'codepen-embed', 'color-brewer', 'darcula', 'dark', 'darkula', 'default', 'docco', 'dracula', 'far', 'foundation', 'github-gist', 'github', 'gml', 'googlecode', 'grayscale', 'gruvbox-dark', 'gruvbox-light', 'hopscotch', 'hybrid', 'idea', 'ir-black', 'isbl-editor-dark', 'isbl-editor-light', 'kimbie.dark', 'kimbie.light', 'lightfair', 'magula', 'mono-blue', 'monokai-sublime', 'monokai', 'nord', 'obsidian', 'ocean', 'paraiso-dark', 'paraiso-light', 'purebasic', 'qtcreator_dark', 'qtcreator_light', 'railscasts', 'rainbow', 'routeros', 'shades-of-purple', 'solarized-dark', 'solarized-light', 'sunburst', 'tomorrow-night-blue', 'tomorrow-night-bright', 'tomorrow-night-eighties', 'tomorrow-night', 'tomorrow', 'vs', 'vs2015', 'xcode', 'xt256', 'zenburn'],
-    styleIndex:36
+    styleIndex: 36
   },
   onLoad(e) {
     this.setData({
-      modeIndex:parseInt(e.mode)
+      modeIndex: parseInt(e.mode)
     })
     htmlString = "";
   },
@@ -50,10 +50,10 @@ Page({
         htmlString += '# 1号标题 #\n## 2号标题 ##\n### 3号标题 ###';
         break;
       case 'img_md':
-        htmlString +='![示例图片](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg)';
+        htmlString += '![示例图片](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg)';
         break;
       case 'a_md':
-        htmlString +='[GitHub链接](https://github.com/jin-yufeng/Parser)';
+        htmlString += '[GitHub链接](https://github.com/jin-yufeng/Parser)';
         break;
     }
     this.setData({
@@ -78,30 +78,30 @@ Page({
       parseing: false,
     })
   },
-  focus(){
+  focus() {
     this.setData({
-      parseing:false,
-      focus:true,
+      parseing: false,
+      focus: true,
     })
   },
   parseHtml(e) {
-    if (!htmlString){
+    if (!htmlString) {
       wx.showModal({
         title: '失败',
         content: '内容不能为空！',
-        showCancel:false
+        showCancel: false
       })
       return;
     }
     if (this.data.modeIndex == 0) {
-      var that=this;
+      var that = this;
       this.setData({
-        parseing:true,
+        parseing: true,
         htmlString: htmlString,
         html: htmlString
       })
     } else {
-      if (this.data.modeIndex == 2 && !/https*:\/\//.test(htmlString)){
+      if (this.data.modeIndex == 2 && !/https*:\/\//.test(htmlString)) {
         wx.showModal({
           title: '失败',
           content: '无效的网址！网址必须以http://或https://开头',
@@ -123,7 +123,7 @@ Page({
         data: {
           data: htmlString,
           mode: mode,
-          options:{styles:that.data.styles[e.detail.value.styles]}
+          options: { styles: that.data.styles[e.detail.value.styles] }
         },
         success: res => {
           wx.hideLoading()
@@ -138,7 +138,7 @@ Page({
           wx.showModal({
             title: '失败',
             content: '解析失败，' + err.errMsg,
-            showCancel:false
+            showCancel: false
           })
         }
       })

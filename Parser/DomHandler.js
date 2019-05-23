@@ -1,5 +1,6 @@
 //DomHandler.js
-var Common = 1, Rich = 2;
+var Common = 1,
+  Rich = 2;
 var trustTag = {
   a: Rich,
   abbr: Common,
@@ -57,6 +58,7 @@ var textTag = {
   em: true,
   i: true,
   ins: true,
+  label: true,
   q: true,
   span: true,
   strong: true
@@ -92,15 +94,6 @@ var ignoreTag = {
   canvas: true
 };
 
-function DomHandler(style, tagStyle) {
-  this.imgList = [];
-  this.videoNum = 0;
-  this.audioNum = 0;
-  this.bgmusic = false;
-  this.nodes = [];
-  this._style = ParseClass(style, tagStyle || {});
-  this._tagStack = [];
-}
 function ParseClass(style, options) {
   if (style) {
     var classes = style.match(/[^\{\}]+?\{([^\{\}]*?({[\s\S]*?})*)*?\}/g);
@@ -131,11 +124,25 @@ function ParseClass(style, options) {
   if (!options.code) options.code = 'padding:0 1px 0 1px;margin-left:2px;margin-right:2px;background-color:#f8f8f8;border:1px solid #cccccc;border-radius:3px';
   return options;
 }
+
+function DomHandler(style, tagStyle = {}) {
+  this.imgList = [];
+  this.nodes = [];
+  this._mediaNum = 0;
+  this._style = ParseClass(style, tagStyle);
+  this._tagStack = [];
+}
 DomHandler.prototype._addDomElement = function(element) {
   var parent = this._tagStack[this._tagStack.length - 1];
   var siblings = parent ? parent.children : this.nodes;
   siblings.push(element);
 };
+DomHandler.prototype._bubbling = function() {
+  for (var i = this._tagStack.length - 1; i >= 0; i--) {
+    if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
+    else return this._tagStack[i].name;
+  }
+}
 DomHandler.prototype.onopentag = function(name, attrs) {
   if (ignoreTag[name]) return;
   var element = {
@@ -157,26 +164,15 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       }
       break;
     case 'img':
-      /*如需在没有src时将data-src自动赋给src，请打开这段注释
-        if (attrs['data-src']) {
+      /*if (attrs['data-src']) {
         attrs.src = attrs.src || attrs['data-src'];
         delete attrs['data-src'];
       }*/
-      var display = attrs.style.match(/display\s*?:([^;]*)/i);
-      attrs.display = display ? display[1] : "inline-block";
-      var float = attrs.style.match(/float\s*?:([^;]*)/i);
-      attrs.float = float ? float[1] : '';
+      attrs.style = 'max-width:100%;' + attrs.style;
       if (!attrs.hasOwnProperty('ignore') && attrs.src) {
         this.imgList.push(attrs.src);
-        for (var i = this._tagStack.length - 1; i >= 0; i--) {
-          if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
-          else {
-            if (this._tagStack[i].name == 'a') attrs.ignore = "";
-            break;
-          }
-        }
+        if (this._bubbling() == 'a') attrs.ignore = "";
       };
-      attrs.style = 'max-width:100%;' + attrs.style;
       break;
     case 'font':
       name = 'span';
@@ -190,43 +186,22 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       }
       break;
     case 'a':
-      element.continue = true;
-      for (var i = this._tagStack.length - 1; i >= 0; i--) {
-        if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
-        else break;
-      }
       attrs.style = 'color:#366092;display:inline;word-break:break-all;overflow:auto;' + attrs.style;
+      element.continue = true;
+      this._bubbling();
       break;
     case 'video':
-      attrs.loop = attrs.hasOwnProperty('loop');
-      attrs.controls = attrs.hasOwnProperty('controls');
-      attrs.autoplay = attrs.hasOwnProperty('autoplay');
-      attrs.muted = attrs.hasOwnProperty('muted');
-      attrs.id = ('video' + (++this.videoNum));
-      attrs.source = [];
-      if (attrs.src) attrs.source.push(attrs.src);
-      if (!attrs.controls && !attrs.autoplay)
-        console.warn('存在没有controls属性的视频，可能导致无法播放', attrs);
-      for (var i = this._tagStack.length - 1; i >= 0; i--) {
-        if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
-        else break;
-      }
-      break;
     case 'audio':
       attrs.loop = attrs.hasOwnProperty('loop');
       attrs.controls = attrs.hasOwnProperty('controls');
-      if (attrs.hasOwnProperty('autoplay') && !this.bgmusic) {
-        attrs.id = "bgmusic";
-        this.bgmusic = true;
-      } else attrs.id = ('audio' + (++this.audioNum));
+      attrs.autoplay = attrs.hasOwnProperty('autoplay');
+      if (name == 'video') attrs.muted = attrs.hasOwnProperty('muted');
+      attrs.id = ('media' + (++this._mediaNum));
       attrs.source = [];
       if (attrs.src) attrs.source.push(attrs.src);
-      if (!attrs.controls && !attrs.hasOwnProperty('autoplay'))
-        console.warn('存在没有controls属性的音乐，可能导致无法播放', attrs);
-      for (var i = this._tagStack.length - 1; i >= 0; i--) {
-        if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
-        else break;
-      }
+      if (!attrs.controls && !attrs.autoplay)
+        console.warn('存在没有controls属性的' + name + '标签，可能导致无法播放', attrs);
+      this._bubbling();
       break;
     case 'source':
       var parent = this._tagStack[this._tagStack.length - 1];

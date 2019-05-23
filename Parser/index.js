@@ -1,93 +1,95 @@
-const html2nodes = require('./Parser.js');
+var html2nodes = require('./Parser.js');
+var initData = function(that) {
+  setTimeout(function() {
+    that.createSelectorQuery().select('#contain').boundingClientRect(function(res) {
+      that.triggerEvent('ready', res);
+    }).exec();
+    that.videoContext = [];
+    var nodes = [that.selectComponent('#contain')];
+    nodes = nodes.concat(that.selectAllComponents('#contain>>>#node'));
+    for (var node of nodes) {
+      for (var item of node.data.nodes) {
+        if (item.name == 'video')
+          that.videoContext.push({
+            id: item.attrs.id,
+            context: wx.createVideoContext(item.attrs.id, node)
+          });
+        else if (item.name == 'audio' && item.attrs.autoplay)
+          wx.createAudioContext(item.attrs.id, node).play();
+      }
+    }
+  }, 10)
+}
 Component({
-  externalClasses: ['html-class'],
   properties: {
     'html': {
       type: null,
       value: '',
       observer: function(html) {
-        var that = this;
-        var hideAnimation = {}, showAnimation = {};
+        var hideAnimation = {},
+          showAnimation = {};
         if (this.data.showWithAnimation) {
-          hideAnimation = { "actions": [{ "animates": [{ "type": "style", "args": ["opacity", 0] }], "option": { "transformOrigin": "50% 50% 0", "transition": { "duration": this.data.animationDuration, "timingFunction": "ease", "delay": 0 } } }] };
-          showAnimation = { "actions": [{ "animates": [{ "type": "style", "args": ["opacity", 1] }], "option": { "transformOrigin": "50% 50% 0", "transition": { "duration": this.data.animationDuration, "timingFunction": "ease", "delay": 0 } } }] };
+          hideAnimation = wx.createAnimation({
+            duration: this.data.animationDuration,
+            timingFunction: "ease"
+          }).opacity(0).step().export();
+          showAnimation = wx.createAnimation({
+            duration: this.data.animationDuration,
+            timingFunction: "ease"
+          }).opacity(1).step().export();
         }
         if (!html) {
           this.setData({
-            nodes: [],
-            controls: {}
+            nodes: []
           })
         } else if (typeof html == 'string') {
-          html2nodes(html, this.data.tagStyle).then(res => {
+          var that = this;
+          html2nodes(html, this.data.tagStyle).then(function(res) {
             that.setData({
               nodes: res.nodes,
+              controls: {},
               showAnimation,
-              hideAnimation,
-              controls: {}
-            }, function() {
-              wx.createInnerAudioContext('bgmusic', that).play();
-              that.imgList = res.imgList;
-              that.videoNum = res.videoNum;
-              if (res.videoNum > 1) {
-                for (var i = 1; i <= res.videoNum; i++) {
-                  that['video' + i] = wx.createVideoContext('video' + i, that);
-                }
-              }
-              that.createSelectorQuery().select('.html-class').boundingClientRect(function (res) {
-                that.triggerEvent('ready', res);
-              }).exec();
-            })
+              hideAnimation
+            }, initData(that))
             if (res.title) {
               wx.setNavigationBarTitle({
                 title: res.title
               })
             }
+            that.imgList = res.imgList;
             that.triggerEvent('parse', res);
-          }).catch(err => {
+          }).catch(function(err) {
             that.triggerEvent('error', err);
           })
         } else if (html.constructor == Array) {
           this.setData({
+            controls: {},
             showAnimation,
-            hideAnimation,
-            controls: {}
-          }, function() {
-            wx.createInnerAudioContext('bgmusic', that).play();
-            that.createSelectorQuery().select('.html-class').boundingClientRect(function (res) {
-              that.triggerEvent('ready', res);
-            }).exec();
-          })
+            hideAnimation
+          }, initData(this))
           this.imgList = [];
-          this.videoNum = 0;
         } else if (typeof html == 'object') {
           if (!html.nodes || html.nodes.constructor != Array) {
-            that.triggerEvent('error', { message: "传入的nodes数组格式不正确！应该传入的类型是array，实际传入的类型是："+typeof html.nodes });
+            this.triggerEvent('error', {
+              message: "传入的nodes数组格式不正确！应该传入的类型是array，实际传入的类型是：" + typeof html.nodes
+            });
             return;
           }
           this.setData({
+            controls: {},
             showAnimation,
-            hideAnimation,
-            controls: {}
-          }, function() {
-            wx.createInnerAudioContext('bgmusic', that).play();
-            that.imgList = html.imgList;
-            that.videoNum = html.videoNum ? html.videoNum : 0;
-            if (that.videoNum > 1) {
-              for (var i = 1; i <= that.videoNum; i++) {
-                that['video' + i] = wx.createVideoContext('video' + i, that);
-              }
-            }
-            that.createSelectorQuery().select('.html-class').boundingClientRect(function (res) {
-              that.triggerEvent('ready', res);
-            }).exec();
-          })
+            hideAnimation
+          }, initData(this))
           if (html.title) {
             wx.setNavigationBarTitle({
               title: html.title
             })
           }
+          this.imgList = html.imgList || [];
         } else {
-          this.triggerEvent('error', { message: "错误的类型：" + typeof html });
+          this.triggerEvent('error', {
+            message: "错误的html类型：" + typeof html
+          });
         }
       }
     },
@@ -98,10 +100,6 @@ Component({
     'selectable': {
       type: Boolean,
       value: true
-    },
-    'htmlStyle': {
-      type: String,
-      value: ''
     },
     'tagStyle': {
       type: Object,
@@ -117,59 +115,37 @@ Component({
     }
   },
   methods: {
-    _loadVideo(e) {
-      this.data.controls[e.currentTarget.dataset.id] = {
-        play: true,
-        index: 0
-      }
-      this.setData({
-        controls: this.data.controls
+    //事件
+    tapEvent(e) {
+      this.triggerEvent('linkpress', e.detail);
+    },
+    errorEvent(e) {
+      this.triggerEvent('error', e.detail);
+    },
+    //内部方法
+    _previewImg(e) {
+      wx.previewImage({
+        current: e.detail,
+        urls: this.imgList.length ? this.imgList : [e.detail],
       })
     },
     _playVideo(e) {
-      if (this.videoNum > 1 && this.data.autopause) {
-        for (var i = 1; i <= this.videoNum; i++) {
-          var id = 'video' + i;
-          if (id == e.currentTarget.dataset.id) continue;
-          this[id].pause();
+      if (this.videoContext.length > 1 && this.data.autopause) {
+        for (var video of this.videoContext) {
+          if (video.id == e.detail) continue;
+          video.context.pause();
         }
       }
     },
-    error(e) {
-      //尝试切换其他来源
-      if (!this.data.controls[e.currentTarget.dataset.id] && e.currentTarget.dataset.source.length > 1) {
-        this.data.controls[e.currentTarget.dataset.id] = {
-          play: false,
-          index: 1
-        }
-      } else if (this.data.controls[e.currentTarget.dataset.id] && e.currentTarget.dataset.source.length > (this.data.controls[e.currentTarget.dataset.id].index + 1)) {
-        this.data.controls[e.currentTarget.dataset.id].index++;
-      }
-      this.setData({
-        controls: this.data.controls
-      })
-      this.triggerEvent('error', { target: e.currentTarget, message: e.detail.errMsg });
-    },
-    tapevent(e) {
-      this.triggerEvent('linkpress', e.currentTarget.dataset.href);
-    },
-    copyhref(e) {
+    _copyhref(e) {
       if (this.data.selectable) {
         wx.setClipboardData({
-          data: e.currentTarget.dataset.href,
+          data: e.detail,
           success: function(res) {
             wx.showToast({
               title: '内容已复制',
             })
           }
-        })
-      }
-    },
-    previewImg(e) {
-      if (!e.target.dataset.hasOwnProperty('ignore')) {
-        wx.previewImage({
-          current: e.target.dataset.src,
-          urls: this.imgList.length ? this.imgList : [e.target.dataset.src],
         })
       }
     }

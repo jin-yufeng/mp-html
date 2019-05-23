@@ -1,6 +1,6 @@
 // miniprogram/pages/component/component.js
 Page({
-  data:{
+  data: {
     tagStyle: {
       code: "font-style: italic; color: #005cc5;margin-left:3px;margin-right:3px;"
     },
@@ -30,8 +30,6 @@ Page({
     stylecode: [{ "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "style", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": ".demo", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-selector-class" } }], "name": "span", "attrs": { "style": ";", "class": "css" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  font-style:italic;", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "}", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "xquery" } }, { "children": [{ "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "#demo2", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-selector-id" } }], "name": "span", "attrs": { "style": ";", "class": "css" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  font-weight:bold;", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "}", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "xquery" } }, { "children": [{ "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "p", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "undefined" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  text-align:center;", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  font-size:", "type": "text" }, { "children": [{ "text": "30", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "hljs-number" } }, { "text": "px;", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "}", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "xquery" } }, { "children": [{ "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "style", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "p", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "span", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "class", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"demo\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "text": "Hello ", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "span", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "undefined" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "span", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "id", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"demo2\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "text": "World!", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "span", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "p", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;", "class": "hljs" } }],
     //设置默认的标签样式示例代码
     tagStylecode: [{ "children": [{ "children": [{ "text": "data", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;", "class": "hljs-selector-tag" } }, { "text": ":{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "tagStyle", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #0086b3;;", "class": "hljs-attribute" } }, { "text": ":{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "    code:", "type": "text" }, { "children": [{ "text": "\"font-style:italic;color:#005cc5\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  }", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "}", "type": "text" }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;", "class": "hljs" } }, { "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "html", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"<code>test</code>\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "tag-style", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{{tagStyle}}", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-template-variable" } }, { "children": [{ "children": [{ "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": " />", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;", "class": "hljs" } }],
-    //设置整体容器样式样式代码
-    htmlStylecode: [{ "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "html", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }], "name": "span", "attrs": { "style": ";" } }, { "children": [{ "text": "{{html}}", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "children": [{ "children": [{ "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "html-style", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"margin:5px\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": " />", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }], "name": "span", "attrs": { "style": ";" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;" } }],
     //添加加载提示代码
     loadingcode: [{ "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "html", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{{html}}", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-template-variable" } }, { "children": [{ "children": [{ "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "text": "加载中...", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;", "class": "hljs" } }],
     //多资源加载示例代码
@@ -48,7 +46,7 @@ Page({
       attrs: 'src, controls, loop, autoplay, \nposter, name, author'
     }, {
       name: 'source',
-      attrs:'src'
+      attrs: 'src'
     }],
     table: [{
       name: 'table',
@@ -175,18 +173,10 @@ Page({
       type: 'String\nArray\nObject',
       notice: '见下方说明'
     }, {
-      name: 'html-class',
-      type: 'String',
-      notice: '整个富文本容器的class样式'
+      name: 'tag-style',
+      type: 'Object',
+      notice: '标签的默认样式'
     }, {
-      name: 'html-style',
-      type: 'String',
-        notice:'整个富文本容器的style样式，可以动态设置'
-      }, {
-        name: 'tag-style',
-        type: 'Object',
-        notice: '标签的默认样式'
-      }, {
       name: 'autopause',
       type: 'Boolean',
       default: 'true',
@@ -196,20 +186,20 @@ Page({
       type: 'Boolean',
       default: 'true',
       notice: '是否允许链接长按复制'
-    },{
-        name:'show-with-\nanimation',
-        type: 'Boolean',
-        default:'false',
-        notice:'是否使用渐显动画效果'
-    },{
-        name: 'animation-\nduration',
-        type: 'Number',
-        default: '400',
-        notice: '动画持续时间（单位ms）'
+    }, {
+      name: 'show-with-\nanimation',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否使用渐显动画效果'
+    }, {
+      name: 'animation-\nduration',
+      type: 'Number',
+      default: '400',
+      notice: '动画持续时间（单位ms）'
     }],
     //属性格式
     format:
-    `<ul style="text-align:justify">
+      `<ul style="text-align:justify">
       <li>html格式
         <ol>
           <li><code>String</code>类型：一个html字符串，如："&lt;div&gt;Hello World!&lt;/div&gt;"</li>
@@ -222,17 +212,17 @@ Page({
       </li>
       <br/>
       <li>tag-style格式
-        <p>一个形如<code>{ name:style }</code>的结构体，name为标签名，style为需要设置的样式</p>
+        <p>一个形如<code>{ name:style }</code>的结构体，name为标签名，style为需要设置的样式；该属性仅传入的<code>html</code>为<code>String</code>类型时有效（在解析过程中设置）</p>
       </li>
     </ul>`,
     //回调函数
     callback:
-    `<ul style="text-align:justify">
+      `<ul style="text-align:justify">
       <li><code>bindparse</code><br/>
       当传入的<code>html</code>为字符串类型时，解析完成后调用；返回值是一个形如<code>{nodes: [Array], imgList: [Array], title: "String"}</code>的结构体，<code>nodes</code>是节点数组，<code>imgList</code>是所有图片地址的数组，<code>title</code>是页面标题（可用于转发）可以将该值保存后下次调用时直接作为属性<code>html</code>的值，可节省解析时间
       </li>
       <li style="margin-top:5px;"><code>bindready</code><br/>
-      渲染完成时调用，返回值是整个组件的<code>NodesRef</code>结构体，包含宽度、高度、位置等信息
+      渲染完成时调用，返回值是整个组件的<code>NodesRef</code>结构体，包含宽度、高度、位置等信息（每次传入的<code>html</code>修改后都会触发）
       </li>
       <li style="margin-top:5px;"><code>binderror</code><br/>
       解析出错或多媒体文件加载错误时调用，返回值为一个结构体，<code>message</code>属性是错误原因；若是加载多媒体文件出错还会包含<code>target</code>属性，含有该标签的具体信息
@@ -246,15 +236,11 @@ Page({
     versions: [{
       version: ">=2.2.5",
       function: "完全正常",
-      percent: "98.29%"
+      percent: "98.36%"
     }, {
-      version: "1.9.90-2.2.4",
-      function: "部分html实体无法显示",
-      percent: "1.46%"
-    }, {
-      version: "1.6.3-1.9.90",
-      function: "html-class属性无法使用；部分html实体无法显示",
-      percent: "0.12%"
+      version: "1.6.3-2.2.4",
+      function: "不支持部分html实体",
+      percent: "1.55%"
     }, {
       version: "<1.6.3",
       function: "无法使用",
@@ -264,7 +250,16 @@ Page({
     api: [{ "children": [{ "children": [{ "text": "var", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;" } }, { "text": " html2nodes=", "type": "text" }, { "children": [{ "text": "require", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": "(", "type": "text" }, { "children": [{ "text": "\"/Parser/Parser.js\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": ");", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "html2nodes(", "type": "text" }, { "children": [{ "text": "\"your html\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": ").then(", "type": "text" }, { "children": [{ "children": [{ "text": "function", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;" } }, { "text": "(", "type": "text" }, { "children": [{ "text": "res", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": ")", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "console", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": ".log(res);", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "})", "type": "text" }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;" } }],
     //更新日志
     update:
-    `<ul>
+      `<ul>
+    <li>2019.5.24：
+      <ol>
+        <li><code>U</code> 通过以自定义组件递归的方式替代了模板循环，精简包的大小至<code>28.1KB</code>，且不再受层数限制</li>
+        <li><code>D</code> 删除了<code>html-class</code>和<code>html-style</code>属性，支持直接对<code>Parser</code>标签设置<code>class</code>和<code>style</code>，默认的<code>display</code>是<code>block</code></li>
+        <li><code>F</code> 修复了部分情况下节点的<code>display</code>和<code>float</code>可能不生效的问题</li>
+        <li><code>F</code> 修复了背景音乐无法播放的问题(设置<code>autoplay</code>)，并支持对多个<code>audio</code>标签设置<code>autoplay</code></li>
+      </ol>
+    </li>
+    <br />
     <li>2019.5.22：
       <ol>
         <li><code>U</code> <code>bindready</code>回调将返回整个组件的<code>NodesRef</code>结构体，包含了宽度、高度、位置等信息</li>
@@ -386,14 +381,14 @@ Page({
     </li>
   </ul>`
   },
-  gotop(){
+  gotop() {
     this.setData({
-      top:0
+      top: 0
     })
   },
-  gosection(e){
+  gosection(e) {
     this.setData({
-      section:e.currentTarget.dataset.section
+      section: e.currentTarget.dataset.section
     })
   },
 })

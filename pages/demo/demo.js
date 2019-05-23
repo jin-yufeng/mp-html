@@ -1,13 +1,13 @@
 // pages/demo/demo.js
-const htmls=require('./htmls.js');
+const htmls = require('./htmls.js');
 Page({
   onLoad(e) {
     this.setData({
-      html: htmls['demo'+e.index],
+      html: htmls['demo' + e.index],
     })
   },
   downloadfile(e) {
-    if (e.detail&&e.detail.indexOf('docx') != -1) {
+    if (e.detail && e.detail.indexOf('docx') != -1) {
       wx.showLoading({
         title: '附件下载中',
       })
@@ -26,7 +26,7 @@ Page({
       })
     }
   },
-  error(e){
+  error(e) {
     console.error(e.detail.message)
-  }
+  },
 })

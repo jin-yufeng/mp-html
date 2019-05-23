@@ -1,7 +1,7 @@
 //Tokenizer.js
 function Tokenizer(cbs) {
+  this.title = "";
   this._state = "TEXT";
-  this._title = "";
   this._buffer = "";
   this._sectionStart = 0;
   this._index = 0;
@@ -58,12 +58,12 @@ Tokenizer.prototype.InTag = function(c) {
         this._sectionStart = this._index + 1;
       } else this._sectionStart = this._index = this._buffer.length;
       this._state = "TEXT";
-    } else if(tagName=="title") {
+    } else if (tagName == "title") {
       var index = this._buffer.indexOf("</title>", this._index);
       if (index != -1) {
         this._index = index + 7;
-        var title=this._getSection().match(/>(.*?)</);
-        if(title) this._title=title[1];
+        var title = this._getSection().match(/>(.*?)</);
+        if (title) this.title = title[1];
         this._sectionStart = this._index + 1;
       } else this._sectionStart = this._index = this._buffer.length;
       this._state = "TEXT";

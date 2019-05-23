@@ -1,0 +1,57 @@
+/* 链接受到点击的hover-class，可自定义修改 */
+.navigator-hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+/* 以下内容不建议修改 */
+:host {
+  display: inherit;
+  float: inherit;
+}
+.sub, .sup, .code, .text {
+  display: inline-block !important;
+}
+.p, .div, .dl, .dd, .dt, .pre {
+  display:block;
+}
+.b, .strong {
+  font-weight: bold;
+  display: inline;
+}
+.del {
+  text-decoration: line-through;
+  display: inline;
+}
+.ins {
+  text-decoration: underline;
+  display: inline;
+}
+.em, .i {
+  font-style: italic;
+  display: inline;
+}
+.q, .span, .label {
+  display: inline;
+}
+.q::before {
+  content: '"';
+}
+.q::after {
+  content: '"';
+}
+.video {
+  background-color: black;
+  width: 300px;
+  height: 225px;
+  display: inline-block;
+  position: relative;
+}
+.triangle_border_right {
+  border-width: 15px 0 15px 30px;
+  border-style: solid;
+  border-color: transparent transparent transparent white;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+}
