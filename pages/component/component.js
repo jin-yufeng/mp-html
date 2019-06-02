@@ -236,11 +236,11 @@ Page({
     versions: [{
       version: ">=2.2.5",
       function: "完全正常",
-      percent: "98.36%"
+      percent: "98.37%"
     }, {
       version: "1.6.3-2.2.4",
       function: "不支持部分html实体",
-      percent: "1.55%"
+      percent: "1.52%"
     }, {
       version: "<1.6.3",
       function: "无法使用",
@@ -251,6 +251,12 @@ Page({
     //更新日志
     update:
       `<ul>
+    <li>2019.6.1：
+      <ol>
+        <li><code>F</code> 修复了部分情况下<code>width</code>设置为百分比时失效的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.5.24：
       <ol>
         <li><code>U</code> 通过以自定义组件递归的方式替代了模板循环，精简包的大小至<code>28.1KB</code>，且不再受层数限制</li>

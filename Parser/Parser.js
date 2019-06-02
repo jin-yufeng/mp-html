@@ -149,7 +149,6 @@ function html2nodes(data, tagStyle) {
         style += arguments[1];
         return '';
       });
-      style = style.toLowerCase();
       var handler = new DomHandler(style, tagStyle);
       new Parser(handler, function(res) {
         return resolve(res);

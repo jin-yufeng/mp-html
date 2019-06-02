@@ -169,6 +169,10 @@ DomHandler.prototype.onopentag = function(name, attrs) {
         delete attrs['data-src'];
       }*/
       attrs.style = 'max-width:100%;' + attrs.style;
+      if (attrs.width) {
+        attrs.style = 'width:' + attrs.width + ';' + attrs.style;
+        delete attrs.width;
+      }
       if (!attrs.hasOwnProperty('ignore') && attrs.src) {
         this.imgList.push(attrs.src);
         if (this._bubbling() == 'a') attrs.ignore = "";
