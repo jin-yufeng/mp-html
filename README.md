@@ -65,6 +65,9 @@
     <source src="demo2.webm" />
   </video>
   ```
+- 支持长按复制内容  
+  通过设置`selectable`属性可以实现长按复制任意内容  
+
 - 支持的标签种类丰富，包括`视频`、`表格`等  
   在[`rich-text`](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html)组件的基础上增加支持以下标签: 
   
@@ -86,7 +89,7 @@
 - 图片支持大小自适应，点击图片可以预览（预览时通过左右滑动可以查看所有图片）；对于一些装饰性的图片，可以对其设置`ignore`属性，设置后将无法预览  
 
   ![解析图片](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/28/e20b6b6340f1e2c28073a1137b94bdcc.gif)  
-- 点击`a`标签，若`href`为小程序内部页面路径，将直接跳转；若是网页链接，则`长按`可以复制链接，并在浏览器中打开；点击时将有下划线和半透明的效果，支持图片链接。链接被点击时会触发`bindlinkpress`事件，可以在该回调中进行下载附件等更多操作  
+- 点击`a`标签，若`href`为小程序内部页面路径，将直接跳转；若是网页链接，则可以自动复制链接（可通过`autocopy`属性控制），并在浏览器中打开；点击时将有下划线和半透明的效果，支持图片链接。链接被点击时会触发`bindlinkpress`事件，可以在该回调中进行下载附件等更多操作  
   ![解析链接](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/28/660803d34009355a80f888218369515e.gif)
 - 支持解析有序列表和无序列表（直接由`rich-text`进行显示）  
   ![解析列表](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/28/af3fc4dd4041cf7680e24f1f49ba715a.png)
@@ -104,10 +107,10 @@
   <div>!
   ```  
  
-- 功能强大，支持无限层级，解析速度快，包大小仅约`28.6KB`  
+- 功能强大，支持无限层级，解析速度快，包大小仅约`30.0KB`  
 ## 使用方法 ##
 1. 下载Parser文件夹至小程序目录  
-   ![页面结构](http://bmob-cdn-17111.b0.upaiyun.com/2019/05/23/7db73adb4044a84780006c846dda8712.png)
+   ![页面结构](http://bmob-cdn-17111.b0.upaiyun.com/2019/06/03/0941c933409ad76a80fdf7f8289a10af.png)
    
 2. 在需要引用的页面的`json`文件中添加
    ``` json
@@ -135,8 +138,9 @@
   |:----:|:----:|:----:|:----:|:----:|
   | html | String/Object/Array | | 是 | 要显示的富文本数据，具体格式见下方说明 |
   | tag-style | Object | | 否 | 设置标签的默认样式 |
+  | autocopy | Boolean | true | 否 | 是否允许链接受到点击时自动复制链接（仅限http开头的网络链接）|
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
-  | selectable | Boolean | true | 否 | 是否允许长按复制链接 |
+  | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
   | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
   | animation-duration | Number | 400 | 否 | 动画持续时间 |
   
@@ -171,8 +175,7 @@
     html2nodes("your html").then(res=>{
       console.log(res);
     })
-    ```  
-  - 若需要图片在没有`src`属性时自动将`data-src`属性赋给`src`（一些网页可能需要），可将`Parser`文件夹下的`DomHandler.js`中的第167-170行的注释打开  
+    ```   
   - 若需要自定义链接受到点击时的效果，可对`Parser/trees`文件夹下的`trees.wxss`中的`navigator-hover`进行修改（默认下划线+半透明）
 - Tips  
     - `table`, `ol`, `ul`等标签由于较难通过模板循环的方式显示，将直接通过`rich-text`进行渲染，因此请尽量避免在表格，列表中加入图片或链接，否则将无法预览或点击（但可以正常显示）  
@@ -200,7 +203,11 @@ parser(html).then(function(res){
 ## 许可 ##
 您可以随意的使用和分享本插件
 ## 更新日志 ##
-- 2019.6.1
+- 2019.6.3:
+  1. `A` 增加了`autocopy`属性，用于控制是否允许`a`标签受到点击时自动复制链接（仅限`http`开头的网址链接；默认`true`；接近于原`selectable`属性的功能）
+  2. `U` 可以通过设置`selectable`属性控制是否允许长按复制任意内容（默认`false`)
+  3. `F` 修复了`style`标签内容过长时安卓机可能出现栈溢出的问题
+- 2019.6.1:
   1. `F` 修复了部分情况下`width`设置为百分比时失效的问题
 - 2019.5.24:
   1. `U` 通过以自定义组件递归的方式替代了模板循环，精简包的大小至`28.1KB`，且不再受层数限制

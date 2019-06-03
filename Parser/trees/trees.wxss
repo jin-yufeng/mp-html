@@ -12,7 +12,7 @@
   display: inline-block !important;
 }
 .p, .div, .dl, .dd, .dt, .pre {
-  display:block;
+  display: block;
 }
 .b, .strong {
   font-weight: bold;

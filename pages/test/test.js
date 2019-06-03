@@ -131,6 +131,7 @@ Page({
             parseing: true,
             htmlString: htmlString,
             html: res.result,
+            nonePadding: this.data.modeIndex==2
           })
         },
         fail: err => {

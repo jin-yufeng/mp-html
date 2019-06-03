@@ -6,8 +6,8 @@
   </view>
   <view class="page__bd">
     <view class="weui-cells__title">解析结果</view>
-    <view class="weui-cells weui-cells_after-title" style="padding:10px 15px">
-      <Parser html="{{html}}" />
+    <view class="weui-cells weui-cells_after-title" style="padding:{{nonePadding?'0':'10px 15px'}}">
+      <Parser html="{{html}}"/>
     </view>
     <form bindsubmit='parseHtml'>
       <view class="weui-cells__title">输入字符</view>

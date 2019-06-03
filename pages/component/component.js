@@ -85,6 +85,8 @@ Page({
     }, {
       name: 'abbr'
     }, {
+      name: 'address'
+    }, {
       name: 'b'
     }, {
       name: 'blockquote'
@@ -177,6 +179,11 @@ Page({
       type: 'Object',
       notice: '标签的默认样式'
     }, {
+      name: 'autocopy',
+      type: 'Boolean',
+      default: 'true',
+      notice: '是否允许点击链接时自动复制链接地址（仅限http开头的网址链接）'
+    }, {
       name: 'autopause',
       type: 'Boolean',
       default: 'true',
@@ -184,8 +191,8 @@ Page({
     }, {
       name: 'selectable',
       type: 'Boolean',
-      default: 'true',
-      notice: '是否允许链接长按复制'
+      default: 'false',
+      notice: '是否允许长按复制内容'
     }, {
       name: 'show-with-\nanimation',
       type: 'Boolean',
@@ -251,6 +258,14 @@ Page({
     //更新日志
     update:
       `<ul>
+    <li>2019.6.3：
+      <ol>
+        <li><code>A</code> 增加了<code>autocopy</code>属性，用于控制是否允许<code>a</code>标签受到点击时自动复制链接（仅限<code>http</code>开头的网址链接；默认<code>true</code>；接近于原<code>selectable</code>属性的功能)</li>
+        <li><code>U</code> 可以通过设置<code>selectable</code>属性控制是否允许长按复制任意内容（默认<code>false</code>）</li>
+        <li><code>F</code> 修复了<code>style</code>标签内容过长时安卓机可能出现栈溢出的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.6.1：
       <ol>
         <li><code>F</code> 修复了部分情况下<code>width</code>设置为百分比时失效的问题</li>

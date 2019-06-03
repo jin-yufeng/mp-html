@@ -1,16 +1,17 @@
-var html2nodes = require('./Parser.js');
-var initData = function(that) {
-  setTimeout(function() {
-    that.createSelectorQuery().select('#contain').boundingClientRect(function(res) {
-      that.triggerEvent('ready', res);
+//Parser组件
+const html2nodes = require('./Parser.js');
+const initData = function(Component) {
+  setTimeout(() => {
+    Component.createSelectorQuery().select('#contain').boundingClientRect(res => {
+      Component.triggerEvent('ready', res);
     }).exec();
-    that.videoContext = [];
-    var nodes = [that.selectComponent('#contain')];
-    nodes = nodes.concat(that.selectAllComponents('#contain>>>#node'));
-    for (var node of nodes) {
-      for (var item of node.data.nodes) {
+    Component.videoContext = [];
+    let nodes = [Component.selectComponent('#contain')];
+    nodes = nodes.concat(Component.selectAllComponents('#contain>>>#node'));
+    for (let node of nodes) {
+      for (let item of node.data.nodes) {
         if (item.name == 'video')
-          that.videoContext.push({
+          Component.videoContext.push({
             id: item.attrs.id,
             context: wx.createVideoContext(item.attrs.id, node)
           });
@@ -26,7 +27,7 @@ Component({
       type: null,
       value: '',
       observer: function(html) {
-        var hideAnimation = {},
+        let hideAnimation = {},
           showAnimation = {};
         if (this.data.showWithAnimation) {
           hideAnimation = wx.createAnimation({
@@ -43,23 +44,22 @@ Component({
             nodes: []
           })
         } else if (typeof html == 'string') {
-          var that = this;
-          html2nodes(html, this.data.tagStyle).then(function(res) {
-            that.setData({
+          html2nodes(html, this.data.tagStyle).then(res => {
+            this.setData({
               nodes: res.nodes,
               controls: {},
               showAnimation,
               hideAnimation
-            }, initData(that))
+            }, initData(this))
             if (res.title) {
               wx.setNavigationBarTitle({
                 title: res.title
               })
             }
-            that.imgList = res.imgList;
-            that.triggerEvent('parse', res);
-          }).catch(function(err) {
-            that.triggerEvent('error', err);
+            this.imgList = res.imgList;
+            this.triggerEvent('parse', res);
+          }).catch(err => {
+            this.triggerEvent('error', new Error(err));
           })
         } else if (html.constructor == Array) {
           this.setData({
@@ -93,13 +93,17 @@ Component({
         }
       }
     },
+    'autocopy': {
+      type: Boolean,
+      value: true
+    },
     'autopause': {
       type: Boolean,
       value: true
     },
     'selectable': {
       type: Boolean,
-      value: true
+      value: false
     },
     'tagStyle': {
       type: Object,
@@ -117,6 +121,16 @@ Component({
   methods: {
     //事件
     tapEvent(e) {
+      if (this.data.autocopy && e.detail && /^http/.test(e.detail)) {
+        wx.setClipboardData({
+          data: e.detail,
+          success() {
+            wx.showToast({
+              title: '链接已复制',
+            })
+          }
+        })
+      }
       this.triggerEvent('linkpress', e.detail);
     },
     errorEvent(e) {
@@ -131,22 +145,10 @@ Component({
     },
     _playVideo(e) {
       if (this.videoContext.length > 1 && this.data.autopause) {
-        for (var video of this.videoContext) {
+        for (let video of this.videoContext) {
           if (video.id == e.detail) continue;
           video.context.pause();
         }
-      }
-    },
-    _copyhref(e) {
-      if (this.data.selectable) {
-        wx.setClipboardData({
-          data: e.detail,
-          success: function(res) {
-            wx.showToast({
-              title: '内容已复制',
-            })
-          }
-        })
       }
     }
   }

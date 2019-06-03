@@ -16,6 +16,7 @@
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="setTitle" bindtap="gosection">自动设置标题</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="addLoading" bindtap="gosection">添加加载提示</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="source" bindtap="gosection">多资源加载</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="selectable" bindtap="gosection">内容可复制</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持丰富的标签</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tapEvent" bindtap="gosection">事件效果</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="performance" bindtap="gosection">性能指标</view>
@@ -94,6 +95,11 @@
           <text class="code">source</text>标签来设置多个来源，组件会按顺序进行加载，若前面的资源链接无法播放，会自动使用下一个链接进行加载，直至最后一个链接；可用于解决平台支持性差异，最大程度避免无法播放，示例：
           <rich-text nodes="{{source}}" />
         </view>
+        <!--内容可复制-->
+        <view id="selectable" class="weui-article__h2">内容可复制</view>
+        <view class="weui-article__section">
+          <Parser html="<div>当<code>selectable</code>属性被设置为<code>true</code>时，可以通过长按复制内容（本段文字可以体验）" selectable tag-style="{{tagStyle}}" />
+        </view>
         <!--支持丰富的标签-->
         <view id="supportTag" class="weui-article__h2">支持丰富的标签</view>
         <view class="weui-article__h3">媒体标签</view>
@@ -149,7 +155,7 @@
           对于不在上述列表中标签，除个别会被直接移除外，都会被转换为
           <text class="code">div</text>标签，因此可以使用一些语义化标签，如
           <text class="code">article</text>，
-          <text class="code">address</text>等
+          <text class="code">aside</text>等
         </view>
         <!--事件效果-->
         <view id="tapEvent" class="weui-article__h2">事件效果</view>
@@ -158,13 +164,13 @@
           <Parser html='<ol><li>点击图片可以预览，左右滑动可以查看所有的图片</li><li>对于一些装饰性的图片，可以对其设置<code>ignore</code>属性，设置后将无法预览</li></ol>' tag-style="{{tagStyle}}" />
           <text>\n</text>
           <view class="weui-article__h3">链接点击</view>
-          <Parser html='<ol><li>点击链接会有下划线和半透明的效果，若链接为小程序路径，则点击时跳转至相应页面；若为外部链接，则长按可复制链接</li><li>点击链接时会触发<code>bindlinkpress</code>事件，并返回相应的链接，可以进行进一步的操作（如文档链接可以在回调中进行下载和打开等）</li></ol>' tag-style="{{tagStyle}}" />
+          <Parser html='<ol><li>点击链接会有下划线和半透明的效果。若链接为小程序路径，受到点击时将跳转至相应页面；若为外部链接，将自动复制链接（可通过<code>autocopy</code>属性控制）</li><li>点击链接时会触发<code>bindlinkpress</code>事件，并返回相应的链接，可以进行进一步的操作（如文档链接可以在回调中进行下载和打开等）</li></ol>' tag-style="{{tagStyle}}" />
         </view>
         <!--性能指标-->
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <text class="code">28.6KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <text class="code">30.0KB</text>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <rich-text nodes="{{errorcode}}" />
         </view>
       </view>
@@ -243,14 +249,6 @@
             <rich-text nodes="{{api}}" />
           </view>
           <view class="weui-article__p">
-            若需要在图片没有
-            <text class="code">src</text>属性时自动将
-            <text class="code">data-src</text>属性的值赋给
-            <text class="code">src</text>，请将
-            <text class="code">Parser</text>文件夹下的
-            <text class="code">DomHandler.js</text>中167-170行的注释打开
-          </view>
-          <view class="weui-article__p">
             若需要修改链接受到点击时的样式，可在
             <text class="code">Parser/trees</text>文件夹下的
             <text class="code">trees.wxss</text>中修改
@@ -281,12 +279,12 @@
         <text decode>\n&emsp;&emsp;</text>通过这样的方式，既解决了
         <text class="code">WxParse</text>标签数过多（rich-text可以节省大量的标签），层数超过限制无法显示（自定义组件递归可以支持无限层级），无法解析表格，部分样式显示不准确（rich-text的显示效果更好）等缺陷；也弥补了
         <text class="code">rich-text</text>图片不能预览，链接无法点击，不能显示视频，部分标签不支持（在解析的过程中替换）等问题，从而达到一个更加完美的效果。
-        <text decode>\n&emsp;&emsp;</text>且其轻量化，前后端通用等特点，也使得应用面更加广泛。
+        <text decode>\n&emsp;&emsp;</text>且其轻量化，前后端通用等特点以及更多精致的功能，也使得应用面更加广泛。
       </view>
       <!--下载链接-->
       <view id="download" class="weui-article__h1">下载链接</view>
       <view class="weui-article__section">
-        <Parser html='GitHub链接：<a href="https://github.com/jin-yufeng/Parser">长按复制链接</a>' />
+        <Parser html='GitHub链接：<a href="https://github.com/jin-yufeng/Parser">点击复制链接</a>' />
       </view>
       <!--更新日志-->
       <view id="update" class="weui-article__h1">更新日志</view>

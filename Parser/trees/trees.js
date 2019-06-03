@@ -1,4 +1,4 @@
-// Parser/trees/trees.js
+//trees组件
 Component({
   properties: {
     nodes: {
@@ -28,12 +28,6 @@ Component({
     },
     tapEvent(e) {
       this.triggerEvent('linkpress', e.currentTarget.dataset.href, {
-        bubbles: true,
-        composed: true
-      });
-    },
-    longtapEvent(e) {
-      this.triggerEvent('linklongpress', e.currentTarget.dataset.href, {
         bubbles: true,
         composed: true
       });

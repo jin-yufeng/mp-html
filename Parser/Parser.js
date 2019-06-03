@@ -1,7 +1,7 @@
 //Parser.js
-var Tokenizer = require("./Tokenizer.js");
-var DomHandler = require("./DomHandler.js");
-var trustAttrs = {
+const Tokenizer = require("./Tokenizer.js");
+const DomHandler = require("./DomHandler.js");
+const trustAttrs = {
   align: true,
   alt: true,
   author: true,
@@ -28,7 +28,7 @@ var trustAttrs = {
   type: true,
   width: true,
 };
-var voidTag = {
+const voidTag = {
   area: true,
   base: true,
   basefont: true,
@@ -105,21 +105,14 @@ Parser.prototype.onclosetag = function(name) {
   }
 };
 Parser.prototype._closeCurrentTag = function() {
-  var name = this._tagname;
+  let name = this._tagname;
   this.onopentagend();
   if (this._stack[this._stack.length - 1] === name) {
     this._cbs.onclosetag(name);
     this._stack.pop();
   }
 };
-Parser.prototype.onattribname = function(name) {
-  this._attribname = name;
-};
-Parser.prototype.onattribdata = function(value) {
-  this._attribvalue += value;
-};
 Parser.prototype.onattribend = function() {
-  this._attribname = this._attribname.toLowerCase();
   this._attribvalue = this._attribvalue.replace(/&quot;/g, '"');
   if (this._attribs && trustAttrs[this._attribname]) {
     this._attribs[this._attribname] = this._attribvalue;
@@ -144,13 +137,13 @@ Parser.prototype.write = function(chunk) {
 function html2nodes(data, tagStyle) {
   return new Promise(function(resolve, reject) {
     try {
-      var style = '';
+      let style = '';
       data = data.replace(/<style.*?>([\s\S]*?)<\/style>/gi, function() {
         style += arguments[1];
         return '';
       });
-      var handler = new DomHandler(style, tagStyle);
-      new Parser(handler, function(res) {
+      let handler = new DomHandler(style, tagStyle);
+      new Parser(handler, (res) => {
         return resolve(res);
       }).write(data);
     } catch (err) {

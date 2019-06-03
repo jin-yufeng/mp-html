@@ -1,7 +1,8 @@
 //DomHandler.js
-var Common = 1,
+const CssTokenizer = require('./CssTokenizer.js');
+const Common = 1,
   Rich = 2;
-var trustTag = {
+const trustTag = {
   a: Rich,
   abbr: Common,
   audio: Rich,
@@ -34,7 +35,6 @@ var trustTag = {
   li: Rich,
   ol: Rich,
   p: Common,
-  pre: Common,
   q: Common,
   source: Rich,
   span: Common,
@@ -52,7 +52,7 @@ var trustTag = {
   ul: Rich,
   video: Common
 };
-var textTag = {
+const textTag = {
   b: true,
   del: true,
   em: true,
@@ -63,7 +63,7 @@ var textTag = {
   span: true,
   strong: true
 };
-var ignoreTag = {
+const ignoreTag = {
   head: true,
   area: true,
   base: true,
@@ -94,58 +94,27 @@ var ignoreTag = {
   canvas: true
 };
 
-function ParseClass(style, options) {
-  if (style) {
-    var classes = style.match(/[^\{\}]+?\{([^\{\}]*?({[\s\S]*?})*)*?\}/g);
-    if (classes) {
-      for (var item of classes) {
-        try {
-          var name = item.match(/(\S.*?)\{/)[1];
-          name = name.replace(/\s*$/g, '');
-          if (/[\s@>:\[\]]/.test(name)) continue;
-          var content = item.match(/\{([\s\S]*?)\}/)[1];
-          if (/,/.test(item)) {
-            var items = name.split(',');
-            for (var i of items) {
-              i = i[0] + i.substring(1).replace(/\./g, ' ');
-              options[i] = content;
-            }
-          } else {
-            name = name[0] + name.substring(1).replace(/\./g, ' ');
-            options[name] = content;
-          }
-        } catch (err) {
-          continue;
-        }
-      }
-    }
-  }
-  if (!options.blockquote) options.blockquote = 'background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px';
-  if (!options.code) options.code = 'padding:0 1px 0 1px;margin-left:2px;margin-right:2px;background-color:#f8f8f8;border:1px solid #cccccc;border-radius:3px';
-  return options;
-}
-
 function DomHandler(style, tagStyle = {}) {
   this.imgList = [];
   this.nodes = [];
   this._mediaNum = 0;
-  this._style = ParseClass(style, tagStyle);
+  this._style = new CssTokenizer(style, tagStyle).parse();
   this._tagStack = [];
 }
 DomHandler.prototype._addDomElement = function(element) {
-  var parent = this._tagStack[this._tagStack.length - 1];
-  var siblings = parent ? parent.children : this.nodes;
+  let parent = this._tagStack[this._tagStack.length - 1];
+  let siblings = parent ? parent.children : this.nodes;
   siblings.push(element);
 };
 DomHandler.prototype._bubbling = function() {
-  for (var i = this._tagStack.length - 1; i >= 0; i--) {
+  for (let i = this._tagStack.length - 1; i >= 0; i--) {
     if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
     else return this._tagStack[i].name;
   }
 }
 DomHandler.prototype.onopentag = function(name, attrs) {
   if (ignoreTag[name]) return;
-  var element = {
+  let element = {
     children: []
   };
   if (this._style[name]) attrs.style += (';' + this._style[name]);
@@ -164,10 +133,10 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       }
       break;
     case 'img':
-      /*if (attrs['data-src']) {
+      if (attrs['data-src']) {
         attrs.src = attrs.src || attrs['data-src'];
         delete attrs['data-src'];
-      }*/
+      }
       attrs.style = 'max-width:100%;' + attrs.style;
       if (attrs.width) {
         attrs.style = 'width:' + attrs.width + ';' + attrs.style;
@@ -208,21 +177,13 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       this._bubbling();
       break;
     case 'source':
-      var parent = this._tagStack[this._tagStack.length - 1];
+      let parent = this._tagStack[this._tagStack.length - 1];
       if (parent && (parent.name == 'video' || parent.name == 'audio')) {
         parent.attrs.source.push(attrs.src);
         if (!parent.attrs.src) parent.attrs.src = attrs.src;
       }
       this._tagStack.push(element);
       return;
-    case 'center':
-      name = 'div';
-      attrs.style = 'text-align:center;' + attrs.style;
-      break;
-    case 'pre':
-      name = 'div';
-      attrs.style = 'background-color:#f6f8fa;padding:5px;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll' + attrs.style;
-      break;
     case 'u':
       name = 'span';
       attrs.style = 'text-decoration:underline;' + attrs.style;
@@ -234,7 +195,7 @@ DomHandler.prototype.onopentag = function(name, attrs) {
   this._tagStack.push(element);
 };
 DomHandler.prototype.ontext = function(data) {
-  var lastTag;
+  let lastTag;
   if (!this._tagStack.length && this.nodes.length && (lastTag = this.nodes[this.nodes.length - 1]).type === 'text') {
     lastTag.data += data;
   } else {
@@ -246,7 +207,7 @@ DomHandler.prototype.ontext = function(data) {
     ) {
       lastTag.data += data;
     } else if (/\S/.test(data)) {
-      var element = {
+      let element = {
         text: data.replace(/&nbsp;/g, '\u00A0'),
         type: 'text'
       };
