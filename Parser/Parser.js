@@ -11,6 +11,7 @@ const trustAttrs = {
   colspan: true,
   controls: true,
   "data-src": true,
+  dir: true,
   face: true,
   height: true,
   href: true,
@@ -34,7 +35,9 @@ const voidTag = {
   basefont: true,
   br: true,
   col: true,
+  circle: true,
   command: true,
+  ellipse: true,
   embed: true,
   frame: true,
   hr: true,
@@ -42,21 +45,19 @@ const voidTag = {
   input: true,
   isindex: true,
   keygen: true,
+  line: true,
   link: true,
   meta: true,
   param: true,
-  source: true,
-  track: true,
-  wbr: true,
   path: true,
-  circle: true,
-  ellipse: true,
-  line: true,
-  rect: true,
-  use: true,
-  stop: true,
+  polygon: true,
   polyline: true,
-  polygon: true
+  rect: true,
+  source: true,
+  stop: true,
+  track: true,
+  use: true,
+  wbr: true
 };
 
 function Parser(cbs, callback) {
@@ -126,7 +127,7 @@ Parser.prototype.onend = function() {
   );
   this._callback({
     'nodes': this._cbs.nodes,
-    'title': this._tokenizer.title,
+    'title': this._cbs.title,
     'imgList': this._cbs.imgList
   });
 };

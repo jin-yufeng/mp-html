@@ -1,7 +1,7 @@
 # Parser
 微信小程序富文本插件（本文档动态更新，建议加星收藏）
 ## 立即体验 ##
-![体验小程序](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/27/e0290fef409d5baa803d3ed551f10d49.jpg)
+![体验小程序](https://i.imgur.com/t3uXihW.jpg)
 ## 功能介绍 ##
 - 支持解析`<style>`标签中的全局样式  
   可以按以下模式解析
@@ -32,7 +32,7 @@
 	 <span id="demo2">World!</span>
 	</p>
 	```
-  ![解析style](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/27/d7c003d7404e2d278049ab62f8c0cf88.png)
+  ![解析style](https://i.imgur.com/vL31Ykz.png)
 - 支持自定义默认的标签样式
   ``` javascript
   data:{
@@ -44,7 +44,7 @@
   ``` html
   <Parser html="<code>test</code>" tag-style="{{tagStyle}}" />
   ```
-  ![解析自定义样式](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/27/ca68a4464065829c80c33d056f95a7d2.png)
+  ![解析自定义样式](https://i.imgur.com/MMbq7ld.png)
 - 自动设置标题  
   若`html`中存在`title`标签，将自动把`title`标签的内容设置到页面的标题上，并在回调`bindparse`中返回，可以用于转发  
 - 支持添加加载提示  
@@ -77,6 +77,7 @@
   | audio | src, controls, loop, autoplay, [poster, name, author](https://developers.weixin.qq.com/miniprogram/dev/component/audio.html) |
   | source | src |
   | u |  |
+  | s |  |
   | center |  |
   | font | face, color |
   | pre |  |
@@ -84,15 +85,16 @@
   | style |  |
   | body |  |
 
-  另外，对于不在支持列表中的标签，除个别会直接移除外，都会被转换为`div`标签，因此可以使用一些语义化标签，如`article`, `address`等
+  另外，对于不在支持列表中的标签，除个别会直接移除外，都会被转换为一个行内标签，因此可以使用一些语义化标签  
+  *附注：2.7.1基础库开始`rich-text`组件已经支持`section`、`center`、`u`、`s`、`font`等标签，但本插件可以实现低版本兼容*
   
 - 图片支持大小自适应，点击图片可以预览（预览时通过左右滑动可以查看所有图片）；对于一些装饰性的图片，可以对其设置`ignore`属性，设置后将无法预览  
 
-  ![解析图片](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/28/e20b6b6340f1e2c28073a1137b94bdcc.gif)  
+  ![解析图片](https://i.imgur.com/XG7XdRa.gif)  
 - 点击`a`标签，若`href`为小程序内部页面路径，将直接跳转；若是网页链接，则可以自动复制链接（可通过`autocopy`属性控制），并在浏览器中打开；点击时将有下划线和半透明的效果，支持图片链接。链接被点击时会触发`bindlinkpress`事件，可以在该回调中进行下载附件等更多操作  
-  ![解析链接](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/28/660803d34009355a80f888218369515e.gif)
+  ![解析链接](https://i.imgur.com/2pySRst.gif)
 - 支持解析有序列表和无序列表（直接由`rich-text`进行显示）  
-  ![解析列表](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/28/af3fc4dd4041cf7680e24f1f49ba715a.png)
+  ![解析列表](https://i.imgur.com/QYMbUkV.png)
  
 - 容错性强，稳定性高，不需要网络请求  
   以下情况都可以正常解析：
@@ -107,10 +109,10 @@
   <div>!
   ```  
  
-- 功能强大，支持无限层级，解析速度快，包大小仅约`30.0KB`  
+- 功能强大，支持无限层级，解析速度快，包大小仅约`33.4KB`  
 ## 使用方法 ##
 1. 下载Parser文件夹至小程序目录  
-   ![页面结构](http://bmob-cdn-17111.b0.upaiyun.com/2019/06/03/0941c933409ad76a80fdf7f8289a10af.png)
+   ![页面结构](https://i.imgur.com/XW4Jupv.png)
    
 2. 在需要引用的页面的`json`文件中添加
    ``` json
@@ -140,6 +142,7 @@
   | tag-style | Object | | 否 | 设置标签的默认样式 |
   | autocopy | Boolean | true | 否 | 是否允许链接受到点击时自动复制链接（仅限http开头的网络链接）|
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
+  | img-mode | String | default | 否 | 图片显示模式 |
   | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
   | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
   | animation-duration | Number | 400 | 否 | 动画持续时间 |
@@ -149,6 +152,8 @@
     2. `object`类型：一个形如`{nodes: [Array], imgList: [Array], videoNum: Number, title: "String"}`的结构体，其中nodes数组的格式基本同[rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html)，对于该节点下有`img`，`video`，`a`标签的，需要将`continue`属性设置为`true`，否则将直接使用`rich-text`组件渲染，可能导致图片无法预览，链接无法点击等问题，imgList为其中所有图片地址的数组，`videoNum`是视频数量（不必要，用于`autopause`属性）`title`是页面的标题（不必要，传入将会设置到页面的标题上）回调函数`bindparser`的返回值就是这样的结构体
     3. `array`类型：格式要求同上（用此格式传入预览图片时，将`不能`通过左右滑动查看所有图片）  
     4. 使用b, c方法可以节省解析的时间，提高性能
+  - 关于img-mode
+    默认`default`，在没有设置宽高时，按图片原大小显示；设置了宽或高时，按比例进行缩放；同时设置了宽高时，按设置的宽高进行缩放。在同时设置了宽高的情况下，宽度可能因为`max-width:100%`的限制而缩短导致图片变形，此时可将模式设置为`widthFix`，即保持宽度不变，高度自动变化（会导致设置的高度无效）
   - 关于tag-style  
     可以设置标签的默认样式，如`{ body:"margin:5px" }`；仅传入的`html`为`String`类型时有效（在解析过程中设置）  
 
@@ -168,18 +173,48 @@
     | >=2.2.5 | 全部正常 | 98.37% |
     | 1.6.3-2.2.4 | 部分html实体无法显示 | 1.52% |
     | <1.6.6 | 无法使用 | 0.09% |
-- 附加功能  
-  - 若仅需要获取解析结果而不需要显示（或需要对解析结果进行修改后再进行显示），可使用本api，接受两个参数，第一个是`html`字符串，第二个是`tagStyle`结构体，返回值结构同`bindparse`，示例：  
+- Api 
+  - `html2nodes`  
+    功能：解析`html`字符串  
+    参数：`html`（要解析的字符串）, `tagStyle`（默认的标签样式）  
+    返回值：同`bindparse`，可作为`html`属性的参数  
     ```javascript
-    const html2nodes=require("/Parser/Parser.js");
-    html2nodes("your html").then(res=>{
+    const Api=require("path/Parser/api.js");
+    Api.html2nodes("<div>Hello World!</div>").then(res=>{
       console.log(res);
     })
     ```   
-  - 若需要自定义链接受到点击时的效果，可对`Parser/trees`文件夹下的`trees.wxss`中的`navigator-hover`进行修改（默认下划线+半透明）
+  - `css2object`  
+    功能：解析`css`字符串  
+    参数：`style`（要解析的字符串）, `tagStyle`（已有的样式）  
+	返回值：一个形如{key: value}的结构体，可作为`tag-style`属性的值  
+    ```javascript
+	const Api=require("path/Parser/api.js");
+	console.log(Api.css2object(".demo{text-align:center;}"));
+	//{.demo:"text-align:center;"}
+    ```
+  - `versionHigherThan`  
+    功能：判断当前设备的基础库版本是否高于或等于输入的版本  
+    参数：`version`（要比较的基础库版本号）  
+    返回值：若当前设备的基础库版本高于或等于输入的版本，返回`true`，否则返回`false`  
+    ```javascript
+	const Api=require("path/Parser/api.js");
+	console.log(Api.versionHigherThan("2.7.1"));
+    ```
+  - `String.splice`  
+    功能：对字符串的指定位置进行删改（类似于数组的`splice`方法）  
+    参数：`start`（开始修改的位置，为负数时表示倒数第几个）, `deleteCount`（要删除的字符个数）, `addStr`（要添加的字符串）  
+	返回值：修改后的字符串（该方法不改变原字符串，不需要引入文件）  
+    ```javascript
+    var Str="Hello world!";
+    Str=Str.splice(6,1,'W');
+	console.log(Str);
+	//Hello World
+    ```
 - Tips  
     - `table`, `ol`, `ul`等标签由于较难通过模板循环的方式显示，将直接通过`rich-text`进行渲染，因此请尽量避免在表格，列表中加入图片或链接，否则将无法预览或点击（但可以正常显示）  
     - 请尽量避免在一个页面中使用过多的`Parser`组件，由于每个`Parser`组件都需要对传入的`html`进行监听（改变时进行解析等操作），过多的监听器将占用较大的内存
+    - 若需要自定义链接受到点击时的效果，可对`Parser/trees`文件夹下的`trees.wxss`中的`navigator-hover`进行修改（默认下划线+半透明）
 
 ## 后端解析 ##
 &emsp;&emsp;本插件提供了一个配套的后端`node.js`支持包，可以提供更加强大的功能，如匹配多层的`style`，代码高亮，直接打开网址，解析`markdown`等，其返回值可以直接作为本组件的`html`属性的值；且在后端提前完成解析后可以节省解析时间，提高性能。  
@@ -199,10 +234,17 @@ parser(html).then(function(res){
 详细文档参考： [npm链接](https://www.npmjs.com/package/parser-wxapp)
 
 ## 原理简介 ##
-&emsp;&emsp;该插件对`rich-text`组件进行了二次封装，对于节点下有`img`, `video`, `a`标签的，使用自定义组件递归的方式显示，否则直接通过`rich-text`组件显示，这样既解决了`WxParse`中过多的标签数（`rich-text`可以节省大量的标签），层数容易不够（自定义组件递归可以显示无限层级），无法解析表格，一些组件显示格式不正确（`rich-text`可以解析出更好的效果）等缺点；也弥补了`rich-text`图片无法预览，无法显示视频，无法复制链接，部分标签不支持（在解析过程中进行替换）等缺点，另外该解析脚本还减小了包的大小，提高了解析效率，通过包装成一个自定义组件，简单易用且功能强大。
+&emsp;&emsp;该插件对`rich-text`组件进行了二次封装，对于节点下有`img`, `video`, `a`标签的，使用自定义组件递归的方式显示，否则直接通过`rich-text`组件显示，这样既解决了`WxParse`中过多的标签数（`rich-text`可以节省大量的标签），层数容易不够（自定义组件递归可以显示无限层级），无法解析表格，一些组件显示格式不正确（`rich-text`可以解析出更好的效果）等缺点；也弥补了`rich-text`图片无法预览，无法显示视频，无法复制链接，部分标签不支持（在解析过程中进行替换）等缺点，另外该解析脚本还减小了包的大小，提高了解析效率，通过包装成一个自定义组件，简单易用且功能强大。  
+更多可见：[《小程序富文本能力的深入研究与应用》](https://developers.weixin.qq.com/community/develop/article/doc/0006e05c1e8dd80b78a8d49f356413)
 ## 许可 ##
 您可以随意的使用和分享本插件
 ## 更新日志 ##
+- 2019.6.10：
+  1. `A` 适配了`rich-text`组件在2.7.1基础库新增加的标签，其中`big`、`small`、`mark`、`cite`、`s`等标签在低版本都可以兼容；`bdi`、`bdo`、`caption`、`rt`、`ruby`标签必须基础库2.7.1及以上才能正常显示，低版本会被转为`span`
+  2. `A` 增加了`html2nodes`（解析`html`）、`css2object`（解析`css`）、`versionHigherThan`（比较和判断基础库版本）、`String.splice`（对字符串指定位置进行删改）等`api`函数
+  3. `A` 增加了`img-mode`属性，可以设置为`default`或`widthFix`，设置为`widthFix`时，宽度不变，高度自动变化，可用于解决部分情况下图片变形的问题（但设置的高度会失效）
+  4. `U` 优化了样式匹配的优先级：`tag-style`&lt;`style`标签&lt;内联`style`样式
+  5. `F` 修复了`style`标签中`,`前后有空格时导致该样式被忽略的问题
 - 2019.6.3:
   1. `A` 增加了`autocopy`属性，用于控制是否允许`a`标签受到点击时自动复制链接（仅限`http`开头的网址链接；默认`true`；接近于原`selectable`属性的功能）
   2. `U` 可以通过设置`selectable`属性控制是否允许长按复制任意内容（默认`false`)

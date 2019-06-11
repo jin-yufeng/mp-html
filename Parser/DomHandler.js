@@ -1,5 +1,6 @@
 //DomHandler.js
 const CssTokenizer = require('./CssTokenizer.js');
+const CanIUse = require('./api.js').versionHigherThan('2.7.1');
 const Common = 1,
   Rich = 2;
 const trustTag = {
@@ -9,16 +10,16 @@ const trustTag = {
   b: Common,
   blockquote: Common,
   br: Rich,
-  code: Rich,
+  code: Common,
   col: Rich,
   colgroup: Rich,
   dd: Common,
   del: Common,
-  div: Common,
   dl: Common,
   dt: Common,
+  div: Common,
   em: Common,
-  fieldset: Common,
+  fieldset: Rich,
   font: Common,
   h1: Rich,
   h2: Rich,
@@ -31,7 +32,7 @@ const trustTag = {
   img: Common,
   ins: Common,
   label: Common,
-  legend: Common,
+  legend: Rich,
   li: Rich,
   ol: Rich,
   p: Common,
@@ -52,53 +53,115 @@ const trustTag = {
   ul: Rich,
   video: Common
 };
+const blockTag = {
+  address: true,
+  article: true,
+  aside: true,
+  body: true,
+  center: true,
+  cite: true,
+  footer: true,
+  header: true,
+  html: true,
+  nav: true,
+  pre: true,
+  section: true
+}
 const textTag = {
+  a: true,
+  abbr: true,
   b: true,
+  big: true,
+  code: true,
   del: true,
   em: true,
+  font: true,
   i: true,
   ins: true,
   label: true,
+  mark: true,
   q: true,
+  s: true,
+  small: true,
   span: true,
-  strong: true
+  strong: true,
+  u: true
 };
 const ignoreTag = {
-  head: true,
   area: true,
   base: true,
   basefont: true,
+  canvas: true,
+  circle: true,
   command: true,
+  ellipse: true,
   embed: true,
-  iframe: true,
   frame: true,
+  head: true,
+  iframe: true,
   input: true,
-  textarea: true,
   isindex: true,
   keygen: true,
+  line: true,
   link: true,
+  map: true,
   meta: true,
   param: true,
-  track: true,
-  wbr: true,
   path: true,
-  circle: true,
-  ellipse: true,
-  line: true,
-  rect: true,
-  use: true,
-  stop: true,
-  polyline: true,
   polygon: true,
-  map: true,
-  canvas: true
+  polyline: true,
+  rect: true,
+  script: true,
+  stop: true,
+  textarea: true,
+  title: true,
+  track: true,
+  use: true,
+  wbr: true
 };
+if (CanIUse) {
+  trustTag.bdi = Rich;
+  trustTag.bdo = Rich;
+  trustTag.caption = Rich;
+  trustTag.rt = Rich;
+  trustTag.ruby = Rich;
+  ignoreTag.rp = true;
+  trustTag.big = Common;
+  trustTag.small = Common;
+  trustTag.pre = Rich;
+  delete blockTag.pre;
+}
+//添加默认值
+function initStyle(tagStyle) {
+  tagStyle.a = "display:inline;color:#366092;word-break:break-all;" + (tagStyle.a || "");
+  tagStyle.address = "font-style:italic;" + (tagStyle.address || "");
+  tagStyle.blockquote = tagStyle.blockquote || 'background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px';
+  tagStyle.center = 'text-align:center;' + (tagStyle.center || "");
+  tagStyle.cite = "font-style:italic;" + (tagStyle.cite || "");
+  tagStyle.code = tagStyle.code || 'padding:0 1px 0 1px;margin-left:2px;margin-right:2px;background-color:#f8f8f8;border:1px solid #cccccc;border-radius:3px';
+  tagStyle.dd = "margin-left:40px;" + (tagStyle.dd || "");
+  tagStyle.img = "max-width:100%;" + (tagStyle.img || "");
+  tagStyle.mark = "display:inline;background-color:yellow;" + (tagStyle.mark || "");
+  tagStyle.pre = "overflow:scroll;" + (tagStyle.pre || 'background-color:#f6f8fa;padding:5px;border-radius:5px;');
+  tagStyle.s = "display:inline;text-decoration:line-through;" + (tagStyle.s || "");
+  tagStyle.u = "display:inline;text-decoration:underline;" + (tagStyle.u || "");
+  //低版本兼容
+  if (!CanIUse) {
+    blockTag.caption = true;
+    tagStyle.big = "display:inline;font-size:1.2em;" + (tagStyle.big || "");
+    tagStyle.small = "display:inline;font-size:0.8em;" + (tagStyle.small || "");
+    tagStyle.pre = "font-family:monospace;white-space:pre;" + tagStyle.pre;
+  }
+  return tagStyle;
+}
 
 function DomHandler(style, tagStyle = {}) {
   this.imgList = [];
   this.nodes = [];
-  this._mediaNum = 0;
-  this._style = new CssTokenizer(style, tagStyle).parse();
+  this.title = "";
+  this._videoNum = 0;
+  this._audioNum = 0;
+  this._style = new CssTokenizer(style, initStyle(tagStyle)).parse();
   this._tagStack = [];
 }
 DomHandler.prototype._addDomElement = function(element) {
@@ -113,17 +176,17 @@ DomHandler.prototype._bubbling = function() {
   }
 }
 DomHandler.prototype.onopentag = function(name, attrs) {
-  if (ignoreTag[name]) return;
   let element = {
     children: []
   };
-  if (this._style[name]) attrs.style += (';' + this._style[name]);
-  if (this._style['.' + attrs.class]) attrs.style += (';' + this._style['.' + attrs.class]);
-  if (this._style['#' + attrs.id]) attrs.style += (';' + this._style['#' + attrs.id]);
-  if (!trustTag[name]) name = 'div';
-  if (textTag[name]) element.continue = true;
+  //匹配样式
+  let matched =
+    (this._style[name] ? (this._style[name] + ';') : '') +
+    (this._style['#' + attrs.id] ? (this._style['#' + attrs.id] + ';') : '') +
+    (this._style['.' + attrs.class] ? (this._style['.' + attrs.class] + ';') : '');
   delete attrs.class;
   delete attrs.id;
+  //处理属性
   switch (name) {
     case 'div':
     case 'p':
@@ -133,14 +196,13 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       }
       break;
     case 'img':
+      if (attrs.width) {
+        attrs.style = 'width:' + attrs.width + (/[0-9]/.test(attrs.width[attrs.width.length - 1]) ? 'px' : '') + ';' + attrs.style;
+        delete attrs.width;
+      }
       if (attrs['data-src']) {
         attrs.src = attrs.src || attrs['data-src'];
         delete attrs['data-src'];
-      }
-      attrs.style = 'max-width:100%;' + attrs.style;
-      if (attrs.width) {
-        attrs.style = 'width:' + attrs.width + ';' + attrs.style;
-        delete attrs.width;
       }
       if (!attrs.hasOwnProperty('ignore') && attrs.src) {
         this.imgList.push(attrs.src);
@@ -159,8 +221,6 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       }
       break;
     case 'a':
-      attrs.style = 'color:#366092;display:inline;word-break:break-all;overflow:auto;' + attrs.style;
-      element.continue = true;
       this._bubbling();
       break;
     case 'video':
@@ -168,8 +228,18 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       attrs.loop = attrs.hasOwnProperty('loop');
       attrs.controls = attrs.hasOwnProperty('controls');
       attrs.autoplay = attrs.hasOwnProperty('autoplay');
-      if (name == 'video') attrs.muted = attrs.hasOwnProperty('muted');
-      attrs.id = ('media' + (++this._mediaNum));
+      if (name == 'video') {
+        attrs.muted = attrs.hasOwnProperty('muted');
+        if (attrs.width) {
+          attrs.style = 'width:' + parseFloat(attrs.width) + 'px;' + attrs.style;
+          delete attrs.width;
+        }
+        if (attrs.height) {
+          attrs.style = 'height:' + parseFloat(attrs.height) + 'px;' + attrs.style;
+          delete attrs.height;
+        }
+      }
+      attrs.id = (name + (++this['_' + name + 'Num']));
       attrs.source = [];
       if (attrs.src) attrs.source.push(attrs.src);
       if (!attrs.controls && !attrs.autoplay)
@@ -184,39 +254,37 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       }
       this._tagStack.push(element);
       return;
-    case 'u':
-      name = 'span';
-      attrs.style = 'text-decoration:underline;' + attrs.style;
-      break;
   }
+  attrs.style = matched + attrs.style;
+  if (textTag[name]) element.continue = true;
+  else if (blockTag[name]) name = 'div';
+  else if (!trustTag[name]) name = 'span';
   element.name = name;
   element.attrs = attrs;
   this._addDomElement(element);
   this._tagStack.push(element);
 };
 DomHandler.prototype.ontext = function(data) {
-  let lastTag;
-  if (!this._tagStack.length && this.nodes.length && (lastTag = this.nodes[this.nodes.length - 1]).type === 'text') {
-    lastTag.data += data;
-  } else {
-    if (
-      this._tagStack.length &&
-      (lastTag = this._tagStack[this._tagStack.length - 1]) &&
-      (lastTag = lastTag.children[lastTag.children.length - 1]) &&
-      lastTag.type === 'text'
-    ) {
-      lastTag.data += data;
-    } else if (/\S/.test(data)) {
-      let element = {
-        text: data.replace(/&nbsp;/g, '\u00A0'),
-        type: 'text'
-      };
-      if (/&#*((?!sp|lt|gt).){2,5};/.test(data)) element.decode = true;
-      this._addDomElement(element);
-    }
+  if (/\S/.test(data)) {
+    let element = {
+      text: data.replace(/&nbsp;/g, '\u00A0'),
+      type: 'text'
+    };
+    if (/&#*((?!sp|lt|gt).){2,5};/.test(data)) element.decode = true;
+    this._addDomElement(element);
   }
 };
 DomHandler.prototype.onclosetag = function(name) {
-  if (!ignoreTag[name]) this._tagStack.pop();
+  let element = this._tagStack.pop();
+  if (ignoreTag[name]) {
+    if (name == 'title') {
+      try {
+        this.title = element.children[0].text;
+      } catch (e) {}
+    }
+    let parent = this._tagStack[this._tagStack.length - 1];
+    let siblings = parent ? parent.children : this.nodes;
+    siblings.pop();
+  }
 };
 module.exports = DomHandler;

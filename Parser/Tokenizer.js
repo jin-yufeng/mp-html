@@ -1,6 +1,5 @@
 //Tokenizer.js
 function Tokenizer(cbs) {
-  this.title = "";
   this._state = "TEXT";
   this._buffer = "";
   this._sectionStart = 0;
@@ -49,28 +48,9 @@ Tokenizer.prototype.BeforeTag = function(c) {
 };
 Tokenizer.prototype.InTag = function(c) {
   if (c === "/" || c === ">" || /\s/.test(c)) {
-    var tagName = this._getSection().toLowerCase();
-    if (tagName == "script") {
-      let index = this._buffer.indexOf("</script>", this._index);
-      if (index != -1) {
-        this._index = index + 8;
-        this._sectionStart = this._index + 1;
-      } else this._sectionStart = this._index = this._buffer.length;
-      this._state = "TEXT";
-    } else if (tagName == "title") {
-      let index = this._buffer.indexOf("</title>", this._index);
-      if (index != -1) {
-        this._index = index + 7;
-        var title = this._getSection().match(/>(.*?)</);
-        if (title) this.title = title[1];
-        this._sectionStart = this._index + 1;
-      } else this._sectionStart = this._index = this._buffer.length;
-      this._state = "TEXT";
-    } else {
-      this._cbs.onopentagname(this._getSection());
-      this._state = "BeforeAttrsName";
-      this._index--;
-    }
+    this._cbs.onopentagname(this._getSection());
+    this._state = "BeforeAttrsName";
+    this._index--;
   }
 };
 Tokenizer.prototype.BeforeAttrsName = function(c) {

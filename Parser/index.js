@@ -10,12 +10,12 @@ const initData = function(Component) {
     nodes = nodes.concat(Component.selectAllComponents('#contain>>>#node'));
     for (let node of nodes) {
       for (let item of node.data.nodes) {
-        if (item.name == 'video')
+        if (item.name == 'video') {
           Component.videoContext.push({
             id: item.attrs.id,
             context: wx.createVideoContext(item.attrs.id, node)
           });
-        else if (item.name == 'audio' && item.attrs.autoplay)
+        } else if (item.name == 'audio' && item.attrs.autoplay)
           wx.createAudioContext(item.attrs.id, node).play();
       }
     }
@@ -47,7 +47,9 @@ Component({
           html2nodes(html, this.data.tagStyle).then(res => {
             this.setData({
               nodes: res.nodes,
-              controls: {},
+              controls: {
+                imgMode: this.data.imgMode
+              },
               showAnimation,
               hideAnimation
             }, initData(this))
@@ -59,11 +61,13 @@ Component({
             this.imgList = res.imgList;
             this.triggerEvent('parse', res);
           }).catch(err => {
-            this.triggerEvent('error', new Error(err));
+            this.triggerEvent('error', err);
           })
         } else if (html.constructor == Array) {
           this.setData({
-            controls: {},
+            controls: {
+              imgMode: this.data.imgMode
+            },
             showAnimation,
             hideAnimation
           }, initData(this))
@@ -76,7 +80,9 @@ Component({
             return;
           }
           this.setData({
-            controls: {},
+            controls: {
+              imgMode: this.data.imgMode
+            },
             showAnimation,
             hideAnimation
           }, initData(this))
@@ -100,6 +106,10 @@ Component({
     'autopause': {
       type: Boolean,
       value: true
+    },
+    'imgMode': {
+      type: String,
+      value: "default"
     },
     'selectable': {
       type: Boolean,

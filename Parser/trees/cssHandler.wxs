@@ -1,0 +1,30 @@
+// Parser/trees/cssHandler.wxs
+module.exports = {
+  getStyle: function(style, display) {
+    var res = "";
+    var reg = getRegExp("float\s*:\s*[^;]*", "i");
+    if (reg.test(style)) res += reg.exec(style)[0];
+    reg = getRegExp("display\s*:\s*[^;]*", "i");
+    if (reg.test(style)) res += (';' + reg.exec(style)[0]);
+    else res += (';display:' + display);
+    reg = getRegExp("[^;\s]*width\s*:\s*[^;]*", "ig");
+    var width = reg.exec(style);
+    while (width) {
+      res += (';' + width[0]);
+      width = reg.exec(style);
+    }
+    return res;
+  },
+  setImgStyle: function (item, imgMode) {
+    if (getRegExp("[^-]width\s*:\s*[^;]*", "i").test(';' + item.attrs.style))
+      item.attrs.style += ';width:100%';
+    if (imgMode == "widthFix")
+      item.attrs.style += ";height:auto !important";
+    return [item];
+  },
+  setStyle: function(item) {
+    if (getRegExp("[^-]width\s*:\s*[^;]*", "i").test(';' + item.attrs.style))
+      item.attrs.style += ';width:100%';
+    return [item];
+  }
+}

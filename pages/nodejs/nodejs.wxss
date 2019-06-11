@@ -5,7 +5,7 @@
 .link-hover {
   text-decoration: underline;
 }
-.code {
+code {
   font-style: italic;
   color: #005cc5;
   margin-left: 1px;

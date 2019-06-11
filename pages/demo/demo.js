@@ -6,6 +6,9 @@ Page({
       html: htmls['demo' + e.index],
     })
   },
+  onError(e){
+    console.error(e)
+  },
   linkTap(e) {
     if (e.detail) {
       if (/doc/.test(e.detail)) {

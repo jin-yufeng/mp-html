@@ -26,13 +26,13 @@ Page({
         htmlString += '<ol>\n  <li>有序列表1</li>\n  <li>有序列表2</li>\n</ol>\n<ul>\n  <li>无序列表1</li>\n  <li>无序列表2</li>\n</ul>';
         break;
       case 'img':
-        htmlString += '<div style="text-align:center;">\n  <img src="http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg" />\n<p style="color:gray;font-size:12px;text-align:center">点击图片预览</p>\n</br>\n  <img ignore src="http://bmob-cdn-17111.b0.upaiyun.com/2019/04/14/190f5994407ecad1805d8a3478e64821.gif" width="50%"/>\n  <p style="color:gray;font-size:12px">装饰图片不能预览</p>\n</div>';
+        htmlString += '<div style="text-align:center;">\n  <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174" />\n<p style="color:gray;font-size:12px;text-align:center">点击图片预览</p>\n</br>\n  <img ignore src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351" width="50%"/>\n  <p style="color:gray;font-size:12px">装饰图片不能预览</p>\n</div>';
         break;
       case 'video':
         htmlString += '<div style="text-align:center;">\n  <video src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" controls></video>\n</div>';
         break;
       case 'a':
-        htmlString += '<div style="text-align:center">\n  <a href="/pages/component/component">\n    <img src="http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg" />\n  </a>\n  <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>\n  <br />\n  <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>\n  <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>\n</div>';
+        htmlString += '<div style="text-align:center">\n  <a href="/pages/component/component">\n    <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174" />\n  </a>\n  <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>\n  <br />\n  <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>\n  <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>\n</div>';
         break;
       case 'style':
         htmlString += '<style>.demo1 .demo2{\n  text-align:center;\n}\n</style>\n<div class="demo1">\n  <div class="demo2">Hello World!</div>\n</div>';
@@ -50,7 +50,7 @@ Page({
         htmlString += '# 1号标题 #\n## 2号标题 ##\n### 3号标题 ###';
         break;
       case 'img_md':
-        htmlString += '![示例图片](http://bmob-cdn-17111.b0.upaiyun.com/2019/04/13/b5f2a4b340b855488029635bb8649309.jpg)';
+        htmlString += '![示例图片](https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174)';
         break;
       case 'a_md':
         htmlString += '[GitHub链接](https://github.com/jin-yufeng/Parser)';
@@ -123,7 +123,9 @@ Page({
         data: {
           data: htmlString,
           mode: mode,
-          options: { styles: that.data.styles[e.detail.value.styles] }
+          options: {
+            styles: that.data.styles[e.detail.value.styles]
+          }
         },
         success: res => {
           wx.hideLoading()
@@ -131,7 +133,7 @@ Page({
             parseing: true,
             htmlString: htmlString,
             html: res.result,
-            nonePadding: this.data.modeIndex==2
+            webmode: this.data.modeIndex == 2
           })
         },
         fail: err => {

@@ -35,7 +35,7 @@
       <view id="background" class="weui-article__h1">背景介绍</view>
       <view class="weui-article__section">
         由于前端对时间和空间的要求，一些功能较为精简，因此另外推出了一个用于
-        <text class="code">node.js</text>的后端加强包，将提供更加强大的功能；且在后端提前解析完成后再传输给前端，可以节省解析的时间，提高性能
+        <code>node.js</code>的后端加强包，将提供更加强大的功能；且在后端提前解析完成后再传输给前端，可以节省解析的时间，提高性能
         <view style="font-weight:bold;margin-top:5px;">注意：本包的使用需要node.js v7.6.0以上环境，无法直接在小程序前端使用，建议部署在服务器或云函数上</view>
       </view>
       <!--功能介绍-->
@@ -77,8 +77,8 @@
         <!--代码高亮-->
         <view id="highlight" class="weui-article__h2">代码高亮</view>
         <view class="weui-article__section">
-          <text class="code">pre</text>标签内的代码将自动高亮显示，自动检测语言，支持80余种风格（详细可参考
-          <text class="code">highlightjs</text>官网），示例：
+          <code>pre</code>标签内的代码将自动高亮显示，自动检测语言，支持80余种风格（详细可参考
+          <code>highlightjs</code>官网），示例：
           <Parser html="{{codedemo}}" />
           <view style="font-size:12px;color:gray;text-align:center;margin-top:-5px;">javascript语言，github-gist风格</view>
         </view>
@@ -86,27 +86,27 @@
         <view id="entity" class="weui-article__h2">解析实体编码</view>
         <view class="weui-article__section">
           支持解析各类实体编码（包括中文），前端是通过
-          <text class="code">rich-text</text>组件编码实体，基础库低于
-          <text class="code">2.2.5</text>时部分实体无法显示，可以在后端提前完成编码
+          <code>rich-text</code>组件编码实体，基础库低于
+          <code>2.2.5</code>时部分实体无法显示，可以在后端提前完成编码
         </view>
         <!--自动补全网址-->
         <view id="complement" class="weui-article__h2">自动补全网址</view>
         <view class="weui-article__section">
           当多媒体标签的
-          <text class="code">src</text>属性是以
-          <text class="code">/</text>开头时，会自动与主域名拼接成完整的地址，避免在小程序端无法显示（主域名可以通过
-          <text class="code">options</text>参数中的
-          <text class="code">domain</text>属性设置，当解析模式为
-          <text class="code">website</text>时将自动获取）
+          <code>src</code>属性是以
+          <code>/</code>开头时，会自动与主域名拼接成完整的地址，避免在小程序端无法显示（主域名可以通过
+          <code>options</code>参数中的
+          <code>domain</code>属性设置，当解析模式为
+          <code>website</code>时将自动获取）
         </view>
         <!--支持website模式-->
         <view id="website" class="weui-article__h2">支持
-          <text class="code">website</text>模式</view>
+          <code>website</code>模式</view>
         <view class="weui-article__section">
           <view class="weui-article__p">给入一个网址（必须以
-            <text class="code">http://</text>或
-            <text class="code">https://</text>开头），设置
-            <text class="code">website</text>模式，插件将自动获取该页面的内容并进行解析</view>
+            <code>http://</code>或
+            <code>https://</code>开头），设置
+            <code>website</code>模式，插件将自动获取该页面的内容并进行解析</view>
           <view class="weui-article__p">支持以下模式（自定义测试页面由于云函数空间大小限制仅支持静态网页模式）：
             <Parser html="{{webmode}}" tag-style="{{tagStyle}}" />
           </view>
@@ -115,15 +115,15 @@
         </view>
         <!--支持file模式-->
         <view id="file" class="weui-article__h2">支持
-          <text class="code">file</text>模式</view>
+          <code>file</code>模式</view>
         <view class="weui-article__section">
           给入一个文件路径，将自动获取内容并进行解析（仅支持
-          <text class="code">html</text>和
-          <text class="code">md</text>文件）
+          <code>html</code>和
+          <code>md</code>文件）
         </view>
         <!--支持markdown模式-->
         <view id="markdown" class="weui-article__h2">支持
-          <text class="code">markdown</text>模式</view>
+          <code>markdown</code>模式</view>
         <view class="weui-article__section">
           支持解析markdown，包括表格，代码高亮等，例如：
           <Parser html="<pre># 示例\n| 标题1 | 标题2 |\n|:---:|:---:|\n| 栏目1 | 栏目2 |</pre>" />
@@ -172,30 +172,30 @@
         <view class="weui-article__h2">解析设置</view>
         <view class="weui-article__section">
           <view>styles：代码高亮风格，默认
-            <text class="code">default</text>
+            <code>default</code>
           </view>
           <view style="margin-top:5px">tagStyle：标签的默认样式，如
-            <text class="code">{body: "margin:5px"}</text>
+            <code>{body: "margin:5px"}</code>
           </view>
           <view style="margin-top:5px">domain：主域名，用于自动将多媒体标签的
-            <text class="code">src</text>属性填充完整，解析模式为
-            <text class="code">website</text>时自动获取</view>
+            <code>src</code>属性填充完整，解析模式为
+            <code>website</code>时自动获取</view>
           <view style="margin-top:5px">engine：打开网址的引擎，支持的有
-            <text class="code">default</text>（速度快，无需额外安装，但
-            <text class="code">js</text>中动态加载的内容会被忽略）、
-            <text class="code">puppeteer</text>（使用无头浏览器加载，使用前需要额外安装
-            <text class="code">npm i puppeteer</text>）和phantom（使用无头浏览器加载，使用前需要额外安装
-            <text class="code">npm i phantom</text>）</view>
+            <code>default</code>（速度快，无需额外安装，但
+            <code>js</code>中动态加载的内容会被忽略）、
+            <code>puppeteer</code>（使用无头浏览器加载，使用前需要额外安装
+            <code>npm i puppeteer</code>）和phantom（使用无头浏览器加载，使用前需要额外安装
+            <code>npm i phantom</code>）</view>
           <view style="margin-top:5px">maxDepth：前端显示时的最大递归深度，为0或负数时代表不限制（默认为0）。层数超过限制时，会直接使用
-            <text class="code">rich-text</text>显示而不再递归，可能导致图片不能预览，链接无法点击，视频和音频无法显示等问题；但过深的深度可能导致渲染时间较长；对于复杂的内容可以适当进行限制</view>
+            <code>rich-text</code>显示而不再递归，可能导致图片不能预览，链接无法点击，视频和音频无法显示等问题；但过深的深度可能导致渲染时间较长；对于复杂的内容可以适当进行限制</view>
         </view>
         <!--返回值-->
         <view id="callback" class="weui-article__h2">返回值</view>
         <view class="weui-article__section">
           一个形如
-          <text class="code">{nodes: [Array], imgList: [Array], title: "String"}</text>的结构体，其中nodes为节点数组，可以直接应用于
-          <text class="code">rich-text</text>组件，imgList为所有图片地址的数组，videoNum为视频的数量，title为页面标题，整个结构体可以作为
-          <text class="code">Parser</text>组件的参数
+          <code>{nodes: [Array], imgList: [Array], title: "String"}</code>的结构体，其中nodes为节点数组，可以直接应用于
+          <code>rich-text</code>组件，imgList为所有图片地址的数组，videoNum为视频的数量，title为页面标题，整个结构体可以作为
+          <code>Parser</code>组件的参数
         </view>
       </view>
       <!--下载链接-->
@@ -212,5 +212,5 @@
   </view>
 </scroll-view>
 <cover-view style="position:fixed;right:15px;bottom:15px;width:35px;height:35px;">
-  <cover-image src="/images/top.png" style="width:100%" mode="widthFix" bindtap="gotop" />
+  <cover-image src="https://6874-html-foe72-1259071903.tcb.qcloud.la/top.png?sign=76a551dc18ef9bdc988a8d958990b997&t=1560250156" style="width:100%" mode="widthFix" bindtap="gotop" />
 </cover-view>

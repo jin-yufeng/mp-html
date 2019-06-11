@@ -1,6 +1,8 @@
 // miniprogram/pages/component/component.js
+const code = require('./code.js');
 Page({
   data: {
+    //标签的默认样式
     tagStyle: {
       code: "font-style: italic; color: #005cc5;margin-left:3px;margin-right:3px;"
     },
@@ -26,16 +28,13 @@ Page({
       example: '.demo1,.demo2',
       match: 'class="demo1"\nclass="demo2"'
     }],
-    //解析style标签示例代码，示例代码均来自后端解析结果
-    stylecode: [{ "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "style", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": ".demo", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-selector-class" } }], "name": "span", "attrs": { "style": ";", "class": "css" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  font-style:italic;", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "}", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "xquery" } }, { "children": [{ "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "#demo2", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-selector-id" } }], "name": "span", "attrs": { "style": ";", "class": "css" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  font-weight:bold;", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "}", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "xquery" } }, { "children": [{ "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "p", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "undefined" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  text-align:center;", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  font-size:", "type": "text" }, { "children": [{ "text": "30", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "hljs-number" } }, { "text": "px;", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "}", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "xquery" } }, { "children": [{ "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "style", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "p", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "span", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "class", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"demo\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "text": "Hello ", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "span", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "undefined" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "span", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "id", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"demo2\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "text": "World!", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "span", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "children": [{ "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "p", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;", "class": "hljs" } }],
-    //设置默认的标签样式示例代码
-    tagStylecode: [{ "children": [{ "children": [{ "text": "data", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;", "class": "hljs-selector-tag" } }, { "text": ":{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "tagStyle", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #0086b3;;", "class": "hljs-attribute" } }, { "text": ":{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "    code:", "type": "text" }, { "children": [{ "text": "\"font-style:italic;color:#005cc5\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  }", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "}", "type": "text" }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;", "class": "hljs" } }, { "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "html", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"<code>test</code>\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "tag-style", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{{tagStyle}}", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-template-variable" } }, { "children": [{ "children": [{ "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": " />", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;", "class": "hljs" } }],
-    //添加加载提示代码
-    loadingcode: [{ "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "html", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{{html}}", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-template-variable" } }, { "children": [{ "children": [{ "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "text": "加载中...", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;", "class": "hljs" } }],
-    //多资源加载示例代码
-    source: [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "video", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "controls", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "source", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "src", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"demo1.mov\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": " />", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "source", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "src", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"dmeo2.webm\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": " />", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "video", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;" } }],
+    //示例代码
+    stylecode: code.stylecode,
+    tagStylecode: code.tagStylecode,
+    loadingcode: code.loadingcode,
+    sourcecode: code.sourcecode,
     //支持的标签列表
-    media: [{
+    mediaTags: [{
       name: 'img',
       attrs: 'alt, src, height, width, ignore'
     }, {
@@ -48,7 +47,7 @@ Page({
       name: 'source',
       attrs: 'src'
     }],
-    table: [{
+    tableTags: [{
       name: 'table',
       attrs: 'width'
     }, {
@@ -60,10 +59,10 @@ Page({
     }, {
       name: 'tr'
     }, {
-      name: 'td',
+      name: 'th',
       attrs: 'colspan, height, rowspan, width'
     }, {
-      name: 'th',
+      name: 'td',
       attrs: 'colspan, height, rowspan, width'
     }, {
       name: 'col',
@@ -78,16 +77,22 @@ Page({
       name: 'ul'
     }, {
       name: 'li'
+    }, {
+      name: 'dd'
+    }, {
+      name: 'dl'
+    }, {
+      name: 'dt'
     }],
-    text: [{
+    textTags: [{
       name: 'a',
       attrs: 'href'
     }, {
       name: 'abbr'
     }, {
-      name: 'address'
-    }, {
       name: 'b'
+    }, {
+      name: 'big'
     }, {
       name: 'blockquote'
     }, {
@@ -97,16 +102,7 @@ Page({
     }, {
       name: 'code'
     }, {
-      name: 'dd'
-    }, {
       name: 'del'
-    }, {
-      name: 'div',
-      attrs: 'align'
-    }, {
-      name: 'dl'
-    }, {
-      name: 'dt'
     }, {
       name: 'em'
     }, {
@@ -133,14 +129,13 @@ Page({
     }, {
       name: 'label'
     }, {
-      name: 'p',
-      attrs: 'align'
-    }, {
-      name: 'pre'
+      name: 'mark'
     }, {
       name: 'q'
     }, {
-      name: 'section'
+      name: 's'
+    }, {
+      name: 'small'
     }, {
       name: 'span'
     }, {
@@ -152,23 +147,61 @@ Page({
     }, {
       name: 'u'
     }],
-    default: [{
-      name: 'html'
+    blockTags: [{
+      name: 'address'
+    }, {
+      name: 'article'
+    }, {
+      name: 'aside'
     }, {
       name: 'body'
     }, {
-      name: 'style'
+      name: 'cite'
+    }, {
+      name: 'div',
+      attrs: 'align'
     }, {
       name: 'fieldset'
     }, {
+      name: 'footer'
+    }, {
+      name: 'header'
+    }, {
+      name: 'html'
+    }, {
       name: 'legend'
+    }, {
+      name: 'nav'
+    }, {
+      name: 'p',
+      attrs: 'align'
+    }, {
+      name: 'pre'
+    }, {
+      name: 'section'
+    }, {
+      name: 'style'
     }],
-    //容错性示例代码
-    errorcode: [{ "children": [{ "children": [{ "text": "<!--冒号不匹配-->", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #969896;;", "class": "hljs-comment" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "div", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "style", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"font-family:\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": "宋体\"\">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "text": "Hello", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "div", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "<!--标签首尾不匹配-->", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #969896;;", "class": "hljs-comment" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "div", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "text": " World!", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "p", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "<!--异形标签-->", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #969896;;", "class": "hljs-comment" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "o:p", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "o:p", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "<!--缺少尾标签-->", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #969896;;", "class": "hljs-comment" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "div", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }, { "text": "!", "type": "text" }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;", "class": "hljs" } }],
-    //使用方法示例代码
-    json: [{ "children": [{ "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "\"usingComponents\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": ":{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "    ", "type": "text" }, { "children": [{ "text": "\"Parser\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": ":", "type": "text" }, { "children": [{ "text": "\"/Parser/index\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  }", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "}", "type": "text" }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;", "class": "hljs" } }],
-    wxml: [{ "children": [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "Parser", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #63a35c;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "html", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #795da3;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }, { "children": [{ "text": "{{html}}", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-template-variable" } }, { "children": [{ "children": [{ "children": [{ "text": "\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "text": " />", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #333333;;", "class": "hljs-tag" } }], "name": "span", "attrs": { "style": ";", "class": "xml" } }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;", "class": "hljs" } }],
-    js: [{ "children": [{ "text": "onLoad:", "type": "text" }, { "children": [{ "children": [{ "text": "function", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;", "class": "hljs-keyword" } }, { "children": [{ "text": "()", "type": "text" }], "name": "span", "attrs": { "style": ";", "class": "hljs-params" } }], "name": "span", "attrs": { "style": ";", "class": "hljs-function" } }, { "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "this", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;", "class": "hljs-keyword" } }, { "text": ".setData({", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "    html:", "type": "text" }, { "children": [{ "text": "'your html'", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;", "class": "hljs-string" } }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  })", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "}", "type": "text" }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;", "class": "hljs" } }],
+    newTags: [{
+      name: 'bdi'
+    }, {
+      name: 'bdo',
+      attrs: 'dir'
+    }, {
+      name: 'caption',
+    }, {
+      name: 'rp',
+      attrs: '高版本不显示，可用于兼容'
+    }, {
+      name: 'rt'
+    }, {
+      name: 'ruby'
+    }],
+    //示例代码
+    errorcode: code.errorcode,
+    json: code.json,
+    wxml: code.wxml,
+    js: code.js,
     //属性
     attrs: [{
       name: 'html',
@@ -189,6 +222,11 @@ Page({
       default: 'true',
       notice: '是否允许在播放视频时自动暂停其他视频'
     }, {
+      name: 'img-mode',
+      type: 'String',
+      default: 'default',
+      notice: '图片的显示模式'
+    }, {
       name: 'selectable',
       type: 'Boolean',
       default: 'false',
@@ -205,8 +243,7 @@ Page({
       notice: '动画持续时间（单位ms）'
     }],
     //属性格式
-    format:
-      `<ul style="text-align:justify">
+    format: `<ul style="text-align:justify">
       <li>html格式
         <ol>
           <li><code>String</code>类型：一个html字符串，如："&lt;div&gt;Hello World!&lt;/div&gt;"</li>
@@ -218,13 +255,16 @@ Page({
         </ul>
       </li>
       <br/>
+      <li>img-mode格式
+        <p>默认<code>default</code>，在没有设置宽高时，按图片原大小显示；设置了宽或高时，按比例进行缩放；同时设置了宽高时，按设置的宽高进行缩放。在同时设置了宽高的情况下，宽度可能因为<code>max-width:100%</code>的限制而缩短导致图片变形，此时可将模式设置为<code>widthFix</code>，即保持宽度不变，高度自动变化（会导致设置的高度无效）</p>
+      </li>
+      <br/>
       <li>tag-style格式
         <p>一个形如<code>{ name:style }</code>的结构体，name为标签名，style为需要设置的样式；该属性仅传入的<code>html</code>为<code>String</code>类型时有效（在解析过程中设置）</p>
       </li>
     </ul>`,
     //回调函数
-    callback:
-      `<ul style="text-align:justify">
+    callback: `<ul style="text-align:justify">
       <li><code>bindparse</code><br/>
       当传入的<code>html</code>为字符串类型时，解析完成后调用；返回值是一个形如<code>{nodes: [Array], imgList: [Array], title: "String"}</code>的结构体，<code>nodes</code>是节点数组，<code>imgList</code>是所有图片地址的数组，<code>title</code>是页面标题（可用于转发）可以将该值保存后下次调用时直接作为属性<code>html</code>的值，可节省解析时间
       </li>
@@ -253,11 +293,23 @@ Page({
       function: "无法使用",
       percent: "0.09%"
     }],
-    //api
-    api: [{ "children": [{ "children": [{ "text": "var", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;" } }, { "text": " html2nodes=", "type": "text" }, { "children": [{ "text": "require", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": "(", "type": "text" }, { "children": [{ "text": "\"/Parser/Parser.js\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": ");", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "html2nodes(", "type": "text" }, { "children": [{ "text": "\"your html\"", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #df5000;;" } }, { "text": ").then(", "type": "text" }, { "children": [{ "children": [{ "text": "function", "type": "text" }], "name": "span", "attrs": { "style": ";  color: #a71d5d;;" } }, { "text": "(", "type": "text" }, { "children": [{ "text": "res", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": ")", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "console", "type": "text" }], "name": "span", "attrs": { "style": ";" } }, { "text": ".log(res);", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";" } }, { "text": "})", "type": "text" }], "name": "div", "attrs": { "style": "background-color:#f6f8fa;padding:5px;margin:5px 0 5px 0;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;  display: block;  background: white;  padding: 0.5em;  color: #333333;  overflow-x: auto;;" } }],
+    //示例代码
+    html2nodes: code.html2nodes,
+    css2object: code.css2object,
+    VersionHigherThan: code.VersionHigherThan,
+    StrSplice: code.StrSplice,
     //更新日志
-    update:
-      `<ul>
+    update: `<ul>
+    <li>2019.6.10：
+      <ol>
+        <li><code>A</code> 适配了<code>rich-text</code>组件在2.7.1基础库新增加的标签，其中<code>big</code>、<code>small</code>、<code>mark</code>、<code>cite</code>、<code>s</code>等标签在低版本都可以兼容；<code>bdi</code>、<code>bdo</code>、<code>caption</code>、<code>rt</code>、<code>ruby</code>标签必须基础库2.7.1及以上才能正常显示，低版本会被转为<code>span</code></li>
+        <li><code>A</code> 增加了<code>html2nodes</code>（解析<code>html</code>）、<code>css2object</code>（解析<code>css</code>）、<code>versionHigherThan</code>（比较和判断基础库版本）、<code>String.splice</code>（对字符串指定位置进行删改）等<code>api</code>函数</li>
+        <li><code>A</code> 增加了<code>img-mode</code>属性，可以设置为<code>default</code>或<code>widthFix</code>，设置为<code>widthFix</code>时，宽度不变，高度自动变化，可用于解决部分情况下图片变形的问题（但设置的高度会失效）</li>
+        <li><code>U</code> 优化了样式匹配的优先级：<code>tag-style</code>&lt;<code>style</code>标签&lt;内联<code>style</code>样式</li>
+        <li><code>F</code> 修复了<code>style</code>标签中<code>,</code>前后有空格时导致该样式被忽略的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.6.3：
       <ol>
         <li><code>A</code> 增加了<code>autocopy</code>属性，用于控制是否允许<code>a</code>标签受到点击时自动复制链接（仅限<code>http</code>开头的网址链接；默认<code>true</code>；接近于原<code>selectable</code>属性的功能)</li>

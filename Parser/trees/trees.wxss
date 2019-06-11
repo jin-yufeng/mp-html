@@ -8,29 +8,41 @@
   display: inherit;
   float: inherit;
 }
-.sub, .sup, .code, .text {
+.sub, .sup, .text, .bdo, .bdi, .ruby, .rt, .span {
   display: inline-block !important;
 }
-.p, .div, .dl, .dd, .dt, .pre {
-  display: block;
+.div, .blockquote, .p{
+  display:block;
 }
 .b, .strong {
+  display: inline;
   font-weight: bold;
-  display: inline;
-}
-.del {
-  text-decoration: line-through;
-  display: inline;
-}
-.ins {
-  text-decoration: underline;
-  display: inline;
 }
 .em, .i {
-  font-style: italic;
   display: inline;
+  font-style: italic;
 }
-.q, .span, .label {
+.del {
+  display: inline;
+  text-decoration: line-through;
+}
+.ins {
+  display: inline;
+  text-decoration: underline;
+}
+.code {
+  display: inline;
+  font-family: monospace;
+}
+.big {
+  font-size:1.2em;
+  display:inline;
+}
+.small {
+  font-size:0.8em;
+  display:inline;
+}
+.q, .span, .label, .abbr {
   display: inline;
 }
 .q::before {
@@ -46,7 +58,7 @@
   display: inline-block;
   position: relative;
 }
-.triangle_border_right {
+.video-triangle {
   border-width: 15px 0 15px 30px;
   border-style: solid;
   border-color: transparent transparent transparent white;

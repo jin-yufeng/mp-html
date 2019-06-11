@@ -1,4 +1,4 @@
-//trees组件
+// Parser/trees/trees.js
 Component({
   properties: {
     nodes: {
