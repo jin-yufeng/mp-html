@@ -6,6 +6,7 @@
     <rich-text wx:if="{{item.name=='img'}}" style="{{cssHandler.getStyle(item.attrs.style,'inline-block')}}" nodes='{{cssHandler.setImgStyle(item,controls.imgMode)}}' data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewEvent' />
     <!--文本-->
     <text wx:elif="{{item.type=='text'&&!item.decode}}" decode>{{item.text}}</text>
+    <text wx:elif="{{item.name=='br'}}">\n</text>
     <!--视频-->
     <block wx:elif="{{item.name=='video'}}">
       <view wx:if="{{item.attrs.id>'video3'&&!controls[item.attrs.id].play}}" class="video" style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}" data-id="{{item.attrs.id}}" bindtap="_loadVideo">

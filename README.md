@@ -239,6 +239,8 @@ parser(html).then(function(res){
 ## 许可 ##
 您可以随意的使用和分享本插件
 ## 更新日志 ##
+- 2019.6.15:
+  1. `F` 修复了部分情况下`br`标签换行格式不正确的问题
 - 2019.6.10：
   1. `A` 适配了`rich-text`组件在2.7.1基础库新增加的标签，其中`big`、`small`、`mark`、`cite`、`s`等标签在低版本都可以兼容；`bdi`、`bdo`、`caption`、`rt`、`ruby`标签必须基础库2.7.1及以上才能正常显示，低版本会被转为`span`
   2. `A` 增加了`html2nodes`（解析`html`）、`css2object`（解析`css`）、`versionHigherThan`（比较和判断基础库版本）、`String.splice`（对字符串指定位置进行删改）等`api`函数

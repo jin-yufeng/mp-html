@@ -300,6 +300,12 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.6.15：
+      <ol>
+        <li><code>F</code> 修复了部分情况下<code>br</code>标签换行格式不正确的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.6.10：
       <ol>
         <li><code>A</code> 适配了<code>rich-text</code>组件在2.7.1基础库新增加的标签，其中<code>big</code>、<code>small</code>、<code>mark</code>、<code>cite</code>、<code>s</code>等标签在低版本都可以兼容；<code>bdi</code>、<code>bdo</code>、<code>caption</code>、<code>rt</code>、<code>ruby</code>标签必须基础库2.7.1及以上才能正常显示，低版本会被转为<code>span</code></li>
