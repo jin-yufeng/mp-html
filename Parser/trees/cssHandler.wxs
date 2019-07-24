@@ -4,6 +4,8 @@ module.exports = {
     var res = "";
     var reg = getRegExp("float\s*:\s*[^;]*", "i");
     if (reg.test(style)) res += reg.exec(style)[0];
+    reg = getRegExp("margin[^;]*auto", "i");
+    if (reg.test(style)) res += (";" + reg.exec(style)[0]);
     reg = getRegExp("display\s*:\s*[^;]*", "i");
     if (reg.test(style)) res += (';' + reg.exec(style)[0]);
     else res += (';display:' + display);
@@ -15,7 +17,7 @@ module.exports = {
     }
     return res;
   },
-  setImgStyle: function (item, imgMode) {
+  setImgStyle: function(item, imgMode) {
     if (getRegExp("[^-]width\s*:\s*[^;]*", "i").test(';' + item.attrs.style))
       item.attrs.style += ';width:100%';
     if (imgMode == "widthFix")

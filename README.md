@@ -109,7 +109,7 @@
   <div>!
   ```  
  
-- 功能强大，支持无限层级，解析速度快，包大小仅约`33.4KB`  
+- 功能强大，支持无限层级，解析速度快，包大小仅约`33.8KB`  
 ## 使用方法 ##
 1. 下载Parser文件夹至小程序目录  
    ![页面结构](https://i.imgur.com/XW4Jupv.png)
@@ -142,6 +142,7 @@
   | tag-style | Object | | 否 | 设置标签的默认样式 |
   | autocopy | Boolean | true | 否 | 是否允许链接受到点击时自动复制链接（仅限http开头的网络链接）|
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
+  | autosetTitle | Boolean | true | 否 | 是否自动将title标签的内容设置到页面标题上 |
   | img-mode | String | default | 否 | 图片显示模式 |
   | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
   | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
@@ -239,6 +240,9 @@ parser(html).then(function(res){
 ## 许可 ##
 您可以随意的使用和分享本插件
 ## 更新日志 ##
+- 2019.7.24:
+  1. `A` 增加了`autosetTitle`属性，可设置是否自动将`title`标签的值设置到页面标题上（默认`true`）
+  2. `F` 修复了`margin:auto`失效的问题
 - 2019.6.15:
   1. `F` 修复了部分情况下`br`标签换行格式不正确的问题
 - 2019.6.10：

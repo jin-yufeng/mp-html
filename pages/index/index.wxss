@@ -5,6 +5,7 @@ page {
 button {
   background-color: white;
   text-align: left;
+  line-height: inherit;
   font-size: 16px;
   margin: 0;
   padding: 0;

@@ -53,7 +53,7 @@ Component({
               showAnimation,
               hideAnimation
             }, initData(this))
-            if (res.title) {
+            if (res.title && this.data.autosetTitle) {
               wx.setNavigationBarTitle({
                 title: res.title
               })
@@ -86,7 +86,7 @@ Component({
             showAnimation,
             hideAnimation
           }, initData(this))
-          if (html.title) {
+          if (html.title && this.data.autosetTitle) {
             wx.setNavigationBarTitle({
               title: html.title
             })
@@ -104,6 +104,10 @@ Component({
       value: true
     },
     'autopause': {
+      type: Boolean,
+      value: true
+    },
+    'autosetTitle':{
       type: Boolean,
       value: true
     },

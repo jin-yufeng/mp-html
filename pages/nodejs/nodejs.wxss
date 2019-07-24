@@ -5,13 +5,6 @@
 .link-hover {
   text-decoration: underline;
 }
-code {
-  font-style: italic;
-  color: #005cc5;
-  margin-left: 1px;
-  margin-right: 3px;
-  font-family: monospace;
-}
 .td {
   padding: 3px;
   border-right: 1px solid #dfe2e5;

@@ -74,6 +74,12 @@ Page({
     node: code.node,
     //更新日志
     update: `<ul>
+    <li>2019.7.24：
+      <ol>
+        <li><code>F</code> 修复了<code>pre</code>标签在低版本基础库无法显示的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.6.3：
       <ol>
         <li><code>A</code> 增加支持<code>link</code>标签（仅限css）

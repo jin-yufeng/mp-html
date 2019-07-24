@@ -4,7 +4,8 @@
     "pages/component/component",
     "pages/nodejs/nodejs",
     "pages/demo/demo",
-    "pages/test/test"
+    "pages/test/test",
+    "pages/question/question"
   ],
   "window": {
     "backgroundTextStyle": "light",
