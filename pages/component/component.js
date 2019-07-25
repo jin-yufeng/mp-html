@@ -288,15 +288,15 @@ Page({
     versions: [{
       version: ">=2.2.5",
       function: "完全正常",
-      percent: "98.37%"
+      percent: "98.96%"
     }, {
       version: "1.6.3-2.2.4",
       function: "不支持部分html实体",
-      percent: "1.52%"
+      percent: "1.00%"
     }, {
       version: "<1.6.3",
       function: "无法使用",
-      percent: "0.09%"
+      percent: "0.04%"
     }],
     //示例代码
     html2nodes: code.html2nodes,

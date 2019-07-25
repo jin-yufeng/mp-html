@@ -7,7 +7,7 @@
   <view class="page__bd">
     <view class="weui-cells__title">解析结果</view>
     <view class="weui-cells weui-cells_after-title" style="padding:{{webmode?'0':'10px 15px'}}">
-      <Parser html="{{html}}" img-mode="{{webmode?'widthFix':'default'}}"/>
+      <Parser html="{{html}}" img-mode="widthFix"/>
     </view>
     <form bindsubmit='parseHtml'>
       <view class="weui-cells__title">输入字符</view>
@@ -40,9 +40,15 @@
         </block>
       </view>
       <view class="weui-cells weui-cells_after-title" wx:if="{{modeIndex!=0}}">
-        <view class="weui-cell weui-cell_select">
+        <view class="weui-cell weui-cell_switch">
+          <view class="weui-cell__bd">代码高亮</view>
+          <view class="weui-cell__ft">
+            <switch bindchange="changeHighlight" checked/>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_select" wx:if="{{highlight}}">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
-            <view class="weui-label">代码高亮</view>
+            <view class="weui-label">高亮风格</view>
           </view>
           <view class="weui-cell__bd">
             <picker name="styles" bindchange="changeStyle" value="{{styleIndex}}" range="{{styles}}">

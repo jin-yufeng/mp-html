@@ -16,17 +16,37 @@
         <code>img-mode</code>属性设置为
         <code>widthFix</code>，图片将根据设置的宽度，高度自适应显示，可解决图片的变形问题，但设置的高度会失效</view>
     </view>
-    <view class="weui-article__h2">2. npm构建的问题</view>
+    <view class="weui-article__h2">2. 表格边框的问题</view>
+    <view class="weui-article__section" style="margin-left:5%;text-align:justify">
+      <view>一些富文本编辑器对于表格会有默认的边框，但在本插件没有默认的边框（实际浏览器中
+        <code>table</code>标签也没有默认的边框），如需要需自行添加默认样式</view>
+      <view>解决方案：在
+        <code>tagStyle</code>属性中设置以下内容即可实现表格
+        <code>1px</code>的灰色边框
+        <Parser html="{{code}}" selectable />
+      </view>
+    </view>
+    <view class="weui-article__h2">3. 在其他前端框架下使用的问题</view>
+    <view class="weui-article__section" style="margin-left:5%;text-align:justify">
+      <view>目前本插件仅用于微信小程序原生框架，没有对其他前端框架进行适配，在其他前端框架下使用可能存在问题</view>
+      <view>解决方案：在
+        <code>Taro</code>框架下使用本插件可参考
+        <Parser html="<a href='https://github.com/xPixv/Taro-ParserRichText'>https://github.com/xPixv/Taro-ParserRichText</a>" style="display:inline" />，其他框架需自行适配</view>
+    </view>
+    <view class="weui-article__h2">4. npm构建的问题</view>
     <view class="weui-article__section" style="margin-left:5%;text-align:justify">
       <view>后端加强包不能在前端使用，其运行需要
         <code>node.js v7.6.0</code>以上的环境，使用
         <code>npm</code>在前端使用该包会出现错误</view>
       <view>解决方案：若需要使用后端加强包的功能，需要在后端服务器或云函数中完成解析，将解析结果返回前端进行显示</view>
     </view>
-    <view class="weui-article__h2">3. 不能正确显示一些网站的问题</view>
+    <view class="weui-article__h2">5. 不能正确显示一些网站的问题</view>
     <view class="weui-article__section" style="margin-left:5%;text-align:justify">
-      <view>很多网站的内容是在<code>js</code>脚本中动态加载的，这些内容在插件解析中会被直接忽略，可能导致一些动态加载的复杂网页无法正确显示</view>
-      <view>解决方案：可在后端使用无头浏览器进行加载，将加载后的<code>html</code>给插件进行解析。另外，许多网页结构非常复杂，本插件不能完全取代<code>web-view</code>的功能，建议用于富文本编辑器中编辑的富文本或简单的网页。</view>
+      <view>很多网站的内容是在
+        <code>js</code>脚本中动态加载的，这些内容在插件解析中会被直接忽略，可能导致一些动态加载的复杂网页无法正确显示</view>
+      <view>解决方案：可在后端使用无头浏览器进行加载，将加载后的
+        <code>html</code>给插件进行解析。另外，许多网页结构非常复杂，本插件不能完全取代
+        <code>web-view</code>的功能，建议用于富文本编辑器中编辑的富文本或简单的网页。</view>
     </view>
   </view>
 </view>

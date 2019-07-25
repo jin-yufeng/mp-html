@@ -74,6 +74,13 @@ Page({
     node: code.node,
     //更新日志
     update: `<ul>
+    <li>2019.7.25：
+      <ol>
+        <li><code>U</code> 支持自动过滤小程序不支持的<code>svg</code>图片</li>
+        <li><code>F</code> 修复了部分情况下<code>style</code>标签匹配错误的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.7.24：
       <ol>
         <li><code>F</code> 修复了<code>pre</code>标签在低版本基础库无法显示的问题</li>

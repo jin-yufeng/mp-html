@@ -271,8 +271,7 @@ module.exports = {
     }],
     "name": "h1",
     "attrs": {
-      "style": ";",
-      "id": "示例"
+      "style": ";"
     }
   }, {
     "children": [{
@@ -284,7 +283,7 @@ module.exports = {
           }],
           "name": "th",
           "attrs": {
-            "style": ";border:1px solid #ccc;padding: 6px 13px;",
+            "style": ";border-right:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 13px;",
             "align": "center"
           }
         }, {
@@ -294,7 +293,7 @@ module.exports = {
           }],
           "name": "th",
           "attrs": {
-            "style": ";border:1px solid #ccc;padding: 6px 13px;",
+            "style": ";border-right:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 13px;",
             "align": "center"
           }
         }],
@@ -311,22 +310,22 @@ module.exports = {
       "children": [{
         "children": [{
           "children": [{
-            "text": "栏目1",
+            "text": "内容1",
             "type": "text"
           }],
           "name": "td",
           "attrs": {
-            "style": ";border:1px solid #ccc;padding: 6px 13px;",
+            "style": ";border-right:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 13px;",
             "align": "center"
           }
         }, {
           "children": [{
-            "text": "栏目2",
+            "text": "内容2",
             "type": "text"
           }],
           "name": "td",
           "attrs": {
-            "style": ";border:1px solid #ccc;padding: 6px 13px;",
+            "style": ";border-right:1px solid #ccc;border-bottom:1px solid #ccc;padding:6px 13px;",
             "align": "center"
           }
         }],
@@ -342,7 +341,7 @@ module.exports = {
     }],
     "name": "table",
     "attrs": {
-      "style": ";"
+      "style": ";border-collapse:collapse;border-left:1px solid #ccc;border-top:1px solid #ccc;;"
     }
   }],
   //使用步骤

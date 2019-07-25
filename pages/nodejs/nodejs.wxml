@@ -201,7 +201,7 @@
       <!--下载链接-->
       <view id="download" class="weui-article__h1">下载链接</view>
       <view class="weui-article__section">
-        <Parser html='npm链接：<a href="https://www.npmjs.com/package/parser-wxapp">长按复制链接</a>' />
+        <Parser html='npm链接：<a href="https://www.npmjs.com/package/parser-wxapp">点击复制链接</a>' />
       </view>
       <!--更新日志-->
       <view id="update" class="weui-article__h1">更新日志</view>

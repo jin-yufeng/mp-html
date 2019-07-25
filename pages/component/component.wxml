@@ -200,6 +200,7 @@
           <view style="margin-left:10%;">
             <rich-text nodes="{{js}}" />
           </view>
+          <Parser html='在<code>Taro</code>中使用可参考：<a href="https://github.com/xPixv/Taro-ParserRichText">https://github.com/xPixv/Taro-ParserRichText</a>' tagStyle="{{tagStyle}}"/>
         </view>
         <!--组件属性-->
         <view id="attrs" class="weui-article__h2">组件属性</view>
