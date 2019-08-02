@@ -241,6 +241,8 @@ parser(html).then(function(res){
 ## 许可 ##
 您可以随意的使用和分享本插件
 ## 更新日志 ##
+- 2019.8.2:
+  1. `F` 修复了部分情况下`display:flex`显示出错的问题
 - 2019.7.24:
   1. `A` 增加了`autosetTitle`属性，可设置是否自动将`title`标签的值设置到页面标题上（默认`true`）
   2. `F` 修复了`margin:auto`失效的问题

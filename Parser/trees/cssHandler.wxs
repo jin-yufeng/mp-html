@@ -6,8 +6,8 @@ module.exports = {
     if (reg.test(style)) res += reg.exec(style)[0];
     reg = getRegExp("margin[^;]*auto", "i");
     if (reg.test(style)) res += (";" + reg.exec(style)[0]);
-    reg = getRegExp("display\s*:\s*[^;]*", "i");
-    if (reg.test(style)) res += (';' + reg.exec(style)[0]);
+    reg = getRegExp("display\s*:\s*([^;]*)", "i");
+    if (reg.test(style) && reg.exec(style)[1]!="flex") res += (';' + reg.exec(style)[0]);
     else res += (';display:' + display);
     reg = getRegExp("[^;\s]*width\s*:\s*[^;]*", "ig");
     var width = reg.exec(style);

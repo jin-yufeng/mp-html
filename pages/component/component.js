@@ -305,6 +305,12 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.8.2：
+      <ol>
+        <li><code>F</code> 修复了部分情况下<code>display:flex</code>显示出错的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.7.24：
       <ol>
         <li><code>A</code> 增加了<code>autosetTitle</code>属性（默认<code>true</code>），支持设置是否自动将<code>title</code>标签里的内容设置到页面标题</li>
