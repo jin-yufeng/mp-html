@@ -288,15 +288,15 @@ Page({
     versions: [{
       version: ">=2.2.5",
       function: "完全正常",
-      percent: "98.96%"
+      percent: "99.06%"
     }, {
       version: "1.6.3-2.2.4",
       function: "不支持部分html实体",
-      percent: "1.00%"
+      percent: "0.91%"
     }, {
       version: "<1.6.3",
       function: "无法使用",
-      percent: "0.04%"
+      percent: "0.03%"
     }],
     //示例代码
     html2nodes: code.html2nodes,
@@ -305,6 +305,13 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.8.10：
+      <ol>
+        <li><code>U</code> 优化了<code>a</code>标签的点击效果</li>
+        <li><code>F</code> 修复了部分情况下<code>span</code>标签样式出错的情况</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.8.2：
       <ol>
         <li><code>F</code> 修复了部分情况下<code>display:flex</code>显示出错的问题</li>

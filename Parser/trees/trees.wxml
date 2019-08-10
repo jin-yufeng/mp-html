@@ -23,7 +23,7 @@
     <rich-text wx:else class="{{item.name||item.type}}" style="{{cssHandler.getStyle(item.attrs.style,'block')}}" nodes="{{cssHandler.setStyle(item)}}" />
   </block>
   <!--链接-->
-  <navigator wx:elif="{{item.name=='a'}}" url="{{item.attrs.href}}" style="{{item.attrs.style}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" bindtap="tapEvent">
+  <navigator wx:elif="{{item.name=='a'}}" url="{{item.attrs.href}}" style="{{item.attrs.style}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" hover-start-time="25" hover-stay-time="300" bindtap="tapEvent">
     <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
   </navigator>
   <!--继续递归-->
