@@ -180,12 +180,17 @@ DomHandler.prototype.onopentag = function(name, attrs) {
     children: []
   };
   //匹配样式
-  let matched =
-    (this._style[name] ? (this._style[name] + ';') : '') +
-    (this._style['#' + attrs.id] ? (this._style['#' + attrs.id] + ';') : '') +
-    (this._style['.' + attrs.class] ? (this._style['.' + attrs.class] + ';') : '');
-  delete attrs.class;
-  delete attrs.id;
+  let matched =this._style[name] ? (this._style[name] + ';') : ''; 
+  if (attrs.id) {
+    matched += (this._style['#' + attrs.id] ? (this._style['#' + attrs.id] + ';') : '');
+    delete attrs.id;
+  }
+  if(attrs.class){
+    for (var Class of attrs.class.split(' ')) {
+      matched += (this._style['.' + Class] ? (this._style['.' + Class] + ';') : '');
+    }
+    delete attrs.class;
+  }
   //处理属性
   switch (name) {
     case 'div':

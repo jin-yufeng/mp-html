@@ -26,21 +26,14 @@
         <Parser html="{{code}}" selectable />
       </view>
     </view>
-    <view class="weui-article__h2">3. 在其他前端框架下使用的问题</view>
-    <view class="weui-article__section" style="margin-left:5%;text-align:justify">
-      <view>目前本插件仅用于微信小程序原生框架，没有对其他前端框架进行适配，在其他前端框架下使用可能存在问题</view>
-      <view>解决方案：在
-        <code>Taro</code>框架下使用本插件可参考
-        <Parser html="<a href='https://github.com/xPixv/Taro-ParserRichText'>https://github.com/xPixv/Taro-ParserRichText</a>" style="display:inline" />，其他框架需自行适配</view>
-    </view>
-    <view class="weui-article__h2">4. npm构建的问题</view>
+    <view class="weui-article__h2">3. npm构建的问题</view>
     <view class="weui-article__section" style="margin-left:5%;text-align:justify">
       <view>后端加强包不能在前端使用，其运行需要
         <code>node.js v7.6.0</code>以上的环境，使用
         <code>npm</code>在前端使用该包会出现错误</view>
       <view>解决方案：若需要使用后端加强包的功能，需要在后端服务器或云函数中完成解析，将解析结果返回前端进行显示</view>
     </view>
-    <view class="weui-article__h2">5. 不能正确显示一些网站的问题</view>
+    <view class="weui-article__h2">4. 不能正确显示一些网站的问题</view>
     <view class="weui-article__section" style="margin-left:5%;text-align:justify">
       <view>很多网站的内容是在
         <code>js</code>脚本中动态加载的，这些内容在插件解析中会被直接忽略，可能导致一些动态加载的复杂网页无法正确显示</view>

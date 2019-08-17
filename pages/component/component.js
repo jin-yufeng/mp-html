@@ -305,6 +305,13 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.8.17:
+      <ol>
+        <li><code>A</code> 增加了在<code>mpVue</code>中使用的<code>demo</code></li>
+        <li><code>F</code> 修复了形如<code>class="a&nbsp;b"</code>（多个<code>class</code>）时样式匹配失效的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.8.10：
       <ol>
         <li><code>U</code> 优化了<code>a</code>标签的点击效果</li>
