@@ -113,6 +113,8 @@ parser(html).then(function(res){
 您可以随意的使用和分享本插件
 
 ## 更新日志 ##
+- 2019.8.21:
+  1. `F` 修复了部分情况下实体编码内容无法显示的问题
 - 2019.8.17:
   1. `A` 添加了在`mpVue`中使用的`demo`
   2. `F` 修复了形如`class="a b"`（多个）时样式匹配失效的问题
@@ -121,8 +123,5 @@ parser(html).then(function(res){
   2. `F` 修复了部分情况下`span`标签样式出错的问题
 - 2019.8.2:
   1. `F` 修复了部分情况下`display:flex`显示出错的问题
-- 2019.7.24:
-  1. `A` 增加了`autosetTitle`属性，可设置是否自动将`title`标签的值设置到页面标题上（默认`true`）
-  2. `F` 修复了`margin:auto`失效的问题  
 
 更多可见：[更新日志](./docs/Update.md)

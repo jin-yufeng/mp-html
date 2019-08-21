@@ -305,6 +305,12 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.8.21:
+      <ol>
+        <li><code>F</code> 修复了部分情况下实体编码内容无法显示的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.8.17:
       <ol>
         <li><code>A</code> 增加了在<code>mpVue</code>中使用的<code>demo</code></li>

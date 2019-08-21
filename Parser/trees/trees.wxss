@@ -8,7 +8,7 @@
   display: inherit;
   float: inherit;
 }
-.sub, .sup, .text, .bdo, .bdi, .ruby, .rt {
+.sub, .sup, .bdo, .bdi, .ruby, .rt {
   display: inline-block !important;
 }
 .div, .blockquote, .p{

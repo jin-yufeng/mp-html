@@ -5,7 +5,10 @@
     <!--图片-->
     <rich-text wx:if="{{item.name=='img'}}" style="{{cssHandler.getStyle(item.attrs.style,'inline-block')}}" nodes='{{cssHandler.setImgStyle(item,controls.imgMode)}}' data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewEvent' />
     <!--文本-->
-    <text wx:elif="{{item.type=='text'&&!item.decode}}" decode>{{item.text}}</text>
+    <block wx:elif="{{item.type=='text'}}">
+      <text wx:if="{{!item.decode}}" decode>{{item.text}}</text>
+      <rich-text wx:else style="display:inline-block" nodes="{{[item]}}"></rich-text>
+    </block>
     <text wx:elif="{{item.name=='br'}}">\n</text>
     <!--视频-->
     <block wx:elif="{{item.name=='video'}}">
@@ -20,7 +23,7 @@
     <audio wx:elif="{{item.name=='audio'}}" src='{{controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src}}' id="{{item.attrs.id}}" loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' poster='{{item.attrs.poster}}'
       name='{{item.attrs.name}}' author='{{item.attrs.author}}' style="{{item.attrs.style}}" data-id="{{item.attrs.id}}" data-source="{{item.attrs.source}}" binderror="errorEvent" />
     <!--富文本-->
-    <rich-text wx:else class="{{item.name||item.type}}" style="{{cssHandler.getStyle(item.attrs.style,'block')}}" nodes="{{cssHandler.setStyle(item)}}" />
+    <rich-text wx:else class="{{item.name}}" style="{{cssHandler.getStyle(item.attrs.style,'block')}}" nodes="{{cssHandler.setStyle(item)}}" />
   </block>
   <!--链接-->
   <navigator wx:elif="{{item.name=='a'}}" url="{{item.attrs.href}}" style="{{item.attrs.style}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" hover-start-time="25" hover-stay-time="300" bindtap="tapEvent">
