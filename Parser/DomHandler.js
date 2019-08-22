@@ -180,12 +180,12 @@ DomHandler.prototype.onopentag = function(name, attrs) {
     children: []
   };
   //匹配样式
-  let matched =this._style[name] ? (this._style[name] + ';') : ''; 
+  let matched = this._style[name] ? (this._style[name] + ';') : '';
   if (attrs.id) {
     matched += (this._style['#' + attrs.id] ? (this._style['#' + attrs.id] + ';') : '');
     delete attrs.id;
   }
-  if(attrs.class){
+  if (attrs.class) {
     for (var Class of attrs.class.split(' ')) {
       matched += (this._style['.' + Class] ? (this._style['.' + Class] + ';') : '');
     }
@@ -223,6 +223,36 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       if (attrs.face) {
         attrs.style += (";font-family:" + attrs.face);
         delete attrs.face;
+      }
+      if (attrs.size) {
+        var size = parseInt(attrs.size);
+        if (size < 1) size = 1;
+        else if (size > 7) size = 7;
+        switch (size) {
+          case 1:
+            size = 10;
+            break;
+          case 2:
+            size = 13;
+            break;
+          case 3:
+            size = 16;
+            break;
+          case 4:
+            size = 18;
+            break;
+          case 5:
+            size = 24;
+            break;
+          case 6:
+            size = 32;
+            break;
+          case 7:
+            size = 48;
+            break;
+        }
+        attrs.style += (";font-size:" + size + "px");
+        delete attrs.size;
       }
       break;
     case 'a':

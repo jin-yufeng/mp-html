@@ -107,7 +107,7 @@ Page({
       name: 'em'
     }, {
       name: 'font',
-      attrs: 'face, color'
+      attrs: 'size, face, color'
     }, {
       name: 'h1'
     }, {
@@ -288,15 +288,15 @@ Page({
     versions: [{
       version: ">=2.2.5",
       function: "完全正常",
-      percent: "99.06%"
+      percent: "99.14%"
     }, {
       version: "1.6.3-2.2.4",
       function: "不支持部分html实体",
-      percent: "0.91%"
+      percent: "0.82%"
     }, {
       version: "<1.6.3",
       function: "无法使用",
-      percent: "0.03%"
+      percent: "0.04%"
     }],
     //示例代码
     html2nodes: code.html2nodes,
@@ -305,6 +305,12 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.8.22:
+      <ol>
+        <li><code>U</code> 支持了<code>font</code>标签的<code>size</code>属性</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.8.21:
       <ol>
         <li><code>F</code> 修复了部分情况下实体编码内容无法显示的问题</li>

@@ -22,6 +22,7 @@ const trustAttrs = {
   name: true,
   poster: true,
   rowspan: true,
+  size: true,
   span: true,
   src: true,
   start: true,

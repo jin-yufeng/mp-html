@@ -178,7 +178,7 @@
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <code>33.9KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <code>34.8KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <rich-text nodes="{{errorcode}}" />
         </view>
       </view>
@@ -200,7 +200,7 @@
           <view style="margin-left:10%;">
             <rich-text nodes="{{js}}" />
           </view>
-          <Parser html='在<code>Taro</code>中使用可参考：<a href="https://github.com/xPixv/Taro-ParserRichText">https://github.com/xPixv/Taro-ParserRichText</a>' tagStyle="{{tagStyle}}"/>
+          <Parser html='<div style="margin-left:5%">在<code>mpVue</code>中使用：<a href="https://github.com/jin-yufeng/Parser_mpVue">Github链接</a></div><div style="margin-left:5%">在<code>Taro </code>中使用：<a href="https://github.com/xPixv/Taro-ParserRichText">Github链接</a></div>' tagStyle="{{tagStyle}}"/>
         </view>
         <!--组件属性-->
         <view id="attrs" class="weui-article__h2">组件属性</view>
