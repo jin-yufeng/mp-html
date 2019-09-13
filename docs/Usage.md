@@ -7,6 +7,7 @@
   | tag-style | Object | | 否 | 设置标签的默认样式 |
   | autocopy | Boolean | true | 否 | 是否允许链接受到点击时自动复制链接（仅限http开头的网络链接）|
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
+  | autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 |
   | autosetTitle | Boolean | true | 否 | 是否自动将title标签的内容设置到页面标题上 |
   | img-mode | String | default | 否 | 图片显示模式 |
   | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
@@ -30,6 +31,7 @@
     | bindparser | 在解析完成时调用（仅当传入的html为`字符串`时会调用） | 返回一个`object`，其中`nodes`为解析后的节点数组，`imgList`为图片列表，`title`是页面标题，该`object`可以在下次调用直接作为html属性的值，节省解析的时间 |
     | bindready | 渲染完成时调用 | 返回整个组件的`NodesRef`结构体，包含宽度、高度、位置等信息（每次`html`修改后都会触发） |
     | binderror | 出错时返回 | 解析错误或加载多媒体资源出错时调用，返回一个`object`，其中`message`为错误原因，若由于加载多媒体资源出错还会具有`target`属性，包含该标签的具体信息 |
+    | bindimgtap | 在图片受到点击时调用 | 返回该图片的`src`值，可用于阻挡`onShow`的调用 |
     | bindlinkpress | 在链接受到点击时调用 | 返回该链接的`href`值，开发者可以在该回调中进行进一步操作，如下载文档和打开等 |  
 - 关于基础库
   

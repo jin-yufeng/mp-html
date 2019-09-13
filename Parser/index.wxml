@@ -1,4 +1,4 @@
 <!--Parser-->
 <slot wx:if="{{!(html.nodes||((html[0].name||html[0].type)?1:nodes.length))}}" animation="{{hideAnimation}}"></slot>
-<trees id="contain" style="{{(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')}}" animation="{{showAnimation}}" nodes="{{html.nodes||((html[0].name||html[0].type)?html:nodes)}}" controls="{{controls}}" catchpreview="_previewImg"
+<trees id="contain" style="{{(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')}}" animation="{{showAnimation}}" nodes="{{html.nodes||((html[0].name||html[0].type)?html:nodes)}}" controls="{{controls}}" catchpreview="previewEvent"
   catchplay="_playVideo" catchlinkpress="tapEvent" catcherror="errorEvent" />

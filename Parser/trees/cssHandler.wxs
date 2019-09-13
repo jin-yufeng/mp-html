@@ -18,7 +18,7 @@ module.exports = {
     return res;
   },
   setImgStyle: function(item, imgMode) {
-    if (getRegExp("[^-]width\s*:\s*[^;]*", "i").test(';' + item.attrs.style))
+    if (getRegExp("[^-]width\s*:\s*[^px]*;", "i").test(';' + item.attrs.style))
       item.attrs.style += ';width:100%';
     if (imgMode == "widthFix")
       item.attrs.style += ";height:auto !important";

@@ -144,6 +144,10 @@ function html2nodes(data, tagStyle) {
         style += arguments[1];
         return '';
       });
+      try {
+        var emoji = require("./emoji.js");
+        data = emoji.parseEmoji(data);
+      } catch (err) {}
       let handler = new DomHandler(style, tagStyle);
       new Parser(handler, (res) => {
         return resolve(res);

@@ -157,22 +157,34 @@ function initStyle(tagStyle) {
 
 function DomHandler(style, tagStyle = {}) {
   this.imgList = [];
+  this.imgIndex = 0;
   this.nodes = [];
   this.title = "";
   this._videoNum = 0;
   this._audioNum = 0;
   this._style = new CssTokenizer(style, initStyle(tagStyle)).parse();
   this._tagStack = [];
+  this._whiteSpace = false;
 }
 DomHandler.prototype._addDomElement = function(element) {
+  if (element.name == 'pre' || (element.attrs && /white-space\s*:\s*pre/.test(element.attrs.style))) {
+    this._whiteSpace = true;
+    element.pre = true;
+  }
   let parent = this._tagStack[this._tagStack.length - 1];
   let siblings = parent ? parent.children : this.nodes;
   siblings.push(element);
 };
 DomHandler.prototype._bubbling = function() {
   for (let i = this._tagStack.length - 1; i >= 0; i--) {
-    if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
-    else return this._tagStack[i].name;
+    if (trustTag[this._tagStack[i].name] == Common) {
+      this._tagStack[i].continue = true;
+      if (i == this._tagStack.length - 1) { // 同级标签中若有文本标签
+        for (var node of this._tagStack[i].children)
+          if (textTag[node.name])
+            node.continue = true;
+      }
+    } else return this._tagStack[i].name;
   }
 }
 DomHandler.prototype.onopentag = function(name, attrs) {
@@ -210,8 +222,10 @@ DomHandler.prototype.onopentag = function(name, attrs) {
         delete attrs['data-src'];
       }
       if (!attrs.hasOwnProperty('ignore') && attrs.src) {
+        if (this.imgList.indexOf(attrs.src) != -1)
+          attrs.src = attrs.src + "?index=" + this.imgIndex++;
         this.imgList.push(attrs.src);
-        if (this._bubbling() == 'a') attrs.ignore = "";
+        if (this._bubbling() == 'a') attrs.ignore = ""; // 图片在链接中不可预览
       };
       break;
     case 'font':
@@ -228,30 +242,8 @@ DomHandler.prototype.onopentag = function(name, attrs) {
         var size = parseInt(attrs.size);
         if (size < 1) size = 1;
         else if (size > 7) size = 7;
-        switch (size) {
-          case 1:
-            size = 10;
-            break;
-          case 2:
-            size = 13;
-            break;
-          case 3:
-            size = 16;
-            break;
-          case 4:
-            size = 18;
-            break;
-          case 5:
-            size = 24;
-            break;
-          case 6:
-            size = 32;
-            break;
-          case 7:
-            size = 48;
-            break;
-        }
-        attrs.style += (";font-size:" + size + "px");
+        let map = [10, 13, 16, 18, 24, 32, 48];
+        attrs.style += (";font-size:" + map[size - 1] + "px");
         delete attrs.size;
       }
       break;
@@ -291,8 +283,10 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       return;
   }
   attrs.style = matched + attrs.style;
-  if (textTag[name]) element.continue = true;
-  else if (blockTag[name]) name = 'div';
+  if (textTag[name]) {
+    if (!this._tagStack.length || this._tagStack[this._tagStack.length - 1].continue)
+      element.continue = true;
+  } else if (blockTag[name]) name = 'div';
   else if (!trustTag[name]) name = 'span';
   element.name = name;
   element.attrs = attrs;
@@ -300,14 +294,16 @@ DomHandler.prototype.onopentag = function(name, attrs) {
   this._tagStack.push(element);
 };
 DomHandler.prototype.ontext = function(data) {
-  if (/\S/.test(data)) {
-    let element = {
-      text: data.replace(/&nbsp;/g, '\u00A0'),
-      type: 'text'
-    };
-    if (/&#*((?!sp|lt|gt).){2,5};/.test(data)) element.decode = true;
-    this._addDomElement(element);
-  }
+  if (!this._whiteSpace)
+    data = data.replace(/\s+/g, " ");
+  if (!data)
+    return;
+  let element = {
+    text: data.replace(/&nbsp;/g, '\u00A0'), // 解决连续&nbsp;失效问题
+    type: 'text'
+  };
+  if (/&#*((?!sp|lt|gt).){2,5};/.test(data)) element.decode = true;
+  this._addDomElement(element);
 };
 DomHandler.prototype.onclosetag = function(name) {
   let element = this._tagStack.pop();
@@ -320,6 +316,21 @@ DomHandler.prototype.onclosetag = function(name) {
     let parent = this._tagStack[this._tagStack.length - 1];
     let siblings = parent ? parent.children : this.nodes;
     siblings.pop();
+  }
+  // 合并一些不必要的层，减小节点深度
+  if (element.children.length == 1 && element.name == 'div' && element.children[0].name == 'div' && !(/padding/.test(element.attrs.style)) && !(/margin/.test(element.attrs.style) && /margin/.test(element.children[0].attrs.style)) && !(/display/.test(element.attrs.style)) && !(/display/.test(element.children[0].attrs.style))) {
+    let parent = this._tagStack.length ? this._tagStack[this._tagStack.length - 1].children : this.nodes;
+    let i = parent.indexOf(element);
+    if (/padding/.test(element.children[0].attrs.style))
+      element.children[0].attrs.style = ";box-sizing:border-box;" + element.children[0].attrs.style;
+    element.children[0].attrs.style = element.attrs.style + ";" + element.children[0].attrs.style;
+    parent[i] = element.children[0];
+  }
+  if (element.pre) {
+    this._whiteSpace = false;
+    for (var ele of this._tagStack)
+      if (ele.pre)
+        this._whiteSpace = true;
   }
 };
 module.exports = DomHandler;

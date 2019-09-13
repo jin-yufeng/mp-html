@@ -1,6 +1,6 @@
 //CssTokenizer.js
 function CssTokenizer(style = '', tagStyle = {}) {
-  this.res = tagStyle;
+  this.res = JSON.parse(JSON.stringify(tagStyle));
   this._state = "SPACE";
   this._buffer = style;
   this._sectionStart = 0;

@@ -107,7 +107,11 @@ Component({
       type: Boolean,
       value: true
     },
-    'autosetTitle':{
+    'autopreview': {
+      type: Boolean,
+      value: true
+    },
+    'autosetTitle': {
       type: Boolean,
       value: true
     },
@@ -150,13 +154,16 @@ Component({
     errorEvent(e) {
       this.triggerEvent('error', e.detail);
     },
-    //内部方法
-    _previewImg(e) {
-      wx.previewImage({
-        current: e.detail,
-        urls: this.imgList.length ? this.imgList : [e.detail],
-      })
+    previewEvent(e) {
+      if (this.data.autopreview) {
+        wx.previewImage({
+          current: e.detail,
+          urls: this.imgList.length ? this.imgList : [e.detail],
+        })
+      }
+      this.triggerEvent('imgtap', e.detail);
     },
+    //内部方法
     _playVideo(e) {
       if (this.videoContext.length > 1 && this.data.autopause) {
         for (let video of this.videoContext) {
