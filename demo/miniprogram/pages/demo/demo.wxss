@@ -1,0 +1,55 @@
+/* pages/demo/demo.wxss */
+.loading-cell {
+  position:absolute;
+  width:100%;
+  height:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.line-bounce {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  position: relative;
+}
+.line-bounce text {
+  display: block;
+  width: 5px;
+  height: 26px;
+  background-color: #8fbbd8;
+  position: absolute;
+  top: calc(50% - 13px);
+  animation: line-bounce 1s infinite linear;
+}
+.line-bounce text:nth-child(1) {
+  left:15px;
+  animation-delay: 0.1s;
+}
+.line-bounce text:nth-child(2) {
+  left:30px;
+  animation-delay: 0.25s;
+}
+.line-bounce text:nth-child(3) {
+  left:45px;
+  animation-delay: 0.4s;
+}
+.line-bounce text:nth-child(4) {
+  left:60px;
+  animation-delay: 0.55s;
+}
+.line-bounce text:nth-child(5) {
+  left:75px;
+  animation-delay: 0.7s;
+}
+@keyframes line-bounce {
+  0%{
+    transform: scaleY(1);
+  }
+  50%{
+    transform: scaleY(.3);
+  }
+  100%{
+    transform: scaleY(1);
+  }
+}

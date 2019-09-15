@@ -1,0 +1,33 @@
+<!--index.wxml-->
+<view class="page">
+  <view class="page__hd">
+    <view class="page__title">Parser</view>
+    <view class="page__desc">Parser 是一款功能强大的轻量级富文本插件，支持的标签种类丰富，无层数限制，解析效率高，稳定性强。</view>
+  </view>
+  <view class="page__bd page__bd_spacing">
+    <view class="kind-list">
+      <block wx:for="{{list}}" wx:key="id">
+        <view class="kind-list__item">
+          <view id="{{item.id}}" class="weui-flex kind-list__item-hd {{item.open ? 'kind-list__item-hd_show' : ''}}" bindtap="kindToggle">
+            <view class="weui-flex__item">{{item.name}}</view>
+            <image class="kind-list__img" src="/images/{{item.id}}.png"></image>
+          </view>
+          <view class="kind-list__item-bd {{item.open ? 'kind-list__item-bd_show' : ''}}">
+            <view class="weui-cells {{item.open ? 'weui-cells_show' : ''}}">
+              <block wx:for="{{item.pages}}" wx:for-item="page" wx:key="{{page.name}}">
+                <navigator wx:if="{{page.url}}" url="{{page.url}}" class="weui-cell weui-cell_access">
+                  <view class="weui-cell__bd">{{page.name}}</view>
+                  <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                </navigator>
+                <button wx:else open-type='contact' class="weui-cell weui-cell_access">
+                  <view class="weui-cell__bd">{{page.name}}</view>
+                  <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                </button>
+              </block>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

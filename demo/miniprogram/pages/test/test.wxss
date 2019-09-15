@@ -1,0 +1,17 @@
+/* pages/test/test.wxss */
+page {
+  background-color: #f8f8f8;
+}
+.label {
+  font-size: 13px;
+  text-align: center;
+  padding-left:8px;
+  padding-right:8px;
+  width: auto;
+  height:25px;
+  line-height: 25px;
+  border-radius: 5px;
+  margin: 5px;
+  border: 1px solid #d9d9d9;
+  background-color: white;
+}

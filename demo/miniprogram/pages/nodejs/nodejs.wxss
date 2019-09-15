@@ -1,0 +1,15 @@
+/* miniprogram/pages/nodejs/nodejs.wxss */
+.link {
+  color:#586c94;
+}
+.link-hover {
+  text-decoration: underline;
+}
+.td {
+  padding: 3px;
+  border-right: 1px solid #dfe2e5;
+  border-bottom: 1px solid #dfe2e5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

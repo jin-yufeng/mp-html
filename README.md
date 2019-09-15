@@ -16,40 +16,43 @@
 - 支持长按复制内容  
   通过设置`selectable`属性可以实现长按复制任意内容  
 - 智能压缩  
-  可以智能对解析结果进行压缩，包括较小深度、去除无用的空白符等，可以有效提高性能  
+  可以智能对解析结果进行压缩，包括减小深度、去除无用的空白符等，可以有效提高性能  
 - 支持的标签种类丰富，包括`视频`、`表格`等  
 - 图片支持大小自适应，点击图片可以预览（预览时通过左右滑动可以查看所有图片）；对于一些装饰性的图片，可以对其设置`ignore`属性，设置后将无法预览  
 - 点击`a`标签，若`href`为小程序内部页面路径，将直接跳转；若是网页链接，则可以自动复制链接（可通过`autocopy`属性控制），并在浏览器中打开；点击时将有下划线和半透明的效果，支持图片链接。链接被点击时会触发`bindlinkpress`事件，可以在该回调中进行下载附件等更多操作  
 - 支持解析有序列表和无序列表（直接由`rich-text`进行显示）  
+- 支持解析`emoji`小表情和动态操作`DOM`（具体见下方*补丁包*）  
 - 容错性强，稳定性高，不需要网络请求  
-- 功能强大，支持无限层级，解析速度快，包大小仅约`36.9KB`（`min`版本`27.3KB`）  
+- 功能强大，支持无限层级，解析速度快，包大小仅约`38.0KB`（`min`版本`27.8KB`）  
   
 详细可见：[功能介绍](./docs/Introduction.md)
 ## 使用方法 ##
-1. 下载Parser文件夹至小程序目录（`Parser.min`是压缩版本，功能相同）  
-   ![页面结构](https://i.imgur.com/XW4Jupv.png)
+- 在原生框架中使用：
+  1. 下载Parser文件夹至小程序目录（`Parser.min`是压缩版本，功能相同）  
+     ![页面结构](https://i.imgur.com/XW4Jupv.png)
    
-2. 在需要引用的页面的`json`文件中添加
-   ``` json
-   {
-     "usingComponents": {
-       "Parser":"/Parser/index"
+  2. 在需要引用的页面的`json`文件中添加
+     ``` json
+     {
+       "usingComponents": {
+         "Parser":"/Parser/index"
+       }
      }
-   }
-   ```
-3. 在需要引用的页面的`wxml`文件中添加  
-   ``` html
-   <Parser html="{{html}}" />
-   ```
-4. 在需要引用的页面的`js`文件中添加  
-   ``` javascript
-   onLoad:function(){
-     this.setData({
-       html:'your html'
-     })
-   }
-   ```
-- `demo`文件夹下的是示例小程序的源码，可供参考
+     ```
+  3. 在需要引用的页面的`wxml`文件中添加  
+     ``` html
+     <Parser html="{{html}}" />
+     ```
+  4. 在需要引用的页面的`js`文件中添加  
+     ``` javascript
+     onLoad:function(){
+       this.setData({
+         html:'your html'
+       })
+     }
+     ```
+  - `demo`文件夹下的是示例小程序的源码，可供参考  
+&nbsp;
 - 在`mpVue`中使用：
   1. 下载`Parser`文件夹至`static`目录下
   2. 在`src`目录下需要使用本插件的页面文件夹下添加`json`文件
@@ -75,8 +78,8 @@
      }
      </script>
      ```
+- 在`uni-app`中使用可参考：[小程序组件支持](https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81)（**注意：** 在`mpvue`和`uni-app`中使用时组件名必须**小写**）
 - 在`Taro`中使用可参考：[Github链接](https://github.com/xPixv/Taro-ParserRichText)  
-- 在`uni-app`中使用可参考：[官网-小程序组件支持](https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81)
 - 组件属性：  
 
   | 属性 | 类型 | 默认值 | 必填 | 说明 |
@@ -108,7 +111,7 @@
     |:----:|:----:|:----:|
     | bindparser | 在解析完成时调用（仅当传入的html为`字符串`时会调用） | 返回一个`object`，其中`nodes`为解析后的节点数组，`imgList`为图片列表，`title`是页面标题，该`object`可以在下次调用直接作为html属性的值，节省解析的时间 |
     | bindready | 渲染完成时调用 | 返回整个组件的`NodesRef`结构体，包含宽度、高度、位置等信息（每次`html`修改后都会触发） |
-    | binderror | 出错时返回 | 解析错误或加载多媒体资源出错时调用，返回一个`object`，其中`message`为错误原因，若由于加载多媒体资源出错还会具有`target`属性，包含该标签的具体信息 |
+    | binderror | 出错时返回 | 出错时调用，返回一个`object`，其中`source`是错误来源（`ad`广告出错、`video`视频加载出错、`audio`音频加载出错、`parse`解析过程中出错），`errMsg`为错误信息，`errCode`是错误代码（仅`ad`），`target`包含出错标签的具体信息 |
     | bindimgtap | 在图片受到点击时调用 | 返回该图片的`src`值，可用于阻挡`onShow`的调用 |
     | bindlinkpress | 在链接受到点击时调用 | 返回该链接的`href`值，开发者可以在该回调中进行进一步操作，如下载文档和打开等 |
   
@@ -128,7 +131,78 @@
   parserEmoji.removeEmoji("笑脸"); //移除笑脸emoji
   parserEmoji.setEmoji("哈哈","https://example.png"); //设置emoji，支持emoji字符或网络图片
   ```  
-  ![emoji演示](https://i.imgur.com/Uc2ZHoH.png)
+  ![emoji演示](https://i.imgur.com/Uc2ZHoH.png)  
+&nbsp;
+- document  
+  使用方法：将`document.js`复制到`Parser`文件夹下即可（若使用`min`版本也要改名为`document.js`）  
+  大小：`4.75KB`（`min`版本`3.69KB`）  
+  功能：实现类似于`web`中的`document`对象，可以动态操作`DOM`  
+  - `document`：  
+    获取方式：可通过 `this.selectComponent("#id").document` 获取  
+    `Api`列表:   
+  
+    | 名称 | 输入值 | 返回值 | 功能 |
+    |:---:|:---:|:---:|:---:|
+    | getElementById | id | element | 按照`id`查找`element` |
+    | getChildren | i | element | 获取根节点的第`i`个子节点的`element`实例 | 
+  - `element`：   
+    属性名：
+
+    | 名称 | 功能 |
+    |:---:|:---:|
+    | id | 该节点的id值 |
+    | nodes | 该节点的结构体，可以直接对这个结构体进行修改（修改后需要调用`update`方法同步到`UI`，修改时要注意格式，更建议使用下方的`api`方法进行修改） |
+
+    `Api`列表：
+  
+    | 名称 | 输入值 | 返回值 | 功能 |
+    |:---:|:---:|:---:|:---:|
+    | getText |   | text | 获取文本内容（仅直接包含文本的标签可用） |
+    | setText | text |   | 修改文本内容（仅直接包含文本的标签可用） |
+    | addChildren | nodes, i |   | 在第`i`个位置添加子节点，`nodes`为一个结构体，格式同`rich-text` |
+    | removeChildren | i |   | 移除第`i`个子节点 |
+    | getChildren | i |   | 获取第`i`个子节点的`element`示例 |
+    | getAttr | key | attr | 获取某个属性值 |
+    | setAttr | key, value |   | 设置某个属性值 |
+    | getElementById | id | element | 在子节点中按照`id`查找`element` |
+    | update |   |   | 若修改了`element.nodes`需要调用此方法同步到`UI` |
+
+  - 返回格式  
+    若执行成功，返回`{ok:true, data:...}`；若不成功，返回`{ok:false, errCode:..., errMsg:...}`  
+    错误码
+
+    | 错误码 | 含义 |
+    |:---:|:---:|
+    | 1 | 对没有直接包含`text`的标签执行`getText`或`setText` |
+    | 2 | 输入值类型不正确 |
+    | 3 | 输入值超出范围 |
+    | 4 | 无法找到对应`id`的节点 |
+
+  - 注意事项  
+    所有方法必须在`html`被`setData`完成后才能调用  
+    每次执行除了`get`以外的方法都需要进行一次局部的`setData`更新，请不要过于频繁的调用，否则可能影响性能。
+  - 综合示例  
+    ```html
+    <Parser id="article" html="{{html}}" binderror="error" />
+    ```
+    ``` javascript
+    data:{
+      html:'...<div id="adContainer"><ad unit-id="..."></ad></div>...'
+    }
+    error(e){
+      // 广告组件加载出错
+      if(e.detail.source == "ad"){
+        // 获取document
+        var document = this.selectComponent("#article").document;
+        // 查找广告框容器
+        var res = document.getElementById("adContainer");
+        if (res.ok)
+          res.data.setAttr("style","display:none"); // 隐藏广告容器
+        else
+          console.error(res.errMsg); // 查找失败
+      }
+    }
+    ```
 
 ## 后端解析 ##
 &emsp;&emsp;本插件提供了一个配套的后端`node.js`支持包，可以提供更加强大的功能，如匹配多层的`style`，代码高亮，直接打开网址，解析`markdown`等，其返回值可以直接作为本组件的`html`属性的值；且在后端提前完成解析后可以节省解析时间，提高性能。  
@@ -161,6 +235,9 @@ parser(html).then(function(res){
 ![支持](https://i.imgur.com/ASMBhWI.png)
 
 ## 更新日志 ##
+- 2019.9.15:
+  1. `A` 增加了`document`补丁包（可用于动态操作`DOM`）  
+  2. `A` 增加支持小程序广告`ad`组件（可显示文中广告）  
 - 2019.9.13:
   1. `A` 增加了`emoji`补丁包（可用于解析小表情）
   2. `A` 增加了`autopreview`属性（可用于控制点击图片时是否自动预览，默认`true`）和`imgtap`事件（图片被点击时触发）
@@ -177,8 +254,5 @@ parser(html).then(function(res){
 - 2019.8.17:
   1. `A` 添加了在`mpVue`中使用的`demo`
   2. `F` 修复了形如`class="a b"`（多个）时样式匹配失效的问题
-- 2019.8.10:
-  1. `U` 优化了`a`标签的点击态效果
-  2. `F` 修复了部分情况下`span`标签样式出错的问题
 
 更多可见：[更新日志](./docs/Update.md)
