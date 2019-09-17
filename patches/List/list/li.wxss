@@ -1,0 +1,26 @@
+:host{
+  display:block
+}
+.point_type1{
+  width:0.3em;
+  height:0.3em;
+  overflow: hidden;
+  border-radius: 50%;
+  color: inherit;
+  display:inline-block;
+}
+.point_type2{
+  width:0.23em;
+  height:0.23em;
+  background-color: transparent;
+  border:0.05em solid black;
+  border-radius: 50%;
+  display:inline-block;
+}
+.point_type3{
+  width:0.3em;
+  height:0.3em;
+  overflow: hidden;
+  color: inherit;
+  display:inline-block;
+}

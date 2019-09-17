@@ -10,38 +10,43 @@
       <view id="catalogue" class="weui-article__h1">目录</view>
       <view class="weui-article__section">
         <!--功能介绍-->
-        <view class="weui-article__h2 link" hover-class='link-hover' data-section="introduction" bindtap="gosection">功能介绍</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="parseStyle" bindtap="gosection">解析style标签</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tagStyle" bindtap="gosection">设置默认标签样式</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="setTitle" bindtap="gosection">自动设置标题</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="addLoading" bindtap="gosection">添加加载提示</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="source" bindtap="gosection">多资源加载</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="selectable" bindtap="gosection">内容可复制</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="compress" bindtap="gosection">智能压缩</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持丰富的标签</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tapEvent" bindtap="gosection">事件效果</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="emoji" bindtap="gosection">解析小表情</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="DOM" bindtap="gosection">动态操作DOM</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="performance" bindtap="gosection">性能指标</view>
+        <view class="weui-article__h2 link" hover-class='link-hover' data-section="introduction" bindtap="gosection" style="{{page==1?'font-weight:bold':''}}">功能介绍</view>
+        <block wx:if="{{page==1}}">
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="parseStyle" bindtap="gosection">解析style标签</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tagStyle" bindtap="gosection">设置默认标签样式</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="setTitle" bindtap="gosection">自动设置标题</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="addLoading" bindtap="gosection">添加加载提示</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="source" bindtap="gosection">多资源加载</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="selectable" bindtap="gosection">内容可复制</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="compress" bindtap="gosection">智能压缩</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持丰富的标签</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tapEvent" bindtap="gosection">事件效果</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="emoji" bindtap="gosection">解析小表情</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="DOM" bindtap="gosection">动态操作DOM</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="performance" bindtap="gosection">性能指标</view>
+        </block>
         <!--使用方法-->
-        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="usage" bindtap="gosection">使用方法</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="useStep" bindtap="gosection">使用步骤</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="attrs" bindtap="gosection">组件属性</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="callback" bindtap="gosection">回调函数</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="patches" bindtap="gosection">补丁包</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="libRequire" bindtap="gosection">基础库要求</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="api" bindtap="gosection">Api</view>
-        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tips" bindtap="gosection">注意事项</view>
-        <!--原理简介-->
-        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="theory" bindtap="gosection">原理简介</view>
-        <!--下载链接-->
-        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="download" bindtap="gosection">下载链接</view>
+        <view class="weui-article__h2 link" hover-class='link-hover' data-section="usage" bindtap="gosection" style="margin-top:5px;{{page==2?'font-weight:bold':''}}">使用方法</view>
+        <block wx:if="{{page==2}}">
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="useStep" bindtap="gosection">使用步骤</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="attrs" bindtap="gosection">组件属性</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="callback" bindtap="gosection">回调函数</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="patches" bindtap="gosection">补丁包</view>
+          <view class="link" style="margin-left:10%;" hover-class='link-hover' data-section="patchEmoji" bindtap="gosection">emoji</view>
+          <view class="link" style="margin-left:10%;" hover-class='link-hover' data-section="patchDocument" bindtap="gosection">document</view>
+          <view class="link" style="margin-left:10%;" hover-class='link-hover' data-section="patchList" bindtap="gosection">List</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="libRequire" bindtap="gosection">基础库要求</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="api" bindtap="gosection">Api</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tips" bindtap="gosection">注意事项</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="theory" bindtap="gosection">原理简介</view>
+          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="download" bindtap="gosection">下载链接</view>
+        </block>
         <!--更新日志-->
-        <view class="weui-article__h2 link" style="margin-top:5px;" hover-class='link-hover' data-section="update" bindtap="gosection">更新日志</view>
+        <view class="weui-article__h2 link" hover-class='link-hover' data-section="update" bindtap="gosection" style="margin-top:5px;{{page==3?'font-weight:bold':''}}">更新日志</view>
       </view>
       <!--功能介绍-->
-      <view id="introduction" class="weui-article__h1">功能介绍</view>
-      <view class="weui-article__section">
+      <view wx:if="{{page==1}}" id="introduction" class="weui-article__h1">功能介绍</view>
+      <view wx:if="{{page==1}}" class="weui-article__section">
         <!--解析style标签-->
         <view id="parseStyle" class="weui-article__h2">解析
           <code>style</code>标签</view>
@@ -107,10 +112,8 @@
         <!--智能压缩-->
         <view id="compress" class="weui-article__h2">智能压缩</view>
         <view class="weui-article__section">
-          本插件可以自动将一些只有一个子节点的标签进行合并来减小节点的深度，根据内容的不同，可以减少
-          <code>15%~60%</code>的深度；还可以在非
-          <code>pre</code>标签且没有
-          <code>white-space:pre</code>时自动去除空白符，可有效提高性能。
+          本插件可以通过以下方法实现自动压缩解析结果，可以有效提升性能
+          <Parser html="<ol><li>将一些只有一个子节点的标签进行合并来减小节点的深度，根据内容的不同，可以减少<code>15%~60%</code>的深度</li><li>在非<code>pre</code>标签且没有<code>white-space:pre</code>时自动去除空白符" tag-style="{{tagStyle}}" style="margin-top:10px;" />
         </view>
         <!--支持丰富的标签-->
         <view id="supportTag" class="weui-article__h2">支持丰富的标签</view>
@@ -193,7 +196,7 @@
           <code>emoji</code>小表情
           <Parser html="[破涕为笑]" style="display:inline" />
           <view>（使用此功能需要补丁包
-            <code>emoji.js</code>，具体用法见下方）</view>
+            <code>emoji.js</code>，具体用法见使用方法-补丁包）</view>
         </view>
         <!--动态修改DOM-->
         <view id="DOM" class="weui-article__h2">动态操作DOM</view>
@@ -203,21 +206,21 @@
           <code>document</code>的方法实现动态操作
           <code>DOM</code>
           <view>（使用此功能需要补丁包
-            <code>document.js</code>，具体用法见下方）</view>
+            <code>document.js</code>，具体用法见使用方法-补丁包）</view>
         </view>
         <!--性能指标-->
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <code>38.0KB</code>，
+          <code>37.9KB</code>，
           <code>min</code>版本
-          <code>27.8KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <code>27.5KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <rich-text nodes="{{errorcode}}" />
         </view>
       </view>
       <!--使用方法-->
-      <view id="usage" class="weui-article__h1">使用方法</view>
-      <view class="weui-article__section">
+      <view wx:if="{{page==2}}" id="usage" class="weui-article__h1">使用方法</view>
+      <view wx:if="{{page==2}}" class="weui-article__section">
         <!--使用步骤-->
         <view id="useStep" class="weui-article__h2">使用步骤</view>
         <view class="weui-article__section">
@@ -279,24 +282,27 @@
         <view class="weui-article__section">
           本插件在
           <code>patches</code>文件夹中提供了一些可选的补丁包，可以实现更加丰富的功能
-          <view style="margin-top:5px">
+          <!--emoji补丁包-->
+          <view id="patchEmoji" style="margin-top:5px">
             1.
             <code>emoji</code>
+          </view>
+          <view>功能：将形如
+            <code>[笑脸]</code>的文本解析为
+            <code>emoji</code>小表情
+            <Parser html="[笑脸]" style="display:inline" />
+          </view>
+          <view>大小：
+            <code>4.68KB</code>，
+            <code>min</code>版本
+            <code>3.59KB</code>
           </view>
           <view>使用方法：将
             <code>emoji.js</code>复制到
             <code>Parser</code>文件夹中即可（使用
             <code>min</code>版本时也要改名成
             <code>emoji.js</code>）</view>
-          <view>大小：
-            <code>4.68KB</code>，
-            <code>min</code>版本
-            <code>3.59KB</code>
-          </view>
-          <view>功能：将形如
-            <code>[笑脸]</code>的文本解析为
-            <code>emoji</code>小表情
-            <Parser html="[笑脸]" style="display:inline" />；默认配置中支持
+          <view>默认配置中支持
             <code>176</code>个常用的
             <code>emoji</code>小表情</view>
           <view>支持两种形式的
@@ -307,29 +313,31 @@
             <code>emoji</code>字符，可使用以下
             <code>api</code>获取或修改：</view>
           <rich-text nodes="{{emoji}}"></rich-text>
-          <view style="margin-top:5px">
+          <!--document补丁包-->
+          <view id="patchDocument" style="margin-top:5px">
             2.
             <code>document</code>
           </view>
-          <view>使用方法：将
-            <code>document.js</code>复制到
-            <code>Parser</code>文件夹中即可（使用
-            <code>min</code>版本时也要改名成
-            <code>document.js</code>）</view>
-          <view>大小：
-            <code>4.75KB</code>（
-            <code>min</code>版本
-            <code>3.69KB</code>）</view>
           <view>功能：实现类似
             <code>web</code>中的
             <code>document</code>对象，可以动态操作
             <code>DOM</code>
           </view>
+          <view>大小：
+            <code>4.75KB</code>（
+            <code>min</code>版本
+            <code>3.69KB</code>）</view>
+          <view>使用方法：将
+            <code>document.js</code>复制到
+            <code>Parser</code>文件夹中即可（使用
+            <code>min</code>版本时也要改名成
+            <code>document.js</code>）</view>
           <view style="margin-top:5px">
             <code>document</code>类</view>
           <view style="word-break:break-all">获取方式：可通过
             <code>this.selectComponent("#id").document</code>获取</view>
-          <view>Api列表</view>
+          <view>
+            <code>Api</code>列表</view>
           <view class="weui-article__section table" style="font-size:13px">
             <view class="tr">
               <view class="th" style="width:42%">名称</view>
@@ -361,7 +369,8 @@
               <view class="td" style="width:75%;">该节点的结构体，可以直接对这个结构体进行修改（修改后需要调用update方法同步到UI，修改时要注意格式，更建议使用下方的api方法进行修改）</view>
             </view>
           </view>
-          <view style="margin-top:5px">Api列表</view>
+          <view style="margin-top:5px">
+            <code>Api</code>列表</view>
           <view class="table" style="font-size:13px">
             <view class="tr">
               <view class="th" style="width:45%">名称</view>
@@ -378,10 +387,76 @@
             <code>{ok:false, errCode:..., errMsg:...}</code>
           </view>
           <view style="margin-top:5px">注意事项</view>
-          <view>所有方法必须等待<code>setData</code>完成后才能调用</view>
-          <view>除了<code>get</code>方法外，其他方法执行时都会执行一次<text style="font-weight:bold">局部</text>的<code>setData</code>刷新，请不要过于频繁的调用</view>
+          <view>所有方法必须等待
+            <code>setData</code>完成后才能调用</view>
+          <view>除了
+            <code>get</code>方法外，其他方法执行时都会执行一次
+            <text style="font-weight:bold">局部</text>的
+            <code>setData</code>刷新，请不要过于频繁的调用</view>
           <view style="margin-top:5px">综合示例</view>
           <rich-text nodes="{{apicode}}"></rich-text>
+          <!--List补丁包-->
+          <view id="patchList" style="margin-top:5px">
+            3.
+            <code>List</code>
+          </view>
+          <view>功能：模拟实现列表（在原插件中，由于列表较难模拟实现，是直接通过
+            <code>rich-text</code>组件显示，这将导致列表中的图片无法预览，链接无法点击等问题，本补丁包可以解决这个问题）</view>
+          <view>
+            <code>ol</code>组件支持
+            <code>start</code>和
+            <code>type</code>属性；
+            <code>ul</code>组件支持按照层级自动变化符号，这几个组件同样可以在其他页面使用</view>
+          <view>大小：
+            <code>4.22KB</code>
+          </view>
+          <view>使用方法：
+            <Parser html="<ol type='i'><li>将<code>Parser</code>文件夹复制到<code>Parser</code>下</li><li>将<code>trees.li.wxml</code>中的内容复制到<code>Parser/trees/trees.wxml</code>中<code>name</code>为<code>element</code>的<code>template</code>中的任意位置</li><li>在<code>Parser/trees/handler.wxs</code>中的<code>isContinue</code>函数中的 else if(item.name == 'a') 修改为 else if(item.name == 'a' || item.name == 'li' || item.name == 'ol' || item.name == 'ul')</li><li>在<code>Parser/trees/trees.json</code>中添加</li></ol>"
+              tag-style="{{tagStyle}}" style="word-break:break-all" />
+            <view style="margin-left:10%;">
+              <rich-text nodes="{{listJson}}"></rich-text>
+            </view>
+            <Parser html="<ol type='i' start='5'><li>将<code>Parser/DomHandler.js</code>中<code>trustTag</code>结构体的<code>ol</code>、<code>ul</code>、<code>li</code>属性值改为1</li></ol>" tag-style="{{tagStyle}}" />
+          </view>
+          <view style="margin-top:5px">注意事项：对于
+            <code>ol</code>标签，
+            <code>type</code>为阿拉伯数字（默认）时没有限制，为字母时最多包含26个
+              <code>li</code>，为罗马数字时最多包含20个
+                <code>li</code>
+          </view>
+          <view style="margin-top:5px">在其他页面使用：
+            <view>在使用页面的
+              <code>json</code>文件中加入以下内容即可直接使用
+              <code>ol</code>、
+              <code>ul</code>、
+              <code>li</code>标签</view>
+            <rich-text nodes="{{listJson2}}"></rich-text>
+            <view>示例：</view>
+            <rich-text nodes="{{listWxml}}"></rich-text>
+            <ol>
+              <li>类型1-1</li>
+              <li>类型1-2</li>
+            </ol>
+            <ol type="A" start="3" style="margin-top:5px;">
+              <li>类型2-3</li>
+              <li>类型2-4</li>
+            </ol>
+            <ol type="I" start="5" style="margin-top:5px;">
+              <li>类型3-5</li>
+              <li>类型3-6</li>
+            </ol>
+            <ul style="margin-top:10px">
+              <li>层级1
+                <ul>
+                  <li>层级2
+                    <ul>
+                      <li>层级3</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </view>
         </view>
         <!--基础库要求-->
         <view id="libRequire" class="weui-article__h2">基础库要求</view>
@@ -470,7 +545,8 @@
         <view class="weui-article__section">
           <view class="weui-article__p">
             表格和列表由于较难通过模板循环的方式显示，将直接使用
-            <code>rich-text</code>组件显示，因此请尽量避免在列表和表格中使用图片、链接等组件，否则将出现无法预览和点击等问题（可以正常显示）
+            <code>rich-text</code>组件显示，因此请尽量避免在列表和表格中使用图片、链接等组件，否则将出现无法预览和点击等问题（可以正常显示）（列表通过使用
+            <code>list</code>补丁包可以解决这个问题）
           </view>
           <view class="weui-article__p">
             如需修改链接受到点击时的点击态效果，可以对
@@ -479,28 +555,35 @@
             <code>navigator-hover</code>进行修改（默认是半透明加下划线）
           </view>
         </view>
-      </view>
-      <!--原理简介-->
-      <view id="theory" class="weui-article__h1">原理简介</view>
-      <view class="weui-article__section">
-        <text decode>&emsp;&emsp;</text>本插件对
-        <code>rich-text</code>组件进行了二次封装，对于节点下有图片、视频、链接等的，通过自定义组件递归的方式显示；否则则直接通过
-        <code>rich-text</code>组件显示。
-        <text decode>\n&emsp;&emsp;</text>通过这样的方式，既解决了
-        <code>WxParse</code>标签数过多（rich-text可以节省大量的标签），层数超过限制无法显示（自定义组件递归可以支持无限层级），无法解析表格，部分样式显示不准确（rich-text的显示效果更好）等缺陷；也弥补了
-        <code>rich-text</code>图片不能预览，链接无法点击，不能显示视频，部分标签不支持（在解析的过程中替换）等问题，从而达到一个更加完美的效果。
-        <text decode>\n&emsp;&emsp;</text>且其轻量化，前后端通用等特点以及更多精致的功能，也使得应用面更加广泛。
-        <Parser html="<div style='text-align:center;'>更多：<a href='https://developers.weixin.qq.com/community/develop/article/doc/0006e05c1e8dd80b78a8d49f356413'>《小程序富文本能力的深入研究与应用》</a></div>" />
-      </view>
-      <!--下载链接-->
-      <view id="download" class="weui-article__h1">下载链接</view>
-      <view class="weui-article__section">
-        <Parser html='GitHub链接：<a href="https://github.com/jin-yufeng/Parser">点击复制链接</a>' />
+        <!--原理简介-->
+        <view id="theory" class="weui-article__h2">原理简介</view>
+        <view class="weui-article__section">
+          <text decode>&emsp;&emsp;</text>本插件对
+          <code>rich-text</code>组件进行了二次封装，对于节点下有图片、视频、链接等的，通过自定义组件递归的方式显示；否则则直接通过
+          <code>rich-text</code>组件显示。
+          <text decode>\n&emsp;&emsp;</text>通过这样的方式，既解决了
+          <code>WxParse</code>标签数过多（rich-text可以节省大量的标签），层数超过限制无法显示（自定义组件递归可以支持无限层级），无法解析表格，部分样式显示不准确（rich-text的显示效果更好）等缺陷；也弥补了
+          <code>rich-text</code>图片不能预览，链接无法点击，不能显示视频，部分标签不支持（在解析的过程中替换）等问题，从而达到一个更加完美的效果。
+          <text decode>\n&emsp;&emsp;</text>且其轻量化，前后端通用等特点以及更多精致的功能，也使得应用面更加广泛。
+          <Parser html="<div style='text-align:center;'>更多：<a href='https://developers.weixin.qq.com/community/develop/article/doc/0006e05c1e8dd80b78a8d49f356413'>《小程序富文本能力的深入研究与应用》</a></div>" />
+        </view>
+        <!--下载链接-->
+        <view id="download" class="weui-article__h2">下载链接</view>
+        <view class="weui-article__section">
+          <Parser html='GitHub链接：<a href="https://github.com/jin-yufeng/Parser">点击复制链接</a>' />
+        </view>
       </view>
       <!--更新日志-->
-      <view id="update" class="weui-article__h1">更新日志</view>
-      <view class="weui-article__section">
+      <view wx:if="{{page==3}}" id="update" class="weui-article__h1">更新日志</view>
+      <view wx:if="{{page==3}}" class="weui-article__section">
         <Parser html="{{update}}" />
+      </view>
+      <view style="display:flex;justify-content:center;margin-left:5%;margin-right:5%;color:#586c94">
+        <view wx:if="{{page==2}}" bindtap="prev">上一章：功能介绍</view>
+        <view wx:elif="{{page==3}}" bindtap="prev">上一章：使用方法</view>
+        <view wx:if="{{page==2}}" style="flex:1"></view>
+        <view wx:if="{{page==1}}" bindtap="next">下一章：使用方法</view>
+        <view wx:elif="{{page==2}}" bindtap="next">下一章：更新日志</view>
       </view>
     </view>
   </view>

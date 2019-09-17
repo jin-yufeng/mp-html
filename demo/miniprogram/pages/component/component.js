@@ -2,6 +2,7 @@
 const code = require('./code.js');
 Page({
   data: {
+    page: 1,
     //标签的默认样式
     tagStyle: {
       code: "font-style: italic; color: #005cc5;margin-left:3px;margin-right:3px;"
@@ -39,7 +40,7 @@ Page({
       attrs: 'alt, src, height, width, ignore'
     }, {
       name: 'video',
-      attrs: 'src, controls, loop, autoplay, \nmuted, height, width'
+      attrs: 'src, controls, loop, autoplay, \nmuted, height, width, unit-id'
     }, {
       name: 'audio',
       attrs: 'src, controls, loop, autoplay, \nposter, name, author'
@@ -237,6 +238,9 @@ Page({
     json2: code.json2,
     vue: code.vue,
     emoji: code.emoji,
+    listJson: code.listJson,
+    listJson2: code.listJson2,
+    listWxml: code.listWxml,
     //属性
     attrs: [{
       name: 'html',
@@ -293,7 +297,7 @@ Page({
         <ol>
           <li><code>String</code>类型：一个html字符串，如："&lt;div&gt;Hello World!&lt;/div&gt;"</li>
           <li><code>Array</code>类型：格式基本同<code>rich-text</code>，对于节点下有图片、链接等的，需要将<code>continue</code>属性设置为<code>true</code>，否则将直接使用<code>rich-text</code>组件渲染，可能导致图片无法预览等问题（此格式传入将不能通过左右滑动查看所有图片）</li>
-          <li><code>Object</code>类型：一个形如<code>{nodes: [Array], imgList: [Array], videoNum: Number, title: "String"}</code>的结构体，nodes数组的格式同上，imgList为所有图片地址的数组，videoNum为视频的数量（不必要，用于<code>autopause</code>属性）title为文章的标题（不必要，如果传入将设置到页面的标题上）回调函数<code>bindparse</code>的返回值就是该类型的结构体</li>
+          <li><code>Object</code>类型：一个形如<code>{nodes: [Array], imgList: [Array], title: "String"}</code>的结构体，nodes数组的格式同上，imgList为所有图片地址的数组，title为文章的标题（不必要，如果传入将设置到页面的标题上）回调函数<code>bindparse</code>的返回值就是该类型的结构体</li>
         </ol>
         <ul>
           <li style="margin-top:5px;">备注：<code>Array</code>和<code>Object</code>类型传入可以节省解析时间，提高性能</li>
@@ -348,6 +352,14 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.9.17:
+      <ol>
+        <li><code>A</code> 增加了<code>List</code>补丁包（可用于模拟列表）</li>
+        <li><code>A</code> <code>video</code>组件增加支持<code>unit-id</code>属性（前贴视频广告）</li>
+        <li><code>F</code> 修复了部分情况下图片可能被<code>text-indent</code>错误缩进的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.9.15:
       <ol>
         <li><code>A</code> 增加了<code>document</code>补丁包（可用于动态操作<code>DOM</code>）</li>
@@ -382,7 +394,6 @@ Page({
     <br />
     <li>2019.8.17:
       <ol>
-        <li><code>A</code> 增加了在<code>mpVue</code>中使用的<code>demo</code></li>
         <li><code>F</code> 修复了形如<code>class="a&nbsp;b"</code>（多个<code>class</code>）时样式匹配失效的问题</li>
       </ol>
     </li>
@@ -567,14 +578,53 @@ Page({
     </li>
   </ul>`
   },
+  prev() {
+    var section;
+    if (this.data.page == 2)
+      section = "introduction";
+    else
+      section = "usage";
+    this.setData({
+      page: this.data.page - 1,
+      section
+    })
+  },
+  next() {
+    var section;
+    if (this.data.page == 1)
+      section = "usage";
+    else
+      section = "update";
+    this.setData({
+      page: this.data.page + 1,
+      section
+    })
+  },
   gotop() {
     this.setData({
       top: 0
     })
   },
   gosection(e) {
-    this.setData({
-      section: e.currentTarget.dataset.section
-    })
+    if (e.currentTarget.dataset.section == "introduction" && this.data.page != 1) {
+      this.setData({
+        page: 1,
+        section: "catalogue"
+      })
+    } else if (e.currentTarget.dataset.section == "usage" && this.data.page != 2) {
+      this.setData({
+        page: 2,
+        section: "catalogue"
+      })
+    } else if (e.currentTarget.dataset.section == "update" && this.data.page != 3) {
+      this.setData({
+        page: 3,
+        section: "catalogue"
+      })
+    } else {
+      this.setData({
+        section: e.currentTarget.dataset.section
+      })
+    }
   },
 })

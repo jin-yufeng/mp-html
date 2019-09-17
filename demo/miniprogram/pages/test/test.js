@@ -24,13 +24,13 @@ Page({
         htmlString += '<style>\ntable{\n  border-left:1px solid #dfe2e5;\n  border-top:1px solid #dfe2e5;\n  border-collapse:collapse\n}\ntd{\n  text-align:ceter;\n  border-right:1px solid #dfe2e5;\n  border-bottom:1px solid #dfe2e5;\n  font-size:14px;\n  padding:5px;\n}\n</style>\n<table>\n  <tr>\n    <td>标题1</td>\n    <td>标题2</td>\n    <td>标题3</td>\n  </tr>\n  <tr>\n    <td rowspan=2>内容1</td>\n    <td>内容2</td>\n    <td>内容3</td>\n  </tr>\n  <tr>\n    <td>内容4</td>\n    <td>内容5</td>\n  </tr>\n</table>';
         break;
       case 'list':
-        htmlString += '<ol>\n  <li>有序列表1</li>\n  <li>有序列表2</li>\n</ol>\n<ul>\n  <li>无序列表1</li>\n  <li>无序列表2</li>\n</ul>';
+        htmlString += '<ol>\n  <li>类型1-1</li>\n  <li>类型1-2</li>\n</ol>\n<ol type="A" start="3" style="margin-top:5px;">\n  <li>类型2-3</li>\n  <li>类型2-4</li>\n</ol>\n<ol type="I" start="5" style="margin-top:5px;">\n  <li>类型3-5</li>\n  <li>类型3-6</li></ol>\n<ul style="margin-top:10px">\n  <li>层级1\n    <ul>\n      <li>层级2\n        <ul>\n          <li>层级3</li>\n        </ul>\n      </li>\n    </ul>\n  </li>\n</ul>';
         break;
       case 'img':
         htmlString += '<div style="text-align:center;">\n  <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174" />\n<p style="color:gray;font-size:12px;text-align:center">点击图片预览</p>\n</br>\n  <img ignore src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351" width="50%"/>\n  <p style="color:gray;font-size:12px">装饰图片不能预览</p>\n</div>';
         break;
       case 'video':
-        htmlString += '<div style="text-align:center;">\n  <video src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" controls></video>\n</div>';
+        htmlString += '<div style="text-align:center;">\n  <video src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" controls unit-id="adunit-eaaa362d6fda3c6a"></video>\n</div>';
         break;
       case 'a':
         htmlString += '<div style="text-align:center">\n  <a href="/pages/component/component">\n    <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174" />\n  </a>\n  <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>\n  <br />\n  <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>\n  <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>\n</div>';

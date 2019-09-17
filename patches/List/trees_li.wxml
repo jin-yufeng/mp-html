@@ -1,0 +1,23 @@
+<!--请将本段复制到Parser/trees/trees.wxml的name为element的template中-->
+<!--列表-->
+<block wx:elif="{{item.continue}}">
+  <ol wx:if="{{item.name=='ol'}}" start="{{item.attrs.start}}" type="{{item.attrs.type}}" style="{{item.attrs.style}}">
+    <block wx:for="{{item.children}}" wx:key>
+      <li wx:if="{{item.name=='li'}}" style="{{item.attrs.style}}">
+        <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+      </li>
+      <trees wx:else id="node" nodes="{{item}}" controls="{{controls}}" />
+    </block>
+  </ol>
+  <ul wx:elif="{{item.name=='ul'}}" style="{{item.attrs.style}}">
+    <block wx:for="{{item.children}}" wx:key>
+      <li wx:if="{{item.name=='li'}}" style="{{item.attrs.style}}">
+        <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+      </li>
+      <trees wx:else id="node" nodes="{{item}}" controls="{{controls}}" />
+    </block>
+  </ul>
+  <li wx:elif="{{item.name=='li'}}" style="{{item.attrs.style}}">
+    <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+  </li>
+</block>

@@ -32,8 +32,8 @@ const trustTag = {
   ins: 1,
   label: 1,
   legend: 0,
-  li: 0,
-  ol: 0,
+  li: 1,
+  ol: 1,
   p: 1,
   q: 1,
   source: 0,
@@ -49,7 +49,7 @@ const trustTag = {
   thead: 0,
   tr: 0,
   u: 1,
-  ul: 0,
+  ul: 1,
   video: 1
 };
 const blockTag = {
@@ -65,26 +65,6 @@ const blockTag = {
   nav: true,
   pre: true,
   section: true
-}
-const textTag = {
-  a: true,
-  abbr: true,
-  b: true,
-  big: true,
-  code: true,
-  del: true,
-  em: true,
-  font: true,
-  i: true,
-  ins: true,
-  label: true,
-  mark: true,
-  q: true,
-  s: true,
-  small: true,
-  span: true,
-  strong: true,
-  u: true
 };
 const ignoreTag = {
   area: true,
@@ -176,14 +156,10 @@ DomHandler.prototype._addDomElement = function(element) {
 };
 DomHandler.prototype._bubbling = function() {
   for (let i = this._tagStack.length - 1; i >= 0; i--) {
-    if (trustTag[this._tagStack[i].name]) {
+    if (trustTag[this._tagStack[i].name])
       this._tagStack[i].continue = true;
-      if (i == this._tagStack.length - 1) { // 同级标签中若有文本标签
-        for (var node of this._tagStack[i].children)
-          if (textTag[node.name])
-            node.continue = true;
-      }
-    } else return this._tagStack[i].name;
+    else
+      return this._tagStack[i].name;
   }
 }
 DomHandler.prototype.onopentag = function(name, attrs) {
@@ -281,10 +257,7 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       return;
   }
   attrs.style = matched + attrs.style;
-  if (textTag[name]) {
-    if (!this._tagStack.length || this._tagStack[this._tagStack.length - 1].continue)
-      element.continue = true;
-  } else if (blockTag[name]) name = 'div';
+  if (blockTag[name]) name = 'div';
   else if (!trustTag.hasOwnProperty(name)) name = 'span';
   element.name = name;
   element.attrs = attrs;
@@ -292,8 +265,8 @@ DomHandler.prototype.onopentag = function(name, attrs) {
   this._tagStack.push(element);
 };
 DomHandler.prototype.ontext = function(data) {
-  if (!this._whiteSpace){
-    if(!/\S/.test(data))
+  if (!this._whiteSpace) {
+    if (!/\S/.test(data))
       return;
     data = data.replace(/\s+/g, " ");
   }

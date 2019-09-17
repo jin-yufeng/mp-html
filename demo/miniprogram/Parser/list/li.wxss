@@ -1,0 +1,24 @@
+:host{
+  display:block
+}
+.point_type1{
+  width:0.3em;
+  height:0.3em;
+  border-radius: 50%;
+  background-color: black;
+  display:inline-block;
+}
+.point_type2{
+  width:0.23em;
+  height:0.23em;
+  background-color: transparent;
+  border:0.05em solid black;
+  border-radius: 50%;
+  display:inline-block;
+}
+.point_type3{
+  width:0.3em;
+  height:0.3em;
+  background-color: black;
+  display:inline-block;
+}

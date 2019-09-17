@@ -1,0 +1,12 @@
+<!--index/li.wxml-->
+<view style="display:flex;">
+  <view wx:if="{{type=='ol'}}" style="width:36px;text-align:right;margin-right:5px;flex-shrink:0">{{num}}.</view>
+  <view wx:else style="margin-left:23px;margin-right:12px;flex-shrink:0;line-height:normal">
+    <view wx:if="{{floor%3==1}}" class="point_type1"></view>
+    <view wx:elif="{{floor%3==2}}" class="point_type2"></view>
+    <view wx:else class="point_type3"></view>
+  </view>
+  <view style="display:block">
+    <slot></slot>
+  </view>
+</view>

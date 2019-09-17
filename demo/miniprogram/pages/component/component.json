@@ -1,5 +1,8 @@
 {
   "usingComponents": {
-    "Parser": "/Parser/index"
+    "Parser": "/Parser/index",
+    "ol":"/Parser/list/ol",
+    "ul": "/Parser/list/ul",
+    "li": "/Parser/list/li"
   }
 }
