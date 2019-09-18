@@ -2086,6 +2086,595 @@ module.exports = {
       "style": ";font-family:monospace;white-space:pre;overflow:scrollbackground-color:#f6f8fa;padding:5px;border-radius:5px;;\n  display: block;\n  background: white;\n  padding: 0.5em;\n  color: #333333;\n  overflow-x: auto;"
     }
   }],
+  wepy: [{
+    "children": [{
+      "children": [{
+        "text": " ",
+        "type": "text"
+      }, {
+        "children": [{
+          "text": "<",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "template",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #63a35c; ;"
+          }
+        }, {
+          "text": ">",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": "; color: #333333; ;"
+        }
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";"
+        }
+      }, {
+        "text": "  ",
+        "type": "text"
+      }, {
+        "children": [{
+          "text": "<",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "view",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #63a35c; ;"
+          }
+        }, {
+          "text": " ",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "class",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #795da3; ;"
+          }
+        }, {
+          "text": "=",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "\"container\"",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #df5000; ;"
+          }
+        }, {
+          "text": ">",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": "; color: #333333; ;"
+        }
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";"
+        }
+      }, {
+        "text": "    ",
+        "type": "text"
+      }, {
+        "children": [{
+          "text": "<",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "Parser",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #63a35c; ;"
+          }
+        }, {
+          "text": " ",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "html",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #795da3; ;"
+          }
+        }, {
+          "text": "=",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "\"",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #df5000; ;"
+          }
+        }],
+        "name": "span",
+        "attrs": {
+          "style": "; color: #333333; ;"
+        }
+      }],
+      "name": "span",
+      "attrs": {
+        "style": ";"
+      }
+    }, {
+      "children": [{
+        "text": "{{html}}",
+        "type": "text"
+      }],
+      "name": "span",
+      "attrs": {
+        "style": "; color: #df5000; ;"
+      }
+    }, {
+      "children": [{
+        "children": [{
+          "children": [{
+            "text": "\"",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #df5000; ;"
+          }
+        }, {
+          "text": ">",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": "; color: #333333; ;"
+        }
+      }, {
+        "children": [{
+          "text": "</",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "Parser",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #63a35c; ;"
+          }
+        }, {
+          "text": ">",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": "; color: #333333; ;"
+        }
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";"
+        }
+      }, {
+        "text": "  ",
+        "type": "text"
+      }, {
+        "children": [{
+          "text": "</",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "view",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #63a35c; ;"
+          }
+        }, {
+          "text": ">",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": "; color: #333333; ;"
+        }
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";"
+        }
+      }, {
+        "children": [{
+          "text": "</",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "template",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #63a35c; ;"
+          }
+        }, {
+          "text": ">",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": "; color: #333333; ;"
+        }
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";"
+        }
+      }, {
+        "children": [{
+          "text": "<",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "script",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #63a35c; ;"
+          }
+        }, {
+          "text": ">",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": "; color: #333333; ;"
+        }
+      }, {
+        "children": [{
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "children": [{
+            "text": "import",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #a71d5d; ;"
+          }
+        }, {
+          "text": " wepy ",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "from",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #a71d5d; ;"
+          }
+        }, {
+          "text": " ",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "'wepy'",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #df5000; ;"
+          }
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "children": [{
+            "text": "export",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #a71d5d; ;"
+          }
+        }, {
+          "text": " ",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "default",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #a71d5d; ;"
+          }
+        }, {
+          "text": " ",
+          "type": "text"
+        }, {
+          "children": [{
+            "children": [{
+              "text": "class",
+              "type": "text"
+            }],
+            "name": "span",
+            "attrs": {
+              "style": "; color: #a71d5d; ;"
+            }
+          }, {
+            "text": " ",
+            "type": "text"
+          }, {
+            "children": [{
+              "text": "Index",
+              "type": "text"
+            }],
+            "name": "span",
+            "attrs": {
+              "style": "; color: #795da3; ;"
+            }
+          }, {
+            "text": " ",
+            "type": "text"
+          }, {
+            "children": [{
+              "text": "extends",
+              "type": "text"
+            }],
+            "name": "span",
+            "attrs": {
+              "style": "; color: #a71d5d; ;"
+            }
+          }, {
+            "text": " ",
+            "type": "text"
+          }, {
+            "children": [{
+              "text": "wepy",
+              "type": "text"
+            }],
+            "name": "span",
+            "attrs": {
+              "style": "; color: #795da3; ;"
+            }
+          }, {
+            "text": ".",
+            "type": "text"
+          }, {
+            "children": [{
+              "text": "page",
+              "type": "text"
+            }],
+            "name": "span",
+            "attrs": {
+              "style": "; color: #795da3; ;"
+            }
+          }, {
+            "text": " ",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "text": "{",
+          "type": "text"
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "text": "  config = {",
+          "type": "text"
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "text": "    ",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "usingComponents",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #795da3; ;"
+          }
+        }, {
+          "text": ": {",
+          "type": "text"
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "text": "      ",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "'Parser'",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #df5000; ;"
+          }
+        }, {
+          "text": ": ",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "'/components/Parser/index'",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #df5000; ;"
+          }
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "text": "    }",
+          "type": "text"
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "text": "  }",
+          "type": "text"
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "text": "  data = {",
+          "type": "text"
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "text": "    ",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "html",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #795da3; ;"
+          }
+        }, {
+          "text": ": ",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "'<div>Hello World!</div>'",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #df5000; ;"
+          }
+        }, {
+          "text": ",",
+          "type": "text"
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "text": "  }",
+          "type": "text"
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }, {
+          "text": "}",
+          "type": "text"
+        }, {
+          "children": [],
+          "name": "br",
+          "attrs": {
+            "style": ";"
+          }
+        }],
+        "name": "span",
+        "attrs": {
+          "style": ";"
+        }
+      }, {
+        "children": [{
+          "text": "</",
+          "type": "text"
+        }, {
+          "children": [{
+            "text": "script",
+            "type": "text"
+          }],
+          "name": "span",
+          "attrs": {
+            "style": "; color: #63a35c; ;"
+          }
+        }, {
+          "text": ">",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": "; color: #333333; ;"
+        }
+      }],
+      "name": "span",
+      "attrs": {
+        "style": ";"
+      }
+    }],
+    "name": "div",
+    "attrs": {
+      "style": ";font-family:monospace;white-space:pre;overflow:scroll;background-color:#f6f8fa;padding:5px;border-radius:5px; display: block; background: white; padding: 0.5em; color: #333333; overflow-x: auto; ;"
+    }
+  }],
   emoji: [{
     "children": [{
       "children": [{

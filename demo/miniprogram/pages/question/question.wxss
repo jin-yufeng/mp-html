@@ -1,1 +1,5 @@
 /* miniprogram/pages/question/question.wxss */
+.section {
+  margin-left: 5%;
+  text-align: justify;
+}

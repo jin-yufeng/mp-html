@@ -76,7 +76,7 @@ CssTokenizer.prototype.InContent = function(c) {
   if (c == '}') {
     this._content = this._buffer.substring(this._sectionStart, this._index);
     for (let item of this._list)
-      this.res[item] = (this.res[item] || '') + this._content;
+      this.res[item] = (this.res[item] || '') + ";" + this._content;
     this._list = [];
     this._comma = false;
     this._state = "SPACE";

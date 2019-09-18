@@ -237,6 +237,7 @@ Page({
     js: code.js,
     json2: code.json2,
     vue: code.vue,
+    wepy:code.wepy,
     emoji: code.emoji,
     listJson: code.listJson,
     listJson2: code.listJson2,
@@ -352,6 +353,14 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.9.18:
+      <ol>
+        <li><code>A</code> 增加了在<code>wepy</code>中的使用方法</li>
+        <li><code>F</code> 修复了部分情况下<code>style</code>标签解析结果缺少<code>;</code>导致匹配失效的问题</code>
+        <li><code>F</code> 修复了<code>0917</code>版本中<code>a</code>标签失效的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.9.17:
       <ol>
         <li><code>A</code> 增加了<code>List</code>补丁包（可用于模拟列表）</li>

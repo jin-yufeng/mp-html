@@ -10,39 +10,44 @@
       <view id="catalogue" class="weui-article__h1">目录</view>
       <view class="weui-article__section">
         <!--功能介绍-->
-        <view class="weui-article__h2 link" hover-class='link-hover' data-section="introduction" bindtap="gosection" style="{{page==1?'font-weight:bold':''}}">功能介绍</view>
+        <view class="weui-article__h2 link_h1" hover-class='link-hover' data-section="introduction" bindtap="gosection" style="{{page==1?'font-weight:bold':''}}">功能介绍</view>
         <block wx:if="{{page==1}}">
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="parseStyle" bindtap="gosection">解析style标签</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tagStyle" bindtap="gosection">设置默认标签样式</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="setTitle" bindtap="gosection">自动设置标题</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="addLoading" bindtap="gosection">添加加载提示</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="source" bindtap="gosection">多资源加载</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="selectable" bindtap="gosection">内容可复制</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="compress" bindtap="gosection">智能压缩</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持丰富的标签</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tapEvent" bindtap="gosection">事件效果</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="emoji" bindtap="gosection">解析小表情</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="DOM" bindtap="gosection">动态操作DOM</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="performance" bindtap="gosection">性能指标</view>
+          <view class="link_h2" hover-class='link-hover' data-section="parseStyle" bindtap="gosection">解析style标签</view>
+          <view class="link_h2" hover-class='link-hover' data-section="tagStyle" bindtap="gosection">设置默认标签样式</view>
+          <view class="link_h2" hover-class='link-hover' data-section="setTitle" bindtap="gosection">自动设置标题</view>
+          <view class="link_h2" hover-class='link-hover' data-section="addLoading" bindtap="gosection">添加加载提示</view>
+          <view class="link_h2" hover-class='link-hover' data-section="source" bindtap="gosection">多资源加载</view>
+          <view class="link_h2" hover-class='link-hover' data-section="selectable" bindtap="gosection">内容可复制</view>
+          <view class="link_h2" hover-class='link-hover' data-section="compress" bindtap="gosection">智能压缩</view>
+          <view class="link_h2" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持丰富的标签</view>
+          <view class="link_h2" hover-class='link-hover' data-section="tapEvent" bindtap="gosection">事件效果</view>
+          <view class="link_h2" hover-class='link-hover' data-section="emoji" bindtap="gosection">解析小表情</view>
+          <view class="link_h2" hover-class='link-hover' data-section="DOM" bindtap="gosection">动态操作DOM</view>
+          <view class="link_h2" hover-class='link-hover' data-section="performance" bindtap="gosection">性能指标</view>
         </block>
         <!--使用方法-->
-        <view class="weui-article__h2 link" hover-class='link-hover' data-section="usage" bindtap="gosection" style="margin-top:5px;{{page==2?'font-weight:bold':''}}">使用方法</view>
+        <view class="weui-article__h2 link_h1" hover-class='link-hover' data-section="usage" bindtap="gosection" style="margin-top:5px;{{page==2?'font-weight:bold':''}}">使用方法</view>
         <block wx:if="{{page==2}}">
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="useStep" bindtap="gosection">使用步骤</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="attrs" bindtap="gosection">组件属性</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="callback" bindtap="gosection">回调函数</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="patches" bindtap="gosection">补丁包</view>
-          <view class="link" style="margin-left:10%;" hover-class='link-hover' data-section="patchEmoji" bindtap="gosection">emoji</view>
-          <view class="link" style="margin-left:10%;" hover-class='link-hover' data-section="patchDocument" bindtap="gosection">document</view>
-          <view class="link" style="margin-left:10%;" hover-class='link-hover' data-section="patchList" bindtap="gosection">List</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="libRequire" bindtap="gosection">基础库要求</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="api" bindtap="gosection">Api</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tips" bindtap="gosection">注意事项</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="theory" bindtap="gosection">原理简介</view>
-          <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="download" bindtap="gosection">下载链接</view>
+          <view class="link_h2" hover-class='link-hover' data-section="useStep" bindtap="gosection">使用步骤</view>
+          <view class="link_h3" hover-class='link-hover' data-section="protogenesis" bindtap="gosection">原生框架中使用</view>
+          <view class="link_h3" hover-class='link-hover' data-section="mpVue" bindtap="gosection">mpVue中使用</view>
+          <view class="link_h3" hover-class='link-hover' data-section="uniApp" bindtap="gosection">uni-app中使用</view>
+          <view class="link_h3" hover-class='link-hover' data-section="taro" bindtap="gosection">taro中使用</view>
+          <view class="link_h3" hover-class='link-hover' data-section="wepy" bindtap="gosection">wepy中使用</view>
+          <view class="link_h2" hover-class='link-hover' data-section="attrs" bindtap="gosection">组件属性</view>
+          <view class="link_h2" hover-class='link-hover' data-section="callback" bindtap="gosection">回调函数</view>
+          <view class="link_h2" hover-class='link-hover' data-section="patches" bindtap="gosection">补丁包</view>
+          <view class="link_h3" hover-class='link-hover' data-section="patchEmoji" bindtap="gosection">emoji</view>
+          <view class="link_h3" hover-class='link-hover' data-section="patchDocument" bindtap="gosection">document</view>
+          <view class="link_h3" hover-class='link-hover' data-section="patchList" bindtap="gosection">List</view>
+          <view class="link_h2" hover-class='link-hover' data-section="libRequire" bindtap="gosection">基础库要求</view>
+          <view class="link_h2" hover-class='link-hover' data-section="api" bindtap="gosection">Api</view>
+          <view class="link_h2" hover-class='link-hover' data-section="tips" bindtap="gosection">注意事项</view>
+          <view class="link_h2" hover-class='link-hover' data-section="theory" bindtap="gosection">原理简介</view>
+          <view class="link_h2" hover-class='link-hover' data-section="download" bindtap="gosection">下载链接</view>
         </block>
         <!--更新日志-->
-        <view class="weui-article__h2 link" hover-class='link-hover' data-section="update" bindtap="gosection" style="margin-top:5px;{{page==3?'font-weight:bold':''}}">更新日志</view>
+        <view class="weui-article__h2 link_h1" hover-class='link-hover' data-section="update" bindtap="gosection" style="margin-top:5px;{{page==3?'font-weight:bold':''}}">更新日志</view>
       </view>
       <!--功能介绍-->
       <view wx:if="{{page==1}}" id="introduction" class="weui-article__h1">功能介绍</view>
@@ -53,7 +58,7 @@
         <view class="weui-article__section">
           支持将
           <code>style</code>标签中的样式解析到各个标签中去，支持按以下模式匹配（不支持的匹配模式将被直接忽略）
-          <view style="font-size:12px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;margin-top:10px;margin-bottom:10px;word-break:break-all">
+          <view class="table" style="font-size:12px;margin-top:10px;margin-bottom:10px;word-break:break-all">
             <view style="display:flex;font-weight:bold;">
               <view class="td" style="width:30%">模式</view>
               <view class="td" style="width:30%;">举例</view>
@@ -224,6 +229,7 @@
         <!--使用步骤-->
         <view id="useStep" class="weui-article__h2">使用步骤</view>
         <view class="weui-article__section">
+          <Parser id="protogenesis" html="<li>在原生框架中使用</li>" style="margin-bottom:5px" />
           <Parser html='<ol><li>下载<code>Parser</code>文件夹（<code>Parser.min</code>是压缩版本，功能相同）至小程序目录</li><li>在需要使用页面的<code>json</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <rich-text nodes="{{json}}" />
@@ -236,8 +242,7 @@
           <view style="margin-left:10%;">
             <rich-text nodes="{{js}}" />
           </view>
-          <view style="margin-left:5%;">在
-            <code>mpVue</code>中使用：</view>
+          <Parser id="mpVue" style="margin-top:5px;margin-bottom:5px" html="<li>在<code>mpVue</code>中使用</li>" tag-style="{{tagStyle}}" />
           <Parser html='<ol><li>下载<code>Parser</code>文件夹至<code>static</code>目录下</li><li>在需要使用页面的<code>json</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <rich-text nodes="{{json2}}" />
@@ -246,8 +251,21 @@
           <view style="margin-left:10%;">
             <rich-text nodes="{{vue}}" />
           </view>
-          <Parser html='<div style="margin-left:5%">在<code>uni-app</code>中使用可参考：<a href="https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81">小程序组件支持</a></div><div  style="margin-left:5%"><strong>注意：</strong>在<code>mpVue</code>和<code>uni-app</code>中使用时组件名一定要<strong>小写</strong></div><div style="margin-left:5%;margin-top:5px;">在<code>Taro </code>中使用可参考：<a href="https://github.com/xPixv/Taro-ParserRichText">Github链接</a></div>'
+          <Parser id="uniApp" html='<li style="margin-top:5px;margin-bottom:5px">在<code>uni-app</code>中使用</li><div style="margin-left:20px">可参考：<a href="https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81">官网-小程序组件支持</a></div><div style="margin-left:20px"><strong>注意：</strong>在<code>mpVue</code>和<code>uni-app</code>中使用时组件名一定要<strong>小写</strong></div>'
             tagStyle="{{tagStyle}}" />
+          <Parser id="taro" html='<li style="margin-top:10px;margin-bottom:5px">在<code>Taro</code>中使用</li><div style="margin-left:20px">可参考：<a href="https://github.com/xPixv/Taro-ParserRichText">Github链接</a></div>' tag-style="{{tagStyle}}" />
+          <Parser id="wepy" style="margin-top:10px;margin-bottom:5px" html="<li>在<code>wepy</code>中使用</li>" tag-style="{{tagStyle}}" />
+          <view style="margin-left:20px">测试版本：V1.7.3</view>
+          <view style="margin-left:20px">方法一：</view>
+          <Parser html="<ol><li>将<code>Parser</code>文件夹复制到<code>/src/components</code>目录下</li><li>若没有使用<code>document</code>补丁包，删除<code>Parser/index.js</code>第25-30行；若没有使用<code>emoji</code>补丁包，删除<code>Parser/Parser.js</code>第148-151行（这两个地方都是通过<code>try</code>来引入文件，但在<code>wepy</code>中还是会出文件不存在的错误）</li><li>在需要使用页面的<code>wpy</code>文件中添加</li></ol>"
+            tag-style="{{tagStyle}}" />
+          <view style="margin-left:10%;">
+            <rich-text nodes="{{wepy}}" />
+          </view>
+          <Parser html="<ol start='4'><li>通过<code>wepy build --watch</code>命令进行编译</li></ol><ul><li>如果出现<code>Components not found</code>错误，则用<code>wepy build --no-cache --watch</code>命令清理缓存，重新编译" tag-style="{{tagStyle}}" />
+          <view style="margin-left:20px;margin-top:5px">方法二：</view>
+          <Parser html="<ol><li>将<code>Parser</code>文件夹复制到<code>/dist/components</code>文件夹下（注意是 <strong>dist</strong> 不是 <strong>src</strong> ）</li><li>同方法一第3、4步</li></ol><ul><li>这种方法<code>wepy</code>不会对插件包进行编译和压缩</li></ul>" tag-style="{{tagStyle}}" style="margin-left:5%"
+          />
         </view>
         <!--组件属性-->
         <view id="attrs" class="weui-article__h2">组件属性</view>
@@ -421,8 +439,8 @@
           <view style="margin-top:5px">注意事项：对于
             <code>ol</code>标签，
             <code>type</code>为阿拉伯数字（默认）时没有限制，为字母时最多包含26个
-              <code>li</code>，为罗马数字时最多包含20个
-                <code>li</code>
+            <code>li</code>，为罗马数字时最多包含20个
+            <code>li</code>
           </view>
           <view style="margin-top:5px">在其他页面使用：
             <view>在使用页面的

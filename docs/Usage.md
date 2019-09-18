@@ -1,4 +1,104 @@
 ## 使用方法 ##
+- 在原生框架中使用  
+  1. 下载`Parser`文件夹至小程序目录（`Parser.min`是压缩版本，功能相同）  
+     ![页面结构](https://i.imgur.com/XW4Jupv.png)
+   
+  2. 在需要引用的页面的`json`文件中添加
+     ``` json
+     {
+       "usingComponents": {
+         "Parser":"/Parser/index"
+       }
+     }
+     ```
+  3. 在需要引用的页面的`wxml`文件中添加  
+     ``` html
+     <Parser html="{{html}}" />
+     ```
+  4. 在需要引用的页面的`js`文件中添加  
+     ``` javascript
+     onLoad:function(){
+       this.setData({
+         html:'your html'
+       })
+     }
+     ```
+  - `demo`文件夹下的是示例小程序的源码，可供参考  
+&nbsp;  
+- 在`mpVue`中使用  
+  1. 下载`Parser`文件夹至`static`目录下
+  2. 在`src`目录下需要使用本插件的页面文件夹下添加`json`文件
+     ```json
+     {
+         "usingComponents": {
+             "parser": "../../static/Parser/index"
+         }
+     }
+     ```
+  3. 在需要使用的页面的`vue`文件中添加
+     ```vue
+     <template>
+       <div class="container">
+         <parser :html="html"></parser>
+       </div>
+     </template>
+     <script>
+     export default {
+       data: {
+         html: '<div>Hello World!</div>'
+       }
+     }
+     </script>
+     ```
+  - **注意：** 在`mpvue`和`uni-app`中使用时组件名必须**小写**  
+&nbsp;  
+- 在`wepy`中使用  
+  测试版本：V1.7.3
+  - 方法一
+    1. 通过`wepy build --no-cache --watch`命令编译（**一定要有**`--no-cache`，否则可能出现`Components not found`的错误）  
+    2. 将`Parser`文件夹复制到`/src/components`目录下  
+    3. 如果没有使用`document`补丁包，删除`Parser/index.js`中第25到30行；如果没有使用`emoji`补丁包，删除`Parser/Parser.js`中148到151行（这两个地方都是通过`try`来引入文件，但在`wepy`中还是会出文件不存在的错误）  
+       ```javascript
+       // Parser/index.js
+       created() {
+         try {
+           const Document = require("./document.js");
+           this.document = new Document();
+         } catch (e) {}
+       },
+       // Parser/Parser.js
+       try {
+         var emoji = require("./emoji.js");
+         data = emoji.parseEmoji(data);
+       } catch (err) {}
+       ```
+
+    4. 在需要使用的页面的`wpy`文件中添加
+       ```vue
+       <template>
+         <view class="container">
+           <Parser html="{{html}}"></Parser>
+         </view>
+       </template>
+       <script>
+       import wepy from 'wepy'
+       export default class Index extends wepy.page {
+         config = {
+           usingComponents: {
+             'Parser': '/components/Parser/index'
+           }
+         }
+         data = {
+           html: '<div>Hello World!</div>',
+         }
+       }
+       </script>
+       ```
+  - 方法2 
+    1. 将`Parser`文件夹复制到`/dist/components`文件夹下（注意是**dist**不是**src**）
+    2. 同方法一的第4步
+    - 这种方法`wepy`不会对插件包进行编译和压缩  
+&nbsp;  
 - 组件属性：  
 
   | 属性 | 类型 | 默认值 | 必填 | 说明 |
@@ -23,7 +123,7 @@
     默认`default`，在没有设置宽高时，按图片原大小显示；设置了宽或高时，按比例进行缩放；同时设置了宽高时，按设置的宽高进行缩放。在同时设置了宽高的情况下，宽度可能因为`max-width:100%`的限制而缩短导致图片变形，此时可将模式设置为`widthFix`，即保持宽度不变，高度自动变化（会导致设置的高度无效）
   - 关于tag-style  
     可以设置标签的默认样式，如`{ body:"margin:5px" }`；仅传入的`html`为`String`类型时有效（在解析过程中设置）  
-
+&nbsp;  
 - 回调函数
   
     | 名称 | 功能 | 说明 |

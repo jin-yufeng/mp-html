@@ -7,6 +7,7 @@
   - [在mpVue中使用](#在mpVue中使用)
   - [在uni-app中使用](https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81)
   - [在taro中使用](https://github.com/xPixv/Taro-ParserRichText)
+  - [在wepy中使用](#在wepy中使用)
   - [组件属性](#组件属性)
   - [回调函数](#回调函数)
 - [补丁包](#补丁包)
@@ -52,56 +53,106 @@
 详细可见：[功能介绍](./docs/Introduction.md)
 ## 使用方法 ##
 ### 在原生框架中使用 ###
-  1. 下载`Parser`文件夹至小程序目录（`Parser.min`是压缩版本，功能相同）  
-     ![页面结构](https://i.imgur.com/XW4Jupv.png)
+1. 下载`Parser`文件夹至小程序目录（`Parser.min`是压缩版本，功能相同）  
+   ![页面结构](https://i.imgur.com/XW4Jupv.png)
    
-  2. 在需要引用的页面的`json`文件中添加
-     ``` json
-     {
-       "usingComponents": {
-         "Parser":"/Parser/index"
-       }
+2. 在需要引用的页面的`json`文件中添加
+   ``` json
+   {
+     "usingComponents": {
+       "Parser":"/Parser/index"
      }
-     ```
-  3. 在需要引用的页面的`wxml`文件中添加  
-     ``` html
-     <Parser html="{{html}}" />
-     ```
-  4. 在需要引用的页面的`js`文件中添加  
-     ``` javascript
-     onLoad:function(){
-       this.setData({
-         html:'your html'
-       })
-     }
-     ```
-  - `demo`文件夹下的是示例小程序的源码，可供参考  
+   }
+   ```
+3. 在需要引用的页面的`wxml`文件中添加  
+   ``` html
+   <Parser html="{{html}}" />
+   ```
+4. 在需要引用的页面的`js`文件中添加  
+   ``` javascript
+   onLoad:function(){
+     this.setData({
+       html:'your html'
+     })
+   }
+   ```
+- `demo`文件夹下的是示例小程序的源码，可供参考  
 ### 在mpVue中使用 ###
-  1. 下载`Parser`文件夹至`static`目录下
-  2. 在`src`目录下需要使用本插件的页面文件夹下添加`json`文件
-     ```json
-     {
-         "usingComponents": {
-             "parser": "../../static/Parser/index"
-         }
+1. 下载`Parser`文件夹至`static`目录下
+2. 在`src`目录下需要使用本插件的页面文件夹下添加`json`文件
+   ```json
+   {
+       "usingComponents": {
+           "parser": "../../static/Parser/index"
+       }
+   }
+   ```
+3. 在需要使用的页面的`vue`文件中添加
+   ```vue
+   <template>
+     <div class="container">
+       <parser :html="html"></parser>
+     </div>
+   </template>
+   <script>
+   export default {
+     data: {
+       html: '<div>Hello World!</div>'
      }
+   }
+   </script>
+   ```
+- **注意：** 在`mpvue`和`uni-app`中使用时组件名必须**小写** 
+ 
+### 在wepy中使用 ###
+测试版本：V1.7.3
+- 方法一  
+  1. 将`Parser`文件夹复制到`/src/components`目录下  
+  2. 如果没有使用`document`补丁包，删除`Parser/index.js`中第25到30行；如果没有使用`emoji`补丁包，删除`Parser/Parser.js`中148到151行（这两个地方都是通过`try`来引入文件，但在`wepy`中还是会出文件不存在的错误）  
+     ```javascript
+     // Parser/index.js
+     created() {
+       try {
+         const Document = require("./document.js");
+         this.document = new Document();
+       } catch (e) {}
+     },
+     // Parser/Parser.js
+     try {
+       var emoji = require("./emoji.js");
+       data = emoji.parseEmoji(data);
+     } catch (err) {}
      ```
-  3. 在需要使用的页面的`vue`文件中添加
+
+  3. 在需要使用的页面的`wpy`文件中添加
      ```vue
      <template>
-       <div class="container">
-         <parser :html="html"></parser>
-       </div>
+       <view class="container">
+         <Parser html="{{html}}"></Parser>
+       </view>
      </template>
      <script>
-     export default {
-       data: {
-         html: '<div>Hello World!</div>'
+     import wepy from 'wepy'
+     export default class Index extends wepy.page {
+       config = {
+         usingComponents: {
+           'Parser': '/components/Parser/index'
+         }
+       }
+       data = {
+         html: '<div>Hello World!</div>',
        }
      }
      </script>
      ```
-- **注意：** 在`mpvue`和`uni-app`中使用时组件名必须**小写**
+  4. 通过`wepy build --watch`命令进行编译  
+  - 如果出现`Components not found`错误，则用`wepy build --no-cache --watch`命令清理缓存，重新编译  
+&nbsp;  
+- 方法2 
+  1. 将`Parser`文件夹复制到`/dist/components`文件夹下（注意是**dist**不是**src**）
+  2. 同方法一的第3、4步
+  - 这种方法`wepy`不会对插件包进行编译和压缩  
+  
 
 ### 组件属性 ###  
 
@@ -328,6 +379,10 @@ parser(html).then(function(res){
 
 
 ## 更新日志 ##
+- 2019.9.18:
+  1. `A` 增加了在`wepy`中的使用方法  
+  2. `F` 修复了部分情况下`style`标签解析时由于缺少`;`导致错误样式匹配失败的问题
+  2. `F` 修复了`0917`版本中`a`标签失效的问题  
 - 2019.9.17:
   1. `A` 增加了`list`补丁包（可用于模拟列表）  
   2. `A` `video`组件增加支持`unit-id`属性（前插视频广告）  

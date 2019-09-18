@@ -6,7 +6,7 @@
 <view class="page__bd">
   <view class="weui-article">
     <view class="weui-article__h2">1. 图片变形的问题</view>
-    <view class="weui-article__section" style="margin-left:5%;text-align:justify">
+    <view class="weui-article__section section">
       <view>图片变形一般是由于对
         <code>img</code>标签同时设置了
         <code>width</code>和
@@ -17,11 +17,11 @@
         <code>widthFix</code>，图片将根据设置的宽度，高度自适应显示，可解决图片的变形问题，但设置的高度会失效</view>
     </view>
     <view class="weui-article__h2">2. 在<code>vue</code>中使用不生效的问题</view>
-    <view class="weui-article__section" style="margin-left:5%;text-align:justify">
+    <view class="weui-article__section section">
       在<code>mpVue</code>和<code>uni-app</code>中使用时组件名一定要小写，包括<code>vue</code>文件和<code>json</code>文件中都要小写，否则将无效
     </view>
     <view class="weui-article__h2">3. 表格边框的问题</view>
-    <view class="weui-article__section" style="margin-left:5%;text-align:justify">
+    <view class="weui-article__section section">
       <view>一些富文本编辑器对于表格会有默认的边框，但在本插件没有默认的边框（实际浏览器中
         <code>table</code>标签也没有默认的边框），如需要需自行添加默认样式</view>
       <view>解决方案：在
@@ -30,15 +30,19 @@
         <Parser html="{{code}}" selectable />
       </view>
     </view>
-    <view class="weui-article__h2">4. npm构建的问题</view>
-    <view class="weui-article__section" style="margin-left:5%;text-align:justify">
+    <view class="weui-article__h2">4. 部分<code>style</code>标签中的样式无法匹配</view>
+    <view class="weui-article__section section">
+      本插件并不支持所有的选择器，需要留意支持的选择器类型，如果使用了不支持的选择器，该样式将被忽略
+    </view>
+    <view class="weui-article__h2">5. <code>npm</code>构建的问题</view>
+    <view class="weui-article__section section">
       <view>后端加强包不能在前端使用，其运行需要
         <code>node.js v7.6.0</code>以上的环境，使用
         <code>npm</code>在前端使用该包会出现错误</view>
       <view>解决方案：若需要使用后端加强包的功能，需要在后端服务器或云函数中完成解析，将解析结果返回前端进行显示</view>
     </view>
-    <view class="weui-article__h2">5. 不能正确显示一些网站的问题</view>
-    <view class="weui-article__section" style="margin-left:5%;text-align:justify">
+    <view class="weui-article__h2">6. 不能正确显示一些网站的问题</view>
+    <view class="weui-article__section section">
       <view>很多网站的内容是在
         <code>js</code>脚本中动态加载的，这些内容在插件解析中会被直接忽略，可能导致一些动态加载的复杂网页无法正确显示</view>
       <view>解决方案：可在后端使用无头浏览器进行加载，将加载后的

@@ -1,6 +1,5 @@
 // Parser/trees/cssHandler.wxs
 var textTag = {
-  a: true,
   abbr: true,
   b: true,
   big: true,

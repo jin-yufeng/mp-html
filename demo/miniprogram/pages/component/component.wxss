@@ -1,6 +1,14 @@
 /* miniprogram/pages/component/component.wxss */
-.link {
+.link_h1 {
   color: #586c94;
+}
+.link_h2 {
+  color: #586c94;
+  margin-left: 5%;
+}
+.link_h3 {
+  color: #586c94;
+  margin-left: 10%;
 }
 .link-hover {
   text-decoration: underline;
