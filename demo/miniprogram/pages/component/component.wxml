@@ -21,8 +21,9 @@
           <view class="link_h2" hover-class='link-hover' data-section="compress" bindtap="gosection">智能压缩</view>
           <view class="link_h2" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持丰富的标签</view>
           <view class="link_h2" hover-class='link-hover' data-section="tapEvent" bindtap="gosection">事件效果</view>
-          <view class="link_h2" hover-class='link-hover' data-section="emoji" bindtap="gosection">解析小表情</view>
-          <view class="link_h2" hover-class='link-hover' data-section="DOM" bindtap="gosection">动态操作DOM</view>
+          <view class="link_h3" hover-class='link-hover' data-section="imgEvent" bindtap="gosection">图片点击</view>
+          <view class="link_h3" hover-class='link-hover' data-section="linkEvent" bindtap="gosection">链接点击</view>
+          <view class="link_h3" hover-class='link-hover' data-section="videoEvent" bindtap="gosection">视频播放</view>
           <view class="link_h2" hover-class='link-hover' data-section="performance" bindtap="gosection">性能指标</view>
         </block>
         <!--使用方法-->
@@ -188,38 +189,22 @@
         <!--事件效果-->
         <view id="tapEvent" class="weui-article__h2">事件效果</view>
         <view class="weui-article__section">
-          <view class="weui-article__h3">图片点击</view>
+          <view id="imgEvent" class="weui-article__h3">图片点击</view>
           <Parser html='<ol><li>点击图片可以预览，左右滑动可以查看所有的图片</li><li>对于一些装饰性的图片，可以对其设置<code>ignore</code>属性，设置后将无法预览</li></ol>' tag-style="{{tagStyle}}" />
           <text>\n</text>
-          <view class="weui-article__h3">链接点击</view>
+          <view id="linkEvent" class="weui-article__h3">链接点击</view>
           <Parser html='<ol><li>点击链接会有下划线和半透明的效果。若链接为小程序路径，受到点击时将跳转至相应页面；若为外部链接，将自动复制链接（可通过<code>autocopy</code>属性控制）</li><li>点击链接时会触发<code>bindlinkpress</code>事件，并返回相应的链接，可以进行进一步的操作（如文档链接可以在回调中进行下载和打开等）</li></ol>' tag-style="{{tagStyle}}" />
-        </view>
-        <!--解析emoji-->
-        <view id="emoji" class="weui-article__h2">解析小表情</view>
-        <view class="weui-article__section">
-          支持将形如“[破涕为笑]”的文字解析为
-          <code>emoji</code>小表情
-          <Parser html="[破涕为笑]" style="display:inline" />
-          <view>（使用此功能需要补丁包
-            <code>emoji.js</code>，具体用法见使用方法-补丁包）</view>
-        </view>
-        <!--动态修改DOM-->
-        <view id="DOM" class="weui-article__h2">动态操作DOM</view>
-        <view class="weui-article__section">
-          支持通过类似
-          <code>web</code>中的
-          <code>document</code>的方法实现动态操作
-          <code>DOM</code>
-          <view>（使用此功能需要补丁包
-            <code>document.js</code>，具体用法见使用方法-补丁包）</view>
+          <text>\n</text>
+          <view id="videoEvent" class="weui-article__h3">视频播放</view>
+          <Parser html='<ol><li>支持对视频进行懒加载（有超过3个视频时将仅加载前3个视频，其他的在点击时再加载，避免页面卡死）</li><li>支持在播放视频时自动暂停其他视频的播放（可通过<code>autopause</code>属性控制）</li></ol>' tag-style="{{tagStyle}}" />
         </view>
         <!--性能指标-->
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <code>37.9KB</code>，
+          <code>37.4KB</code>，
           <code>min</code>版本
-          <code>27.5KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <code>27.2KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <rich-text nodes="{{errorcode}}" />
         </view>
       </view>
@@ -256,16 +241,12 @@
           <Parser id="taro" html='<li style="margin-top:10px;margin-bottom:5px">在<code>Taro</code>中使用</li><div style="margin-left:20px">可参考：<a href="https://github.com/xPixv/Taro-ParserRichText">Github链接</a></div>' tag-style="{{tagStyle}}" />
           <Parser id="wepy" style="margin-top:10px;margin-bottom:5px" html="<li>在<code>wepy</code>中使用</li>" tag-style="{{tagStyle}}" />
           <view style="margin-left:20px">测试版本：V1.7.3</view>
-          <view style="margin-left:20px">方法一：</view>
-          <Parser html="<ol><li>将<code>Parser</code>文件夹复制到<code>/src/components</code>目录下</li><li>若没有使用<code>document</code>补丁包，删除<code>Parser/index.js</code>第25-30行；若没有使用<code>emoji</code>补丁包，删除<code>Parser/Parser.js</code>第148-151行（这两个地方都是通过<code>try</code>来引入文件，但在<code>wepy</code>中还是会出文件不存在的错误）</li><li>在需要使用页面的<code>wpy</code>文件中添加</li></ol>"
+          <Parser html="<ol><li><div>将<code>Parser</code>文件夹复制到<code>/src/components</code>目录下</div><div>（也可以直接复制到<code>/dist/components</code>目录下，这样<code>wepy</code>将不会对插件包进行编译和压缩</div></li><li>在需要使用页面的<code>wpy</code>文件中添加</li></ol>"
             tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <rich-text nodes="{{wepy}}" />
           </view>
-          <Parser html="<ol start='4'><li>通过<code>wepy build --watch</code>命令进行编译</li></ol><ul><li>如果出现<code>Components not found</code>错误，则用<code>wepy build --no-cache --watch</code>命令清理缓存，重新编译" tag-style="{{tagStyle}}" />
-          <view style="margin-left:20px;margin-top:5px">方法二：</view>
-          <Parser html="<ol><li>将<code>Parser</code>文件夹复制到<code>/dist/components</code>文件夹下（注意是 <strong>dist</strong> 不是 <strong>src</strong> ）</li><li>同方法一第3、4步</li></ol><ul><li>这种方法<code>wepy</code>不会对插件包进行编译和压缩</li></ul>" tag-style="{{tagStyle}}" style="margin-left:5%"
-          />
+          <Parser html="<ol start='3'><li>通过<code>wepy build --watch</code>命令进行编译</li></ol><ul><li>如果出现<code>Components not found</code>错误，则用<code>wepy build --no-cache --watch</code>命令清理缓存，重新编译" tag-style="{{tagStyle}}" />
         </view>
         <!--组件属性-->
         <view id="attrs" class="weui-article__h2">组件属性</view>
@@ -342,9 +323,9 @@
             <code>DOM</code>
           </view>
           <view>大小：
-            <code>4.75KB</code>（
+            <code>4.66KB</code>（
             <code>min</code>版本
-            <code>3.69KB</code>）</view>
+            <code>3.61KB</code>）</view>
           <view>使用方法：将
             <code>document.js</code>复制到
             <code>Parser</code>文件夹中即可（使用
@@ -429,7 +410,7 @@
             <code>4.22KB</code>
           </view>
           <view>使用方法：
-            <Parser html="<ol type='i'><li>将<code>Parser</code>文件夹复制到<code>Parser</code>下</li><li>将<code>trees.li.wxml</code>中的内容复制到<code>Parser/trees/trees.wxml</code>中<code>name</code>为<code>element</code>的<code>template</code>中的任意位置</li><li>在<code>Parser/trees/handler.wxs</code>中的<code>isContinue</code>函数中的 else if(item.name == 'a') 修改为 else if(item.name == 'a' || item.name == 'li' || item.name == 'ol' || item.name == 'ul')</li><li>在<code>Parser/trees/trees.json</code>中添加</li></ol>"
+            <Parser html="<ol type='i'><li>将<code>list</code>文件夹复制到<code>Parser</code>下</li><li>将<code>trees.li.wxml</code>中的内容复制到<code>Parser/trees/trees.wxml</code>中<code>name</code>为<code>element</code>的<code>template</code>中的任意位置</li><li>在<code>Parser/trees/handler.wxs</code>中的<code>isContinue</code>函数中的 else if(item.name == 'a') 修改为 else if(item.name == 'a' || item.name == 'li' || item.name == 'ol' || item.name == 'ul')</li><li>在<code>Parser/trees/trees.json</code>中添加</li></ol>"
               tag-style="{{tagStyle}}" style="word-break:break-all" />
             <view style="margin-left:10%;">
               <rich-text nodes="{{listJson}}"></rich-text>

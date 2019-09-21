@@ -1,4 +1,8 @@
 //Parser组件
+var Document;
+try {
+  Document = require("./document.js");
+} catch (e) {}
 const html2nodes = require('./Parser.js');
 const initData = function(Component) {
   setTimeout(() => {
@@ -22,12 +26,6 @@ const initData = function(Component) {
   }, 10)
 }
 Component({
-  created() {
-    try {
-      const Document = require("./document.js");
-      this.document = new Document();
-    } catch (e) {}
-  },
   properties: {
     'html': {
       type: null,
@@ -59,7 +57,7 @@ Component({
               showAnimation,
               hideAnimation
             }, initData(this))
-            if (this.document) this.document.init("nodes", res.nodes, this);
+            if (Document) this.document = new Document("nodes", res.nodes, this);
             if (res.title && this.data.autosetTitle) {
               wx.setNavigationBarTitle({
                 title: res.title
@@ -81,7 +79,7 @@ Component({
             showAnimation,
             hideAnimation
           }, initData(this))
-          if (this.document) this.document.init("html", html, this);
+          if (Document) this.document = new Document("html", html, this);
           this.imgList = [];
         } else if (typeof html == 'object') {
           if (!html.nodes || html.nodes.constructor != Array) {
@@ -100,7 +98,7 @@ Component({
             showAnimation,
             hideAnimation
           }, initData(this))
-          if (this.document) this.document.init("html.nodes", html.nodes, this);
+          if (Document) this.document = new Document("html.nodes", html.nodes, this);
           if (html.title && this.data.autosetTitle)
             wx.setNavigationBarTitle({
               title: html.title
@@ -154,9 +152,9 @@ Component({
   methods: {
     //事件
     tapEvent(e) {
-      if (this.data.autocopy && e.detail && /^http/.test(e.detail)) {
+      if (this.data.autocopy && e.detail.href && /^http/.test(e.detail.href)) {
         wx.setClipboardData({
-          data: e.detail,
+          data: e.detail.href,
           success() {
             wx.showToast({
               title: '链接已复制',
@@ -172,8 +170,8 @@ Component({
     previewEvent(e) {
       if (this.data.autopreview) {
         wx.previewImage({
-          current: e.detail,
-          urls: this.imgList.length ? this.imgList : [e.detail],
+          current: e.detail.src,
+          urls: this.imgList.length ? this.imgList : [e.detail.src],
         })
       }
       this.triggerEvent('imgtap', e.detail);

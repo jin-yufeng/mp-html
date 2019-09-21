@@ -55,16 +55,5 @@
 </template>
 <block wx:for='{{nodes}}' wx:key>
   <template wx:if="{{Handler.isContinue(item)}}" is="element" data="{{item,controls}}" />
-  <!--继续递归-->
-  <view wx:else id="node" class="{{item.name}}" style="{{item.attrs.style}}">
-    <block wx:for="{{item.children}}" wx:key>
-      <template wx:if="{{Handler.isContinue(item)}}" is="element" data="{{item,controls}}" />
-      <view wx:else id="node" class="{{item.name}}" style="{{item.attrs.style}}">
-        <block wx:for="{{item.children}}" wx:key>
-          <template wx:if="{{Handler.isContinue(item)}}" is="element" data="{{item,controls}}" />
-          <trees wx:else id="node" class="{{item.name}}" style="{{item.attrs.style}}" nodes="{{item.children}}" controls="{{controls}}" />
-        </block>
-      </view>
-    </block>
-  </view>
+  <trees wx:else id="node" class="{{item.name}}" style="{{item.attrs.style}}" nodes="{{item.children}}" controls="{{controls}}" />
 </block>

@@ -74,9 +74,16 @@ Page({
     node: code.node,
     //更新日志
     update: `<ul>
+    <li>2019.9.21:
+      <ol>
+        <li><code>U</code> 优化了<code>class</code>匹配结果的优先级，按照<code>id</code>选择器><code>class</code>选择器><code>name</code>选择器的优先级排列</li>
+        <li><code>F</code> 修复了部分情况下通配符无法被匹配的问题</li>
+    </li>
+    <br />
     <li>2019.9.15:
       <ol>
         <li><code>U</code> 支持自动移除没用的空标签，进一步减小解析结果大小</li>
+      </ol>
     </li>
     <br />
     <li>2019.9.13:

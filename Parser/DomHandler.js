@@ -1,4 +1,8 @@
 //DomHandler.js
+var emoji;
+try {
+  emoji = require("./emoji.js");
+} catch (err) {}
 const CssTokenizer = require('./CssTokenizer.js');
 const CanIUse = require('./api.js').versionHigherThan('2.7.1');
 const trustTag = {
@@ -32,8 +36,8 @@ const trustTag = {
   ins: 1,
   label: 1,
   legend: 0,
-  li: 0,
-  ol: 0,
+  li: 1,
+  ol: 1,
   p: 1,
   q: 1,
   source: 0,
@@ -49,7 +53,7 @@ const trustTag = {
   thead: 0,
   tr: 0,
   u: 1,
-  ul: 0,
+  ul: 1,
   video: 1
 };
 const blockTag = {
@@ -270,6 +274,7 @@ DomHandler.prototype.ontext = function(data) {
       return;
     data = data.replace(/\s+/g, " ");
   }
+  if (emoji) data = emoji.parseEmoji(data);
   let element = {
     text: data.replace(/&nbsp;/g, '\u00A0'), // 解决连续&nbsp;失效问题
     type: 'text'

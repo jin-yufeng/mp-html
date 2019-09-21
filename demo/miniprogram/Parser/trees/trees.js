@@ -12,7 +12,7 @@ const triggerError = function(Component, source, target, errMsg, errCode) {
   });
 }
 // 加载其他源（音视频）
-const loadSource = function (Component, currentTarget) {
+const loadSource = function(Component, currentTarget) {
   if (!Component.data.controls[currentTarget.id] && currentTarget.source.length > 1) {
     Component.data.controls[currentTarget.id] = {
       play: false,
@@ -46,14 +46,18 @@ Component({
     },
     previewEvent(e) {
       if (!e.target.dataset.hasOwnProperty('ignore')) {
-        this.triggerEvent('preview', e.currentTarget.dataset.src, {
+        this.triggerEvent('preview', {
+          src: e.currentTarget.dataset.src
+        }, {
           bubbles: true,
           composed: true
         });
       }
     },
     tapEvent(e) {
-      this.triggerEvent('linkpress', e.currentTarget.dataset.href, {
+      this.triggerEvent('linkpress', {
+        href: e.currentTarget.dataset.href
+      }, {
         bubbles: true,
         composed: true
       });
@@ -62,10 +66,10 @@ Component({
       triggerError(this, "ad", e.currentTarget, e.detail.errMsg, e.detail.errCode);
     },
     videoError(e) {
-      loadSource(this,e.currentTarget.dataset);
+      loadSource(this, e.currentTarget.dataset);
       triggerError(this, "video", e.currentTarget, e.detail.errMsg);
     },
-    audioError(e){
+    audioError(e) {
       loadSource(this, e.currentTarget.dataset);
       triggerError(this, "audio", e.currentTarget, e.detail.errMsg);
     },

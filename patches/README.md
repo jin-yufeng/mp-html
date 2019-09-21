@@ -21,7 +21,7 @@
 - 功能  
   实现类似于`web`中的`document`对象，可以动态操作`DOM`  
 - 大小  
-  `4.75KB`（`min`版本`3.69KB`）  
+  `4.66KB`（`min`版本`3.61KB`）  
 - 使用方法  
   将`document.js`复制到`Parser`文件夹下即可（若使用`min`版本也要改名为`document.js`）  
   - `document` 类  
@@ -98,6 +98,7 @@
   `ol`标签支持`start`和`type`属性；`ul`标签会自动根据层级显示不同的样式  
 - 大小  
   `4.22KB`  
+- 此补丁包**仅能**在微信小程序中使用  
 - 使用方法  
 1. 将`list`文件夹复制到`Parser`文件夹下  
   2. 将`trees.li.wxml`中的内容复制到`Parser/trees/trees.wxml`中`name`为`element`的`template`中的任意位置

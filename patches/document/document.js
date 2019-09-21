@@ -162,12 +162,7 @@ class element {
   }
 }
 class document {
-  constructor() {
-    this._root = '';
-    this.nodes = [];
-    this._Component = null;
-  }
-  init(root, nodes, Component) {
+  constructor(root, nodes, Component) {
     this._root = root;
     this.nodes = nodes;
     this._Component = Component;

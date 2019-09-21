@@ -1,8 +1,9 @@
 # Parser
-微信小程序富文本插件（本文档动态更新，建议加星收藏）
+小程序富文本插件（本文档动态更新，建议加星收藏）
 ## 目录 ##
 - [功能介绍](#功能介绍)
 - [使用方法](#使用方法)
+  - [插件包说明](#插件包说明)
   - [在原生框架中使用](#在原生框架中使用)
   - [在mpVue中使用](#在mpVue中使用)
   - [在uni-app中使用](https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81)
@@ -10,6 +11,7 @@
   - [在wepy中使用](#在wepy中使用)
   - [组件属性](#组件属性)
   - [回调函数](#回调函数)
+  - [百度版与微信版的差别](./docs/Usage.md#百度版与微信版的差别)
 - [补丁包](#补丁包)
   - [emoji](#emoji)
   - [document](#document)
@@ -43,40 +45,47 @@
   支持自动按原大小显示，点击图片可以预览（预览时通过左右滑动可以查看所有图片）；对于一些装饰性的图片，可以对其设置`ignore`属性，设置后将无法预览  
 - 链接点击效果  
   点击`a`标签，若`href`为小程序内部页面路径，将直接跳转；若是网页链接，则可以自动复制链接；链接被点击时会触发`bindlinkpress`事件，可以在该回调中进行下载附件等更多操作  
+- 视频效果  
+  支持视频自动懒加载（当视频数量超过`3`个时，仅先加载前`3`个，避免页面卡死）；支持播放一个视频时自动暂停其他视频  
 - 支持解析各类列表  
   可以显示各类复杂的列表结构  
-- 支持解析`emoji`小表情和动态操作`DOM`  
-  具体见下方[补丁包](#补丁包)  
 - 性能指标  
-  容错性强，稳定性高，不需要网络请求，支持无限层级，解析速度快，包大小仅约`37.9KB`（`min`版本`27.5KB`）  
+  容错性强，稳定性高，不需要网络请求，支持无限层级，解析速度快，轻量化  
   
 详细可见：[功能介绍](./docs/Introduction.md)
 ## 使用方法 ##
+### 插件包说明 ##
+
+| 名称 | 大小 | 使用 |
+|:---:|:---:|:---:|
+| Parser | 37.4KB | 微信小程序插件包 |
+| Parser.min | 27.2KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.bd | 39.8KB | 百度小程序插件包 |
+| Parser.bd.min | 26.3KB | 百度小程序插件包压缩版（功能相同） |
+
+可根据需要选用，使用时建议统一更名为`Parser`，以下**统称**为`Parser`  
+
 ### 在原生框架中使用 ###
-1. 下载`Parser`文件夹至小程序目录（`Parser.min`是压缩版本，功能相同）  
-   ![页面结构](https://i.imgur.com/XW4Jupv.png)
-   
-2. 在需要引用的页面的`json`文件中添加
+1. 下载`Parser`文件夹至小程序目录  
+2. 在需要引用的页面的`json`文件中添加（百度小程序中组件名一定要**小写**）
    ``` json
    {
      "usingComponents": {
-       "Parser":"/Parser/index"
+       "parser":"/Parser/index"
      }
    }
    ```
 3. 在需要引用的页面的`wxml`文件中添加  
    ``` html
-   <Parser html="{{html}}" />
+   <parser html="{{html}}" />
    ```
 4. 在需要引用的页面的`js`文件中添加  
    ``` javascript
-   onLoad:function(){
-     this.setData({
-       html:'your html'
-     })
+   data: {
+     html:"<div>Hello World!</div>"
    }
    ```
-- `demo`文件夹下的是示例小程序的源码，可供参考  
+- `demo`文件夹下的是微信小程序 `富文本插件` 示例程序的源码，可供参考  
 ### 在mpVue中使用 ###
 1. 下载`Parser`文件夹至`static`目录下
 2. 在`src`目录下需要使用本插件的页面文件夹下添加`json`文件
@@ -106,52 +115,31 @@
  
 ### 在wepy中使用 ###
 测试版本：V1.7.3
-- 方法一  
-  1. 将`Parser`文件夹复制到`/src/components`目录下  
-  2. 如果没有使用`document`补丁包，删除`Parser/index.js`中第25到30行；如果没有使用`emoji`补丁包，删除`Parser/Parser.js`中148到151行（这两个地方都是通过`try`来引入文件，但在`wepy`中还是会出文件不存在的错误）  
-     ```javascript
-     // Parser/index.js
-     created() {
-       try {
-         const Document = require("./document.js");
-         this.document = new Document();
-       } catch (e) {}
-     },
-     // Parser/Parser.js
-     try {
-       var emoji = require("./emoji.js");
-       data = emoji.parseEmoji(data);
-     } catch (err) {}
-     ```
-
-  3. 在需要使用的页面的`wpy`文件中添加
-     ```vue
-     <template>
-       <view class="container">
-         <Parser html="{{html}}"></Parser>
-       </view>
-     </template>
-     <script>
-     import wepy from 'wepy'
-     export default class Index extends wepy.page {
-       config = {
-         usingComponents: {
-           'Parser': '/components/Parser/index'
-         }
-       }
-       data = {
-         html: '<div>Hello World!</div>',
+1. 将`Parser`文件夹复制到`/src/components`目录下  
+   （也可以直接复制到`/dist/components`目录下，这样`wepy`不会对插件包进行编译和压缩）    
+2. 在需要使用的页面的`wpy`文件中添加
+   ```vue
+   <template>
+     <view class="container">
+       <Parser html="{{html}}"></Parser>
+     </view>
+   </template>
+   <script>
+   import wepy from 'wepy'
+   export default class Index extends wepy.page {
+     config = {
+       usingComponents: {
+         'Parser': '/components/Parser/index'
        }
      }
-     </script>
-     ```
-  4. 通过`wepy build --watch`命令进行编译  
-  - 如果出现`Components not found`错误，则用`wepy build --no-cache --watch`命令清理缓存，重新编译  
-&nbsp;  
-- 方法2 
-  1. 将`Parser`文件夹复制到`/dist/components`文件夹下（注意是**dist**不是**src**）
-  2. 同方法一的第3、4步
-  - 这种方法`wepy`不会对插件包进行编译和压缩  
+     data = {
+       html: '<div>Hello World!</div>',
+     }
+   }
+   </script>
+   ```
+3. 通过`wepy build --watch`命令进行编译  
+- 如果出现`Components not found`错误，则用`wepy build --no-cache --watch`命令清理缓存，重新编译  
   
 
 ### 组件属性 ###  
@@ -186,9 +174,8 @@
 | bindparser | 在解析完成时调用（仅当传入的`html`为`String`时会调用） | 返回一个`object`，其中`nodes`为解析后的节点数组，`imgList`为图片列表，`title`是页面标题，该`object`可以在下次调用直接作为`html`属性的值，节省解析的时间 |
 | bindready | 渲染完成时调用 | 返回整个组件的`NodesRef`结构体，包含宽度、高度、位置等信息（每次`html`修改后都会触发） |
 | binderror | 出错时调用 | 返回一个`object`，其中`source`是错误来源（`ad`广告出错、`video`视频加载出错、`audio`音频加载出错、`parse`解析过程中出错），`errMsg`为错误信息，`errCode`是错误代码（仅`ad`），`target`包含出错标签的具体信息 |
-| bindimgtap | 在图片受到点击时调用 | 返回该图片的`src`值，可用于阻挡`onShow`的调用 |
-| bindlinkpress | 在链接受到点击时调用 | 返回该链接的`href`值，开发者可以在该回调中进行进一步操作，如下载文档和打开等 |
-
+| bindimgtap | 在图片受到点击时调用 | 返回一个形如`{src:...}`的结构体（`src`是图片链接），可用于阻挡`onShow`的调用 |
+| bindlinkpress | 在链接受到点击时调用 | 返回一个形如`{href:...}`的结构体（`href`是链接地址），开发者可以在该回调中进行进一步操作，如下载文档和打开等 |  
   
 更多信息可见：[使用方法](./docs/Usage.md)
 
@@ -215,7 +202,7 @@
 - 功能  
   实现类似于`web`中的`document`对象，可以动态操作`DOM`  
 - 大小  
-  `4.75KB`（`min`版本`3.69KB`）  
+  `4.66KB`（`min`版本`3.61KB`）  
 - 使用方法  
   将`document.js`复制到`Parser`文件夹下即可（若使用`min`版本也要改名为`document.js`）  
   - `document` 类  
@@ -292,6 +279,7 @@
   `ol`标签支持`start`和`type`属性；`ul`标签会自动根据层级显示不同的样式  
 - 大小  
   `4.22KB`  
+- 此补丁包**仅能**在微信小程序中使用  
 - 使用方法  
   1. 将`list`文件夹复制到`Parser`文件夹下  
   2. 将`trees.li.wxml`中的内容复制到`Parser/trees/trees.wxml`中`name`为`element`的`template`中的任意位置
@@ -355,6 +343,7 @@
 ## 后端解析 ##
 &emsp;&emsp;本插件提供了一个配套的后端`node.js`支持包，可以提供更加强大的功能，如匹配多层的`style`，代码高亮，直接打开网址，解析`markdown`等，其返回值可以直接作为本组件的`html`属性的值；且在后端提前完成解析后可以节省解析时间，提高性能。  
 **注意：该包需要node.js v7.6.0以上运行环境，无法直接在小程序前端使用，建议部署在服务器或云函数上**  
+在**百度小程序中使用**需要在`options`中设置`{env: "bd"}`  
 安装方法：
 ```npm
 npm install parser-wxapp
@@ -379,6 +368,11 @@ parser(html).then(function(res){
 
 
 ## 更新日志 ##
+- 2019.9.21:
+  1. `A` 增加了百度小程序插件包
+  2. `U` 为与百度小程序包统一，所有事件的返回值改为`object`类型（影响`bindimgtap`和`bindlinkpress`）
+  3. `U` 优化了补丁包的引入方式
+  4. `F` 修复了`autopause`属性在某些情况下会失效的问题  
 - 2019.9.18:
   1. `A` 增加了在`wepy`中的使用方法  
   2. `F` 修复了部分情况下`style`标签解析时由于缺少`;`导致错误样式匹配失败的问题
@@ -401,7 +395,5 @@ parser(html).then(function(res){
   7. `F` 修复了部分情况下`html`中的换行符会被显示的问题
 - 2019.8.22：
   1. `U` 支持了`font`标签的`size`属性
-- 2019.8.21:
-  1. `F` 修复了部分情况下实体编码内容无法显示的问题
 
 更多可见：[更新日志](./docs/Update.md)

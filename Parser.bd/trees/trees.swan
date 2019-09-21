@@ -1,0 +1,45 @@
+<!--Parser/trees/trees.wxml-->
+<template name="element">
+	<!--图片-->
+	<rich-text s-if="item.name=='img'" style="text-indent:0;{{item.attrs.containStyle}}" nodes='{{[item]}}'
+		data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewEvent' />
+	<text s-elif="item.name=='br'">\n</text>
+	<!--视频-->
+	<block s-elif="item.name=='video'">
+		<view s-if="item.attrs.id>'video3'&&!controls[item.attrs.id].play" class="video"
+			style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}"
+			data-id="{{item.attrs.id}}" bindtap="_loadVideo">
+			<view class="video-triangle" />
+		</view>
+		<video s-else src='{{controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src}}'
+			id="{{item.attrs.id}}" loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}'
+			autoplay="{{item.attrs.autoplay||controls[item.attrs.id].play}}" class="v" muted="{{item.attrs.muted}}"
+			style="{{item.attrs.style+(item.attrs.width?(';width:'+item.attrs.width):'')+(item.attrs.height?('height:'+item.attrs.height):'')}}"
+			data-id="{{item.attrs.id}}" data-source="{{item.attrs.source}}" bindplay='playEvent'
+			binderror="videoError" />
+	</block>
+	<!--音频-->
+	<audio s-elif="item.name=='audio'"
+		src='{{controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src}}'
+		id="{{item.attrs.id}}" loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}'
+		poster='{{item.attrs.poster}}' name='{{item.attrs.name}}' author='{{item.attrs.author}}'
+		style="{{item.attrs.style}}" data-id="{{item.attrs.id}}" data-source="{{item.attrs.source}}"
+		binderror="audioError" />
+	<!--链接-->
+	<navigator s-elif="item.name=='a'" url="{{item.attrs.href}}" style="{{item.attrs.style}}"
+		data-href='{{item.attrs.href}}' hover-class="navigator-hover" hover-start-time="25" hover-stay-time="300"
+		bindtap="tapEvent">
+		<trees nodes="{{item.children}}" controls="{{controls}}" />
+	</navigator>
+	<!--广告-->
+	<ad s-elif="item.name=='ad'" appid="{{item.attrs.appid}}" apid="{{item.attrs.apid}}" type="{{item.attrs.type}}"
+		binderror="adError"></ad>
+	<!--富文本-->
+	<rich-text s-else style="{{item.attrs.containStyle}}" nodes="{{[item]}}" />
+</template>
+<block s-for='item, index in nodes' s-key>
+    <template s-if="!item.continue" is="element" data="{{{item,controls}}}" />
+	<!--继续递归-->
+	<trees s-else class="{{item.name}}" style="{{item.attrs.style}}" nodes="{{item.children}}"
+		controls="{{controls}}" />
+</block>

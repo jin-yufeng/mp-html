@@ -1390,7 +1390,7 @@ module.exports = {
       "type": "text"
     }, {
       "children": [{
-        "text": "\"Parser\"",
+        "text": "\"parser\"",
         "type": "text"
       }],
       "name": "span",
@@ -1444,7 +1444,7 @@ module.exports = {
           "type": "text"
         }, {
           "children": [{
-            "text": "Parser",
+            "text": "parser",
             "type": "text"
           }],
           "name": "span",
@@ -2089,9 +2089,6 @@ module.exports = {
   wepy: [{
     "children": [{
       "children": [{
-        "text": " ",
-        "type": "text"
-      }, {
         "children": [{
           "text": "<",
           "type": "text"

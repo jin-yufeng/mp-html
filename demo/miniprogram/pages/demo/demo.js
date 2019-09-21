@@ -16,13 +16,13 @@ Page({
     }
   },
   linkTap(e) {
-    if (e.detail) {
-      if (/doc/.test(e.detail)) {
+    if (e.detail.href) {
+      if (/doc/.test(e.detail.href)) {
         wx.showLoading({
           title: '附件下载中',
         })
         wx.downloadFile({
-          url: e.detail,
+          url: e.detail.href,
           success(res) {
             wx.hideLoading();
             const filePath = res.tempFilePath
@@ -34,9 +34,9 @@ Page({
             })
           }
         })
-      } else if (/http/.test(e.detail)) {
+      } else if (/http/.test(e.detail.href)) {
         wx.setClipboardData({
-          data: e.detail,
+          data: e.detail.href,
           success() {
             wx.showToast({
               title: '链接已复制',

@@ -1,4 +1,8 @@
 //DomHandler.js
+var emoji;
+try {
+  emoji = require("./emoji.js");
+} catch (err) {}
 const CssTokenizer = require('./CssTokenizer.js');
 const CanIUse = require('./api.js').versionHigherThan('2.7.1');
 const trustTag = {
@@ -270,6 +274,7 @@ DomHandler.prototype.ontext = function(data) {
       return;
     data = data.replace(/\s+/g, " ");
   }
+  if (emoji) data = emoji.parseEmoji(data);
   let element = {
     text: data.replace(/&nbsp;/g, '\u00A0'), // 解决连续&nbsp;失效问题
     type: 'text'
