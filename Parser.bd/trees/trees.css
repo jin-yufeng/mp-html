@@ -1,58 +1,60 @@
+/* 可在这里引入需要的自定义样式 */
+
 /* 链接受到点击的hover-class，可自定义修改 */
 .navigator-hover {
-    opacity: 0.7;
-    text-decoration: underline;
+  opacity: 0.7;
+  text-decoration: underline;
 }
 /* 以下内容不建议修改 */
 :host {
-    display: inherit;
-    float: inherit;
+  display: inherit;
+  float: inherit;
 }
 .div, .blockquote, .p {
-    display: block;
+  display: block;
 }
 .b, .strong {
-    display: inline;
-    font-weight: bold;
+  display: inline;
+  font-weight: bold;
 }
 .em, .i {
-    display: inline;
-    font-style: italic;
+  display: inline;
+  font-style: italic;
 }
 .del {
-    display: inline;
-    text-decoration: line-through;
+  display: inline;
+  text-decoration: line-through;
 }
 .ins {
-    display: inline;
-    text-decoration: underline;
+  display: inline;
+  text-decoration: underline;
 }
 .code {
-    display: inline;
-    font-family: monospace;
+  display: inline;
+  font-family: monospace;
 }
 .q, .span, .label {
-    display: inline;
+  display: inline;
 }
 .q::before {
-    content: '"';
+  content: '"';
 }
 .q::after {
-    content: '"';
+  content: '"';
 }
 .video {
-    background-color: black;
-    width: 300px;
-    height: 225px;
-    display: inline-block;
-    position: relative;
+  background-color: black;
+  width: 300px;
+  height: 225px;
+  display: inline-block;
+  position: relative;
 }
 .video-triangle {
-    border-width: 15px 0 15px 30px;
-    border-style: solid;
-    border-color: transparent transparent transparent white;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin: -15px 0 0 -15px;
+  border-width: 15px 0 15px 30px;
+  border-style: solid;
+  border-color: transparent transparent transparent white;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
 }

@@ -2178,7 +2178,7 @@ module.exports = {
           "type": "text"
         }, {
           "children": [{
-            "text": "Parser",
+            "text": "parser",
             "type": "text"
           }],
           "name": "span",
@@ -2253,7 +2253,7 @@ module.exports = {
           "type": "text"
         }, {
           "children": [{
-            "text": "Parser",
+            "text": "parser",
             "type": "text"
           }],
           "name": "span",
@@ -2532,7 +2532,7 @@ module.exports = {
           "type": "text"
         }, {
           "children": [{
-            "text": "'Parser'",
+            "text": "'parser'",
             "type": "text"
           }],
           "name": "span",

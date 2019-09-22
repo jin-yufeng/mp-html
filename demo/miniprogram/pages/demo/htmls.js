@@ -762,13 +762,13 @@ var demo2 = `<title>整体示例</title>
       <section style="border: 0px none;margin: 20px auto 0px auto;">
         <section style="display: flex;justify-content: center;align-items: center;">
           <section style="display: inline-block;width:1em;">
-            <img style="width: 100%;display: block;" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo2-15.png?sign=8508536dc335ca185604e48feecb0c9d&t=1560249799"/>
+            <img style="width: 100%;display: block;" ignore src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo2-15.png?sign=8508536dc335ca185604e48feecb0c9d&t=1560249799"/>
           </section>
           <section style="font-size:16px;padding:5px 0.2em;letter-spacing: 1.5px;color:#1f9459;">
             END
           </section>
           <section style="display: inline-block;width:1em;">
-            <img style="width: 100%;display: block;transform: scaleX(-1);-webkit-transform: scaleX(-1);-moz-transform: scaleX(-1);-o-transform: scaleX(-1);" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo2-15.png?sign=8508536dc335ca185604e48feecb0c9d&t=1560249799"/>
+            <img style="width: 100%;display: block;transform: scaleX(-1);-webkit-transform: scaleX(-1);-moz-transform: scaleX(-1);-o-transform: scaleX(-1);" ignore src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo2-15.png?sign=8508536dc335ca185604e48feecb0c9d&t=1560249799"/>
           </section>
         </section>
         <section style="width: 100%;font-size: 14px;text-align:center;letter-spacing: 1.5px;color:#1f9459;padding: 1em 0px;">

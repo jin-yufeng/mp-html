@@ -353,10 +353,16 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.9.22:
+      <ol>
+        <li><code>U</code> 支持引入<code>wxss</code>文件中的外部样式</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.9.21:
       <ol>
         <li><code>A</code> 增加了对百度小程序的支持</li>
-        <li><code>U</code> 为与百度小程序包统一，所有事件的返回值改为<code>object</code>类型（影响<code>bindimgtap</code>和<code>bindlinkpress</code>）</li>
+        <li style='word-break:break-all'><code>U</code> 为与百度小程序包统一，所有事件的返回值改为<code>object</code>类型（影响<code>bindimgtap</code>和<code>bindlinkpress</code>）</li>
         <li><code>U</code> 优化了补丁包的引入方式</li>
         <li><code>F</code> 修复了<code>autopause</code>属性在某些情况下会失效的问题</li>
       </ol>

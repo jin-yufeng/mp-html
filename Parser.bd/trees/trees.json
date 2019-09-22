@@ -1,6 +1,6 @@
 {
-    "component": true,
-    "usingComponents": {
-        "trees": "./trees"
-    }
+  "component": true,
+  "usingComponents": {
+    "trees": "./trees"
+  }
 }

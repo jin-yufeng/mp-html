@@ -3,10 +3,10 @@
 
   | 名称 | 大小 | 使用 |
   |:---:|:---:|:---:|
-  | Parser | 37.4KB | 微信小程序插件包 |
-  | Parser.min | 27.2KB | 微信小程序插件包压缩版（功能相同） |
-  | Parser.bd | 39.9KB | 百度小程序插件包 |
-  | Parser.bd.min | 26.4KB | 百度小程序插件包压缩版（功能相同） |
+  | Parser | 37.3KB | 微信小程序插件包 |
+  | Parser.min | 27.0KB | 微信小程序插件包压缩版（功能相同） |
+  | Parser.bd | 35.5KB | 百度小程序插件包 |
+  | Parser.bd.min | 26.1KB | 百度小程序插件包压缩版（功能相同） |
   
   可根据需要选用，使用时建议统一更名为`Parser`，以下**统称**为`Parser`  
 
@@ -143,6 +143,21 @@
 
   - 所有回调函数的返回值从`e.detail`中获取    
 &nbsp;
+- 使用外部样式  
+  如果需要使用一些固定的样式，可以通过`wxss` / `css`文件引入  
+  在`/Parser/trees/trees.wxss(css)`中通过`@import`引入自定义的样式文件即可  
+  ```css
+  /*
+  * Parser/trees/trees.wxss(css)
+  * 在这里引入您的自定义样式
+  */
+  @import "external.wxss(css)";
+  ```
+  注意事项：  
+  1. 由于只有自定义组件内的样式在组件内能生效且`rich-text`在组件内使用时也只能匹配组件内的样式，所以必须在`trees`组件的`wxss`/`css`文件中引入需要的样式，在页面中写的样式无效  
+  2. 组件内只能使用`class`选择器（支持后代选择器），不支持`id`选择器、属性选择器、标签名选择器等（更多可见[官网说明](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html)）  
+  3. 通过这种方式引入的样式会对所有`parser`标签生效，如果是对单个`parser`使用的样式，请使用`style`标签  
+&nbsp;  
 - 关于基础库  
   微信小程序：
   
@@ -223,7 +238,7 @@
 - 功能  
   实现类似于`web`中的`document`对象，可以动态操作`DOM`  
 - 大小  
-  `4.75KB`（`min`版本`3.69KB`）  
+  `4.66KB`（`min`版本`3.61KB`）  
 - 使用方法  
   将`document.js`复制到`Parser`文件夹下即可（若使用`min`版本也要改名为`document.js`）  
   - `document` 类  
@@ -299,7 +314,7 @@
   模拟`ol`、`ul`、`li`标签  
   `ol`标签支持`start`和`type`属性；`ul`标签会自动根据层级显示不同的样式  
 - 大小  
-  `3.61KB`  
+  `4.39KB`  
 - 此补丁包**仅能**在微信小程序中使用  
 - 使用方法  
   1. 将`list`文件夹复制到`Parser`文件夹下  

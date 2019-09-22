@@ -36,8 +36,8 @@ const trustTag = {
   ins: 1,
   label: 1,
   legend: 0,
-  li: 1,
-  ol: 1,
+  li: 0,
+  ol: 0,
   p: 1,
   q: 1,
   source: 0,
@@ -53,7 +53,7 @@ const trustTag = {
   thead: 0,
   tr: 0,
   u: 1,
-  ul: 1,
+  ul: 0,
   video: 1
 };
 const blockTag = {
@@ -174,12 +174,9 @@ DomHandler.prototype.onopentag = function(name, attrs) {
   let matched = this._style[name] ? (this._style[name] + ';') : '';
   if (attrs.id)
     matched += (this._style['#' + attrs.id] ? (this._style['#' + attrs.id] + ';') : '');
-  if (attrs.class) {
-    for (var Class of attrs.class.split(' ')) {
+  if (attrs.class)
+    for (var Class of attrs.class.split(' '))
       matched += (this._style['.' + Class] ? (this._style['.' + Class] + ';') : '');
-    }
-    delete attrs.class;
-  }
   //处理属性
   switch (name) {
     case 'div':
@@ -284,25 +281,26 @@ DomHandler.prototype.ontext = function(data) {
 };
 DomHandler.prototype.onclosetag = function(name) {
   let element = this._tagStack.pop();
+  let parent = this._tagStack.length ? this._tagStack[this._tagStack.length - 1].children : this.nodes;
   if (ignoreTag[name]) {
     if (name == 'title') {
       try {
         this.title = element.children[0].text;
       } catch (e) {}
     }
-    let parent = this._tagStack[this._tagStack.length - 1];
-    let siblings = parent ? parent.children : this.nodes;
-    siblings.pop();
+    parent.pop();
   }
   // 合并一些不必要的层，减小节点深度
-  if (element.children.length == 1 && element.name == 'div' && element.children[0].name == 'div' && !(/padding/.test(element.attrs.style)) && !(/margin/.test(element.attrs.style) && /margin/.test(element.children[0].attrs.style)) && !(/display/.test(element.attrs.style)) && !(/display/.test(element.children[0].attrs.style)) && !(element.attrs.id && element.children[0].attrs.id)) {
-    let parent = this._tagStack.length ? this._tagStack[this._tagStack.length - 1].children : this.nodes;
-    let i = parent.indexOf(element);
-    if (/padding/.test(element.children[0].attrs.style))
-      element.children[0].attrs.style = ";box-sizing:border-box;" + element.children[0].attrs.style;
-    element.children[0].attrs.style = element.attrs.style + ";" + element.children[0].attrs.style;
-    element.children[0].attrs.id = (element.children[0].attrs.id || "") + (element.attrs.id || "");
-    parent[i] = element.children[0];
+  if (element.children.length == 1 && element.name == 'div') {
+    let child = element.children[0];
+    if (child.name == 'div' && !(/padding/.test(element.attrs.style)) && !(/margin/.test(element.attrs.style) && /margin/.test(child.attrs.style)) && !(/display/.test(element.attrs.style)) && !(/display/.test(child.attrs.style)) && !(element.attrs.id && child.attrs.id) && !(element.attrs.class && child.attrs.class)) {
+      if (/padding/.test(child.attrs.style))
+        child.attrs.style = ";box-sizing:border-box;" + child.attrs.style;
+      child.attrs.style = element.attrs.style + ";" + child.attrs.style;
+      child.attrs.id = (child.attrs.id || "") + (element.attrs.id || "");
+      child.attrs.class = (child.attrs.class || "") + (element.attrs.class || "");
+      parent[parent.indexOf(element)] = child;
+    }
   }
   if (element.pre) {
     this._whiteSpace = false;

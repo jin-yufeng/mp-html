@@ -11,6 +11,7 @@
   - [在wepy中使用](#在wepy中使用)
   - [组件属性](#组件属性)
   - [回调函数](#回调函数)
+  - [使用外部样式](#使用外部样式)
   - [百度版与微信版的差别](./docs/Usage.md#百度版与微信版的差别)
 - [补丁包](#补丁包)
   - [emoji](#emoji)
@@ -58,10 +59,10 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| Parser | 37.4KB | 微信小程序插件包 |
-| Parser.min | 27.2KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.bd | 39.8KB | 百度小程序插件包 |
-| Parser.bd.min | 26.3KB | 百度小程序插件包压缩版（功能相同） |
+| Parser | 37.3KB | 微信小程序插件包 |
+| Parser.min | 27.0KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.bd | 35.5KB | 百度小程序插件包 |
+| Parser.bd.min | 26.1KB | 百度小程序插件包压缩版（功能相同） |
 
 可根据需要选用，使用时建议统一更名为`Parser`，以下**统称**为`Parser`  
 
@@ -121,7 +122,7 @@
    ```vue
    <template>
      <view class="container">
-       <Parser html="{{html}}"></Parser>
+       <parser html="{{html}}"></parser>
      </view>
    </template>
    <script>
@@ -129,7 +130,7 @@
    export default class Index extends wepy.page {
      config = {
        usingComponents: {
-         'Parser': '/components/Parser/index'
+         'parser': '/components/Parser/index'
        }
      }
      data = {
@@ -178,6 +179,21 @@
 | bindlinkpress | 在链接受到点击时调用 | 返回一个形如`{href:...}`的结构体（`href`是链接地址），开发者可以在该回调中进行进一步操作，如下载文档和打开等 |  
   
 更多信息可见：[使用方法](./docs/Usage.md)
+
+### 使用外部样式 ###
+如果需要使用一些固定的样式，可以通过`wxss` / `css`文件引入  
+在`/Parser/trees/trees.wxss(css)`中通过`@import`引入自定义的样式文件即可  
+```css
+/*
+* Parser/trees/trees.wxss(css)
+* 在这里引入您的自定义样式
+*/
+@import "external.wxss(css)";
+```
+注意事项：  
+1. 由于只有自定义组件内的样式在组件内能生效且`rich-text`在组件内使用时也只能匹配组件内的样式，所以必须在`trees`组件的`wxss`/`css`文件中引入需要的样式，在页面中写的样式无效  
+2. 组件内只能使用`class`选择器（支持后代选择器），不支持`id`选择器、属性选择器、标签名选择器等（更多可见[官网说明](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html)）  
+3. 通过这种方式引入的样式会对所有`parser`标签生效，如果是对单个`parser`使用的样式，请使用`style`标签  
 
 ## 补丁包 ##
 `patches`文件夹中准备了一些补丁包，可根据需要选用，可以实现更加丰富的功能  
@@ -278,7 +294,7 @@
   模拟`ol`、`ul`、`li`标签  
   `ol`标签支持`start`和`type`属性；`ul`标签会自动根据层级显示不同的样式  
 - 大小  
-  `4.22KB`  
+  `4.39KB`  
 - 此补丁包**仅能**在微信小程序中使用  
 - 使用方法  
   1. 将`list`文件夹复制到`Parser`文件夹下  
@@ -368,24 +384,26 @@ parser(html).then(function(res){
 
 
 ## 更新日志 ##
+- 2019.9.22:
+  1. `U` 支持引入`wxss` / `css`文件中的外部样式 [详细](#使用外部样式)  
 - 2019.9.21:
-  1. `A` 增加了百度小程序插件包
-  2. `U` 为与百度小程序包统一，所有事件的返回值改为`object`类型（影响`bindimgtap`和`bindlinkpress`）
+  1. `A` 增加了百度小程序插件包 [详细](#插件包说明)  
+  2. `U` 为与百度小程序包统一，所有事件的返回值改为`object`类型（影响`bindimgtap`和`bindlinkpress`） [详细](#回调函数)  
   3. `U` 优化了补丁包的引入方式
   4. `F` 修复了`autopause`属性在某些情况下会失效的问题  
 - 2019.9.18:
-  1. `A` 增加了在`wepy`中的使用方法  
+  1. `A` 增加了在`wepy`中的使用方法 [详细](#在wepy中使用)  
   2. `F` 修复了部分情况下`style`标签解析时由于缺少`;`导致错误样式匹配失败的问题
   2. `F` 修复了`0917`版本中`a`标签失效的问题  
 - 2019.9.17:
-  1. `A` 增加了`list`补丁包（可用于模拟列表）  
+  1. `A` 增加了`list`补丁包（可用于模拟列表） [详细](#List)  
   2. `A` `video`组件增加支持`unit-id`属性（前插视频广告）  
   3. `F` 修复了部分情况下图片会被`text-indent`错误缩进的问题  
 - 2019.9.15:
-  1. `A` 增加了`document`补丁包（可用于动态操作`DOM`）  
+  1. `A` 增加了`document`补丁包（可用于动态操作`DOM`） [详细](#document) 
   2. `A` 增加支持小程序广告`ad`组件（可显示文中广告）  
 - 2019.9.13:
-  1. `A` 增加了`emoji`补丁包（可用于解析小表情）
+  1. `A` 增加了`emoji`补丁包（可用于解析小表情） [详细](#emoji)  
   2. `A` 增加了`autopreview`属性（可用于控制点击图片时是否自动预览，默认`true`）和`imgtap`事件（图片被点击时触发）
   3. `A` 提供了一个`min`版本（`27.3KB`，功能上无差别）
   3. `U` 缩小了节点深度（约`15%~35%`，主要是通过合并一些只有一个子节点的标签以及优化排版方式），优化了性能

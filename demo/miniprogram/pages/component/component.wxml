@@ -37,6 +37,7 @@
           <view class="link_h3" hover-class='link-hover' data-section="wepy" bindtap="gosection">wepy中使用</view>
           <view class="link_h2" hover-class='link-hover' data-section="attrs" bindtap="gosection">组件属性</view>
           <view class="link_h2" hover-class='link-hover' data-section="callback" bindtap="gosection">回调函数</view>
+          <view class="link_h2" hover-class='link-hover' data-section="externClass" bindtap="gosection">使用外部样式</view>
           <view class="link_h2" hover-class='link-hover' data-section="patches" bindtap="gosection">补丁包</view>
           <view class="link_h3" hover-class='link-hover' data-section="patchEmoji" bindtap="gosection">emoji</view>
           <view class="link_h3" hover-class='link-hover' data-section="patchDocument" bindtap="gosection">document</view>
@@ -202,9 +203,9 @@
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <code>37.4KB</code>，
+          <code>37.3KB</code>，
           <code>min</code>版本
-          <code>27.2KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <code>27.0KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <rich-text nodes="{{errorcode}}" />
         </view>
       </view>
@@ -241,7 +242,7 @@
           <Parser id="taro" html='<li style="margin-top:10px;margin-bottom:5px">在<code>Taro</code>中使用</li><div style="margin-left:20px">可参考：<a href="https://github.com/xPixv/Taro-ParserRichText">Github链接</a></div>' tag-style="{{tagStyle}}" />
           <Parser id="wepy" style="margin-top:10px;margin-bottom:5px" html="<li>在<code>wepy</code>中使用</li>" tag-style="{{tagStyle}}" />
           <view style="margin-left:20px">测试版本：V1.7.3</view>
-          <Parser html="<ol><li><div>将<code>Parser</code>文件夹复制到<code>/src/components</code>目录下</div><div>（也可以直接复制到<code>/dist/components</code>目录下，这样<code>wepy</code>将不会对插件包进行编译和压缩</div></li><li>在需要使用页面的<code>wpy</code>文件中添加</li></ol>"
+          <Parser html="<ol><li style='word-break:break-all'>将<code>Parser</code>文件夹复制到<code>/src/components</code>目录下（也可以直接复制到<code>/dist/components</code>目录下，这样<code>wepy</code>将不会对插件包进行编译和压缩</li><li>在需要使用页面的<code>wpy</code>文件中添加</li></ol>"
             tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <rich-text nodes="{{wepy}}" />
@@ -275,6 +276,13 @@
         <view id="callback" class="weui-article__h2">回调函数</view>
         <view class="weui-article__section">
           <Parser html="{{callback}}" tag-style="{{tagStyle}}" />
+        </view>
+        <!--使用外部样式-->
+        <view id="externClass" class="weui-article__h2">使用外部样式</view>
+        <view class="weui-article__section">
+          如果需要引入<code>wxss</code>中的外部样式，只需要在<code>Parser/trees/trees.wxss</code>中通过<code>@import</code>引入需要的样式文件即可
+          <view>注意事项：</view>
+          <Parser html="<ol><li>只有自定义组件内的样式在组件内能生效且<code>rich-text</code>在组件内使用时也只能匹配组件内的样式，所以必须在<code>trees</code>组件的<code>wxss</code>文件中引入需要的样式，在页面中写的样式无效</li><li>组件内只能使用<code>class</code>选择器（支持后代选择器），不支持<code>id</code>选择器、属性选择器、标签名选择器等（更多可见<a href='https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html'>官网说明</a>）</li><li>通过这种方式引入的样式会对所有<code>parser</code>标签生效，如果是对单个<code>parser</code>使用的样式，请使用<code>style</code>标签</li></ol>" tag-style="{{tagStyle}}" />
         </view>
         <!--补丁包-->
         <view id="patches" class="weui-article__h2">补丁包</view>
@@ -407,15 +415,15 @@
             <code>type</code>属性；
             <code>ul</code>组件支持按照层级自动变化符号，这几个组件同样可以在其他页面使用</view>
           <view>大小：
-            <code>4.22KB</code>
+            <code>4.39KB</code>
           </view>
           <view>使用方法：
-            <Parser html="<ol type='i'><li>将<code>list</code>文件夹复制到<code>Parser</code>下</li><li>将<code>trees.li.wxml</code>中的内容复制到<code>Parser/trees/trees.wxml</code>中<code>name</code>为<code>element</code>的<code>template</code>中的任意位置</li><li>在<code>Parser/trees/handler.wxs</code>中的<code>isContinue</code>函数中的 else if(item.name == 'a') 修改为 else if(item.name == 'a' || item.name == 'li' || item.name == 'ol' || item.name == 'ul')</li><li>在<code>Parser/trees/trees.json</code>中添加</li></ol>"
+            <Parser html="<ol type='i'><li>将<code>list</code>文件夹复制到<code>Parser</code>下</li><li>将<code>trees.li.wxml</code>中的内容复制到<code>Parser/trees/trees.wxml</code>中<code>name</code>为<code>element</code>的<code>template</code>中的任意位置</li><li style='word-break:break-all'>在<code>Parser/trees/handler.wxs</code>中的<code>isContinue</code>函数中的<span style='font-family:monospace;'>else if(item.name=='a')</span>修改为<span style='font-family:monospace;'>else if(item.name=='a'||item.name=='li'||item.name=='ol'||item.name=='ul')</span></li><li>在<code>Parser/trees/trees.json</code>中添加</li></ol>"
               tag-style="{{tagStyle}}" style="word-break:break-all" />
             <view style="margin-left:10%;">
               <rich-text nodes="{{listJson}}"></rich-text>
             </view>
-            <Parser html="<ol type='i' start='5'><li>将<code>Parser/DomHandler.js</code>中<code>trustTag</code>结构体的<code>ol</code>、<code>ul</code>、<code>li</code>属性值改为1</li></ol>" tag-style="{{tagStyle}}" />
+            <Parser html="<ol type='i' start='5'><li style='word-break:break-all'>将<code>Parser/DomHandler.js</code>中<code>trustTag</code>结构体的<code>ol</code>、<code>ul</code>、<code>li</code>属性值改为1</li></ol>" tag-style="{{tagStyle}}" />
           </view>
           <view style="margin-top:5px">注意事项：对于
             <code>ol</code>标签，
@@ -472,10 +480,7 @@
               <view class="td" style="width:20%;">{{item.percent}}</view>
             </view>
           </view>
-          <view style="margin-top:5px">
-            附注：2.7.1以下不支持极个别新标签
-            <text style="color:#366092;margin-left:5px" data-section="newTags" bindtap="gosection">详情</text>
-          </view>
+          <view style="margin-top:5px">附注：2.7.1以下不支持极个别新标签</view>
         </view>
         <!--Api-->
         <view id="api" class="weui-article__h2">Api</view>
