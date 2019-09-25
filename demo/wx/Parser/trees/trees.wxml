@@ -26,6 +26,28 @@
     <navigator wx:elif="{{item.name=='a'}}" url="{{item.attrs.href}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" hover-start-time="25" hover-stay-time="300" bindtap="tapEvent">
       <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
     </navigator>
+    <!--列表-->
+    <block wx:elif="{{item.continue}}">
+      <ol wx:if="{{item.name=='ol'}}" start="{{item.attrs.start}}" type="{{item.attrs.type}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
+        <block wx:for="{{item.children}}" wx:key>
+          <li wx:if="{{item.name=='li'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
+            <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+          </li>
+          <trees wx:else id="node" nodes="{{[item]}}" controls="{{controls}}" />
+        </block>
+      </ol>
+      <ul wx:elif="{{item.name=='ul'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
+        <block wx:for="{{item.children}}" wx:key>
+          <li wx:if="{{item.name=='li'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
+            <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+          </li>
+          <trees wx:else id="node" nodes="{{[item]}}" controls="{{controls}}" />
+        </block>
+      </ul>
+      <li wx:elif="{{item.name=='li'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
+        <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+      </li>
+    </block>
     <!--广告-->
     <ad wx:elif="{{item.name=='ad'}}" unit-id="{{item.attrs['unit-id']}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}" binderror="adError"></ad>
     <!--富文本-->

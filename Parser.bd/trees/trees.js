@@ -78,7 +78,6 @@ Component({
       this._top.triggerEvent('linkpress', { href: e.currentTarget.dataset.href });
     },
     adError(e) {
-      console.log(e);
       triggerError(this._top, "ad", e.currentTarget, "", e.detail.errorCode);
     },
     videoError(e) {

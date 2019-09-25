@@ -5,11 +5,14 @@
   |:---:|:---:|:---:|
   | Parser | 37.3KB | 微信小程序插件包 |
   | Parser.min | 27.0KB | 微信小程序插件包压缩版（功能相同） |
-  | Parser.bd | 35.5KB | 百度小程序插件包 |
-  | Parser.bd.min | 26.1KB | 百度小程序插件包压缩版（功能相同） |
+  | Parser.bd | 35.8KB | 百度小程序插件包 |
+  | Parser.bd.min | 26.2KB | 百度小程序插件包压缩版（功能相同） |
+  | Parser.uni | 43.0KB | `uni-app` 插件包（可以编译到所有小程序平台） |
   
-  可根据需要选用，使用时建议统一更名为`Parser`，以下**统称**为`Parser`  
-
+  - 关于百度版与微信版的差别，可见[百度版与微信版的差别](#百度版与微信版的差别)  
+  - `uni-app`版因为各平台`rich-text`和自定义组件表现有所不同，有较多条件编译的内容，编译后大小会缩小，关于各平台间的差别和与原生包的差别，可见[`uni-app`包说明](#uni-app包说明)  
+  - 可根据需要选用，使用时建议统一更名为`Parser`，以下**统称**为`Parser`  
+&nbsp;  
 - 在原生框架中使用
   1. 下载`Parser`文件夹至小程序目录  
   2. 在需要引用的页面的`json`文件中添加（百度小程序中组件名一定要**小写**）
@@ -31,6 +34,32 @@
      }
      ```
   - `demo`文件夹下的是微信小程序 `富文本插件` 示例程序的源码，可供参考  
+&nbsp;  
+- 在`uni-app`中使用  
+  - 使用`uni-app`包（可以编译到所有小程序平台）  
+    1. 下载`Parser.uni`包到`component`目录下（更名为`Parser`）  
+    2. 在需要使用页面的`vue`文件中添加  
+       ```vue
+       <template>
+         <view>
+           <parser :html="html"></parser>
+         </view>
+       </template>
+       <script>
+       import parser from "@/components/Parser/index"
+       export default{
+         components: {
+           parser
+         },
+         data() {
+           return {
+             html: '<div>Hello World!</div>'
+           }
+         }
+       </script>
+       ```
+  - 使用原生包  
+    参考[官网-小程序组件支持](https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81)  
 &nbsp;  
 - 在`mpVue`中使用  
   1. 下载`Parser`文件夹至`static`目录下
@@ -397,3 +426,24 @@
 7. 组件间通信  
    本插件的基本显示方式是通过自定义组件`trees`递归调用来显示`dom`树，在微信小程序中，事件通过设置`options`中的`composed`属性即可让该事件穿过自定义组件边界继续冒泡，使得各层`trees`组件中的图片受到点击、链接受到点击等情况发生时，顶层组件都能收到并处理；但在百度小程序中无论是`triggerEvent`、`dispatch`还是`selectComponent`**均无法**穿透组件边界，这将导致顶层组件无法知晓子孙组件的事件  
    *解决方案：* 通过`getApp()`设置了一个全局变量`_Parser`，当顶层模块被创建的时候，将这个变量设置为顶层模块的`this`；子孙组件建立时，通过这个变量获取顶层组件示例，并直接操作顶层模块的各类方法以实现等价效果，最终效果基本无明显差异  
+
+## uni-app包说明 ##
+1. 需要使用`HBuilderX 2.2.5-alpha`**及以上版本**，否则引入`wxs`会报错  
+2. 本插件依赖`rich-text`组件，仅能在**小程序**平台上使用（5个小程序平台**都已经过**基本测试）  
+3. 支付宝小程序**不支持**`autopause`属性，**没有**`versionHigherThan`的`api`  
+4. **仅**微信小程序、QQ小程序、百度小程序支持`ad`组件  
+5. **仅**微信小程序支持`ruby`、`bdi`、`bdo`标签及`audio`标签的`autoplay`属性  
+6. 编译过程中出现`Module not found`的`Warning`，**请忽略**（是因为没有引入对应的[补丁包](#补丁包)）
+- 与原生包编译结果的区别（已知问题）
+  1. `vue`框架要求`template`下只能有一个直接子节点，因此每个`trees`组件都需要用一个`view`套着，一定程度上增加了节点树深度
+  2. 编译中会使用大量的`block`，一定程度上增大了编译结果大小
+     ```html
+     <!--原生包-->
+     <view wx:elif="{{item.name=='div'}}">...</view>
+     <!--uni-app编译结果-->
+     <block wx:else>
+       <block wx:if="{{item.name=='div'}}">
+         <view>...</view>
+       </block>
+     </block>
+     ```

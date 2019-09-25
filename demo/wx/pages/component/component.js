@@ -237,6 +237,7 @@ Page({
     js: code.js,
     json2: code.json2,
     vue: code.vue,
+    uni: code.uni,
     wepy:code.wepy,
     emoji: code.emoji,
     listJson: code.listJson,
@@ -353,6 +354,13 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.9.25:
+      <ol>
+        <li><code>A</code> 增加了<code>uni-app</code>插件包</li>
+        <li><code>F</code> 修复了部分情况下显示样式出错的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.9.22:
       <ol>
         <li><code>U</code> 支持引入<code>wxss</code>文件中的外部样式</li>

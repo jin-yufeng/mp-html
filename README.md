@@ -5,14 +5,13 @@
 - [使用方法](#使用方法)
   - [插件包说明](#插件包说明)
   - [在原生框架中使用](#在原生框架中使用)
+  - [在uni-app中使用](#在uni-app中使用)
   - [在mpVue中使用](#在mpVue中使用)
-  - [在uni-app中使用](https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81)
   - [在taro中使用](https://github.com/xPixv/Taro-ParserRichText)
   - [在wepy中使用](#在wepy中使用)
   - [组件属性](#组件属性)
   - [回调函数](#回调函数)
   - [使用外部样式](#使用外部样式)
-  - [百度版与微信版的差别](./docs/Usage.md#百度版与微信版的差别)
 - [补丁包](#补丁包)
   - [emoji](#emoji)
   - [document](#document)
@@ -59,12 +58,15 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| Parser | 37.3KB | 微信小程序插件包 |
-| Parser.min | 27.0KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.bd | 35.5KB | 百度小程序插件包 |
-| Parser.bd.min | 26.1KB | 百度小程序插件包压缩版（功能相同） |
+| Parser | 37.6KB | 微信小程序插件包 |
+| Parser.min | 27.1KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.bd | 35.8KB | 百度小程序插件包 |
+| Parser.bd.min | 26.2KB | 百度小程序插件包压缩版（功能相同） |
+| Parser.uni | 43.0KB | `uni-app` 插件包（可以编译到所有小程序平台） |
 
-可根据需要选用，使用时建议统一更名为`Parser`，以下**统称**为`Parser`  
+- 关于百度版与微信版的差别，可见[百度版与微信版的差别](./docs/Usage.md#百度版与微信版的差别)  
+- `uni-app`版因为各平台`rich-text`和自定义组件表现有所不同，有较多条件编译的内容，编译后大小会缩小，关于各平台间的差别和与原生包的差别，可见[`uni-app`包说明](./docs/Usage.md#uni-app包说明)  
+- 可根据需要选用，使用时建议统一更名为`Parser`，以下**统称**为`Parser`  
 
 ### 在原生框架中使用 ###
 1. 下载`Parser`文件夹至小程序目录  
@@ -86,7 +88,34 @@
      html:"<div>Hello World!</div>"
    }
    ```
-- `demo`文件夹下的是微信小程序 `富文本插件` 示例程序的源码，可供参考  
+- `demo/wx`文件夹下的是微信小程序 `富文本插件` 示例程序的源码，可供参考  
+### 在uni-app中使用 ###
+- 使用`uni-app`包（可以编译到所有小程序平台）  
+  1. 下载`Parser.uni`包到`components`目录下（更名为`Parser`）  
+  2. 在需要使用页面的`vue`文件中添加  
+     ```vue
+     <template>
+       <view>
+         <parser :html="html"></parser>
+       </view>
+     </template>
+     <script>
+     import parser from "@/components/Parser/index"
+     export default{
+       components: {
+         parser
+       },
+       data() {
+         return {
+           html: '<div>Hello World!</div>'
+         }
+       }
+     </script>
+     ```
+  - 可以直接通过插件市场引入：[插件市场](https://ext.dcloud.net.cn/plugin?id=805)
+  - `demo/uni-app`文件夹下是一个示例程序，可供参考  
+- 使用原生包  
+  参考[官网-小程序组件支持](https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81)
 ### 在mpVue中使用 ###
 1. 下载`Parser`文件夹至`static`目录下
 2. 在`src`目录下需要使用本插件的页面文件夹下添加`json`文件
@@ -359,9 +388,9 @@
 ## 后端解析 ##
 &emsp;&emsp;本插件提供了一个配套的后端`node.js`支持包，可以提供更加强大的功能，如匹配多层的`style`，代码高亮，直接打开网址，解析`markdown`等，其返回值可以直接作为本组件的`html`属性的值；且在后端提前完成解析后可以节省解析时间，提高性能。  
 **注意：该包需要node.js v7.6.0以上运行环境，无法直接在小程序前端使用，建议部署在服务器或云函数上**  
-在**百度小程序中使用**需要在`options`中设置`{env: "bd"}`  
+在百度小程序和头条小程序中使用时需要将`options`中的`setContain`设置为`true`    
 安装方法：
-```npm
+```cmd
 npm install parser-wxapp
 ```
 使用方法：
@@ -380,10 +409,13 @@ parser(html).then(function(res){
 
 ## 许可与支持 ##
 您可以随意的使用和分享本插件  
-![](https://i.imgur.com/ASMBhWI.png)  
+![支持](https://i.imgur.com/ASMBhWI.png)  
 
 
 ## 更新日志 ##
+- 2019.9.25:
+  1. `A` 增加了`uni-app`插件包（可以编译到所有小程序平台）[详细](#在uni-app中使用)    
+  2. `F` 修复了部分情况下样式显示错误的问题  
 - 2019.9.22:
   1. `U` 支持引入`wxss` / `css`文件中的外部样式 [详细](#使用外部样式)  
 - 2019.9.21:
@@ -411,7 +443,5 @@ parser(html).then(function(res){
   5. `F` 修复了解析完成后传入的`tagStyle`会被修改的问题
   6. `F` 修复了存在多张相同`url`图片时，进行预览会出现定位错误的问题
   7. `F` 修复了部分情况下`html`中的换行符会被显示的问题
-- 2019.8.22：
-  1. `U` 支持了`font`标签的`size`属性
 
 更多可见：[更新日志](./docs/Update.md)

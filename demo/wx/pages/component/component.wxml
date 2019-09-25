@@ -203,9 +203,9 @@
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <code>37.3KB</code>，
+          <code>37.6KB</code>，
           <code>min</code>版本
-          <code>27.0KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <code>27.1KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <rich-text nodes="{{errorcode}}" />
         </view>
       </view>
@@ -237,8 +237,15 @@
           <view style="margin-left:10%;">
             <rich-text nodes="{{vue}}" />
           </view>
-          <Parser id="uniApp" html='<li style="margin-top:5px;margin-bottom:5px">在<code>uni-app</code>中使用</li><div style="margin-left:20px">可参考：<a href="https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81">官网-小程序组件支持</a></div><div style="margin-left:20px"><strong>注意：</strong>在<code>mpVue</code>和<code>uni-app</code>中使用时组件名一定要<strong>小写</strong></div>'
-            tagStyle="{{tagStyle}}" />
+          <Parser id="uniApp" html='<li style="margin-top:5px;margin-bottom:5px">在<code>uni-app</code>中使用</li>' tag-style="{{tagStyle}}" />
+          <view style="margin-left:20px">使用<code>uni-app</code>包：（可以编译到所有小程序平台）</view>
+          <Parser html='<ol><li>下载<code>Parser.uni</code>文件夹至<code>components</code>目录下（更名为<code>Parser）</li><li>在需要使用页面的<code>vue</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
+          <view style="margin-left:10%;">
+            <rich-text nodes="{{uni}}" />
+          </view>
+          <Parser html="<ul><li>可以直接通过<code>uni-app</code>插件市场引入：<a href='https://ext.dcloud.net.cn/plugin?id=805'>链接</a>" tag-style="{{tagStyle}}" />
+          <view style="margin-left:20px;margin-top:10px">使用原生包：</view>
+          <Parser html='<div style="margin-left:20px">可参考：<a href="https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81">官网-小程序组件支持</a></div><div style="margin-left:20px"><strong>注意：</strong>在<code>mpVue</code>和<code>uni-app</code>中使用时组件名一定要<strong>小写</strong></div>' tag-style="{{tagStyle}}" />
           <Parser id="taro" html='<li style="margin-top:10px;margin-bottom:5px">在<code>Taro</code>中使用</li><div style="margin-left:20px">可参考：<a href="https://github.com/xPixv/Taro-ParserRichText">Github链接</a></div>' tag-style="{{tagStyle}}" />
           <Parser id="wepy" style="margin-top:10px;margin-bottom:5px" html="<li>在<code>wepy</code>中使用</li>" tag-style="{{tagStyle}}" />
           <view style="margin-left:20px">测试版本：V1.7.3</view>

@@ -71,19 +71,30 @@ const _traverse = function (nodes) {
       var style = element.attrs.style;
       var reg = /float\s*:\s*[^;]*/i;
       if (reg.test(style)) res += reg.exec(style)[0];
-      reg = /margin[^;]*auto/i;
-      if (reg.test(style)) res += ";" + reg.exec(style)[0];
+      reg = /margin[^;]*/gi;
+      var margin = reg.exec(style);
+      while (margin) {
+        res += (';' + margin[0]);
+        margin = reg.exec(style);
+      }
       reg = /display\s*:\s*([^;]*)/i;
-      if (reg.test(style) && reg.exec(style)[1] != "flex") res += ';' + reg.exec(style)[0];
+      if (reg.test(style) && reg.exec(style)[1] != "flex") res += (';' + reg.exec(style)[0]);
       else res += (";display:" + (element.name == 'img' ? 'inline-block' : 'block'));
-      reg = /[^;\s]*width\s*:\s*[^;]*/ig;
+      reg = /flex\s*:[^;]*/i;
+      if (reg.test(style)) res += (';' + reg.exec(style)[0]);
+      reg = /[^;\s]*width[^;]*/ig;
       var width = reg.exec(style);
       while (width) {
-        res += ';' + width[0];
+        res += (';' + width[0]);
         width = reg.exec(style);
       }
       element.attrs.containStyle = res;
-      if (/[^-]width\s*:\s*[^px]*;/i.test(';' + element.attrs.style)) element.attrs.style += ';width:100%';
+      if (/[^-]width[^pev;]+/.test(";" + style))
+        element.attrs.style += "width:100%";
+      element.attrs.style = element.attrs.style.replace(/margin.*?:\s*([^;\s]*)/gi, function () {
+        if (arguments[1] != '0') return "";
+        else return "margin:0"
+      });
     }
     else _traverse(element.children);
   }

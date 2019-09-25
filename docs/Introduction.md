@@ -26,7 +26,7 @@
   可以在`tag-style`属性中设置标签的默认样式  
   示例：  
   ``` html
-  <Parser html="<code>test</code>" tag-style="{{tagStyle}}" />
+  <parser html="<code>test</code>" tag-style="{{tagStyle}}" />
   ```
   ``` javascript
   data:{
@@ -41,12 +41,12 @@
 - 支持添加加载提示  
   可以在`Parser`标签内添加加载提示或动画，将在未加载完成或内容为空时显示，加载完成后自动隐藏  
   ```html
-  <Parser html="{{html}}">加载中...</Parser>
+  <parser html="{{html}}">加载中...</parser>
   ```
 - 支持动画显示效果  
   通过设置`show-with-animation`属性可以实现内容加载完成后渐显的动画效果  
   ```html
-  <Parser html="{{html}}" show-with-animation animation-duration="500" />
+  <parser html="{{html}}" show-with-animation animation-duration="500" />
   ```
 - 支持多资源加载  
   可以在`video`和`audio`中设置多个`source`标签，组件将按顺序进行加载，若前面的链接无法播放，将自动切换下一个链接进行加载和播放，直到最后一个链接；可用于解决平台差异，最大程度避免无法播放
@@ -59,7 +59,8 @@
 - 支持长按复制内容  
   通过设置`selectable`属性可以实现长按复制任意内容  
   `tips`: 百度小程序的`rich-text`本身支持`selectable`属性（需要百度`APP 11.10`以上）；但微信小程序不支持；本插件**均可实现**支持复制（且**没有版本要求**）  
-
+- 支持各类实体  
+  支持 `&nbsp;` `&ensp;` `&emsp;` `&lt;` `&gt;` `&quot;` `&mdash;` `&hellip;` `&copy;`等多个常用实体  
 - 智能压缩  
   支持自动通过以下方式对解析结果进行压缩，可以有效提升性能：
   - 将一些只有一个子节点的标签进行合并，以实现减小深度的效果，根据内容不同，可以减少`15%~60%`的深度  
@@ -78,7 +79,7 @@
   | html |  |
   | ad | unit-id / appid, apid, type |
 
-  以下标签在微信小程序基础库2.7.1以上已经支持；百度小程序不支持；本插件可以实现**均支持**这些标签，且**没有基础库要求**：  
+  以下标签在微信小程序基础库2.7.1以上已经支持；其他小程序不支持；本插件可以实现**均支持**这些标签，且**没有基础库要求**：  
 
   | 标签 | 属性 |
   |:---:|:---:|

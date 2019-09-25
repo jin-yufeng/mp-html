@@ -648,7 +648,7 @@ module.exports = {
           "type": "text"
         }, {
           "children": [{
-            "text": "Parser",
+            "text": "parser",
             "type": "text"
           }],
           "name": "span",
@@ -773,7 +773,7 @@ module.exports = {
           "type": "text"
         }, {
           "children": [{
-            "text": "Parser",
+            "text": "parser",
             "type": "text"
           }],
           "name": "span",
@@ -859,7 +859,7 @@ module.exports = {
           "type": "text"
         }, {
           "children": [{
-            "text": "Parser",
+            "text": "parser",
             "type": "text"
           }],
           "name": "span",
@@ -2086,6 +2086,7 @@ module.exports = {
       "style": ";font-family:monospace;white-space:pre;overflow:scrollbackground-color:#f6f8fa;padding:5px;border-radius:5px;;\n  display: block;\n  background: white;\n  padding: 0.5em;\n  color: #333333;\n  overflow-x: auto;"
     }
   }],
+  uni: [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "template", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "view", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "    ", "type": "text" }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "parser", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": ":html", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #795da3; ;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"html\"", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #df5000; ;;", "class": "hljs-string" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "parser", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "view", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "template", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "script", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [{ "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "children": [{ "text": "import", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #a71d5d; ;;", "class": "hljs-keyword" } }, { "text": " parser ", "type": "text" }, { "children": [{ "text": "from", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #a71d5d; ;;", "class": "hljs-keyword" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "\"@/components/Parser/index\"", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #df5000; ;;", "class": "hljs-string" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "children": [{ "text": "export", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #a71d5d; ;;", "class": "hljs-keyword" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "default", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #a71d5d; ;;", "class": "hljs-keyword" } }, { "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "components", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #795da3; ;;", "class": "hljs-attr" } }, { "text": ": {", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "    parser", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  },", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  data() {", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "    ", "type": "text" }, { "children": [{ "text": "return", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #a71d5d; ;;", "class": "hljs-keyword" } }, { "text": " {", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "      ", "type": "text" }, { "children": [{ "text": "html", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #795da3; ;;", "class": "hljs-attr" } }, { "text": ": ", "type": "text" }, { "children": [{ "text": "'<div>Hello World!</div>'", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #df5000; ;;", "class": "hljs-string" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "    }", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  }", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }], "name": "span", "attrs": { "style": ";;;", "class": "javascript" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "script", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }], "name": "div", "attrs": { "style": ";font-family:monospace;white-space:pre;overflow:scroll;background-color:#f6f8fa;padding:5px;border-radius:5px;;; display: block; background: white; padding: 0.5em; color: #333333; overflow-x: auto; ;;", "class": "hljs" } }],
   wepy: [{
     "children": [{
       "children": [{
@@ -2828,7 +2829,7 @@ module.exports = {
   }],
   apicode: [{
     "children": [{
-      "text": "<Parser ",
+      "text": "<parser ",
       "type": "text"
     }, {
       "children": [{

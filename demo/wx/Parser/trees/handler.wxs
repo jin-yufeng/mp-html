@@ -23,12 +23,18 @@ module.exports = {
     var res = "";
     var reg = getRegExp("float\s*:\s*[^;]*", "i");
     if (reg.test(style)) res += reg.exec(style)[0];
-    reg = getRegExp("margin[^;]*auto", "i");
-    if (reg.test(style)) res += (";" + reg.exec(style)[0]);
+    reg = getRegExp("margin[^;]*", "gi");
+    var margin = reg.exec(style);
+    while (margin) {
+      res += (';' + margin[0]);
+      margin = reg.exec(style);
+    }
     reg = getRegExp("display\s*:\s*([^;]*)", "i");
     if (reg.test(style) && reg.exec(style)[1] != "flex") res += (';' + reg.exec(style)[0]);
     else res += (';display:' + display);
-    reg = getRegExp("[^;\s]*width\s*:\s*[^;]*", "ig");
+    reg = getRegExp("flex\s*:[^;]*", "i");
+    if (reg.test(style)) res += (';' + reg.exec(style)[0]);
+    reg = getRegExp("[^;\s]*width[^;]*", "ig");
     var width = reg.exec(style);
     while (width) {
       res += (';' + width[0]);
@@ -37,15 +43,17 @@ module.exports = {
     return res;
   },
   setImgStyle: function(item, imgMode) {
-    if (getRegExp("[^-]width\s*:\s*[^px]*;", "i").test(';' + item.attrs.style))
-      item.attrs.style += ';width:100%';
     if (imgMode == "widthFix")
       item.attrs.style += ";height:auto !important";
+    if (getRegExp("[^-]width[^pev;]+").test(";" + item.attrs.style))
+      item.attrs.style += "width:100%";
+    item.attrs.style = item.attrs.style.replace(getRegExp('margin[^;]*', "gi"), "");
     return [item];
   },
   setStyle: function(item) {
-    if (getRegExp("[^-]width\s*:\s*[^;]*", "i").test(';' + item.attrs.style))
-      item.attrs.style += ';width:100%';
+    if (getRegExp("[^-]width[^pev;]+").test(";" + item.attrs.style))
+      item.attrs.style += "width:100%";
+    item.attrs.style = item.attrs.style.replace(getRegExp('margin[^;]*', "gi"), "");
     return [item];
   },
   isContinue: function(item) {
@@ -53,7 +61,7 @@ module.exports = {
       return false;
     if (!item["continue"])
       return true;
-    else if(item.name=='a'||item.name=='li'||item.name=='ol'||item.name=='ul')
+    else if (item.name == 'a' || item.name == 'li' || item.name == 'ol' || item.name == 'ul')
       return true;
     return false;
   }

@@ -13,7 +13,7 @@
 .sub, .sup, .bdo, .bdi, .ruby, .rt {
   display: inline-block !important;
 }
-.div, .blockquote, .p{
+.div, .blockquote, .p {
   display:block;
 }
 .b, .strong {
