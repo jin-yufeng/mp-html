@@ -66,8 +66,13 @@ const _traverse = function(nodes) {
 			}
 			element.attrs.containStyle = res;
 			if (/[^-]width[^pev;]+/.test(";" + style))
-				element.attrs.style += "width:100%";
+				element.attrs.style += ";width:100%";
+			let addMargin = "";
+			if (/margin\s*:/.test(style)) addMargin = ';margin:0';
+			else if (/margin-top/.test(style)) addMargin = ';margin-top:0';
+			else if (/margin-bottom/.test(style)) addMargin = ';margin-bottom:0';
 			element.attrs.style = element.attrs.style.replace(/margin[^;]*/gi, "");
+			element.attrs.style += addMargin;
 		} else _traverse(element.children);
 	}
 };

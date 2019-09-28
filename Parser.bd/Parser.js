@@ -82,7 +82,7 @@ const _traverse = function (nodes) {
       else res += (";display:" + (element.name == 'img' ? 'inline-block' : 'block'));
       reg = /flex\s*:[^;]*/i;
       if (reg.test(style)) res += (';' + reg.exec(style)[0]);
-      reg = /[^;\s]*width[^;]*/ig;
+      reg = /[^;\s]*width[^;]*/gi;
       var width = reg.exec(style);
       while (width) {
         res += (';' + width[0]);
@@ -90,11 +90,13 @@ const _traverse = function (nodes) {
       }
       element.attrs.containStyle = res;
       if (/[^-]width[^pev;]+/.test(";" + style))
-        element.attrs.style += "width:100%";
-      element.attrs.style = element.attrs.style.replace(/margin.*?:\s*([^;\s]*)/gi, function () {
-        if (arguments[1] != '0') return "";
-        else return "margin:0"
-      });
+        element.attrs.style += ";width:100%";
+      let addMargin = "";
+      if(/margin\s*:/.test(style)) addMargin = ';margin:0';
+      else if(/margin-top/.test(style)) addMargin = ';margin-top:0';
+      else if(/margin-bottom/.test(style)) addMargin = ';margin-bottom:0';
+      element.attrs.style = element.attrs.style.replace(/margin[^;]*/gi, "");
+      element.attrs.style += addMargin;
     }
     else _traverse(element.children);
   }

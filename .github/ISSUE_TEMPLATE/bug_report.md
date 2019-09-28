@@ -1,6 +1,6 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: 报告问题（Bug report）
+about: 描述遇到的问题
 title: ''
 labels: ''
 assignees: ''
@@ -17,7 +17,7 @@ assignees: ''
 请描述实际的表现
 
 **html代码**  
-请附上出现问题的html代码，例如：
+请附上出现问题的html代码（或附件），例如：
 ```html
 <div>Hello World!</div>
 ```

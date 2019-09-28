@@ -278,6 +278,11 @@ Page({
       default: 'default',
       notice: '图片的显示模式'
     }, {
+      name: 'lazy-load',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否开启图片懒加载'
+    }, {
       name: 'selectable',
       type: 'Boolean',
       default: 'false',
@@ -337,15 +342,19 @@ Page({
     versions: [{
       version: ">=2.2.5",
       function: "完全正常",
-      percent: "99.14%"
+      percent: "99.19%"
     }, {
-      version: "1.6.3-2.2.4",
+      version: "1.9.3-2.2.4",
       function: "不支持部分html实体",
-      percent: "0.82%"
+      percent: "0.68%"
+    }, {
+      version: "1.6.3-1.9.2",
+      function: "不支持部分html实体\n不支持lazyload属性",
+      percent: "0.05%"
     }, {
       version: "<1.6.3",
       function: "无法使用",
-      percent: "0.04%"
+      percent: "0.05%"
     }],
     //示例代码
     html2nodes: code.html2nodes,
@@ -354,6 +363,12 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.9.28:
+      <ol>
+        <li><code>A</code> 增加了<code>lazy-load</code>属性（可用于图片懒加载）</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.9.25:
       <ol>
         <li><code>A</code> 增加了<code>uni-app</code>插件包</li>

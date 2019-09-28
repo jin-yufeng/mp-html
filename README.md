@@ -58,11 +58,11 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| Parser | 37.6KB | 微信小程序插件包 |
-| Parser.min | 27.1KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.bd | 35.8KB | 百度小程序插件包 |
-| Parser.bd.min | 26.2KB | 百度小程序插件包压缩版（功能相同） |
-| Parser.uni | 43.0KB | `uni-app` 插件包（可以编译到所有小程序平台） |
+| Parser | 39.2KB | 微信小程序插件包 |
+| Parser.min | 28.1KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.bd | 35.9KB | 百度小程序插件包 |
+| Parser.bd.min | 26.3KB | 百度小程序插件包压缩版（功能相同） |
+| Parser.uni | 44.1KB | `uni-app` 插件包（可以编译到所有小程序平台） |
 
 - 关于百度版与微信版的差别，可见[百度版与微信版的差别](./docs/Usage.md#百度版与微信版的差别)  
 - `uni-app`版因为各平台`rich-text`和自定义组件表现有所不同，有较多条件编译的内容，编译后大小会缩小，关于各平台间的差别和与原生包的差别，可见[`uni-app`包说明](./docs/Usage.md#uni-app包说明)  
@@ -183,6 +183,7 @@
   | autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 |
   | autosetTitle | Boolean | true | 否 | 是否自动将title标签的内容设置到页面标题上 |
   | img-mode | String | default | 否 | 图片显示模式 |
+  | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
   | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
   | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
   | animation-duration | Number | 400 | 否 | 动画持续时间 |
@@ -323,7 +324,7 @@
   模拟`ol`、`ul`、`li`标签  
   `ol`标签支持`start`和`type`属性；`ul`标签会自动根据层级显示不同的样式  
 - 大小  
-  `4.39KB`  
+  `4.50KB`  
 - 此补丁包**仅能**在微信小程序中使用  
 - 使用方法  
   1. 将`list`文件夹复制到`Parser`文件夹下  
@@ -413,6 +414,8 @@ parser(html).then(function(res){
 
 
 ## 更新日志 ##
+- 2019.9.28:
+  1. `A` 增加了`lazy-load`属性（可用于图片懒加载）  
 - 2019.9.25:
   1. `A` 增加了`uni-app`插件包（可以编译到所有小程序平台）[详细](#在uni-app中使用)    
   2. `F` 修复了部分情况下样式显示错误的问题  

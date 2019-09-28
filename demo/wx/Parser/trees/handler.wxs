@@ -42,17 +42,21 @@ module.exports = {
     }
     return res;
   },
-  setImgStyle: function(item, imgMode) {
+  setImgStyle: function (item, imgMode, imgLoad) {
     if (imgMode == "widthFix")
       item.attrs.style += ";height:auto !important";
     if (getRegExp("[^-]width[^pev;]+").test(";" + item.attrs.style))
-      item.attrs.style += "width:100%";
+      item.attrs.style += ";width:100%";
     item.attrs.style = item.attrs.style.replace(getRegExp('margin[^;]*', "gi"), "");
+    if (!imgLoad){
+      delete item.attrs.src;
+      item.attrs.style += ";width:5px !important;height:5px !important"
+    }
     return [item];
   },
   setStyle: function(item) {
     if (getRegExp("[^-]width[^pev;]+").test(";" + item.attrs.style))
-      item.attrs.style += "width:100%";
+      item.attrs.style += ";width:100%";
     item.attrs.style = item.attrs.style.replace(getRegExp('margin[^;]*', "gi"), "");
     return [item];
   },

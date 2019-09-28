@@ -1,5 +1,5 @@
 <!--pages/demo/demo.wxml-->
-<Parser id="article" html='{{html}}' bindlinkpress="linkTap" show-with-animation autocopy="{{false}}" selectable binderror="onError">
+<Parser id="article" html='{{html}}' bindlinkpress="linkTap" lazy-load show-with-animation autocopy="{{false}}" selectable binderror="onError">
   <view class="loading-cell">
     <view class="line-bounce">
       <text></text>

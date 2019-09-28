@@ -4,8 +4,9 @@
 			<block v-if="!item.continue">
 				<!--图片-->
 				<!--#ifdef MP-WEIXIN || MP-QQ -->
-				<rich-text v-if="item.name=='img'" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
-				 :nodes='handler.setImgStyle(item,imgMode)' :data-ignore='item.attrs.ignore' :data-src='item.attrs.src' @tap='previewEvent' />
+				<rich-text v-if="item.name=='img'" class="img" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
+				 :nodes='handler.setImgStyle(item,imgMode,imgLoad)' :data-ignore='item.attrs.ignore' :data-src='item.attrs.src'
+				 @tap='previewEvent' />
 				<!--文本-->
 				<block v-else-if="item.type=='text'">
 					<text v-if="!item.decode" decode>{{item.text}}</text>
@@ -42,7 +43,7 @@
 				<!--链接-->
 				<view v-else-if="item.name=='a'" :class="'a '+(item.attrs.class||'')" :style="item.attrs.style" :data-href='item.attrs.href'
 				 hover-class="navigator-hover" hover-start-time="25" hover-stay-time="300" @tap="tapEvent">
-					<trees :nodes="item.children" :imgMode="imgMode" />
+					<trees :nodes="item.children" :imgMode="imgMode" :lazyLoad="lazyLoad" />
 				</view>
 				<!--广告-->
 				<!--#ifdef MP-WEIXIN || MP-QQ-->
@@ -68,7 +69,7 @@
 			<!--#endif-->
 			<!--#ifndef MP-ALIPAY-->
 			<trees v-else :class="item.name+' '+(item.attrs.class||'')" :style="item.attrs.style" :nodes="item.children"
-			 :imgMode="imgMode" />
+			 :imgMode="imgMode" :lazyLoad="lazyLoad" />
 			<!--#endif-->
 		</block>
 	</view>
@@ -83,7 +84,10 @@
 		},
 		data() {
 			return {
-				controls: {}
+				controls: {},
+				// #ifdef MP-WEIXIN || MP-QQ
+				imgLoad: false
+				// #endif
 			}
 		},
 		props: {
@@ -91,6 +95,12 @@
 				type: Array,
 				default: []
 			},
+			// #ifdef MP-WEIXIN || MP-QQ
+			lazyLoad: {
+				type: Boolean,
+				default: false
+			},
+			// #endif
 			imgMode: {
 				type: String,
 				default: "default"
@@ -106,8 +116,13 @@
 				}
 				this._top = this._top.$parent;
 			}
-			this.name = "trees";
 		},
+		// #ifdef MP-WEIXIN || MP-QQ
+		beforeDestroy() {
+			if (this._observer)
+				this._observer.disconnect();
+		},
+		// #endif
 		methods: {
 			// #ifndef MP-ALIPAY
 			playEvent(e) {

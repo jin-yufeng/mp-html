@@ -4,26 +4,48 @@ try {
   Document = require("./document.js");
 } catch (e) {}
 const html2nodes = require('./Parser.js');
+const CanIUseObserver = require("./api.js").versionHigherThan('1.9.3');
+const CanIUseNextTick = wx.canIUse('nextTick');
 const initData = function(Component) {
-  setTimeout(() => {
-    Component.createSelectorQuery().select('#contain').boundingClientRect(res => {
-      Component.triggerEvent('ready', res);
-    }).exec();
-    Component.videoContext = [];
-    let nodes = [Component.selectComponent('#contain')];
-    nodes = nodes.concat(Component.selectAllComponents('#contain>>>#node'));
-    for (let node of nodes) {
-      for (let item of node.data.nodes) {
-        if (item.name == 'video') {
-          Component.videoContext.push({
-            id: item.attrs.id,
-            context: wx.createVideoContext(item.attrs.id, node)
-          });
-        } else if (item.name == 'audio' && item.attrs.autoplay)
-          wx.createAudioContext(item.attrs.id, node).play();
+  Component.createSelectorQuery().select('#contain').boundingClientRect(res => {
+    Component.triggerEvent('ready', res);
+  }).exec();
+  Component.videoContext = [];
+  let nodes = [Component.selectComponent('#contain')];
+  nodes = nodes.concat(Component.selectAllComponents('#contain>>>#node'));
+  for (let node of nodes) {
+    let observered = false
+    for (let item of node.data.nodes) {
+      // 图片懒加载
+      if (item.name == 'img' && !observered) {
+        observered = true;
+        if (node.data.lazyLoad && CanIUseObserver) {
+          node._observer = node.createIntersectionObserver();
+          node._observer.relativeToViewport({
+            bottom: 1500
+          }).observe('.img', res => {
+            node.setData({
+              imgLoad: true
+            })
+            node._observer.disconnect();
+            node._observer = null;
+          })
+        } else {
+          node.setData({
+            imgLoad: true
+          })
+        }
       }
+      // 音视频控制 
+      else if (item.name == 'video') {
+        Component.videoContext.push({
+          id: item.attrs.id,
+          context: wx.createVideoContext(item.attrs.id, node)
+        });
+      } else if (item.name == 'audio' && item.attrs.autoplay)
+        wx.createAudioContext(item.attrs.id, node).play();
     }
-  }, 10)
+  }
 }
 Component({
   properties: {
@@ -56,7 +78,13 @@ Component({
               },
               showAnimation,
               hideAnimation
-            }, initData(this))
+            })
+            if (CanIUseNextTick) wx.nextTick(() => {
+              initData(this)
+            })
+            else setTimeout(() => {
+              initData(this)
+            }, 30)
             if (Document) this.document = new Document("nodes", res.nodes, this);
             if (res.title && this.data.autosetTitle) {
               wx.setNavigationBarTitle({
@@ -78,7 +106,13 @@ Component({
             },
             showAnimation,
             hideAnimation
-          }, initData(this))
+          })
+          if (CanIUseNextTick) wx.nextTick(() => {
+            initData(this)
+          })
+          else setTimeout(() => {
+            initData(this)
+          }, 30)
           if (Document) this.document = new Document("html", html, this);
           this.imgList = [];
         } else if (typeof html == 'object') {
@@ -97,7 +131,13 @@ Component({
             },
             showAnimation,
             hideAnimation
-          }, initData(this))
+          })
+          if (CanIUseNextTick) wx.nextTick(() => {
+            initData(this)
+          })
+          else setTimeout(() => {
+            initData(this)
+          }, 30)
           if (Document) this.document = new Document("html.nodes", html.nodes, this);
           if (html.title && this.data.autosetTitle)
             wx.setNavigationBarTitle({
@@ -131,6 +171,10 @@ Component({
     'imgMode': {
       type: String,
       value: "default"
+    },
+    'lazyLoad': {
+      type: Boolean,
+      value: false
     },
     'selectable': {
       type: Boolean,

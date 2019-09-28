@@ -26,10 +26,21 @@ const loadSource = function(Component, currentTarget) {
   })
 }
 Component({
+  data: {
+    imgLoad: false,
+  },
+  detached() {
+    if (this._observer)
+      this._observer.disconnect();
+  },
   properties: {
     nodes: {
       type: Array,
       value: []
+    },
+    lazyLoad: {
+      type: Boolean,
+      value: false
     },
     controls: {
       type: Object,

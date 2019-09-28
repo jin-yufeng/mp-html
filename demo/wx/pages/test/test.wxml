@@ -7,7 +7,7 @@
   <view class="page__bd">
     <view class="weui-cells__title">解析结果</view>
     <view class="weui-cells weui-cells_after-title" style="padding:{{webmode?'0':'10px 15px'}}">
-      <Parser id="test" html="{{html}}" img-mode="widthFix"/>
+      <Parser id="test" html="{{html}}" img-mode="widthFix" />
     </view>
     <form bindsubmit='parseHtml'>
       <view class="weui-cells__title">输入字符</view>

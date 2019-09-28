@@ -4,20 +4,20 @@
   <ol wx:if="{{item.name=='ol'}}" start="{{item.attrs.start}}" type="{{item.attrs.type}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
     <block wx:for="{{item.children}}" wx:key>
       <li wx:if="{{item.name=='li'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
-        <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+        <trees id="node" nodes="{{item.children}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
       </li>
-      <trees wx:else id="node" nodes="{{[item]}}" controls="{{controls}}" />
+      <trees wx:else id="node" nodes="{{[item]}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
     </block>
   </ol>
   <ul wx:elif="{{item.name=='ul'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
     <block wx:for="{{item.children}}" wx:key>
       <li wx:if="{{item.name=='li'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
-        <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+        <trees id="node" nodes="{{item.children}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
       </li>
-      <trees wx:else id="node" nodes="{{[item]}}" controls="{{controls}}" />
+      <trees wx:else id="node" nodes="{{[item]}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
     </block>
   </ul>
   <li wx:elif="{{item.name=='li'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
-    <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+    <trees id="node" nodes="{{item.children}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
   </li>
 </block>

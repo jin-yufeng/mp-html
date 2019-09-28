@@ -3,9 +3,10 @@ String.prototype.splice = function(start = 0, deleteCount = 0, addStr = '') {
   if (deleteCount < 0) deleteCount = 0;
   return this.substring(0, start) + addStr + this.substring(start + deleteCount);
 }
+const SDKVersion = wx.getSystemInfoSync().SDKVersion;
 module.exports = {
   versionHigherThan(version = '') {
-    var v1 = wx.getSystemInfoSync().SDKVersion.split('.');
+    var v1 = SDKVersion.split('.');
     var v2 = version.split('.');
     const len = Math.max(v1.length, v2.length);
     while (v1.length < len) {

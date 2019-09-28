@@ -74,6 +74,12 @@ Page({
     node: code.node,
     //更新日志
     update: `<ul>
+    <li>2019.9.28:
+      <ol>
+        <li><code>F</code> 修复了高亮处理时<code>pre</code>标签中的实体编码不被编码的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.9.21:
       <ol>
         <li><code>U</code> 优化了<code>class</code>匹配结果的优先级，按照<code>id</code>选择器><code>class</code>选择器><code>name</code>选择器的优先级排列</li>

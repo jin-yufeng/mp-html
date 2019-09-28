@@ -3,8 +3,7 @@
 <block wx:for='{{nodes}}' wx:key>
   <block wx:if="{{Handler.isContinue(item)}}">
     <!--图片-->
-    <rich-text wx:if="{{item.name=='img'}}" style="text-indent:0;{{Handler.getStyle(item.attrs.style,'inline-block')}}" nodes='{{Handler.setImgStyle(item,controls.imgMode)}}' data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewEvent'
-    />
+    <rich-text wx:if="{{item.name=='img'}}" class="img" style="text-indent:0;{{Handler.getStyle(item.attrs.style,'inline-block')}}" nodes='{{Handler.setImgStyle(item,controls.imgMode,imgLoad)}}' data-ignore='{{item.attrs.ignore}}' data-src='{{item.attrs.src}}' bindtap='previewEvent' />
     <!--文本-->
     <block wx:elif="{{item.type=='text'}}">
       <text wx:if="{{!item.decode}}" decode>{{item.text}}</text>
@@ -24,28 +23,28 @@
       poster='{{item.attrs.poster}}' name='{{item.attrs.name}}' author='{{item.attrs.author}}' style="{{item.attrs.style}}" data-id="{{item.attrs.id}}" data-source="{{item.attrs.source}}" binderror="audioError" />
     <!--链接-->
     <navigator wx:elif="{{item.name=='a'}}" url="{{item.attrs.href}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" hover-start-time="25" hover-stay-time="300" bindtap="tapEvent">
-      <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+      <trees id="node" nodes="{{item.children}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
     </navigator>
     <!--列表-->
     <block wx:elif="{{item.continue}}">
       <ol wx:if="{{item.name=='ol'}}" start="{{item.attrs.start}}" type="{{item.attrs.type}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
         <block wx:for="{{item.children}}" wx:key>
           <li wx:if="{{item.name=='li'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
-            <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+            <trees id="node" nodes="{{item.children}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
           </li>
-          <trees wx:else id="node" nodes="{{[item]}}" controls="{{controls}}" />
+          <trees wx:else id="node" nodes="{{[item]}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
         </block>
       </ol>
       <ul wx:elif="{{item.name=='ul'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
         <block wx:for="{{item.children}}" wx:key>
           <li wx:if="{{item.name=='li'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
-            <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+            <trees id="node" nodes="{{item.children}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
           </li>
-          <trees wx:else id="node" nodes="{{[item]}}" controls="{{controls}}" />
+          <trees wx:else id="node" nodes="{{[item]}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
         </block>
       </ul>
       <li wx:elif="{{item.name=='li'}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}">
-        <trees id="node" nodes="{{item.children}}" controls="{{controls}}" />
+        <trees id="node" nodes="{{item.children}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
       </li>
     </block>
     <!--广告-->
@@ -53,5 +52,5 @@
     <!--富文本-->
     <rich-text wx:else style="{{Handler.getStyle(item.attrs.style,'block')}}" nodes="{{Handler.setStyle(item)}}" />
   </block>
-  <trees wx:else id="node" class="{{item.name+' '+(item.attrs.class||'')}}" style="{{item.attrs.style}}" nodes="{{item.children}}" controls="{{controls}}" />
+  <trees wx:else id="node" class="{{item.name+' '+(item.attrs.class||'')}}" style="{{item.attrs.style}}" nodes="{{item.children}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
 </block>

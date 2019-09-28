@@ -9,7 +9,8 @@
 		<!--#endif-->
 		<!--#ifndef MP-ALIPAY-->
 		<trees class="contain" :style="(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
-		 :animation="showAnimation" :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode" />
+		 :animation="showAnimation" :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode"
+		 :lazyLoad="lazyLoad" />
 		<!--#endif-->
 	</view>
 </template>
@@ -17,6 +18,9 @@
 <script>
 	import trees from "./trees"
 	const html2nodes = require("./Parser.js");
+	// #ifndef MP-ALIPAY
+	const CanIUseObserver = require("./api.js").versionHigherThan('1.9.3');
+	// #endif
 	var Document;
 	try {
 		Document = require("./document.js");
@@ -58,6 +62,12 @@
 				type: String,
 				default: 'default'
 			},
+			// #ifdef MP-WEIXIN || MP-QQ
+			'lazyLoad': {
+				type: Boolean,
+				default: false
+			},
+			// #endif
 			'selectable': {
 				type: Boolean,
 				default: false
@@ -143,42 +153,43 @@
 				}
 			},
 			// #ifndef MP-ALIPAY
-			getVideoContext(components) {
-				for (var component of components) {
-					if (component.name == 'trees') {
-						for (let item of component.nodes) {
-							if (item.name == 'video') {
-								this.videoContext.push({
-									id: item.attrs.id,
-									context: uni.createVideoContext(item.attrs.id, this)
-								});
-							}
+			getContext(components) {
+				for (let component of components) {
+					let observered = false;
+					for (let item of component.nodes) {
+						if (item.name == 'img' && !observered) {
+							observered = true;
+							if (component.lazyLoad && CanIUseObserver) {
+								component._observer = uni.createIntersectionObserver(component);
+								component._observer.relativeToViewport({
+									bottom: 1500
+								}).observe('.img', res => {
+									component.imgLoad = true;
+									component._observer.disconnect();
+									component._observer = null;
+								})
+							} else
+								component.imgLoad = true;
+						} else if (item.name == 'video') {
+							this.videoContext.push({
+								id: item.attrs.id,
+								context: uni.createVideoContext(item.attrs.id, this)
+							});
 						}
 					}
-					this.getVideoContext(component.$children);
+					this.getContext(component.$children);
 				}
 			},
 			// #endif
 			ready() {
-				if (uni.canIUse('nextTick')) {
-					this.$nextTick(() => {
-						uni.createSelectorQuery().in(this).select(".contain").boundingClientRect(res => {
-							this.$emit("ready", res);
-						}).exec()
-						// #ifndef MP-ALIPAY
-						this.getVideoContext(this.$children);
-						// #endif
-					})
-				} else {
-					setTimeout(() => {
-						uni.createSelectorQuery().in(this).select(".contain").boundingClientRect(res => {
-							this.$emit("ready", res);
-						}).exec()
-						// #ifndef MP-ALIPAY
-						this.getVideoContext(this.$children);
-						// #endif
-					}, 50)
-				}
+				this.$nextTick(() => {
+					uni.createSelectorQuery().in(this).select(".contain").boundingClientRect(res => {
+						this.$emit("ready", res);
+					}).exec()
+					// #ifndef MP-ALIPAY
+					this.getContext(this.$children);
+					// #endif
+				})
 			}
 		},
 		watch: {
