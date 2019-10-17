@@ -74,6 +74,12 @@ Page({
     node: code.node,
     //更新日志
     update: `<ul>
+    <li>2019.10.14:
+      <ol>
+        <li><code>F</code> 修复了部分情况下样式被错误匹配的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.9.28:
       <ol>
         <li><code>F</code> 修复了高亮处理时<code>pre</code>标签中的实体编码不被编码的问题</li>

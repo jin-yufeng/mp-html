@@ -1,13 +1,13 @@
 <template>
 	<view>
 		<slot v-if="!(html.nodes||((html[0].name||html[0].type)?1:nodes.length))"></slot>
-		<!--#ifdef MP-ALIPAY-->
+		<!--#ifdef MP-ALIPAY || H5-->
 		<view class="contain" :style="(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
 		 :animation="showAnimation">
 			<trees :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode" />
 		</view>
 		<!--#endif-->
-		<!--#ifndef MP-ALIPAY-->
+		<!--#ifndef MP-ALIPAY || H5-->
 		<trees class="contain" :style="(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
 		 :animation="showAnimation" :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode"
 		 :lazyLoad="lazyLoad" />
@@ -18,7 +18,7 @@
 <script>
 	import trees from "./trees"
 	const html2nodes = require("./Parser.js");
-	// #ifndef MP-ALIPAY
+	// #ifndef MP-ALIPAY || H5
 	const CanIUseObserver = require("./api.js").versionHigherThan('1.9.3');
 	// #endif
 	var Document;
@@ -26,6 +26,7 @@
 		Document = require("./document.js");
 	} catch (e) {}
 	export default {
+		name: 'parser',
 		data() {
 			return {
 				nodes: [],
@@ -74,7 +75,9 @@
 			},
 			'tagStyle': {
 				type: Object,
-				default: {}
+				default: ()=>{
+					return {};
+				}
 			},
 			'showWithAnimation': {
 				type: Boolean,
@@ -96,7 +99,7 @@
 				let showAnimation = {};
 				if (this.showWithAnimation) {
 					showAnimation = uni.createAnimation({
-						duration: this.data.animationDuration,
+						duration: this.animationDuration,
 						timingFunction: "ease"
 					}).opacity(1).step().export();
 				}
@@ -156,13 +159,16 @@
 			getContext(components) {
 				for (let component of components) {
 					let observered = false;
+					if(!component.nodes)
+						return this.getContext(component.$children);
 					for (let item of component.nodes) {
 						if (item.name == 'img' && !observered) {
 							observered = true;
 							if (component.lazyLoad && CanIUseObserver) {
 								component._observer = uni.createIntersectionObserver(component);
 								component._observer.relativeToViewport({
-									bottom: 1500
+									top: 1000,
+									bottom: 1000
 								}).observe('.img', res => {
 									component.imgLoad = true;
 									component._observer.disconnect();

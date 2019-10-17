@@ -42,6 +42,7 @@
           <view class="link_h3" hover-class='link-hover' data-section="patchEmoji" bindtap="gosection">emoji</view>
           <view class="link_h3" hover-class='link-hover' data-section="patchDocument" bindtap="gosection">document</view>
           <view class="link_h3" hover-class='link-hover' data-section="patchList" bindtap="gosection">List</view>
+          <view class="link_h3" hover-class='link-hover' data-section="patchCssHandler" bindtap="gosection">CssHandler</view>
           <view class="link_h2" hover-class='link-hover' data-section="libRequire" bindtap="gosection">基础库要求</view>
           <view class="link_h2" hover-class='link-hover' data-section="api" bindtap="gosection">Api</view>
           <view class="link_h2" hover-class='link-hover' data-section="tips" bindtap="gosection">注意事项</view>
@@ -203,9 +204,9 @@
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化（包大小仅约
-          <code>39.2KB</code>，
+          <code>39.7KB</code>，
           <code>min</code>版本
-          <code>28.1KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+          <code>28.3KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <rich-text nodes="{{errorcode}}" />
         </view>
       </view>
@@ -238,19 +239,21 @@
             <rich-text nodes="{{vue}}" />
           </view>
           <Parser id="uniApp" html='<li style="margin-top:5px;margin-bottom:5px">在<code>uni-app</code>中使用</li>' tag-style="{{tagStyle}}" />
-          <view style="margin-left:20px">使用<code>uni-app</code>包：（可以编译到所有小程序平台）</view>
+          <view style="margin-left:20px">使用
+            <code>uni-app</code>包：（可以编译到所有小程序平台）</view>
           <Parser html='<ol><li>下载<code>Parser.uni</code>文件夹至<code>components</code>目录下（更名为<code>Parser）</li><li>在需要使用页面的<code>vue</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <rich-text nodes="{{uni}}" />
           </view>
           <Parser html="<ul><li>可以直接通过<code>uni-app</code>插件市场引入：<a href='https://ext.dcloud.net.cn/plugin?id=805'>链接</a>" tag-style="{{tagStyle}}" />
           <view style="margin-left:20px;margin-top:10px">使用原生包：</view>
-          <Parser html='<div style="margin-left:20px">可参考：<a href="https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81">官网-小程序组件支持</a></div><div style="margin-left:20px"><strong>注意：</strong>在<code>mpVue</code>和<code>uni-app</code>中使用时组件名一定要<strong>小写</strong></div>' tag-style="{{tagStyle}}" />
+          <Parser html='<div style="margin-left:20px">可参考：<a href="https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81">官网-小程序组件支持</a></div><div style="margin-left:20px"><strong>注意：</strong>在<code>mpVue</code>和<code>uni-app</code>中使用时组件名一定要<strong>小写</strong></div>'
+            tag-style="{{tagStyle}}" />
           <Parser id="taro" html='<li style="margin-top:10px;margin-bottom:5px">在<code>Taro</code>中使用</li><div style="margin-left:20px">可参考：<a href="https://github.com/xPixv/Taro-ParserRichText">Github链接</a></div>' tag-style="{{tagStyle}}" />
           <Parser id="wepy" style="margin-top:10px;margin-bottom:5px" html="<li>在<code>wepy</code>中使用</li>" tag-style="{{tagStyle}}" />
           <view style="margin-left:20px">测试版本：V1.7.3</view>
-          <Parser html="<ol><li style='word-break:break-all'>将<code>Parser</code>文件夹复制到<code>/src/components</code>目录下（也可以直接复制到<code>/dist/components</code>目录下，这样<code>wepy</code>将不会对插件包进行编译和压缩</li><li>在需要使用页面的<code>wpy</code>文件中添加</li></ol>"
-            tag-style="{{tagStyle}}" />
+          <Parser html="<ol><li style='word-break:break-all'>将<code>Parser</code>文件夹复制到<code>/src/components</code>目录下（也可以直接复制到<code>/dist/components</code>目录下，这样<code>wepy</code>将不会对插件包进行编译和压缩</li><li>在需要使用页面的<code>wpy</code>文件中添加</li></ol>" tag-style="{{tagStyle}}"
+          />
           <view style="margin-left:10%;">
             <rich-text nodes="{{wepy}}" />
           </view>
@@ -287,9 +290,13 @@
         <!--使用外部样式-->
         <view id="externClass" class="weui-article__h2">使用外部样式</view>
         <view class="weui-article__section">
-          如果需要引入<code>wxss</code>中的外部样式，只需要在<code>Parser/trees/trees.wxss</code>中通过<code>@import</code>引入需要的样式文件即可
+          如果需要引入
+          <code>wxss</code>中的外部样式，只需要在
+          <code>Parser/trees/trees.wxss</code>中通过
+          <code>@import</code>引入需要的样式文件即可
           <view>注意事项：</view>
-          <Parser html="<ol><li>只有自定义组件内的样式在组件内能生效且<code>rich-text</code>在组件内使用时也只能匹配组件内的样式，所以必须在<code>trees</code>组件的<code>wxss</code>文件中引入需要的样式，在页面中写的样式无效</li><li>组件内只能使用<code>class</code>选择器（支持后代选择器），不支持<code>id</code>选择器、属性选择器、标签名选择器等（更多可见<a href='https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html'>官网说明</a>）</li><li>通过这种方式引入的样式会对所有<code>parser</code>标签生效，如果是对单个<code>parser</code>使用的样式，请使用<code>style</code>标签</li></ol>" tag-style="{{tagStyle}}" />
+          <Parser html="<ol><li>只有自定义组件内的样式在组件内能生效且<code>rich-text</code>在组件内使用时也只能匹配组件内的样式，所以必须在<code>trees</code>组件的<code>wxss</code>文件中引入需要的样式，在页面中写的样式无效</li><li>组件内只能使用<code>class</code>选择器（支持后代选择器），不支持<code>id</code>选择器、属性选择器、标签名选择器等（更多可见<a href='https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html'>官网说明</a>）</li><li>通过这种方式引入的样式会对所有<code>parser</code>标签生效，如果是对单个<code>parser</code>使用的样式，请使用<code>style</code>标签</li></ol>"
+            tag-style="{{tagStyle}}" />
         </view>
         <!--补丁包-->
         <view id="patches" class="weui-article__h2">补丁包</view>
@@ -307,9 +314,9 @@
             <Parser html="[笑脸]" style="display:inline" />
           </view>
           <view>大小：
-            <code>4.68KB</code>，
+            <code>4.70KB</code>，
             <code>min</code>版本
-            <code>3.59KB</code>
+            <code>3.61KB</code>
           </view>
           <view>使用方法：将
             <code>emoji.js</code>复制到
@@ -317,7 +324,7 @@
             <code>min</code>版本时也要改名成
             <code>emoji.js</code>）</view>
           <view>默认配置中支持
-            <code>176</code>个常用的
+            <code>177</code>个常用的
             <code>emoji</code>小表情</view>
           <view>支持两种形式的
             <code>emoji</code>，一是
@@ -471,6 +478,43 @@
               </li>
             </ul>
           </view>
+          <!--CssHandler补丁包-->
+          <view id="patchCssHandler" style="margin-top:5px">
+            4.
+            <code>CssHandler</code>
+          </view>
+          <view>功能：支持更多的
+            <code>css</code>选择器
+            <view class="weui-article__section table" style="font-size:13px">
+              <view class="tr">
+                <view class="th" style="width:15%">模式</view>
+                <view class="th" style="width:60%;">匹配的标签</view>
+                <view class="th" style="width:25%;">说明</view>
+              </view>
+              <view class="tr" style="background-color:white">
+                <view class="td" style="width:15%">*</view>
+                <view class="td" style="width:60%;">所有</view>
+                <view class="td" style="width:25%;">通配符</view>
+              </view>
+              <view class="tr" style="background-color:#f6f8fa">
+                <view class="td" style="width:15%">.a .b</view>
+                <view class="td" style="width:60%;"><text decode>&lt;element class="a"&gt;\n&nbsp;...\n&nbsp;&nbsp;&lt;element class="b"&gt;</text></view>
+                <view class="td" style="width:25%;">后代选择器</view>
+              </view>
+              <view class="tr" style="background-color:#f6f8fa">
+                <view class="td" style="width:15%">.a>.b</view>
+                <view class="td" style="width:60%;"><text decode>&lt;element class="a"&gt;\n&nbsp;&lt;element class="b"&gt;</text></view>
+                <view class="td" style="width:25%;">子选择器</view>
+              </view>
+            </view>
+            <view>大小：（与原大小相比增加）
+              <view><code>3.04KB</code>（<code>min</code>版本<code>1.71KB</code>）</view>
+            </view>
+            <view>使用方法：
+              <view>用<code>CssHandler</code>文件夹下的<code>CssHandler.js</code>（若使用<code>min</code>版本也要改名为<code>CssHandler.js</code>）替换原插件包下的<code>CssHandler.js</code>即可</view>
+            </view>
+            <view>注意事项：使用该补丁包后会一定程度上减慢解析速度，如非必要不建议使用</view>
+          </view>
         </view>
         <!--基础库要求-->
         <view id="libRequire" class="weui-article__h2">基础库要求</view>
@@ -483,7 +527,9 @@
             </view>
             <view wx:for="{{versions}}" wx:key class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
               <view class="td" style="width:30%">{{item.version}}</view>
-              <view class="td" style="width:50%;"><text>{{item.function}}</text></view>
+              <view class="td" style="width:50%;">
+                <text>{{item.function}}</text>
+              </view>
               <view class="td" style="width:20%;">{{item.percent}}</view>
             </view>
           </view>

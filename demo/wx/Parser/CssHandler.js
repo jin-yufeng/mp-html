@@ -1,6 +1,20 @@
-//CssTokenizer.js
+//CssHandler.js
+const CanIUse = require('./api.js').versionHigherThan('2.7.1');
+function CssHandler(style, tagStyle) {
+  this._style = new CssTokenizer(style, tagStyle).parse();
+}
+CssHandler.prototype.match = function(name, attrs) {
+  let matched = this._style[name] ? (this._style[name] + ';') : '';
+  if (attrs.id)
+    matched += (this._style['#' + attrs.id] ? (this._style['#' + attrs.id] + ';') : '');
+  if (attrs.class)
+    for (var Class of attrs.class.split(' '))
+      matched += (this._style['.' + Class] ? (this._style['.' + Class] + ';') : '');
+  return matched;
+}
+
 function CssTokenizer(style = '', tagStyle = {}) {
-  this.res = JSON.parse(JSON.stringify(tagStyle));
+  this.res = this.initClass(tagStyle);
   this._state = "SPACE";
   this._buffer = style;
   this._sectionStart = 0;
@@ -9,6 +23,28 @@ function CssTokenizer(style = '', tagStyle = {}) {
   this._content = '';
   this._list = [];
   this._comma = false;
+}
+CssTokenizer.prototype.initClass = function(tagStyle) {
+  let initStyle = JSON.parse(JSON.stringify(tagStyle));
+  initStyle.a = "display:inline;color:#366092;word-break:break-all;" + (initStyle.a || "");
+  initStyle.address = "font-style:italic;" + (initStyle.address || "");
+  initStyle.blockquote = initStyle.blockquote || 'background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px;';
+  initStyle.center = 'text-align:center;' + (initStyle.center || "");
+  initStyle.cite = "font-style:italic;" + (initStyle.cite || "");
+  initStyle.code = initStyle.code || 'padding:0 1px 0 1px;margin-left:2px;margin-right:2px;background-color:#f8f8f8;border:1px solid #cccccc;border-radius:3px;';
+  initStyle.dd = "margin-left:40px;" + (initStyle.dd || "");
+  initStyle.img = "max-width:100%;" + (initStyle.img || "");
+  initStyle.mark = "display:inline;background-color:yellow;" + (initStyle.mark || "");
+  initStyle.pre = "overflow:scroll;" + (initStyle.pre || 'background-color:#f6f8fa;padding:5px;border-radius:5px;');
+  initStyle.s = "display:inline;text-decoration:line-through;" + (initStyle.s || "");
+  initStyle.u = "display:inline;text-decoration:underline;" + (initStyle.u || "");
+  //低版本兼容
+  if (!CanIUse) {
+    initStyle.big = "display:inline;font-size:1.2em;" + (initStyle.big || "");
+    initStyle.small = "display:inline;font-size:0.8em;" + (initStyle.small || "");
+    initStyle.pre = "font-family:monospace;white-space:pre;" + initStyle.pre;
+  }
+  return initStyle;
 }
 CssTokenizer.prototype.SPACE = function(c) {
   if (/[a-zA-Z.#]/.test(c)) {
@@ -111,4 +147,4 @@ CssTokenizer.prototype.parse = function() {
     this[this._state](this._buffer[this._index]);
   return this.res;
 };
-module.exports = CssTokenizer;
+module.exports = CssHandler;

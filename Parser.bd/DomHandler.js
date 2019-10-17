@@ -3,7 +3,7 @@ var emoji;
 try {
   emoji = require("./emoji.js");
 } catch (err) { }
-const CssTokenizer = require('./CssTokenizer.js');
+const CssHandler = require('./CssHandler.js');
 const trustTag = {
   a: 0,
   abbr: 1,
@@ -67,7 +67,8 @@ const blockTag = {
   html: true,
   nav: true,
   pre: true,
-  section: true
+  section: true,
+  caption: true
 };
 const ignoreTag = {
   area: true,
@@ -101,26 +102,6 @@ const ignoreTag = {
   use: true,
   wbr: true
 };
-//添加默认值
-function initStyle(tagStyle) {
-  tagStyle.a = "display:inline;color:#366092;word-break:break-all;" + (tagStyle.a || "");
-  tagStyle.address = "font-style:italic;" + (tagStyle.address || "");
-  tagStyle.blockquote = tagStyle.blockquote || 'margin:0;background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px;';
-  tagStyle.center = 'text-align:center;' + (tagStyle.center || "");
-  tagStyle.cite = "font-style:italic;" + (tagStyle.cite || "");
-  tagStyle.code = tagStyle.code || 'padding:0 1px 0 1px;margin-left:2px;margin-right:2px;background-color:#f8f8f8;border:1px solid #cccccc;border-radius:3px;';
-  tagStyle.dd = "margin-left:40px;" + (tagStyle.dd || "");
-  tagStyle.img = "max-width:100%;" + (tagStyle.img || "");
-  tagStyle.mark = "display:inline;background-color:yellow;" + (tagStyle.mark || "");
-  tagStyle.pre = "overflow:scroll;" + (tagStyle.pre || 'background-color:#f6f8fa;padding:5px;border-radius:5px;');
-  tagStyle.s = "display:inline;text-decoration:line-through;" + (tagStyle.s || "");
-  tagStyle.u = "display:inline;text-decoration:underline;" + (tagStyle.u || "");
-  blockTag.caption = true;
-  tagStyle.big = "display:inline;font-size:1.2em;" + (tagStyle.big || "");
-  tagStyle.small = "display:inline;font-size:0.8em;" + (tagStyle.small || "");
-  tagStyle.pre = "font-family:monospace;white-space:pre;" + tagStyle.pre;
-  return tagStyle;
-}
 
 function DomHandler(style, tagStyle = {}, imgMode) {
   this.imgList = [];
@@ -129,7 +110,7 @@ function DomHandler(style, tagStyle = {}, imgMode) {
   this.title = "";
   this._videoNum = 0;
   this._audioNum = 0;
-  this._style = new CssTokenizer(style, initStyle(tagStyle)).parse();
+  this._CssHandler = new CssHandler(style, tagStyle);
   this._tagStack = [];
   this._imgMode = imgMode;
   this._whiteSpace = false;
@@ -154,12 +135,7 @@ DomHandler.prototype.onopentag = function (name, attrs) {
   let element = {
     children: []
   };
-  //匹配样式
-  let matched = this._style[name] ? this._style[name] + ';' : '';
-  if (attrs.id) matched += this._style['#' + attrs.id] ? this._style['#' + attrs.id] + ';' : '';
-  if (attrs.class)
-    for (var Class of attrs.class.split(' '))
-      matched += this._style['.' + Class] ? this._style['.' + Class] + ';' : '';
+  let matched = this._CssHandler.match(name, attrs, element);
   //处理属性
   switch (name) {
     case 'div':
@@ -319,5 +295,8 @@ DomHandler.prototype.onclosetag = function (name) {
     for (var ele of this._tagStack) if (ele.pre) this._whiteSpace = true;
     delete element.pre;
   }
+  // 多层样式处理 
+  if (this._CssHandler.pop)
+    this._CssHandler.pop(element);
 };
 module.exports = DomHandler;

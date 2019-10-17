@@ -5,10 +5,10 @@
 - 功能  
   将形如`[笑脸]`的文本解析为`emoji`小表情  
 - 大小  
-  `4.66KB`（`min`版本`3.59KB`）  
+  `4.70KB`（`min`版本`3.61KB`）  
 - 使用方法  
   将`emoji.js`复制到`Parser`文件夹下即可（若使用`min`版本也要改名为`emoji.js`）  
-  默认配置中支持`176`个常用的`emoji`小表情  
+  默认配置中支持`177`个常用的`emoji`小表情  
   支持两种形式的`emoji`，一是`emoji`字符（不同设备上显示的样子可能不同），或者是网络图片（将按照`16px` × `16px`的大小显示，且不可放大预览），默认配置中都是`emoji`字符，可使用以下`api`获取或修改：  
   ```javascript
   const parserEmoji = require("path/Parser/emoji.js");
@@ -155,3 +155,29 @@
      </ul>
      ```
      ![列表演示](https://i.imgur.com/xgCAdzj.png)
+### CssHandler ###
+- 功能：支持更多的`css`选择器  
+  原插件包支持的选择器：
+
+  | 模式 | 举例 | 匹配 |
+  |:----:|:----:|:----:|
+  | 按class名匹配 | .demo | &lt;element class="demo"&gt; |
+  | 按id名匹配 | #demo | &lt;element id="demo"&gt; |
+  | 按标签名匹配 | body | &lt;body&gt;...&lt;/body&gt; |
+  | 单层多个class | .demo1.demo2 | &lt;element class="demo1 demo2"&gt; |
+  | 多个并列 | .demo1,.demo2 |&lt;element class="demo1"&gt;或&lt;element class="demo2"&gt;|
+
+  使用本补丁包后**增加**支持的选择器：
+
+  | 模式 | 匹配的标签 | 说明 |
+  |:---:|:---:|:---:|
+  | * | 所有 | 通配符 |
+  | .demo1 .demo2 | &lt;element class="demo1"&gt;<br />...<br />&ensp;&ensp;&ensp;&ensp;&lt;element class="demo2"&gt; | 后代选择器 |
+  | .demo1>.demo2 | &lt;element class="demo1"&gt;<br />&ensp;&ensp;&ensp;&ensp;&lt;element class="demo2"&gt; | 子选择器 |
+
+- 大小（与原大小相比增加）  
+  `3.04KB`（`min`版本：`1.71KB`）  
+- 使用方法  
+  用`CssHandler`文件夹下的`CssHandler.js`（若使用`min`版本也要改名为`CssHandler.js`）替换原插件包下的`CssHandler.js`即可
+- 注意事项  
+  使用该补丁包后会一定程度上减慢解析速度，如非必要不建议使用  

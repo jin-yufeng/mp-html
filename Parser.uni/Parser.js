@@ -37,7 +37,7 @@ const trustAttrs = {
 	// #endif
 	width: true,
 };
-// #ifdef MP-BAIDU||MP-TOUTIAO
+// #ifdef MP-BAIDU || MP-TOUTIAO || H5
 const _traverse = function(nodes) {
 	for (var element of nodes) {
 		if (element.type == "text")
@@ -193,7 +193,7 @@ function html2nodes(data, tagStyle) {
 			});
 			let handler = new DomHandler(style, tagStyle);
 			new Parser(handler, (res) => {
-				// #ifdef MP-BAIDU||MP-TOUTIAO
+				// #ifdef MP-BAIDU || MP-TOUTIAO || H5
 				_traverse(res.nodes);
 				// #endif
 				return resolve(res);

@@ -5,7 +5,7 @@ String.prototype.splice = function(start = 0, deleteCount = 0, addStr = '') {
 }
 const SDKVersion = uni.getSystemInfoSync().SDKVersion;
 module.exports = {
-	// #ifndef MP-ALIPAY
+	// #ifndef MP-ALIPAY || H5
   versionHigherThan(version = '') {
     var v1 = SDKVersion.split('.');
     var v2 = version.split('.');
@@ -33,7 +33,7 @@ module.exports = {
     return Parser(html, tagStyle);
   },
   css2object(style, tagStyle) {
-    const CssTokenizer = require('./CssTokenizer.js');
-    return new CssTokenizer(style, tagStyle).parse();
+    const CssHandler = require('./CssHandler.js'); 
+    return new CssHandler(style, tagStyle)._style; 
   }
 }

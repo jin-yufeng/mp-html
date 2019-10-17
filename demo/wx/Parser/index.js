@@ -22,7 +22,8 @@ const initData = function(Component) {
         if (node.data.lazyLoad && CanIUseObserver) {
           node._observer = node.createIntersectionObserver();
           node._observer.relativeToViewport({
-            bottom: 1500
+            top:1000,
+            bottom: 1000
           }).observe('.img', res => {
             node.setData({
               imgLoad: true

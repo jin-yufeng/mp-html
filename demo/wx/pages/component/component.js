@@ -363,6 +363,13 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.10.17:
+      <ol>
+        <li><code>A</code> 增加了<code>CssHandler</code>补丁包（可支持多层的<code>css</code>选择器）</li>
+        <li><code>U</code> <code>uni-app</code>包支持在<code>H5</code>端使用</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.9.28:
       <ol>
         <li><code>A</code> 增加了<code>lazy-load</code>属性（可用于图片懒加载）</li>
