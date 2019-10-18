@@ -63,7 +63,7 @@
     },
     "mp-qq" : {
         "usingComponents" : true,
-        "appid" : "1108100302"
+        "appid" : ""
     },
     "mp-alipay" : {
         "usingComponents" : true

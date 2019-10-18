@@ -26,8 +26,8 @@
 				<text v-else-if="item.name=='br'">\n</text>
 				<!--视频-->
 				<block v-else-if="item.name=='video'">
-					<view v-if="item.attrs.id[item.attrs.id.length-1]>'3'&&!controls[item.attrs.id].play" :class="'video '+(item.attrs.class||'')"
-					 :style="item.attrs.style" :data-id="item.attrs.id" @tap="_loadVideo">
+					<view v-if="item.attrs.id[item.attrs.id.length-1]>'3'&&(!controls[item.attrs.id]||!controls[item.attrs.id].play)"
+					 :class="'video '+(item.attrs.class||'')" :style="item.attrs.style" :data-id="item.attrs.id" @tap="_loadVideo">
 						<view class="video-triangle"></view>
 					</view>
 					<video v-else-if :src='controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src'
@@ -115,7 +115,7 @@
 		mounted() {
 			// 获取顶层组件
 			this._top = this.$parent;
-			while (this._top.$options.name!='parser') {
+			while (this._top.$options.name != 'parser') {
 				if (this._top._top) {
 					this._top = this._top._top;
 					break;

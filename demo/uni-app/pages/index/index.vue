@@ -1,12 +1,12 @@
 <template>
 	<view>
-		<parser :html="html" @parser="parser" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error">加载中...</parser>
+		<parser :html="html" @parser="parser" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error" show-with-animation lazy-load img-mode="widthFix">加载中...</parser>
 	</view>
 </template>
 
 <script>
-	import parser from "@/components/Parser/index"
-	const api = require('@/components/Parser/api.js');
+	import parser from "@/components/jyf-Parser/index"
+	const api = require('@/components/jyf-Parser/api.js');
 	export default {
 		data() {
 			return {
@@ -20,7 +20,7 @@
 </style>
 <title>功能示例</title>
 <body>
-  <section style="border: 0px none;">
+	<section style="border: 0px none;">
     <section style="padding: 10px;">
       <section style="box-shadow:0px 0px 5px #e5e5e5 ;height:65px;">
         <section style="display: flex;justify-content: flex-start;align-items: center;">
@@ -389,7 +389,7 @@
 			parser
 		},
 		onLoad() {
-			// #ifndef MP-ALIPAY
+			// #ifndef MP-ALIPAY || H5
 			console.log("api: versionHigherThan'2.7.1'?", api.versionHigherThan('2.7.1'))
 			// #endif
 		},

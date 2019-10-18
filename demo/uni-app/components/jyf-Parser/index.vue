@@ -1,15 +1,16 @@
 <template>
 	<view>
 		<slot v-if="!(html.nodes||((html[0].name||html[0].type)?1:nodes.length))"></slot>
-		<!--#ifdef MP-ALIPAY-->
+		<!--#ifdef MP-ALIPAY || H5-->
 		<view class="contain" :style="(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
 		 :animation="showAnimation">
 			<trees :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode" />
 		</view>
 		<!--#endif-->
-		<!--#ifndef MP-ALIPAY-->
+		<!--#ifndef MP-ALIPAY || H5-->
 		<trees class="contain" :style="(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
-		 :animation="showAnimation" :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode" />
+		 :animation="showAnimation" :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode"
+		 :lazyLoad="lazyLoad" />
 		<!--#endif-->
 	</view>
 </template>
@@ -17,11 +18,15 @@
 <script>
 	import trees from "./trees"
 	const html2nodes = require("./Parser.js");
+	// #ifndef MP-ALIPAY || H5
+	const CanIUseObserver = require("./api.js").versionHigherThan('1.9.3');
+	// #endif
 	var Document;
 	try {
 		Document = require("./document.js");
 	} catch (e) {}
 	export default {
+		name: 'parser',
 		data() {
 			return {
 				nodes: [],
@@ -58,13 +63,21 @@
 				type: String,
 				default: 'default'
 			},
+			// #ifdef MP-WEIXIN || MP-QQ
+			'lazyLoad': {
+				type: Boolean,
+				default: false
+			},
+			// #endif
 			'selectable': {
 				type: Boolean,
 				default: false
 			},
 			'tagStyle': {
 				type: Object,
-				default: {}
+				default: ()=>{
+					return {};
+				}
 			},
 			'showWithAnimation': {
 				type: Boolean,
@@ -86,14 +99,14 @@
 				let showAnimation = {};
 				if (this.showWithAnimation) {
 					showAnimation = uni.createAnimation({
-						duration: this.data.animationDuration,
+						duration: this.animationDuration,
 						timingFunction: "ease"
 					}).opacity(1).step().export();
 				}
 				if (!html) {
 					this.nodes = [];
 				} else if (typeof html == 'string') {
-					html2nodes(html, this.tagStyle).then(res => {
+					html2nodes(html, this.tagStyle, this.imgMode).then(res => {
 						this.nodes = res.nodes;
 						this.showAnimation = showAnimation;
 						this.imgList = res.imgList;
@@ -143,42 +156,46 @@
 				}
 			},
 			// #ifndef MP-ALIPAY
-			getVideoContext(components) {
-				for (var component of components) {
-					if (component.name == 'trees') {
-						for (let item of component.nodes) {
-							if (item.name == 'video') {
-								this.videoContext.push({
-									id: item.attrs.id,
-									context: uni.createVideoContext(item.attrs.id, this)
-								});
-							}
+			getContext(components) {
+				for (let component of components) {
+					let observered = false;
+					if(!component.nodes)
+						return this.getContext(component.$children);
+					for (let item of component.nodes) {
+						if (item.name == 'img' && !observered) {
+							observered = true;
+							if (component.lazyLoad && CanIUseObserver) {
+								component._observer = uni.createIntersectionObserver(component);
+								component._observer.relativeToViewport({
+									top: 1000,
+									bottom: 1000
+								}).observe('.img', res => {
+									component.imgLoad = true;
+									component._observer.disconnect();
+									component._observer = null;
+								})
+							} else
+								component.imgLoad = true;
+						} else if (item.name == 'video') {
+							this.videoContext.push({
+								id: item.attrs.id,
+								context: uni.createVideoContext(item.attrs.id, this)
+							});
 						}
 					}
-					this.getVideoContext(component.$children);
+					this.getContext(component.$children);
 				}
 			},
 			// #endif
 			ready() {
-				if (uni.canIUse('nextTick')) {
-					this.$nextTick(() => {
-						uni.createSelectorQuery().in(this).select(".contain").boundingClientRect(res => {
-							this.$emit("ready", res);
-						}).exec()
-						// #ifndef MP-ALIPAY
-						this.getVideoContext(this.$children);
-						// #endif
-					})
-				} else {
-					setTimeout(() => {
-						uni.createSelectorQuery().in(this).select(".contain").boundingClientRect(res => {
-							this.$emit("ready", res);
-						}).exec()
-						// #ifndef MP-ALIPAY
-						this.getVideoContext(this.$children);
-						// #endif
-					}, 50)
-				}
+				this.$nextTick(() => {
+					uni.createSelectorQuery().in(this).select(".contain").boundingClientRect(res => {
+						this.$emit("ready", res);
+					}).exec()
+					// #ifndef MP-ALIPAY
+					this.getContext(this.$children);
+					// #endif
+				})
 			}
 		},
 		watch: {

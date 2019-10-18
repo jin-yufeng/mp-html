@@ -37,7 +37,7 @@ const trustAttrs = {
 	// #endif
 	width: true,
 };
-// #ifdef MP-BAIDU||MP-TOUTIAO
+// #ifdef MP-BAIDU || MP-TOUTIAO || H5
 const _traverse = function(nodes) {
 	for (var element of nodes) {
 		if (element.type == "text")
@@ -66,8 +66,13 @@ const _traverse = function(nodes) {
 			}
 			element.attrs.containStyle = res;
 			if (/[^-]width[^pev;]+/.test(";" + style))
-				element.attrs.style += "width:100%";
+				element.attrs.style += ";width:100%";
+			let addMargin = "";
+			if (/margin\s*:/.test(style)) addMargin = ';margin:0';
+			else if (/margin-top/.test(style)) addMargin = ';margin-top:0';
+			else if (/margin-bottom/.test(style)) addMargin = ';margin-bottom:0';
 			element.attrs.style = element.attrs.style.replace(/margin[^;]*/gi, "");
+			element.attrs.style += addMargin;
 		} else _traverse(element.children);
 	}
 };
@@ -178,7 +183,7 @@ Parser.prototype.write = function(chunk) {
 	this._tokenizer.parse(chunk);
 };
 
-function html2nodes(data, tagStyle) {
+function html2nodes(data, tagStyle, imgMode) {
 	return new Promise(function(resolve, reject) {
 		try {
 			let style = '';
@@ -186,9 +191,9 @@ function html2nodes(data, tagStyle) {
 				style += arguments[1];
 				return '';
 			});
-			let handler = new DomHandler(style, tagStyle);
+			let handler = new DomHandler(style, tagStyle, imgMode);
 			new Parser(handler, (res) => {
-				// #ifdef MP-BAIDU||MP-TOUTIAO
+				// #ifdef MP-BAIDU || MP-TOUTIAO || H5
 				_traverse(res.nodes);
 				// #endif
 				return resolve(res);

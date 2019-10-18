@@ -4,8 +4,9 @@
 			<block v-if="!item.continue">
 				<!--图片-->
 				<!--#ifdef MP-WEIXIN || MP-QQ -->
-				<rich-text v-if="item.name=='img'" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
-				 :nodes='handler.setImgStyle(item,imgMode)' :data-ignore='item.attrs.ignore' :data-src='item.attrs.src' @tap='previewEvent' />
+				<rich-text v-if="item.name=='img'" class="img" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
+				 :nodes='handler.setImgStyle(item,imgMode,imgLoad)' :data-ignore='item.attrs.ignore' :data-src='item.attrs.src'
+				 @tap='previewEvent' />
 				<!--文本-->
 				<block v-else-if="item.type=='text'">
 					<text v-if="!item.decode" decode>{{item.text}}</text>
@@ -18,19 +19,19 @@
 				<!--文本-->
 				<text v-else-if="item.type=='text'" decode>{{item.text}}</text>
 				<!--#endif-->
-				<!--#ifdef MP-BAIDU || MP-TOUTIAO-->
+				<!--#ifdef MP-BAIDU || MP-TOUTIAO || H5-->
 				<rich-text v-if="item.name=='img'" :style="'text-indent:0;'+item.attrs.containStyle" :nodes='[item]' :data-ignore='item.attrs.ignore'
 				 :data-src='item.attrs.src' @tap='previewEvent' />
 				<!--#endif-->
 				<text v-else-if="item.name=='br'">\n</text>
 				<!--视频-->
 				<block v-else-if="item.name=='video'">
-					<view v-if="item.attrs.id[item.attrs.id.length-1]>'3'&&!controls[item.attrs.id].play" :class="'video '+(item.attrs.class||'')"
-					 :style="item.attrs.style" :data-id="item.attrs.id" @tap="_loadVideo">
+					<view v-if="item.attrs.id[item.attrs.id.length-1]>'3'&&(!controls[item.attrs.id]||!controls[item.attrs.id].play)"
+					 :class="'video '+(item.attrs.class||'')" :style="item.attrs.style" :data-id="item.attrs.id" @tap="_loadVideo">
 						<view class="video-triangle"></view>
 					</view>
 					<video v-else-if :src='controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src'
-					 :id="item.attrs.id" :loop='item.attrs.loop' :controls='item.attrs.controls' :autoplay="item.attrs.autoplay||controls[item.attrs.id].play"
+					 :id="item.attrs.id" :loop='item.attrs.loop' :controls='item.attrs.controls' :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
 					 :unit-id="item.attrs['unit-id']" :class="'v '+(item.attrs.class||'')" :muted="item.attrs.muted" :style="item.attrs.style"
 					 :data-id="item.attrs.id" :data-source="item.attrs.source" @play='playEvent' @error="videoError" />
 				</block>
@@ -41,8 +42,13 @@
 				 :data-source="item.attrs.source" @error="audioError" />
 				<!--链接-->
 				<view v-else-if="item.name=='a'" :class="'a '+(item.attrs.class||'')" :style="item.attrs.style" :data-href='item.attrs.href'
-				 hover-class="navigator-hover" hover-start-time="25" hover-stay-time="300" @tap="tapEvent">
+				 hover-class="navigator-hover" :hover-start-time="25" :hover-stay-time="300" @tap="tapEvent">
+					<!--#ifdef H5-->
 					<trees :nodes="item.children" :imgMode="imgMode" />
+					<!--#endif-->
+					<!--#ifndef H5-->
+					<trees :nodes="item.children" :imgMode="imgMode" :lazyLoad="lazyLoad" />
+					<!--#endif-->
 				</view>
 				<!--广告-->
 				<!--#ifdef MP-WEIXIN || MP-QQ-->
@@ -57,18 +63,18 @@
 				<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY-->
 				<rich-text v-else :class="item.name" :style="''+handler.getStyle(item.attrs.style,'block')" :nodes="handler.setStyle(item)" />
 				<!--#endif-->
-				<!--#ifdef MP-BAIDU || MP-TOUTIAO-->
-				<rich-text v-else :style="item.attrs.containStyle" :nodes="[item]" />
+				<!--#ifdef MP-BAIDU || MP-TOUTIAO || H5-->
+				<rich-text v-else :style="item.attrs?item.attrs.containStyle:''" :nodes="[item]" />
 				<!--#endif-->
 			</block>
-			<!--#ifdef MP-ALIPAY-->
+			<!--#ifdef MP-ALIPAY || H5-->
 			<view v-else :class="item.name+' '+(item.attrs.class||'')" :style="item.attrs.style">
 				<trees :nodes="item.children" :imgMode="imgMode" />
 			</view>
 			<!--#endif-->
-			<!--#ifndef MP-ALIPAY-->
+			<!--#ifndef MP-ALIPAY || H5-->
 			<trees v-else :class="item.name+' '+(item.attrs.class||'')" :style="item.attrs.style" :nodes="item.children"
-			 :imgMode="imgMode" />
+			 :imgMode="imgMode" :lazyLoad="lazyLoad" />
 			<!--#endif-->
 		</block>
 	</view>
@@ -81,9 +87,13 @@
 		components: {
 			trees
 		},
+		name: 'trees',
 		data() {
 			return {
-				controls: {}
+				controls: {},
+				// #ifdef MP-WEIXIN || MP-QQ
+				imgLoad: false
+				// #endif
 			}
 		},
 		props: {
@@ -91,6 +101,12 @@
 				type: Array,
 				default: []
 			},
+			// #ifdef MP-WEIXIN || MP-QQ
+			lazyLoad: {
+				type: Boolean,
+				default: false
+			},
+			// #endif
 			imgMode: {
 				type: String,
 				default: "default"
@@ -99,15 +115,20 @@
 		mounted() {
 			// 获取顶层组件
 			this._top = this.$parent;
-			while (this._top.$parent.mpType != "page") {
+			while (this._top.$options.name != 'parser') {
 				if (this._top._top) {
 					this._top = this._top._top;
 					break;
 				}
 				this._top = this._top.$parent;
 			}
-			this.name = "trees";
 		},
+		// #ifdef MP-WEIXIN || MP-QQ
+		beforeDestroy() {
+			if (this._observer)
+				this._observer.disconnect();
+		},
+		// #endif
 		methods: {
 			// #ifndef MP-ALIPAY
 			playEvent(e) {
@@ -139,6 +160,7 @@
 				if (!e.currentTarget.dataset.href)
 					return;
 				if (/^http/.test(e.currentTarget.dataset.href)) {
+					// #ifndef H5
 					if (this._top.autocopy)
 						uni.setClipboardData({
 							data: e.currentTarget.dataset.href,
@@ -148,6 +170,10 @@
 								});
 							}
 						});
+					// #endif
+					// #ifdef H5
+					window.location.href = e.currentTarget.dataset.href;
+					// #endif
 				} else
 					uni.navigateTo({
 						url: e.currentTarget.dataset.href

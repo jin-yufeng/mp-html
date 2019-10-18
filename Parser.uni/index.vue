@@ -106,7 +106,7 @@
 				if (!html) {
 					this.nodes = [];
 				} else if (typeof html == 'string') {
-					html2nodes(html, this.tagStyle).then(res => {
+					html2nodes(html, this.tagStyle, this.imgMode).then(res => {
 						this.nodes = res.nodes;
 						this.showAnimation = showAnimation;
 						this.imgList = res.imgList;

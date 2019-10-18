@@ -45,14 +45,17 @@ export default {
 		if (imgMode == "widthFix")
 			item.attrs.style += ";height:auto !important";
 		if (getRegExp("[^-]width[^pev;]+").test(";" + item.attrs.style))
-			item.attrs.style += "width:100%";
+			item.attrs.style += ";width:100%";
 		item.attrs.style = item.attrs.style.replace(getRegExp('margin[^;]*', "gi"), "");
 		return [item];
 	},
 	setStyle: function(item) {
 		if (getRegExp("[^-]width[^pev;]+").test(";" + item.attrs.style))
-			item.attrs.style += "width:100%";
-		item.attrs.style = item.attrs.style.replace(getRegExp('margin[^;]*', "gi"), "");
+			item.attrs.style += ";width:100%";
+		if (getRegExp('margin').test(item.attrs.style)) {
+			item.attrs.style = item.attrs.style.replace(getRegExp('margin[^;]*', "gi"), "");
+			item.attrs.style += ';margin:0'
+		}
 		return [item];
 	},
 	isContinue: function(item) {
@@ -60,7 +63,7 @@ export default {
 			return false;
 		if (!item["continue"])
 			return true;
-		else if (item.name == 'a' || item.name == 'li' || item.name == 'ol' || item.name == 'ul')
+		else if (item.name == 'a')
 			return true;
 		return false;
 	}

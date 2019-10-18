@@ -131,7 +131,7 @@ function randomId() {
 	return res;
 }
 
-function DomHandler(style, tagStyle = {}) {
+function DomHandler(style, tagStyle = {}, imgMode) {
 	this.imgList = [];
 	this.imgIndex = 0;
 	this.nodes = [];
@@ -139,6 +139,9 @@ function DomHandler(style, tagStyle = {}) {
 	this._CssHandler = new CssHandler(style, tagStyle);
 	this._tagStack = [];
 	this._videoNum = 0;
+	// #ifdef MP-BAIDU || MP-TOUTIAO || H5
+	this._imgMode = imgMode;
+	// #endif
 	this._whiteSpace = false;
 }
 DomHandler.prototype._addDomElement = function(element) {
@@ -189,6 +192,9 @@ DomHandler.prototype.onopentag = function(name, attrs) {
 				if (this._bubbling() == 'a') attrs.ignore = "true"; // 图片在链接中不可预览
 			} else
 				attrs.ignore = "true";
+			// #ifdef MP-BAIDU || MP-TOUTIAO || H5
+			if (this._imgMode == "widthFix") attrs.style += ";height:auto !important;";
+			// #endif
 			break;
 		case 'font':
 			name = 'span';
