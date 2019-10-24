@@ -10,7 +10,7 @@
 		<!--#ifndef MP-ALIPAY || H5-->
 		<trees class="contain" :style="(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
 		 :animation="showAnimation" :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode"
-		 :lazyLoad="lazyLoad" />
+		 :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
 		<!--#endif-->
 	</view>
 </template>
@@ -18,8 +18,11 @@
 <script>
 	import trees from "./trees"
 	const html2nodes = require("./Parser.js");
-	// #ifndef MP-ALIPAY || H5
+	// #ifdef MP-WEIXIN || MP-QQ
 	const CanIUseObserver = require("./api.js").versionHigherThan('1.9.3');
+	// #endif
+	// #ifdef APP-PLUS
+	const CanIUseObserver = true;
 	// #endif
 	var Document;
 	try {
@@ -30,7 +33,10 @@
 		data() {
 			return {
 				nodes: [],
-				showAnimation: {}
+				showAnimation: {},
+				// #ifdef APP-PLUS
+				loadVideo: false,
+				// #endif
 			}
 		},
 		components: {
@@ -63,7 +69,7 @@
 				type: String,
 				default: 'default'
 			},
-			// #ifdef MP-WEIXIN || MP-QQ
+			// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
 			'lazyLoad': {
 				type: Boolean,
 				default: false
@@ -75,7 +81,7 @@
 			},
 			'tagStyle': {
 				type: Object,
-				default: ()=>{
+				default: () => {
 					return {};
 				}
 			},
@@ -107,6 +113,9 @@
 					this.nodes = [];
 				} else if (typeof html == 'string') {
 					html2nodes(html, this.tagStyle, this.imgMode).then(res => {
+						// #ifdef APP-PLUS
+						this.loadVideo = false;
+						// #endif
 						this.nodes = res.nodes;
 						this.showAnimation = showAnimation;
 						this.imgList = res.imgList;
@@ -128,6 +137,9 @@
 				} else if (html.constructor == Array) {
 					this.showAnimation = showAnimation;
 					this.imgList = [];
+					// #ifdef APP-PLUS
+					this.loadVideo = false;
+					// #endif
 					if (Document) this.document = new Document("html", html, this);
 					this.ready();
 				} else if (typeof html == 'object') {
@@ -142,6 +154,9 @@
 					}
 					this.showAnimation = showAnimation;
 					this.imgList = html.imgList || [];
+					// #ifdef APP-PLUS
+					this.loadVideo = false;
+					// #endif
 					if (Document) this.document = new Document("html.nodes", html.nodes, this);
 					if (html.title && this.autosetTitle)
 						uni.setNavigationBarTitle({
@@ -159,7 +174,7 @@
 			getContext(components) {
 				for (let component of components) {
 					let observered = false;
-					if(!component.nodes)
+					if (!component.nodes)
 						return this.getContext(component.$children);
 					for (let item of component.nodes) {
 						if (item.name == 'img' && !observered) {
@@ -194,6 +209,11 @@
 					}).exec()
 					// #ifndef MP-ALIPAY
 					this.getContext(this.$children);
+					// #endif
+					// #ifdef APP-PLUS
+					setTimeout(() => {
+						this.loadVideo = true;
+					}, 1000);
 					// #endif
 				})
 			}

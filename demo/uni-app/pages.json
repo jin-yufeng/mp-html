@@ -10,6 +10,10 @@
             "path" : "pages/turn/turn",
             "style" : {}
         }
+        ,{
+            "path" : "pages/web/web",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

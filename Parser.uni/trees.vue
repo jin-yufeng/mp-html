@@ -3,7 +3,7 @@
 		<block v-for='(item, index) in nodes' v-bind:key='index'>
 			<block v-if="!item.continue">
 				<!--图片-->
-				<!--#ifdef MP-WEIXIN || MP-QQ -->
+				<!--#ifdef MP-WEIXIN || MP-QQ || APP-PLUS-->
 				<rich-text v-if="item.name=='img'" class="img" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
 				 :nodes='handler.setImgStyle(item,imgMode,imgLoad)' :data-ignore='item.attrs.ignore' :data-src='item.attrs.src'
 				 @tap='previewEvent' />
@@ -26,10 +26,18 @@
 				<text v-else-if="item.name=='br'">\n</text>
 				<!--视频-->
 				<block v-else-if="item.name=='video'">
+					<!--#ifdef APP-PLUS-->
+					<view v-if="!loadVideo||(item.attrs.id[item.attrs.id.length-1]>'3'&&(!controls[item.attrs.id]||!controls[item.attrs.id].play))"
+					 :class="'video '+(item.attrs.class||'')" :style="item.attrs.style" :data-id="item.attrs.id" @tap="_loadVideo">
+						<view class="video-triangle"></view>
+					</view>
+					<!--#endif-->
+					<!--#ifndef APP-PLUS-->
 					<view v-if="item.attrs.id[item.attrs.id.length-1]>'3'&&(!controls[item.attrs.id]||!controls[item.attrs.id].play)"
 					 :class="'video '+(item.attrs.class||'')" :style="item.attrs.style" :data-id="item.attrs.id" @tap="_loadVideo">
 						<view class="video-triangle"></view>
 					</view>
+					<!--#endif-->
 					<video v-else-if :src='controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src'
 					 :id="item.attrs.id" :loop='item.attrs.loop' :controls='item.attrs.controls' :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
 					 :unit-id="item.attrs['unit-id']" :class="'v '+(item.attrs.class||'')" :muted="item.attrs.muted" :style="item.attrs.style"
@@ -47,7 +55,7 @@
 					<trees :nodes="item.children" :imgMode="imgMode" />
 					<!--#endif-->
 					<!--#ifndef H5-->
-					<trees :nodes="item.children" :imgMode="imgMode" :lazyLoad="lazyLoad" />
+					<trees :nodes="item.children" :imgMode="imgMode" :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
 					<!--#endif-->
 				</view>
 				<!--广告-->
@@ -60,11 +68,11 @@
 				 :style="item.attrs.style" @error="adError"></ad>
 				<!--#endif-->
 				<!--富文本-->
-				<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY-->
+				<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY || APP-PLUS-->
 				<rich-text v-else :class="item.name" :style="''+handler.getStyle(item.attrs.style,'block')" :nodes="handler.setStyle(item)" />
 				<!--#endif-->
 				<!--#ifdef MP-BAIDU || MP-TOUTIAO || H5-->
-				<rich-text v-else :style="item.attrs?item.attrs.containStyle:''" :nodes="[item]" />
+				<rich-text v-else :class="item.name" :style="item.attrs?item.attrs.containStyle:''" :nodes="[item]" />
 				<!--#endif-->
 			</block>
 			<!--#ifdef MP-ALIPAY || H5-->
@@ -74,7 +82,7 @@
 			<!--#endif-->
 			<!--#ifndef MP-ALIPAY || H5-->
 			<trees v-else :class="item.name+' '+(item.attrs.class||'')" :style="item.attrs.style" :nodes="item.children"
-			 :imgMode="imgMode" :lazyLoad="lazyLoad" />
+			 :imgMode="imgMode" :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
 			<!--#endif-->
 		</block>
 	</view>
@@ -91,7 +99,7 @@
 		data() {
 			return {
 				controls: {},
-				// #ifdef MP-WEIXIN || MP-QQ
+				// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
 				imgLoad: false
 				// #endif
 			}
@@ -101,8 +109,14 @@
 				type: Array,
 				default: []
 			},
-			// #ifdef MP-WEIXIN || MP-QQ
+			// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
 			lazyLoad: {
+				type: Boolean,
+				default: false
+			},
+			// #endif
+			// #ifdef APP-PLUS
+			loadVideo: {
 				type: Boolean,
 				default: false
 			},
@@ -123,7 +137,7 @@
 				this._top = this._top.$parent;
 			}
 		},
-		// #ifdef MP-WEIXIN || MP-QQ
+		// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
 		beforeDestroy() {
 			if (this._observer)
 				this._observer.disconnect();
@@ -160,8 +174,8 @@
 				if (!e.currentTarget.dataset.href)
 					return;
 				if (/^http/.test(e.currentTarget.dataset.href)) {
-					// #ifndef H5
-					if (this._top.autocopy)
+					if (this._top.autocopy) {
+						// #ifndef H5
 						uni.setClipboardData({
 							data: e.currentTarget.dataset.href,
 							success() {
@@ -170,10 +184,11 @@
 								});
 							}
 						});
-					// #endif
-					// #ifdef H5
-					window.location.href = e.currentTarget.dataset.href;
-					// #endif
+						// #endif
+						// #ifdef H5
+						window.location.href = e.currentTarget.dataset.href;
+						// #endif
+					}
 				} else
 					uni.navigateTo({
 						url: e.currentTarget.dataset.href
@@ -195,7 +210,7 @@
 					})
 				} else if (this.controls[currentTarget.id] && currentTarget.source.length > this.controls[
 						currentTarget.id].index + 1) {
-					this.$set(this.controls[currentTarget.id], index, this.controls[currentTarget.id].index + 1);
+					this.$set(this.controls[currentTarget.id], "index", this.controls[currentTarget.id].index + 1);
 				}
 			},
 			adError(e) {
@@ -210,10 +225,16 @@
 				this.triggerError("audio", e.currentTarget, e.detail.errMsg);
 			},
 			_loadVideo(e) {
-				this.controls[e.currentTarget.dataset.id] = {
-					play: true,
-					index: 0
-				};
+				// #ifdef APP-PLUS
+				if (this.loadVideo) {
+					// #endif
+					this.controls[e.currentTarget.dataset.id] = {
+						play: true,
+						index: 0
+					};
+					// #ifdef APP-PLUS
+				}
+				// #endif
 			}
 		}
 	}

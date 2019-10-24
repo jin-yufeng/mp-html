@@ -267,14 +267,16 @@ DomHandler.prototype.ontext = function(data) {
 	}
 	// #ifndef MP-WEIXIN || MP-QQ
 	let entities = {
+		// #ifndef APP-PLUS
 		lt: "<",
 		gt: ">",
-		amp: "&",
-		quot: '"',
-		apos: "'",
 		nbsp: "\u00A0",
 		ensp: "\u2002",
 		emsp: "\u2003",
+		amp: "&",
+		apos: "'",
+		// #endif
+		quot: '"',
 		ndash: "–",
 		mdash: "—",
 		middot: "·",
@@ -304,7 +306,7 @@ DomHandler.prototype.ontext = function(data) {
 	let element = {
 		type: 'text'
 	};
-	// #ifdef MP-WEIXIN || MP-QQ
+	// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
 	data = data.replace(/&nbsp;/g, '\u00A0'); // 解决连续&nbsp;失效问题
 	if (/&#*((?!sp|lt|gt).){2,8};/.test(data)) element.decode = true;
 	// #endif

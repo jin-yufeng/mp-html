@@ -1,6 +1,6 @@
 <template>
 	<view>
-		跳转测试页面
+		<web-view :src="src" />
 	</view>
 </template>
 
@@ -8,8 +8,14 @@
 	export default {
 		data() {
 			return {
-
+				src: ''
 			}
+		},
+		onLoad(e) {
+			uni.setNavigationBarTitle({
+				title: '外链加载中'
+			});
+			this.src = e.src;
 		},
 		methods: {
 
