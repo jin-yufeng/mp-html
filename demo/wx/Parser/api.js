@@ -31,7 +31,7 @@ module.exports = {
     return Parser(html, tagStyle);
   },
   css2object(style, tagStyle) {
-    const CssTokenizer = require('./CssTokenizer.js');
-    return new CssTokenizer(style, tagStyle).parse();
+    const CssHandler = require('./CssHandler.js');
+    return new CssHandler(style, tagStyle)._style;
   }
 }

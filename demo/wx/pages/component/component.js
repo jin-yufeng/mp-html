@@ -363,6 +363,18 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.10.27:
+      <ol>
+        <li><code>F</code> 修复了部分情况下多张相同的图片仅第一张可显示的问题</li>
+      </ol>
+    </li>
+    <br />
+    <li>2019.10.24:
+      <ol>
+        <li><code>U</code><code>uni-app</code>包支持在<code>APP</code>端使用</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.10.17:
       <ol>
         <li><code>A</code> 增加了<code>CssHandler</code>补丁包（可支持多层的<code>css</code>选择器）</li>
