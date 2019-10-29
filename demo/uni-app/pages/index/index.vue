@@ -18,7 +18,18 @@
 	export default {
 		data() {
 			return {
-				html: testHtml
+				html: testHtml,
+				node:[{
+				                name: 'div',
+				                attrs: {
+				                    class: 'div-class',
+				                    style: 'line-height: 60px; color: red; text-align:center;'
+				                },
+				                children: [{
+				                    type: 'text',
+				                    text: 'Hello&nbsp;uni-app!'
+				                }]
+				            }]
 			}
 		},
 		components: {

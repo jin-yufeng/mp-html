@@ -35,7 +35,7 @@
 		<ad s-elif="item.name=='ad'" appid="{{item.attrs.appid}}" apid="{{item.attrs.apid}}" type="{{item.attrs.type}}"
 			class="{{item.attrs.class||''}}" style="{{item.attrs.style}}" binderror="adError"></ad>
 		<!--富文本-->
-		<rich-text s-else style="{{item.attrs.containStyle}}" nodes="{{[item]}}" />
+		<rich-text s-else class="{{item.name}}" style="{{item.attrs.containStyle}}" nodes="{{[item]}}" />
 	</block>
 	<!--继续递归-->
 	<trees s-else class="{{item.name+' '+(item.attrs.class||'')}}" style="{{item.attrs.style}}"

@@ -363,6 +363,12 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.10.29:
+      <ol>
+        <li><code>F</code> 修复了部分行内标签被错误换行的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.10.27:
       <ol>
         <li><code>F</code> 修复了部分情况下多张相同的图片仅第一张可显示的问题</li>

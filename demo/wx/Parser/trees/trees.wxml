@@ -50,7 +50,7 @@
     <!--广告-->
     <ad wx:elif="{{item.name=='ad'}}" unit-id="{{item.attrs['unit-id']}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}" binderror="adError"></ad>
     <!--富文本-->
-    <rich-text wx:else style="{{Handler.getStyle(item.attrs.style,'block')}}" nodes="{{Handler.setStyle(item)}}" />
+    <rich-text wx:else class="{{item.name}}" style="{{Handler.getStyle(item.attrs.style,'block')}}" nodes="{{Handler.setStyle(item)}}" />
   </block>
   <trees wx:else id="node" class="{{item.name+' '+(item.attrs.class||'')}}" style="{{item.attrs.style}}" nodes="{{item.children}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
 </block>

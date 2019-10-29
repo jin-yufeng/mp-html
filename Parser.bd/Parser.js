@@ -62,6 +62,27 @@ const voidTag = {
   use: true,
   wbr: true
 };
+const textTag = {
+  abbr: true,
+  b: true,
+  big: true,
+  code: true,
+  del: true,
+  em: true,
+  font: true,
+  i: true,
+  ins: true,
+  label: true,
+  mark: true,
+  q: true,
+  s: true,
+  small: true,
+  span: true,
+  strong: true,
+  sub: true,
+  sup: true,
+  u: true
+}
 const _traverse = function (nodes) {
   for (var element of nodes) {
     if (element.type == "text")
@@ -79,6 +100,7 @@ const _traverse = function (nodes) {
       }
       reg = /display\s*:\s*([^;]*)/i;
       if (reg.test(style) && reg.exec(style)[1] != "flex") res += (';' + reg.exec(style)[0]);
+      else if(textTag[element.name]) res+=";display:inline";
       else res += (";display:" + (element.name == 'img' ? 'inline-block' : 'block'));
       reg = /flex\s*:[^;]*/i;
       if (reg.test(style)) res += (';' + reg.exec(style)[0]);

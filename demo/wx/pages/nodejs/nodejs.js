@@ -74,6 +74,12 @@ Page({
     node: code.node,
     //更新日志
     update: `<ul>
+    <li>2019.10.28:
+      <ol>
+        <li><code>F</code> 修复了部分情况下使用子选择器<code>></code>匹配出错的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.10.14:
       <ol>
         <li><code>F</code> 修复了部分情况下样式被错误匹配的问题</li>

@@ -8,7 +8,7 @@
 		</view>
 		<!--#endif-->
 		<!--#ifndef MP-ALIPAY || H5-->
-		<trees class="contain" :style="(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
+		<trees class="contain" :style="'display:block'+(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
 		 :animation="showAnimation" :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode"
 		 :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
 		<!--#endif-->
@@ -119,7 +119,6 @@
 						this.nodes = res.nodes;
 						this.showAnimation = showAnimation;
 						this.imgList = res.imgList;
-						this.test = 1;
 						if (Document) this.document = new Document("nodes", res.nodes, this);
 						if (res.title && this.autosetTitle) {
 							uni.setNavigationBarTitle({
@@ -227,9 +226,11 @@
 </script>
 
 <style>
+	/* #ifndef MP-BAIDU */
 	:host {
 		display: block;
 		overflow: scroll;
 		-webkit-overflow-scrolling: touch;
 	}
+	/* #endif */
 </style>

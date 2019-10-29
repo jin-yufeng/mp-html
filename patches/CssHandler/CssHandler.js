@@ -110,7 +110,8 @@ CssHandler.prototype.match = function(name, attrs, element) {
         item.index++;
         item.key = item.list[item.index];
       }
-    } else if (sign) {
+    }
+	if (sign) {
       element.i.push(i);
       element.index.push(item.index);
       item.index--;
