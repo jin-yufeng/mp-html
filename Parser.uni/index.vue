@@ -193,7 +193,7 @@
 						} else if (item.name == 'video') {
 							this.videoContext.push({
 								id: item.attrs.id,
-								context: uni.createVideoContext(item.attrs.id, this)
+								context: uni.createVideoContext(item.attrs.id, component)
 							});
 						}
 					}

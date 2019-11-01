@@ -155,7 +155,7 @@ DomHandler.prototype.onopentag = function (name, attrs) {
         delete attrs['data-src'];
       }
       if (!attrs.hasOwnProperty('ignore') && attrs.src) {
-        if (this.imgList.indexOf(attrs.src) != -1) 
+        if (this.imgList.indexOf(attrs.src) != -1 && !(/base64/.test(attrs.src))) 
           attrs.src = attrs.src + (/\?/.test(attrs.src) ? '&' : '?') + "parserid=" + this.imgIndex++;
         this.imgList.push(attrs.src);
         if (this._bubbling() == 'a') attrs.ignore = ""; // 图片在链接中不可预览

@@ -12,7 +12,7 @@
     <text wx:elif="{{item.name=='br'}}">\n</text>
     <!--视频-->
     <block wx:elif="{{item.name=='video'}}">
-      <view wx:if="{{item.attrs.id>'video3'&&!controls[item.attrs.id].play}}" class="video {{item.attrs.class||''}}" style="{{item.attrs.style}}" data-id="{{item.attrs.id}}" bindtap="_loadVideo">
+      <view wx:if="{{item.attrs.id>'video3'&&!controls[item.attrs.id].play}}" class="pvideo {{item.attrs.class||''}}" style="{{item.attrs.style}}" data-id="{{item.attrs.id}}" bindtap="_loadVideo">
         <view class="video-triangle" />
       </view>
       <video wx:else src='{{controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src}}' id="{{item.attrs.id}}" loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}' autoplay="{{item.attrs.autoplay||controls[item.attrs.id].play}}"

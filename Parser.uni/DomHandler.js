@@ -185,16 +185,48 @@ DomHandler.prototype.onopentag = function(name, attrs) {
 				attrs.src = attrs.src || attrs['data-src'];
 				delete attrs['data-src'];
 			}
-			if (!attrs.hasOwnProperty('ignore') && attrs.src) {
-				if (this.imgList.indexOf(attrs.src) != -1)
-					attrs.src = attrs.src + (/\?/.test(attrs.src) ? '&' : '?') + "parserid=" + this.imgIndex++;
-				this.imgList.push(attrs.src);
-				if (this._bubbling() == 'a') attrs.ignore = "true"; // 图片在链接中不可预览
-			} else
-				attrs.ignore = "true";
 			// #ifdef MP-BAIDU || MP-TOUTIAO || H5
 			if (this._imgMode == "widthFix") attrs.style += ";height:auto !important;";
 			// #endif
+			if (!attrs.hasOwnProperty('ignore') && attrs.src) {
+				if (this._bubbling() == 'a') {
+					attrs.ignore = "true"; // 图片在链接中不可预览
+					break;
+				}
+				var url = attrs.src;
+				// #ifdef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
+				// 去重，至多重试10次
+				for (let i = 0; this.imgList.indexOf(url) != -1 && i < 10; i++) {
+					// 网络链接
+					if (/^http/.test(url)) {
+						url = url.replace(/^(https*):\/\/([\S]+?)\//, function() {
+							var domain = "";
+							for (var c of arguments[2]) {
+								if (/[a-zA-Z]/.test(c))
+									domain += (Math.random() >= 0.5 ? c.toUpperCase() : c);
+								else domain += c;
+							}
+							return (arguments[1] + '://' + domain + '/');
+						})
+					}
+					// base64
+					else if (/base64/.test(url)) {
+						url = url.replace(/^data:(image\/\S+);base64,/, function() {
+							var head = "";
+							for (var c of arguments[1]) {
+								if (/[a-zA-Z]/.test(c))
+									head += (Math.random() >= 0.5 ? c.toUpperCase() : c);
+								else head += c;
+							}
+							return ('data:' + head + ';base64,');
+						})
+					} else break;
+				}
+				// #endif
+				element.current = this.imgList.length;
+				this.imgList.push(url);
+			} else
+				attrs.ignore = "true";
 			break;
 		case 'font':
 			name = 'span';

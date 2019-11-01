@@ -53,7 +53,7 @@
 .q::after {
   content: '"';
 }
-.video {
+.pvideo {
   background-color: black;
   width: 300px;
   height: 225px;

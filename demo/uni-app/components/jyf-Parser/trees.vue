@@ -6,7 +6,7 @@
 				<!--图片-->
 				<rich-text v-if="item.name=='img'" class="img" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
 				 :nodes='handler.setImgStyle(item,imgMode,imgLoad)' :data-ignore='item.attrs.ignore' :data-src='item.attrs.src'
-				 @tap='previewEvent' />
+				 :data-current='item.current' @tap='previewEvent' />
 				<!--文本-->
 				<block v-else-if="item.type=='text'">
 					<text v-if="!item.decode" decode>{{item.text}}</text>
@@ -16,14 +16,15 @@
 				<!--#ifdef MP-ALIPAY-->
 				<block v-if="handler.isContinue(item)">
 					<rich-text v-if="item.name=='img'" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
-					 :nodes='handler.setImgStyle(item,imgMode)' :data-ignore='item.attrs.ignore' :data-src='item.attrs.src' @tap='previewEvent' />
+					 :nodes='handler.setImgStyle(item,imgMode)' :data-ignore='item.attrs.ignore' :data-src='item.attrs.src'
+					 :data-current='item.current' @tap='previewEvent' />
 					<!--文本-->
 					<text v-else-if="item.type=='text'" decode>{{item.text}}</text>
 					<!--#endif-->
 					<!--#ifdef MP-BAIDU || MP-TOUTIAO || H5-->
 					<block v-if="!item.continue">
 						<rich-text v-if="item.name=='img'" :style="'text-indent:0;'+item.attrs.containStyle" :nodes='[item]' :data-ignore='item.attrs.ignore'
-						 :data-src='item.attrs.src' @tap='previewEvent' />
+						 :data-src='item.attrs.src' :data-current='item.current' @tap='previewEvent' />
 						<!--#endif-->
 						<!--#ifdef H5-->
 						<text v-else-if="item.type=='text'" decode style="display:inline">{{item.text}}</text>
@@ -33,18 +34,18 @@
 						<block v-else-if="item.name=='video'">
 							<!--#ifdef APP-PLUS-->
 							<view v-if="!loadVideo||(item.attrs.id[item.attrs.id.length-1]>'3'&&(!controls[item.attrs.id]||!controls[item.attrs.id].play))"
-							 :class="'video '+(item.attrs.class||'')" :style="item.attrs.style" :data-id="item.attrs.id" @tap="_loadVideo">
+							 :class="'pvideo '+(item.attrs.class||'')" :style="item.attrs.style" :data-id="item.attrs.id" @tap="_loadVideo">
 								<view class="video-triangle"></view>
 							</view>
 							<!--#endif-->
 							<!--#ifndef APP-PLUS-->
 							<view v-if="item.attrs.id[item.attrs.id.length-1]>'3'&&(!controls[item.attrs.id]||!controls[item.attrs.id].play)"
-							 :class="'video '+(item.attrs.class||'')" :style="item.attrs.style" :data-id="item.attrs.id" @tap="_loadVideo">
+							 :class="'pvideo '+(item.attrs.class||'')" :style="item.attrs.style" :data-id="item.attrs.id" @tap="_loadVideo">
 								<view class="video-triangle"></view>
 							</view>
 							<!--#endif-->
-							<video v-else-if :src='controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src'
-							 :id="item.attrs.id" :loop='item.attrs.loop' :controls='item.attrs.controls' :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
+							<video v-else :src='controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src' :id="item.attrs.id"
+							 :loop='item.attrs.loop' :controls='item.attrs.controls' :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
 							 :unit-id="item.attrs['unit-id']" :class="'v '+(item.attrs.class||'')" :muted="item.attrs.muted" :style="item.attrs.style"
 							 :data-id="item.attrs.id" :data-source="item.attrs.source" @play='playEvent' @error="videoError" />
 						</block>
@@ -163,7 +164,7 @@
 				if (!e.currentTarget.dataset.ignore) {
 					if (this._top.autopreview) {
 						uni.previewImage({
-							current: e.currentTarget.dataset.src,
+							current: parseInt(e.currentTarget.dataset.current),
 							urls: this._top.imgList.length ? this._top.imgList : [e.currentTarget.dataset.src]
 						});
 					}
@@ -233,10 +234,10 @@
 				// #ifdef APP-PLUS
 				if (this.loadVideo) {
 					// #endif
-					this.controls[e.currentTarget.dataset.id] = {
+					this.$set(this.controls, e.currentTarget.dataset.id, {
 						play: true,
 						index: 0
-					};
+					})
 					// #ifdef APP-PLUS
 				}
 				// #endif
@@ -335,7 +336,7 @@
 		content: '"';
 	}
 
-	.video {
+	.pvideo {
 		background-color: black;
 		width: 300px;
 		height: 225px;
@@ -349,5 +350,7 @@
 		border-color: transparent transparent transparent white;
 		position: absolute;
 		left: 50%;
+		top: 50%;
+		margin: -15px 0 0 -15px;
 	}
 </style>

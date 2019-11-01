@@ -7,7 +7,7 @@
 		<text s-elif="item.name=='br'">\n</text>
 		<!--视频-->
 		<block s-elif="item.name=='video'">
-			<view s-if="item.attrs.id>'video3'&&!controls[item.attrs.id].play" class="video {{item.attrs.class||''}}"
+			<view s-if="item.attrs.id>'video3'&&!controls[item.attrs.id].play" class="pvideo {{item.attrs.class||''}}"
 				style="{{item.attrs.style}}" data-id="{{item.attrs.id}}" bindtap="_loadVideo">
 				<view class="video-triangle" />
 			</view>
