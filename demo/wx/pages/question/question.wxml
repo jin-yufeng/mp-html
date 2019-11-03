@@ -16,11 +16,7 @@
         <code>img-mode</code>属性设置为
         <code>widthFix</code>，图片将根据设置的宽度，高度自适应显示，可解决图片的变形问题，但设置的高度会失效</view>
     </view>
-    <view class="weui-article__h2">2. 在<code>vue</code>中使用不生效的问题</view>
-    <view class="weui-article__section section">
-      在<code>mpVue</code>和<code>uni-app</code>中使用时组件名一定要小写，包括<code>vue</code>文件和<code>json</code>文件中都要小写，否则将无效
-    </view>
-    <view class="weui-article__h2">3. 表格边框的问题</view>
+    <view class="weui-article__h2">2. 表格边框的问题</view>
     <view class="weui-article__section section">
       <view>一些富文本编辑器对于表格会有默认的边框，但在本插件没有默认的边框（实际浏览器中
         <code>table</code>标签也没有默认的边框），如需要需自行添加默认样式</view>
@@ -29,6 +25,10 @@
         <code>1px</code>的灰色边框
         <Parser html="{{code}}" selectable />
       </view>
+    </view>
+    <view class="weui-article__h2">3. 在<code>vue</code>中使用不生效的问题</view>
+    <view class="weui-article__section section">
+      在<code>mpVue</code>和<code>uni-app</code>中使用时组件名一定要小写，包括<code>vue</code>文件和<code>json</code>文件中都要小写，否则将无效
     </view>
     <view class="weui-article__h2">4. 部分<code>style</code>标签中的样式无法匹配</view>
     <view class="weui-article__section section">

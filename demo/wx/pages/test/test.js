@@ -1,5 +1,10 @@
 // pages/test/test.js
 var htmlString;
+var date = new Date();
+var today = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+var storge = wx.getStorageSync(today);
+var times = (storge === '' ? 3 : storge);
+var videoAd = null;
 Page({
   data: {
     parseing: false,
@@ -7,13 +12,45 @@ Page({
     modeIndex: 0,
     highlight: true,
     styles: ['a11y-dark', 'a11y-light', 'agate', 'an-old-hope', 'androidstudio', 'arduino-light', 'arta', 'ascetic', 'atelier-cave-dark', 'atelier-cave-light', 'atelier-dune-dark', 'atelier-dune-light', 'atelier-estuary-dark', 'atelier-estuary-light', 'atelier-forest-dark', 'atelier-forest-light', 'atelier-heath-dark', 'atelier-heath-light', 'atelier-lakeside-dark', 'atelier-lakeside-light', 'atelier-plateau-dark', 'atelier-plateau-light', 'atelier-savanna-dark', 'atelier-savanna-light', 'atelier-seaside-dark', 'atelier-seaside-light', 'atelier-sulphurpool-dark', 'atelier-sulphurpool-light', 'atom-one-dark-reasonable', 'atom-one-dark', 'atom-one-light', 'codepen-embed', 'color-brewer', 'darcula', 'dark', 'darkula', 'default', 'docco', 'dracula', 'far', 'foundation', 'github-gist', 'github', 'gml', 'googlecode', 'grayscale', 'gruvbox-dark', 'gruvbox-light', 'hopscotch', 'hybrid', 'idea', 'ir-black', 'isbl-editor-dark', 'isbl-editor-light', 'kimbie.dark', 'kimbie.light', 'lightfair', 'magula', 'mono-blue', 'monokai-sublime', 'monokai', 'nord', 'obsidian', 'ocean', 'paraiso-dark', 'paraiso-light', 'purebasic', 'qtcreator_dark', 'qtcreator_light', 'railscasts', 'rainbow', 'routeros', 'shades-of-purple', 'solarized-dark', 'solarized-light', 'sunburst', 'tomorrow-night-blue', 'tomorrow-night-bright', 'tomorrow-night-eighties', 'tomorrow-night', 'tomorrow', 'vs', 'vs2015', 'xcode', 'xt256', 'zenburn'],
-    styleIndex: 36
+    styleIndex: 36,
+    ad: false
   },
   onLoad(e) {
     this.setData({
-      modeIndex: parseInt(e.mode)
+      modeIndex: parseInt(e.mode),
+      times: times
     })
     htmlString = "";
+    if (wx.createRewardedVideoAd) {
+      videoAd = wx.createRewardedVideoAd({
+        adUnitId: 'adunit-06b11586227f9e9b'
+      })
+      videoAd.onLoad(() => {
+        this.setData({
+          ad: true
+        })
+      })
+      videoAd.onError((err) => {
+        this.setData({
+          ad: false
+        })
+      })
+      videoAd.onClose((res) => {
+        if (res && res.isEnded) {
+          this.setData({
+            times: (times += 3)
+          })
+          wx.showToast({
+            title: '成功获取',
+          })
+          wx.setStorageSync(today, times);
+        } else {
+          wx.showToast({
+            title: '获取失败',
+          })
+        }
+      })
+    }
   },
   inputHtml(e) {
     htmlString = e.detail.value;
@@ -30,7 +67,7 @@ Page({
         htmlString += '<div style="text-align:center;">\n  <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174" />\n<p style="color:gray;font-size:12px;text-align:center">点击图片预览</p>\n</br>\n  <img ignore src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351" width="50%"/>\n  <p style="color:gray;font-size:12px">装饰图片不能预览</p>\n</div>';
         break;
       case 'video':
-        htmlString += '<div style="text-align:center;">\n  <video src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" controls unit-id="adunit-eaaa362d6fda3c6a"></video>\n</div>';
+        htmlString += '<div style="text-align:center;">\n  <video src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" controls></video>\n</div>';
         break;
       case 'a':
         htmlString += '<div style="text-align:center">\n  <a href="/pages/component/component">\n    <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174" />\n  </a>\n  <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>\n  <br />\n  <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>\n  <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>\n</div>';
@@ -100,12 +137,13 @@ Page({
       return;
     }
     if (this.data.modeIndex == 0) {
-      var that = this;
       this.setData({
         parseing: true,
         htmlString: htmlString,
-        html: htmlString
+        html: htmlString,
+        times: (--times)
       })
+      wx.setStorageSync(today, times)
     } else {
       if (this.data.modeIndex == 2 && !/https*:\/\//.test(htmlString)) {
         wx.showModal({
@@ -118,7 +156,6 @@ Page({
       wx.showLoading({
         title: '解析中',
       })
-      var that = this;
       var mode;
       if (this.data.modeIndex == 3) mode = 'markdown';
       else if (this.data.modeIndex == 2) mode = 'website';
@@ -130,18 +167,20 @@ Page({
           data: htmlString,
           mode: mode,
           options: {
-            styles: that.data.styles[e.detail.value.styles],
-            autohighlight: that.data.highlight
+            styles: this.data.styles[e.detail.value.styles],
+            autohighlight: this.data.highlight
           }
         },
         success: res => {
           wx.hideLoading()
-          that.setData({
+          this.setData({
             parseing: true,
             htmlString: htmlString,
             html: res.result,
-            webmode: this.data.modeIndex == 2
+            webmode: this.data.modeIndex == 2,
+            times: (--times)
           })
+          wx.setStorageSync(today, times)
         },
         fail: err => {
           wx.hideLoading();
@@ -154,4 +193,17 @@ Page({
       })
     }
   },
+  showAd() {
+    if (videoAd) {
+      videoAd.show().catch(() => {
+        videoAd.load()
+          .then(() => videoAd.show())
+          .catch(err => {
+            wx.showToast({
+              title: '加载失败',
+            })
+          })
+      })
+    }
+  }
 })

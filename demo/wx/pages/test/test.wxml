@@ -58,7 +58,8 @@
         </view>
       </view>
       <view class="weui-btn-area">
-        <button class="weui-btn" form-type='submit' type="primary">解析</button>
+        <button class="weui-btn" form-type='submit' type="primary" disabled="{{times==0}}">解析（今日剩{{times}}次）</button>
+        <button class="weui-btn" bindtap="showAd" wx:if="{{ad}}">看广告加次数</button>
         <button class="weui-btn" bindtap="clearHtml">清空</button>
       </view>
     </form>
