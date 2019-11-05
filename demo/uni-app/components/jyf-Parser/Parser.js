@@ -68,7 +68,7 @@ const _traverse = function(nodes) {
 			if(textTag[element.name]){
 				element.continue = true;
 				_traverse(element.children);
-				return;
+				continue;
 			}
 			// #endif
 			var res = "";

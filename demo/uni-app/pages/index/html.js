@@ -180,7 +180,7 @@ module.exports =
               <p>插入和删除文本：<del>我想出去玩</del>，不你不想，<ins>你想学习</ins></p>
               <p>引用：<q>这是一句引用的文字</q>，这是<code>code</code>标签</p>
               <p><strong>粗体</strong>与<i>斜体</i></p>
-              <p>连续&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;空格</p>
+              <p>连续&nbsp;&nbsp;&nbsp;&nbsp;空格</p>
               <p><big>大一号</big>正常<small>小一号</small></p>
             </p>
           </section>

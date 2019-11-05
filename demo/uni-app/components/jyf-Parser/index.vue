@@ -212,7 +212,7 @@
 					// #ifdef APP-PLUS
 					setTimeout(() => {
 						this.loadVideo = true;
-					}, 1000);
+					}, 3000);
 					// #endif
 				})
 			}

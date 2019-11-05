@@ -297,9 +297,8 @@ DomHandler.prototype.ontext = function(data) {
 			return;
 		data = data.replace(/\s+/g, " ");
 	}
-	// #ifndef MP-WEIXIN || MP-QQ
+	// #ifndef MP-WEIXIN || MP-QQ || APP-PLUS || H5
 	let entities = {
-		// #ifndef APP-PLUS
 		lt: "<",
 		gt: ">",
 		nbsp: "\u00A0",
@@ -307,7 +306,6 @@ DomHandler.prototype.ontext = function(data) {
 		emsp: "\u2003",
 		amp: "&",
 		apos: "'",
-		// #endif
 		quot: '"',
 		ndash: "–",
 		mdash: "—",
@@ -338,8 +336,8 @@ DomHandler.prototype.ontext = function(data) {
 	let element = {
 		type: 'text'
 	};
-	// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
-	data = data.replace(/&nbsp;/g, '\u00A0'); // 解决连续&nbsp;失效问题
+	// #ifdef MP-WEIXIN || MP-QQ || H5 || APP-PLUS
+	data = data.replace(/&nbsp;/g, '&#xA0;'); // 解决连续&nbsp;失效问题
 	if (/&#*((?!sp|lt|gt).){2,8};/.test(data)) element.decode = true;
 	// #endif
 	if (emoji) data = emoji.parseEmoji(data);

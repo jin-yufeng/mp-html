@@ -63,7 +63,7 @@
 | Parser.min | 28.3KB | 微信小程序插件包压缩版（功能相同） |
 | Parser.bd | 36.9KB | 百度小程序插件包 |
 | Parser.bd.min | 26.7KB | 百度小程序插件包压缩版（功能相同） |
-| Parser.uni | 48.4KB | `uni-app` 插件包（可以编译到所有平台） |
+| Parser.uni | 48.3KB | `uni-app` 插件包（可以编译到所有平台） |
 
 - 关于百度版与微信版的差别，可见[百度版与微信版的差别](./docs/Usage.md#百度版与微信版的差别)  
 - `uni-app`版因为各平台`rich-text`和自定义组件表现有所不同，有较多条件编译的内容，编译后大小会缩小，关于各平台间的差别和与原生包的差别，可见[`uni-app`包说明](./docs/Usage.md#uni-app包说明)  
@@ -442,6 +442,8 @@ parser(html).then(function(res){
 
 
 ## 更新日志 ##
+- 2019.11.5:
+  1. `F` 修复了`uni-app`包编译到`APP`时多个连续实体空格失效的问题  
 - 2019.11.3:
   1. `F` 修复了`uni-app`包编译到`H5`时多个行内标签并列会被错误换行的问题 [详细](https://github.com/jin-yufeng/Parser/issues/43)  
 - 2019.11.1:
