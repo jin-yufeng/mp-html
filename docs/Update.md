@@ -1,4 +1,6 @@
 ## 更新日志 ##
+- 2019.11.9:
+  1. `F` 修复了`uni-app`包编译到`H5`时`html`的初值为空时报`Cannot read property 'name' of undefined`的错误的问题  
 - 2019.11.5:
   1. `F` 修复了`uni-app`包编译到`APP`时多个连续实体空格失效的问题  
 - 2019.11.3:

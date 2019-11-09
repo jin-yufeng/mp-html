@@ -236,6 +236,7 @@
   `4.70KB`（`min`版本`3.61KB`）  
 - 使用方法  
   将`emoji.js`复制到`Parser`文件夹下即可（若使用`min`版本也要改名为`emoji.js`）  
+  在`uni-app`中使用时需要将`Domhandler.js`首行改为`const emoji = require('./emoji.js');`  
   默认配置中支持`177`个常用的`emoji`小表情  
   支持两种形式的`emoji`，一是`emoji`字符（不同设备上显示的样子可能不同），或者是网络图片（将按照`16px` × `16px`的大小显示，且不可放大预览），默认配置中都是`emoji`字符，可使用以下`api`获取或修改：  
   ```javascript
@@ -252,6 +253,7 @@
   `4.66KB`（`min`版本`3.61KB`）  
 - 使用方法  
   将`document.js`复制到`Parser`文件夹下即可（若使用`min`版本也要改名为`document.js`）  
+  在`uni-app`中使用时需要将`index.vue`中的`27`行修改为`const Document = require('./document.js');`  
   - `document` 类  
     获取方式：可通过 `this.selectComponent("#id").document` 获取  
     `Api`列表:   
@@ -442,6 +444,8 @@ parser(html).then(function(res){
 
 
 ## 更新日志 ##
+- 2019.11.9:
+  1. `F` 修复了`uni-app`包编译到`H5`时`html`的初值为空时报`Cannot read property 'name' of undefined`的错误的问题  
 - 2019.11.5:
   1. `F` 修复了`uni-app`包编译到`APP`时多个连续实体空格失效的问题  
 - 2019.11.3:
@@ -457,10 +461,5 @@ parser(html).then(function(res){
 - 2019.10.17:
   1. `A` 增加了`CssHandler`补丁包（可支持多层的`css`选择器）[详细](#CssHandler)  
   2. `U` `uni-app`包支持在`H5`端使用  
-- 2019.9.28:
-  1. `A` 增加了`lazy-load`属性（可用于图片懒加载）  
-- 2019.9.25:
-  1. `A` 增加了`uni-app`插件包（可以编译到所有小程序平台）[详细](#在uni-app中使用)    
-  2. `F` 修复了部分情况下样式显示错误的问题  
 
 更多可见：[更新日志](./docs/Update.md)

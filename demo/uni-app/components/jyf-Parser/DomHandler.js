@@ -1,8 +1,5 @@
 //DomHandler.js
-var emoji;
-try {
-	emoji = require("./emoji.js");
-} catch (err) {}
+var emoji; // 使用emoji补丁包时将此句改为 const emoji = require('./emoji.js');
 const CssHandler = require('./CssHandler.js');
 // #ifdef MP-WEIXIN
 const CanIUse = require('./api.js').versionHigherThan('2.7.1');

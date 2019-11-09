@@ -1,10 +1,10 @@
 <template>
 	<view>
-		<slot v-if="!(html.nodes||((html[0].name||html[0].type)?1:nodes.length))"></slot>
+		<slot v-if="!(html.nodes||((html&&(html[0].name||html[0].type))?1:nodes.length))"></slot>
 		<!--#ifdef MP-ALIPAY || H5-->
 		<view class="contain" :style="(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
 		 :animation="showAnimation">
-			<trees :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode" />
+			<trees :nodes="html.nodes||((html&&(html[0].name||html[0].type))?html:nodes)" :imgMode="imgMode" />
 		</view>
 		<!--#endif-->
 		<!--#ifndef MP-ALIPAY || H5-->
@@ -24,10 +24,7 @@
 	// #ifdef APP-PLUS
 	const CanIUseObserver = true;
 	// #endif
-	var Document;
-	try {
-		Document = require("./document.js");
-	} catch (e) {}
+	var Document; // 使用document补丁包时将此句改为 const Document = require('./document.js');
 	export default {
 		name: 'parser',
 		data() {
