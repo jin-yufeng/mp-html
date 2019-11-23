@@ -1,5 +1,6 @@
 # Parser
-小程序富文本插件（本文档动态更新，建议加星收藏）
+小程序富文本插件（本文档动态更新，建议加星收藏）  
+>新版文档链接：[Parser插件文档](https://jin-yufeng.github.io/Parser/)  
 ## 目录 ##
 - [功能介绍](#功能介绍)
 - [使用方法](#使用方法)
@@ -305,7 +306,7 @@
   ``` javascript
   data:{
     html:'...<div id="adContainer"><ad unit-id="..."></ad></div>...'
-  }
+  },
   error(e){
     // 广告组件加载出错
     if(e.detail.source == "ad"){

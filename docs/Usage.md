@@ -323,7 +323,7 @@
   ``` javascript
   data:{
     html:'...<div id="adContainer"><ad unit-id="..."></ad></div>...'
-  }
+  },
   error(e){
     // 广告组件加载出错
     if(e.detail.source == "ad"){

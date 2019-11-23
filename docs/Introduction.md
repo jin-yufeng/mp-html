@@ -7,7 +7,6 @@
   | 按class名匹配 | .demo | &lt;element class="demo"&gt; |
   | 按id名匹配 | #demo | &lt;element id="demo"&gt; |
   | 按标签名匹配 | body | &lt;body&gt;...&lt;/body&gt; |
-  | 单层多个class | .demo1.demo2 | &lt;element class="demo1 demo2"&gt; |
   | 多个并列 | .demo1,.demo2 |&lt;element class="demo1"&gt;或&lt;element class="demo2"&gt;|
 
   含有@或*的，伪类以及多层的样式将被直接忽略  
