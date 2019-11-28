@@ -60,11 +60,11 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| Parser | 39.7KB | 微信小程序插件包 |
-| Parser.min | 28.3KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.bd | 36.9KB | 百度小程序插件包 |
-| Parser.bd.min | 26.7KB | 百度小程序插件包压缩版（功能相同） |
-| Parser.uni | 48.3KB | `uni-app` 插件包（可以编译到所有平台） |
+| Parser | 40.7KB | 微信小程序插件包 |
+| Parser.min | 29.3KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.bd | 37.9KB | 百度小程序插件包 |
+| Parser.bd.min | 27.7KB | 百度小程序插件包压缩版（功能相同） |
+| Parser.uni | 54.2KB | `uni-app` 插件包（可以编译到所有平台） |
 
 - 关于百度版与微信版的差别，可见[百度版与微信版的差别](./docs/Usage.md#百度版与微信版的差别)  
 - `uni-app`版因为各平台`rich-text`和自定义组件表现有所不同，有较多条件编译的内容，编译后大小会缩小，关于各平台间的差别和与原生包的差别，可见[`uni-app`包说明](./docs/Usage.md#uni-app包说明)  
@@ -445,6 +445,13 @@ parser(html).then(function(res){
 
 
 ## 更新日志 ##
+- 2019.11.28:
+  1. `U` `table` 标签支持了 `border`, `cellpadding`, `cellspacing` 属性 [详细](https://github.com/jin-yufeng/Parser/issues/49)  
+  2. `U` 重构了 `uni-app` 包编译到 `H5` 时的显示方式，采用 `html` 原生的标签渲染，实现了以下优化（仅针对 `H5` 平台，其他**不变**）：
+     - 支持所有浏览器支持的标签和属性  
+     - `style` 标签支持所有浏览器支持的选择器
+     - `error` 回调增加支持 `img`，且返回组件的 `DOM` 实例，修改属性后可以直接对页面生效  
+     另外，通过一些转换，原来的属性和事件依然全部支持（不再有 `parser` 回调，因为不进行解析）  
 - 2019.11.9:
   1. `F` 修复了`uni-app`包编译到`H5`时`html`的初值为空时报`Cannot read property 'name' of undefined`的错误的问题  
 - 2019.11.5:
@@ -459,8 +466,5 @@ parser(html).then(function(res){
   1. `F` 修复了部分情况下多张相同的图片仅第一张可显示的问题  
 - 2019.10.24:
   1. `U` `uni-app`包支持在`APP`端使用  
-- 2019.10.17:
-  1. `A` 增加了`CssHandler`补丁包（可支持多层的`css`选择器）[详细](#CssHandler)  
-  2. `U` `uni-app`包支持在`H5`端使用  
 
 更多可见：[更新日志](./docs/Update.md)

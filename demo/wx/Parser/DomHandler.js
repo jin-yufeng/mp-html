@@ -261,6 +261,29 @@ DomHandler.prototype.onclosetag = function(name) {
     }
     parent.pop();
   }
+  // 设置表格的边框
+  if (element.name == 'table') {
+    if (element.attrs.border)
+      element.attrs.style += (";border:" + element.attrs.border + "px solid gray;");
+    if (element.attrs.hasOwnProperty("cellspacing"))
+      element.attrs.style += (";border-spacing:" + element.attrs.cellspacing + "px");
+
+    function setBorder(node) {
+      if (node.type == 'text') return;
+      if (node.name == 'th' || node.name == 'td') {
+        if (element.attrs.border)
+          node.attrs.style += ";border:" + element.attrs.border + "px solid gray;";
+        if (element.attrs.hasOwnProperty("cellpadding"))
+          node.attrs.style += ";padding:" + element.attrs.cellpadding + "px";
+      }
+      for (var child of node.children)
+        setBorder(child);
+    }
+    if (element.attrs.border || element.attrs.hasOwnProperty("cellpadding")) {
+      for (var child of element.children)
+        setBorder(child);
+    }
+  }
   // 合并一些不必要的层，减小节点深度
   if (element.children.length == 1 && element.name == 'div') {
     let child = element.children[0];

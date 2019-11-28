@@ -363,6 +363,12 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.11.28:
+      <ol>
+        <li><code>U</code> <code>table</code>标签支持了<code>border</code>, <code>cellpadding</code>, <code>cellspacing</code></li>
+      </ol>
+    </li>
+    <br />
     <li>2019.10.29:
       <ol>
         <li><code>F</code> 修复了部分行内标签被错误换行的问题</li>

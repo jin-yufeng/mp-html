@@ -25,6 +25,14 @@
         depth: 6
       }
     }
+	function parse(){
+		var html = document.getElementById("input").value.replace(/<script[\s\S]*?\/script>/g,"");
+		document.getElementById("frame").srcdoc = html;
+	}
+	function reset(){
+		document.getElementById("input").value = "";
+		document.getElementById("frame").srcdoc = "";
+	}
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
   <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>

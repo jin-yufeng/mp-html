@@ -1,4 +1,11 @@
 ## 更新日志 ##
+- 2019.11.28:
+  1. `U` `table` 标签支持了 `border`, `cellpadding`, `cellspacing` 属性 [详细](https://github.com/jin-yufeng/Parser/issues/49)  
+  2. `U` 重构了 `uni-app` 包编译到 `H5` 时的显示方式，采用 `html` 原生的标签渲染，实现了以下优化（仅针对 `H5` 平台，其他**不变**）：
+     - 支持所有浏览器支持的标签和属性  
+     - `style` 标签支持所有浏览器支持的选择器
+     - `error` 回调增加支持 `img`，且返回组件的 `DOM` 实例，修改属性后可以直接对页面生效  
+     另外，通过一些转换，原来的属性和事件依然全部支持（不再有 `parser` 回调，因为不进行解析）  
 - 2019.11.9:
   1. `F` 修复了`uni-app`包编译到`H5`时`html`的初值为空时报`Cannot read property 'name' of undefined`的错误的问题  
 - 2019.11.5:

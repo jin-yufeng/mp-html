@@ -10,6 +10,9 @@ const trustAttrs = {
 	// #endif
 	author: true,
 	autoplay: true,
+	border: true,
+	cellpadding: true,
+	cellspacing: true,
 	class: true,
 	color: true,
 	colspan: true,

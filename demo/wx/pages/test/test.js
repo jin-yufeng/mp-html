@@ -58,7 +58,7 @@ Page({
   addTemplate(e) {
     switch (e.target.dataset.type) {
       case 'table':
-        htmlString += '<style>\ntable{\n  border-left:1px solid #dfe2e5;\n  border-top:1px solid #dfe2e5;\n  border-collapse:collapse\n}\ntd{\n  text-align:ceter;\n  border-right:1px solid #dfe2e5;\n  border-bottom:1px solid #dfe2e5;\n  font-size:14px;\n  padding:5px;\n}\n</style>\n<table>\n  <tr>\n    <td>标题1</td>\n    <td>标题2</td>\n    <td>标题3</td>\n  </tr>\n  <tr>\n    <td rowspan=2>内容1</td>\n    <td>内容2</td>\n    <td>内容3</td>\n  </tr>\n  <tr>\n    <td>内容4</td>\n    <td>内容5</td>\n  </tr>\n</table>';
+        htmlString += '<table border="1">\n  <tr>\n    <td>标题1</td>\n    <td>标题2</td>\n    <td>标题3</td>\n  </tr>\n  <tr>\n    <td rowspan=2>内容1</td>\n    <td>内容2</td>\n    <td>内容3</td>\n  </tr>\n  <tr>\n    <td>内容4</td>\n    <td>内容5</td>\n  </tr>\n</table>';
         break;
       case 'list':
         htmlString += '<ol>\n  <li>类型1-1</li>\n  <li>类型1-2</li>\n</ol>\n<ol type="A" start="3" style="margin-top:5px;">\n  <li>类型2-3</li>\n  <li>类型2-4</li>\n</ol>\n<ol type="I" start="5" style="margin-top:5px;">\n  <li>类型3-5</li>\n  <li>类型3-6</li></ol>\n<ul style="margin-top:10px">\n  <li>层级1\n    <ul>\n      <li>层级2\n        <ul>\n          <li>层级3</li>\n        </ul>\n      </li>\n    </ul>\n  </li>\n</ul>';

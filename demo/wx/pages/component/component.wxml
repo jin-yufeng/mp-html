@@ -6,6 +6,10 @@
   </view>
   <view class="page__bd">
     <view class="weui-article">
+      <view class="weui-article__h1">新版文档</view>
+      <view class="weui-article__section">
+        <Parser html="<a href='https://jin-yufeng.github.io/Parser/#/'>点击复制链接</a>" />
+      </view>
       <!--目录-->
       <view id="catalogue" class="weui-article__h1">目录</view>
       <view class="weui-article__section">

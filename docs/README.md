@@ -21,9 +21,12 @@ data:{
 ```
 <p style="text-align:center"><span style="font-style:italic;">Hello </span><span style="font-weight:bold;">World!</span></p>  
 
-?>支持通过逗号分隔的多个相同的选择器，例如 `.a,.b,div{}`  
+>支持通过逗号分隔的多个相同的选择器，例如 `.a,.b,div{}`  
+
+>`uni-app` 包编译到 `H5` 平台时支持所有浏览器支持的选择器  
 
 !>不支持的选择器将被忽略，包括伪类、后代选择器、通配符等<br>如需支持更多选择器，请使用 [CssHandler](#CssHandler) 补丁包  
+
 
 ### 设置默认的标签样式 ###
 支持给各个标签设置默认的效果  
@@ -149,7 +152,7 @@ data:{
 | style |  |
 | sub |  |
 | sup |  |
-| table | width |
+| table | border, cellpadding, cellspacing, width |
 | tbody |  |
 | td | colspan, height, rowspan, width |
 | tfoot |   |
@@ -172,11 +175,13 @@ data:{
 | rt |   |
 | ruby |   |
 
-?>支持图片点击（可自动预览）、链接点击事件（可自动复制链接），不支持其他事件（如 `onclick` 等）  
+>支持图片点击（可自动预览）、链接点击事件（可自动复制链接），不支持其他事件（如 `onclick` 等）  
 
-?>全局支持 `id`、`style`、`class` 属性，`class` 可以匹配 `style` 标签中的样式和 `trees.wxss` 中的样式；其他不支持的属性将被移除  
+>全局支持 `id`、`style`、`class` 属性，`class` 可以匹配 `style` 标签中的样式和 `trees.wxss` 中的样式；其他不支持的属性将被移除  
 
-?>不在此列表中的标签，除个别将被直接移除（如`script`等），都会被转为一个行内标签，因此可以使用更多语义化标签  
+>不在此列表中的标签，除个别将被直接移除（如 `script` 等），都会被转为一个行内标签，因此可以使用更多语义化标签  
+
+>`uni-app` 包编译到 `H5` 平台时支持所有浏览器支持的标签  
 
 !>`ad`（广告）标签仅微信 / `QQ` 小程序、百度小程序支持，且使用后会大大增加渲染时间
 
@@ -199,11 +204,11 @@ data:{
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 39.7KB | 微信小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 28.3KB | 微信小程序插件包压缩版（功能相同） |
-| [Parser.bd](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd) | 36.9KB | 百度小程序插件包 |
-| [Parser.bd.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd.min) | 26.7KB | 百度小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 48.3KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 40.7KB | 微信小程序插件包 |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 29.3KB | 微信小程序插件包压缩版（功能相同） |
+| [Parser.bd](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd) | 37.9KB | 百度小程序插件包 |
+| [Parser.bd.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd.min) | 27.7KB | 百度小程序插件包压缩版（功能相同） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 54.2KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异：
 1. 仅微信小程序、`QQ`小程序、`APP` 支持 `lazy-load` 属性
@@ -244,7 +249,7 @@ data:{
    }
    ```
 
-?>[demo/wx](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) 文件夹下的是微信小程序 [富文本插件](#立即体验) 示例程序的源码，可供参考  
+>[demo/wx](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) 文件夹下的是微信小程序 [富文本插件](#立即体验) 示例程序的源码，可供参考  
 
 ### 在uni-app中使用 ###
 - 使用 `uni-app` 包（可以编译到所有小程序平台）  
@@ -270,9 +275,9 @@ data:{
      </script>
      ```
   
-  ?>可以直接通过插件市场引入：[插件市场](https://ext.dcloud.net.cn/plugin?id=805)
+  >可以直接通过插件市场引入：[插件市场](https://ext.dcloud.net.cn/plugin?id=805)
   
-  ?> [demo/uni-app](https://github.com/jin-yufeng/Parser/tree/master/demo/uni-app) 文件夹下是一个示例程序，可供参考 
+  > [demo/uni-app](https://github.com/jin-yufeng/Parser/tree/master/demo/uni-app) 文件夹下是一个示例程序，可供参考 
  
 - 使用原生包  
   参考 [官网-小程序组件支持](https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81)
@@ -681,29 +686,31 @@ parser(html).then(function(res){
 ### 常见问题 ###
 1. 图片变形问题  
    图片变形一般是由于对 `img` 标签同时设置了 `width` 和 `height`，由于 `max-width:100%` 的限制，宽度被缩小但高度不变导致了变形  
-   *解决方案：* 将 `img-mode` 属性设置成 `widthFix`，图片会根据设置的宽度，高度自适应，可解决图片的变形问题，但设置的高度会失效
-2. 表格边框问题  
-   一些富文本编辑器可能对于表格有默认的边框效果，但在本插件中表格没有设置默认的边框，如需请自行添加默认样式  
-   *解决方案：* 在 `tag-style` 属性中设置以下内容即可实现表格默认的 `1px` 灰色边框效果
+   *解决方案：* 将 `img-mode` 属性设置成 `widthFix`，图片会根据设置的宽度，高度自适应，可解决图片的变形问题，但设置的高度会失效  
+
+2. 禁止横向滚动问题  
+   默认情况下，当内容超出屏幕宽度时可以横向滚动；如果要禁用滚动，请在 `parser` 标签的 `style` 属性中加上 `overflow: hidden`（如果通过 `class` 设置还要加上 `!important`）  
+   *解决方案：*  
    ```wxml
-   <parser html="{{html}}" tag-style="{{tagStyle}}" />
+   <parser style="overflow:hidden" html="{{html}}"></parser>
    ```
+
+3. 关于换行符  
+   `html` 中换行只能使用 `br` 标签，其他的包括 `↵`, `\n` 等都是无效的，只会原样显示  
+   *解决方案：*可自行通过正则替换  
    ```javascript
-   data:{
-     tagStyle:{
-       table: 'border-collapse:collapse;border-top:1px solid gray;border-left:1px solid gray;',
-       th: 'border-right:1px solid gray;border-bottom:1px solid gray;',
-       td: 'border-right:1px solid gray;border-bottom:1px solid gray;'
-     }
-   }
+   // 以↵为例
+   html = html.replace(/↵/g,""); // 移除所有↵
+   html = html.replace(/↵/g,"<br />") // 全部替换为 br 标签
    ```
-3. 关于编辑器  
+
+4. 关于编辑器  
    本插件没有专门配套的富文本编辑器，一般来说，能够导出 `html` 的富文本编辑器都是支持的；另外本插件仅支持显示富文本，没有编辑功能  
   
-4. 部分 `style` 标签中的样式无法被匹配  
+5. 部分 `style` 标签中的样式无法被匹配  
    本插件并不是支持所有的选择器，请留意支持的选择器类型，如果用了不支持的选择器，该样式将被忽略  
   
-5. 不能正确显示一些网站的问题  
+6. 不能正确显示一些网站的问题  
    很多网站的内容是在 `js` 脚本中动态加载的，这些内容在本插件解析中将被直接忽略；本插件并不能替代 `web-view` 的功能，仅建议用于富文本编辑器编辑的富文本或简单的静态网页  
 
 ### 反馈问题 ###
@@ -711,12 +718,26 @@ parser(html).then(function(res){
 1. 在 [常见问题](#常见问题) 中查找是否有此问题
 2. 在 [issues](https://github.com/jin-yufeng/Parser/issues) 中查找是否有相同问题
 3. 使用 [示例项目](https://github.com/jin-yufeng/Parser/tree/master/demo) 或微信小程序 [富文本插件](#立即体验) 中的自定义测试尝试是否也会出现相同的问题  
-  
+4. 在下框中输入 `html` 字符串进行测试（即直接用浏览器进行渲染，若也存在问题，请检查样式）  
+  <textarea id="input" style="width:100%;height:200px" placeholder="请输入字符串"></textarea>
+  <button onclick="parse()">解析</button>
+  <button onclick="reset()" style="margin-left:10px">清空</button>
+  <iframe id="frame" style="height:200px"></iframe>  
+
 如果以上方式无法解决问题，可通过以下方式反馈  
 1. 在 `Github` 上 [提出 issue](https://github.com/jin-yufeng/Parser/issues/new/choose)，请注意按照模板要求详细描述问题  
-2. 在微信小程序 [富文本插件](#立即体验) 中的疑问解答-联系客服中联系我，请**直接发送相关问题**，发送无意义内容将不会回复  
+2. 在微信小程序 [富文本插件](#立即体验) 中的疑问解答 - 联系客服中联系我，请**直接发送相关问题**，发送无意义内容将不会回复  
+
+!>由于客服平台不能发送文件，可将有问题的 `html` 代码贴到 [链接](https://paste.ubuntu.com/)  
 
 ## 更新日志 ##
+- 2019.11.28:
+  1. `U` `table` 标签支持了 `border`, `cellpadding`, `cellspacing` 属性 [详细](https://github.com/jin-yufeng/Parser/issues/49)  
+  2. `U` 重构了 `uni-app` 包编译到 `H5` 时的显示方式，采用 `html` 原生的标签渲染，实现了以下优化（仅针对 `H5` 平台，其他**不变**）：
+     - 支持所有浏览器支持的标签和属性  
+     - `style` 标签支持所有浏览器支持的选择器
+     - `error` 回调增加支持 `img`，且返回组件的 `DOM` 实例，修改属性后可以直接对页面生效  
+     另外，通过一些转换，原来的属性和事件依然全部支持（不再有 `parser` 回调，因为不进行解析）  
 - 2019.11.9:
   1. `F` 修复了 `uni-app` 包编译到 `H5` 时 `html` 的初值为空时报 `Cannot read property 'name' of undefined` 的错误的问题  
 - 2019.11.5:
