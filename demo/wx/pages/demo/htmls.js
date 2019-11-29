@@ -292,9 +292,7 @@ var demo1 = `<style>
     </p>
   </section>
   <div style="text-align:center;">
-    <audio src="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.mp3?sign=26efc4b914843ae759f2ba521d609376&t=1572189640" poster= "https://6874-html-foe72-1259071903.tcb.qcloud.la/music.jpg?sign=65bb0c1dee9ce814304a3b06641914c6&t=1572189675" name="致爱丽丝" author="暂无" controls></audio>
-    <p><br /></p>
-    <video src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" controls></video>
+    <audio src="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.mp3?sign=26efc4b914843ae759f2ba521d609376&t=1572189640" poster= "https://6874-html-foe72-1259071903.tcb.qcloud.la/music.jpg?sign=65bb0c1dee9ce814304a3b06641914c6&t=1572189675" name="致爱丽丝" author="暂无" controls></audio>   
   </div>
   <br />
   <section style="border: 0px none;">

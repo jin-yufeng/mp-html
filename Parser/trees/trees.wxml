@@ -22,9 +22,9 @@
     <audio wx:elif="{{item.name=='audio'}}" class="{{item.attrs.class||''}}" src='{{controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src}}' id="{{item.attrs.id}}" loop='{{item.attrs.loop}}' controls='{{item.attrs.controls}}'
       poster='{{item.attrs.poster}}' name='{{item.attrs.name}}' author='{{item.attrs.author}}' style="{{item.attrs.style}}" data-id="{{item.attrs.id}}" data-source="{{item.attrs.source}}" binderror="audioError" />
     <!--链接-->
-    <navigator wx:elif="{{item.name=='a'}}" url="{{item.attrs.href}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" hover-start-time="25" hover-stay-time="300" bindtap="tapEvent">
+    <view wx:elif="{{item.name=='a'}}" url="{{item.attrs.href}}" class="a {{item.attrs.class||''}}" style="{{item.attrs.style}}" data-href='{{item.attrs.href}}' hover-class="navigator-hover" hover-start-time="25" hover-stay-time="300" bindtap="tapEvent">
       <trees id="node" nodes="{{item.children}}" controls="{{controls}}" lazy-load="{{lazyLoad}}"/>
-    </navigator>
+    </view>
     <!--广告-->
     <ad wx:elif="{{item.name=='ad'}}" unit-id="{{item.attrs['unit-id']}}" class="{{item.attrs.class||''}}" style="{{item.attrs.style}}" binderror="adError"></ad>
     <!--富文本-->

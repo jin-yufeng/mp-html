@@ -187,31 +187,35 @@
 					}
 					document.previewEvent = (img, imgList) => {
 						if (!img.hasAttribute('ignore')) {
-							if (this.autopreview) {
+							var preview = true;
+							img.ignore = () => preview = false;
+							this.$emit('imgtap', img);
+							if (preview && this.autopreview) {
 								uni.previewImage({
 									current: img.index,
 									urls: imgList
 								});
 							}
-							this.$emit('imgtap', img);
 						}
 					}
 					document.tapEvent = (link) => {
+						var jump = true;
 						this.$emit('linkpress', {
-							href: link.getAttribute("href")
+							href: link.getAttribute("href"),
+							ignore: () => jump = false
 						});
-						if (!link.getAttribute("href"))
-							return false;
-						if (/^http/.test(link.getAttribute("href"))) {
-							if (this.autocopy)
-								window.location.href = link.href;
-							return false;
-						} else {
-							uni.navigateTo({
-								url: link.getAttribute("href")
-							})
-							return false;
+						console.log(jump,link.getAttribute("href"))
+						if (jump && link.getAttribute("href")) {
+							if (/^http/.test(link.getAttribute("href"))) {
+								if (this.autocopy)
+									window.location.href = link.href;
+							} else {
+								uni.navigateTo({
+									url: link.getAttribute("href")
+								})
+							}
 						}
+						return false;
 					}
 					document.setTitle = (title) => {
 						if (title && this.autosetTitle) {

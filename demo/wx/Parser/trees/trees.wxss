@@ -10,6 +10,10 @@
   display: inherit;
   float: inherit;
 }
+.a {
+	display: inline;
+	color: #366092;
+}
 .sub, .sup, .bdo, .bdi, .ruby, .rt {
   display: inline-block !important;
 }

@@ -22,7 +22,7 @@ const initData = function(Component) {
         if (node.data.lazyLoad && CanIUseObserver) {
           node._observer = node.createIntersectionObserver();
           node._observer.relativeToViewport({
-            top:1000,
+            top: 1000,
             bottom: 1000
           }).observe('.img', res => {
             node.setData({
@@ -197,29 +197,43 @@ Component({
   methods: {
     //事件
     tapEvent(e) {
-      if (this.data.autocopy && e.detail.href && /^http/.test(e.detail.href)) {
-        wx.setClipboardData({
-          data: e.detail.href,
-          success() {
-            wx.showToast({
-              title: '链接已复制',
+      var jump = true;
+      this.triggerEvent('linkpress', {
+        href: e.detail.href,
+        ignore: () => jump = false
+      });
+      if (jump && e.detail.href) {
+        if (/^http/.test(e.detail.href)) {
+          if (this.data.autocopy)
+            wx.setClipboardData({
+              data: e.detail.href,
+              success() {
+                wx.showToast({
+                  title: '链接已复制',
+                })
+              }
             })
-          }
-        })
+        } else
+          wx.navigateTo({
+            url: e.detail.href,
+          })
       }
-      this.triggerEvent('linkpress', e.detail);
     },
     errorEvent(e) {
       this.triggerEvent('error', e.detail);
     },
     previewEvent(e) {
-      if (this.data.autopreview) {
+      var preview = true;
+      this.triggerEvent('imgtap', {
+        src: e.detail.src,
+        ignore: () => preview = false
+      })
+      if (preview && this.data.autopreview) {
         wx.previewImage({
           current: e.detail.src,
           urls: this.imgList.length ? this.imgList : [e.detail.src],
         })
       }
-      this.triggerEvent('imgtap', e.detail);
     },
     //内部方法
     _playVideo(e) {

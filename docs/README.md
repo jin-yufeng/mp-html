@@ -204,11 +204,11 @@ data:{
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 40.7KB | 微信小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 29.3KB | 微信小程序插件包压缩版（功能相同） |
-| [Parser.bd](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd) | 37.9KB | 百度小程序插件包 |
-| [Parser.bd.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd.min) | 27.7KB | 百度小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 54.2KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 41.1KB | 微信小程序插件包 |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 29.5KB | 微信小程序插件包压缩版（功能相同） |
+| [Parser.bd](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd) | 38.3KB | 百度小程序插件包 |
+| [Parser.bd.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd.min) | 27.8KB | 百度小程序插件包压缩版（功能相同） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 54.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异：
 1. 仅微信小程序、`QQ`小程序、`APP` 支持 `lazy-load` 属性
@@ -384,10 +384,20 @@ data:{
 | bindparser | 在解析完成时调用（仅传入的 html 类型为 String 时调用） | 返回一个 object，其中 nodes 为解析后的节点数组，imgList 为图片列表，title 是页面标题，该 object 可以在下次调用直接作为 html 属性的值，节省解析的时间 |
 | bindready | 渲染完成时调用 | 返回整个组件的 NodesRef 结构体，包含宽度、高度、位置等信息（每次 html 修改后都会触发） |
 | binderror | 出错时调用 | 返回一个 object，其中 source 是错误来源（ad 广告出错、video 视频加载出错、audio 音频加载出错、parse 解析过程中出错），errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息 |
-| bindimgtap | 在图片受到点击时调用 | 返回一个形如 {src: ...} 的结构体（src 是图片链接），可用于阻挡 onShow 的调用 |
-| bindlinkpress | 在链接受到点击时调用 | 返回一个形如 {href: ...} 的结构体（href 是链接地址），开发者可以在该回调中进行进一步操作，如下载文档和打开等 |  
+| bindimgtap | 在图片受到点击时调用 | 返回一个形如 {src: ..., ignore: function} 的结构体（src 是图片链接），可用于阻挡 onShow 的调用；在回调函数中调用 ignore 将不进行预览 |
+| bindlinkpress | 在链接受到点击时调用 | 返回一个形如 {href: ..., ignore: function} 的结构体（href 是链接地址），开发者可以在该回调中进行进一步操作，如下载文档和打开等；在回调函数中调用 ignore 将不自动跳转/复制 |  
   
-!>所有回调函数的返回值从 `e.detail` 中获取  
+>关于图片和链接被点击返回的 `ignore` 函数的解释：类似于 `a` 标签 `onclick` 回调返回 `false` 将不跳转一样，由于 `event` 无法获取返回值，故增加此函数，若在回调函数中执行，则不自动进行预览/跳转/复制链接操作，可执行自定义操作（这两个回调函数应尽量简短）  
+
+```javascript
+linkpress(e){
+  if(e.detail.href == "xxx")
+    e.detail.ignore(); // 此链接不进行自动跳转/复制
+  // 自定义操作
+}
+```
+
+!>原生包所有回调函数的返回值从 `e.detail` 中获取  
 
 !>`uni-app` 包的回调函数以 `@` 开头，如 `@ready`  
 
@@ -703,14 +713,21 @@ parser(html).then(function(res){
    html = html.replace(/↵/g,""); // 移除所有↵
    html = html.replace(/↵/g,"<br />") // 全部替换为 br 标签
    ```
+4. 表格和列表中的图片/链接无法点击  
+   由于表格和列表较难模拟，将直接通过 `rich-text` 显示，因此其中的图片和链接将无法点击  
+   *解决方案：*列表可以通过引入 [List补丁包](#List) 解决（仅能用于微信原生包）；表格由于 `colspan` 和 `rowspan` 无法模拟，目前只有 `rich-text` 能够有最佳的显示效果；请尽量避免在其中使用图片或链接，否则将无法点击  
 
-4. 关于编辑器  
+5. 关于 `img`  
+   本插件用 `rich-text` 中的 `img` 显示图片而不是用 `image` 组件，原因在于 `img` 更贴近于 `html` 中图片的显示模式：在没有设置宽高时，自动按原大小显示；设置了宽或高时，按比例进行缩放；同时设置了宽高时，按设置的值显示。若用 `image` 组件实现这样的效果需要较为复杂的处理，且需要多次 `setData`，影响性能。  
+   但也因此会存在一些问题，如 `img` 加载失败时没有 `error` 回调、无法使用 `lazy-load`（目前已通过其他方式实现）、无法使用微信小程序中的 `show-menu-by-longpress`（长按识别小程序码，但在预览时可以）等
+
+6. 关于编辑器  
    本插件没有专门配套的富文本编辑器，一般来说，能够导出 `html` 的富文本编辑器都是支持的；另外本插件仅支持显示富文本，没有编辑功能  
   
-5. 部分 `style` 标签中的样式无法被匹配  
+7. 部分 `style` 标签中的样式无法被匹配  
    本插件并不是支持所有的选择器，请留意支持的选择器类型，如果用了不支持的选择器，该样式将被忽略  
   
-6. 不能正确显示一些网站的问题  
+8. 不能正确显示一些网站的问题  
    很多网站的内容是在 `js` 脚本中动态加载的，这些内容在本插件解析中将被直接忽略；本插件并不能替代 `web-view` 的功能，仅建议用于富文本编辑器编辑的富文本或简单的静态网页  
 
 ### 反馈问题 ###
@@ -731,6 +748,8 @@ parser(html).then(function(res){
 !>由于客服平台不能发送文件，可将有问题的 `html` 代码贴到 [链接](https://paste.ubuntu.com/)  
 
 ## 更新日志 ##
+- 2019.11.29:
+  1. `U` `linkpress`, `imgtap` 回调中增加一个 `ignore` 函数，在回调中调用此函数将不自动进行链接跳转/图片预览操作，可以屏蔽指定的链接/图片或进行自定义操作 [详细](https://github.com/jin-yufeng/Parser/issues/51)  
 - 2019.11.28:
   1. `U` `table` 标签支持了 `border`, `cellpadding`, `cellspacing` 属性 [详细](https://github.com/jin-yufeng/Parser/issues/49)  
   2. `U` 重构了 `uni-app` 包编译到 `H5` 时的显示方式，采用 `html` 原生的标签渲染，实现了以下优化（仅针对 `H5` 平台，其他**不变**）：

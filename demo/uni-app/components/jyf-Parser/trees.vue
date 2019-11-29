@@ -165,43 +165,47 @@
 			// #endif
 			previewEvent(e) {
 				if (!e.currentTarget.dataset.ignore) {
-					if (this._top.autopreview) {
+					var preview = true;
+					this._top.$emit('imgtap', {
+						src: e.currentTarget.dataset.src,
+						ignore: () => preview = false
+					});
+					if (preview && this._top.autopreview) {
 						uni.previewImage({
 							current: parseInt(e.currentTarget.dataset.current),
 							urls: this._top.imgList.length ? this._top.imgList : [e.currentTarget.dataset.src]
 						});
 					}
-					this._top.$emit('imgtap', {
-						src: e.currentTarget.dataset.src
-					});
 				}
 			},
 			tapEvent(e) {
+				var jump = true;
 				this._top.$emit('linkpress', {
-					href: e.currentTarget.dataset.href
+					href: e.currentTarget.dataset.href,
+					ignore: () => jump = false
 				});
-				if (!e.currentTarget.dataset.href)
-					return;
-				if (/^http/.test(e.currentTarget.dataset.href)) {
-					if (this._top.autocopy) {
-						// #ifndef H5
-						uni.setClipboardData({
-							data: e.currentTarget.dataset.href,
-							success() {
-								uni.showToast({
-									title: '链接已复制'
-								});
-							}
-						});
-						// #endif
-						// #ifdef H5
-						window.location.href = e.currentTarget.dataset.href;
-						// #endif
-					}
-				} else
-					uni.navigateTo({
-						url: e.currentTarget.dataset.href
-					})
+				if (jump && e.currentTarget.dataset.href) {
+					if (/^http/.test(e.currentTarget.dataset.href)) {
+						if (this._top.autocopy) {
+							// #ifndef H5
+							uni.setClipboardData({
+								data: e.currentTarget.dataset.href,
+								success() {
+									uni.showToast({
+										title: '链接已复制'
+									});
+								}
+							});
+							// #endif
+							// #ifdef H5
+							window.location.href = e.currentTarget.dataset.href;
+							// #endif
+						}
+					} else
+						uni.navigateTo({
+							url: e.currentTarget.dataset.href
+						})
+				}
 			},
 			triggerError(source, target, errMsg, errCode) {
 				this._top.$emit('error', {

@@ -10,6 +10,10 @@
   display: inherit;
   float: inherit;
 }
+.a {
+  display: inline;
+	color: #366092;
+}
 .div, .blockquote, .p {
   display: block;
 }

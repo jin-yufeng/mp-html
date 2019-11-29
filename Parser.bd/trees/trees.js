@@ -55,27 +55,41 @@ Component({
     },
     previewEvent(e) {
       if (!e.target.dataset.hasOwnProperty('ignore')) {
-        if (this._top.data.autopreview) {
+        var preview = true;
+        this._top.triggerEvent('imgtap', {
+          src: e.currentTarget.dataset.src,
+          ignore: () => preview = false
+        });
+        if (preview && this._top.data.autopreview) {
           swan.previewImage({
             current: e.currentTarget.dataset.src,
             urls: this._top.imgList.length ? this._top.imgList : [e.currentTarget.dataset.src]
           });
         }
-        this._top.triggerEvent('imgtap', { src: e.currentTarget.dataset.src });
       }
     },
     tapEvent(e) {
-      if (this._top.data.autocopy && e.currentTarget.dataset.href && /^http/.test(e.currentTarget.dataset.href)) {
-        swan.setClipboardData({
-          data: e.currentTarget.dataset.href,
-          success() {
-            swan.showToast({
-              title: '链接已复制'
+      var jump = true;
+      this._top.triggerEvent('linkpress', {
+        href: e.currentTarget.dataset.href,
+        ignore: () => jump = false
+      });
+      if (jump && e.currentTarget.dataset.href) {
+        if (/^http/.test(e.currentTarget.dataset.href)) {
+          if (this._top.data.autocopy)
+            swan.setClipboardData({
+              data: e.currentTarget.dataset.href,
+              success() {
+                swan.showToast({
+                  title: '链接已复制'
+                });
+              }
             });
-          }
-        });
+        } else
+          swan.navigateTo({
+            url: e.currentTarget.dataset.href
+          });
       }
-      this._top.triggerEvent('linkpress', { href: e.currentTarget.dataset.href });
     },
     adError(e) {
       triggerError(this._top, "ad", e.currentTarget, "", e.detail.errorCode);

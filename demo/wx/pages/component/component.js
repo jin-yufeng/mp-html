@@ -331,10 +331,10 @@ Page({
       出错时时调用，返回值为一个结构体，其中<code>source</code>是错误来源（可能是<code>ad</code>广告出错、<code>video</code>视频加载出错、<code>audio</code>音频加载出错以及<code>parse</code>解析过程中出错）；<code>errMsg</code>是错误原因；<code>errCode</code>是错误代码（仅<code>ad</code>）；<code>target</code>属性中含有出错标签的具体信息
       </li>
       <li style="margin-top:5px;"><code>bindlinkpress</code><br/>
-      链接（<code>a</code>标签）受到点击时调用，返回值是一个形如<code>{href: ...}</code>的结构体，其中<code>href</code>是被点击链接的<code>href</code>值，如果该链接不是简单的跳转，可以在此回调函数中进行进一步操作（如附件链接可以在这里下载和打开）
+      链接（<code>a</code>标签）受到点击时调用，返回值是一个形如<code>{href: ..., ignore: function}</code>的结构体，其中<code>href</code>是被点击链接的<code>href</code>值，如果该链接不是简单的跳转，可以在此回调函数中进行进一步操作（如附件链接可以在这里下载和打开）；在回调中调用<code>ignore</code>函数将不自动跳转/复制链接
       </li>
       <li style="margin-top:5px;"><code>bindimgtap</code><br/>
-      图片被点击时调用，返回值是一个形如<code>{src: ...}</code>的结构体，其中<code>src</code>是图片的链接，可用于阻挡<code>onShow</code>的调用
+      图片被点击时调用，返回值是一个形如<code>{src: ..., ignore: function}</code>的结构体，其中<code>src</code>是图片的链接，可用于阻挡<code>onShow</code>的调用；在回调中调用<code>ignore</code>函数将不自动预览
       </li>
       <li style="margin-top:5px;">备注：所有回调函数的返回值在<code>e.detail</code>中获取</li>
     </ul>`,
@@ -363,6 +363,12 @@ Page({
     StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.11.29:
+      <ol>
+        <li><code>U</code> <code>linkpress</code>和<code>imgtap</code>回调增加<code>ignore</code>函数，在回调中调用此函数将不自动进行链接跳转/图片预览操作，可以屏蔽指定的链接/图片或进行自定义操作</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.11.28:
       <ol>
         <li><code>U</code> <code>table</code>标签支持了<code>border</code>, <code>cellpadding</code>, <code>cellspacing</code></li>
