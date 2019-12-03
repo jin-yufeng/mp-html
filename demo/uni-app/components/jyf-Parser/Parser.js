@@ -217,7 +217,7 @@ Parser.prototype.write = function(chunk) {
 	this._tokenizer.parse(chunk);
 };
 
-function html2nodes(data, tagStyle, imgMode) {
+function html2nodes(data, options) {
 	return new Promise(function(resolve, reject) {
 		try {
 			let style = '';
@@ -225,7 +225,7 @@ function html2nodes(data, tagStyle, imgMode) {
 				style += arguments[1];
 				return '';
 			});
-			let handler = new DomHandler(style, tagStyle, imgMode);
+			let handler = new DomHandler(style, options);
 			new Parser(handler, (res) => {
 				// #ifdef MP-BAIDU || MP-TOUTIAO || H5
 				_traverse(res.nodes);

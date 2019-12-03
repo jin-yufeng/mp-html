@@ -10,14 +10,13 @@ const triggerError = function (Top, source, target, errMsg, errCode) {
 };
 // 加载其他源（音视频）
 const loadSource = function (Component, currentTarget) {
-  if (!Component.data.controls[currentTarget.id] && currentTarget.source.length > 1) {
+  if (!Component.data.controls[currentTarget.id] && currentTarget.source.length > 1)
     Component.data.controls[currentTarget.id] = {
       play: false,
       index: 1
     };
-  } else if (Component.data.controls[currentTarget.id] && currentTarget.source.length > Component.data.controls[currentTarget.id].index + 1) {
+  else if (Component.data.controls[currentTarget.id] && currentTarget.source.length > Component.data.controls[currentTarget.id].index + 1)
     Component.data.controls[currentTarget.id].index++;
-  }
   Component.setData({
     controls: Component.data.controls
   });
@@ -26,12 +25,16 @@ Component({
   attached() {
     this._top = getApp()._Parser;
     for (let item of this.data.nodes) {
-      if (item.name == 'video') {
+      if (item.name == 'video')
         this._top.videoContext.push({
           id: item.attrs.id,
           context: swan.createVideoContext(item.attrs.id, this)
         });
-      }
+      if (item.attrs && item.attrs.id)
+        this._top.anchors.push({
+          id: item.attrs.id,
+          node: this
+        })
     }
   },
   properties: {
@@ -57,6 +60,7 @@ Component({
       if (!e.target.dataset.hasOwnProperty('ignore')) {
         var preview = true;
         this._top.triggerEvent('imgtap', {
+          id: e.target.id,
           src: e.currentTarget.dataset.src,
           ignore: () => preview = false
         });
@@ -75,7 +79,13 @@ Component({
         ignore: () => jump = false
       });
       if (jump && e.currentTarget.dataset.href) {
-        if (/^http/.test(e.currentTarget.dataset.href)) {
+        if (e.currentTarget.dataset.href[0] == "#") {
+          if (this._top.data.useAnchor)
+            this._top.navigateTo({
+              id: e.currentTarget.dataset.href.substring(1)
+            })
+        }
+        else if (/^http/.test(e.currentTarget.dataset.href)) {
           if (this._top.data.autocopy)
             swan.setClipboardData({
               data: e.currentTarget.dataset.href,

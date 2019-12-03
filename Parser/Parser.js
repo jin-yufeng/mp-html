@@ -140,7 +140,7 @@ Parser.prototype.write = function(chunk) {
   this._tokenizer.parse(chunk);
 };
 
-function html2nodes(data, tagStyle) {
+function html2nodes(data, options) {
   return new Promise(function(resolve, reject) {
     try {
       let style = '';
@@ -148,7 +148,7 @@ function html2nodes(data, tagStyle) {
         style += arguments[1];
         return '';
       });
-      let handler = new DomHandler(style, tagStyle);
+      let handler = new DomHandler(style, options);
       new Parser(handler, (res) => {
         return resolve(res);
       }).write(data);

@@ -18,16 +18,8 @@ Page({
       match: 'id="demo"'
     }, {
       mode: '按标签名匹配',
-      example: 'body',
-      match: '<body>...</body>'
-    }, {
-      mode: '单层多个class',
-      example: '.demo1.demo2',
-      match: 'class="demo1 demo2"'
-    }, {
-      mode: '多个并列',
-      example: '.demo1,.demo2',
-      match: 'class="demo1"\nclass="demo2"'
+      example: 'img',
+      match: '<img>'
     }],
     //示例代码
     stylecode: code.stylecode,
@@ -53,7 +45,7 @@ Page({
     }],
     tableTags: [{
       name: 'table',
-      attrs: 'width'
+      attrs: 'border, cellpadding,\ncellspacing, width'
     }, {
       name: 'thead'
     }, {
@@ -201,45 +193,14 @@ Page({
     }, {
       name: 'ruby'
     }],
-    api: [{
-      name: "getText()",
-      notice: "获取文本内容（仅直接包含文本的标签可用）"
-    }, {
-      name: "setText(text)",
-      notice: "修改文本内容（仅直接包含文本的标签可用）"
-    }, {
-      name: "addChildren(nodes,i)",
-      notice: "在第i个位置添加子节点，nodes为一个结构体，格式同rich-text"
-    }, {
-      name: "removeChildren(i)",
-      notice: "移除第i个子节点"
-    }, {
-      name: "getChildren(i)",
-      notice: "获取第i个子节点的element实例"
-    }, {
-      name: "getAttr(key)",
-      notice: "获取某个属性值"
-    }, {
-      name: "setAttr(key,value)",
-      notice: "设置某个属性值"
-    }, {
-      name: "getElementById(id)",
-      notice: "在子节点中按照id查找element"
-    }, {
-      name: "update()",
-      notice: "若修改了element.nodes需要调用此方法同步到UI"
-    }],
     //示例代码
-    apicode: code.apicode,
     errorcode: code.errorcode,
     json: code.json,
     wxml: code.wxml,
     js: code.js,
-    json2: code.json2,
-    vue: code.vue,
     uni: code.uni,
-    wepy:code.wepy,
     emoji: code.emoji,
+    apicode: code.apicode,
     listJson: code.listJson,
     listJson2: code.listJson2,
     listWxml: code.listWxml,
@@ -247,7 +208,7 @@ Page({
     attrs: [{
       name: 'html',
       type: 'String\nArray\nObject',
-      notice: '见下方说明'
+      notice: '要显示的富文本数据'
     }, {
       name: 'tag-style',
       type: 'Object',
@@ -273,6 +234,11 @@ Page({
       default: 'true',
       notice: '是否自动将title标签中的内容设置到页面标题'
     }, {
+      name: 'domain',
+      type: 'String',
+      default: '',
+      notice: '主域名，设置后将自动给图片链接拼接上主域名或协议名'
+    }, {
       name: 'img-mode',
       type: 'String',
       default: 'default',
@@ -297,32 +263,16 @@ Page({
       type: 'Number',
       default: '400',
       notice: '动画持续时间（单位ms）'
+    }, {
+      name: 'use-anchor',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否使用页面内锚点'
     }],
-    //属性格式
-    format: `<ul style="text-align:justify">
-      <li>html格式
-        <ol>
-          <li><code>String</code>类型：一个html字符串，如："&lt;div&gt;Hello World!&lt;/div&gt;"</li>
-          <li><code>Array</code>类型：格式基本同<code>rich-text</code>，对于节点下有图片、链接等的，需要将<code>continue</code>属性设置为<code>true</code>，否则将直接使用<code>rich-text</code>组件渲染，可能导致图片无法预览等问题（此格式传入将不能通过左右滑动查看所有图片）</li>
-          <li><code>Object</code>类型：一个形如<code>{nodes: [Array], imgList: [Array], title: "String"}</code>的结构体，nodes数组的格式同上，imgList为所有图片地址的数组，title为文章的标题（不必要，如果传入将设置到页面的标题上）回调函数<code>bindparse</code>的返回值就是该类型的结构体</li>
-        </ol>
-        <ul>
-          <li style="margin-top:5px;">备注：<code>Array</code>和<code>Object</code>类型传入可以节省解析时间，提高性能</li>
-        </ul>
-      </li>
-      <br/>
-      <li>img-mode格式
-        <p>默认<code>default</code>，在没有设置宽高时，按图片原大小显示；设置了宽或高时，按比例进行缩放；同时设置了宽高时，按设置的宽高进行缩放。在同时设置了宽高的情况下，宽度可能因为<code>max-width:100%</code>的限制而缩短导致图片变形，此时可将模式设置为<code>widthFix</code>，即保持宽度不变，高度自动变化（会导致设置的高度无效）</p>
-      </li>
-      <br/>
-      <li>tag-style格式
-        <p>一个形如<code>{ name:style }</code>的结构体，name为标签名，style为需要设置的样式；该属性仅传入的<code>html</code>为<code>String</code>类型时有效（在解析过程中设置）</p>
-      </li>
-    </ul>`,
     //回调函数
     callback: `<ul style="text-align:justify">
       <li><code>bindparse</code><br/>
-      当传入的<code>html</code>为字符串类型时，解析完成后调用；返回值是一个形如<code>{nodes: [Array], imgList: [Array], title: "String"}</code>的结构体，<code>nodes</code>是节点数组，<code>imgList</code>是所有图片地址的数组，<code>title</code>是页面标题（可用于转发）可以将该值保存后下次调用时直接作为属性<code>html</code>的值，可节省解析时间
+      当传入的<code>html</code>为字符串类型时，解析完成后调用；返回值是一个形如<code>{nodes, imgList, title}</code>的结构体，<code>nodes</code>是节点数组，<code>imgList</code>是所有图片地址的数组，<code>title</code>是页面标题（可用于转发）可以将该值保存后下次调用时直接作为属性<code>html</code>的值，可节省解析时间
       </li>
       <li style="margin-top:5px;"><code>bindready</code><br/>
       渲染完成时调用，返回值是整个组件的<code>NodesRef</code>结构体，包含宽度、高度、位置等信息（每次传入的<code>html</code>修改后都会触发）
@@ -331,13 +281,34 @@ Page({
       出错时时调用，返回值为一个结构体，其中<code>source</code>是错误来源（可能是<code>ad</code>广告出错、<code>video</code>视频加载出错、<code>audio</code>音频加载出错以及<code>parse</code>解析过程中出错）；<code>errMsg</code>是错误原因；<code>errCode</code>是错误代码（仅<code>ad</code>）；<code>target</code>属性中含有出错标签的具体信息
       </li>
       <li style="margin-top:5px;"><code>bindlinkpress</code><br/>
-      链接（<code>a</code>标签）受到点击时调用，返回值是一个形如<code>{href: ..., ignore: function}</code>的结构体，其中<code>href</code>是被点击链接的<code>href</code>值，如果该链接不是简单的跳转，可以在此回调函数中进行进一步操作（如附件链接可以在这里下载和打开）；在回调中调用<code>ignore</code>函数将不自动跳转/复制链接
+      链接（<code>a</code>标签）受到点击时调用，返回值是一个形如<code>{href, ignore}</code>的结构体，其中<code>href</code>是被点击链接的<code>href</code>值，如果该链接不是简单的跳转，可以在此回调函数中进行进一步操作（如附件链接可以在这里下载和打开）；在回调中调用<code>ignore</code>函数将不自动跳转/复制链接
       </li>
       <li style="margin-top:5px;"><code>bindimgtap</code><br/>
-      图片被点击时调用，返回值是一个形如<code>{src: ..., ignore: function}</code>的结构体，其中<code>src</code>是图片的链接，可用于阻挡<code>onShow</code>的调用；在回调中调用<code>ignore</code>函数将不自动预览
+      图片被点击时调用，返回值是一个形如<code>{src, ignore}</code>的结构体，其中<code>src</code>是图片的链接；在回调中调用<code>ignore</code>函数将不自动预览；可用于阻挡<code>onShow</code>的调用
       </li>
       <li style="margin-top:5px;">备注：所有回调函数的返回值在<code>e.detail</code>中获取</li>
     </ul>`,
+    selectors: [{
+      mode: "*",
+      match: "所有",
+      notice: "通配符"
+    }, {
+      mode: ".a .b",
+      match: '&lt;element class="a"&gt;\n&nbsp;...\n&nbsp;&nbsp;&lt;element class="b"&gt;',
+      notice: "后代选择器"
+    }, {
+      mode: ".a>.b",
+      match: '&lt;element class="a"&gt;\n&nbsp;&lt;element class="b"&gt;',
+      notice: "子选择器"
+    }, {
+      mode: ".c:before",
+      match: '&lt;element class="c" :before&gt;',
+      notice: "before伪类"
+    }, {
+      mode: ".c:after",
+      match: '&lt;element class="c" :after&gt;',
+      notice: "after伪类"
+    }],
     //基础库要求
     versions: [{
       version: ">=2.2.5",
@@ -356,13 +327,16 @@ Page({
       function: "无法使用",
       percent: "0.05%"
     }],
-    //示例代码
-    html2nodes: code.html2nodes,
-    css2object: code.css2object,
-    VersionHigherThan: code.VersionHigherThan,
-    StrSplice: code.StrSplice,
     //更新日志
     update: `<ul>
+    <li>2019.12.3:
+      <ol>
+        <li><code>A</code> 增加了<code>domain</code>属性，设置后可以自动给图片链接拼接主域名或协议名</li>
+        <li><code>A</code> 增加了<code>use-anchor</code>属性，可以选择是否使用页面内锚点</li>
+        <li><code>U</code> <code>CssHandler</code>补丁包增加支持<code>before</code>和<code>after</code>伪类</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.11.29:
       <ol>
         <li><code>U</code> <code>linkpress</code>和<code>imgtap</code>回调增加<code>ignore</code>函数，在回调中调用此函数将不自动进行链接跳转/图片预览操作，可以屏蔽指定的链接/图片或进行自定义操作</li>
@@ -463,203 +437,6 @@ Page({
         <li><code>F</code> 修复了部分情况下<code>html</code>中的换行符会被显示的问题</li>
       </ol>
     </li>
-    <br />
-    <li>2019.8.22:
-      <ol>
-        <li><code>U</code> 支持了<code>font</code>标签的<code>size</code>属性</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.8.21:
-      <ol>
-        <li><code>F</code> 修复了部分情况下实体编码内容无法显示的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.8.17:
-      <ol>
-        <li><code>F</code> 修复了形如<code>class="a&nbsp;b"</code>（多个<code>class</code>）时样式匹配失效的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.8.10：
-      <ol>
-        <li><code>U</code> 优化了<code>a</code>标签的点击效果</li>
-        <li><code>F</code> 修复了部分情况下<code>span</code>标签样式出错的情况</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.8.2：
-      <ol>
-        <li><code>F</code> 修复了部分情况下<code>display:flex</code>显示出错的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.7.24：
-      <ol>
-        <li><code>A</code> 增加了<code>autosetTitle</code>属性（默认<code>true</code>），支持设置是否自动将<code>title</code>标签里的内容设置到页面标题</li>
-        <li><code>F</code> 修复了<code>margin:auto</code>不生效的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.6.15：
-      <ol>
-        <li><code>F</code> 修复了部分情况下<code>br</code>标签换行格式不正确的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.6.10：
-      <ol>
-        <li><code>A</code> 适配了<code>rich-text</code>组件在2.7.1基础库新增加的标签，其中<code>big</code>、<code>small</code>、<code>mark</code>、<code>cite</code>、<code>s</code>等标签在低版本都可以兼容；<code>bdi</code>、<code>bdo</code>、<code>caption</code>、<code>rt</code>、<code>ruby</code>标签必须基础库2.7.1及以上才能正常显示，低版本会被转为<code>span</code></li>
-        <li><code>A</code> 增加了<code>html2nodes</code>（解析<code>html</code>）、<code>css2object</code>（解析<code>css</code>）、<code>versionHigherThan</code>（比较和判断基础库版本）、<code>String.splice</code>（对字符串指定位置进行删改）等<code>api</code>函数</li>
-        <li><code>A</code> 增加了<code>img-mode</code>属性，可以设置为<code>default</code>或<code>widthFix</code>，设置为<code>widthFix</code>时，宽度不变，高度自动变化，可用于解决部分情况下图片变形的问题（但设置的高度会失效）</li>
-        <li><code>U</code> 优化了样式匹配的优先级：<code>tag-style</code>&lt;<code>style</code>标签&lt;内联<code>style</code>样式</li>
-        <li><code>F</code> 修复了<code>style</code>标签中<code>,</code>前后有空格时导致该样式被忽略的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.6.3：
-      <ol>
-        <li><code>A</code> 增加了<code>autocopy</code>属性，用于控制是否允许<code>a</code>标签受到点击时自动复制链接（仅限<code>http</code>开头的网址链接；默认<code>true</code>；接近于原<code>selectable</code>属性的功能)</li>
-        <li><code>U</code> 可以通过设置<code>selectable</code>属性控制是否允许长按复制任意内容（默认<code>false</code>）</li>
-        <li><code>F</code> 修复了<code>style</code>标签内容过长时安卓机可能出现栈溢出的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.6.1：
-      <ol>
-        <li><code>F</code> 修复了部分情况下<code>width</code>设置为百分比时失效的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.5.24：
-      <ol>
-        <li><code>U</code> 通过以自定义组件递归的方式替代了模板循环，精简包的大小至<code>28.1KB</code>，且不再受层数限制</li>
-        <li><code>D</code> 删除了<code>html-class</code>和<code>html-style</code>属性，支持直接对<code>Parser</code>标签设置<code>class</code>和<code>style</code>，默认的<code>display</code>是<code>block</code></li>
-        <li><code>F</code> 修复了部分情况下节点的<code>display</code>和<code>float</code>可能不生效的问题</li>
-        <li><code>F</code> 修复了背景音乐无法播放的问题(设置<code>autoplay</code>)，并支持对多个<code>audio</code>标签设置<code>autoplay</code></li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.5.22：
-      <ol>
-        <li><code>U</code> <code>bindready</code>回调将返回整个组件的<code>NodesRef</code>结构体，包含了宽度、高度、位置等信息</li>
-        <li><code>U</code> 提高了传入的<code>html</code>类型为<code>Array</code>或<code>Object</code>时的渲染速度（约10%）</li>
-        <li><code>U</code> 解析时若存在<code>video</code>或<code>audio</code>组件既没有<code>controls</code>属性也没有<code>autoplay</code>属性时会向控制台打印“可能无法播放”的警告</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.5.20：
-      <ol>
-        <li><code>A</code> 增加支持<code>source</code>标签（仅限用于<code>video</code>和<code>audio</code>标签中），当设置了多个<code>source</code>时，将按照顺序进行加载，若前面的资源加载失败，则自动加载后面的资源</li>
-        <li><code>U</code> 增加支持<code>video</code>标签的<code>autoplay</code>和<code>muted</code>属性</li>
-        <li><code>U</code> 增加支持<code>audio</code>标签的<code>autoplay</code>属性（自动播放的音乐仅限一首，否则只会自动播放第一首）</li>
-        <li><code>F</code> 修复了超过3个视频时后面的视频无法播放的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.5.19：
-      <ol>
-        <li><code>A</code> 增加了<code>html-style</code>属性，可以对整个富文本容器设置样式，且可以通过<code>wxml</code>中的数据绑定动态设置</li>
-        <li><code>A</code> 增加了<code>show-with-animation</code>和<code>animation-duration</code>属性，支持设置是否使用显示时的渐显动画以及动画持续时间</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.5.17：
-      <ol>
-        <li><code>A</code> 增加了<code>bindready</code>回调，在渲染完成时调用</li>
-        <li><code>A</code> 增加了<code>binderror</code>回调，在解析出错或加载多媒体文件出错时调用</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.5.15：
-      <ol>
-        <li><code>F</code> 修复了一个页面存在多个<code>Parser</code>组件时，<code>imgList</code>被覆盖而导致图片预览失效的问题
-        <li><code>F</code> 修复了图片设置<code>float</code>无效的问题
-      </ol>
-    </li>
-    <br />
-    <li>2019.5.14：
-      <ol>
-        <li><code>A</code> 增加了<code>html-class</code>属性，可以对整个富文本容器设置样式，包括<code>display</code>、<code>margin</code>、<code>padding</code>等</li>
-        <li><code>D</code> 删除了<code>scroll</code>属性，默认当内容宽度超出页面宽度时允许横向滚动，如要禁止滚动可以在<code>html-class</code>中设置<code>overflow: hidden !important</li>
-        <li><code>F</code> 修复了实体编码的空格<code>&amp;nbsp;</code>在部分情况下失效的问题
-      </ol>
-    </li>
-    <br />
-    <li>2019.5.10：
-      <ol>
-        <li><code>A</code> 增加了<code>autopause</code>属性，可以选择是否允许在播放视频时自动暂停其他视频（默认<code>true</code>）</li>
-        <li><code>U</code> 支持在视频数量超过3个时只加载前3个，其余用图片替代，在受到点击时再进行加载和播放，避免页面卡死</li>
-        <li><code>U</code> 在样式匹配完成后移除了节点的<code>class</code>和<code>id</code>属性，减小了<code>nodes</code>数组大小，加快渲染速度</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.5.6： 
-      <ol>
-        <li><code>A</code> 发布了后端<code>node.js</code>加强包，具有更加强大的解析能力，提供了<code>html</code>、<code>website</code>、<code>markdown</code>等多种模式
-        <li><code>U</code> 在<code>Parser</code>标签内可以放入加载提示或动画，会在未加载完成或内容为空时显示，加载完成后自动隐藏</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.4.29：
-      <ol>
-        <li><code>A</code> 增加支持将<code>title</code>标签中的内容设置到页面标题上，并在<code>bindparse</code>回调中返回（可用于转发分享）</li>
-        <li><code>A</code> 增加<code>scroll</code>属性，可以选择是否允许页面横向滚动</li>
-        <li><code>U</code><code>style</code>标签中的样式支持更多匹配模式(包括单层多个<code>.demo1.demo2</code>和多个并列<code>.demo1,.demo2</code>等，另外对于伪类、多层的以及含有@或*的将直接忽略)</li>
-        <li><code>F</code> 修复了已知<code>bug</code></li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.4.28：
-      <ol>
-        <li><code>U</code> 优化图片显示效果，对没有设置宽高的图片，按原大小显示（最大不超过100%）；设置了宽度或高度之一的，按比例进行缩放；同时设置了宽度和高度的，按设置的值进行拉伸；图片无法显示时，可以显示<code>alt</code>属性中的文本；但由于这些特性需要通过<code>rich-text</code>显示，因此取消了<code>lazyload</code>属性</li>
-        <li><code>U</code> 优化了<code>a</code>标签的内联效果</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.4.26：
-      <ol>
-        <li><code>A</code> 增加支持<code>pre</code>, <code>u</code>, <code>center</code>, <code>source</code>等标签</li>
-        <li><code>A</code> 增加<code>bindlinkpress</code>回调函数，在链接受到点击时触发，开发者可以在此回调中进行进一步操作（如下载和打开文档等）</li>
-        <li><code>U</code> 对于不在支持列表中的标签，除个别直接移除外，都会被转为<code>div</code>标签，因此可以使用一些语义化标签，如<code>article</code>, <code>address</code>等</li>
-        <li><code>U</code> 提高了解析效率和渲染效率（约10%）</li>
-        <li><code>D</code> 删除了<code>preview</code>，默认允许图片预览</li>
-        <li><code>D</code> 删除了<code>space</code>属性，由于设置连续空格会使得标签间的空格都被显示，导致错误的效果，因此取消了这一属性；如需要显示连续空格，请使用实体编码的空格或设置<code>white-space</code>属性</li>
-        <li><code>F</code> 修复了已知<code>bug</code></li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.4.21：
-      <ol>
-        <li><code>A</code> 增加了<code>tagStyle</code>属性，支持对标签设置自定义样式</li>
-        <li><code>A</code> 发布了<code>demo</code>小程序</li>
-        <li><code>U</code> 降低了最低基础库的要求</li>
-        <li><code>F</code> 修复了已知<code>bug</code></li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.4.18：
-      <ol>
-        <li><code>A</code> 增加支持<code>audio</code>标签</li>
-        <li><code>A</code> 增加<code>lazyload</code>属性（图片懒加载）</li>
-        <li><code>U</code> 优化<code>a</code>, <code>code</code>, <code>blockquote</code>标签的显示效果</li>
-        <li><code>F</code> 修复了已知<code>bug</code></li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.4.16：
-      <ol>
-        <li><code>U</code> 精简包的大小</li>
-        <li><code>F</code> 修复了已知<code>bug</code></li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.4.14：
-      <ol>
-        <li><code>U</code> <code>style</code>标签中的样式支持按标签名匹配，如<code>body{Object}</code></li>
-      </ol>
-    </li>
   </ul>`
   },
   prev() {
@@ -681,8 +458,13 @@ Page({
       section = "update";
     this.setData({
       page: this.data.page + 1,
-      section
+      //section
     })
+    setTimeout(()=>{
+      this.setData({
+        section
+      })
+    },3000)
   },
   gotop() {
     this.setData({

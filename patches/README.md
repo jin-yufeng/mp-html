@@ -97,15 +97,15 @@
   模拟`ol`、`ul`、`li`标签  
   `ol`标签支持`start`和`type`属性；`ul`标签会自动根据层级显示不同的样式  
 - 大小  
-  `4.50KB`  
+  `4.79KB`  
 - 此补丁包**仅能**在微信小程序中使用  
 - 使用方法  
 1. 将`list`文件夹复制到`Parser`文件夹下  
-  2. 将`trees.li.wxml`中的内容复制到`Parser/trees/trees.wxml`中`name`为`element`的`template`中的任意位置
-  3. 在`Parser/trees/handler.wxs`中的`isContinue`函数中进行如下修改  
+  2. 将`trees.li.wxml`中的内容复制到`Parser/trees/trees.wxml`中 `wx:if="{{Handler.notContinue(item)}}"` 的 `block` 中的任意位置
+  3. 在`Parser/trees/handler.wxs`中的`notContinue`函数中进行如下修改  
      ```javascript
-     // else if(item.name=='a')
-     else if(item.name=='a'||item.name=='li'||item.name=='ol'||item.name=='ul')
+     // if(item.name=='a')
+     if(item.name=='a'||item.name=='li'||item.name=='ol'||item.name=='ul')
      ```
   4. 在`Parser/trees/trees.json`中添加
      ```json

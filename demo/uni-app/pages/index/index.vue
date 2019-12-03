@@ -2,11 +2,11 @@
 	<view>
 		<!--#ifndef APP-PLUS-->
 		<parser :html="html" @parser="parser" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error"
-		 show-with-animation lazy-load>加载中...</parser>
+		 show-with-animation lazy-load use-anchor>加载中...</parser>
 		<!--#endif-->
 		<!--#ifdef APP-PLUS-->
 		<parser :html="html" @parser="parser" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error"
-		 show-with-animation lazy-load :autocopy="false">加载中...</parser>
+		 show-with-animation lazy-load :autocopy="false" use-anchor>加载中...</parser>
 		<!--#endif-->
 	</view>
 </template>

@@ -144,7 +144,7 @@ var demo1 = `<style>
   <p>
     <br />
   </p>
-  <section style="border: 0px none;">
+  <section id="anchor" style="border: 0px none;">
     <section style="padding: 10px;">
       <section style="box-shadow:0px 0px 5px #e5e5e5 ;height:65px;">
         <section style="display: flex;justify-content: flex-start;align-items: center;">
@@ -325,6 +325,9 @@ var demo1 = `<style>
       <br />
       <a href="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%99%84%E4%BB%B6%E7%A4%BA%E4%BE%8B.docx?sign=558e8df1107441b038ecbb5aaafefa11&t=1556120797">附件示例.docx</a>
       <p style="font-size:12px;color:gray">附件链接，点击将下载和打开</p>
+      <br />
+      <a href="#anchor">锚点</a>
+      <p style="font-size:12px;color:gray">内部锚点链接，点击将跳转到文字渲染栏</p>
     </div>
     <br />
   </section>

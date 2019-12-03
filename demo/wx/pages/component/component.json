@@ -1,6 +1,6 @@
 {
   "usingComponents": {
-    "Parser": "/Parser/index",
+    "parser": "/Parser/index",
     "ol":"/Parser/list/ol",
     "ul": "/Parser/list/ul",
     "li": "/Parser/list/li"

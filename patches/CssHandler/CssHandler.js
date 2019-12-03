@@ -85,6 +85,7 @@ CssHandler.prototype.match = function(name, attrs, element) {
     item;
   element.i = [];
   element.index = [];
+  element.pseudo = [];
 
   for (var i = 0; i < this._style.length; i++) {
     item = this._style[i];
@@ -98,7 +99,8 @@ CssHandler.prototype.match = function(name, attrs, element) {
     var matchRes = matchClass(name, match_class, match_id, key);
     if (matchRes != -1) {
       if (!item.hasOwnProperty('index') || item.index == (item.list.length - 1)) {
-        if (matchRes == 0)
+        if (item.pseudo) element.pseudo.push(item);
+        else if (matchRes == 0)
           matchedName += (';' + item.content);
         else if (matchRes == 1)
           matchedClass += (';' + item.content);
@@ -111,16 +113,23 @@ CssHandler.prototype.match = function(name, attrs, element) {
         item.key = item.list[item.index];
       }
     }
-	if (sign) {
+    if (sign) {
       element.i.push(i);
       element.index.push(item.index);
       item.index--;
       item.key = item.list[item.index];
     }
   }
+  if (!element.i.length) {
+    delete element.i;
+    delete element.index;
+  }
+  if (!element.pseudo.length)
+    delete element.pseudo;
   return matchedName + ';' + matchedClass + ";" + matchedId + ";";
 }
 CssHandler.prototype.pop = function(element) {
+  // 多层class匹配标记
   if (element.hasOwnProperty("i")) {
     for (var i = 0; i < element.i.length; i++) {
       this._style[element.i[i]].key = this._style[element.i[i]].list[element.index[i]];
@@ -128,6 +137,30 @@ CssHandler.prototype.pop = function(element) {
     }
     delete element.i;
     delete element.index;
+  }
+  // 伪类
+  if (element.hasOwnProperty("pseudo")) {
+    for (var item of element.pseudo) {
+      var content;
+      var style = item.content.replace(/content\s*:\s*['"]([\S]*?)['"];*/, function() {
+        content = arguments[1];
+        return '';
+      })
+      var child = {
+        name: "span",
+        attrs: {
+          style
+        },
+        children: [{
+          type: "text",
+          text: content
+        }]
+      }
+      if (item.pseudo == "before")
+        element.children.unshift(child);
+      else
+        element.children.push(child);
+    }
   }
 }
 
@@ -167,18 +200,18 @@ CssTokenizer.prototype.initClass = function(tagStyle) {
   return res;
 };
 CssTokenizer.prototype.setClass = function(key) {
-  var type = [];
-  if (key.match(/^[^\.#\[\]\s]+/))
-    type.push("name");
-  if (key.match(/\.[^\.#\[\]\s]+/))
-    type.push("class");
-  if (key.match(/#[^\.#\[\]\s]+/))
-    type.push("id");
+  var pseudo;
+  if (/:/.test(key)) {
+    var info = key.split(/\s*:+\s*/);
+    key = info[0];
+    pseudo = info[1];
+    if (pseudo != "before" && pseudo != "after") return;
+  }
   if (!/[\s>]/.test(key)) {
     this.res.push({
       key: key,
       content: this._content,
-      type
+      pseudo
     })
   } else {
     key = key.replace(/\s*>\s*/g, ' >').split(/\s/);
@@ -187,7 +220,7 @@ CssTokenizer.prototype.setClass = function(key) {
       index: 0,
       list: key,
       content: this._content,
-      type
+      pseudo
     })
   }
 };
@@ -223,7 +256,7 @@ CssTokenizer.prototype.InName = function(c) {
   } else if (/\s/.test(c)) {
     this._name = this._buffer.substring(this._sectionStart, this._index);
     this._state = "NameSpace";
-  } else if (/[:\[]/.test(c)) this._state = "Ignore1";
+  } else if (/[\[]/.test(c)) this._state = "Ignore1";
 };
 CssTokenizer.prototype.NameSpace = function(c) {
   if (c == '{') {

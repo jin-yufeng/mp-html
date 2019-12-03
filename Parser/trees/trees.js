@@ -13,25 +13,23 @@ const triggerError = function(Component, source, target, errMsg, errCode) {
 }
 // 加载其他源（音视频）
 const loadSource = function(Component, currentTarget) {
-  if (!Component.data.controls[currentTarget.id] && currentTarget.source.length > 1) {
+  if (!Component.data.controls[currentTarget.id] && currentTarget.source.length > 1)
     Component.data.controls[currentTarget.id] = {
       play: false,
       index: 1
     }
-  } else if (Component.data.controls[currentTarget.id] && currentTarget.source.length > (Component.data.controls[currentTarget.id].index + 1)) {
+  else if (Component.data.controls[currentTarget.id] && currentTarget.source.length > (Component.data.controls[currentTarget.id].index + 1))
     Component.data.controls[currentTarget.id].index++;
-  }
   Component.setData({
     controls: Component.data.controls
   })
 }
 Component({
   data: {
-    imgLoad: false,
+    imgLoad: false
   },
   detached() {
-    if (this._observer)
-      this._observer.disconnect();
+    if (this._observer) this._observer.disconnect();
   },
   properties: {
     nodes: {
@@ -58,6 +56,7 @@ Component({
     previewEvent(e) {
       if (!e.target.dataset.hasOwnProperty('ignore')) {
         this.triggerEvent('preview', {
+          id: e.target.id,
           src: e.currentTarget.dataset.src
         }, {
           bubbles: true,
@@ -93,6 +92,6 @@ Component({
       this.setData({
         controls: this.data.controls
       })
-    },
+    }
   }
 })

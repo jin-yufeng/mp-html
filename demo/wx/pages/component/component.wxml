@@ -8,7 +8,7 @@
     <view class="weui-article">
       <view class="weui-article__h1">新版文档</view>
       <view class="weui-article__section">
-        <Parser html="<a href='https://jin-yufeng.github.io/Parser/#/'>点击复制链接</a>" />
+        <parser html="<a href='https://jin-yufeng.github.io/Parser/#/'>点击复制链接</a>" />
       </view>
       <!--目录-->
       <view id="catalogue" class="weui-article__h1">目录</view>
@@ -24,10 +24,6 @@
           <view class="link_h2" hover-class='link-hover' data-section="selectable" bindtap="gosection">内容可复制</view>
           <view class="link_h2" hover-class='link-hover' data-section="compress" bindtap="gosection">智能压缩</view>
           <view class="link_h2" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持丰富的标签</view>
-          <view class="link_h2" hover-class='link-hover' data-section="tapEvent" bindtap="gosection">事件效果</view>
-          <view class="link_h3" hover-class='link-hover' data-section="imgEvent" bindtap="gosection">图片点击</view>
-          <view class="link_h3" hover-class='link-hover' data-section="linkEvent" bindtap="gosection">链接点击</view>
-          <view class="link_h3" hover-class='link-hover' data-section="videoEvent" bindtap="gosection">视频播放</view>
           <view class="link_h2" hover-class='link-hover' data-section="performance" bindtap="gosection">性能指标</view>
         </block>
         <!--使用方法-->
@@ -35,10 +31,7 @@
         <block wx:if="{{page==2}}">
           <view class="link_h2" hover-class='link-hover' data-section="useStep" bindtap="gosection">使用步骤</view>
           <view class="link_h3" hover-class='link-hover' data-section="protogenesis" bindtap="gosection">原生框架中使用</view>
-          <view class="link_h3" hover-class='link-hover' data-section="mpVue" bindtap="gosection">mpVue中使用</view>
           <view class="link_h3" hover-class='link-hover' data-section="uniApp" bindtap="gosection">uni-app中使用</view>
-          <view class="link_h3" hover-class='link-hover' data-section="taro" bindtap="gosection">taro中使用</view>
-          <view class="link_h3" hover-class='link-hover' data-section="wepy" bindtap="gosection">wepy中使用</view>
           <view class="link_h2" hover-class='link-hover' data-section="attrs" bindtap="gosection">组件属性</view>
           <view class="link_h2" hover-class='link-hover' data-section="callback" bindtap="gosection">回调函数</view>
           <view class="link_h2" hover-class='link-hover' data-section="externClass" bindtap="gosection">使用外部样式</view>
@@ -48,9 +41,6 @@
           <view class="link_h3" hover-class='link-hover' data-section="patchList" bindtap="gosection">List</view>
           <view class="link_h3" hover-class='link-hover' data-section="patchCssHandler" bindtap="gosection">CssHandler</view>
           <view class="link_h2" hover-class='link-hover' data-section="libRequire" bindtap="gosection">基础库要求</view>
-          <view class="link_h2" hover-class='link-hover' data-section="api" bindtap="gosection">Api</view>
-          <view class="link_h2" hover-class='link-hover' data-section="tips" bindtap="gosection">注意事项</view>
-          <view class="link_h2" hover-class='link-hover' data-section="theory" bindtap="gosection">原理简介</view>
           <view class="link_h2" hover-class='link-hover' data-section="download" bindtap="gosection">下载链接</view>
         </block>
         <!--更新日志-->
@@ -81,7 +71,7 @@
           </view>
           示例：
           <rich-text nodes="{{stylecode}}" />
-          <Parser html='<style>.demo{font-style:italic;}#demo2{font-weight:bold;}p{text-align:center;font-size:30px;}</style><p><span class="demo">Hello </span><span id="demo2">World!</span></p>' />
+          <parser html='<style>.demo{font-style:italic;}#demo2{font-weight:bold;}p{text-align:center;font-size:30px;}</style><p><span class="demo">Hello </span><span id="demo2">World!</span></p>' />
           <view style="color:gray;text-align:center;font-size:12px;">解析结果</view>
         </view>
         <!--设置标签的默认样式-->
@@ -90,7 +80,7 @@
           可以对标签设置任意自定义的样式，示例：
           <rich-text nodes="{{tagStylecode}}" />
           <text>解析结果：</text>
-          <Parser html="<code>test</code>" tag-style="{{tagStyle}}" style="display:inline;" />
+          <parser html="<code>test</code>" tag-style="{{tagStyle}}" style="display:inline;" />
         </view>
         <!--自动设置标题-->
         <view id="setTitle" class="weui-article__h2">自动设置标题</view>
@@ -119,13 +109,13 @@
         <!--内容可复制-->
         <view id="selectable" class="weui-article__h2">内容可复制</view>
         <view class="weui-article__section">
-          <Parser html="<div>当<code>selectable</code>属性被设置为<code>true</code>时，可以通过长按复制内容（本段文字可以体验）" selectable tag-style="{{tagStyle}}" />
+          <parser html="<div>当<code>selectable</code>属性被设置为<code>true</code>时，可以通过长按复制内容（本段文字可以体验）" selectable tag-style="{{tagStyle}}" />
         </view>
         <!--智能压缩-->
         <view id="compress" class="weui-article__h2">智能压缩</view>
         <view class="weui-article__section">
           本插件可以通过以下方法实现自动压缩解析结果，可以有效提升性能
-          <Parser html="<ol><li>将一些只有一个子节点的标签进行合并来减小节点的深度，根据内容的不同，可以减少<code>15%~60%</code>的深度</li><li>在非<code>pre</code>标签且没有<code>white-space:pre</code>时自动去除空白符" tag-style="{{tagStyle}}" style="margin-top:10px;" />
+          <parser html="<ol><li>将一些只有一个子节点的标签进行合并来减小节点的深度，根据内容的不同，可以减少<code>15%~60%</code>的深度</li><li>在非<code>pre</code>标签且没有<code>white-space:pre</code>时自动去除空白符" tag-style="{{tagStyle}}" style="margin-top:10px;" />
         </view>
         <!--支持丰富的标签-->
         <view id="supportTag" class="weui-article__h2">支持丰富的标签</view>
@@ -192,24 +182,13 @@
         <view class="weui-article__section">
           对于不在上述列表中标签，除个别会被直接移除外，都会被转换为行内标签，因此可以使用一些语义化标签
         </view>
-        <!--事件效果-->
-        <view id="tapEvent" class="weui-article__h2">事件效果</view>
-        <view class="weui-article__section">
-          <view id="imgEvent" class="weui-article__h3">图片点击</view>
-          <Parser html='<ol><li>点击图片可以预览，左右滑动可以查看所有的图片</li><li>对于一些装饰性的图片，可以对其设置<code>ignore</code>属性，设置后将无法预览</li></ol>' tag-style="{{tagStyle}}" />
-          <text>\n</text>
-          <view id="linkEvent" class="weui-article__h3">链接点击</view>
-          <Parser html='<ol><li>点击链接会有下划线和半透明的效果。若链接为小程序路径，受到点击时将跳转至相应页面；若为外部链接，将自动复制链接（可通过<code>autocopy</code>属性控制）</li><li>点击链接时会触发<code>bindlinkpress</code>事件，并返回相应的链接，可以进行进一步的操作（如文档链接可以在回调中进行下载和打开等）</li></ol>' tag-style="{{tagStyle}}" />
-          <text>\n</text>
-          <view id="videoEvent" class="weui-article__h3">视频播放</view>
-          <Parser html='<ol><li>支持对视频进行懒加载（有超过3个视频时将仅加载前3个视频，其他的在点击时再加载，避免页面卡死）</li><li>支持在播放视频时自动暂停其他视频的播放（可通过<code>autopause</code>属性控制）</li></ol>' tag-style="{{tagStyle}}" />
-        </view>
         <!--性能指标-->
         <view id="performance" class="weui-article__h2">性能指标</view>
         <view class="weui-article__section">
           解析和渲染效率高；轻量化；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
           <rich-text nodes="{{errorcode}}" />
         </view>
+        <parser html="更多功能可见：<a href='https://jin-yufeng.github.io/Parser/#/'>功能介绍</a>" style="padding-bottom:20px" />
       </view>
       <!--使用方法-->
       <view wx:if="{{page==2}}" id="usage" class="weui-article__h1">使用方法</view>
@@ -217,48 +196,29 @@
         <!--使用步骤-->
         <view id="useStep" class="weui-article__h2">使用步骤</view>
         <view class="weui-article__section">
-          <Parser id="protogenesis" html="<li>在原生框架中使用</li>" style="margin-bottom:5px" />
-          <Parser html='<ol><li>下载<code>Parser</code>文件夹（<code>Parser.min</code>是压缩版本，功能相同）至小程序目录</li><li>在需要使用页面的<code>json</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
+          <parser id="protogenesis" html="<li>在原生框架中使用</li>" style="margin-bottom:5px" />
+          <parser html='<ol><li>下载<code>Parser</code>文件夹（<code>Parser.min</code>是压缩版本，功能相同）至小程序目录</li><li>在需要使用页面的<code>json</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <rich-text nodes="{{json}}" />
           </view>
-          <Parser html='<ol start=3><li>在需要使用页面的<code>wxml</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
+          <parser html='<ol start=3><li>在需要使用页面的<code>wxml</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <rich-text nodes="{{wxml}}" />
           </view>
-          <Parser html='<ol start=4><li>在需要使用页面的<code>js</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
+          <parser html='<ol start=4><li>在需要使用页面的<code>js</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <rich-text nodes="{{js}}" />
           </view>
-          <Parser id="mpVue" style="margin-top:5px;margin-bottom:5px" html="<li>在<code>mpVue</code>中使用</li>" tag-style="{{tagStyle}}" />
-          <Parser html='<ol><li>下载<code>Parser</code>文件夹至<code>static</code>目录下</li><li>在需要使用页面的<code>json</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
-          <view style="margin-left:10%;">
-            <rich-text nodes="{{json2}}" />
-          </view>
-          <Parser html='<ol start=3><li>在需要使用页面的<code>vue</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
-          <view style="margin-left:10%;">
-            <rich-text nodes="{{vue}}" />
-          </view>
-          <Parser id="uniApp" html='<li style="margin-top:5px;margin-bottom:5px">在<code>uni-app</code>中使用</li>' tag-style="{{tagStyle}}" />
+          <parser id="uniApp" html='<li style="margin-top:5px;margin-bottom:5px">在<code>uni-app</code>中使用</li>' tag-style="{{tagStyle}}" />
           <view style="margin-left:20px">使用
             <code>uni-app</code>包：（可以编译到所有小程序平台）</view>
-          <Parser html='<ol><li>下载<code>Parser.uni</code>文件夹至<code>components</code>目录下（更名为<code>Parser）</li><li>在需要使用页面的<code>vue</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
+          <parser html='<ol><li>下载<code>Parser.uni</code>文件夹至<code>components</code>目录下（更名为<code>Parser）</li><li>在需要使用页面的<code>vue</code>文件中添加</li></ol>' tag-style="{{tagStyle}}" />
           <view style="margin-left:10%;">
             <rich-text nodes="{{uni}}" />
           </view>
-          <Parser html="<ul><li>可以直接通过<code>uni-app</code>插件市场引入：<a href='https://ext.dcloud.net.cn/plugin?id=805'>链接</a>" tag-style="{{tagStyle}}" />
+          <parser html="<ul><li>可以直接通过<code>uni-app</code>插件市场引入：<a href='https://ext.dcloud.net.cn/plugin?id=805'>链接</a>" tag-style="{{tagStyle}}" />
           <view style="margin-left:20px;margin-top:10px">使用原生包：</view>
-          <Parser html='<div style="margin-left:20px">可参考：<a href="https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81">官网-小程序组件支持</a></div><div style="margin-left:20px"><strong>注意：</strong>在<code>mpVue</code>和<code>uni-app</code>中使用时组件名一定要<strong>小写</strong></div>'
-            tag-style="{{tagStyle}}" />
-          <Parser id="taro" html='<li style="margin-top:10px;margin-bottom:5px">在<code>Taro</code>中使用</li><div style="margin-left:20px">可参考：<a href="https://github.com/xPixv/Taro-ParserRichText">Github链接</a></div>' tag-style="{{tagStyle}}" />
-          <Parser id="wepy" style="margin-top:10px;margin-bottom:5px" html="<li>在<code>wepy</code>中使用</li>" tag-style="{{tagStyle}}" />
-          <view style="margin-left:20px">测试版本：V1.7.3</view>
-          <Parser html="<ol><li style='word-break:break-all'>将<code>Parser</code>文件夹复制到<code>/src/components</code>目录下（也可以直接复制到<code>/dist/components</code>目录下，这样<code>wepy</code>将不会对插件包进行编译和压缩</li><li>在需要使用页面的<code>wpy</code>文件中添加</li></ol>" tag-style="{{tagStyle}}"
-          />
-          <view style="margin-left:10%;">
-            <rich-text nodes="{{wepy}}" />
-          </view>
-          <Parser html="<ol start='3'><li>通过<code>wepy build --watch</code>命令进行编译</li></ol><ul><li>如果出现<code>Components not found</code>错误，则用<code>wepy build --no-cache --watch</code>命令清理缓存，重新编译" tag-style="{{tagStyle}}" />
+          <parser html='<div style="margin-left:20px">可参考：<a href="https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81">官网-小程序组件支持</a></div><div style="margin-left:20px"><strong>注意：</strong>在<code>vue</code>中使用时组件名一定要<strong>小写</strong></div><br><div>在其他框架中使用可见：<a href="https://jin-yufeng.github.io/Parser/#/instructions?id=在其他框架中使用">在其他框架中使用</a></div>' tag-style="{{tagStyle}}" />
         </view>
         <!--组件属性-->
         <view id="attrs" class="weui-article__h2">组件属性</view>
@@ -280,13 +240,11 @@
             <view class="td" style="width:38%;">{{item.notice}}</view>
           </view>
         </view>
-        <view class="weui-article__section">
-          <Parser html='{{format}}' tag-style="{{tagStyle}}" />
-        </view>
+        <parser html="详细可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions?id=组件属性'>组件属性</a>" style="margin-bottom:20px" />
         <!--回调函数-->
         <view id="callback" class="weui-article__h2">回调函数</view>
         <view class="weui-article__section">
-          <Parser html="{{callback}}" tag-style="{{tagStyle}}" />
+          <parser html="{{callback}}" tag-style="{{tagStyle}}" />
         </view>
         <!--使用外部样式-->
         <view id="externClass" class="weui-article__h2">使用外部样式</view>
@@ -295,9 +253,6 @@
           <code>wxss</code>中的外部样式，只需要在
           <code>Parser/trees/trees.wxss</code>中通过
           <code>@import</code>引入需要的样式文件即可
-          <view>注意事项：</view>
-          <Parser html="<ol><li>只有自定义组件内的样式在组件内能生效且<code>rich-text</code>在组件内使用时也只能匹配组件内的样式，所以必须在<code>trees</code>组件的<code>wxss</code>文件中引入需要的样式，在页面中写的样式无效</li><li>组件内只能使用<code>class</code>选择器（支持后代选择器），不支持<code>id</code>选择器、属性选择器、标签名选择器等（更多可见<a href='https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html'>官网说明</a>）</li><li>通过这种方式引入的样式会对所有<code>parser</code>标签生效，如果是对单个<code>parser</code>使用的样式，请使用<code>style</code>标签</li></ol>"
-            tag-style="{{tagStyle}}" />
         </view>
         <!--补丁包-->
         <view id="patches" class="weui-article__h2">补丁包</view>
@@ -312,29 +267,8 @@
           <view>功能：将形如
             <code>[笑脸]</code>的文本解析为
             <code>emoji</code>小表情
-            <Parser html="[笑脸]" style="display:inline" />
+            <parser html="[笑脸]" style="display:inline" />
           </view>
-          <view>大小：
-            <code>4.70KB</code>，
-            <code>min</code>版本
-            <code>3.61KB</code>
-          </view>
-          <view>使用方法：将
-            <code>emoji.js</code>复制到
-            <code>Parser</code>文件夹中即可（使用
-            <code>min</code>版本时也要改名成
-            <code>emoji.js</code>）</view>
-          <view>默认配置中支持
-            <code>177</code>个常用的
-            <code>emoji</code>小表情</view>
-          <view>支持两种形式的
-            <code>emoji</code>，一是
-            <code>emoji</code>字符（不同设备上显示的样子可能不同），或者是网络图片（将按照
-            <code>16px</code> ×
-            <code>16px</code>的大小显示，且不可放大预览），默认配置中都是
-            <code>emoji</code>字符，可使用以下
-            <code>api</code>获取或修改：</view>
-          <rich-text nodes="{{emoji}}"></rich-text>
           <!--document补丁包-->
           <view id="patchDocument" style="margin-top:5px">
             2.
@@ -345,77 +279,7 @@
             <code>document</code>对象，可以动态操作
             <code>DOM</code>
           </view>
-          <view>大小：
-            <code>4.66KB</code>（
-            <code>min</code>版本
-            <code>3.61KB</code>）</view>
-          <view>使用方法：将
-            <code>document.js</code>复制到
-            <code>Parser</code>文件夹中即可（使用
-            <code>min</code>版本时也要改名成
-            <code>document.js</code>）</view>
-          <view style="margin-top:5px">
-            <code>document</code>类</view>
-          <view style="word-break:break-all">获取方式：可通过
-            <code>this.selectComponent("#id").document</code>获取</view>
-          <view>
-            <code>Api</code>列表</view>
-          <view class="weui-article__section table" style="font-size:13px">
-            <view class="tr">
-              <view class="th" style="width:42%">名称</view>
-              <view class="th" style="width:58%;">功能</view>
-            </view>
-            <view class="tr" style="background-color:white">
-              <view class="td" style="width:42%">getElementById(id)</view>
-              <view class="td" style="width:58%;">按照id查找element</view>
-            </view>
-            <view class="tr" style="background-color:#f6f8fa">
-              <view class="td" style="width:42%">getChildren(i)</view>
-              <view class="td" style="width:58%;">获取根节点的第i个子节点的element实例</view>
-            </view>
-          </view>
-          <view>
-            <code>element</code>类</view>
-          <view>属性名</view>
-          <view class="table" style="font-size:13px">
-            <view class="tr">
-              <view class="th" style="width:25%">名称</view>
-              <view class="th" style="width:75%;">功能</view>
-            </view>
-            <view class="tr" style="background-color:white">
-              <view class="td" style="width:25%">id</view>
-              <view class="td" style="width:75%;">该节点的id值</view>
-            </view>
-            <view class="tr" style="background-color:#f6f8fa">
-              <view class="td" style="width:25%">nodes</view>
-              <view class="td" style="width:75%;">该节点的结构体，可以直接对这个结构体进行修改（修改后需要调用update方法同步到UI，修改时要注意格式，更建议使用下方的api方法进行修改）</view>
-            </view>
-          </view>
-          <view style="margin-top:5px">
-            <code>Api</code>列表</view>
-          <view class="table" style="font-size:13px">
-            <view class="tr">
-              <view class="th" style="width:45%">名称</view>
-              <view class="th" style="width:55%;">功能</view>
-            </view>
-            <view wx:for="{{api}}" wx:key class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
-              <view class="td" style="width:45%">{{item.name}}</view>
-              <view class="td" style="width:55%;">{{item.notice}}</view>
-            </view>
-          </view>
-          <view style="margin-top:5px">返回值</view>
-          <view>若执行成功，返回
-            <code>{ok:true, data:...}</code>；若不成功，返回
-            <code>{ok:false, errCode:..., errMsg:...}</code>
-          </view>
-          <view style="margin-top:5px">注意事项</view>
-          <view>所有方法必须等待
-            <code>setData</code>完成后才能调用</view>
-          <view>除了
-            <code>get</code>方法外，其他方法执行时都会执行一次
-            <text style="font-weight:bold">局部</text>的
-            <code>setData</code>刷新，请不要过于频繁的调用</view>
-          <view style="margin-top:5px">综合示例</view>
+          <view style="margin-top:5px">示例</view>
           <rich-text nodes="{{apicode}}"></rich-text>
           <!--List补丁包-->
           <view id="patchList" style="margin-top:5px">
@@ -429,23 +293,6 @@
             <code>start</code>和
             <code>type</code>属性；
             <code>ul</code>组件支持按照层级自动变化符号，这几个组件同样可以在其他页面使用</view>
-          <view>大小：
-            <code>4.50KB</code>
-          </view>
-          <view>使用方法：
-            <Parser html="<ol type='i'><li>将<code>list</code>文件夹复制到<code>Parser</code>下</li><li>将<code>trees.li.wxml</code>中的内容复制到<code>Parser/trees/trees.wxml</code>中<code>name</code>为<code>element</code>的<code>template</code>中的任意位置</li><li style='word-break:break-all'>在<code>Parser/trees/handler.wxs</code>中的<code>isContinue</code>函数中的<span style='font-family:monospace;'>else if(item.name=='a')</span>修改为<span style='font-family:monospace;'>else if(item.name=='a'||item.name=='li'||item.name=='ol'||item.name=='ul')</span></li><li>在<code>Parser/trees/trees.json</code>中添加</li></ol>"
-              tag-style="{{tagStyle}}" style="word-break:break-all" />
-            <view style="margin-left:10%;">
-              <rich-text nodes="{{listJson}}"></rich-text>
-            </view>
-            <Parser html="<ol type='i' start='5'><li style='word-break:break-all'>将<code>Parser/DomHandler.js</code>中<code>trustTag</code>结构体的<code>ol</code>、<code>ul</code>、<code>li</code>属性值改为1</li></ol>" tag-style="{{tagStyle}}" />
-          </view>
-          <view style="margin-top:5px">注意事项：对于
-            <code>ol</code>标签，
-            <code>type</code>为阿拉伯数字（默认）时没有限制，为字母时最多包含26个
-            <code>li</code>，为罗马数字时最多包含20个
-            <code>li</code>
-          </view>
           <view style="margin-top:5px">在其他页面使用：
             <view>在使用页面的
               <code>json</code>文件中加入以下内容即可直接使用
@@ -488,33 +335,16 @@
             <code>css</code>选择器
             <view class="weui-article__section table" style="font-size:13px">
               <view class="tr">
-                <view class="th" style="width:15%">模式</view>
-                <view class="th" style="width:60%;">匹配的标签</view>
+                <view class="th" style="width:18%">模式</view>
+                <view class="th" style="width:57%;">匹配的标签</view>
                 <view class="th" style="width:25%;">说明</view>
               </view>
-              <view class="tr" style="background-color:white">
-                <view class="td" style="width:15%">*</view>
-                <view class="td" style="width:60%;">所有</view>
-                <view class="td" style="width:25%;">通配符</view>
-              </view>
-              <view class="tr" style="background-color:#f6f8fa">
-                <view class="td" style="width:15%">.a .b</view>
-                <view class="td" style="width:60%;"><text decode>&lt;element class="a"&gt;\n&nbsp;...\n&nbsp;&nbsp;&lt;element class="b"&gt;</text></view>
-                <view class="td" style="width:25%;">后代选择器</view>
-              </view>
-              <view class="tr" style="background-color:#f6f8fa">
-                <view class="td" style="width:15%">.a>.b</view>
-                <view class="td" style="width:60%;"><text decode>&lt;element class="a"&gt;\n&nbsp;&lt;element class="b"&gt;</text></view>
-                <view class="td" style="width:25%;">子选择器</view>
+              <view wx:for="{{selectors}}" wx:key class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+                <view class="td" style="width:18%">{{item.mode}}</view>
+                <view class="td" style="width:57%;"><text decode>{{item.match}}</text></view>
+                <view class="td" style="width:25%;">{{item.notice}}</view>
               </view>
             </view>
-            <view>大小：（与原大小相比增加）
-              <view><code>3.04KB</code>（<code>min</code>版本<code>1.71KB</code>）</view>
-            </view>
-            <view>使用方法：
-              <view>用<code>CssHandler</code>文件夹下的<code>CssHandler.js</code>（若使用<code>min</code>版本也要改名为<code>CssHandler.js</code>）替换原插件包下的<code>CssHandler.js</code>即可</view>
-            </view>
-            <view>注意事项：使用该补丁包后会一定程度上减慢解析速度，如非必要不建议使用</view>
           </view>
         </view>
         <!--基础库要求-->
@@ -536,105 +366,18 @@
           </view>
           <view style="margin-top:5px">附注：2.7.1以下不支持极个别新标签</view>
         </view>
-        <!--Api-->
-        <view id="api" class="weui-article__h2">Api</view>
-        <view class="weui-article__section">
-          本插件还提供了几个实用的
-          <code>Api</code>，可通过
-          <code>require('path/Parser/api.js')</code>获取
-          <view class="weui-article__p">
-            1.
-            <code>html2nodes</code>：
-            <view style="margin-left:5%">功能：解析一个
-              <code>html</code>字符串，异步方法</view>
-            <view style="margin-left:5%">参数：
-              <code>html</code>（需要解析的字符串，必填）,
-              <code>tagStyle</code>（默认的标签样式，可选）</view>
-            <view style="margin-left:5%">返回值：一个形如
-              <code>{nodes:Array, title:String, imgList:Array}</code>的结构体，其中
-              <code>nodes</code>是节点数组，
-              <code>title</code>是
-              <code>title</code>标签中的值，
-              <code>imgList</code>是所有图片地址的数组，可作为
-              <code>html</code>属性的值</view>
-            <Parser style="margin-left:4%" html="{{html2nodes}}" />
-          </view>
-          <view class="weui-article__p">
-            2.
-            <code>css2object</code>：
-            <view style="margin-left:5%">功能：解析一个
-              <code>css</code>字符串，同步方法</view>
-            <view style="margin-left:5%">参数：
-              <code>style</code>（需要解析的字符串，必填）,
-              <code>tagStyle</code>（已有的样式，可选）</view>
-            <view style="margin-left:5%">返回值：一个形如
-              <code>{key: value}</code>的结构体，可作为
-              <code>tag-style</code>属性的值</view>
-            <Parser style="margin-left:4%" html="{{css2object}}" />
-          </view>
-          <view class="weui-article__p">
-            3.
-            <code>versionHigherThan</code>：
-            <view style="margin-left:5%">功能：判断当前设备的基础库版本是否高于或等于输入的版本</view>
-            <view style="margin-left:5%">参数：
-              <code>version</code>（需要判断的版本）</view>
-            <view style="margin-left:5%">返回值：一个
-              <code>Boolean</code>值，若当前设备基础库版本高于或等于输入值，则为
-              <code>true</code>，否则
-              <code>false</code>
-            </view>
-            <Parser style="margin-left:4%" html="{{VersionHigherThan}}" />
-          </view>
-          <view class="weui-article__p">
-            4.
-            <code>String.splice</code>：
-            <view style="margin-left:5%">功能：对字符串的指定位置进行删改（类似于数组的
-              <code>splice</code>方法）</view>
-            <view style="margin-left:5%">参数：
-              <code>start</code>（开始修改的位置，为负数时表示倒数第几个，必填）,
-              <code>deleteCount</code>（要删除的字符个数，可选）,
-              <code>addStr</code>（要添加进去的字符串，可选）</view>
-            <view style="margin-left:5%">返回值：修改后的字符串（该方法不改变原字符串的值，不需要引入文件）</view>
-            <Parser style="margin-left:4%" html="{{StrSplice}}" />
-          </view>
-        </view>
-        <!--注意事项-->
-        <view id="tips" class="weui-article__h2">注意事项</view>
-        <view class="weui-article__section">
-          <view class="weui-article__p">
-            表格和列表由于较难通过模板循环的方式显示，将直接使用
-            <code>rich-text</code>组件显示，因此请尽量避免在列表和表格中使用图片、链接等组件，否则将出现无法预览和点击等问题（可以正常显示）（列表通过使用
-            <code>list</code>补丁包可以解决这个问题）
-          </view>
-          <view class="weui-article__p">
-            如需修改链接受到点击时的点击态效果，可以对
-            <code>Parser/trees</code>文件夹下的
-            <code>trees.wxss</code>中的
-            <code>navigator-hover</code>进行修改（默认是半透明加下划线）
-          </view>
-        </view>
-        <!--原理简介-->
-        <view id="theory" class="weui-article__h2">原理简介</view>
-        <view class="weui-article__section">
-          <text decode>&emsp;&emsp;</text>本插件对
-          <code>rich-text</code>组件进行了二次封装，对于节点下有图片、视频、链接等的，通过自定义组件递归的方式显示；否则则直接通过
-          <code>rich-text</code>组件显示。
-          <text decode>\n&emsp;&emsp;</text>通过这样的方式，既解决了
-          <code>WxParse</code>标签数过多（rich-text可以节省大量的标签），层数超过限制无法显示（自定义组件递归可以支持无限层级），无法解析表格，部分样式显示不准确（rich-text的显示效果更好）等缺陷；也弥补了
-          <code>rich-text</code>图片不能预览，链接无法点击，不能显示视频，部分标签不支持（在解析的过程中替换）等问题，从而达到一个更加完美的效果。
-          <text decode>\n&emsp;&emsp;</text>且其轻量化，前后端通用等特点以及更多精致的功能，也使得应用面更加广泛。
-          <Parser html="<div style='text-align:center;'>更多：<a href='https://developers.weixin.qq.com/community/develop/article/doc/0006e05c1e8dd80b78a8d49f356413'>《小程序富文本能力的深入研究与应用》</a></div>" />
-        </view>
         <!--下载链接-->
         <view id="download" class="weui-article__h2">下载链接</view>
         <view class="weui-article__section">
-          <Parser html='GitHub链接：<a href="https://github.com/jin-yufeng/Parser">点击复制链接</a>' />
+          <parser html='GitHub链接：<a href="https://github.com/jin-yufeng/Parser">点击复制链接</a>' />
         </view>
+        <parser html="更多信息可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions'>使用方法</a>" style="padding-bottom:20px" />
       </view>
       <!--更新日志-->
       <view wx:if="{{page==3}}" id="update" class="weui-article__h1">更新日志</view>
       <view wx:if="{{page==3}}" class="weui-article__section">
-        <Parser html="{{update}}" />
+        <parser html="{{update}}" />
+        <parser html="更多可见：<a href='https://jin-yufeng.github.io/Parser/#/changelog'>更新日志</a>" style="margin-top:20px;padding-bottom:20px" />
       </view>
       <view style="display:flex;justify-content:center;margin-left:5%;margin-right:5%;color:#586c94">
         <view wx:if="{{page==2}}" bindtap="prev">上一章：功能介绍</view>

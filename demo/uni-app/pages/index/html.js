@@ -140,7 +140,7 @@ module.exports = `<style>
   <p>
     <br />
   </p>
-  <section style="border: 0px none;">
+  <section id="anchor" style="border: 0px none;">
     <section style="padding: 10px;">
       <section style="box-shadow:0px 0px 5px #e5e5e5 ;height:65px;">
         <section style="display: flex;justify-content: flex-start;align-items: center;">
@@ -314,6 +314,9 @@ module.exports = `<style>
       <br />
       <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>
       <p style="font-size:12px;color:gray">外部链接，点击可以复制/跳转</p>
+			<br />
+			<a href="#anchor">锚点</a>
+			<p style="font-size:12px;color:gray">内部锚点链接,点击将跳转到文字渲染栏</p>
     </div>
     <br />
   </section>

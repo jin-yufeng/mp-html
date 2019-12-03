@@ -103,17 +103,20 @@ const ignoreTag = {
   wbr: true
 };
 
-function DomHandler(style, tagStyle = {}, imgMode) {
+function DomHandler(style, options) {
   this.imgList = [];
   this.imgIndex = 0;
   this.nodes = [];
   this.title = "";
   this._videoNum = 0;
   this._audioNum = 0;
-  this._CssHandler = new CssHandler(style, tagStyle);
+  this._CssHandler = new CssHandler(style, options.tagStyle);
   this._tagStack = [];
-  this._imgMode = imgMode;
+  this._imgMode = options.imgMode;
   this._whiteSpace = false;
+  this._domain = options.domain; 
+  this._protocol = /:\/\//.test(options.domain) ? options.domain.split(/:\/\//)[0] : "http"; 
+  this._useAnchor = options.useAnchor; 
 }
 DomHandler.prototype._addDomElement = function (element) {
   if (element.name == 'pre' || element.attrs && /white-space\s*:\s*pre/.test(element.attrs.style)) {
@@ -160,6 +163,10 @@ DomHandler.prototype.onopentag = function (name, attrs) {
         this.imgList.push(attrs.src);
         if (this._bubbling() == 'a') attrs.ignore = ""; // 图片在链接中不可预览
       };
+      if (this._domain && attrs.src[0] == '/') { 
+        if (attrs.src[1] == '/') attrs.src = this._protocol + ":" + attrs.src; 
+        else attrs.src = this._domain + attrs.src; 
+      } 
       if (this._imgMode == "widthFix") attrs.style += ";height:auto !important;";
       break;
     case 'font':
@@ -215,6 +222,7 @@ DomHandler.prototype.onopentag = function (name, attrs) {
       this._tagStack.push(element);
       return;
   }
+  if(this._useAnchor && attrs.id) this._bubbling(); 
   attrs.style = matched + attrs.style;
   if (blockTag[name]) name = 'div'; else if (!trustTag.hasOwnProperty(name)) name = 'span';
   element.name = name;

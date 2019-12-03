@@ -6,6 +6,34 @@ try {
 const html2nodes = require('./Parser.js');
 const initData = function (Component) {
   setTimeout(() => {
+    Component.navigateTo = function (obj) {
+	  obj.success = obj.success || function () { };
+      obj.fail = obj.fail || function () { };
+      function Scroll(selector, component) {
+        const query = component.createSelectorQuery();
+        query.select(selector).boundingClientRect();
+        query.selectViewport().scrollOffset();
+        query.exec(res => {
+          if (!res||!res[0])
+            return obj.fail({
+              errMsg: "Label Not Found"
+            });
+          swan.pageScrollTo({
+            scrollTop: res[1].scrollTop + res[0].top,
+            success: obj.success,
+            fail: obj.fail
+          })
+        })
+      }
+      if (!obj.id) Scroll("#contain", Component);
+      else {
+        for (var anchor of Component.anchors) {
+          if (anchor.id == obj.id){
+            Scroll("#" + obj.id, anchor.node);
+          }
+        }
+      }
+    }
     Component.createSelectorQuery().select('#contain' + Component.id).boundingClientRect(res => {
       Component.triggerEvent('ready', res);
     }).exec();
@@ -37,7 +65,7 @@ Component({
             nodes: []
           });
         } else if (typeof html == 'string') {
-          html2nodes(html, this.data.tagStyle, this.data.imgMode).then(res => {
+          html2nodes(html, this.data).then(res => {
             this.setData({
               nodes: res.nodes,
               controls: {},
@@ -46,6 +74,7 @@ Component({
             }, initData(this));
             if (Document) this.document = new Document("nodes", res.nodes, this);
             this.videoContext = [];
+            this.anchors = [];
             if (res.title && this.data.autosetTitle) {
               swan.setNavigationBarTitle({
                 title: res.title
@@ -67,6 +96,7 @@ Component({
           }, initData(this));
           if (Document) this.document = new Document("html", html, this);
           this.videoContext = [];
+          this.anchors = [];
           this.imgList = [];
         } else if (typeof html == 'object') {
           if (!html.nodes || html.nodes.constructor != Array) {
@@ -84,6 +114,7 @@ Component({
           }, initData(this));
           if (Document) this.document = new Document("html.nodes", html.nodes, this);
           this.videoContext = [];
+          this.anchors = [];
           if (html.title && this.data.autosetTitle) swan.setNavigationBarTitle({
             title: html.title
           });
@@ -112,6 +143,10 @@ Component({
       type: Boolean,
       value: true
     },
+    'domain': {
+      type: String,
+      value: ""
+    },
     'imgMode': {
       type: String,
       value: "default"
@@ -131,6 +166,10 @@ Component({
     'animationDuration': {
       type: Number,
       value: 400
+    },
+    'useAnchor': {
+      type: Boolean,
+      value: false
     }
   }
 });

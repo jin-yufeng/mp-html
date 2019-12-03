@@ -93,26 +93,18 @@ const _traverse = function (nodes) {
     if (!element.continue) {
       var res = "";
       var style = element.attrs.style;
-      var reg = /float\s*:\s*[^;]*/i;
+      var reg = /float[^;]+(?![\s\S]*?float)/i;
       if (reg.test(style)) res += reg.exec(style)[0];
-      reg = /margin[^;]*/gi;
-      var margin = reg.exec(style);
-      while (margin) {
-        res += (';' + margin[0]);
-        margin = reg.exec(style);
-      }
-      reg = /display\s*:\s*([^;]*)/i;
+      reg = /margin[^;]+/gi;
+      if (reg.test(style)) res += (';' + style.match(reg).join(';'));
+      reg = /display\s*:\s*([^;]*)(?![\s\S]*?display)/i;
       if (reg.test(style) && reg.exec(style)[1] != "flex") res += (';' + reg.exec(style)[0]);
       else if(textTag[element.name]) res+=";display:inline";
       else res += (";display:" + (element.name == 'img' ? 'inline-block' : 'block'));
-      reg = /flex\s*:[^;]*/i;
-      if (reg.test(style)) res += (';' + reg.exec(style)[0]);
-      reg = /[^;\s]*width[^;]*/gi;
-      var width = reg.exec(style);
-      while (width) {
-        res += (';' + width[0]);
-        width = reg.exec(style);
-      }
+      reg = /flex[^;]*:[^;]+/gi;
+      if (reg.test(style)) res += (';' + style.match(reg).join(';'));
+      reg = /[^;\s]*width[^;]+/gi;
+      if (reg.test(style)) res += (';' + style.match(reg).join(';'));
       element.attrs.containStyle = res;
       if (/[^-]width[^pev;]+/.test(";" + style))
         element.attrs.style += ";width:100%";
@@ -200,7 +192,7 @@ Parser.prototype.write = function (chunk) {
   this._tokenizer.parse(chunk);
 };
 
-function html2nodes(data, tagStyle, imgMode) {
+function html2nodes(data, options) {
   return new Promise(function (resolve, reject) {
     try {
       let style = '';
@@ -208,7 +200,7 @@ function html2nodes(data, tagStyle, imgMode) {
         style += arguments[1];
         return '';
       });
-      let handler = new DomHandler(style, tagStyle, imgMode);
+      let handler = new DomHandler(style, options);
       new Parser(handler, res => {
         _traverse(res.nodes);
         return resolve(res);

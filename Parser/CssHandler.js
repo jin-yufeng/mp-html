@@ -5,11 +5,11 @@ function CssHandler(style, tagStyle) {
 }
 CssHandler.prototype.match = function(name, attrs) {
   let matched = this._style[name] ? (this._style[name] + ';') : '';
-  if (attrs.id)
-    matched += (this._style['#' + attrs.id] ? (this._style['#' + attrs.id] + ';') : '');
   if (attrs.class)
     for (var Class of attrs.class.split(' '))
       matched += (this._style['.' + Class] ? (this._style['.' + Class] + ';') : '');
+  if (attrs.id)
+    matched += (this._style['#' + attrs.id] ? (this._style['#' + attrs.id] + ';') : '');
   return matched;
 }
 

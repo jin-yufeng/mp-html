@@ -93,7 +93,8 @@
         <!--智能压缩-->
         <view id="compress" class="weui-article__h2">智能压缩</view>
         <view class="weui-article__section">
-          除了前端包的压缩能力外，后端加强包还可以通过移除空标签，移除<code>display:none</code>的标签等方法进一步压缩解析结果的大小，提升传输速度和渲染速度
+          除了前端包的压缩能力外，后端加强包还可以通过移除空标签，移除
+          <code>display:none</code>的标签等方法进一步压缩解析结果的大小，提升传输速度和渲染速度
         </view>
         <!--自动补全网址-->
         <view id="complement" class="weui-article__h2">自动补全网址</view>
@@ -112,10 +113,7 @@
           <view class="weui-article__p">给入一个网址（必须以
             <code>http://</code>或
             <code>https://</code>开头），设置
-            <code>website</code>模式，插件将自动获取该页面的内容并进行解析</view>
-          <view class="weui-article__p">支持以下模式（自定义测试页面由于云函数空间大小限制仅支持静态网页模式）：
-            <Parser html="{{webmode}}" tag-style="{{tagStyle}}" />
-          </view>
+            <code>website</code>模式，插件将自动获取该页面的内容并进行解析（仅限简单的静态网页）</view>
           示例：
           <Parser html="{{website}}" />
         </view>
@@ -186,14 +184,18 @@
           <view style="margin-top:5px">domain：主域名，用于自动将多媒体标签的
             <code>src</code>属性填充完整，解析模式为
             <code>website</code>时自动获取</view>
-          <view style="margin-top:5px">engine：打开网址的引擎，支持的有
-            <code>default</code>（速度快，无需额外安装，但
-            <code>js</code>中动态加载的内容会被忽略）、
-            <code>puppeteer</code>（使用无头浏览器加载，使用前需要额外安装
-            <code>npm i puppeteer</code>）和<code>phantom</code>（使用无头浏览器加载，使用前需要额外安装
-            <code>npm i phantom</code>）</view>
-          <view style="margin-top:5px">parseEmoji：是否解析emoji，默认为<code>true</code>，打开后会自动将形如<code>[笑脸]</code>的字符解析为<code>emoji</code>字符😄</view>
-          <view style="margin-top:5px">compress：是否进行自动压缩（默认为<code>true</code>），打开后会通过移除<code>display:none</code>的节点，移除空标签，合并一些层级等，对于一些复杂的网页能减小大小</view>
+          <view style="margin-top:5px">useAnchor：是否使用页面内锚点，设置为
+            <code>true</code>时将把所有设置了
+            <code>id</code>的节点都通过组件递归的方式显示，默认
+            <code>false</code>
+          </view>
+          <view style="margin-top:5px">parseEmoji：是否解析emoji，默认为
+            <code>true</code>，打开后会自动将形如
+            <code>[笑脸]</code>的字符解析为
+            <code>emoji</code>字符😄</view>
+          <view style="margin-top:5px">compress：是否进行自动压缩（默认为
+            <code>true</code>），打开后会通过移除
+            <code>display:none</code>的节点，移除空标签，合并一些层级等，对于一些复杂的网页能减小大小</view>
           <view style="margin-top:5px">maxDepth：前端显示时的最大递归深度，为0或负数时代表不限制（默认为0）。层数超过限制时，会直接使用
             <code>rich-text</code>显示而不再递归，可能导致图片不能预览，链接无法点击，视频和音频无法显示等问题；但过深的深度可能导致渲染时间较长；对于复杂的内容可以适当进行限制</view>
         </view>

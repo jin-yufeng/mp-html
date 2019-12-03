@@ -9,17 +9,17 @@
 					<!--#endif-->
 					<!--图片-->
 					<!--#ifdef MP-WEIXIN || MP-QQ || APP-PLUS-->
-					<rich-text v-if="item.name=='img'" class="img" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
+					<rich-text v-if="item.name=='img'" :id="item.attrs.id||''" class="img" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
 					 :nodes='handler.setImgStyle(item,imgMode,imgLoad)' :data-ignore='item.attrs.ignore' :data-src='item.attrs.src'
 					 :data-current='item.current' @tap='previewEvent' />
 					<!--#endif-->
 					<!--#ifdef MP-ALIPAY-->
-					<rich-text v-if="item.name=='img'" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
+					<rich-text v-if="item.name=='img'" :id="item.attrs.id||''" :style="'text-indent:0;'+handler.getStyle(item.attrs.style,'inline-block')"
 					 :nodes='handler.setImgStyle(item,imgMode)' :data-ignore='item.attrs.ignore' :data-src='item.attrs.src'
 					 :data-current='item.current' @tap='previewEvent' />
 					<!--#endif-->
 					<!--#ifdef MP-BAIDU || MP-TOUTIAO || H5-->
-					<rich-text v-if="item.name=='img'" :style="'text-indent:0;'+item.attrs.containStyle" :nodes='[item]' :data-ignore='item.attrs.ignore'
+					<rich-text v-if="item.name=='img'" :id="item.attrs.id||''" :style="'text-indent:0;'+item.attrs.containStyle" :nodes='[item]' :data-ignore='item.attrs.ignore'
 					 :data-src='item.attrs.src' :data-current='item.current' @tap='previewEvent' />
 					<!--#endif-->
 					<!--文本-->
@@ -47,14 +47,14 @@
 							<view class="video-triangle"></view>
 						</view>
 						<!--#endif-->
-						<video v-else :src='controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src' :id="item.attrs.id"
+						<video v-else :src='controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src' :id="item.attrs.id||''"
 						 :loop='item.attrs.loop' :controls='item.attrs.controls' :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
 						 :unit-id="item.attrs['unit-id']" :class="'v '+(item.attrs.class||'')" :muted="item.attrs.muted" :style="item.attrs.style"
 						 :data-id="item.attrs.id" :data-source="item.attrs.source" @play='playEvent' @error="videoError" />
 					</block>
 					<!--音频-->
 					<audio v-else-if="item.name=='audio'" :src='controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index]:item.attrs.src'
-					 :id="item.attrs.id" :loop='item.attrs.loop' :controls='item.attrs.controls' :poster='item.attrs.poster' :name='item.attrs.name'
+					 :id="item.attrs.id||''" :loop='item.attrs.loop' :controls='item.attrs.controls' :poster='item.attrs.poster' :name='item.attrs.name'
 					 :author='item.attrs.author' :class="item.attrs.class||''" :style="item.attrs.style" :data-id="item.attrs.id"
 					 :data-source="item.attrs.source" @error="audioError" />
 					<!--链接-->
@@ -78,19 +78,19 @@
 					<!--#endif-->
 					<!--富文本-->
 					<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY || APP-PLUS-->
-					<rich-text v-else :class="item.name" :style="''+handler.getStyle(item.attrs.style,'block')" :nodes="handler.setStyle(item)" />
+					<rich-text v-else :id="item.attrs.id||''" :class="item.name" :style="''+handler.getStyle(item.attrs.style,'block')" :nodes="handler.setStyle(item)" />
 					<!--#endif-->
 					<!--#ifdef MP-BAIDU || MP-TOUTIAO || H5-->
-					<rich-text v-else :class="item.name" :style="item.attrs?item.attrs.containStyle:''" :nodes="[item]" />
+					<rich-text v-else :id="item.attrs.id||''" :class="item.name" :style="item.attrs?item.attrs.containStyle:''" :nodes="[item]" />
 					<!--#endif-->
 				</block>
 				<!--#ifdef MP-ALIPAY || H5-->
-				<view v-else :class="item.name+' '+(item.attrs.class||'')" :style="item.attrs.style">
+				<view v-else :id="item.attrs.id||''" :class="item.name+' '+(item.attrs.class||'')" :style="item.attrs.style">
 					<trees :nodes="item.children" :imgMode="imgMode" />
 				</view>
 				<!--#endif-->
 				<!--#ifndef MP-ALIPAY || H5-->
-				<trees v-else :class="item.name+' '+(item.attrs.class||'')" :style="item.attrs.style" :nodes="item.children"
+				<trees v-else :id="item.attrs.id||''" :class="item.name+' '+(item.attrs.class||'')" :style="item.attrs.style" :nodes="item.children"
 				 :imgMode="imgMode" :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
 				<!--#endif-->
 			</block>
@@ -167,6 +167,7 @@
 				if (!e.currentTarget.dataset.ignore) {
 					var preview = true;
 					this._top.$emit('imgtap', {
+						id: e.target.id,
 						src: e.currentTarget.dataset.src,
 						ignore: () => preview = false
 					});
@@ -185,7 +186,12 @@
 					ignore: () => jump = false
 				});
 				if (jump && e.currentTarget.dataset.href) {
-					if (/^http/.test(e.currentTarget.dataset.href)) {
+					if (e.currentTarget.dataset.href[0]) {
+						if (this._top.useAnchor)
+							this._top.navigateTo({
+								id: e.currentTarget.dataset.href.substring(1)
+							})
+					} else if (/^http/.test(e.currentTarget.dataset.href)) {
 						if (this._top.autocopy) {
 							// #ifndef H5
 							uni.setClipboardData({

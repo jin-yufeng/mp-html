@@ -103,21 +103,6 @@ module.exports = {
   website: [{
     "children": [{
       "children": [{
-        "text": "//静态网页模式",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";  color: #969896;;"
-      }
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "children": [{
         "text": "await ",
         "type": "text"
       }, {
@@ -176,87 +161,6 @@ module.exports = {
       "attrs": {
         "style": ";"
       }
-    }, {
-      "children": [{
-        "text": "//动态网页模式，需提前安装npm i phantom",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";  color: #969896;;"
-      }
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "children": [{
-        "text": "await ",
-        "type": "text"
-      }, {
-        "children": [{
-          "text": "parser",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": ";  color: #795da3;;"
-        }
-      }, {
-        "children": [{
-          "text": "(",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "\"https://example.com\"",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": ";  color: #df5000;;"
-          }
-        }, {
-          "text": ",",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "\"website\"",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": ";  color: #df5000;;"
-          }
-        }, {
-          "text": ",{engine:",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "\"phantom\"",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": ";  color: #df5000;;"
-          }
-        }, {
-          "text": "})",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": ";"
-        }
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": ";",
-      "type": "text"
     }],
     "name": "div",
     "attrs": {

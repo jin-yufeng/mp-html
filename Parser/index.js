@@ -7,12 +7,34 @@ const html2nodes = require('./Parser.js');
 const CanIUseObserver = require("./api.js").versionHigherThan('1.9.3');
 const CanIUseNextTick = wx.canIUse('nextTick');
 const initData = function(Component) {
+  Component.navigateTo = function(obj) {
+	obj.success = obj.success || function () { };
+    obj.fail = obj.fail || function () { };
+    function Scroll(selector) {
+      const query = Component.createSelectorQuery();
+      query.select(selector).boundingClientRect();
+      query.selectViewport().scrollOffset();
+      query.exec(res => {
+        if (!res||!res[0])
+          return obj.fail({
+            errMsg: "Label Not Found"
+          });
+        wx.pageScrollTo({
+          scrollTop: res[1].scrollTop + res[0].top,
+          success: obj.success,
+          fail: obj.fail
+        })
+      })
+    }
+    if (!obj.id) Scroll("#contain");
+    else Scroll('#contain >>> #' + obj.id);
+  }
   Component.createSelectorQuery().select('#contain').boundingClientRect(res => {
     Component.triggerEvent('ready', res);
   }).exec();
   Component.videoContext = [];
   let nodes = [Component.selectComponent('#contain')];
-  nodes = nodes.concat(Component.selectAllComponents('#contain>>>#node'));
+  nodes = nodes.concat(Component.selectAllComponents('#contain>>>.node'));
   for (let node of nodes) {
     let observered = false
     for (let item of node.data.nodes) {
@@ -71,7 +93,7 @@ Component({
             nodes: []
           })
         } else if (typeof html == 'string') {
-          html2nodes(html, this.data.tagStyle).then(res => {
+          html2nodes(html, this.data).then(res => {
             this.setData({
               nodes: res.nodes,
               controls: {
@@ -169,6 +191,10 @@ Component({
       type: Boolean,
       value: true
     },
+    'domain': {
+      type: String,
+      value: ""
+    },
     'imgMode': {
       type: String,
       value: "default"
@@ -192,6 +218,10 @@ Component({
     'animationDuration': {
       type: Number,
       value: 400
+    },
+    'useAnchor': {
+      type: Boolean,
+      value: false
     }
   },
   methods: {
@@ -203,7 +233,12 @@ Component({
         ignore: () => jump = false
       });
       if (jump && e.detail.href) {
-        if (/^http/.test(e.detail.href)) {
+        if (e.detail.href[0] == "#") {
+          if (this.data.useAnchor)
+            this.navigateTo({
+              id: e.detail.href.substring(1)
+            })
+        } else if (/^http/.test(e.detail.href)) {
           if (this.data.autocopy)
             wx.setClipboardData({
               data: e.detail.href,
@@ -225,6 +260,7 @@ Component({
     previewEvent(e) {
       var preview = true;
       this.triggerEvent('imgtap', {
+        id: e.detail.id,
         src: e.detail.src,
         ignore: () => preview = false
       })

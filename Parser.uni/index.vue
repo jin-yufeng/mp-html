@@ -69,6 +69,10 @@
 				type: Boolean,
 				default: true
 			},
+			'domain': {
+				type: String,
+				default: ''
+			},
 			'imgMode': {
 				type: String,
 				default: 'default'
@@ -96,12 +100,19 @@
 			'animationDuration': {
 				type: Number,
 				default: 400
+			},
+			'useAnchor': {
+				type: Boolean,
+				default: false
 			}
 		},
 		mounted() {
 			this.execHtml(this.html);
 			// #ifndef MP-ALIPAY || H5
 			this.videoContext = [];
+			// #endif
+			// #ifdef MP-BAIDU || MP-ALIPAY
+			this.anchors = [];
 			// #endif
 		},
 		methods: {
@@ -111,58 +122,7 @@
 				// 支持 iframe.srcdoc
 				if (typeof(iframe.srcdoc) == "string") {
 					var script =
-						`<script>function calcPageHeight(doc) {
-				    var cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
-				    var sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight)
-				    var height  = Math.max(cHeight, sHeight)
-				    return height
-				}
-				document.addEventListener("DOMContentLoaded", function(){
-					var imgs = document.getElementsByTagName("img");
-					var imgList=[];
-					for (var i = 0; i < imgs.length; i++) {
-						var img = imgs[i];
-						img.style += ";max-width:100%";
-						imgList.push(img.src);
-						img.index = i;
-						if(img.parentElement.nodeName!='A'){
-							img.onclick = function() {
-								parent.document.previewEvent(this,imgList);
-							}
-						}
-						img.onerror = function(){
-							parent.document.errorEvent(this,"img");
-						}
-						var links = document.getElementsByTagName("a");
-						for(var link of links){
-							link.onclick = function(e){
-								return parent.document.tapEvent(this);
-							}
-						}
-						var videos = document.getElementsByTagName("video");
-						for(var video of videos){
-							video.style += ';max-width:100%';
-							video.onerror = function(){
-								parent.document.errorEvent(this,"video");
-							}
-							video.onplay = function(){
-								parent.document.playEvent(this);
-							}
-						}
-						parent.document.setVideoContext(videos);
-						var audios = document.getElementsByTagName("audios");
-						for(var audio of audios){
-							audio.onerror = function(e){
-								parent.document.errorEvent(this,"audio");
-							}
-						}
-					}
-				},false);
-				window.onload = function() {
-						var height = calcPageHeight(document);
-						parent.document.getElementById('contain').style.height = height + 'px';
-						parent.document.setTitle(document.title);
-				}<\/script>`;
+						'<script>"use strict";function calcPageHeight(t){var e=Math.max(t.body.clientHeight,t.documentElement.clientHeight),n=Math.max(t.body.scrollHeight,t.documentElement.scrollHeight);return Math.max(e,n)}document.addEventListener("DOMContentLoaded",function(){for(var t=document.getElementsByTagName("img"),e=[],n=0;n<t.length;n++){var r=t[n];r.style+=";max-width:100%",e.push(r.src),r.index=n,"A"!=r.parentElement.nodeName&&(r.onclick=function(){parent.document.previewEvent(this,e)}),r.onerror=function(){parent.document.errorEvent(this,"img")};var o=document.getElementsByTagName("a"),a=!0,i=!1,c=void 0;try{for(var u,l=o[Symbol.iterator]();!(a=(u=l.next()).done);a=!0){u.value.onclick=function(t){if("#"==this.getAttribute("href")[0]){var e=document.getElementById(this.getAttribute("href").substring(1));return parent.document.tapEvent(this,e?e.offsetTop:-1)}return parent.document.tapEvent(this)}}}catch(t){i=!0,c=t}finally{try{!a&&l.return&&l.return()}finally{if(i)throw c}}var d=document.getElementsByTagName("video"),m=!0,h=!1,s=void 0;try{for(var v,y=d[Symbol.iterator]();!(m=(v=y.next()).done);m=!0){var f=v.value;f.style+=";max-width:100%",f.onerror=function(){parent.document.errorEvent(this,"video")},f.onplay=function(){parent.document.playEvent(this)}}}catch(t){h=!0,s=t}finally{try{!m&&y.return&&y.return()}finally{if(h)throw s}}parent.document.setVideoContext(d);var g=document.getElementsByTagName("audios"),p=!0,E=!1,x=void 0;try{for(var b,w=g[Symbol.iterator]();!(p=(b=w.next()).done);p=!0){b.value.onerror=function(t){parent.document.errorEvent(this,"audio")}}}catch(t){E=!0,x=t}finally{try{!p&&w.return&&w.return()}finally{if(E)throw x}}}},!1),window.onload=function(){var t=calcPageHeight(document);parent.document.getElementById("contain").style.height=t+"px",parent.document.setTitle(document.title)};<\/script>';
 					if (!html) return;
 					if (typeof html != 'string') {
 						if (typeof html == 'object') {
@@ -198,15 +158,17 @@
 							}
 						}
 					}
-					document.tapEvent = (link) => {
+					document.tapEvent = (link, offsetTop) => {
 						var jump = true;
 						this.$emit('linkpress', {
 							href: link.getAttribute("href"),
 							ignore: () => jump = false
 						});
-						console.log(jump,link.getAttribute("href"))
 						if (jump && link.getAttribute("href")) {
-							if (/^http/.test(link.getAttribute("href"))) {
+							if (link.getAttribute("href")[0] == '#') {
+								if (this.useAnchor)
+									window.scrollTo(0, iframe.offsetTop + offsetTop);
+							} else if (/^http/.test(link.getAttribute("href"))) {
 								if (this.autocopy)
 									window.location.href = link.href;
 							} else {
@@ -261,7 +223,7 @@
 				if (!html) {
 					this.nodes = [];
 				} else if (typeof html == 'string') {
-					html2nodes(html, this.tagStyle, this.imgMode).then(res => {
+					html2nodes(html, this).then(res => {
 						// #ifdef APP-PLUS
 						this.loadVideo = false;
 						// #endif
@@ -332,13 +294,14 @@
 				return elem;
 			},
 			// #endif
-			// #ifndef MP-ALIPAY || H5
+			// #ifndef H5
 			getContext(components) {
 				for (let component of components) {
 					let observered = false;
 					if (!component.nodes)
 						return this.getContext(component.$children);
 					for (let item of component.nodes) {
+						// #ifndef MP-ALIPAY
 						if (item.name == 'img' && !observered) {
 							observered = true;
 							if (component.lazyLoad && CanIUseObserver) {
@@ -359,6 +322,15 @@
 								context: uni.createVideoContext(item.attrs.id, component)
 							});
 						}
+						// #endif
+						// #ifdef MP-BAIDU || MP-ALIPAY
+						if (item.attrs && item.attrs.id) {
+							this.anchors.push({
+								id: item.attrs.id,
+								node: component
+							})
+						}
+						// #endif
 					}
 					this.getContext(component.$children);
 				}
@@ -366,10 +338,43 @@
 			// #endif
 			ready() {
 				this.$nextTick(() => {
+					this.navigateTo = (obj) => {
+						obj.success = obj.success || function() {};
+						obj.fail = obj.fail || function() {};
+						var Scroll = (selector,component) => {
+							const query = uni.createSelectorQuery().in(component?component:this);
+							query.select(selector).boundingClientRect();
+							query.selectViewport().scrollOffset();
+							query.exec(res => {
+								if (!res || !res[0])
+									return obj.fail({
+										errMsg: "Label Not Found"
+									});
+								uni.pageScrollTo({
+									scrollTop: res[1].scrollTop + res[0].top,
+									success: obj.success,
+									fail: obj.fail
+								})
+							})
+						}
+						if (!obj.id) Scroll(".contain");
+						else {
+							// #ifndef MP-BAIDU || MP-ALIPAY
+							Scroll('.contain >>> #' + obj.id);
+							// #endif
+							// #ifdef MP-BAIDU || MP-ALIPAY
+							for (var anchor of this.anchors) {
+								if (anchor.id == obj.id) {
+									Scroll("#" + obj.id, anchor.node);
+								}
+							}
+							// #endif
+						}
+					}
 					uni.createSelectorQuery().in(this).select(".contain").boundingClientRect(res => {
 						this.$emit("ready", res);
 					}).exec()
-					// #ifndef MP-ALIPAY || H5
+					// #ifndef H5
 					this.getContext(this.$children);
 					// #endif
 					// #ifdef APP-PLUS

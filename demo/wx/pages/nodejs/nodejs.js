@@ -45,29 +45,6 @@ Page({
     }],
     //示例代码
     codedemo: code.codedemo,
-    webmode: `<ul>
-      <li style="margin-top:5px;">静态网页模式：
-        <p>速度快，可以直接使用，但<code>js</code>中动态加载的内容都会被忽略</p>
-        <p>另外，针对微信推送网页做了以下优化，可基本正确显示：</p>
-        <ul>
-          <li>支持在图片没有<code>src</code>属性时自动将<code>data-src</code>属性赋给<code>src</code></li>
-          <li>支持从视频的<code>iframe</code>标签解析出真实的视频源地址并进行播放</li>
-          <li>支持从音频的<code>qqmusic</code>标签解析出真实的音频源地址并进行播放</li>
-        </ul>
-      </li>
-      <li style="margin-top:5px;">动态网页模式： 
-        <p>使用无头浏览器进行加载，速度较慢，需要额外安装本地依赖，可通过设置<code>mode</code>中的<code>engine</code>属性实现，支持的引擎有：</p>
-        <ul>
-          <li>puppeteer：
-            <p>使用<code>Chromium</code>浏览器加载，<strong>使用前需要安装</strong><code>npm i puppeteer</code></p>
-          </li>
-          <li>phantom:
-            <p>使用<code>phantom</code>浏览器加载，<strong>使用前需要安装</strong><code>npm i phantom</code></p>
-          </li>
-        </ul>
-      </li>
-    </ul>`,
-    //示例代码
     website: code.website,
     markdown: code.markdown,
     npm: code.npm,

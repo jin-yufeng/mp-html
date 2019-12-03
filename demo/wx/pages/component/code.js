@@ -1634,86 +1634,7 @@ module.exports = {
       "class": "hljs"
     }
   }],
-  json2: [{
-    "children": [{
-      "text": "{",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "  ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"usingComponents\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #795da3;"
-      }
-    }, {
-      "text": ": {",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "    ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"parser\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #795da3;"
-      }
-    }, {
-      "text": ": ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"../../static/Parser/index\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "  }",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "}",
-      "type": "text"
-    }],
-    "name": "div",
-    "attrs": {
-      "style": ";font-family:monospace;white-space:pre;overflow:scrollbackground-color:#f6f8fa;padding:5px;border-radius:5px;;\n  display: block;\n  background: white;\n  padding: 0.5em;\n  color: #333333;\n  overflow-x: auto;"
-    }
-  }],
-  vue: [{
+  uni: [{
     "children": [{
       "children": [{
         "text": "<",
@@ -1725,7 +1646,8 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #63a35c;"
+          "style": ";; color: #63a35c; ;;",
+          "class": "hljs-name"
         }
       }, {
         "text": ">",
@@ -1733,13 +1655,14 @@ module.exports = {
       }],
       "name": "span",
       "attrs": {
-        "style": ";\n  color: #333333;"
+        "style": ";; color: #333333; ;;",
+        "class": "hljs-tag"
       }
     }, {
       "children": [],
       "name": "br",
       "attrs": {
-        "style": ";"
+        "style": ";;;"
       }
     }, {
       "text": "  ",
@@ -1750,36 +1673,13 @@ module.exports = {
         "type": "text"
       }, {
         "children": [{
-          "text": "div",
+          "text": "view",
           "type": "text"
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #63a35c;"
-        }
-      }, {
-        "text": " ",
-        "type": "text"
-      }, {
-        "children": [{
-          "text": "class",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": ";\n  color: #795da3;"
-        }
-      }, {
-        "text": "=",
-        "type": "text"
-      }, {
-        "children": [{
-          "text": "\"container\"",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": ";\n  color: #df5000;"
+          "style": ";; color: #63a35c; ;;",
+          "class": "hljs-name"
         }
       }, {
         "text": ">",
@@ -1787,13 +1687,14 @@ module.exports = {
       }],
       "name": "span",
       "attrs": {
-        "style": ";\n  color: #333333;"
+        "style": ";; color: #333333; ;;",
+        "class": "hljs-tag"
       }
     }, {
       "children": [],
       "name": "br",
       "attrs": {
-        "style": ";"
+        "style": ";;;"
       }
     }, {
       "text": "    ",
@@ -1809,7 +1710,8 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #63a35c;"
+          "style": ";; color: #63a35c; ;;",
+          "class": "hljs-name"
         }
       }, {
         "text": " ",
@@ -1821,7 +1723,8 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #795da3;"
+          "style": ";; color: #795da3; ;;",
+          "class": "hljs-attr"
         }
       }, {
         "text": "=",
@@ -1833,7 +1736,8 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #df5000;"
+          "style": ";; color: #df5000; ;;",
+          "class": "hljs-string"
         }
       }, {
         "text": ">",
@@ -1841,7 +1745,8 @@ module.exports = {
       }],
       "name": "span",
       "attrs": {
-        "style": ";\n  color: #333333;"
+        "style": ";; color: #333333; ;;",
+        "class": "hljs-tag"
       }
     }, {
       "children": [{
@@ -1854,7 +1759,8 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #63a35c;"
+          "style": ";; color: #63a35c; ;;",
+          "class": "hljs-name"
         }
       }, {
         "text": ">",
@@ -1862,13 +1768,14 @@ module.exports = {
       }],
       "name": "span",
       "attrs": {
-        "style": ";\n  color: #333333;"
+        "style": ";; color: #333333; ;;",
+        "class": "hljs-tag"
       }
     }, {
       "children": [],
       "name": "br",
       "attrs": {
-        "style": ";"
+        "style": ";;;"
       }
     }, {
       "text": "  ",
@@ -1879,12 +1786,13 @@ module.exports = {
         "type": "text"
       }, {
         "children": [{
-          "text": "div",
+          "text": "view",
           "type": "text"
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #63a35c;"
+          "style": ";; color: #63a35c; ;;",
+          "class": "hljs-name"
         }
       }, {
         "text": ">",
@@ -1892,13 +1800,14 @@ module.exports = {
       }],
       "name": "span",
       "attrs": {
-        "style": ";\n  color: #333333;"
+        "style": ";; color: #333333; ;;",
+        "class": "hljs-tag"
       }
     }, {
       "children": [],
       "name": "br",
       "attrs": {
-        "style": ";"
+        "style": ";;;"
       }
     }, {
       "children": [{
@@ -1911,7 +1820,8 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #63a35c;"
+          "style": ";; color: #63a35c; ;;",
+          "class": "hljs-name"
         }
       }, {
         "text": ">",
@@ -1919,13 +1829,14 @@ module.exports = {
       }],
       "name": "span",
       "attrs": {
-        "style": ";\n  color: #333333;"
+        "style": ";; color: #333333; ;;",
+        "class": "hljs-tag"
       }
     }, {
       "children": [],
       "name": "br",
       "attrs": {
-        "style": ";"
+        "style": ";;;"
       }
     }, {
       "children": [{
@@ -1938,7 +1849,8 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #63a35c;"
+          "style": ";; color: #63a35c; ;;",
+          "class": "hljs-name"
         }
       }, {
         "text": ">",
@@ -1946,14 +1858,57 @@ module.exports = {
       }],
       "name": "span",
       "attrs": {
-        "style": ";\n  color: #333333;"
+        "style": ";; color: #333333; ;;",
+        "class": "hljs-tag"
       }
     }, {
       "children": [{
         "children": [],
         "name": "br",
         "attrs": {
-          "style": ";"
+          "style": ";;;"
+        }
+      }, {
+        "children": [{
+          "text": "import",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": ";; color: #a71d5d; ;;",
+          "class": "hljs-keyword"
+        }
+      }, {
+        "text": " parser ",
+        "type": "text"
+      }, {
+        "children": [{
+          "text": "from",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": ";; color: #a71d5d; ;;",
+          "class": "hljs-keyword"
+        }
+      }, {
+        "text": " ",
+        "type": "text"
+      }, {
+        "children": [{
+          "text": "\"@/components/Parser/index\"",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": ";; color: #df5000; ;;",
+          "class": "hljs-string"
+        }
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";;;"
         }
       }, {
         "children": [{
@@ -1962,7 +1917,8 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #a71d5d;"
+          "style": ";; color: #a71d5d; ;;",
+          "class": "hljs-keyword"
         }
       }, {
         "text": " ",
@@ -1974,28 +1930,30 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #a71d5d;"
+          "style": ";; color: #a71d5d; ;;",
+          "class": "hljs-keyword"
         }
       }, {
-        "text": " {",
+        "text": "{",
         "type": "text"
       }, {
         "children": [],
         "name": "br",
         "attrs": {
-          "style": ";"
+          "style": ";;;"
         }
       }, {
         "text": "  ",
         "type": "text"
       }, {
         "children": [{
-          "text": "data",
+          "text": "components",
           "type": "text"
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #795da3;"
+          "style": ";; color: #795da3; ;;",
+          "class": "hljs-attr"
         }
       }, {
         "text": ": {",
@@ -2004,10 +1962,59 @@ module.exports = {
         "children": [],
         "name": "br",
         "attrs": {
-          "style": ";"
+          "style": ";;;"
+        }
+      }, {
+        "text": "    parser",
+        "type": "text"
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";;;"
+        }
+      }, {
+        "text": "  },",
+        "type": "text"
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";;;"
+        }
+      }, {
+        "text": "  data() {",
+        "type": "text"
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";;;"
         }
       }, {
         "text": "    ",
+        "type": "text"
+      }, {
+        "children": [{
+          "text": "return",
+          "type": "text"
+        }],
+        "name": "span",
+        "attrs": {
+          "style": ";; color: #a71d5d; ;;",
+          "class": "hljs-keyword"
+        }
+      }, {
+        "text": " {",
+        "type": "text"
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";;;"
+        }
+      }, {
+        "text": "      ",
         "type": "text"
       }, {
         "children": [{
@@ -2016,25 +2023,36 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #795da3;"
+          "style": ";; color: #795da3; ;;",
+          "class": "hljs-attr"
         }
       }, {
         "text": ": ",
         "type": "text"
       }, {
         "children": [{
-          "text": "\'<div>Hello World!</div>\'",
+          "text": "'<div>Hello World!</div>'",
           "type": "text"
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #df5000;"
+          "style": ";; color: #df5000; ;;",
+          "class": "hljs-string"
         }
       }, {
         "children": [],
         "name": "br",
         "attrs": {
-          "style": ";"
+          "style": ";;;"
+        }
+      }, {
+        "text": "    }",
+        "type": "text"
+      }, {
+        "children": [],
+        "name": "br",
+        "attrs": {
+          "style": ";;;"
         }
       }, {
         "text": "  }",
@@ -2043,21 +2061,13 @@ module.exports = {
         "children": [],
         "name": "br",
         "attrs": {
-          "style": ";"
-        }
-      }, {
-        "text": "}",
-        "type": "text"
-      }, {
-        "children": [],
-        "name": "br",
-        "attrs": {
-          "style": ";"
+          "style": ";;;"
         }
       }],
       "name": "span",
       "attrs": {
-        "style": ";"
+        "style": ";;;",
+        "class": "javascript"
       }
     }, {
       "children": [{
@@ -2070,7 +2080,8 @@ module.exports = {
         }],
         "name": "span",
         "attrs": {
-          "style": ";\n  color: #63a35c;"
+          "style": ";; color: #63a35c; ;;",
+          "class": "hljs-name"
         }
       }, {
         "text": ">",
@@ -2078,753 +2089,14 @@ module.exports = {
       }],
       "name": "span",
       "attrs": {
-        "style": ";\n  color: #333333;"
+        "style": ";; color: #333333; ;;",
+        "class": "hljs-tag"
       }
     }],
     "name": "div",
     "attrs": {
-      "style": ";font-family:monospace;white-space:pre;overflow:scrollbackground-color:#f6f8fa;padding:5px;border-radius:5px;;\n  display: block;\n  background: white;\n  padding: 0.5em;\n  color: #333333;\n  overflow-x: auto;"
-    }
-  }],
-  uni: [{ "children": [{ "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "template", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "view", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "    ", "type": "text" }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "parser", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": " ", "type": "text" }, { "children": [{ "text": ":html", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #795da3; ;;", "class": "hljs-attr" } }, { "text": "=", "type": "text" }, { "children": [{ "text": "\"html\"", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #df5000; ;;", "class": "hljs-string" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "parser", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "view", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "template", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "children": [{ "text": "<", "type": "text" }, { "children": [{ "text": "script", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }, { "children": [{ "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "children": [{ "text": "import", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #a71d5d; ;;", "class": "hljs-keyword" } }, { "text": " parser ", "type": "text" }, { "children": [{ "text": "from", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #a71d5d; ;;", "class": "hljs-keyword" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "\"@/components/Parser/index\"", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #df5000; ;;", "class": "hljs-string" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "children": [{ "text": "export", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #a71d5d; ;;", "class": "hljs-keyword" } }, { "text": " ", "type": "text" }, { "children": [{ "text": "default", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #a71d5d; ;;", "class": "hljs-keyword" } }, { "text": "{", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  ", "type": "text" }, { "children": [{ "text": "components", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #795da3; ;;", "class": "hljs-attr" } }, { "text": ": {", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "    parser", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  },", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  data() {", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "    ", "type": "text" }, { "children": [{ "text": "return", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #a71d5d; ;;", "class": "hljs-keyword" } }, { "text": " {", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "      ", "type": "text" }, { "children": [{ "text": "html", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #795da3; ;;", "class": "hljs-attr" } }, { "text": ": ", "type": "text" }, { "children": [{ "text": "'<div>Hello World!</div>'", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #df5000; ;;", "class": "hljs-string" } }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "    }", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }, { "text": "  }", "type": "text" }, { "children": [], "name": "br", "attrs": { "style": ";;;" } }], "name": "span", "attrs": { "style": ";;;", "class": "javascript" } }, { "children": [{ "text": "</", "type": "text" }, { "children": [{ "text": "script", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #63a35c; ;;", "class": "hljs-name" } }, { "text": ">", "type": "text" }], "name": "span", "attrs": { "style": ";; color: #333333; ;;", "class": "hljs-tag" } }], "name": "div", "attrs": { "style": ";font-family:monospace;white-space:pre;overflow:scroll;background-color:#f6f8fa;padding:5px;border-radius:5px;;; display: block; background: white; padding: 0.5em; color: #333333; overflow-x: auto; ;;", "class": "hljs" } }],
-  wepy: [{
-    "children": [{
-      "children": [{
-        "children": [{
-          "text": "<",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "template",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #63a35c; ;"
-          }
-        }, {
-          "text": ">",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": "; color: #333333; ;"
-        }
-      }, {
-        "children": [],
-        "name": "br",
-        "attrs": {
-          "style": ";"
-        }
-      }, {
-        "text": "  ",
-        "type": "text"
-      }, {
-        "children": [{
-          "text": "<",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "view",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #63a35c; ;"
-          }
-        }, {
-          "text": " ",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "class",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #795da3; ;"
-          }
-        }, {
-          "text": "=",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "\"container\"",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #df5000; ;"
-          }
-        }, {
-          "text": ">",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": "; color: #333333; ;"
-        }
-      }, {
-        "children": [],
-        "name": "br",
-        "attrs": {
-          "style": ";"
-        }
-      }, {
-        "text": "    ",
-        "type": "text"
-      }, {
-        "children": [{
-          "text": "<",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "parser",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #63a35c; ;"
-          }
-        }, {
-          "text": " ",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "html",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #795da3; ;"
-          }
-        }, {
-          "text": "=",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "\"",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #df5000; ;"
-          }
-        }],
-        "name": "span",
-        "attrs": {
-          "style": "; color: #333333; ;"
-        }
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "children": [{
-        "text": "{{html}}",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": "; color: #df5000; ;"
-      }
-    }, {
-      "children": [{
-        "children": [{
-          "children": [{
-            "text": "\"",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #df5000; ;"
-          }
-        }, {
-          "text": ">",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": "; color: #333333; ;"
-        }
-      }, {
-        "children": [{
-          "text": "</",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "parser",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #63a35c; ;"
-          }
-        }, {
-          "text": ">",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": "; color: #333333; ;"
-        }
-      }, {
-        "children": [],
-        "name": "br",
-        "attrs": {
-          "style": ";"
-        }
-      }, {
-        "text": "  ",
-        "type": "text"
-      }, {
-        "children": [{
-          "text": "</",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "view",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #63a35c; ;"
-          }
-        }, {
-          "text": ">",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": "; color: #333333; ;"
-        }
-      }, {
-        "children": [],
-        "name": "br",
-        "attrs": {
-          "style": ";"
-        }
-      }, {
-        "children": [{
-          "text": "</",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "template",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #63a35c; ;"
-          }
-        }, {
-          "text": ">",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": "; color: #333333; ;"
-        }
-      }, {
-        "children": [],
-        "name": "br",
-        "attrs": {
-          "style": ";"
-        }
-      }, {
-        "children": [{
-          "text": "<",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "script",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #63a35c; ;"
-          }
-        }, {
-          "text": ">",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": "; color: #333333; ;"
-        }
-      }, {
-        "children": [{
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "children": [{
-            "text": "import",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #a71d5d; ;"
-          }
-        }, {
-          "text": " wepy ",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "from",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #a71d5d; ;"
-          }
-        }, {
-          "text": " ",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "'wepy'",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #df5000; ;"
-          }
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "children": [{
-            "text": "export",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #a71d5d; ;"
-          }
-        }, {
-          "text": " ",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "default",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #a71d5d; ;"
-          }
-        }, {
-          "text": " ",
-          "type": "text"
-        }, {
-          "children": [{
-            "children": [{
-              "text": "class",
-              "type": "text"
-            }],
-            "name": "span",
-            "attrs": {
-              "style": "; color: #a71d5d; ;"
-            }
-          }, {
-            "text": " ",
-            "type": "text"
-          }, {
-            "children": [{
-              "text": "Index",
-              "type": "text"
-            }],
-            "name": "span",
-            "attrs": {
-              "style": "; color: #795da3; ;"
-            }
-          }, {
-            "text": " ",
-            "type": "text"
-          }, {
-            "children": [{
-              "text": "extends",
-              "type": "text"
-            }],
-            "name": "span",
-            "attrs": {
-              "style": "; color: #a71d5d; ;"
-            }
-          }, {
-            "text": " ",
-            "type": "text"
-          }, {
-            "children": [{
-              "text": "wepy",
-              "type": "text"
-            }],
-            "name": "span",
-            "attrs": {
-              "style": "; color: #795da3; ;"
-            }
-          }, {
-            "text": ".",
-            "type": "text"
-          }, {
-            "children": [{
-              "text": "page",
-              "type": "text"
-            }],
-            "name": "span",
-            "attrs": {
-              "style": "; color: #795da3; ;"
-            }
-          }, {
-            "text": " ",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "text": "{",
-          "type": "text"
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "text": "  config = {",
-          "type": "text"
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "text": "    ",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "usingComponents",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #795da3; ;"
-          }
-        }, {
-          "text": ": {",
-          "type": "text"
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "text": "      ",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "'parser'",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #df5000; ;"
-          }
-        }, {
-          "text": ": ",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "'/components/Parser/index'",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #df5000; ;"
-          }
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "text": "    }",
-          "type": "text"
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "text": "  }",
-          "type": "text"
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "text": "  data = {",
-          "type": "text"
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "text": "    ",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "html",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #795da3; ;"
-          }
-        }, {
-          "text": ": ",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "'<div>Hello World!</div>'",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #df5000; ;"
-          }
-        }, {
-          "text": ",",
-          "type": "text"
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "text": "  }",
-          "type": "text"
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }, {
-          "text": "}",
-          "type": "text"
-        }, {
-          "children": [],
-          "name": "br",
-          "attrs": {
-            "style": ";"
-          }
-        }],
-        "name": "span",
-        "attrs": {
-          "style": ";"
-        }
-      }, {
-        "children": [{
-          "text": "</",
-          "type": "text"
-        }, {
-          "children": [{
-            "text": "script",
-            "type": "text"
-          }],
-          "name": "span",
-          "attrs": {
-            "style": "; color: #63a35c; ;"
-          }
-        }, {
-          "text": ">",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": "; color: #333333; ;"
-        }
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }],
-    "name": "div",
-    "attrs": {
-      "style": ";font-family:monospace;white-space:pre;overflow:scroll;background-color:#f6f8fa;padding:5px;border-radius:5px; display: block; background: white; padding: 0.5em; color: #333333; overflow-x: auto; ;"
-    }
-  }],
-  emoji: [{
-    "children": [{
-      "children": [{
-        "text": "const",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #a71d5d;"
-      }
-    }, {
-      "text": " parserEmoji = ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "require",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"path/Parser/emoji.js\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": ");",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "children": [{
-        "text": "console",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": ".log(parserEmoji.getEmoji(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"笑脸\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": ")); ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "//笑脸的emoji字符",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #969896;"
-      }
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "parserEmoji.removeEmoji(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"笑脸\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": "); ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "//移除笑脸emoji",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #969896;"
-      }
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "parserEmoji.setEmoji(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"哈哈\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": ",",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"https://example.png\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": "); ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "//设置emoji，支持emoji字符或网络图片",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #969896;"
-      }
-    }],
-    "name": "div",
-    "attrs": {
-      "style": ";font-family:monospace;white-space:pre;overflow:scrollbackground-color:#f6f8fa;padding:5px;border-radius:5px;;\n  display: block;\n  background: white;\n  padding: 0.5em;\n  color: #333333;\n  overflow-x: auto;"
+      "style": ";font-family:monospace;white-space:pre;overflow:scroll;background-color:#f6f8fa;padding:5px;border-radius:5px;;; display: block; background: white; padding: 0.5em; color: #333333; overflow-x: auto; ;;",
+      "class": "hljs"
     }
   }],
   apicode: [{
@@ -4566,431 +3838,6 @@ module.exports = {
     "name": "div",
     "attrs": {
       "style": ";font-family:monospace;white-space:pre;overflow:scroll;background-color:#f6f8fa;padding:5px;border-radius:5px; display: block; background: white; padding: 0.5em; color: #333333; overflow-x: auto; ;"
-    }
-  }],
-  //api
-  html2nodes: [{
-    "children": [{
-      "children": [{
-        "text": "const",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #a71d5d;"
-      }
-    }, {
-      "text": " Api = ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "require",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"path/Parser/api.js\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": ");",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "Api.html2nodes(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"<div>Hello World!</div>\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": ").then(",
-      "type": "text"
-    }, {
-      "children": [{
-        "children": [{
-          "text": "res",
-          "type": "text"
-        }],
-        "name": "span",
-        "attrs": {
-          "style": ";"
-        }
-      }, {
-        "text": "=>",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "{",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "  ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "console",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": ".log(res);",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "})",
-      "type": "text"
-    }],
-    "name": "pre",
-    "attrs": {
-      "style": ";background-color:#f6f8fa;padding:5px;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;\n  display: block;\n  background: white;\n  padding: 0.5em;\n  color: #333333;\n  overflow-x: auto;"
-    }
-  }],
-  css2object: [{
-    "children": [{
-      "children": [{
-        "text": "const",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #a71d5d;"
-      }
-    }, {
-      "text": " Api = ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "require",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"path/Parser/api.js\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": ");",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "children": [{
-        "text": "console",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": ".log(Api.css2object(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\".demo{text-align:center}\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": "));",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "children": [{
-        "text": "//{.demo:\"text-align:center\"}",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #969896;"
-      }
-    }],
-    "name": "pre",
-    "attrs": {
-      "style": ";background-color:#f6f8fa;padding:5px;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;\n  display: block;\n  background: white;\n  padding: 0.5em;\n  color: #333333;\n  overflow-x: auto;"
-    }
-  }],
-  VersionHigherThan: [{
-    "children": [{
-      "children": [{
-        "text": "const",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #a71d5d;"
-      }
-    }, {
-      "text": " Api=",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "require",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "'path/Parser/api.js'",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": ");",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "children": [{
-        "text": "console",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": ".log(Api.VersionHigherThan(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "'2.7.1'",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": "));",
-      "type": "text"
-    }],
-    "name": "pre",
-    "attrs": {
-      "style": ";background-color:#f6f8fa;padding:5px;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;\n  display: block;\n  background: white;\n  padding: 0.5em;\n  color: #333333;\n  overflow-x: auto;"
-    }
-  }],
-  StrSplice: [{
-    "children": [{
-      "text": "var ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "Str",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": " = ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "\"Hello world!\"",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": ";",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "children": [{
-        "text": "Str",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": " = ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "Str",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": ".splice(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "6",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": ",",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "1",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": ",",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "'W'",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #df5000;"
-      }
-    }, {
-      "text": ");",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "console.",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "log",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "(",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "Str",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": ");",
-      "type": "text"
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "children": [{
-        "text": "//Hello World!",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": ";\n  color: #969896;"
-      }
-    }],
-    "name": "pre",
-    "attrs": {
-      "style": ";background-color:#f6f8fa;padding:5px;border-radius:5px;font-family:monospace;white-space:pre;overflow:scroll;\n  display: block;\n  background: white;\n  padding: 0.5em;\n  color: #333333;\n  overflow-x: auto;"
     }
   }]
 }

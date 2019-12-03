@@ -17,6 +17,9 @@
     window.$docsify = {
       name: 'Parser富文本插件',
       repo: 'https://github.com/jin-yufeng/Parser',
+	  loadSidebar: true,
+	  subMaxLevel: 5,
+	  homepage: 'features.md',
       search: {
         maxAge: 86400000,
         paths: ['/'],
@@ -24,7 +27,16 @@
         noData: '找不到结果',
         depth: 6
       }
-    }
+    };
+	var oldURL = "";
+	window.onhashchange = function(e){
+	  if(!/\?id=/.test(e.newURL)){
+	    if(e.newURL != oldURL)
+	      window.scrollTo(0,0);
+		oldURL = "";
+	  }
+	  else oldURL = e.oldURL;
+	}
 	function parse(){
 		var html = document.getElementById("input").value.replace(/<script[\s\S]*?\/script>/g,"");
 		document.getElementById("frame").srcdoc = html;
