@@ -4,8 +4,9 @@
 .point_type1{
   width:0.3em;
   height:0.3em;
+  overflow: hidden;
   border-radius: 50%;
-  background-color: black;
+  color: inherit;
   display:inline-block;
 }
 .point_type2{
@@ -19,6 +20,7 @@
 .point_type3{
   width:0.3em;
   height:0.3em;
-  background-color: black;
+  overflow: hidden;
+  color: inherit;
   display:inline-block;
 }

@@ -5,7 +5,7 @@ Page({
     page: 1,
     //标签的默认样式
     tagStyle: {
-      code: "font-style: italic; color: #005cc5;margin-left:3px;margin-right:3px;"
+      code: "font-style:italic;color:#005cc5;margin-left:3px;margin-right:3px;background-color:white"
     },
     //支持的匹配模式
     styles: [{
@@ -234,6 +234,11 @@ Page({
       default: 'true',
       notice: '是否自动将title标签中的内容设置到页面标题'
     }, {
+      name: 'cache-id',
+      type: 'String',
+      default: '',
+      notice: '缓存 id，设置后将把解析结果进行缓存，下次直接使用'
+    },{
       name: 'domain',
       type: 'String',
       default: '',
@@ -278,7 +283,7 @@ Page({
       渲染完成时调用，返回值是整个组件的<code>NodesRef</code>结构体，包含宽度、高度、位置等信息（每次传入的<code>html</code>修改后都会触发）
       </li>
       <li style="margin-top:5px;"><code>binderror</code><br/>
-      出错时时调用，返回值为一个结构体，其中<code>source</code>是错误来源（可能是<code>ad</code>广告出错、<code>video</code>视频加载出错、<code>audio</code>音频加载出错以及<code>parse</code>解析过程中出错）；<code>errMsg</code>是错误原因；<code>errCode</code>是错误代码（仅<code>ad</code>）；<code>target</code>属性中含有出错标签的具体信息
+      出错时时调用，返回值为一个结构体，其中<code>source</code>是错误来源（可能是<code>ad</code>广告出错、<code>video</code>视频加载出错、<code>audio</code>音频加载出错以及<code>parse</code>解析过程中出错）；<code>errMsg</code>是错误原因；<code>errCode</code>是错误代码（仅<code>ad</code>）；<code>target</code>属性中含有出错标签的具体信息；<code>context</code>是该音频/视频的<code>context</code>对象
       </li>
       <li style="margin-top:5px;"><code>bindlinkpress</code><br/>
       链接（<code>a</code>标签）受到点击时调用，返回值是一个形如<code>{href, ignore}</code>的结构体，其中<code>href</code>是被点击链接的<code>href</code>值，如果该链接不是简单的跳转，可以在此回调函数中进行进一步操作（如附件链接可以在这里下载和打开）；在回调中调用<code>ignore</code>函数将不自动跳转/复制链接
@@ -329,6 +334,18 @@ Page({
     }],
     //更新日志
     update: `<ul>
+    <li>2019.12.9:
+      <ol>
+        <li><code>A</code> 增加了<code>cache-id</code>属性，可以将解析结果缓存到<code>globalData</code>中，多次打开不用重复解析</li> 
+        <li><code>A</code> 增加了<code>getText</code>的<code>api</code>，可以获取到一个富文本中的所有文本内容</li>
+        <li><code>A</code> 增加了<code>getVideoContext</code>的<code>api</code>，可以获取到视频的<code>context</code>对象，用于操作播放状态</li>
+        <li><code>A</code> 增加了<code>highlight</code>代码高亮处理接口</li>
+        <li><code>U</code> 重构了解析脚本，提高了解析速度，减小了包的大小</li>  
+        <li><code>U</code> 解决了微信最新版开发者工具会报 <code>wx: key = "" does not look like a valid key name</code> 的警告的问题</li>  
+        <li><code>U</code> <code>error</code>回调将返回该视频的<code>context</code>对象，可以修改播放源</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.12.3:
       <ol>
         <li><code>A</code> 增加了<code>domain</code>属性，设置后可以自动给图片链接拼接主域名或协议名</li>
@@ -458,13 +475,11 @@ Page({
       section = "update";
     this.setData({
       page: this.data.page + 1,
-      //section
-    })
-    setTimeout(()=>{
+    },()=>{
       this.setData({
         section
       })
-    },3000)
+    })
   },
   gotop() {
     this.setData({

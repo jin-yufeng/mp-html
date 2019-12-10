@@ -3,18 +3,18 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 42.3KB | 微信小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 30.3KB | 微信小程序插件包压缩版（功能相同） |
-| [Parser.bd](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd) | 40.1KB | 百度小程序插件包 |
-| [Parser.bd.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd.min) | 29.0KB | 百度小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 56.8KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 44.1KB | 微信/QQ小程序插件包 |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 30.7KB | 微信/QQ小程序插件包压缩版（功能相同） |
+| [Parser.bd](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd) | 42.4KB | 百度小程序插件包 |
+| [Parser.bd.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd.min) | 28.8KB | 百度小程序插件包压缩版（功能相同） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 55.5KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异：
-1. 仅微信小程序、`QQ`小程序、`APP` 支持 `lazy-load` 属性
+1. 仅微信小程序、`QQ`小程序、`APP`、`H5` 支持 `lazy-load` 属性
 2. 仅微信小程序、`QQ`小程序、百度小程序支持 `ad` 组件
 3. 微信小程序、`QQ`小程序、`H5`、`APP` 支持所有实体编码
 4. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`
-5. 支付宝小程序不支持 `autopause` 属性
+5. 支付宝小程序不支持 `autopause` 属性，没有 `getVideoContext` 的 `api`  
 6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性
 
 !>`uni-app` 包为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
@@ -154,6 +154,7 @@
 | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 | [20190510](/changelog#v20190510) |
 | autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 | [20190913](/changelog#v20190913) |
 | autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题上 | [20190724](/changelog#v20190724) |
+| cache-id | String |  | 否 | 缓存的 id，设置后一次解析完成后将自动保存到 globalData 中，下次直接读取 | [20191208](/changelog#v20191210) |
 | domain | String |  | 否 | 主域名，设置后将给图片地址自动拼接上主域名或协议名 | [20191202](/changelog#v20191202) |
 | img-mode | String | default | 否 | 图片显示模式 | [20190610](/changelog#v20190610) |
 | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 | [20190928](/changelog#v20190928) |
@@ -181,23 +182,25 @@
   1. 通过 `a` 标签跳转  
      `a` 标签的 `href` 属性设置为 `#id` 即可，在按下时将自动跳转到锚点所在位置，`href` 设置为 `#` 时将跳转到**插件**的顶部（自动跳转的前提是锚点存在且 `use-anchor` 属性设置为 `true`）  
   2. 通过获取组件实例手动跳转  
-     可在页面中通过 `this.selectComponent("#id").navigateTo({id, success, fail})` 实现手动跳转，`id` 是要跳转的锚点的 `id`（不加 `#`，为空时将跳转到插件顶部），`success` 和 `fail` 为成功和失败回调。此函数**必须在** `ready` 回调及以后才能使用；此函数没有设置 `use-anchor` 时也可以使用，但**只能**跳转到通过组件递归显示的节点（如图片等，其他被 `rich-text` 显示的节点是找不到的）  
+     此方法没有设置 `use-anchor` 时也可以使用，但**只能**跳转到通过组件递归显示的节点（如图片等，其他被 `rich-text` 显示的节点是找不到的），具体见 [navigateTo](#navigateTo)  
   
   示例代码可见 [设置锚点](/features#设置锚点)
 
   !>将 `use-anchor` 设置成 `true` 会把所有设置了 `id` 的标签都通过组件递归的方式暴露出来而不是直接通过 `rich-text` 显示，这将一定程度上增加标签数，减慢渲染速度，如非必要，不建议使用  
 
-!>`tag-style`、`domain` 和 `use-anchor` 属性仅传入的 `html` 为 `String` 类型时有效（在解析过程中设置）；`uni-app` 包编译到 `H5` 时 `domain` 属性无效（浏览器自动获取 `domain`） 
+!>整个应用中每个 `cache-id` 只能唯一对应一个 `html` 内容，如果动态修改了 `html` 的内容，也必须修改 `cache-id`，否则还是读取上次缓存的内容。建议对不需要动态修改，可能在一个应用生命周期内多次打开的内容进行缓存，可以节省解析时间  
+
+!>`tag-style`、`cacheId`、`domain` 和 `use-anchor` 属性仅传入的 `html` 为 `String` 类型时有效（在解析过程中设置）；`uni-app` 包编译到 `H5` 时 `domain` 属性无效（浏览器自动获取 `domain`） 
 
 ### 回调函数 ###
 
 | 名称 | 功能 | 说明 |
 |:----:|----|----|
-| bindparser | 在解析完成时调用（仅传入的 html 类型为 String 时调用） | 返回一个 object，其中 nodes 为解析后的节点数组，imgList 为图片列表，title 是页面标题，该 object 可以在下次调用直接作为 html 属性的值，节省解析的时间 |
-| bindready | 渲染完成时调用 | 返回整个组件的 NodesRef 结构体，包含宽度、高度、位置等信息（每次 html 修改后都会触发） |
-| binderror | 出错时调用 | 返回一个 object，其中 source 是错误来源（ad 广告出错、video 视频加载出错、audio 音频加载出错、parse 解析过程中出错），errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息 |
-| bindimgtap | 在图片受到点击时调用 | 返回一个形如 {id, src, ignore} 的结构体，src 是图片链接；在回调函数中调用 ignore 函数将不进行预览；可用于阻挡 onShow 的调用 |
-| bindlinkpress | 在链接受到点击时调用 | 返回一个形如 {href, ignore} 的结构体（href 是链接地址），开发者可以在该回调中进行进一步操作，如下载文档和打开等；在回调函数中调用 ignore 将不自动跳转/复制 |  
+| parse | 在解析完成时调用（仅传入的 html 类型为 String 时触发） | 返回一个 object，其中 nodes 为解析后的节点数组，imgList 为图片列表，title 是页面标题，该 object 可以在下次调用直接作为 html 属性的值，节省解析的时间 |
+| ready | 渲染完成时调用 | 返回整个组件的 NodesRef 结构体，包含宽度、高度、位置等信息（每次 html 修改后都会触发） |
+| error | 出错时调用 | 返回一个 object，其中 source 是错误来源（ad 广告出错、video 视频加载出错、audio 音频加载出错、parse 解析过程中出错），errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息，context 是视频的 context 对象，可以设置新的源 |
+| imgtap | 在图片受到点击时调用 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览；可用于阻挡 onShow 的调用 |
+| linkpress | 在链接受到点击时调用 | 返回一个object，其中 href 是链接地址，ignore 是一个函数，在回调中调用将不自动跳转/复制；开发者可以在该回调中进行进一步操作，如下载文档和打开等 |  
   
 >关于图片和链接被点击返回的 `ignore` 函数的解释：类似于 `a` 标签 `onclick` 回调返回 `false` 将不跳转一样，由于 `event` 无法获取返回值，故增加此函数，若在回调函数中执行，则不自动进行预览/跳转/复制链接操作，可执行自定义操作（这两个回调函数应尽量简短）  
 
@@ -211,7 +214,7 @@ linkpress(e){
 
 !>原生包所有回调函数的返回值从 `e.detail` 中获取  
 
-!>`uni-app` 包的回调函数以 `@` 开头，如 `@ready`  
+!>原生包的回调函数以 `bind` 或 `catch` 开头，如 `bindready`；`uni-app` 包的回调函数以 `@` 开头，如 `@ready`  
 
 ### 使用外部样式 ###
 如果需要使用一些固定的样式，可以通过 `wxss` / `css` 文件引入  
@@ -230,6 +233,90 @@ linkpress(e){
 
 !>通过这种方式引入的样式会对所有 `parser` 标签生效，如果是对单个 `parser` 使用的样式，请使用 `style` 标签；另外，这种方式引入的样式优先级最低  
 
+!>`uni-app` 包编译到 `H5` 时这种样式无效，请使用 `style` 标签  
+
+### 配置项 ###
+
+| 配置项 | 作用 |
+|:---:|:---:|
+| trustTags | 信任的标签列表 |
+| blockTags | 块级标签列表 |
+| ignoreTags | 移除的标签列表 |
+| selfClosingTags | 自闭合的标签列表 |
+| userAgentStyles | 默认的样式 |
+| highlight | 高亮处理函数 |
+| LabelAttrsHandler | 标签属性处理函数 |
+| trustAttrs | 信任的属性 |
+
+?>配置项在 `/libs/config.js` 中配置，对所有 `parser` 标签生效
+
+- 关于高亮函数  
+  高亮函数用于实现代码高亮，这里留有一个接口，如有需要可自行实现此函数。高亮处理函数的输入值有两个，第一个是 `pre` 标签的内容，第二个是该 `pre` 标签的属性列表（可以记录语言信息等），返回值是高亮处理后的 `html` 文本；示例（以 [prismjs](https://prismjs.com/) 为例）：
+
+  ```javascript
+  // libs/config.js
+  const Prism = require('./prism.js');
+  var highlight = (content, attrs) => Prism.highlight(content, Prism.languages.javascript, 'javascript');
+  ```
+  同时需要通过 [外部样式](#使用外部样式) 或 `style` 标签引入高亮样式
+  ```css
+  /* trees/trees.wxss */
+  @import '../libs/prism.wxss';
+  ```
+
+!>不在信任的属性列表中的属性将被移除  
+不在信任的标签列表中的标签，除被移除的标签外，块级标签列表中的标签将被转为 `div` 标签，其他被转为 `span` 标签
+
+### 长内容处理 ###
+如果富文本内容特别长，通过 `setData` 无法设置或者有超出 `1000` 个标签，可以采用微信官方提供的 [长列表组件](https://developers.weixin.qq.com/miniprogram/dev/extended/component-plus/recycle-view.html) 进行处理（需要将内容拆分成多个章节，且需要提供每个章节的高度），这里提供一个简单的示例  
+```wxml
+<recycle-view batch="{{batchSetRecycleData}}" id="recycleId">
+  <recycle-item wx:for="{{recycleList}}" wx:key="id">
+      <parser html="{{item.content}}" />
+  </recycle-item>
+</recycle-view>
+```
+```javascript
+const createRecycleContext = require('miniprogram-recycle-view')
+Page({
+  onReady: function() {
+    this.ctx = createRecycleContext({
+      id: 'recycleId',
+      dataKey: 'recycleList',
+      page: this,
+      itemSize: this.itemSizeFunc
+    })
+    // 这里设置了 100 个章节，每个章节高度为 500px
+    var longarray = [];
+    for (var i = 1; i <= 100; i++) {
+      longarray.push({
+        id: "section" + i,
+        content: "<div style='width:100vw;height:500px;display:flex;justify-content:center;align-items:center'>section" + i + "</div>"
+      })
+    }
+    this.ctx.append(longarray)
+  },
+  itemSizeFunc: function(item, idx) {
+    // 可以给不同章节设置不同的高度
+    return {
+      width: this.ctx.transformRpx(750),
+      height: 500
+    }
+  }
+})
+```
+```json
+{
+  "usingComponents": {
+    "recycle-view": "/miniprogram_npm/miniprogram-recycle-view/recycle-view",
+    "recycle-item": "/miniprogram_npm/miniprogram-recycle-view/recycle-item",
+    "parser": "/Parser/index"
+  }
+}
+```
+
+!>拆分成多个 `parser` 标签后预览时不能直接通过左右滑动查看所有图片，如果需要可以获取组件实例并修改 `component.data.imgList`
+
 ### 基础库要求 ###
 微信小程序：
   
@@ -245,43 +332,82 @@ linkpress(e){
 !>百度小程序基础库版本 `3.60`（客户端版本 `11.9`）以下的可能无法正常显示  
 
 ### Api ### 
-- `html2nodes`  
-  功能：解析 `html` 字符串  
-  参数：`html`（要解析的字符串）, `tagStyle`（默认的标签样式）  
-  返回值：同 `bindparse`，可作为 `html` 属性的参数  
-  ```javascript
-  const Api=require("path/Parser/api.js");
-  Api.html2nodes("<div>Hello World!</div>").then(res=>{
-    console.log(res);
+
+#### getText ####
+功能：获取富文本中的所有文本内容（对于 `div`, `p`, `br` 等标签会自动插入一个换行符）  
+使用方法：
+```wxml
+<parser id="article" html="{{html}}"></parser>
+```
+```javascript
+console.log(this.selectComponent("#article").getText());
+```
+
+#### navigateTo ####
+功能：跳转到指定的锚点
+输入值：一个 `object`，`id` 为锚点的 `id`（为空时将跳转到组件顶部），`success` 和 `fail` 是成功和失败的回调（需要配合 `use-anchor` 属性使用）  
+使用方法：  
+```wxml
+<parser id="article" html="{{html}}" use-anchor bindready="ready"></parser>
+```
+```javascript
+data:{
+  html: "<div id='test'></div>"
+},
+ready(){
+  this.selectComponent("#article").navigateTo({
+    id: "test",
+    success: console.log,
+    fail: console.error
   })
-  ```   
-- `css2object`  
-  功能：解析 `css` 字符串  
-  参数：`style`（要解析的字符串）, `tagStyle`（已有的样式）  
-  返回值：一个形如{key: value}的结构体，可作为 `tag-style` 属性的值  
-  ```javascript
-  const Api=require("path/Parser/api.js");
-  console.log(Api.css2object(".demo{text-align:center;}"));
-  //{.demo:"text-align:center;"}
-  ```
-- `versionHigherThan`  
-  功能：判断当前设备的基础库版本是否高于或等于输入的版本  
-  参数：`version`（要比较的基础库版本号）  
-  返回值：若当前设备的基础库版本高于或等于输入的版本，返回 `true`，否则返回 `false`  
-  ```javascript
-  const Api=require("path/Parser/api.js");
-  console.log(Api.versionHigherThan("2.7.1"));
-  ```
-- `String.splice`  
-  功能：对字符串的指定位置进行删改（类似于数组的 `splice` 方法）  
-  参数：`start`（开始修改的位置，为负数时表示倒数第几个）, `deleteCount`（要删除的字符个数）, `addStr`（要添加的字符串）  
-  返回值：修改后的字符串（该方法不改变原字符串，不需要引入文件）  
-  ```javascript
-  var Str="Hello world!";
-  Str=Str.splice(6,1,'W');
-  console.log(Str);
-  //Hello World
-  ```
+}
+```
+
+#### getVideoContext ####
+功能：获取组件中视频的 `context` 对象，可以操控视频的播放  
+输入值：`video` 标签的 `id`（没有设置 `id` 时会被自动设置为 `video + i`，不输入返回一个包含所有视频的数组）  
+使用方法：
+```wxml
+<parser id="article" html="{{html}}"></parser>
+```
+```javascript
+// 返回 id=test 的 video 标签的 context，不存在则返回 null
+console.log(this.selectComponent("#article").getVideoContext("test"));
+```
+
+!>以上 `api` 都需要获取组件实例来调用，需要等待渲染完成，建议在 `ready` 回调中或之后使用  
+
+#### parseHtml ####  
+功能：解析 `html` 字符串  
+输入值：第一个参数为 `html` 字符串；第二个参数为 `options`（包括 `tagStyle`, `domain`, `useAnchor`)  
+返回值：一个形如 `{nodes, text, title, imgList}` 的结构体，可以作为 `html` 属性的值，其中的`nodes` 可以作为 `rich-text` 的 `nodes` 属性的值
+```javascript
+const MpHtmlParser = require("/Parser/libs/MpHtmlParser.js");
+// 异步方法
+MpHtmlParser.parseHtml("<div>Hello World!</div>").then(res=>{
+  console.log(res);
+});
+// 同步方法
+console.log(MpHtmlParser.parseHtmlSync("<div>Hello World!</div>"));
+```
+
+#### parseCss ####  
+功能：解析 `css` 字符串  
+输入值：一个 `css` 字符串  
+返回值：一个形如 `{key: value}` 的结构体，可以作为 `tag-style` 属性的值  
+```javascript
+const CssHandler = require("/Parser/libs/CssHandler.js");
+console.log(new CssHandler().parseCss(".test{text-align:center}")); //{".demo":"text-align:center"}
+```
+
+#### versionHigherThan ####  
+功能：比较当前基础库版本是否高于输入版本  
+输入值：一个基础库版本  
+返回值：若当前基础库版本高于或等于输入值，返回 `true`；否则，返回 `false`  
+```javascript
+const versionHigherThan = require("/Parser/libs/config.js").versionHigherThan;
+console.log(versionHigherThan("2.7.1"));
+```
 
 ## 补丁包 ##
 [patches](https://github.com/jin-yufeng/Parser/tree/master/patches) 文件夹中准备了一些补丁包，可根据需要选用，可以实现更加丰富的功能  
@@ -290,11 +416,11 @@ linkpress(e){
 - 功能  
   将形如 `[笑脸]` 的文本解析为 `emoji` 小表情  
 - 大小  
-  `4.70KB`（`min` 版本 `3.61KB`）  
+  `4.85KB`（`min` 版本 `3.61KB`）  
 - 使用方法  
-  将 `emoji.js` 复制到 `Parser` 文件夹下即可（若使用 `min` 版本也要改名为 `emoji.js`）  
+  将 `emoji.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `emoji.js`）  
   
-  !>在 uni-app 中使用时需要将 Domhandler.js 首行改为 const emoji = require('./emoji.js');  
+  !>在 uni-app 中使用时需要将 libs/MpHtmlParser.js 首行改为 const emoji = require('./emoji.js');  
   
   默认配置中支持 `177` 个常用的 `emoji` 小表情  
   支持两种形式的 `emoji`，一是 `emoji` 字符（不同设备上显示的样子可能不同），或者是网络图片（将按照 `16px` × `16px` 的大小显示，且不可放大预览），默认配置中都是 `emoji` 字符，可使用以下 `api` 获取或修改：  
@@ -309,11 +435,11 @@ linkpress(e){
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `4.66KB`（`min` 版本 `3.61KB`）  
+  `4.82KB`（`min` 版本 `3.61KB`）  
 - 使用方法  
-  将 `document.js` 复制到 `Parser` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
+  将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
-  !>在 uni-app 中使用时需要将 index.vue 中的 27 行修改为 const Document = require('./document.js');  
+  !>在 uni-app 中使用时需要将 index.vue 中的 29 行修改为 const Document = require('./document.js');  
   
 document 类：  
 获取方式：可通过 `this.selectComponent("#id").document` 获取  
@@ -392,7 +518,7 @@ error(e){
   模拟 `ol`、`ul`、`li` 标签  
   `ol` 标签支持 `start` 和 `type` 属性；`ul` 标签会自动根据层级显示不同的样式  
 - 大小  
-  `4.79KB`  
+  `4.65KB`  
 
 !>此补丁包**仅能**在微信小程序中使用  
 
@@ -413,7 +539,7 @@ error(e){
        "li": "../list/li"
      }
      ```  
-  5. 将 `Parser/DomHandler.js` 中 `trustTag` 结构体的 `ol`、`ul`、`li` 属性值改为 `1`  
+  5. 将 `Parser/libs/config.js` 中 `trustTags` 结构体的 `ol`、`ul`、`li` 属性值改为 `1`  
   - 可参考 `demo` 文件夹中的 [Parser](https://github.com/jin-yufeng/Parser/tree/master/demo/wx/Parser)（已装载此补丁包）  
   
 >对于 `ol` 标签，`type` 为阿拉伯数字（默认）时没有数量限制；为字母时最多包含26个子项；为罗马数字时最多包含20个子项
@@ -469,7 +595,7 @@ error(e){
 | .class::after | .demo::after | &lt;element class="demo" ::after&gt; |
 
 - 大小（与原大小相比增加）  
-  `3.75KB`（`min` 版本：`2.14KB`）  
+  `4.49KB`（`min` 版本：`2.82KB`）  
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
@@ -497,9 +623,12 @@ parser(html).then(function(res){
 ```
 详细文档参考： [npm链接](https://www.npmjs.com/package/parser-wxapp)
 
-## 原理简介 ##
-&emsp;&emsp;本插件对 `rich-text` 组件进行了二次封装，对于节点下有 `img`, `video`, `a` 标签的，使用自定义组件递归的方式显示，否则直接通过 `rich-text` 组件显示，这样既解决了 `WxParse` 中过多的标签数（`rich-text` 可以节省大量的标签），层数容易不够（自定义组件递归可以显示无限层级），无法解析表格，一些组件显示格式不正确（`rich-text` 可以解析出更好的效果）等缺点；也弥补了 `rich-text` 图片无法预览，无法显示视频，无法复制链接，部分标签不支持（在解析过程中进行替换）等缺点，另外该解析脚本还减小了包的大小，提高了解析效率，通过包装成一个自定义组件，简单易用且功能强大。  
-更多可见：[《小程序富文本能力的深入研究与应用》](https://developers.weixin.qq.com/community/develop/article/doc/0006e05c1e8dd80b78a8d49f356413)
+## 二次开发 ##
+- 解析过程流程图  
+  ![解析流程图](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E8%A7%A3%E6%9E%90%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?sign=e56509c626c1466e4fc61128f784acbc&t=1575800648)  
+  
+- 渲染过程流程图  
+  ![渲染流程图](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?sign=3a3b10fe783bc068ad5f6800badf4f14&t=1575800687)
 
 ## 许可与支持 ##
 - 许可  
@@ -543,7 +672,7 @@ parser(html).then(function(res){
    本插件并不是支持所有的选择器，请留意支持的选择器类型，如果用了不支持的选择器，该样式将被忽略  
   
 8. 不能正确显示一些网站的问题  
-   很多网站的内容是在 `js` 脚本中动态加载的，这些内容在本插件解析中将被直接忽略；本插件并不能替代 `web-view` 的功能，仅建议用于富文本编辑器编辑的富文本或简单的静态网页  
+   很多网站的内容是在 `js` 脚本中动态加载的，这些内容在本插件解析中将被直接忽略（包括 `iframe` 视频）；本插件并不能替代 `web-view` 的功能，仅建议用于富文本编辑器编辑的富文本或简单的静态网页  
 
 ### 反馈问题 ###
 在反馈问题前，请先通过以下方式尝试解决：  

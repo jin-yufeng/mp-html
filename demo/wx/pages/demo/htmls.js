@@ -225,7 +225,7 @@ var demo1 = `<style>
           </section>
           <section style="padding:0px 0.4em 0px 0.5em;font-size: 16px;letter-spacing: 1.5px;color: #71868f;">
             <p>
-              <strong>多媒体渲染</strong>
+              <strong>图片渲染</strong>
             </p>
           </section>
         </section>
@@ -286,14 +286,6 @@ var demo1 = `<style>
       </p>
     </section>
   </section>
-  <section>
-    <p>
-        <br/>
-    </p>
-  </section>
-  <div style="text-align:center;">
-    <audio src="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.mp3?sign=26efc4b914843ae759f2ba521d609376&t=1572189640" poster= "https://6874-html-foe72-1259071903.tcb.qcloud.la/music.jpg?sign=65bb0c1dee9ce814304a3b06641914c6&t=1572189675" name="致爱丽丝" author="暂无" controls></audio>   
-  </div>
   <br />
   <section style="border: 0px none;">
     <section style="padding: 10px;">

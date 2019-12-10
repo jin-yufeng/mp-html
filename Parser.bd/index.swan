@@ -3,5 +3,4 @@
 <trees id="contain{{id}}"
 	style="{{(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')}}"
 	animation="{{showAnimation}}" nodes="{{html.nodes||((html[0].name||html[0].type)?html:nodes)}}"
-	controls="{{controls}}" catchpreview="previewEvent" catchplay="_playVideo" catchlinkpress="tapEvent"
-	catcherror="errorEvent" />
+	controls="{{controls}}" />

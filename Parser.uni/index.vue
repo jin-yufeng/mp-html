@@ -2,13 +2,12 @@
 	<view>
 		<!--#ifdef H5-->
 		<slot v-if="!html"></slot>
-		<iframe id="contain" :style="'width:100%;'+(selectable?'user-select:text;-webkit-user-select:text':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')"
-		 frameborder="0"></iframe>
+		<div :id="'rtf' + uid" :style="(selectable?'user-select:text;-webkit-user-select:text':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')"></div>
 		<!--#endif-->
 		<!--#ifndef H5-->
 		<slot v-if="!(html.nodes||((html&&(html[0].name||html[0].type))?1:nodes.length))"></slot>
 		<!--#endif-->
-		<!--#ifdef MP-ALIPAY || H5-->
+		<!--#ifdef MP-ALIPAY-->
 		<view class="contain" :style="(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
 		 :animation="showAnimation">
 			<trees :nodes="html.nodes||((html&&(html[0].name||html[0].type))?html:nodes)" :imgMode="imgMode" />
@@ -17,20 +16,16 @@
 		<!--#ifndef MP-ALIPAY || H5-->
 		<trees class="contain" :style="'display:block'+(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
 		 :animation="showAnimation" :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode"
-		 :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
+		 :loadVideo="loadVideo" />
 		<!--#endif-->
 	</view>
 </template>
 
 <script>
 	import trees from "./trees"
-	const html2nodes = require("./Parser.js");
-	// #ifdef MP-WEIXIN || MP-QQ
-	const CanIUseObserver = require("./api.js").versionHigherThan('1.9.3');
-	// #endif
-	// #ifdef APP-PLUS
-	const CanIUseObserver = true;
-	// #endif
+	const parseHtmlSync = require('./libs/MpHtmlParser.js').parseHtmlSync;
+	const config = require('./libs/config.js');
+	const App = getApp();
 	var Document; // 使用document补丁包时将此句改为 const Document = require('./document.js');
 	export default {
 		name: 'parser',
@@ -40,6 +35,9 @@
 				showAnimation: {},
 				// #ifdef APP-PLUS
 				loadVideo: false,
+				// #endif
+				// #ifdef H5
+				uid: this._uid,
 				// #endif
 			}
 		},
@@ -69,15 +67,19 @@
 				type: Boolean,
 				default: true
 			},
+			'cacheId': {
+				type: String,
+				default: null
+			},
 			'domain': {
 				type: String,
-				default: ''
+				default: null
 			},
 			'imgMode': {
 				type: String,
 				default: 'default'
 			},
-			// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
+			// #ifdef MP-WEIXIN || MP-QQ || H5 || APP-PLUS
 			'lazyLoad': {
 				type: Boolean,
 				default: false
@@ -109,109 +111,153 @@
 		mounted() {
 			this.execHtml(this.html);
 			// #ifndef MP-ALIPAY || H5
-			this.videoContext = [];
+			this.videoContexts = [];
 			// #endif
 			// #ifdef MP-BAIDU || MP-ALIPAY
 			this.anchors = [];
 			// #endif
 		},
+		// #ifdef H5
+		beforeDestroy() {
+			if (this._observer) this._observer.disconnect();
+		},
+		// #endif
 		methods: {
 			execHtml(html) {
 				// #ifdef H5
-				var iframe = document.getElementById("contain");
-				// 支持 iframe.srcdoc
-				if (typeof(iframe.srcdoc) == "string") {
-					var script =
-						'<script>"use strict";function calcPageHeight(t){var e=Math.max(t.body.clientHeight,t.documentElement.clientHeight),n=Math.max(t.body.scrollHeight,t.documentElement.scrollHeight);return Math.max(e,n)}document.addEventListener("DOMContentLoaded",function(){for(var t=document.getElementsByTagName("img"),e=[],n=0;n<t.length;n++){var r=t[n];r.style+=";max-width:100%",e.push(r.src),r.index=n,"A"!=r.parentElement.nodeName&&(r.onclick=function(){parent.document.previewEvent(this,e)}),r.onerror=function(){parent.document.errorEvent(this,"img")};var o=document.getElementsByTagName("a"),a=!0,i=!1,c=void 0;try{for(var u,l=o[Symbol.iterator]();!(a=(u=l.next()).done);a=!0){u.value.onclick=function(t){if("#"==this.getAttribute("href")[0]){var e=document.getElementById(this.getAttribute("href").substring(1));return parent.document.tapEvent(this,e?e.offsetTop:-1)}return parent.document.tapEvent(this)}}}catch(t){i=!0,c=t}finally{try{!a&&l.return&&l.return()}finally{if(i)throw c}}var d=document.getElementsByTagName("video"),m=!0,h=!1,s=void 0;try{for(var v,y=d[Symbol.iterator]();!(m=(v=y.next()).done);m=!0){var f=v.value;f.style+=";max-width:100%",f.onerror=function(){parent.document.errorEvent(this,"video")},f.onplay=function(){parent.document.playEvent(this)}}}catch(t){h=!0,s=t}finally{try{!m&&y.return&&y.return()}finally{if(h)throw s}}parent.document.setVideoContext(d);var g=document.getElementsByTagName("audios"),p=!0,E=!1,x=void 0;try{for(var b,w=g[Symbol.iterator]();!(p=(b=w.next()).done);p=!0){b.value.onerror=function(t){parent.document.errorEvent(this,"audio")}}}catch(t){E=!0,x=t}finally{try{!p&&w.return&&w.return()}finally{if(E)throw x}}}},!1),window.onload=function(){var t=calcPageHeight(document);parent.document.getElementById("contain").style.height=t+"px",parent.document.setTitle(document.title)};<\/script>';
-					if (!html) return;
-					if (typeof html != 'string') {
-						if (typeof html == 'object') {
-							var str = "";
-							for (var node of (html.nodes || html))
-								str += this.Dom2Str(node);
-							html = str;
-						} else {
-							this.$emit('error', {
-								source: "parse",
-								errMsg: "传入的html格式不正确！"
-							});
-							return;
+				if (!html) html = '';
+				if (typeof html != 'string') html = this.Dom2Str(html.nodes || html);
+				// 处理 rpx
+				if (/[0-9.]*?rpx/.test(html)) {
+					var rpx = uni.getSystemInfoSync().screenWidth / 750;
+					html = html.replace(/([0-9.]*?)rpx/g, function() {
+						return parseFloat(arguments[1]) * rpx + "px";
+					})
+				}
+				// 处理 tag-style 和 userAgentStyles
+				var style = "<style>";
+				for (var item in config.userAgentStyles)
+					style += (item + '{' + config.userAgentStyles[item] + '}');
+				for (var item in this.tagStyle || {})
+					style += (item + '{' + config.userAgentStyles[item] + '}');
+				style += "</style>";
+				html = style + html;
+				var rtf = document.createElement('div');
+				rtf.innerHTML = html;
+				for (var style of rtf.getElementsByTagName("style")) {
+					style.innerHTML = style.innerHTML.replace(/\s*body/g, "#rtf" + this._uid);
+					style.setAttribute("scoped", "true");
+				}
+				this.imgList = [];
+				var imgs = rtf.getElementsByTagName("img");
+				if (this.lazyLoad && IntersectionObserver) {
+					this._observer = new IntersectionObserver(changes => {
+						for (var change of changes) {
+							if (change.isIntersecting) {
+								change.target.src = change.target.getAttribute("data-src");
+								change.target.removeAttribute("data-src");
+								this._observer.unobserve(change.target);
+							}
 						}
-					}
-					// 处理 rpx
-					if (/[0-9.]*?rpx/.test(html)) {
-						var rpx = uni.getSystemInfoSync().screenWidth / 750;
-						html = html.replace(/([0-9.]*?)rpx/g, function() {
-							return parseFloat(arguments[1]) * rpx + "px";
-						})
-					}
-					document.previewEvent = (img, imgList) => {
-						if (!img.hasAttribute('ignore')) {
-							var preview = true;
-							img.ignore = () => preview = false;
-							this.$emit('imgtap', img);
-							if (preview && this.autopreview) {
-								uni.previewImage({
-									current: img.index,
-									urls: imgList
-								});
+					}, {
+						rootMargin: "1000px 0px 1000px 0px"
+					})
+				}
+				var component = this;
+				for (var i = 0; i < imgs.length; i++) {
+					var img = imgs[i];
+					img.style.maxWidth = "100%";
+					img.index = i;
+					component.imgList.push(img.src);
+					if (img.parentElement.nodeName != 'A') {
+						img.onclick = function() {
+							if (!this.hasAttribute('ignore')) {
+								var preview = true;
+								this.ignore = () => preview = false;
+								component.$emit('imgtap', this);
+								if (preview && component.autopreview) {
+									uni.previewImage({
+										current: this.index,
+										urls: component.imgList
+									});
+								}
 							}
 						}
 					}
-					document.tapEvent = (link, offsetTop) => {
+					img.onerror = function() {
+						component.$emit('error', {
+							source: "img",
+							target: this
+						});
+					}
+					if (component.lazyLoad && this._observer) {
+						img.setAttribute("data-src", img.src);
+						img.removeAttribute("src");
+						this._observer.observe(img);
+					}
+				}
+				var links = rtf.getElementsByTagName("a");
+				for (var link of links) {
+					link.onclick = function(e) {
 						var jump = true;
-						this.$emit('linkpress', {
-							href: link.getAttribute("href"),
+						component.$emit('linkpress', {
+							href: this.getAttribute("href"),
 							ignore: () => jump = false
 						});
-						if (jump && link.getAttribute("href")) {
-							if (link.getAttribute("href")[0] == '#') {
-								if (this.useAnchor)
-									window.scrollTo(0, iframe.offsetTop + offsetTop);
-							} else if (/^http/.test(link.getAttribute("href"))) {
-								if (this.autocopy)
-									window.location.href = link.href;
+						if (jump && this.getAttribute("href")) {
+							if (this.getAttribute("href")[0] == '#') {
+								if (component.useAnchor) {
+									var target = document.getElementById(this.getAttribute('href').substring(1));
+									if (target)
+										window.scrollTo(0, target.offsetTop);
+								}
+							} else if (/^http/.test(this.getAttribute("href"))) {
+								if (component.autocopy)
+									window.location.href = this.href;
 							} else {
 								uni.navigateTo({
-									url: link.getAttribute("href")
+									url: this.getAttribute("href")
 								})
 							}
 						}
 						return false;
 					}
-					document.setTitle = (title) => {
-						if (title && this.autosetTitle) {
-							uni.setNavigationBarTitle({
-								title: title
-							})
-						}
-						if (html)
-							uni.createSelectorQuery().in(this).select("#contain").boundingClientRect(res => {
-								this.$emit('ready', res);
-							}).exec()
-					}
-					document.errorEvent = (target, source) => {
-						this.$emit('error', {
-							source,
-							target
+				}
+				var videos = rtf.getElementsByTagName("video");
+				component.videoContexts = videos;
+				for (var video of videos) {
+					video.style.maxWidth = "100%";
+					video.onerror = function() {
+						component.$emit('error', {
+							source: "video",
+							target: this
 						});
 					}
-					document.setVideoContext = (videos) => {
-						this.videoContext = videos;
-					}
-					document.playEvent = (v) => {
-						if (this.autopause) {
-							for (var video of this.videoContext) {
-								if (video != v)
+					video.onplay = function() {
+						if (component.autopause) {
+							for (var video of component.videoContexts) {
+								if (video != this)
 									video.pause();
 							}
 						}
 					}
-					iframe.srcdoc = script + html;
-					this.showAnimation =
-						"opacity: 1; transition: opacity 400ms ease 0ms, -webkit-transform 400ms ease 0ms, transform 400ms ease 0ms; transform-origin: 50% 50% 0px;";
-					return;
 				}
+				var audios = rtf.getElementsByTagName("audios");
+				for (var audio of audios) {
+					audio.onerror = function(e) {
+						component.$emit('error', {
+							source: "audio",
+							target: this
+						});
+					}
+				}
+				document.getElementById("rtf" + this._uid).appendChild(rtf);
+				this.showAnimation =
+					"opacity: 1; transition: opacity 400ms ease 0ms, -webkit-transform 400ms ease 0ms, transform 400ms ease 0ms; transform-origin: 50% 50% 0px;";
+				this.$nextTick(() => {
+					this.$emit("ready", rtf.getBoundingClientRect());
+				})
+				return;
 				// #endif
 				let showAnimation = {};
 				if (this.showWithAnimation) {
@@ -223,27 +269,32 @@
 				if (!html) {
 					this.nodes = [];
 				} else if (typeof html == 'string') {
-					html2nodes(html, this).then(res => {
-						// #ifdef APP-PLUS
-						this.loadVideo = false;
-						// #endif
-						this.nodes = res.nodes;
-						this.showAnimation = showAnimation;
-						this.imgList = res.imgList;
-						if (Document) this.document = new Document("nodes", res.nodes, this);
-						if (res.title && this.autosetTitle) {
-							uni.setNavigationBarTitle({
-								title: res.title
-							})
+					var res;
+					// 缓存读取
+					if (this.cacheId) {
+						App.globalData = App.globalData || {};
+						if (App.globalData[this.cacheId])
+							res = App.globalData[this.cacheId];
+						else {
+							res = parseHtmlSync(html, this);
+							App.globalData[this.cacheId] = res;
 						}
-						this.$emit('parser', res);
-						this.ready();
-					}).catch(err => {
-						this.$emit('error', {
-							source: "parse",
-							errMsg: err
-						});
-					})
+					} else res = parseHtmlSync(html, this);
+					console.log(res)
+					// #ifdef APP-PLUS
+					this.loadVideo = false;
+					// #endif
+					this.nodes = res.nodes;
+					this.showAnimation = showAnimation;
+					this.imgList = res.imgList;
+					if (Document) this.document = new Document("nodes", res.nodes, this);
+					if (res.title && this.autosetTitle) {
+						uni.setNavigationBarTitle({
+							title: res.title
+						})
+					}
+					this.$emit('parse', res);
+					this.ready();
 				} else if (html.constructor == Array) {
 					this.showAnimation = showAnimation;
 					this.imgList = [];
@@ -281,17 +332,20 @@
 				}
 			},
 			// #ifdef H5
-			Dom2Str(node) {
-				if (node.type == "text")
-					return node.text;
-				var elem = '<' + node.name;
-				for (var attr in node.attrs)
-					elem += (' ' + atts + '="' + node.attrs[attr] + '"');
-				elem += ">";
-				for (var child of node.children)
-					elem += Dom2Str(child);
-				elem += ("</" + node.name + ">");
-				return elem;
+			Dom2Str(nodes) {
+				var str = "";
+				for (var node of nodes) {
+					if (node.type == "text")
+						str += node.text;
+					else {
+						str += ('<' + node.name);
+						for (var attr in node.attrs || {})
+							str += (' ' + attr + '="' + node.attrs[attr] + '"');
+						if (!node.children || !node.children.length) str += "/>";
+						else str += ('>' + this.Dom2Str(node.children) + "</" + node.name + '>');
+					}
+				}
+				return str;
 			},
 			// #endif
 			// #ifndef H5
@@ -304,7 +358,7 @@
 						// #ifndef MP-ALIPAY
 						if (item.name == 'img' && !observered) {
 							observered = true;
-							if (component.lazyLoad && CanIUseObserver) {
+							if (this.lazyLoad && uni.createIntersectionObserver) {
 								component._observer = uni.createIntersectionObserver(component);
 								component._observer.relativeToViewport({
 									top: 1000,
@@ -317,7 +371,7 @@
 							} else
 								component.imgLoad = true;
 						} else if (item.name == 'video') {
-							this.videoContext.push({
+							this.videoContexts.push({
 								id: item.attrs.id,
 								context: uni.createVideoContext(item.attrs.id, component)
 							});
@@ -335,54 +389,93 @@
 					this.getContext(component.$children);
 				}
 			},
-			// #endif
 			ready() {
 				this.$nextTick(() => {
-					this.navigateTo = (obj) => {
-						obj.success = obj.success || function() {};
-						obj.fail = obj.fail || function() {};
-						var Scroll = (selector,component) => {
-							const query = uni.createSelectorQuery().in(component?component:this);
-							query.select(selector).boundingClientRect();
-							query.selectViewport().scrollOffset();
-							query.exec(res => {
-								if (!res || !res[0])
-									return obj.fail({
-										errMsg: "Label Not Found"
-									});
-								uni.pageScrollTo({
-									scrollTop: res[1].scrollTop + res[0].top,
-									success: obj.success,
-									fail: obj.fail
-								})
-							})
-						}
-						if (!obj.id) Scroll(".contain");
-						else {
-							// #ifndef MP-BAIDU || MP-ALIPAY
-							Scroll('.contain >>> #' + obj.id);
-							// #endif
-							// #ifdef MP-BAIDU || MP-ALIPAY
-							for (var anchor of this.anchors) {
-								if (anchor.id == obj.id) {
-									Scroll("#" + obj.id, anchor.node);
-								}
-							}
-							// #endif
-						}
-					}
+					this.getContext(this.$children);
 					uni.createSelectorQuery().in(this).select(".contain").boundingClientRect(res => {
 						this.$emit("ready", res);
-					}).exec()
-					// #ifndef H5
-					this.getContext(this.$children);
-					// #endif
+					}).exec();
 					// #ifdef APP-PLUS
 					setTimeout(() => {
 						this.loadVideo = true;
 					}, 3000);
 					// #endif
 				})
+			},
+			// #endif
+			getText() {
+				// #ifdef H5
+				return this.iframe.contentWindow.document.innerText;
+				// #endif
+				// #ifndef H5
+				var text = "";
+				var traverse = (node) => {
+					if (node.type == "text") return text += node.text;
+					else {
+						if ((node.name == "p" || node.name == "div" || node.name == "br") && text[text.length - 1] != '\n')
+							text += '\n';
+						for (var child of node.children)
+							traverse(child);
+					}
+				}
+				if (!this.html) return "";
+				for (var node of (this.html.nodes || ((this.html[0].name || this.html[0].type) ? this.html :
+						this.nodes)))
+					traverse(node);
+				return text;
+				// #endif
+			},
+			navigateTo(obj) {
+				obj.success = obj.success || (() => null);
+				obj.fail = obj.fail || (() => null);
+				// #ifdef H5
+				if (!obj.id) return window.scrollTo(0, this.iframe.offsetTop);
+				var target = iframe.contentWindow.document.getElementById(obj.id);
+				if (!target) return obj.fail({
+					errMsg: "Label Not Found"
+				});
+				return window.scrollTo(0, this.iframe.offsetTop + target.offsetTop);
+				// #endif
+				// #ifndef H5
+				var Scroll = (selector, component) => {
+					const query = uni.createSelectorQuery().in(component ? component : this);
+					query.select(selector).boundingClientRect();
+					query.selectViewport().scrollOffset();
+					query.exec(res => {
+						if (!res || !res[0])
+							return obj.fail({
+								errMsg: "Label Not Found"
+							});
+						uni.pageScrollTo({
+							scrollTop: res[1].scrollTop + res[0].top,
+							success: obj.success,
+							fail: obj.fail
+						})
+					})
+				}
+				if (!obj.id) Scroll(".contain");
+				else {
+					// #ifndef MP-BAIDU || MP-ALIPAY
+					Scroll('.contain >>> #' + obj.id);
+					// #endif
+					// #ifdef MP-BAIDU || MP-ALIPAY
+					for (var anchor of this.anchors) {
+						if (anchor.id == obj.id) {
+							Scroll("#" + obj.id, anchor.node);
+						}
+					}
+					// #endif
+				}
+				// #endif
+			},
+			getVideoContext(id) {
+				if (!id) return this.videoContexts;
+				else {
+					for (var video of this.videoContexts) {
+						if (video.id == id) return video;
+					}
+				}
+				return null;
 			}
 		},
 		watch: {
@@ -400,6 +493,5 @@
 		overflow: scroll;
 		-webkit-overflow-scrolling: touch;
 	}
-
 	/* #endif */
 </style>

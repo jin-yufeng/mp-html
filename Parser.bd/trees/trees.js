@@ -1,4 +1,9 @@
-// Parser/trees/trees.js
+/*
+ trees 递归显示组件
+ github地址：https://github.com/jin-yufeng/Parser
+ 文档地址：https://jin-yufeng.github.io/Parser
+ author：JinYufeng
+*/
 // 提交错误事件
 const triggerError = function (Top, source, target, errMsg, errCode) {
   Top.triggerEvent('error', {
@@ -10,26 +15,34 @@ const triggerError = function (Top, source, target, errMsg, errCode) {
 };
 // 加载其他源（音视频）
 const loadSource = function (Component, currentTarget) {
-  if (!Component.data.controls[currentTarget.id] && currentTarget.source.length > 1)
+  if (!Component.data.controls[currentTarget.id] && currentTarget.source.length > 1) {
     Component.data.controls[currentTarget.id] = {
       play: false,
       index: 1
     };
-  else if (Component.data.controls[currentTarget.id] && currentTarget.source.length > Component.data.controls[currentTarget.id].index + 1)
+    Component.setData({
+      controls: Component.data.controls
+    });
+    return true;
+  }
+  else if (Component.data.controls[currentTarget.id] && currentTarget.source.length > Component.data.controls[currentTarget.id].index + 1) {
     Component.data.controls[currentTarget.id].index++;
-  Component.setData({
-    controls: Component.data.controls
-  });
+    Component.setData({
+      controls: Component.data.controls
+    });
+    return true;
+  }
+  return false;
 };
 Component({
   attached() {
     this._top = getApp()._Parser;
     for (let item of this.data.nodes) {
-      if (item.name == 'video')
-        this._top.videoContext.push({
-          id: item.attrs.id,
-          context: swan.createVideoContext(item.attrs.id, this)
-        });
+      if (item.name == 'video') {
+        var context = swan.createVideoContext(item.attrs.id, this);
+        context.id = item.attrs.id;
+        this._top.videoContexts.push(context);
+      }
       if (item.attrs && item.attrs.id)
         this._top.anchors.push({
           id: item.attrs.id,
@@ -48,14 +61,16 @@ Component({
     }
   },
   methods: {
+    // 视频播放事件
     playEvent(e) {
-      if (this._top.videoContext.length > 1 && this._top.data.autopause) {
-        for (let video of this._top.videoContext) {
+      if (this._top.videoContexts.length > 1 && this._top.data.autopause) {
+        for (let video of this._top.videoContexts) {
           if (video.id == e.currentTarget.dataset.id) continue;
-          video.context.pause();
+          video.pause();
         }
       }
     },
+    // 图片预览事件
     previewEvent(e) {
       if (!e.target.dataset.hasOwnProperty('ignore')) {
         var preview = true;
@@ -72,6 +87,7 @@ Component({
         }
       }
     },
+    // 链接点击事件
     tapEvent(e) {
       var jump = true;
       this._top.triggerEvent('linkpress', {
@@ -101,19 +117,20 @@ Component({
           });
       }
     },
+    // 错误事件
     adError(e) {
       triggerError(this._top, "ad", e.currentTarget, "", e.detail.errorCode);
     },
     videoError(e) {
-      loadSource(this, e.currentTarget.dataset);
-      triggerError(this._top, "video", e.currentTarget, e.detail.errMsg);
+      if (!loadSource(this, e.currentTarget.dataset) && this._top)
+        triggerError(this._top, "video", e.currentTarget, e.detail.errMsg, undefined, this._top.getVideoContext(e.currentTarget.id));
     },
     audioError(e) {
-      loadSource(this, e.currentTarget.dataset);
-      triggerError(this._top, "audio", e.currentTarget, e.detail.errMsg);
+      if (!loadSource(this, e.currentTarget.dataset))
+        triggerError(this._top, "audio", e.currentTarget, e.detail.errMsg);
     },
-    //内部方法：加载视频
-    _loadVideo(e) {
+    // 加载视频
+    loadVideo(e) {
       this.data.controls[e.currentTarget.dataset.id] = {
         play: true,
         index: 0

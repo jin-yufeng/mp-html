@@ -47,11 +47,11 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| Parser | 42.3KB | 微信小程序插件包 |
-| Parser.min | 30.3KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.bd | 40.1KB | 百度小程序插件包 |
-| Parser.bd.min | 29.0KB | 百度小程序插件包压缩版（功能相同） |
-| Parser.uni | 56.8KB | `uni-app` 插件包（可以编译到所有平台） |
+| Parser | 44.1KB | 微信小程序插件包 |
+| Parser.min | 30.7KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.bd | 42.4KB | 百度小程序插件包 |
+| Parser.bd.min | 28.8KB | 百度小程序插件包压缩版（功能相同） |
+| Parser.uni | 55.5KB | `uni-app` 插件包（可以编译到所有平台） |
 
 
 ### 在原生框架中使用 ###
@@ -114,6 +114,7 @@
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
   | autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 |
   | autosetTitle | Boolean | true | 否 | 是否自动将title标签的内容设置到页面标题上 |
+  | cache-id | String |  | 否 | 缓存的 id，设置后一次解析完成后将自动保存到 globalData 中，下次直接读取 |
   | domain | String |  | 否 | 主域名，设置后将对于图片地址将自动拼接主域名或协议名 |
   | img-mode | String | default | 否 | 图片显示模式 |
   | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
@@ -128,11 +129,11 @@
 
 | 名称 | 功能 | 说明 |
 |:----:|----|----|
-| bindparser | 在解析完成时调用（仅当传入的`html`为`String`时会调用） | 返回一个`object`，其中`nodes`为解析后的节点数组，`imgList`为图片列表，`title`是页面标题，该`object`可以在下次调用直接作为`html`属性的值，节省解析的时间 |
-| bindready | 渲染完成时调用 | 返回整个组件的`NodesRef`结构体，包含宽度、高度、位置等信息（每次`html`修改后都会触发） |
-| binderror | 出错时调用 | 返回一个`object`，其中`source`是错误来源（`ad`广告出错、`video`视频加载出错、`audio`音频加载出错、`parse`解析过程中出错），`errMsg`为错误信息，`errCode`是错误代码（仅`ad`），`target`包含出错标签的具体信息 |
-| bindimgtap | 在图片受到点击时调用 | 返回一个形如`{src:..., ignore: function}`的结构体（`src`是图片链接），可用于阻挡`onShow`的调用；在回调中调用`ignore`函数将不自动预览 |
-| bindlinkpress | 在链接受到点击时调用 | 返回一个形如`{href:..., ignore: function}`的结构体（`href`是链接地址），开发者可以在该回调中进行进一步操作，如下载文档和打开等；在回调中调用`ignore`函数将不自动跳转/复制链接 |  
+| bindparse | 在解析完成时调用（仅传入的 html 类型为 String 时触发） | 返回一个 object，其中 nodes 为解析后的节点数组，imgList 为图片列表，title 是页面标题，该 object 可以在下次调用直接作为 html 属性的值，节省解析的时间 |
+| bindready | 渲染完成时调用 | 返回整个组件的 NodesRef 结构体，包含宽度、高度、位置等信息（每次 html 修改后都会触发） |
+| binderror | 出错时调用 | 返回一个 object，其中 source 是错误来源（ad 广告出错、video 视频加载出错、audio 音频加载出错、parse 解析过程中出错），errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息，context 是视频的 context 对象，可以设置新的源 |
+| bindimgtap | 在图片受到点击时调用 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览；可用于阻挡 onShow 的调用 |
+| bindlinkpress | 在链接受到点击时调用 | 返回一个object，其中 href 是链接地址，ignore 是一个函数，在回调中调用将不自动跳转/复制；开发者可以在该回调中进行进一步操作，如下载文档和打开等 |  
 
 详细可见：[回调函数](https://jin-yufeng.github.io/Parser/#/instructions?id=回调函数)
   
@@ -159,6 +160,10 @@
 |:---:|:---:|:---:|
 | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374" width="200" /> | <img src="https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg" width="200" /> | <img src="https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg" width="200" /> | 
 
+| 恋爱宝典xcx | 恋爱宝典（QQ） |
+|:---:|:---:|
+| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200"> | <img src="https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png" width="200"> |
+
 欢迎添加：[链接](https://github.com/jin-yufeng/Parser/issues/27)  
 
 ## 后端解析 ##
@@ -175,6 +180,19 @@
 
 
 ## 更新日志 ##
+- 2019.12.10:
+  1. `A` 增加了 `cache-id` 属性，可以将解析结果缓存到 `globalData` 中，多次打开不用重复解析 [详细](https://jin-yufeng.github.io/Parser/#/instructions#组件属性)  
+  2. `A` 增加了 `getText` 的 `api`，可以获取到一个富文本中的所有文本内容 [详细](https://jin-yufeng.github.io/Parser/#/instructions#getText)  
+  3. `A` 增加了 `getVideoContext` 的 `api`，可以获取到视频的 `context` 对象，用于操作播放状态 [详细](https://jin-yufeng.github.io/Parser/#/instructions#getVideoContext)  
+  4. `A` 增加了 `highlight` 代码高亮处理接口 [详细](https://jin-yufeng.github.io/Parser/#/instructions#配置项)  
+  5. `A` 增加了长内容的解决方案 [详细](https://jin-yufeng.github.io/Parser/#/instructions#长内容处理)  
+  6. `U` 重构了解析脚本，提高了解析速度，减小了包的大小  
+  7. `U` 解决了微信最新版开发者工具会报 `wx:key="" does not look like a valid key name` 的警告的问题  
+  8. `U` `error` 回调将返回该视频的 `context` 对象，可以修改播放源 [详细](https://jin-yufeng.github.io/Parser/#/instructions#回调函数)  
+  9. `F` 修复了 `uni-app` 包编译到 `H5` 时在微信内置浏览器中无法显示、存在多个 `parser` 标签时相互覆盖等问题 [详细](https://github.com/jin-yufeng/Parser/issues/59)  
+  
+  *此版本较之前版本在 `api` 和补丁包的引入方式上有不兼容的地方，请注意*
+
 - 2019.12.3:
   1. `A` 增加了 `domain` 属性，可以设置主域名，设置后对于图片链接将自动拼接上主域名或协议名 [详细](https://github.com/jin-yufeng/Parser/issues/56)
   2. `A` 增加了 `use-anchor` 属性，可以设置页面内锚点 [详细](https://github.com/jin-yufeng/Parser/issues/55)
@@ -188,11 +206,5 @@
      - `style` 标签支持所有浏览器支持的选择器
      - `error` 回调增加支持 `img`，且返回组件的 `DOM` 实例，修改属性后可以直接对页面生效  
      另外，通过一些转换，原来的属性和事件依然全部支持（不再有 `parser` 回调，因为不进行解析）  
-- 2019.11.9:
-  1. `F` 修复了`uni-app`包编译到`H5`时`html`的初值为空时报`Cannot read property 'name' of undefined`的错误的问题  
-- 2019.11.5:
-  1. `F` 修复了`uni-app`包编译到`APP`时多个连续实体空格失效的问题  
-- 2019.11.3:
-  1. `F` 修复了`uni-app`包编译到`H5`时多个行内标签并列会被错误换行的问题 [详细](https://github.com/jin-yufeng/Parser/issues/43)  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

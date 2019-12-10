@@ -14,7 +14,7 @@
           </view>
           <view class="kind-list__item-bd {{item.open ? 'kind-list__item-bd_show' : ''}}">
             <view class="weui-cells {{item.open ? 'weui-cells_show' : ''}}">
-              <block wx:for="{{item.pages}}" wx:for-item="page" wx:key="{{page.name}}">
+              <block wx:for="{{item.pages}}" wx:for-item="page" wx:key="name">
                 <navigator wx:if="{{page.url}}" url="{{page.url}}" class="weui-cell weui-cell_access">
                   <view class="weui-cell__bd">{{page.name}}</view>
                   <view class="weui-cell__ft weui-cell__ft_in-access"></view>

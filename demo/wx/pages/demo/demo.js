@@ -3,6 +3,7 @@ const htmls = require('./htmls.js');
 Page({
   onLoad(e) {
     this.setData({
+      cacheId: e.index,
       html: htmls['demo' + e.index],
     })
   },

@@ -7,6 +7,23 @@ module.exports = `<style>
   }
 </style>
 <title>功能示例</title>
+<table border="1">
+  <tr>
+    <td>标题1</td>
+    <td>标题2</td>
+    <td>标题3</td>
+  </tr>
+  <tr>
+    <td rowspan=2>内容1</td>
+    <td>内容2</td>
+    <td>内容3</td>
+  </tr>
+  <tr>
+    <td>内容4</td>
+    <td>内容5</td>
+  </tr>
+</table>
+<style>.demo{font-style:italic;}#demo2{font-weight:bold;}</style><p><span class="demo">Hello </span><span id="demo2">World!</span></p>
 <body>
 	<section style="border: 0px none;">
     <section style="padding: 10px;">

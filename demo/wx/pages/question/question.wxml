@@ -43,7 +43,7 @@
     <view class="weui-article__h2">6. 不能正确显示一些网站的问题</view>
     <view class="weui-article__section section">
       <view>很多网站的内容是在
-        <code>js</code>脚本中动态加载的，这些内容在插件解析中会被直接忽略，可能导致一些动态加载的复杂网页无法正确显示；本插件不能完全取代
+        <code>js</code>脚本中动态加载的（包括<code>iframe</code>视频），这些内容在插件解析中会被直接忽略，可能导致一些动态加载的复杂网页无法正确显示；本插件不能完全取代
         <code>web-view</code>的功能，建议用于富文本编辑器中编辑的富文本或简单的静态网页。</view>
     </view>
   </view>

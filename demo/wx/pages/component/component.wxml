@@ -61,7 +61,7 @@
               <view class="td" style="width:30%;">举例</view>
               <view class="td" style="width:40%;">匹配</view>
             </view>
-            <view wx:for="{{styles}}" wx:key style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view wx:for="{{styles}}" wx:key="index" style="display:flex;background-color:{{index%2==0?'white':'#f6f8fa'}}">
               <view class="td" style="width:30%">{{item.mode}}</view>
               <view class="td" style="width:30%;">{{item.example}}</view>
               <view class="td" style="width:40%;">
@@ -173,7 +173,7 @@
             <view class="th" style="width:30%">标签</view>
             <view class="th" style="width:70%;">属性</view>
           </view>
-          <view wx:for="{{newTags}}" wx:key class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+          <view wx:for="{{newTags}}" wx:key="index" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
             <view class="td" style="width:30%">{{item.name}}</view>
             <view class="td" style="width:70%;">{{item.attrs}}</view>
           </view>
@@ -229,7 +229,7 @@
             <view class="th" style="width:15%;">默认</view>
             <view class="th" style="width:38%;">说明</view>
           </view>
-          <view wx:for="{{attrs}}" wx:key class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+          <view wx:for="{{attrs}}" wx:key="index" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
             <view class="td" style="width:27%">
               <text>{{item.name}}</text>
             </view>
@@ -339,7 +339,7 @@
                 <view class="th" style="width:57%;">匹配的标签</view>
                 <view class="th" style="width:25%;">说明</view>
               </view>
-              <view wx:for="{{selectors}}" wx:key class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+              <view wx:for="{{selectors}}" wx:key="index" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
                 <view class="td" style="width:18%">{{item.mode}}</view>
                 <view class="td" style="width:57%;"><text decode>{{item.match}}</text></view>
                 <view class="td" style="width:25%;">{{item.notice}}</view>
@@ -356,7 +356,7 @@
               <view class="th" style="width:50%;">功能</view>
               <view class="th" style="width:20%;">覆盖率</view>
             </view>
-            <view wx:for="{{versions}}" wx:key class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view wx:for="{{versions}}" wx:key="index" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
               <view class="td" style="width:30%">{{item.version}}</view>
               <view class="td" style="width:50%;">
                 <text>{{item.function}}</text>

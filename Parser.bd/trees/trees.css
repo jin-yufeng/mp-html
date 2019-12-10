@@ -6,10 +6,6 @@
   text-decoration: underline;
 }
 /* 以下内容不建议修改 */
-:host {
-  display: inherit;
-  float: inherit;
-}
 .a {
   display: inline;
 	color: #366092;

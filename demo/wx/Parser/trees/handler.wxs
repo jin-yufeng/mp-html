@@ -1,5 +1,10 @@
-// Parser/trees/cssHandler.wxs
-var Tags = {
+/*
+ 给顶层标签的一些样式取出给 rich-text
+ github地址：https://github.com/jin-yufeng/Parser
+ 文档地址：https://jin-yufeng.github.io/Parser
+ author：JinYufeng
+*/
+var inlineTags = {
   abbr: true,
   b: true,
   big: true,
@@ -20,7 +25,7 @@ var Tags = {
 }
 module.exports = {
   getStyle: function(style, display) {
-    var res = "";
+    res = "";
     var reg = getRegExp("float[^;]+(?![\s\S]*?float)", "i");
     if (reg.test(style)) res += reg.exec(style)[0];
     reg = getRegExp("margin[^;]+", "gi");
@@ -36,7 +41,8 @@ module.exports = {
   },
   setImgStyle: function(item, imgMode, imgLoad) {
     if (imgMode == "widthFix") item.attrs.style += ";height:auto !important";
-    item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp('margin[^;]+', "gi"), "");
+    if(item.attrs.style)
+      item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp('margin[^;]+', "gi"), "");
     if (!imgLoad) {
       delete item.attrs.src;
       item.attrs.style += ";width:5px !important;height:5px !important"
@@ -44,11 +50,12 @@ module.exports = {
     return [item];
   },
   setStyle: function(item) {
-    item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp('margin[^;]+', "gi"), "");
+    if (item.attrs.style)
+      item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp('margin[^;]+', "gi"), "");
     return [item];
   },
   notContinue: function(item) {
     if (item.name == 'a' || item.name == 'li' || item.name == 'ol' || item.name == 'ul') return true;
-    return !(item["continue"] || Tags[item.name]);
+    return !(item["continue"] || inlineTags[item.name]);
   }
 }

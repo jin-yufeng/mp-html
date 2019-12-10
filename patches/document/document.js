@@ -1,3 +1,9 @@
+/*
+ document补丁包
+ github地址：https://github.com/jin-yufeng/Parser
+ 文档地址：https://jin-yufeng.github.io/Parser
+ author：JinYufeng
+*/
 const _setData = function(Component, key, value) {
   Component.setData({
     [key]: value

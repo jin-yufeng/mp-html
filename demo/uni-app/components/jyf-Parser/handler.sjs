@@ -1,4 +1,4 @@
-var textTag = {
+var inlineTags = {
 	abbr: true,
 	b: true,
 	big: true,
@@ -58,13 +58,8 @@ export default {
 		}
 		return [item];
 	},
-	isContinue: function(item) {
-		if (textTag[item.name])
-			return false;
-		if (!item["continue"])
-			return true;
-		else if (item.name == 'a')
-			return true;
-		return false;
+	notContinue: function(item) {
+		if (item.name == 'a') return true;
+		return !(item["continue"] || inlineTags[item.name]);
 	}
 }

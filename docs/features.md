@@ -26,10 +26,17 @@ data:{
 
 >`uni-app` 包编译到 `H5` 平台时支持所有浏览器支持的选择器  
 
->各类样式的优先级为：[外部样式](/instructions#使用外部样式) < [tag-style](#设置默认的标签样式) < 标签名选择器 < `class` 选择器 < `id` 选择器 < 标签的行内样式 ；低优先级样式要覆盖高优先级样式需要加上 `!important`  
-
 !>不支持的选择器将被忽略，包括伪类、后代选择器、通配符等<br>如需支持更多选择器，请使用 [CssHandler](/instructions#CssHandler) 补丁包  
 
+各类样式的优先级和作用域：
+
+| 样式来源 | 优先级 | 作用域 | 备注 |
+|:---:|:---:|:---:|:---:|
+| 行内样式 | 0 | 单个标签 | style 属性中的值 |
+| style 标签 | 1 | style 标签所在的 parser | 其中优先级标签名选择器 < class 选择器 < id 选择器 |
+| [tag-style](#设置默认的标签样式) | 2 | 设置了该属性的 parser | 标签的默认样式 |
+| [userAgentStyles](/instructions#配置项) | 3 | 所有 parser | 标签的默认样式 |
+| [外部样式](/instructions#使用外部样式) | 4 | 所有 parser | 仅支持 class 选择器 |
 
 ### 设置默认的标签样式 ###
 支持给各个标签设置默认的效果  
@@ -240,6 +247,10 @@ ready(){
 
 | [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | 多么生活 | [SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program) |
 |:---:|:---:|:---:|
-| ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374 ':size=200') | ![多么生活](https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg ':size=200') | ![SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg ':size=200') | 
+| ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374 ':size=200') | ![多么生活](https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg ':size=200') | ![SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg ':size=200') |
+
+| 恋爱宝典xcx | 恋爱宝典（QQ） |
+|:---:|:---:|
+| ![恋爱宝典xcx](https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg ':size=200') | ![恋爱宝典](https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png ':size=200') |
 
 欢迎添加：[链接](https://github.com/jin-yufeng/Parser/issues/27)  
