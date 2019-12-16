@@ -22,23 +22,25 @@ Page({
       mode: '子选择器',
       example: '.demo1>.demo2',
       match: '<ele class="demo1">\n <ele class="demo2">'
+    }, {
+      mode: 'before伪类',
+      example: '.demo::before',
+      match: '<ele class="demo" ::before>'
+    }, {
+      mode: 'after伪类',
+      example: '.demo::after',
+      match: '<ele class="demo" ::after>'
     }],
     //支持更多的标签
     tags: [{
       name: 'frame',
-      attrs: 'src, width, height, scrolling\nmarginwidth, marginheight'
+      attrs: 'src, srcdoc, width, height, scrolling, marginwidth, marginheight'
     }, {
       name: 'iframe',
-      attrs: 'src, width, height, scrolling\nmarginwidth, marginheight'
+      attrs: 'src, srcdoc, width, height, scrolling, marginwidth, marginheight'
     }, {
       name: 'embed',
-      attrs: 'src'
-    }, {
-      name: 'object',
-      attrs: 'data'
-    }, {
-      name: 'param',
-      attrs: 'name, value'
+      attrs: 'src, autostart, loop, width, height'
     }, {
       name: 'link',
       attrs: 'href（仅限css）'
@@ -51,6 +53,12 @@ Page({
     node: code.node,
     //更新日志
     update: `<ul>
+    <li>2019.12.15:
+      <ol>
+        <li><code>U</code> 返回值格式更改为<code>array</code></li>
+      </ol>
+    </li>
+    <br />
     <li>2019.12.3:
       <ol>
         <li><code>U</code> <code>style</code>标签支持匹配<code>before</code>和<code>after</code>伪类</li>

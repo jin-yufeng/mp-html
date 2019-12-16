@@ -3,14 +3,12 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 44.1KB | 微信/QQ小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 30.7KB | 微信/QQ小程序插件包压缩版（功能相同） |
-| [Parser.bd](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd) | 42.4KB | 百度小程序插件包 |
-| [Parser.bd.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.bd.min) | 28.8KB | 百度小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 55.5KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 46.0KB | 微信小程序插件包 |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.7KB | 微信小程序插件包压缩版（功能相同） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 59.2KB | `uni-app` 插件包（可以编译到所有平台） |
 
-各平台差异：
-1. 仅微信小程序、`QQ`小程序、`APP`、`H5` 支持 `lazy-load` 属性
+各平台差异（主要指 `uni-app` 包）：
+1. 百度小程序和支付宝小程序不支持 `lazy-load` 属性
 2. 仅微信小程序、`QQ`小程序、百度小程序支持 `ad` 组件
 3. 微信小程序、`QQ`小程序、`H5`、`APP` 支持所有实体编码
 4. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`
@@ -18,12 +16,12 @@
 6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性
 
 !>`uni-app` 包为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
-需要使用 `HBuilderX 2.2.5-alpha` 及以上版本编译，且必须使用自定义组件模式
+需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式
 
 !>表格和列表由于较难通过模板循环的方式显示，将直接通过 `rich-text` 进行渲染，因此请尽量避免在列表和表格中加入图片或链接，否则将无法预览或点击（但可以正常显示）  
 列表引入 [list 补丁包](#List) 后可以解决这个问题    
 
-!> 若需要自定义链接受到点击时的效果，可对 `Parser/trees` 文件夹下的 `trees.wxss` 中的 `navigator-hover` 进行修改（默认下划线+半透明）
+> 若需要自定义链接受到点击时的效果，可对 `Parser/trees` 文件夹下的 `trees.wxss` 中的 `navigator-hover` 进行修改（默认下划线+半透明）
 
 以下统称为 `Parser`  
 
@@ -148,33 +146,33 @@
 
 | 属性 | 类型 | 默认值 | 必填 | 说明 | 添加日期 |
 |:----:|:----:|:----:|:----:|----|:---:|
-| html | String/Object/Array | | 是 | 要显示的富文本数据，具体格式见下方说明 | - |
-| tag-style | Object | {} | 否 | 设置标签的默认样式 | [20190421](/changelog#v20190421) |
-| autocopy | Boolean | true | 否 | 是否允许链接受到点击时自动复制链接（仅限 http 开头的网络链接）| [20190603](/changelog#v20190603) |
-| autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 | [20190510](/changelog#v20190510) |
-| autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 | [20190913](/changelog#v20190913) |
-| autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题上 | [20190724](/changelog#v20190724) |
-| cache-id | String |  | 否 | 缓存的 id，设置后一次解析完成后将自动保存到 globalData 中，下次直接读取 | [20191208](/changelog#v20191210) |
-| domain | String |  | 否 | 主域名，设置后将给图片地址自动拼接上主域名或协议名 | [20191202](/changelog#v20191202) |
-| img-mode | String | default | 否 | 图片显示模式 | [20190610](/changelog#v20190610) |
-| lazy-load | Boolean | false | 否 | 是否开启图片懒加载 | [20190928](/changelog#v20190928) |
-| selectable | Boolean | false | 否 | 是否允许长按复制内容 | [20190603](/changelog#v20190603) |
-| show-with-animation | Boolean | false | 否 | 是否使用渐显动画 | [20190519](/changelog#v20190519) |
-| animation-duration | Number | 400 | 否 | 动画持续时间 | [20190519](/changelog#v20190519) |
-| use-anchor | Boolean | false | 否 | 是否使用页面内锚点 | [20191202](/changelog#v20191202) |
+| html | String/Array | | 是 | 要显示的富文本数据，格式同 [rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html) | - |
+| tag-style | Object | {} | 否 | 设置标签的默认样式 | [20190421](/changelog#_20190421) |
+| autocopy | Boolean | true | 否 | 是否允许链接受到点击时自动复制链接（仅限 http 开头的网络链接）| [20190603](/changelog#_20190603) |
+| autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 | [20190510](/changelog#_20190510) |
+| autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 | [20190913](/changelog#_20190913) |
+| autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题上 | [20190724](/changelog#_20190724) |
+| domain | String |  | 否 | 主域名，设置后将给图片地址自动拼接上主域名或协议名 | [20191202](/changelog#_20191202) |
+| img-mode | String | default | 否 | 图片显示模式 | [20190610](/changelog#_20190610) |
+| lazy-load | Boolean | false | 否 | 是否开启图片懒加载 | [20190928](/changelog#_20190928) |
+| selectable | Boolean | false | 否 | 是否允许长按复制内容 | [20190603](/changelog#_20190603) |
+| show-with-animation | Boolean | false | 否 | 是否使用渐显动画 | [20190519](/changelog#_20190519) |
+| use-anchor | Boolean | false | 否 | 是否使用页面内锚点 | [20191202](/changelog#_20191202) |
+| use-cache | Boolean | false | 否 | 是否使用缓存，设置后将对解析结果进行缓存，下次打开不用重复解析 | [20191215](/changelog#_20191215) |
   
-- `html` 格式：
-  1. `String` 类型：一个 `html` 字符串，例如：`<div>Hello World!</div>`
-  2. `Object` 类型：一个结构体构体；其中 `nodes` 属性为一个数组，格式基本同 [rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html)，对于该节点下有 `img`，`video`，`a` 标签的，需要将 `continue` 属性设置为 `true`，否则将直接使用 `rich-text` 组件渲染，可能导致图片无法预览，链接无法点击等问题；`imgList` 属性是其中所有图片地址的数组；`title` 属性是页面的标题（不必要，传入将会设置到页面的标题上）；回调函数 `bindparser` 的返回值就是这样的结构体
-  3. `Array` 类型：格式要求同上（用此格式传入预览图片时，将 `不能` 通过左右滑动查看所有图片）  
-  
-  ?> `html` 传入 `Object` 或 `Array` 可以节省解析的时间，提高性能
+说明：  
+- 关于 `html`  
+  - 传入的格式为 `array` 时，与 `rich-text` 唯一不同的地方在于对于该节点下有图片、视频等需要通过组件递归方式显示的标签时，需要将该标签的 `continue` 属性设置为 `true`，否则将直接使用 `rich-text` 显示，可能导致图片链接无法点击、视频无法显示等问题  
+    
+  - 如果传入没有设置 `continue` 的数组（区分方式是查看 `html[0].PoweredBy` 是否等于 `Parser`），插件也会自动进行设置，并同时处理 `tag-style`、`domain`、`use-anchor` 等一些属性的效果。因此可以传入和 `rich-text` 完全相同的数组，但会产生额外的性能开销  
+    
+  - 传入 `array` 比 `string` 的效率高，因为不需要进行解析  
+
+- 关于 `tag-style`  
+  可以设置标签的默认样式，形如 `{标签名：样式}` 的结构体，例如 `{ img: "display:block" }` 表示给`img` 标签设置默认的块级标签效果  
 
 - 关于 `img-mode`  
   默认 `default`，在没有设置宽高时，按图片原大小显示；设置了宽或高时，按比例进行缩放；同时设置了宽高时，按设置的宽高进行缩放。在同时设置了宽高的情况下，宽度可能因为 `max-width:100%` 的限制而缩短导致图片变形，此时可将模式设置为 `widthFix`，即保持宽度不变，高度自动变化（会导致设置的高度无效）
-
-- 关于 `tag-style`  
-  可以设置标签的默认样式，形如 `{标签名：样式}` 的结构体，例如 `{ body:"margin:5px" }` 表示给`body`标签设置默认的边距效果
 
 - 关于 `use-anchor` 和锚点  
   设置锚点：给标签加上 `id` 属性即可（部分标签可能不支持，如遇，请弃用）  
@@ -188,19 +186,18 @@
 
   !>将 `use-anchor` 设置成 `true` 会把所有设置了 `id` 的标签都通过组件递归的方式暴露出来而不是直接通过 `rich-text` 显示，这将一定程度上增加标签数，减慢渲染速度，如非必要，不建议使用  
 
-!>整个应用中每个 `cache-id` 只能唯一对应一个 `html` 内容，如果动态修改了 `html` 的内容，也必须修改 `cache-id`，否则还是读取上次缓存的内容。建议对不需要动态修改，可能在一个应用生命周期内多次打开的内容进行缓存，可以节省解析时间  
-
-!>`tag-style`、`cacheId`、`domain` 和 `use-anchor` 属性仅传入的 `html` 为 `String` 类型时有效（在解析过程中设置）；`uni-app` 包编译到 `H5` 时 `domain` 属性无效（浏览器自动获取 `domain`） 
+- 关于 `use-cache`  
+  设置为 `true` 时将对解析结果进行缓存，在一个应用生命周期内多次打开，不需要重复解析，可以节省时间，建议对可能多次打开的内容设置缓存（有极低概率可能发生 `hash` 碰撞，即修改内容后没有重新解析，依然读取旧的缓存，如遇，请弃用；可以通过 `getApp().parserCache` 管理缓存）  
 
 ### 回调函数 ###
 
-| 名称 | 功能 | 说明 |
-|:----:|----|----|
-| parse | 在解析完成时调用（仅传入的 html 类型为 String 时触发） | 返回一个 object，其中 nodes 为解析后的节点数组，imgList 为图片列表，title 是页面标题，该 object 可以在下次调用直接作为 html 属性的值，节省解析的时间 |
-| ready | 渲染完成时调用 | 返回整个组件的 NodesRef 结构体，包含宽度、高度、位置等信息（每次 html 修改后都会触发） |
-| error | 出错时调用 | 返回一个 object，其中 source 是错误来源（ad 广告出错、video 视频加载出错、audio 音频加载出错、parse 解析过程中出错），errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息，context 是视频的 context 对象，可以设置新的源 |
-| imgtap | 在图片受到点击时调用 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览；可用于阻挡 onShow 的调用 |
-| linkpress | 在链接受到点击时调用 | 返回一个object，其中 href 是链接地址，ignore 是一个函数，在回调中调用将不自动跳转/复制；开发者可以在该回调中进行进一步操作，如下载文档和打开等 |  
+| 名称 | 触发时间 | 说明 |
+|:----:|:----:|----|
+| parse | 在解析完成时触发 | 返回解析结果（一个 nodes 数组，仅传入的 html 类型为 String 时会触发），可以对该结果进行自定义修改，将在渲染时生效 |
+| ready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息） |
+| error | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码，target 包含出错标签的具体信息，context 是视频的 context 对象，可以设置新的源 |
+| imgtap | 在图片受到点击时触发 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览；可用于阻挡 onShow 的调用 |
+| linkpress | 在链接受到点击时触发 | 返回一个object，其中包含了被点击的 a 标签的所有属性，ignore 是一个函数，在回调函数中调用后将不自动跳转/复制；可在该回调中进行下载文档等进一步操作 |  
   
 >关于图片和链接被点击返回的 `ignore` 函数的解释：类似于 `a` 标签 `onclick` 回调返回 `false` 将不跳转一样，由于 `event` 无法获取返回值，故增加此函数，若在回调函数中执行，则不自动进行预览/跳转/复制链接操作，可执行自定义操作（这两个回调函数应尽量简短）  
 
@@ -315,6 +312,8 @@ Page({
 }
 ```
 
+>大段文本可以先通过 [parseHtml](#parseHtml) 解析成数组再进行拆分  
+
 !>拆分成多个 `parser` 标签后预览时不能直接通过左右滑动查看所有图片，如果需要可以获取组件实例并修改 `component.data.imgList`
 
 ### 基础库要求 ###
@@ -334,13 +333,16 @@ Page({
 ### Api ### 
 
 #### getText ####
-功能：获取富文本中的所有文本内容（对于 `div`, `p`, `br` 等标签会自动插入一个换行符）  
+功能：获取富文本中的所有文本内容  
+输入值：`whiteSpace`，设置成 `true` 时遇到块级标签会自动添加一个换行符，增强可读性（默认 `true`）  
 使用方法：
 ```wxml
-<parser id="article" html="{{html}}"></parser>
+<parser id="article" html="{{html}}" bindready="ready"></parser>
 ```
 ```javascript
-console.log(this.selectComponent("#article").getText());
+ready(e){
+  console.log(this.selectComponent("#article").getText());
+}
 ```
 
 #### navigateTo ####
@@ -354,7 +356,7 @@ console.log(this.selectComponent("#article").getText());
 data:{
   html: "<div id='test'></div>"
 },
-ready(){
+ready(e){
   this.selectComponent("#article").navigateTo({
     id: "test",
     success: console.log,
@@ -368,19 +370,84 @@ ready(){
 输入值：`video` 标签的 `id`（没有设置 `id` 时会被自动设置为 `video + i`，不输入返回一个包含所有视频的数组）  
 使用方法：
 ```wxml
-<parser id="article" html="{{html}}"></parser>
+<parser id="article" html="{{html}}" bindready="ready"></parser>
 ```
 ```javascript
-// 返回 id=test 的 video 标签的 context，不存在则返回 null
-console.log(this.selectComponent("#article").getVideoContext("test"));
+ready(e){
+  // 返回 id=test 的 video 标签的 context，不存在则返回 null
+  console.log(this.selectComponent("#article").getVideoContext("test"))
+}
 ```
 
-!>以上 `api` 都需要获取组件实例来调用，需要等待渲染完成，建议在 `ready` 回调中或之后使用  
+#### imgList ####
+功能：获取所有图片数组，可用于转发图的封面等（注意：这是一个**属性**，不是一个函数）  
+另外，该数组提供了一个 `each` 方法，功能与数组的 `forEach` 基本相同，但可以通过 `return` 改变数组中的值；该数组用于图片的预览，因此可以在 `img` 的 `src` 中使用缩略图，再将此数组中的地址改为原图，即可实现预览时查看大图的效果（设置时若与数组中已存在的元素重复，将自动通过改变域名大小写的方式去重，避免在预览时出现定位错误）  
+使用方法：
+```wxml
+<parser id="article" html="{{html}}" bindready="ready"></parser>
+```
+```javascript
+ready(e){
+  var imgList = this.selectComponent("#article").imgList;
+  var cover = imgList[0]; // 将第一张图作为转发用的封面
+  imgList.each((src, i, arr)=>{
+    console.log(src);
+    /* 通过 return 可以修改原数组，没有 return 时不修改
+       可以将缩略图的链接修改为原图的链接，在预览时会自动使用 */
+    return src.replace("thumb","");
+  })
+}
+```
+
+#### setContent ####
+功能：解析并渲染 `html` 内容（功能上同 `html` 属性）  
+说明：当 `html` 为字符串类型时，该字符串并不能直接在视图层进行渲染，而是在插件内部完成解析后再次 `setData` 并进行渲染的，因此，对字符串类型的 `html` 进行 `setData` 是没有必要的，会带来不必要的性能开销  
+输入值：`html` 为具体的字符串，`options` 可以设置其他的属性（可选）  
+
+使用方法：
+```wxml
+<parser id="article"></parser>
+```
+```javascript
+var html = "<div>Hello World!</div>";
+var tagStyle = {
+  div: "text-align: justify"
+};
+/* 以下代码等价于
+this.setData({
+  html,
+  tagStyle
+})
+但通过 setData 会带来不必要的性能开销 */
+this.selectComponent("#article").setContent(html, {
+  tagStyle
+})
+```
+
+!>以上 `api` 都需要获取组件实例来调用，可以通过 `this.selectComponent` 获取（在 `uni-app` 中可以通过 `ref` 获取），但必须在 `ready` 回调之后使用（除了 `setContent`）  
+
+```vue
+<!--vue中获取组件实例的示例-->
+<template>
+  <view>
+    <parser ref="article" @ready="ready"></parser>
+  </view>
+</template>
+<script>
+export default {
+  method:{
+    ready(){
+      console.log(this.$refs.article.getText());
+    }
+  }
+}
+</script>
+```
 
 #### parseHtml ####  
 功能：解析 `html` 字符串  
 输入值：第一个参数为 `html` 字符串；第二个参数为 `options`（包括 `tagStyle`, `domain`, `useAnchor`)  
-返回值：一个形如 `{nodes, text, title, imgList}` 的结构体，可以作为 `html` 属性的值，其中的`nodes` 可以作为 `rich-text` 的 `nodes` 属性的值
+返回值：一个 `nodes` 数组，可以作为 `html` 属性的值或 `rich-text` 组件 `nodes` 属性的值  
 ```javascript
 const MpHtmlParser = require("/Parser/libs/MpHtmlParser.js");
 // 异步方法
@@ -435,11 +502,11 @@ console.log(versionHigherThan("2.7.1"));
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `4.82KB`（`min` 版本 `3.61KB`）  
+  `4.63KB`（`min` 版本 `3.79KB`）  
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
-  !>在 uni-app 中使用时需要将 index.vue 中的 29 行修改为 const Document = require('./document.js');  
+  !>在 uni-app 中使用时需要将 index.vue 中的 33 行修改为 const Document = require('./document.js');  
   
 document 类：  
 获取方式：可通过 `this.selectComponent("#id").document` 获取  
@@ -469,20 +536,13 @@ element 类：
 | getChildren | i |   | 获取第 i 个子节点的 element 实例 |
 | getAttr | key | attr | 获取某个属性值 |
 | setAttr | key, value |   | 设置某个属性值 |
+| getStyle | key | style | 获取某个样式的值 |
+| setStyle | key, value | 设置某个样式的值 |
 | getElementById | id | element | 在子节点中按照 id 查找 element |
 | update |   |   | 若修改了 element.nodes 需要调用此方法同步到 UI |
 
 返回格式：  
-若执行成功，返回 `{ok:true, data:...}`；若不成功，返回 `{ok:false, errCode:..., errMsg:...}`  
-错误码
-
-| 错误码 | 含义 |
-|:---:|:---:|
-| 1 | 对没有直接包含`text`的标签执行`getText`或`setText` |
-| 2 | 输入值类型不正确 |
-| 3 | 输入值超出范围 |
-| 4 | 无法找到对应`id`的节点 |
-
+对于 `get` 类的方法，获取成功则返回获取到的值，否则返回 `null`；对于 `set` 类的方法，设置成功返回 `true`，否则返回 `false`  
   
 !>所有方法必须在 `html` 被 `setData` 完成后才能调用  
 
@@ -498,15 +558,11 @@ data:{
 },
 error(e){
   // 广告组件加载出错
-  if(e.detail.source == "ad"){
-    // 获取document
+  if (e.detail.source == "ad") {
     var document = this.selectComponent("#article").document;
-    // 查找广告框容器
-    var res = document.getElementById("adContainer");
-    if (res.ok)
-      res.data.setAttr("style","display:none"); // 隐藏广告容器
-    else
-      console.error(res.errMsg); // 查找失败
+    var adContainer = document.getElementById("adContainer");
+    if (adContainer)
+      adContainer.setStyle("display", "none");
   }
 }
 ```
@@ -518,7 +574,7 @@ error(e){
   模拟 `ol`、`ul`、`li` 标签  
   `ol` 标签支持 `start` 和 `type` 属性；`ul` 标签会自动根据层级显示不同的样式  
 - 大小  
-  `4.65KB`  
+  `4.66KB`  
 
 !>此补丁包**仅能**在微信小程序中使用  
 
@@ -595,7 +651,7 @@ error(e){
 | .class::after | .demo::after | &lt;element class="demo" ::after&gt; |
 
 - 大小（与原大小相比增加）  
-  `4.49KB`（`min` 版本：`2.82KB`）  
+  `4.54KB`（`min` 版本：`2.84KB`）  
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
@@ -628,7 +684,16 @@ parser(html).then(function(res){
   ![解析流程图](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E8%A7%A3%E6%9E%90%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?sign=e56509c626c1466e4fc61128f784acbc&t=1575800648)  
   
 - 渲染过程流程图  
-  ![渲染流程图](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?sign=3a3b10fe783bc068ad5f6800badf4f14&t=1575800687)
+  ![渲染流程图](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?sign=3a3b10fe783bc068ad5f6800badf4f14&t=1575800687)  
+
+- 如何添加一个自定义标签  
+  1. 在 `config.js` 中的 `trustAttrs` 中添加需要用到的属性  
+  2. 在 `config.js` 中的 `trustTags` 中添加该标签名（值设置成 1 时表示可以被 `trees` 组件递归显示，一般设置为 0）
+  3. 在 `config.js` 中的 `LabelAttrHandler` 中进行自定义的属性处理（可选）  
+  4. 在 `trees.wxml` 中添加该组件
+     ```wxml
+     <element wx:elif="{{item.name=='element'}}" xxx="{{item.attrs.xxx}}" />
+     ```
 
 ## 许可与支持 ##
 - 许可  

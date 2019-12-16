@@ -5,46 +5,6 @@
  author：JinYufeng
 */
 Component({
-  data: {
-    imgLoad: false
-  },
-  created() {
-    // 提交错误事件
-    this.triggerError = (source, target, errMsg, errCode, context) => {
-      if (this._top)
-        this._top.triggerEvent('error', {
-          source,
-          target,
-          errMsg,
-          errCode,
-          context
-        })
-    };
-    // 加载其他源
-    this.loadSource = (currentTarget) => {
-      if (!this.data.controls[currentTarget.id] && currentTarget.source.length > 1) {
-        this.data.controls[currentTarget.id] = {
-          play: false,
-          index: 1
-        }
-        this.setData({
-          controls: this.data.controls
-        })
-        return true;
-      }
-      if (this.data.controls[currentTarget.id] && currentTarget.source.length > (this.data.controls[currentTarget.id].index + 1)) {
-        this.data.controls[currentTarget.id].index++;
-        this.setData({
-          controls: this.data.controls
-        })
-        return true;
-      }
-      return false;
-    }
-  },
-  detached() {
-    if (this._observer) this._observer.disconnect();
-  },
   properties: {
     nodes: {
       type: Array,
@@ -55,32 +15,63 @@ Component({
       value: {}
     }
   },
+  created() {
+    // 提交错误事件
+    this.triggerError = (source, target, errMsg, errCode, context) => {
+      this._top ? this._top.triggerEvent('error', {
+        source,
+        target,
+        errMsg,
+        errCode,
+        context
+      }) : null;
+    };
+    // 加载其他源
+    this.loadSource = (target) => {
+      var index = (this.data.controls[target.id] ? this.data.controls[target.id].index : 0) + 1;
+      if (index < target.dataset.source.length) {
+        if (!this.data.controls[target.id])
+          this.setData({
+            [`controls.${target.id}`]: {
+              index
+            }
+          })
+        else
+          this.setData({
+            [`controls.${target.id}.index`]: index
+          })
+        return true;
+      }
+      return false;
+    }
+  },
+  detached() {
+    if (this._observer) this._observer.disconnect();
+  },
   methods: {
     // 视频播放事件
     playEvent(e) {
-      if (!this._top) return;
-      if (this._top.videoContexts.length > 1 && this._top.data.autopause) {
+      if (this._top && (this._top.videoContexts || []).length > 1 && this._top.data.autopause) {
         for (let video of this._top.videoContexts) {
-          if (video.id == e.currentTarget.dataset.id) continue;
+          if (video.id == e.currentTarget.id) continue;
           video.pause();
         }
       }
     },
     // 图片预览事件
     previewEvent(e) {
-      if (!this._top) return;
-      if (!e.target.dataset.hasOwnProperty('ignore')) {
-        var preview = true,
-          src = e.currentTarget.dataset.src;
+      var attrs = e.currentTarget.dataset.attrs;
+      if (!attrs.ignore && this._top) {
+        var preview = true;
         this._top.triggerEvent('imgtap', {
           id: e.currentTarget.id,
-          src,
+          src: attrs.src,
           ignore: () => preview = false
         })
         if (preview && this._top.data.autopreview) {
           wx.previewImage({
-            current: src,
-            urls: this._top.imgList.length ? this._top.imgList : [src],
+            current: this._top.imgList[attrs.i] || attrs.src,
+            urls: this._top.imgList || [attrs.src]
           })
         }
       }
@@ -89,31 +80,37 @@ Component({
     tapEvent(e) {
       if (!this._top) return;
       var jump = true,
-        href = e.currentTarget.dataset.href;
-      this._top.triggerEvent('linkpress', {
-        href,
-        ignore: () => jump = false
-      });
-      if (jump && href) {
-        if (href[0] == "#") {
-          if (this._top.data.useAnchor)
-            this._top.navigateTo({
-              id: href.substring(1)
-            })
-        } else if (/^http/.test(href)) {
-          if (this._top.data.autocopy)
-            wx.setClipboardData({
-              data: href,
-              success() {
-                wx.showToast({
-                  title: '链接已复制',
-                })
-              }
-            })
-        } else
-          wx.navigateTo({
-            url: href,
+        attrs = e.currentTarget.dataset.attrs;
+      delete attrs.style;
+      attrs.ignore = () => jump = false;
+      this._top.triggerEvent('linkpress', attrs);
+      if (jump) {
+        if (attrs['app-id'] || attrs.appId) {
+          wx.navigateToMiniProgram({
+            appId: attrs['app-id'] || attrs.appId,
+            path: attrs.path || ''
           })
+        } else if (attrs.href) {
+          if (attrs.href[0] == "#") {
+            if (this._top.data.useAnchor)
+              this._top.navigateTo({
+                id: attrs.href.substring(1)
+              })
+          } else if (attrs.href.indexOf("http") == 0 || attrs.href.indexOf("//") == 0) {
+            if (this._top.data.autocopy)
+              wx.setClipboardData({
+                data: attrs.href,
+                success() {
+                  wx.showToast({
+                    title: '链接已复制',
+                  })
+                }
+              })
+          } else
+            wx.navigateTo({
+              url: attrs.href,
+            })
+        }
       }
     },
     // 错误事件
@@ -121,21 +118,20 @@ Component({
       this.triggerError("ad", e.currentTarget, e.detail.errMsg, e.detail.errCode);
     },
     videoError(e) {
-      if (!this.loadSource(e.currentTarget.dataset) && this._top)
+      if (!this.loadSource(e.currentTarget) && this._top)
         this.triggerError("video", e.currentTarget, e.detail.errMsg, undefined, this._top.getVideoContext(e.currentTarget.id));
     },
     audioError(e) {
-      if (!this.loadSource(e.currentTarget.dataset))
+      if (!this.loadSource(e.currentTarget))
         this.triggerError("audio", e.currentTarget, e.detail.errMsg);
     },
     // 加载视频
     loadVideo(e) {
-      this.data.controls[e.currentTarget.dataset.id] = {
-        play: true,
-        index: 0
-      }
       this.setData({
-        controls: this.data.controls
+        [`controls.${e.currentTarget.id}`]: {
+          play: true,
+          index: 0
+        }
       })
     }
   }

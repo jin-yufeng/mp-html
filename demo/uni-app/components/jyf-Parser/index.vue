@@ -1,53 +1,92 @@
+<!--
+ parser 主模块组件
+ github地址：https://github.com/jin-yufeng/Parser
+ 文档地址：https://jin-yufeng.github.io/Parser
+ 插件市场：https://ext.dcloud.net.cn/plugin?id=805
+ author：JinYufeng
+-->
 <template>
 	<view>
 		<!--#ifdef H5-->
-		<slot v-if="!html"></slot>
-		<div :id="'rtf' + uid" :style="(selectable?'user-select:text;-webkit-user-select:text':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')"></div>
+		<slot v-if="!html && !nodes.length"></slot>
+		<div :id="'rtf' + uid" :style="(selectable ? 'user-select:text;-webkit-user-select:text;' : '') + (showWithAnimation ? ('opacity:0;' + showAnimation) : '')"></div>
 		<!--#endif-->
 		<!--#ifndef H5-->
-		<slot v-if="!(html.nodes||((html&&(html[0].name||html[0].type))?1:nodes.length))"></slot>
+		<slot v-if="!html[0].name && !html[0].type && !nodes.length"></slot>
 		<!--#endif-->
 		<!--#ifdef MP-ALIPAY-->
-		<view class="contain" :style="(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
+		<view class="_contain" :style="(selectable ? 'user-select:text;-webkit-user-select:text;' : '') + (showWithAnimation ? 'opacity:0' : '')"
 		 :animation="showAnimation">
-			<trees :nodes="html.nodes||((html&&(html[0].name||html[0].type))?html:nodes)" :imgMode="imgMode" />
+			<trees :nodes="nodes.length ? nodes : (html[0].name || html[0].type ? html : [])" :imgMode="imgMode" />
 		</view>
 		<!--#endif-->
 		<!--#ifndef MP-ALIPAY || H5-->
-		<trees class="contain" :style="'display:block'+(showWithAnimation?'opacity:0;':'')+(selectable?'user-select:text;-webkit-user-select:text':'')"
-		 :animation="showAnimation" :nodes="html.nodes||((html[0].name||html[0].type)?html:nodes)" :imgMode="imgMode"
+		<trees class="_contain" :style="'display:block;' + (selectable ? 'user-select:text;-webkit-user-select:text;' : '') + (showWithAnimation ? 'opacity:0' : '')"
+		 :animation="showAnimation" :nodes="nodes.length ? nodes : (html[0].name || html[0].type ? html : [])" :imgMode="imgMode"
 		 :loadVideo="loadVideo" />
 		<!--#endif-->
 	</view>
 </template>
 
 <script>
+	// #ifndef H5
 	import trees from "./trees"
+	var document; // document 补丁包，详见 https://jin-yufeng.github.io/Parser/#/instructions?id=document
 	const parseHtmlSync = require('./libs/MpHtmlParser.js').parseHtmlSync;
+	const cache = getApp().parserCache = {};
+	const CssHandler = require("./libs/CssHandler.js");
+	// 散列函数（计算 cache 的 key）
+	const Hash = (str) => {
+		for (var i = 0, hash = 5381, len = str.length; i < len; i++)
+			hash += (hash << 5) + str.charCodeAt(i);
+		return hash;
+	};
+	// 动画
+	const showAnimation = uni.createAnimation({
+		timingFunction: "ease"
+	}).opacity(1).step().export();
+	// #endif
 	const config = require('./libs/config.js');
-	const App = getApp();
-	var Document; // 使用document补丁包时将此句改为 const Document = require('./document.js');
+	// #ifdef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
+	// 图片链接去重
+	const Deduplication = (src) => {
+		if (src.indexOf("http") != 0) return src;
+		var newSrc = '';
+		for (var i = 0; i < src.length; i++) {
+			newSrc += (Math.random() >= 0.5 ? src[i].toUpperCase() : src[i].toLowerCase());
+			if (src[i] == '/' && src[i - 1] != '/' && src[i + 1] != '/') break;
+		}
+		newSrc += src.substring(i + 1);
+		return newSrc;
+	}
+	// #endif
 	export default {
 		name: 'parser',
 		data() {
 			return {
-				nodes: [],
-				showAnimation: {},
 				// #ifdef APP-PLUS
 				loadVideo: false,
 				// #endif
 				// #ifdef H5
 				uid: this._uid,
+				showAnimation: '',
 				// #endif
+				// #ifndef H5
+				showAnimation: {},
+				controls: {},
+				// #endif
+				nodes: []
 			}
 		},
+		// #ifndef H5
 		components: {
 			trees
 		},
+		// #endif
 		props: {
 			'html': {
 				type: null,
-				default: ''
+				default: null
 			},
 			'autocopy': {
 				type: Boolean,
@@ -66,10 +105,6 @@
 			'autosetTitle': {
 				type: Boolean,
 				default: true
-			},
-			'cacheId': {
-				type: String,
-				default: null
 			},
 			'domain': {
 				type: String,
@@ -99,23 +134,37 @@
 				type: Boolean,
 				default: false
 			},
-			'animationDuration': {
-				type: Number,
-				default: 400
-			},
 			'useAnchor': {
+				type: Boolean,
+				default: false
+			},
+			'useCache': {
 				type: Boolean,
 				default: false
 			}
 		},
+		watch: {
+			html(html) {
+				this.setContent(html, undefined, true);
+			}
+		},
 		mounted() {
-			this.execHtml(this.html);
-			// #ifndef MP-ALIPAY || H5
-			this.videoContexts = [];
-			// #endif
-			// #ifdef MP-BAIDU || MP-ALIPAY
-			this.anchors = [];
-			// #endif
+			this.imgList = [];
+			this.imgList.each = function(f) {
+				for (var i = 0; i < this.length; i++) {
+					// #ifdef MP-ALIPAY || APP-PLUS
+					this[i] = f(this[i], i, this) || this[i];
+					// #endif
+					// #ifndef MP-ALIPAY || APP-PLUS
+					var newSrc = f(this[i], i, this);
+					if (newSrc) {
+						if (this.includes(newSrc)) this[i] = Deduplication(newSrc);
+						else this[i] = newSrc;
+					}
+					// #endif
+				}
+			}
+			this.setContent(this.html, undefined, true);
 		},
 		// #ifdef H5
 		beforeDestroy() {
@@ -123,13 +172,24 @@
 		},
 		// #endif
 		methods: {
-			execHtml(html) {
-				// #ifdef H5
-				if (!html) html = '';
+			// #ifdef H5
+			setContent(html, options, observed) {
+				if (typeof options == "object")
+					for (var key in options) {
+						key = key.replace(/-(\w)/g, function() {
+							return arguments[1].toUpperCase();
+						})
+						this[key] = options[key];
+					}
+				html = html || '';
+				if (!html) {
+					if (this.rtf) this.rtf.parentNode.removeChild(this.rtf);
+					return;
+				}
 				if (typeof html != 'string') html = this.Dom2Str(html.nodes || html);
 				// 处理 rpx
 				if (/[0-9.]*?rpx/.test(html)) {
-					var rpx = uni.getSystemInfoSync().screenWidth / 750;
+					const rpx = uni.getSystemInfoSync().screenWidth / 750;
 					html = html.replace(/([0-9.]*?)rpx/g, function() {
 						return parseFloat(arguments[1]) * rpx + "px";
 					})
@@ -138,19 +198,20 @@
 				var style = "<style>";
 				for (var item in config.userAgentStyles)
 					style += (item + '{' + config.userAgentStyles[item] + '}');
-				for (var item in this.tagStyle || {})
-					style += (item + '{' + config.userAgentStyles[item] + '}');
+				for (var item in this.tagStyle)
+					style += (item + '{' + this.tagStyle[item] + '}');
 				style += "</style>";
 				html = style + html;
-				var rtf = document.createElement('div');
-				rtf.innerHTML = html;
-				for (var style of rtf.getElementsByTagName("style")) {
+				if (this.rtf) this.rtf.parentNode.removeChild(this.rtf);
+				this.rtf = document.createElement('div');
+				this.rtf.innerHTML = html;
+				for (var style of this.rtf.getElementsByTagName("style")) {
 					style.innerHTML = style.innerHTML.replace(/\s*body/g, "#rtf" + this._uid);
 					style.setAttribute("scoped", "true");
 				}
-				this.imgList = [];
-				var imgs = rtf.getElementsByTagName("img");
+				// 懒加载
 				if (this.lazyLoad && IntersectionObserver) {
+					if (this._observer) this._observer.disconnect();
 					this._observer = new IntersectionObserver(changes => {
 						for (var change of changes) {
 							if (change.isIntersecting) {
@@ -164,10 +225,19 @@
 					})
 				}
 				var component = this;
+				// 获取标题
+				var title = this.rtf.getElementsByTagName("title");
+				if (title.length && this.autosetTitle)
+					uni.setNavigationBarTitle({
+						title: title[0].innerText
+					})
+				// 图片处理
+				this.imgList.length = 0;
+				var imgs = this.rtf.getElementsByTagName("img");
 				for (var i = 0; i < imgs.length; i++) {
 					var img = imgs[i];
 					img.style.maxWidth = "100%";
-					img.index = i;
+					img.i = i;
 					component.imgList.push(img.src);
 					if (img.parentElement.nodeName != 'A') {
 						img.onclick = function() {
@@ -177,7 +247,7 @@
 								component.$emit('imgtap', this);
 								if (preview && component.autopreview) {
 									uni.previewImage({
-										current: this.index,
+										current: this.i,
 										urls: component.imgList
 									});
 								}
@@ -196,34 +266,36 @@
 						this._observer.observe(img);
 					}
 				}
-				var links = rtf.getElementsByTagName("a");
+				// 链接处理
+				var links = this.rtf.getElementsByTagName("a");
 				for (var link of links) {
 					link.onclick = function(e) {
-						var jump = true;
+						var jump = true,
+							href = this.getAttribute("href");
 						component.$emit('linkpress', {
-							href: this.getAttribute("href"),
+							href,
 							ignore: () => jump = false
 						});
-						if (jump && this.getAttribute("href")) {
-							if (this.getAttribute("href")[0] == '#') {
+						if (jump && href) {
+							if (href[0] == '#') {
 								if (component.useAnchor) {
-									var target = document.getElementById(this.getAttribute('href').substring(1));
-									if (target)
-										window.scrollTo(0, target.offsetTop);
+									component.navigateTo({
+										id: href.substring(1)
+									})
 								}
-							} else if (/^http/.test(this.getAttribute("href"))) {
-								if (component.autocopy)
-									window.location.href = this.href;
-							} else {
+							} else if (href.indexOf("http") == 0 || href.indexOf("//") == 0)
+								return true;
+							else {
 								uni.navigateTo({
-									url: this.getAttribute("href")
+									url: href
 								})
 							}
 						}
 						return false;
 					}
 				}
-				var videos = rtf.getElementsByTagName("video");
+				// 视频处理
+				var videos = this.rtf.getElementsByTagName("video");
 				component.videoContexts = videos;
 				for (var video of videos) {
 					video.style.maxWidth = "100%";
@@ -242,7 +314,8 @@
 						}
 					}
 				}
-				var audios = rtf.getElementsByTagName("audios");
+				// 音频处理
+				var audios = this.rtf.getElementsByTagName("audios");
 				for (var audio of audios) {
 					audio.onerror = function(e) {
 						component.$emit('error', {
@@ -251,87 +324,15 @@
 						});
 					}
 				}
-				document.getElementById("rtf" + this._uid).appendChild(rtf);
-				this.showAnimation =
+				document.getElementById("rtf" + this._uid).appendChild(this.rtf);
+				if (this.showWithAnimation)
+					this.showAnimation =
 					"opacity: 1; transition: opacity 400ms ease 0ms, -webkit-transform 400ms ease 0ms, transform 400ms ease 0ms; transform-origin: 50% 50% 0px;";
+				if (!observed) this.nodes = [0];
 				this.$nextTick(() => {
-					this.$emit("ready", rtf.getBoundingClientRect());
+					this.$emit("ready", this.rtf.getBoundingClientRect());
 				})
-				return;
-				// #endif
-				let showAnimation = {};
-				if (this.showWithAnimation) {
-					showAnimation = uni.createAnimation({
-						duration: this.animationDuration,
-						timingFunction: "ease"
-					}).opacity(1).step().export();
-				}
-				if (!html) {
-					this.nodes = [];
-				} else if (typeof html == 'string') {
-					var res;
-					// 缓存读取
-					if (this.cacheId) {
-						App.globalData = App.globalData || {};
-						if (App.globalData[this.cacheId])
-							res = App.globalData[this.cacheId];
-						else {
-							res = parseHtmlSync(html, this);
-							App.globalData[this.cacheId] = res;
-						}
-					} else res = parseHtmlSync(html, this);
-					console.log(res)
-					// #ifdef APP-PLUS
-					this.loadVideo = false;
-					// #endif
-					this.nodes = res.nodes;
-					this.showAnimation = showAnimation;
-					this.imgList = res.imgList;
-					if (Document) this.document = new Document("nodes", res.nodes, this);
-					if (res.title && this.autosetTitle) {
-						uni.setNavigationBarTitle({
-							title: res.title
-						})
-					}
-					this.$emit('parse', res);
-					this.ready();
-				} else if (html.constructor == Array) {
-					this.showAnimation = showAnimation;
-					this.imgList = [];
-					// #ifdef APP-PLUS
-					this.loadVideo = false;
-					// #endif
-					if (Document) this.document = new Document("html", html, this);
-					this.ready();
-				} else if (typeof html == 'object') {
-					if (!html.nodes || html.nodes.constructor != Array) {
-						if ((html.name && html.children && html.attrs) || (html.type == "text"))
-							return;
-						this.$emit('error', {
-							source: "parse",
-							errMsg: "传入的nodes数组格式不正确！应该传入的类型是array，实际传入的类型是：" + typeof html.nodes
-						});
-						return;
-					}
-					this.showAnimation = showAnimation;
-					this.imgList = html.imgList || [];
-					// #ifdef APP-PLUS
-					this.loadVideo = false;
-					// #endif
-					if (Document) this.document = new Document("html.nodes", html.nodes, this);
-					if (html.title && this.autosetTitle)
-						uni.setNavigationBarTitle({
-							title: html.title
-						})
-					this.ready();
-				} else {
-					this.$emit('error', {
-						source: "parse",
-						errMsg: "错误的html类型：" + typeof html
-					});
-				}
 			},
-			// #ifdef H5
 			Dom2Str(nodes) {
 				var str = "";
 				for (var node of nodes) {
@@ -347,54 +348,189 @@
 				}
 				return str;
 			},
+			getText(whiteSpace = true) {
+				if (!whiteSpace) return this.rtf.innerText.replace(/\s/g, '');
+				return this.rtf.innerText;
+			},
+			navigateTo(obj) {
+				if (!obj.id) {
+					window.scrollTo(0, this.rtf.offsetTop);
+					return obj.success ? obj.success({
+						errMsg: "pageScrollTo:ok"
+					}) : null;
+				}
+				var target = document.getElementById(obj.id);
+				if (!target) return obj.fail ? obj.fail({
+					errMsg: "Label Not Found"
+				}) : null;
+				window.scrollTo(0, this.rtf.offsetTop + target.offsetTop);
+				return obj.success ? obj.success({
+					errMsg: "pageScrollTo:ok"
+				}) : null;
+			},
 			// #endif
 			// #ifndef H5
-			getContext(components) {
-				for (let component of components) {
-					let observered = false;
-					if (!component.nodes)
-						return this.getContext(component.$children);
-					for (let item of component.nodes) {
-						// #ifndef MP-ALIPAY
-						if (item.name == 'img' && !observered) {
-							observered = true;
-							if (this.lazyLoad && uni.createIntersectionObserver) {
-								component._observer = uni.createIntersectionObserver(component);
-								component._observer.relativeToViewport({
-									top: 1000,
-									bottom: 1000
-								}).observe('.img', res => {
-									component.imgLoad = true;
-									component._observer.disconnect();
-									component._observer = null;
-								})
-							} else
-								component.imgLoad = true;
-						} else if (item.name == 'video') {
-							this.videoContexts.push({
-								id: item.attrs.id,
-								context: uni.createVideoContext(item.attrs.id, component)
-							});
-						}
-						// #endif
-						// #ifdef MP-BAIDU || MP-ALIPAY
-						if (item.attrs && item.attrs.id) {
-							this.anchors.push({
-								id: item.attrs.id,
-								node: component
-							})
-						}
-						// #endif
+			setContent(html, options, observed) {
+				if (typeof options == "object")
+					for (var key in options) {
+						key = key.replace(/-(\w)/g, function() {
+							return arguments[1].toUpperCase();
+						})
+						this[key] = options[key];
 					}
-					this.getContext(component.$children);
+				if (this.showWithAnimation)
+					this.showAnimation = showAnimation;
+				if (!html) {
+					if (observed) return;
+					else this.nodes = [];
+				} else if (typeof html == "string") {
+					var res;
+					// 缓存读取
+					if (this.useCache) {
+						var hash = Hash(html);
+						if (cache[hash])
+							res = cache[hash];
+						else {
+							res = parseHtmlSync(html, this);
+							cache[hash] = res;
+						}
+					} else res = parseHtmlSync(html, this);
+					this.nodes = res;
+					this.$emit('parse', res);
+				} else if (html.constructor == Array) {
+					// 非本插件产生的 array 需要进行一些转换
+					if (html.length && html[0].PoweredBy != "Parser") {
+						const Parser = {
+							_imgNum: 0,
+							_videoNum: 0,
+							_audioNum: 0,
+							_domain: this.domain,
+							_protocol: this.domain ? (this.domain.includes("://") ? this.domain.split("://")[0] : "http") : undefined,
+							_STACK: [],
+							CssHandler: new CssHandler(this.tagStyle),
+							bubbling() {
+								for (var i = this._STACK.length - 1; i >= 0; i--) {
+									if (config.trustTags[this._STACK[i].name] !== 0)
+										this._STACK[i].continue = true;
+									else
+										return this._STACK[i].name;
+								}
+							}
+						};
+						Parser.CssHandler.getStyle('');
+						const DFS = (nodes) => {
+							for (var node of nodes) {
+								if (node.type == "text") continue;
+								config.LabelAttrsHandler(node, Parser);
+								if (config.blockTags[node.name]) node.name = 'div';
+								else if (!config.trustTags.hasOwnProperty(node.name)) node.name = 'span';
+								if (node.children && node.children.length) {
+									Parser._STACK.push(node);
+									DFS(node.children);
+									Parser._STACK.pop();
+								}
+							}
+						}
+						DFS(html);
+						this.nodes = html;
+					}
+					if (!observed) this.nodes = html;
+					else this.nodes = [];
+				} else if (typeof html == 'object' && html.nodes) {
+					this.nodes = html.nodes;
+					console.warn("Parser 类型错误：object 类型已废弃，请直接将 html 设置为 object.nodes （array 类型）");
+				} else {
+					return this.$emit('error', {
+						source: "parse",
+						errMsg: "传入的nodes数组格式不正确！应该传入的类型是array，实际传入的类型是：" + typeof html.nodes
+					});
 				}
-			},
-			ready() {
+				// #ifdef APP-PLUS
+				this.loadVideo = false;
+				// #endif
+				if (document) this.document = new document("html", this.html || html, this);
 				this.$nextTick(() => {
-					this.getContext(this.$children);
-					uni.createSelectorQuery().in(this).select(".contain").boundingClientRect(res => {
-						this.$emit("ready", res);
-					}).exec();
+					this.imgList.length = 0;
+					this.videoContexts = [];
+					const getContext = (components) => {
+						for (let component of components) {
+							if (component.$options.name == "trees") {
+								let observered = false;
+								for (let item of component.nodes) {
+									if (item.continue) continue;
+									if (item.name == 'img') {
+										if (item.attrs.src && !item.attrs.ignore) {
+											// #ifndef MP-ALIPAY || APP-PLUS
+											if (this.imgList.indexOf(item.attrs.src) == -1)
+												this.imgList[item.attrs.i] = item.attrs.src;
+											else this.imgList[item.attrs.i] = Deduplication(item.attrs.src);
+											// #endif
+											// #ifdef MP-ALIPAY || APP-PLUS
+											this.imgList[item.attrs.i] = item.attrs.src;
+											// #endif
+										}
+										// #ifndef MP-ALIPAY
+										if (!observered) {
+											observered = true;
+											if (this.lazyLoad && uni.createIntersectionObserver) {
+												if (component._observer) component._observer.disconnect();
+												component._observer = uni.createIntersectionObserver(component);
+												component._observer.relativeToViewport({
+													top: 1000,
+													bottom: 1000
+												}).observe('.img', res => {
+													component.imgLoad = true;
+													component._observer.disconnect();
+													component._observer = null;
+												})
+											} else
+												component.imgLoad = true;
+										}
+										// #endif
+									}
+									// #ifndef MP-ALIPAY
+									else if (item.name == 'video') {
+										var context = uni.createVideoContext(item.attrs.id, component);
+										context.id = item.attrs.id;
+										this.videoContexts.push(context);
+									}
+									// #endif
+									// #ifdef MP-WEIXIN
+									else if (item.name == 'audio' && item.attrs.autoplay)
+										wx.createAudioContext(item.attrs.id, component).play();
+									// #endif
+									// 设置标题
+									else if (item.name == "title") {
+										if (item.children[0].type == "text" && item.children[0].text && this.autosetTitle)
+											uni.setNavigationBarTitle({
+												title: item.children[0].text
+											})
+									}
+									// #ifdef MP-BAIDU || MP-ALIPAY
+									if (item.attrs && item.attrs.id) {
+										this.anchors = this.anchors || [];
+										this.anchors.push({
+											id: item.attrs.id,
+											node: component
+										})
+									}
+									// #endif
+								}
+							}
+							if (component.$children.length)
+								getContext(component.$children)
+						}
+					}
+					// #ifdef MP-TOUTIAO
+					setTimeout(() => {
+						// #endif
+						getContext(this.$children)
+						uni.createSelectorQuery().in(this).select("._contain").boundingClientRect(res => {
+							this.$emit("ready", res);
+						}).exec();
+						// #ifdef MP-TOUTIAO
+					}, 200)
+					// #endif
 					// #ifdef APP-PLUS
 					setTimeout(() => {
 						this.loadVideo = true;
@@ -402,50 +538,38 @@
 					// #endif
 				})
 			},
-			// #endif
-			getText() {
-				// #ifdef H5
-				return this.iframe.contentWindow.document.innerText;
-				// #endif
-				// #ifndef H5
+			getText(whiteSpace = true) {
 				var text = "";
-				var traverse = (node) => {
+				const DFS = (node) => {
 					if (node.type == "text") return text += node.text;
 					else {
-						if ((node.name == "p" || node.name == "div" || node.name == "br") && text[text.length - 1] != '\n')
+						if (whiteSpace && (((node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" ||
+								/h[1-6]/.test(node.name)) && text && text[text.length - 1] != '\n') || node.name == "br"))
 							text += '\n';
-						for (var child of node.children)
-							traverse(child);
+						for (var child of node.children || [])
+							DFS(child);
+						if (whiteSpace && (node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" || /h[1-6]/.test(
+								node.name)) && text && text[text.length - 1] != '\n')
+							text += '\n';
+						else if (whiteSpace && node.name == "td") text += '\t';
 					}
 				}
-				if (!this.html) return "";
-				for (var node of (this.html.nodes || ((this.html[0].name || this.html[0].type) ? this.html :
-						this.nodes)))
-					traverse(node);
+				var nodes = ((this.nodes && this.nodes.length) ? this.nodes : (html[0] && (html[0].name || html[0].type) ? html : []));
+				if (!nodes.length) return "";
+				for (var node of nodes)
+					DFS(node);
 				return text;
-				// #endif
 			},
 			navigateTo(obj) {
-				obj.success = obj.success || (() => null);
-				obj.fail = obj.fail || (() => null);
-				// #ifdef H5
-				if (!obj.id) return window.scrollTo(0, this.iframe.offsetTop);
-				var target = iframe.contentWindow.document.getElementById(obj.id);
-				if (!target) return obj.fail({
-					errMsg: "Label Not Found"
-				});
-				return window.scrollTo(0, this.iframe.offsetTop + target.offsetTop);
-				// #endif
-				// #ifndef H5
 				var Scroll = (selector, component) => {
 					const query = uni.createSelectorQuery().in(component ? component : this);
 					query.select(selector).boundingClientRect();
 					query.selectViewport().scrollOffset();
 					query.exec(res => {
 						if (!res || !res[0])
-							return obj.fail({
+							return obj.fail ? obj.fail({
 								errMsg: "Label Not Found"
-							});
+							}) : null;
 						uni.pageScrollTo({
 							scrollTop: res[1].scrollTop + res[0].top,
 							success: obj.success,
@@ -453,10 +577,10 @@
 						})
 					})
 				}
-				if (!obj.id) Scroll(".contain");
+				if (!obj.id) Scroll("._contain");
 				else {
 					// #ifndef MP-BAIDU || MP-ALIPAY
-					Scroll('.contain >>> #' + obj.id);
+					Scroll('._contain >>> #' + obj.id);
 					// #endif
 					// #ifdef MP-BAIDU || MP-ALIPAY
 					for (var anchor of this.anchors) {
@@ -466,8 +590,8 @@
 					}
 					// #endif
 				}
-				// #endif
 			},
+			// #endif
 			getVideoContext(id) {
 				if (!id) return this.videoContexts;
 				else {
@@ -476,11 +600,6 @@
 					}
 				}
 				return null;
-			}
-		},
-		watch: {
-			html(html) {
-				this.execHtml(html);
 			}
 		}
 	}
@@ -493,5 +612,6 @@
 		overflow: scroll;
 		-webkit-overflow-scrolling: touch;
 	}
+
 	/* #endif */
 </style>

@@ -2,18 +2,15 @@
 const htmls = require('./htmls.js');
 Page({
   onLoad(e) {
-    this.setData({
-      cacheId: e.index,
-      html: htmls['demo' + e.index],
-    })
+    this.selectComponent("#article").setContent(htmls['demo' + e.index]);
   },
   onError(e) {
     console.error(e)
     if (e.detail.source == "ad") {
       var document = this.selectComponent("#article").document;
-      var res = document.getElementById("adContainer");
-      if (res.ok)
-        res.data.setAttr("style","display:none");
+      var adContainer = document.getElementById("adContainer");
+      if (adContainer)
+        adContainer.setStyle("display", "none");
     }
   },
   linkTap(e) {

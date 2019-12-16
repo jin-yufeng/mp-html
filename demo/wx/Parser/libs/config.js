@@ -1,6 +1,44 @@
 /* 配置文件 */
-// 信任的标签，1表示可以通过组件递归的方式显示
-var trustTags = {
+// 信任的属性列表，不在列表中的属性将被移除
+const trustAttrs = {
+  align: true,
+  alt: true,
+  "app-id": true,
+  appId: true,
+  author: true,
+  autoplay: true,
+  border: true,
+  cellpadding: true,
+  cellspacing: true,
+  class: true,
+  color: true,
+  colspan: true,
+  controls: true,
+  "data-src": true,
+  dir: true,
+  face: true,
+  height: true,
+  href: true,
+  id: true,
+  ignore: true,
+  loop: true,
+  muted: true,
+  name: true,
+  path: true,
+  poster: true,
+  rowspan: true,
+  size: true,
+  span: true,
+  src: true,
+  start: true,
+  style: true,
+  type: true,
+  "unit-id": true,
+  unitId: true,
+  width: true
+}
+// 信任的标签列表，1 表示可以用 trees 组件模拟并继续递归显示
+const trustTags = {
   a: 0,
   abbr: 1,
   ad: 0,
@@ -18,7 +56,6 @@ var trustTags = {
   div: 1,
   em: 1,
   fieldset: 0,
-  font: 1,
   h1: 0,
   h2: 0,
   h3: 0,
@@ -47,12 +84,13 @@ var trustTags = {
   th: 0,
   thead: 0,
   tr: 0,
+  title: 0,
   u: 1,
   ul: 1,
   video: 1
 };
 // 块级标签，将被转为 div
-var blockTags = {
+const blockTags = {
   address: true,
   article: true,
   aside: true,
@@ -67,7 +105,7 @@ var blockTags = {
   section: true
 };
 // 被移除的标签
-var ignoreTags = {
+const ignoreTags = {
   area: true,
   base: true,
   basefont: true,
@@ -94,13 +132,41 @@ var ignoreTags = {
   script: true,
   source: true,
   textarea: true,
-  title: true,
+  track: true,
+  use: true,
+  wbr: true
+};
+// 自闭合标签
+const selfClosingTags = {
+  area: true,
+  base: true,
+  basefont: true,
+  br: true,
+  col: true,
+  circle: true,
+  ellipse: true,
+  embed: true,
+  frame: true,
+  hr: true,
+  img: true,
+  input: true,
+  isindex: true,
+  keygen: true,
+  line: true,
+  link: true,
+  meta: true,
+  param: true,
+  path: true,
+  polygon: true,
+  polyline: true,
+  rect: true,
+  source: true,
   track: true,
   use: true,
   wbr: true
 };
 // 默认的标签样式
-var userAgentStyles = {
+const userAgentStyles = {
   a: "display:inline;color:#366092;word-break:break-all;",
   address: "font-style:italic;",
   blockquote: "background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px;",
@@ -153,28 +219,29 @@ module.exports = {
   highlight: null,
   // 处理标签的属性，需要通过组件递归方式显示的标签需要调用 Parser.bubbling()
   LabelAttrsHandler(node, Parser) {
+    node.attrs.style = node.attrs.style || '';
     switch (node.name) {
-      case 'div':
+      case "div":
       case 'p':
         if (node.attrs.align) {
-          node.attrs.style = 'text-align:' + node.attrs.align + ';' + (node.attrs.style || '');
+          node.attrs.style = "text-align:" + node.attrs.align + ';' + node.attrs.style;
           delete node.attrs.align;
         }
         break;
       case "img":
-        if (node.attrs['data-src']) {
-          node.attrs.src = node.attrs.src || node.attrs['data-src'];
+        if (node.attrs["data-src"]) {
+          node.attrs.src = node.attrs.src || node.attrs["data-src"];
           delete node.attrs['data-src'];
         }
-        if (!node.attrs.ignore && node.attrs.src) {
-          if (Parser.imgList.includes(node.attrs.src) && node.attrs.src.includes("http"))
-            node.attrs.src = node.attrs.src + (node.attrs.src.includes('?') ? '&' : '?') + "parserid=" + Parser.imgList.length;
-          Parser.imgList.push(node.attrs.src);
-          if (Parser.bubbling() == 'a') node.attrs.ignore = "true"; // 图片在链接中不可预览
-        }
-        if (Parser._domain && node.attrs.src[0] == '/') {
-          if (node.attrs.src[1] == '/') node.attrs.src = Parser._protocol + ":" + node.attrs.src;
-          else node.attrs.src = Parser._domain + node.attrs.src;
+        if (node.attrs.src) {
+          if (!node.attrs.ignore) {
+            node.attrs.i = (Parser._imgNum++).toString();
+            if (Parser.bubbling() == 'a') node.attrs.ignore = "true"; // 图片在链接中不可预览
+          }
+          if (Parser._domain && node.attrs.src[0] == '/') {
+            if (node.attrs.src[1] == '/') node.attrs.src = Parser._protocol + ":" + node.attrs.src;
+            else node.attrs.src = Parser._domain + node.attrs.src;
+          }
         }
         break;
       case 'a':
@@ -182,8 +249,6 @@ module.exports = {
         Parser.bubbling();
         break;
       case 'font':
-        name = 'span';
-        node.attrs.style = node.attrs.style || '';
         if (node.attrs.color) {
           node.attrs.style = 'color:' + node.attrs.color + ';' + node.attrs.style;
           delete node.attrs.color;
@@ -202,17 +267,16 @@ module.exports = {
         }
         break;
       case 'video':
-      case 'audio':
-        if (node.attrs.id) Parser['_' + node.name + 'Num']++;
-        else node.attrs.id = (node.name + (++Parser['_' + node.name + 'Num']));
-        if (node.name == 'video') {
-          node.attrs.style = node.attrs.style || '';
+      case "audio":
+        if (node.attrs.id) Parser['_' + node.name + "Num"]++;
+        else node.attrs.id = (node.name + (++Parser['_' + node.name + "Num"]));
+        if (node.name == "video") {
           if (node.attrs.width) {
-            node.attrs.style = 'width:' + parseFloat(node.attrs.width) + (node.attrs.width.includes("%") ? '%' : "px") + ';' + node.attrs.style;
+            node.attrs.style = "width:" + parseFloat(node.attrs.width) + (node.attrs.width.includes('%') ? '%' : "px") + ';' + node.attrs.style;
             delete node.attrs.width;
           }
           if (node.attrs.height) {
-            node.attrs.style = 'height:' + parseFloat(node.attrs.height) + (node.attrs.height.includes("%") ? '%' : "px") + ';' + node.attrs.style;
+            node.attrs.style = "height:" + parseFloat(node.attrs.height) + (node.attrs.height.includes('%') ? '%' : "px") + ';' + node.attrs.style;
             delete node.attrs.height;
           }
           if (Parser._videoNum > 3) node.lazyLoad = true;
@@ -220,84 +284,34 @@ module.exports = {
         node.attrs.source = [];
         if (node.attrs.src) node.attrs.source.push(node.attrs.src);
         if (!node.attrs.controls && !node.attrs.autoplay)
-          console.warn('存在没有controls属性的' + node.name + '标签，可能导致无法播放', node);
+          console.warn("存在没有 controls 属性的 " + node.name + " 标签，可能导致无法播放", node);
         Parser.bubbling();
         break;
-      case 'source':
+      case "source":
         var parent = Parser._STACK[Parser._STACK.length - 1];
-        if (parent && (parent.name == 'video' || parent.name == 'audio')) {
+        if (parent && (parent.name == "video" || parent.name == "audio")) {
           parent.attrs.source.push(node.attrs.src);
           if (!parent.attrs.src) parent.attrs.src = node.attrs.src;
         }
         break;
     }
+    node.attrs.style = Parser.CssHandler.match(node.name, node.attrs, node) + node.attrs.style;
+    if (Parser._domain && node.attrs.style.includes("url"))
+      node.attrs.style = node.attrs.style.replace(/url\s*\(['"\s]*(\S*?)['"\s]*\)/, function() {
+        var src = arguments[1];
+        if (src && src[0] == '/') {
+          if (src[1] == '/') return "url(" + Parser._protocol + ':' + src + ')';
+          else return "url(" + Parser._domain + src + ')';
+        } else return arguments[0];
+      })
+    if (!node.attrs.style) delete node.attrs.style;
+    if (Parser._useAnchor && node.attrs.id) Parser.bubbling();
   },
-  // 在这里注册的属性才能生效
-  trustAttrs: {
-    align: true,
-    alt: true,
-    author: true,
-    autoplay: true,
-    border: true,
-    cellpadding: true,
-    cellspacing: true,
-    class: true,
-    color: true,
-    colspan: true,
-    controls: true,
-    "data-src": true,
-    dir: true,
-    face: true,
-    height: true,
-    href: true,
-    id: true,
-    ignore: true,
-    loop: true,
-    muted: true,
-    name: true,
-    poster: true,
-    rowspan: true,
-    size: true,
-    span: true,
-    src: true,
-    start: true,
-    style: true,
-    type: true,
-    "unit-id": true,
-    width: true
-  },
-  // 自闭合标签
-  selfClosingTags: {
-    area: true,
-    base: true,
-    basefont: true,
-    br: true,
-    col: true,
-    circle: true,
-    ellipse: true,
-    embed: true,
-    frame: true,
-    hr: true,
-    img: true,
-    input: true,
-    isindex: true,
-    keygen: true,
-    line: true,
-    link: true,
-    meta: true,
-    param: true,
-    path: true,
-    polygon: true,
-    polyline: true,
-    rect: true,
-    source: true,
-    track: true,
-    use: true,
-    wbr: true
-  },
+  trustAttrs,
   trustTags,
   blockTags,
   ignoreTags,
+  selfClosingTags,
   userAgentStyles,
   versionHigherThan
 }

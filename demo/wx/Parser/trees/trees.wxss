@@ -10,61 +10,62 @@
   display: inherit;
   float: inherit;
 }
-.a {
+._a {
 	display: inline;
 	color: #366092;
 }
-.sub, .sup, .bdo, .bdi, .ruby, .rt {
+._sub, ._sup, ._bdo, ._bdi, ._ruby, ._rt {
   display: inline-block !important;
 }
-.div, .blockquote, .p {
+._div, ._blockquote, ._p {
   display:block;
 }
-.b, .strong {
+._b, ._strong {
   display: inline;
   font-weight: bold;
 }
-.em, .i {
+._em, ._i {
   display: inline;
   font-style: italic;
 }
-.del {
+._del {
   display: inline;
   text-decoration: line-through;
 }
-.ins {
+._ins {
   display: inline;
   text-decoration: underline;
 }
-.code {
+._code {
   display: inline;
   font-family: monospace;
 }
-.big {
+._big {
   font-size:1.2em;
   display:inline;
 }
-.small {
+._small {
   font-size:0.8em;
   display:inline;
 }
-.q, .span, .label, .abbr {
+._q, ._span, ._label, ._abbr {
   display: inline;
 }
-.q::before {
+._q::before {
   content: '"';
 }
-.q::after {
+._q::after {
   content: '"';
 }
-.pvideo {
+._video {
   background-color: black;
   width: 300px;
   height: 225px;
   display: inline-block;
   position: relative;
 }
-.video-triangle {
+._video::after {
+  content: '';
   border-width: 15px 0 15px 30px;
   border-style: solid;
   border-color: transparent transparent transparent white;

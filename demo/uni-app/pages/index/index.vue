@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<parser :html="html" @parser="parser" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error"
-		 show-with-animation lazy-load :autocopy="autocopy" use-anchor>加载中...</parser>
+		<parser @parse="parse" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error"
+		 show-with-animation lazy-load :autocopy="autocopy" use-anchor ref="rtf">加载中...</parser>
 	</view>
 </template>
 
@@ -12,7 +12,6 @@
 	export default {
 		data() {
 			return {
-				html: testHtml,
 				// #ifdef APP-PLUS
 				autocopy: false
 				// #endif
@@ -29,12 +28,17 @@
 			console.log("api: versionHigherThan'2.7.1'?", versionHigherThan('2.7.1'))
 			// #endif
 		},
+		onReady(){
+			this.$refs.rtf.setContent(testHtml);
+		},
 		methods: {
 			parse(res) {
 				console.log("parse finish", res);
 			},
 			ready(res) {
 				console.log("ready", res);
+				console.log("api: getText\n" + this.$refs.rtf.getText());
+				console.log("imgList", this.$refs.rtf.imgList);
 			},
 			imgtap(res) {
 				console.log("imgtap", res);

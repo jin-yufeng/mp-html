@@ -18,11 +18,9 @@ class MpHtmlParser {
 		this.CssHandler = new CssHandler(options.tagStyle);
 		this.data = data;
 		this.DOM = [];
-		this.imgList = [];
 		// #ifdef MP-BAIDU || MP-TOUTIAO
 		this._imgMode = options.imgMode;
 		// #endif
-		this.title = '';
 		this._attrName = '';
 		this._attrValue = '';
 		this._attrs = {};
@@ -35,6 +33,7 @@ class MpHtmlParser {
 		this._STACK = [];
 		this._tagName = '';
 		this._audioNum = 0;
+		this._imgNum = 0;
 		this._videoNum = 0;
 		this._useAnchor = options.useAnchor;
 		this._whiteSpace = false;
@@ -102,14 +101,10 @@ class MpHtmlParser {
 		};
 		setContain(this.DOM);
 		// #endif
-		var res = {
-			title: this.title,
-			nodes: this.DOM,
-			imgList: this.imgList
-		};
+		if (this.DOM.length) this.DOM[0].PoweredBy = "Parser";
 		if (this.cb)
-			this.cb(res)
-		else return res;
+			this.cb(this.DOM)
+		else return this.DOM;
 	};
 	TextHandler(c) {
 		if (c == '<') {
@@ -341,13 +336,11 @@ class MpHtmlParser {
 			children: []
 		}
 		config.LabelAttrsHandler(node, this);
-		if (this._useAnchor && node.attrs.id) this.bubbling();
 		this._attrs = {};
 		if (this.data[this._i] == '>') {
 			if (!config.selfClosingTags[this._tagName]) {
-				if (config.ignoreTags[node.name] || node.name == 'title') {
+				if (config.ignoreTags[node.name]) {
 					// 处理要被移除的标签
-					var j = ++this._i;
 					while (this._i < this.data.length) {
 						this._i = this.data.indexOf("</", this._i);
 						if (this._i == -1) return this._i = this.data.length;
@@ -355,9 +348,6 @@ class MpHtmlParser {
 						this._sectionStart = this._i;
 						while (!isBlankChar(this.data[this._i]) && this.data[this._i] != '>' && this.data[this._i] != '/') this._i++;
 						if (this.data.substring(this._sectionStart, this._i).toLowerCase() == node.name) {
-							// 获取标题
-							if (node.name == "title")
-								this.title = this.data.substring(j, this._sectionStart - 2);
 							this._i = this.data.indexOf('>', this._i);
 							if (this._i == -1) this._i = this.data.length;
 							else this._sectionStart = this._i + 1;
@@ -384,8 +374,6 @@ class MpHtmlParser {
 		this._sectionStart = this._i + 1;
 		this._stateHandler = this.TextHandler;
 		if (!config.ignoreTags[node.name]) {
-			node.attrs.style = this.CssHandler.match(node.name, node.attrs, node) + (node.attrs.style || '');
-			if (!node.attrs.style) delete node.attrs.style;
 			// 检查空白符是否有效
 			var styles = node.attrs.style ? node.attrs.style.toLowerCase().split(';') : [];
 			for (var i = 0; i < styles.length; i++)

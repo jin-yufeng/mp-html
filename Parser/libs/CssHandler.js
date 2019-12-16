@@ -54,7 +54,7 @@ class CssParser {
     return res;
   };
   parse() {
-    for (; this._i < this.data.length; this._i++)
+    for (var len = this.data.length; this._i < len; this._i++)
       this._stateHandler(this.data[this._i]);
     return this.res;
   };

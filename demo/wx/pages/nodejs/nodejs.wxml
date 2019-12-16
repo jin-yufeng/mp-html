@@ -43,7 +43,7 @@
         <!--更多的style匹配模式-->
         <view id="tagStyle" class="weui-article__h2">更多的style匹配模式</view>
         <view class="weui-article__section">
-          除前端插件包支持的匹配模式外，还支持以下模式：
+          除前端插件包支持的匹配模式外，还支持以下模式：(同CssHandler补丁包)
           <view style="font-size:12px;border-left:1px solid #dfe2e5;border-top:1px solid #dfe2e5;margin-top:10px;margin-bottom:10px;word-break:break-all">
             <view style="display:flex;font-weight:bold;">
               <view class="td" style="width:30%">模式</view>
@@ -184,9 +184,9 @@
         <!--返回值-->
         <view id="callback" class="weui-article__h2">返回值</view>
         <view class="weui-article__section">
-          一个形如
-          <code>{nodes: [Array], imgList: [Array], title: "String"}</code>的结构体，其中nodes为节点数组，可以直接应用于
-          <code>rich-text</code>组件，imgList为所有图片地址的数组，videoNum为视频的数量，title为页面标题，整个结构体可以作为
+          一个
+          <code>nodes</code>数组，可以直接应用于
+          <code>rich-text</code>组件，也可以作为
           <code>Parser</code>组件的参数
         </view>
       </view>

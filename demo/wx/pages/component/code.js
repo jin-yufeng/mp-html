@@ -2398,7 +2398,7 @@ module.exports = {
         "style": "; color: #a71d5d; ;"
       }
     }, {
-      "text": " res = ",
+      "text": " adContainer = ",
       "type": "text"
     }, {
       "children": [{
@@ -2443,7 +2443,7 @@ module.exports = {
         "style": "; color: #a71d5d; ;"
       }
     }, {
-      "text": " (res.ok)",
+      "text": " (adContainer)",
       "type": "text"
     }, {
       "children": [],
@@ -2452,11 +2452,11 @@ module.exports = {
         "style": ";"
       }
     }, {
-      "text": "      res.data.setAttr(",
+      "text": "      res.data.setStyle(",
       "type": "text"
     }, {
       "children": [{
-        "text": "\"style\"",
+        "text": "\"display\"",
         "type": "text"
       }],
       "name": "span",
@@ -2468,7 +2468,7 @@ module.exports = {
       "type": "text"
     }, {
       "children": [{
-        "text": "\"display:none\"",
+        "text": "\"none\"",
         "type": "text"
       }],
       "name": "span",
@@ -2481,42 +2481,6 @@ module.exports = {
     }, {
       "children": [{
         "text": "// 隐藏广告容器",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": "; color: #969896; ;"
-      }
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "    ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "else",
-        "type": "text"
-      }],
-      "name": "span",
-      "attrs": {
-        "style": "; color: #a71d5d; ;"
-      }
-    }, {
-      "children": [],
-      "name": "br",
-      "attrs": {
-        "style": ";"
-      }
-    }, {
-      "text": "      console.error(res.errMsg); ",
-      "type": "text"
-    }, {
-      "children": [{
-        "text": "// 查找失败",
         "type": "text"
       }],
       "name": "span",

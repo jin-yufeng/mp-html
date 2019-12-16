@@ -47,11 +47,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| Parser | 44.1KB | 微信小程序插件包 |
-| Parser.min | 30.7KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.bd | 42.4KB | 百度小程序插件包 |
-| Parser.bd.min | 28.8KB | 百度小程序插件包压缩版（功能相同） |
-| Parser.uni | 55.5KB | `uni-app` 插件包（可以编译到所有平台） |
+| Parser | 46.0KB | 微信小程序插件包 |
+| Parser.min | 31.7KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.uni | 59.2KB | `uni-app` 插件包（可以编译到所有平台） |
 
 
 ### 在原生框架中使用 ###
@@ -108,13 +106,12 @@
 
   | 属性 | 类型 | 默认值 | 必填 | 说明 |
   |:----:|:----:|:----:|:----:|----|
-  | html | String/Object/Array | | 是 | 要显示的富文本数据 |
+  | html | String/Array | | 是 | 要显示的富文本数据，格式同rich-text |
   | tag-style | Object | | 否 | 设置标签的默认样式 |
   | autocopy | Boolean | true | 否 | 是否允许链接受到点击时自动复制链接（仅限http开头的网络链接）|
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
   | autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 |
   | autosetTitle | Boolean | true | 否 | 是否自动将title标签的内容设置到页面标题上 |
-  | cache-id | String |  | 否 | 缓存的 id，设置后一次解析完成后将自动保存到 globalData 中，下次直接读取 |
   | domain | String |  | 否 | 主域名，设置后将对于图片地址将自动拼接主域名或协议名 |
   | img-mode | String | default | 否 | 图片显示模式 |
   | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
@@ -122,6 +119,7 @@
   | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
   | animation-duration | Number | 400 | 否 | 动画持续时间 |
   | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 |
+  | use-cache | Boolean | false | 否 | 是否使用缓存，设置后将会把解析结果进行缓存，下次打开不用重复解析 |
   
 详细可见：[组件属性](https://jin-yufeng.github.io/Parser/#/instructions?id=组件属性)
 
@@ -129,9 +127,9 @@
 
 | 名称 | 功能 | 说明 |
 |:----:|----|----|
-| bindparse | 在解析完成时调用（仅传入的 html 类型为 String 时触发） | 返回一个 object，其中 nodes 为解析后的节点数组，imgList 为图片列表，title 是页面标题，该 object 可以在下次调用直接作为 html 属性的值，节省解析的时间 |
-| bindready | 渲染完成时调用 | 返回整个组件的 NodesRef 结构体，包含宽度、高度、位置等信息（每次 html 修改后都会触发） |
-| binderror | 出错时调用 | 返回一个 object，其中 source 是错误来源（ad 广告出错、video 视频加载出错、audio 音频加载出错、parse 解析过程中出错），errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息，context 是视频的 context 对象，可以设置新的源 |
+| bindparse | 在解析完成时调用 | 返回解析结果（一个 nodes 数组，仅传入的 html 类型为 String 时会触发），可以对该结果进行自定义修改，将在渲染时生效 |
+| bindready | 渲染完成时调用 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息） |
+| binderror | 出错时调用 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息，context 是视频的 context 对象 |
 | bindimgtap | 在图片受到点击时调用 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览；可用于阻挡 onShow 的调用 |
 | bindlinkpress | 在链接受到点击时调用 | 返回一个object，其中 href 是链接地址，ignore 是一个函数，在回调中调用将不自动跳转/复制；开发者可以在该回调中进行进一步操作，如下载文档和打开等 |  
 
@@ -180,10 +178,22 @@
 
 
 ## 更新日志 ##
+- 2019.12.15:
+  1. `A` 增加 `setContent` 的 `api`，用于设置 `string` 类型的数据，可以减少一次 `setData` [详细](https://jin-yufeng.github.io/Parser/#/instructions#setcontent)  
+  2. `A` 增加 `imgList` 的 `api`，可以获取封面、设置缩略图等 [详细](https://jin-yufeng.github.io/Parser/#/instructions#imglist)
+  3. `U` `a` 标签支持了 `app-id` 和 `path` 属性，可以跳转其他小程序（需要在 `app.json` 中配置跳转名单）  
+  4. `U` `domain` 属性支持自动补全 `css` 中 `url` 的路径
+  5. `U` `cache-id` 属性更名为 `use-cache`，只用选择是否使用缓存即可，缓存 `id` 会自动通过 `hash` 函数获取  
+  6. `U` `html` 属性传入 `array` 类型时即使没有设置 `continue`，组件也会自动进行设置（即可以传入和 `rich-text` 完全相同的格式）[详细](https://jin-yufeng.github.io/Parser/#/instructions#组件属性)  
+  7. `U` 所有内置样式选择器名改为以下划线开头，避免与自定义样式的选择器冲突  
+  8. `U` `document` 补丁包增加 `getStyle` 和 `setStyle` 方法（返回值格式有更改） [详细](https://jin-yufeng.github.io/Parser/#/instructions#document)  
+  9. `D` 废弃了 `html` 属性的 `object` 类型，请直接将 `html` 设置成原 `object.nodes`（即 `array` 类型，`imgList` 等其他信息可直接从 `nodes` 中获取） [详细](https://jin-yufeng.github.io/Parser/#/instructions#组件属性)  
+  10. `D` 删除了 `animation-duration` 属性，需要修改动画时长的，可直接在 `index.js` 中修改  
+  11. `D` 不再对百度版插件包进行维护，如有需要可从过去版本获取  
 - 2019.12.10:
   1. `A` 增加了 `cache-id` 属性，可以将解析结果缓存到 `globalData` 中，多次打开不用重复解析 [详细](https://jin-yufeng.github.io/Parser/#/instructions#组件属性)  
-  2. `A` 增加了 `getText` 的 `api`，可以获取到一个富文本中的所有文本内容 [详细](https://jin-yufeng.github.io/Parser/#/instructions#getText)  
-  3. `A` 增加了 `getVideoContext` 的 `api`，可以获取到视频的 `context` 对象，用于操作播放状态 [详细](https://jin-yufeng.github.io/Parser/#/instructions#getVideoContext)  
+  2. `A` 增加了 `getText` 的 `api`，可以获取到一个富文本中的所有文本内容 [详细](https://jin-yufeng.github.io/Parser/#/instructions#gettext)  
+  3. `A` 增加了 `getVideoContext` 的 `api`，可以获取到视频的 `context` 对象，用于操作播放状态 [详细](https://jin-yufeng.github.io/Parser/#/instructions#getvideocontext)  
   4. `A` 增加了 `highlight` 代码高亮处理接口 [详细](https://jin-yufeng.github.io/Parser/#/instructions#配置项)  
   5. `A` 增加了长内容的解决方案 [详细](https://jin-yufeng.github.io/Parser/#/instructions#长内容处理)  
   6. `U` 重构了解析脚本，提高了解析速度，减小了包的大小  

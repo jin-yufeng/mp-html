@@ -7,23 +7,6 @@ module.exports = `<style>
   }
 </style>
 <title>功能示例</title>
-<table border="1">
-  <tr>
-    <td>标题1</td>
-    <td>标题2</td>
-    <td>标题3</td>
-  </tr>
-  <tr>
-    <td rowspan=2>内容1</td>
-    <td>内容2</td>
-    <td>内容3</td>
-  </tr>
-  <tr>
-    <td>内容4</td>
-    <td>内容5</td>
-  </tr>
-</table>
-<style>.demo{font-style:italic;}#demo2{font-weight:bold;}</style><p><span class="demo">Hello </span><span id="demo2">World!</span></p>
 <body>
 	<section style="border: 0px none;">
     <section style="padding: 10px;">
@@ -234,7 +217,7 @@ module.exports = `<style>
           </section>
           <section style="padding:0px 0.4em 0px 0.5em;font-size: 16px;letter-spacing: 1.5px;color: #71868f;">
             <p>
-              <strong>多媒体渲染</strong>
+              <strong>图片渲染</strong>
             </p>
           </section>
         </section>
@@ -295,15 +278,7 @@ module.exports = `<style>
       </p>
     </section>
   </section>
-  <section>
-    <p>
-        <br/>
-    </p>
-  </section>
-  <div style="text-align:center;">
-    <audio src="https://img-cdn-qiniu.dcloud.net.cn/uniapp/audio/music.mp3" poster= "https://img-cdn-qiniu.dcloud.net.cn/uniapp/audio/music.jpg" name="致爱丽丝" author="暂无" controls></audio>
-  </div>
-  <br />
+	<br />
   <section style="border: 0px none;">
     <section style="padding: 10px;">
       <section style="box-shadow:0px 0px 5px #e5e5e5 ;height:65px;">

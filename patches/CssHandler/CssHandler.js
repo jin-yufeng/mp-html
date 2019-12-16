@@ -142,7 +142,7 @@ class CssHandler {
     }
     if (!element.pseudo.length)
       delete element.pseudo;
-    return matchedName + ';' + matchedClass + ";" + matchedId + ";";
+    return (matchedName ? (matchedName + ';') : '') + (matchedClass ? (matchedClass + ";") : '') + (matchedId ? (matchedId + ";") : '');
   };
   pop(element) {
     // 多层class匹配标记

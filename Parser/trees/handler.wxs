@@ -40,12 +40,12 @@ module.exports = {
     return res;
   },
   setImgStyle: function(item, imgMode, imgLoad) {
-    if (imgMode == "widthFix") item.attrs.style += ";height:auto !important";
-    if(item.attrs.style)
+    if (imgMode == "widthFix") item.attrs.style = (item.attrs.style || '') + ";height:auto !important";
+    if (item.attrs.style)
       item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp('margin[^;]+', "gi"), "");
     if (!imgLoad) {
       delete item.attrs.src;
-      item.attrs.style += ";width:5px !important;height:5px !important"
+      item.attrs.style += ";width:5px !important;height:5px !important";
     }
     return [item];
   },

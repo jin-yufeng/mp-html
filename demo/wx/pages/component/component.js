@@ -82,7 +82,7 @@ Page({
     }],
     textTags: [{
       name: 'a',
-      attrs: 'href'
+      attrs: 'href, app-id, path'
     }, {
       name: 'abbr'
     }, {
@@ -234,11 +234,6 @@ Page({
       default: 'true',
       notice: '是否自动将title标签中的内容设置到页面标题'
     }, {
-      name: 'cache-id',
-      type: 'String',
-      default: '',
-      notice: '缓存 id，设置后将把解析结果进行缓存，下次直接使用'
-    },{
       name: 'domain',
       type: 'String',
       default: '',
@@ -273,14 +268,19 @@ Page({
       type: 'Boolean',
       default: 'false',
       notice: '是否使用页面内锚点'
+    }, {
+      name: 'use-cache',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否使用缓存，设置后将对解析结果进行缓存，多次打开不用重复解析'
     }],
     //回调函数
     callback: `<ul style="text-align:justify">
       <li><code>bindparse</code><br/>
-      当传入的<code>html</code>为字符串类型时，解析完成后调用；返回值是一个形如<code>{nodes, imgList, title}</code>的结构体，<code>nodes</code>是节点数组，<code>imgList</code>是所有图片地址的数组，<code>title</code>是页面标题（可用于转发）可以将该值保存后下次调用时直接作为属性<code>html</code>的值，可节省解析时间
+      当传入的<code>html</code>为字符串类型时，解析完成后调用；返回解析结果（一个节点数组 <code>nodes</code>），对该结果进行自定义修改后将在渲染时生效
       </li>
       <li style="margin-top:5px;"><code>bindready</code><br/>
-      渲染完成时调用，返回值是整个组件的<code>NodesRef</code>结构体，包含宽度、高度、位置等信息（每次传入的<code>html</code>修改后都会触发）
+      渲染完成时调用，返回值是组件<code>boundingClientRect</code>查询的结果，包含宽高、位置等信息（每次传入的<code>html</code>修改后都会触发）
       </li>
       <li style="margin-top:5px;"><code>binderror</code><br/>
       出错时时调用，返回值为一个结构体，其中<code>source</code>是错误来源（可能是<code>ad</code>广告出错、<code>video</code>视频加载出错、<code>audio</code>音频加载出错以及<code>parse</code>解析过程中出错）；<code>errMsg</code>是错误原因；<code>errCode</code>是错误代码（仅<code>ad</code>）；<code>target</code>属性中含有出错标签的具体信息；<code>context</code>是该音频/视频的<code>context</code>对象
@@ -334,7 +334,19 @@ Page({
     }],
     //更新日志
     update: `<ul>
-    <li>2019.12.9:
+    <li>2019.12.15:
+      <ol>
+        <li><code>A</code> 增加<code>setContent</code>的<code>api</code>，用于设置<code>string</code>类型的数据，可以减少一次<code>setData</code></li>
+        <li><code>A</code> 增加<code>imgList</code>的<code>api</code>，可以获取封面、设置缩略图等</li>
+        <li><code>U</code> <code>a</code>标签支持了<code>app-id</code>和<code>path</code>属性，可以跳转其他小程序</li>
+        <li><code>U</code> <code>domain</code>属性支持自动补全<code>css</code>中<code>url</code>的路径</li>
+        <li><code>U</code> <code>cache-id</code>属性更名为<code>use-cache</code>，只用选择是否使用缓存即可，缓存 <code>id</code>会自动通过<code>hash</code>函数获取</li>
+        <li><code>D</code> 废弃了<code>html</code>属性的<code>object</code>类型，直接设置<code>array</code>即可（<code>imgList</code>等其他信息可以从<code>nodes</code>中获取）</li>
+        <li><code>D</code> 删除了<code>animation-duration</code>属性</code>
+      </ol>
+    </li>
+    <br />
+    <li>2019.12.10:
       <ol>
         <li><code>A</code> 增加了<code>cache-id</code>属性，可以将解析结果缓存到<code>globalData</code>中，多次打开不用重复解析</li> 
         <li><code>A</code> 增加了<code>getText</code>的<code>api</code>，可以获取到一个富文本中的所有文本内容</li>
@@ -432,26 +444,6 @@ Page({
         <li><code>A</code> 增加了<code>List</code>补丁包（可用于模拟列表）</li>
         <li><code>A</code> <code>video</code>组件增加支持<code>unit-id</code>属性（前贴视频广告）</li>
         <li><code>F</code> 修复了部分情况下图片可能被<code>text-indent</code>错误缩进的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.9.15:
-      <ol>
-        <li><code>A</code> 增加了<code>document</code>补丁包（可用于动态操作<code>DOM</code>）</li>
-        <li><code>A</code> 增加支持<code>ad</code>小程序广告组件，可以在文中插入广告</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.9.13:
-      <ol>
-        <li><code>A</code> 增加了<code>emoji</code>补丁包（可用于解析小表情）</li>
-        <li><code>A</code> 增加了<code>autopreview</code>属性（可用于控制点击图片时是否自动预览，默认<code>true</code>）和<code>imgtap</code>事件（图片被点击时触发）</li>
-        <li><code>A</code> 增加了一个<code>min</code>版本（<code>27.3KB</code>，功能相同）</li>
-        <li><code>U</code> 缩小了节点深度（约15%~35%，主要是通过合并一些只有一个子节点的标签以及优化排版方式），优化了性能</li>
-        <li><code>U</code> 缩小了解析结果的大小（约3%~5%）</li>
-        <li><code>F</code> 修复了解析完成后传入的<code>tagStyle</code>会被修改的问题</li>
-        <li><code>F</code> 修复了存在多张相同<code>url</code>的图片时，预览会出现定位错误的问题</li>
-        <li><code>F</code> 修复了部分情况下<code>html</code>中的换行符会被显示的问题</li>
       </ol>
     </li>
   </ul>`
