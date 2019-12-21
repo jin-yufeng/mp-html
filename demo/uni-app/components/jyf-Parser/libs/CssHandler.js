@@ -34,7 +34,7 @@ class CssHandler {
 module.exports = CssHandler;
 
 function isBlankChar(c) {
-	return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' || c == '\f';
+	return c == ' ' || c == '\u00A0' || c == '\t' || c == '\r' || c == '\n' || c == '\f';
 };
 class CssParser {
 	constructor(data, tagStyle = {}, api) {

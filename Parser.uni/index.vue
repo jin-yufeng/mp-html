@@ -15,15 +15,13 @@
 		<slot v-if="!html[0].name && !html[0].type && !nodes.length"></slot>
 		<!--#endif-->
 		<!--#ifdef MP-ALIPAY-->
-		<view class="_contain" :style="(selectable ? 'user-select:text;-webkit-user-select:text;' : '') + (showWithAnimation ? 'opacity:0' : '')"
-		 :animation="showAnimation">
+		<view class="_contain" :style="(selectable ? 'user-select:text;-webkit-user-select:text;' : '') + (showWithAnimation ? ('opacity:0;' + showAnimation) : '')">
 			<trees :nodes="nodes.length ? nodes : (html[0].name || html[0].type ? html : [])" :imgMode="imgMode" />
 		</view>
 		<!--#endif-->
 		<!--#ifndef MP-ALIPAY || H5-->
-		<trees class="_contain" :style="'display:block;' + (selectable ? 'user-select:text;-webkit-user-select:text;' : '') + (showWithAnimation ? 'opacity:0' : '')"
-		 :animation="showAnimation" :nodes="nodes.length ? nodes : (html[0].name || html[0].type ? html : [])" :imgMode="imgMode"
-		 :loadVideo="loadVideo" />
+		<trees class="_contain" :style="'display:block;' + (selectable ? 'user-select:text;-webkit-user-select:text;' : '') + (showWithAnimation ? ('opacity:0;' + showAnimation) : '')"
+		 :nodes="nodes.length ? nodes : (html[0].name || html[0].type ? html : [])" :imgMode="imgMode" :loadVideo="loadVideo" />
 		<!--#endif-->
 	</view>
 </template>
@@ -41,11 +39,10 @@
 			hash += (hash << 5) + str.charCodeAt(i);
 		return hash;
 	};
-	// 动画
-	const showAnimation = uni.createAnimation({
-		timingFunction: "ease"
-	}).opacity(1).step().export();
 	// #endif
+	// 动画
+	const showAnimation =
+		"transition:400ms ease 0ms;transition-property:transform,opacity;transform-origin:50% 50% 0;-webkit-transition:400ms ease 0ms;-webkit-transform:;-webkit-transition-property:transform,opacity;-webkit-transform-origin:50% 50% 0;opacity: 1"
 	const config = require('./libs/config.js');
 	// #ifdef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
 	// 图片链接去重
@@ -326,8 +323,7 @@
 				}
 				document.getElementById("rtf" + this._uid).appendChild(this.rtf);
 				if (this.showWithAnimation)
-					this.showAnimation =
-					"opacity: 1; transition: opacity 400ms ease 0ms, -webkit-transform 400ms ease 0ms, transform 400ms ease 0ms; transform-origin: 50% 50% 0px;";
+					this.showAnimation = showAnimation;
 				if (!observed) this.nodes = [0];
 				this.$nextTick(() => {
 					this.$emit("ready", this.rtf.getBoundingClientRect());
@@ -398,6 +394,8 @@
 					this.nodes = res;
 					this.$emit('parse', res);
 				} else if (html.constructor == Array) {
+					if (!observed) this.nodes = html;
+					else this.nodes = [];
 					// 非本插件产生的 array 需要进行一些转换
 					if (html.length && html[0].PoweredBy != "Parser") {
 						const Parser = {
@@ -434,8 +432,6 @@
 						DFS(html);
 						this.nodes = html;
 					}
-					if (!observed) this.nodes = html;
-					else this.nodes = [];
 				} else if (typeof html == 'object' && html.nodes) {
 					this.nodes = html.nodes;
 					console.warn("Parser 类型错误：object 类型已废弃，请直接将 html 设置为 object.nodes （array 类型）");
@@ -554,7 +550,7 @@
 						else if (whiteSpace && node.name == "td") text += '\t';
 					}
 				}
-				var nodes = ((this.nodes && this.nodes.length) ? this.nodes : (html[0] && (html[0].name || html[0].type) ? html : []));
+				var nodes = ((this.nodes && this.nodes.length) ? this.nodes : (this.html[0] && (this.html[0].name || this.html[0].type) ? this.html : []));
 				if (!nodes.length) return "";
 				for (var node of nodes)
 					DFS(node);

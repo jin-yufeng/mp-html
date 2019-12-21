@@ -333,7 +333,16 @@ Page({
       percent: "0.05%"
     }],
     //更新日志
+    codeStyle:{
+      code: "border:1px solid #cccccc;border-radius:3px"
+    },
     update: `<ul>
+    <li>2019.12.21:
+      <ol>
+        <li><code>F</code> 修复了使用<code>font</code>标签的<code>size</code>属性时出错的问题</li>
+      </ol>
+    </li>
+    <br />
     <li>2019.12.15:
       <ol>
         <li><code>A</code> 增加<code>setContent</code>的<code>api</code>，用于设置<code>string</code>类型的数据，可以减少一次<code>setData</code></li>
@@ -436,14 +445,6 @@ Page({
         <li><code>A</code> 增加了在<code>wepy</code>中的使用方法</li>
         <li><code>F</code> 修复了部分情况下<code>style</code>标签解析结果缺少<code>;</code>导致匹配失效的问题</code>
         <li><code>F</code> 修复了<code>0917</code>版本中<code>a</code>标签失效的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.9.17:
-      <ol>
-        <li><code>A</code> 增加了<code>List</code>补丁包（可用于模拟列表）</li>
-        <li><code>A</code> <code>video</code>组件增加支持<code>unit-id</code>属性（前贴视频广告）</li>
-        <li><code>F</code> 修复了部分情况下图片可能被<code>text-indent</code>错误缩进的问题</li>
       </ol>
     </li>
   </ul>`

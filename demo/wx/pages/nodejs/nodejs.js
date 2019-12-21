@@ -52,6 +52,9 @@ Page({
     npm: code.npm,
     node: code.node,
     //更新日志
+    codeStyle: {
+      code: "border:1px solid #cccccc;border-radius:3px"
+    },
     update: `<ul>
     <li>2019.12.15:
       <ol>

@@ -1,4 +1,7 @@
 ## 更新日志 {docsify-ignore}##
+#### 2019.12.21 ####
+1. `F` 修复了使用 `font` 标签的 `size` 属性报错的问题 [详细](https://github.com/jin-yufeng/Parser/issues/63)
+
 #### 2019.12.15 ####
 1. `A` 增加 `setContent` 的 `api`，用于设置 `string` 类型的数据，可以减少一次 `setData` [详细](/instructions#setContent)  
 2. `A` 增加 `imgList` 的 `api`，可以获取封面、设置缩略图等 [详细](/instructions#imgList)

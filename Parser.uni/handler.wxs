@@ -19,7 +19,7 @@ var Tags = {
 }
 module.exports = {
 	getStyle: function(style, display) {
-		res = "";
+		var res = "";
 		var reg = getRegExp("float[^;]+(?![\s\S]*?float)", "i");
 		if (reg.test(style)) res += reg.exec(style)[0];
 		reg = getRegExp("margin[^;]+", "gi");

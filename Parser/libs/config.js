@@ -258,7 +258,7 @@ module.exports = {
           delete node.attrs.face;
         }
         if (node.attrs.size) {
-          var size = parseInt(attrs.size);
+          var size = parseInt(node.attrs.size);
           if (size < 1) size = 1;
           else if (size > 7) size = 7;
           let map = [10, 13, 16, 18, 24, 32, 48];

@@ -198,7 +198,7 @@
       <!--更新日志-->
       <view id="update" class="weui-article__h1">更新日志</view>
       <view class="weui-article__section">
-        <Parser html="{{update}}" />
+        <Parser html="{{update}}" tag-style="{{codeStyle}}"/>
       </view>
     </view>
   </view>

@@ -5,7 +5,7 @@
 |:---:|:---:|:---:|
 | [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 46.0KB | 微信小程序插件包 |
 | [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.7KB | 微信小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 59.2KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 59.3KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
 1. 百度小程序和支付宝小程序不支持 `lazy-load` 属性
@@ -197,7 +197,7 @@
 | ready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息） |
 | error | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码，target 包含出错标签的具体信息，context 是视频的 context 对象，可以设置新的源 |
 | imgtap | 在图片受到点击时触发 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览；可用于阻挡 onShow 的调用 |
-| linkpress | 在链接受到点击时触发 | 返回一个object，其中包含了被点击的 a 标签的所有属性，ignore 是一个函数，在回调函数中调用后将不自动跳转/复制；可在该回调中进行下载文档等进一步操作 |  
+| linkpress | 在链接受到点击时触发 | 返回一个 object，其中包含了被点击的 a 标签的所有属性，ignore 是一个函数，在回调函数中调用后将不自动跳转/复制；可在该回调中进行下载文档等进一步操作 |  
   
 >关于图片和链接被点击返回的 `ignore` 函数的解释：类似于 `a` 标签 `onclick` 回调返回 `false` 将不跳转一样，由于 `event` 无法获取返回值，故增加此函数，若在回调函数中执行，则不自动进行预览/跳转/复制链接操作，可执行自定义操作（这两个回调函数应尽量简短）  
 
@@ -346,7 +346,7 @@ ready(e){
 ```
 
 #### navigateTo ####
-功能：跳转到指定的锚点
+功能：跳转到指定的锚点  
 输入值：一个 `object`，`id` 为锚点的 `id`（为空时将跳转到组件顶部），`success` 和 `fail` 是成功和失败的回调（需要配合 `use-anchor` 属性使用）  
 使用方法：  
 ```wxml

@@ -10,7 +10,7 @@ var emoji; // 需要使用 emoji 补丁包时将此行改为 const emoji = requi
 
 function isBlankChar(c) {
 	if (c == undefined) return false;
-	return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' || c == '\f';
+	return c == ' ' || c == '\u00A0' || c == '\t' || c == '\r' || c == '\n' || c == '\f';
 };
 class MpHtmlParser {
 	constructor(data, options = {}, cb) {
@@ -294,7 +294,7 @@ class MpHtmlParser {
 				j, decode;
 			while (i != -1 && i < text.length) {
 				j = text.indexOf(';', i);
-				if (j - i >= 2 && j - i <= 6) {
+				if (j - i >= 2 && j - i <= 7) {
 					var entity = text.substring(i + 1, j);
 					// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
 					if (!entity.includes("sp") && !entity.includes("lt") && !entity.includes("gt")) {

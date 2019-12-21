@@ -376,7 +376,7 @@
       <!--更新日志-->
       <view wx:if="{{page==3}}" id="update" class="weui-article__h1">更新日志</view>
       <view wx:if="{{page==3}}" class="weui-article__section">
-        <parser html="{{update}}" />
+        <parser html="{{update}}" tag-style="{{codeStyle}}"/>
         <parser html="更多可见：<a href='https://jin-yufeng.github.io/Parser/#/changelog'>更新日志</a>" style="margin-top:20px;padding-bottom:20px" />
       </view>
       <view style="display:flex;justify-content:center;margin-left:5%;margin-right:5%;color:#586c94">

@@ -1,8 +1,8 @@
 # Parser
 小程序富文本插件（本文档动态更新，建议加星收藏）  
->新版文档链接：[Parser插件文档](https://jin-yufeng.github.io/Parser/)  
+>新版文档链接：[Parser插件文档](https://jin-yufeng.github.io/Parser)  
 
-## 功能介绍 ##
+## 功能简介 ##
 - 支持解析 `style` 标签中的全局样式  
   支持解析和匹配 `style` 标签中的样式 
   ``` html
@@ -49,12 +49,12 @@
 |:---:|:---:|:---:|
 | Parser | 46.0KB | 微信小程序插件包 |
 | Parser.min | 31.7KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.uni | 59.2KB | `uni-app` 插件包（可以编译到所有平台） |
+| Parser.uni | 59.3KB | `uni-app` 插件包（可以编译到所有平台） |
 
 
 ### 在原生框架中使用 ###
-1. 下载`Parser`文件夹至小程序目录  
-2. 在需要引用的页面的`json`文件中添加（百度小程序中组件名一定要**小写**）
+1. 下载 `Parser` 文件夹至小程序目录  
+2. 在需要引用的页面的 `json` 文件中添加（百度小程序中组件名一定要**小写**）
    ``` json
    {
      "usingComponents": {
@@ -62,7 +62,7 @@
      }
    }
    ```
-3. 在需要引用的页面的`wxml`文件中添加  
+3. 在需要引用的页面的 `wxml` 文件中添加  
    ``` html
    <parser html="{{html}}" />
    ```
@@ -72,12 +72,12 @@
      html:"<div>Hello World!</div>"
    }
    ```
-- `demo/wx`文件夹下的是微信小程序 `富文本插件` 示例程序的源码，可供参考  
+- `demo/wx` 文件夹下的是微信小程序 `富文本插件` 示例程序的源码，可供参考  
 
 ### 在uni-app中使用 ###
-- 使用`uni-app`包（可以编译到所有小程序平台）  
-  1. 下载`Parser.uni`包到`components`目录下（更名为`Parser`）  
-  2. 在需要使用页面的`vue`文件中添加  
+- 使用 `uni-app` 包（可以编译到所有小程序平台）  
+  1. 下载 `Parser.uni` 包到 `components` 目录下（更名为 `Parser`）  
+  2. 在需要使用页面的 `vue` 文件中添加  
      ```vue
      <template>
        <view>
@@ -98,28 +98,28 @@
      </script>
      ```
   - 可以直接通过插件市场引入：[插件市场](https://ext.dcloud.net.cn/plugin?id=805)
-  - `demo/uni-app`文件夹下是一个示例程序，可供参考  
+  - `demo/uni-app` 文件夹下是一个示例程序，可供参考  
 
 其他框架中使用可见：[在其他框架中使用](https://jin-yufeng.github.io/Parser/#/instructions?id=在其他框架中使用)
 
 ### 组件属性 ###  
 
-  | 属性 | 类型 | 默认值 | 必填 | 说明 |
-  |:----:|:----:|:----:|:----:|----|
-  | html | String/Array | | 是 | 要显示的富文本数据，格式同rich-text |
-  | tag-style | Object | | 否 | 设置标签的默认样式 |
-  | autocopy | Boolean | true | 否 | 是否允许链接受到点击时自动复制链接（仅限http开头的网络链接）|
-  | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
-  | autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 |
-  | autosetTitle | Boolean | true | 否 | 是否自动将title标签的内容设置到页面标题上 |
-  | domain | String |  | 否 | 主域名，设置后将对于图片地址将自动拼接主域名或协议名 |
-  | img-mode | String | default | 否 | 图片显示模式 |
-  | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
-  | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
-  | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
-  | animation-duration | Number | 400 | 否 | 动画持续时间 |
-  | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 |
-  | use-cache | Boolean | false | 否 | 是否使用缓存，设置后将会把解析结果进行缓存，下次打开不用重复解析 |
+| 属性 | 类型 | 默认值 | 必填 | 说明 |
+|:----:|:----:|:----:|:----:|----|
+| html | String/Array | | 是 | 要显示的富文本数据，格式同 rich-text |
+| tag-style | Object | | 否 | 设置标签的默认样式 |
+| autocopy | Boolean | true | 否 | 是否允许链接受到点击时自动复制链接（仅限 http 开头的网络链接）|
+| autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
+| autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 |
+| autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题上 |
+| domain | String |  | 否 | 主域名，设置后将对于图片地址将自动拼接主域名或协议名 |
+| img-mode | String | default | 否 | 图片显示模式 |
+| lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
+| selectable | Boolean | false | 否 | 是否允许长按复制内容 |
+| show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
+| animation-duration | Number | 400 | 否 | 动画持续时间 |
+| use-anchor | Boolean | false | 否 | 是否使用页面内锚点 |
+| use-cache | Boolean | false | 否 | 是否使用缓存，设置后将会把解析结果进行缓存，下次打开不用重复解析 |
   
 详细可见：[组件属性](https://jin-yufeng.github.io/Parser/#/instructions?id=组件属性)
 
@@ -131,7 +131,7 @@
 | bindready | 渲染完成时调用 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息） |
 | binderror | 出错时调用 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息，context 是视频的 context 对象 |
 | bindimgtap | 在图片受到点击时调用 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览；可用于阻挡 onShow 的调用 |
-| bindlinkpress | 在链接受到点击时调用 | 返回一个object，其中 href 是链接地址，ignore 是一个函数，在回调中调用将不自动跳转/复制；开发者可以在该回调中进行进一步操作，如下载文档和打开等 |  
+| bindlinkpress | 在链接受到点击时调用 | 返回一个 object，其中 href 是链接地址，ignore 是一个函数，在回调中调用将不自动跳转/复制；开发者可以在该回调中进行进一步操作，如下载文档和打开等 |  
 
 详细可见：[回调函数](https://jin-yufeng.github.io/Parser/#/instructions?id=回调函数)
   
@@ -178,6 +178,8 @@
 
 
 ## 更新日志 ##
+- 2019.12.21  
+  1. `F` 修复了使用 `font` 标签的 `size` 属性报错的问题 [详细](https://github.com/jin-yufeng/Parser/issues/63)
 - 2019.12.15:
   1. `A` 增加 `setContent` 的 `api`，用于设置 `string` 类型的数据，可以减少一次 `setData` [详细](https://jin-yufeng.github.io/Parser/#/instructions#setcontent)  
   2. `A` 增加 `imgList` 的 `api`，可以获取封面、设置缩略图等 [详细](https://jin-yufeng.github.io/Parser/#/instructions#imglist)
