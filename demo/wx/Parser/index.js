@@ -192,28 +192,25 @@ Component({
             _domain: this.data.domain,
             _protocol: this.data.domain ? (this.data.domain.includes("://") ? this.data.domain.split("://")[0] : "http") : undefined,
             _STACK: [],
-            CssHandler: new CssHandler(this.data.tagStyle),
-            bubbling() {
-              for (var i = this._STACK.length - 1; i >= 0; i--) {
-                if (config.trustTags[this._STACK[i].name] !== 0)
-                  this._STACK[i].continue = true;
-                else
-                  return this._STACK[i].name;
-              }
-            }
+            CssHandler: new CssHandler(this.data.tagStyle)
           };
           Parser.CssHandler.getStyle('');
           const DFS = (nodes) => {
             for (var node of nodes) {
               if (node.type == "text") continue;
+              node.attrs = node.attrs || {};
+              for (var item in node.attrs) {
+                if (!config.trustAttrs[item]) node.attrs[item] = undefined;
+                else if (typeof node.attrs[item] != "string") node.attrs[item] = node.attrs[item].toString();
+              }
               config.LabelAttrsHandler(node, Parser);
               if (config.blockTags[node.name]) node.name = 'div';
-              else if (!config.trustTags.hasOwnProperty(node.name)) node.name = 'span';
+              else if (!config.trustTags[node.name]) node.name = 'span';
               if (node.children && node.children.length) {
                 Parser._STACK.push(node);
                 DFS(node.children);
                 Parser._STACK.pop();
-              }
+              } else node.children = undefined;
             }
           }
           DFS(html);
@@ -235,16 +232,16 @@ Component({
       this.videoContexts = [];
       if (document) this.document = new document("html", data.html || html, this);
       var nodes = [this.selectComponent('#contain')].concat(this.selectAllComponents('#contain>>>._node'));
-      for (let node of nodes) {
+      for (var node of nodes) {
         node._top = this;
         for (var item of node.data.nodes) {
           if (item.continue) continue;
           // 获取图片列表
           if (item.name == 'img') {
-            if (item.attrs.src && !item.attrs.ignore) {
+            if (item.attrs.src && item.attrs.i) {
               if (this.imgList.indexOf(item.attrs.src) == -1)
-                this.imgList.push(item.attrs.src);
-              else this.imgList.push(Deduplication(item.attrs.src));
+                this.imgList[item.attrs.i] = item.attrs.src;
+              else this.imgList[item.attrs.i] = Deduplication(item.attrs.src);
             }
           }
           // 音视频控制

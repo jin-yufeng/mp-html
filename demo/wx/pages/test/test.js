@@ -168,7 +168,11 @@ Page({
           mode: mode,
           options: {
             styles: this.data.styles[e.detail.value.styles],
-            autohighlight: this.data.highlight
+            autohighlight: this.data.highlight,
+            tagStyle: {
+              "#js_content":"visibility:visible !important"
+            },
+            compress: 2 // 强力压缩模式（移除所有标签的 id 和 class）
           }
         },
         success: res => {

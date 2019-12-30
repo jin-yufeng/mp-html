@@ -18,6 +18,7 @@
         <block wx:if="{{page==1}}">
           <view class="link_h2" hover-class='link-hover' data-section="parseStyle" bindtap="gosection">解析style标签</view>
           <view class="link_h2" hover-class='link-hover' data-section="tagStyle" bindtap="gosection">设置默认标签样式</view>
+          <view class="link_h2" hover-class='link-hover' data-section="svg" bindtap="gosection">svg 支持</view>
           <view class="link_h2" hover-class='link-hover' data-section="setTitle" bindtap="gosection">自动设置标题</view>
           <view class="link_h2" hover-class='link-hover' data-section="addLoading" bindtap="gosection">添加加载提示</view>
           <view class="link_h2" hover-class='link-hover' data-section="source" bindtap="gosection">多资源加载</view>
@@ -81,6 +82,14 @@
           <rich-text nodes="{{tagStylecode}}" />
           <text>解析结果：</text>
           <parser html="<code>test</code>" tag-style="{{tagStyle}}" style="display:inline;" />
+        </view>
+        <!--自动设置标题-->
+        <view id="svg" class="weui-article__h2">svg 支持</view>
+        <view class="weui-article__section">
+          可以直接使用所有 <code>svg</code> 系列标签
+          <rich-text nodes="{{svgcode}}" />
+          解析结果：
+          <parser html='<svg><circle cx="100" cy="50" r="40" stroke="black" stroke-width="2" fill="red" /></svg>' />
         </view>
         <!--自动设置标题-->
         <view id="setTitle" class="weui-article__h2">自动设置标题</view>
@@ -180,7 +189,7 @@
         </view>
         <view class="weui-article__h3">附注：</view>
         <view class="weui-article__section">
-          对于不在上述列表中标签，除个别会被直接移除外，都会被转换为行内标签，因此可以使用一些语义化标签
+          <code>svg</code>系列标签也支持（未在上表列出），对于其他不在上述列表中标签，除个别会被直接移除外，都会被转换为行内标签，因此可以使用一些语义化标签
         </view>
         <!--性能指标-->
         <view id="performance" class="weui-article__h2">性能指标</view>

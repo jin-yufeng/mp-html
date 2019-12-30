@@ -11,11 +11,11 @@ const _setData = function(Component, key, value) {
   })
 }
 const _search = function(nodes, id, site, Component) {
-  for (var i = 0; i < nodes.length; i++) {
+  for (var i = 0; i < (nodes || []).length; i++) {
     if (nodes[i].type == "text")
       continue;
     site += ("[" + i + "]");
-    if (nodes[i].attrs.id == id)
+    if (nodes[i].attrs && nodes[i].attrs.id == id)
       return new element(nodes[i], site, Component);
     else {
       site += ".children";
@@ -41,6 +41,8 @@ class element {
     }
     this._site = site;
     this._Component = Component;
+    this.nodes.attrs = this.nodes.attrs || {};
+    this.nodes.children = this.nodes.children || [];
     if (nodes.children[0].type == "text")
       this._text = true;
   }
@@ -120,7 +122,7 @@ class element {
   }
   // 移除某个属性
   removeAttr(key) {
-    delete this.nodes.attrs[key];
+    this.nodes.attrs[key] = undefined;
     _setData(this._Component, this._site, this.nodes);
     return true;
   }
@@ -147,7 +149,7 @@ class document {
     return _search(this.nodes, id, this._root, this._Component);
   }
   getChildren(i) {
-    if (i >= 0 && i < this.nodes.children.length)
+    if (i >= 0 && i < (this.nodes.children || []).length)
       return new element(this.nodes.childrens[i], this._root + ".children[" + i + "]", this._Component);
     else return null;
   }

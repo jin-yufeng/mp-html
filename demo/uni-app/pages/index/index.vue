@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<parser @parse="parse" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error"
-		 show-with-animation lazy-load :autocopy="autocopy" use-anchor ref="rtf">加载中...</parser>
+		 show-with-animation lazy-load :autocopy="autocopy" use-anchor ref="rtf" >加载中...</parser>
 	</view>
 </template>
 

@@ -9,7 +9,6 @@ const config = require("./config.js");
 var emoji; // 需要使用 emoji 补丁包时将此行改为 const emoji = require("./emoji.js");
 
 function isBlankChar(c) {
-	if (c == undefined) return false;
 	return c == ' ' || c == '\u00A0' || c == '\t' || c == '\r' || c == '\n' || c == '\f';
 };
 class MpHtmlParser {
@@ -29,7 +28,7 @@ class MpHtmlParser {
 			undefined;
 		this._i = 0;
 		this._sectionStart = 0;
-		this._stateHandler = this.TextHandler;
+		this._state = this.Text;
 		this._STACK = [];
 		this._tagName = '';
 		this._audioNum = 0;
@@ -40,39 +39,25 @@ class MpHtmlParser {
 	};
 	parse() {
 		if (this.CssHandler) this.data = this.CssHandler.getStyle(this.data);
-		for (; this._i < this.data.length; this._i++)
-			this._stateHandler(this.data[this._i]);
-		if (this._stateHandler == this.TextHandler) this.setText();
+		if (emoji) this.data = emoji.parseEmoji(this.data);
+		// 高亮处理
+		if (config.highlight)
+			this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]*?)<\/[pP][rR][eE][\s\S]*?>/g, function() {
+				return "<pre" + arguments[1] + '>' + config.highlight(arguments[2], "<pre" + arguments[1] + '>') + "</pre>";
+			})
+		for (var len = this.data.length; this._i < len; this._i++)
+			this._state(this.data[this._i]);
+		if (this._state == this.Text) this.setText();
 		while (this._STACK.length)
 			this.popNode(this._STACK.pop());
 		// #ifdef MP-BAIDU || MP-TOUTIAO
-		const textTags = {
-			abbr: true,
-			b: true,
-			big: true,
-			code: true,
-			del: true,
-			em: true,
-			font: true,
-			i: true,
-			ins: true,
-			label: true,
-			mark: true,
-			q: true,
-			s: true,
-			small: true,
-			span: true,
-			strong: true,
-			sub: true,
-			sup: true,
-			u: true
-		};
+		const inlineTags = config.makeMap("abbr,b,big,code,del,em,font,i,ins,label,mark,q,s,small,span,strong,sub,sup,u")
 		// 将顶层标签的一些样式提取出来给 rich-text
 		const setContain = function(nodes) {
 			for (var element of nodes) {
 				if (element.type == "text")
 					continue;
-				if (!element.continue) {
+				if (!element.c) {
 					var res = "";
 					var style = element.attrs.style;
 					var reg = /float[^;]+(?![\s\S]*?float)/i;
@@ -81,7 +66,7 @@ class MpHtmlParser {
 					if (reg.test(style)) res += (';' + style.match(reg).join(';'));
 					reg = /display\s*:\s*([^;]*)(?![\s\S]*?display)/i;
 					if (reg.test(style) && reg.exec(style)[1] != "flex") res += (';' + reg.exec(style)[0]);
-					else if (textTags[element.name]) res += ";display:inline";
+					else if (inlineTags[element.name]) res += ";display:inline";
 					else res += (";display:" + (element.name == 'img' ? 'inline-block' : 'block'));
 					reg = /flex[^;]*:[^;]+/gi;
 					if (reg.test(style)) res += (';' + style.match(reg).join(';'));
@@ -102,134 +87,21 @@ class MpHtmlParser {
 		setContain(this.DOM);
 		// #endif
 		if (this.DOM.length) this.DOM[0].PoweredBy = "Parser";
+		console.log(this.DOM)
 		if (this.cb)
 			this.cb(this.DOM)
 		else return this.DOM;
 	};
-	TextHandler(c) {
-		if (c == '<') {
-			var next = this.data[this._i + 1];
-			if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z')) {
-				this.setText();
-				this._stateHandler = this.TagNameHandler;
-			} else if (next == '/') {
-				this.setText();
-				this._i++;
-				next = this.data[this._i + 1];
-				if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z')) {
-					this._sectionStart = this._i + 1;
-					this._stateHandler = this.EndTagHandler;
-				} else
-					this._stateHandler = this.CommentHandler;
-			} else if (next == '!') {
-				this.setText();
-				this._stateHandler = this.CommentHandler;
-			}
-		}
-	};
-	CommentHandler() {
-		if (this.data.substring(this._i + 1, this._i + 3) == "--" || this.data.substring(this._i + 1, this._i + 7) ==
-			"[CDATA[") {
-			this._i = this.data.indexOf("-->", this._i + 1);
-			if (this._i == -1) return this._i = this.data.length;
-			else this._i = this._i + 2;
-		} else {
-			this._i = this.data.indexOf(">", this._i + 1);
-			if (this._i == -1) return this._i = this.data.length;
-		}
-		this._sectionStart = this._i + 1;
-		this._stateHandler = this.TextHandler;
-	};
-	TagNameHandler(c) {
-		if (isBlankChar(c)) {
-			this._tagName = this.getSelection(true);
-			if (this.checkClose()) this.setNode();
-			else this._stateHandler = this.AttrNameHandler;
-		} else if (this.checkClose()) {
-			this._tagName = this.getSelection();
-			this.setNode();
-		}
-	};
-	AttrNameHandler(c) {
-		if (isBlankChar(c)) {
-			this._attrName = this.getSelection(true);
-			if (this.data[this._i] == '=') {
-				while (isBlankChar(this.data[++this._i]));
-				this._sectionStart = this._i;
-				this._i--;
-				this._stateHandler = this.AttrValueHandler;
-			} else this.setAttr();
-		} else if (c == '=') {
-			this._attrName = this.getSelection();
-			while (isBlankChar(this.data[++this._i]));
-			this._sectionStart = this._i;
-			this._i--;
-			this._stateHandler = this.AttrValueHandler;
-		} else if (this.checkClose()) {
-			this._attrName = this.getSelection();
-			this.setAttr();
-		}
-	};
-	AttrValueHandler(c) {
-		if (c == '"' || c == "'") {
-			this._sectionStart++;
-			if ((this._i = this.data.indexOf(c, this._i + 1)) == -1) return this._i = this.data.length;
-		} else
-			for (; !isBlankChar(this.data[this._i] && this.data[this._i] != '/' && this.data[this._i] != '>'); this._i++);
-		this._attrValue = this.getSelection();
-		while (this._attrValue.includes("&quot;")) this._attrValue = this._attrValue.replace("&quot;", '');
-		this.setAttr();
-	};
-	EndTagHandler(c) {
-		if (isBlankChar(c) || c == '>' || c == '/') {
-			var name = this.getSelection().toLowerCase();
-			var flag = false;
-			for (var i = this._STACK.length - 1; i >= 0; i--)
-				if (this._STACK[i].name == name) {
-					flag = true;
-					break;
-				}
-			if (flag) {
-				var node;
-				while (flag) {
-					node = this._STACK.pop();
-					if (node.name == name) flag = false;
-					this.popNode(node);
-				}
-			} else if (name == 'p' || name == "br") {
-				var slibings = this._STACK.length ? this._STACK[this._STACK.length - 1].children : this.DOM;
-				var node = {
-					name,
-					attrs: {},
-					children: []
-				}
-				slibings.push(node);
-			}
-			this._i = this.data.indexOf('>', this._i);
-			if (this._i == -1) this._i = this.data.length;
-			else this._stateHandler = this.TextHandler;
-		}
-	};
-	checkClose() {
-		if (this.data[this._i] == '>' || (this.data[this._i] == '/' && this.data[this._i + 1] == '>'))
-			return true;
-		return false;
-	};
-	getSelection(trim) {
-		var str = (this._sectionStart == this._i ? '' : this.data.substring(this._sectionStart, this._i));
-		while (trim && isBlankChar(this.data[++this._i]));
-		if (trim) this._i--;
-		this._sectionStart = this._i + 1;
-		return str;
-	};
+	// 设置属性
 	setAttr() {
 		if (config.trustAttrs[this._attrName])
-			this._attrs[this._attrName] = this._attrValue || "true";
+			this._attrs[this._attrName] = (this._attrValue ? this._attrValue : (this._attrName == "src" ? "" : "true"));
 		this._attrValue = '';
 		while (isBlankChar(this.data[this._i])) this._i++;
 		if (this.checkClose()) this.setNode();
-		else this._stateHandler = this.AttrNameHandler;
+		else this._state = this.AttrName;
 	};
+	// 设置文本节点
 	setText() {
 		var text = this.getSelection();
 		if (text) {
@@ -256,7 +128,6 @@ class MpHtmlParser {
 				if (flag) text = text.substring(0, pos) + ' ';
 				if (!text || !has) return;
 			}
-			if (emoji) text = emoji.parseEmoji(text);
 			// 检查实体
 			// #ifdef MP-BAIDU || MP-ALIPAY || MP-TOUTIAO
 			var entities = {
@@ -320,26 +191,19 @@ class MpHtmlParser {
 				})
 		}
 	};
-	bubbling(node) {
-		for (var i = this._STACK.length - 1; i >= 0; i--) {
-			if (config.trustTags[this._STACK[i].name] !== 0)
-				this._STACK[i].continue = true;
-			else
-				return this._STACK[i].name;
-		}
-	};
+	// 设置元素节点
 	setNode() {
 		var slibings = this._STACK.length ? this._STACK[this._STACK.length - 1].children : this.DOM;
 		var node = {
 			name: this._tagName.toLowerCase(),
-			attrs: this._attrs,
-			children: []
+			attrs: this._attrs
 		}
 		config.LabelAttrsHandler(node, this);
 		this._attrs = {};
 		if (this.data[this._i] == '>') {
 			if (!config.selfClosingTags[this._tagName]) {
 				if (config.ignoreTags[node.name]) {
+					var j = this._i;
 					// 处理要被移除的标签
 					while (this._i < this.data.length) {
 						this._i = this.data.indexOf("</", this._i);
@@ -351,66 +215,68 @@ class MpHtmlParser {
 							this._i = this.data.indexOf('>', this._i);
 							if (this._i == -1) this._i = this.data.length;
 							else this._sectionStart = this._i + 1;
-							this._stateHandler = this.TextHandler;
+							this._state = this.Text;
+							// 处理svg 
+							if (node.name == "svg") {
+								var src = this.data.substring(j, this._i + 1);
+								if (!node.attrs.xmlns) src = " xmlns=\"http://www.w3.org/2000/svg\"" + src;
+								this._i = j;
+								while (this.data[j] != '<') j--;
+								src = this.data.substring(j, this._i) + src;
+								this._i = this._sectionStart - 1;
+								node.name = "img";
+								node.attrs = {
+									src: "data:image/svg+xml;utf8," + src.replace(/#/g, "%23"),
+									ignore: "true"
+								}
+								slibings.push(node);
+							}
 							break;
 						}
 					}
 					return;
 				} else this._STACK.push(node);
-				if (node.name == "pre") {
-					this._whiteSapce = true;
-					node.pre = true;
-					// 高亮处理接口
-					if (config.highlight) {
-						this._sectionStart = this._i + 1;
-						this._i = this.data.indexOf("</pre", this._sectionStart);
-						this.data = this.data.substring(0, this._sectionStart) + config.highlight(this.data.substring(this._sectionStart,
-							this._i), node.attrs) + this.data.substring(this._i);
-						this._i = this._sectionStart - 1;
-					}
-				}
+				node.children = [];
 			}
 		} else this._i++;
 		this._sectionStart = this._i + 1;
-		this._stateHandler = this.TextHandler;
+		this._state = this.Text;
 		if (!config.ignoreTags[node.name]) {
 			// 检查空白符是否有效
-			var styles = node.attrs.style ? node.attrs.style.toLowerCase().split(';') : [];
-			for (var i = 0; i < styles.length; i++)
-				if (styles[i].includes("white-space") && styles[i].includes("pre")) {
-					this._whiteSpace = true;
-					node.pre = true;
-					break;
-				}
+			if (node.name == "pre" || (node.attrs.style && node.attrs.style.toLowerCase().includes("white-space") && node.attrs
+					.style.toLowerCase().includes("pre"))) {
+				this._whiteSpace = true;
+				node.pre = true;
+			}
 			slibings.push(node);
 		}
 	};
+	// 标签出栈处理
 	popNode(node) {
 		// 替换一些标签名
 		if (config.blockTags[node.name]) node.name = 'div';
-		else if (!config.trustTags.hasOwnProperty(node.name)) node.name = 'span';
+		else if (!config.trustTags[node.name]) node.name = 'span';
 		// 空白符处理
 		if (node.pre) {
 			this._whiteSpace = false;
-			delete node.pre;
+			node.pre = undefined;
 			for (var i = 0; i < this._STACK.length; i++)
 				if (this._STACK[i].pre)
 					this._whiteSpace = true;
 		}
 		// 处理表格的边框
 		if (node.name == 'table') {
-			node.attrs.style = node.attrs.style || '';
 			if (node.attrs.border)
-				node.attrs.style += (";border:" + node.attrs.border + "px solid gray;");
+				node.attrs.style = "border:" + node.attrs.border + "px solid gray;" + (node.attrs.style || '');
 			if (node.attrs.hasOwnProperty("cellspacing"))
-				node.attrs.style += (";border-spacing:" + node.attrs.cellspacing + "px");
-
+				node.attrs.style = "border-spacing:" + node.attrs.cellspacing + "px;" + (node.attrs.style || '');
+	
 			function setBorder(elem) {
 				if (elem.name == 'th' || elem.name == 'td') {
 					if (node.attrs.border)
-						elem.attrs.style = (elem.attrs.style || '') + ";border:" + node.attrs.border + "px solid gray;";
+						elem.attrs.style = "border:" + node.attrs.border + "px solid gray;" + (elem.attrs.style || '');
 					if (node.attrs.hasOwnProperty("cellpadding"))
-						elem.attrs.style = (elem.attrs.style || '') + ";padding:" + node.attrs.cellpadding + "px";
+						elem.attrs.style = "padding:" + node.attrs.cellpadding + "px;" + (elem.attrs.style || '');
 					return;
 				}
 				if (elem.type == 'text') return;
@@ -440,6 +306,122 @@ class MpHtmlParser {
 		// 多层样式处理
 		if (this.CssHandler.pop)
 			this.CssHandler.pop(node);
+	};
+	// 工具函数
+	checkClose() {
+		if (this.data[this._i] == '>' || (this.data[this._i] == '/' && this.data[this._i + 1] == '>'))
+			return true;
+		return false;
+	};
+	getSelection(trim) {
+		var str = (this._sectionStart == this._i ? '' : this.data.substring(this._sectionStart, this._i));
+		while (trim && isBlankChar(this.data[++this._i]));
+		if (trim) this._i--;
+		this._sectionStart = this._i + 1;
+		return str;
+	};
+	// 状态机
+	Text(c) {
+		if (c == '<') {
+			var next = this.data[this._i + 1];
+			if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z')) {
+				this.setText();
+				this._state = this.TagName;
+			} else if (next == '/') {
+				this.setText();
+				this._i++;
+				next = this.data[this._i + 1];
+				if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z')) {
+					this._sectionStart = this._i + 1;
+					this._state = this.EndTag;
+				} else
+					this._state = this.Comment;
+			} else if (next == '!') {
+				this.setText();
+				this._state = this.Comment;
+			}
+		}
+	};
+	Comment() {
+		if (this.data.substring(this._i + 1, this._i + 3) == "--" || this.data.substring(this._i + 1, this._i + 7) ==
+			"[CDATA[") {
+			this._i = this.data.indexOf("-->", this._i + 1);
+			if (this._i == -1) return this._i = this.data.length;
+			else this._i = this._i + 2;
+		} else {
+			this._i = this.data.indexOf(">", this._i + 1);
+			if (this._i == -1) return this._i = this.data.length;
+		}
+		this._sectionStart = this._i + 1;
+		this._state = this.Text;
+	};
+	TagName(c) {
+		if (isBlankChar(c)) {
+			this._tagName = this.getSelection(true);
+			if (this.checkClose()) this.setNode();
+			else this._state = this.AttrName;
+		} else if (this.checkClose()) {
+			this._tagName = this.getSelection();
+			this.setNode();
+		}
+	};
+	AttrName(c) {
+		if (isBlankChar(c)) {
+			this._attrName = this.getSelection(true).toLowerCase();
+			if (this.data[this._i] == '=') {
+				while (isBlankChar(this.data[++this._i]));
+				this._sectionStart = this._i;
+				this._i--;
+				this._state = this.AttrValue;
+			} else this.setAttr();
+		} else if (c == '=') {
+			this._attrName = this.getSelection().toLowerCase();
+			while (isBlankChar(this.data[++this._i]));
+			this._sectionStart = this._i;
+			this._i--;
+			this._state = this.AttrValue;
+		} else if (this.checkClose()) {
+			this._attrName = this.getSelection().toLowerCase();
+			this.setAttr();
+		}
+	};
+	AttrValue(c) {
+		if (c == '"' || c == "'") {
+			this._sectionStart++;
+			if ((this._i = this.data.indexOf(c, this._i + 1)) == -1) return this._i = this.data.length;
+		} else
+			for (; !isBlankChar(this.data[this._i] && this.data[this._i] != '/' && this.data[this._i] != '>'); this._i++);
+		this._attrValue = this.getSelection();
+		while (this._attrValue.includes("&quot;")) this._attrValue = this._attrValue.replace("&quot;", '');
+		this.setAttr();
+	};
+	EndTag(c) {
+		if (isBlankChar(c) || c == '>' || c == '/') {
+			var name = this.getSelection().toLowerCase();
+			var flag = false;
+			for (var i = this._STACK.length - 1; i >= 0; i--)
+				if (this._STACK[i].name == name) {
+					flag = true;
+					break;
+				}
+			if (flag) {
+				var node;
+				while (flag) {
+					node = this._STACK.pop();
+					if (node.name == name) flag = false;
+					this.popNode(node);
+				}
+			} else if (name == 'p' || name == "br") {
+				var slibings = this._STACK.length ? this._STACK[this._STACK.length - 1].children : this.DOM;
+				var node = {
+					name
+				}
+				slibings.push(node);
+			}
+			this._i = this.data.indexOf('>', this._i);
+			if (this._i == -1) this._i = this.data.length;
+			else this._state = this.Text;
+		}
 	};
 };
 module.exports = {

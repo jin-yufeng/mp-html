@@ -764,6 +764,174 @@ module.exports = {
       "class": "hljs"
     }
   }],
+  svgcode: [{
+    "name": "div",
+    "attrs": {
+      "style": ";font-family:monospace;white-space:pre;overflow:scroll;;"
+    },
+    "children": [{
+      "type": "text",
+      "text": "<svg>"
+    }, {
+      "name": "br",
+      "attrs": {},
+      "children": []
+    }, {
+      "type": "text",
+      "text": "   <"
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-built_in",
+        "style": ";color: #397300;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "circle"
+      }]
+    }, {
+      "type": "text",
+      "text": " cx="
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-string",
+        "style": ";color: #880000;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "\"100\""
+      }]
+    }, {
+      "type": "text",
+      "text": " cy="
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-string",
+        "style": ";color: #880000;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "\"50\""
+      }]
+    }, {
+      "type": "text",
+      "text": " r="
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-string",
+        "style": ";color: #880000;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "\"40\""
+      }]
+    }, {
+      "type": "text",
+      "text": " "
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-built_in",
+        "style": ";color: #397300;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "stroke"
+      }]
+    }, {
+      "type": "text",
+      "text": "="
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-string",
+        "style": ";color: #880000;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "\"black\""
+      }]
+    }, {
+      "type": "text",
+      "text": " "
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-built_in",
+        "style": ";color: #397300;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "stroke"
+      }]
+    }, {
+      "type": "text",
+      "text": "-"
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-built_in",
+        "style": ";color: #397300;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "width"
+      }]
+    }, {
+      "type": "text",
+      "text": "="
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-string",
+        "style": ";color: #880000;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "\"2\""
+      }]
+    }, {
+      "type": "text",
+      "text": " "
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-built_in",
+        "style": ";color: #397300;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "fill"
+      }]
+    }, {
+      "type": "text",
+      "text": "="
+    }, {
+      "name": "span",
+      "attrs": {
+        "class": "hljs-string",
+        "style": ";color: #880000;;"
+      },
+      "children": [{
+        "type": "text",
+        "text": "\"red\""
+      }]
+    }, {
+      "type": "text",
+      "text": " />"
+    }, {
+      "name": "br",
+      "attrs": {},
+      "children": []
+    }, {
+      "type": "text",
+      "text": "</svg>"
+    }],
+    "PoweredBy": "Parser"
+  }],
   //添加加载提示代码
   loadingcode: [{
     "children": [{

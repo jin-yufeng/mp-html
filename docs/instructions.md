@@ -1,11 +1,11 @@
-## 使用方法 {docsify-ignore}##
+## 使用方法 {docsify-ignore} ##
 ### 插件包说明 ###
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 46.0KB | 微信小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.7KB | 微信小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 59.3KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 45.2KB | 微信小程序插件包 |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.5KB | 微信小程序插件包压缩版（功能相同） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 58.9KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
 1. 百度小程序和支付宝小程序不支持 `lazy-load` 属性
@@ -162,7 +162,7 @@
   
 说明：  
 - 关于 `html`  
-  - 传入的格式为 `array` 时，与 `rich-text` 唯一不同的地方在于对于该节点下有图片、视频等需要通过组件递归方式显示的标签时，需要将该标签的 `continue` 属性设置为 `true`，否则将直接使用 `rich-text` 显示，可能导致图片链接无法点击、视频无法显示等问题  
+  - 传入的格式为 `array` 时，与 `rich-text` 唯一不同的地方在于对于该节点下有图片、视频等需要通过组件递归方式显示的标签时，需要将该标签的 `c(continue)` 属性设置为 `1`，否则将直接使用 `rich-text` 显示，可能导致图片链接无法点击、视频无法显示等问题  
     
   - 如果传入没有设置 `continue` 的数组（区分方式是查看 `html[0].PoweredBy` 是否等于 `Parser`），插件也会自动进行设置，并同时处理 `tag-style`、`domain`、`use-anchor` 等一些属性的效果。因此可以传入和 `rich-text` 完全相同的数组，但会产生额外的性能开销  
     
@@ -483,7 +483,7 @@ console.log(versionHigherThan("2.7.1"));
 - 功能  
   将形如 `[笑脸]` 的文本解析为 `emoji` 小表情  
 - 大小  
-  `4.85KB`（`min` 版本 `3.61KB`）  
+  `4.35KB`（`min` 版本 `3.22KB`）  
 - 使用方法  
   将 `emoji.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `emoji.js`）  
   
@@ -502,7 +502,7 @@ console.log(versionHigherThan("2.7.1"));
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `4.63KB`（`min` 版本 `3.79KB`）  
+  `4.77KB`（`min` 版本 `3.89KB`）  
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
@@ -574,17 +574,16 @@ error(e){
   模拟 `ol`、`ul`、`li` 标签  
   `ol` 标签支持 `start` 和 `type` 属性；`ul` 标签会自动根据层级显示不同的样式  
 - 大小  
-  `4.66KB`  
+  `4.67KB`  
 
 !>此补丁包**仅能**在微信小程序中使用  
 
 - 使用方法  
   1. 将 `list` 文件夹复制到 `Parser` 文件夹下  
   2. 将 `trees.li.wxml` 中的内容复制到 `Parser/trees/trees.wxml` 中 `wx:if="{{Handler.notContinue(item)}}"` 的 `block` 中的任意位置
-  3. 在 `Parser/trees/handler.wxs` 中的 `notContinue` 函数中进行如下修改  
+  3. 在 `Parser/trees/handler.wxs` 中的 `notContinue` 函数开头添加  
      ```javascript
-     // if(item.name=='a')
-     if(item.name=='a'||item.name=='li'||item.name=='ol'||item.name=='ul')
+     if(item.name=='li'||item.name=='ol'||item.name=='ul') return true;
      ```
   4. 在 `Parser/trees/trees.json` 中添加
      ```json
@@ -595,7 +594,7 @@ error(e){
        "li": "../list/li"
      }
      ```  
-  5. 将 `Parser/libs/config.js` 中 `trustTags` 结构体的 `ol`、`ul`、`li` 属性值改为 `1`  
+  5. 将 `Parser/libs/config.js` 中 `richOnlyTags` 结构体中去掉 `ol`、`ul`、`li`  
   - 可参考 `demo` 文件夹中的 [Parser](https://github.com/jin-yufeng/Parser/tree/master/demo/wx/Parser)（已装载此补丁包）  
   
 >对于 `ol` 标签，`type` 为阿拉伯数字（默认）时没有数量限制；为字母时最多包含26个子项；为罗马数字时最多包含20个子项
@@ -651,7 +650,7 @@ error(e){
 | .class::after | .demo::after | &lt;element class="demo" ::after&gt; |
 
 - 大小（与原大小相比增加）  
-  `4.54KB`（`min` 版本：`2.84KB`）  
+  `4.7KB`（`min` 版本：`3.07KB`）  
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
@@ -688,7 +687,7 @@ parser(html).then(function(res){
 
 - 如何添加一个自定义标签  
   1. 在 `config.js` 中的 `trustAttrs` 中添加需要用到的属性  
-  2. 在 `config.js` 中的 `trustTags` 中添加该标签名（值设置成 1 时表示可以被 `trees` 组件递归显示，一般设置为 0）
+  2. 在 `config.js` 中的 `trustTags` 中添加该标签名（如果该标签不能被 `trees` 组件模拟，还需要添加到 `richOnlyTags`）  
   3. 在 `config.js` 中的 `LabelAttrHandler` 中进行自定义的属性处理（可选）  
   4. 在 `trees.wxml` 中添加该组件
      ```wxml
@@ -741,10 +740,11 @@ parser(html).then(function(res){
 
 ### 反馈问题 ###
 在反馈问题前，请先通过以下方式尝试解决：  
-1. 在 [常见问题](#常见问题) 中查找是否有此问题
-2. 在 [issues](https://github.com/jin-yufeng/Parser/issues) 中查找是否有相同问题
-3. 使用 [示例项目](https://github.com/jin-yufeng/Parser/tree/master/demo) 或微信小程序 [富文本插件](/features#案例体验) 中的自定义测试尝试是否也会出现相同的问题  
-4. 在下框中输入 `html` 字符串进行测试（即直接用浏览器进行渲染，若也存在问题，请检查样式）  
+1. 检查是否使用的是最新版的插件包  
+2. 在 [常见问题](#常见问题) 中查找是否有此问题  
+3. 在 [issues](https://github.com/jin-yufeng/Parser/issues) 中查找是否有相同问题  
+4. 使用 [示例项目](https://github.com/jin-yufeng/Parser/tree/master/demo) 或微信小程序 [富文本插件](/features#案例体验) 中的自定义测试尝试是否也会出现相同的问题  
+5. 在下框中输入 `html` 字符串进行测试（即直接用浏览器进行渲染，若也存在问题，请检查样式）  
   <textarea id="input" style="width:100%;height:200px" placeholder="请输入字符串"></textarea>
   <button onclick="parse()">解析</button>
   <button onclick="reset()" style="margin-left:10px">清空</button>

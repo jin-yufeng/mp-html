@@ -57,7 +57,6 @@ export default {
 		return [item];
 	},
 	notContinue: function(item) {
-		if (item.name == 'a') return true;
-		return !(item["continue"] || inlineTags[item.name]);
+		return !(item.c || inlineTags[item.name] || item["continue"]);
 	}
 }

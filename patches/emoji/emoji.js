@@ -4,8 +4,8 @@
  文档地址：https://jin-yufeng.github.io/Parser
  author：JinYufeng
 */
-var reg = /\[([^\s\]]*?)\]/g;
-var data = {
+const reg = /\[(.*?)\]/g;
+const data = {
   "笑脸": "😄",
   "生病": "😷",
   "破涕为笑": "😂",
@@ -184,32 +184,17 @@ var data = {
   "警告": "⚠️",
   "禁止": "⛔"
 }
-var parseEmoji = function(text) {
-  return text.replace(reg, function() {
+module.exports = {
+  parseEmoji: (text) => text.replace(reg, function() {
     if (data[arguments[1]]) {
-      if (/http/.test(data[arguments[1]]))
+      if (data[arguments[1]].includes("http"))
         return "<img src=\"" + data[arguments[1]] + "\" style=\"width:16px;height:16px;display:inline-block\" ignore >"
       else
         return data[arguments[1]];
     } else
       return arguments[0];
-  })
-}
-var getEmoji = function(key) {
-  return data[key];
-}
-var removeEmoji = function(key) {
-  delete data[key];
-}
-var setEmoji = function(key, emoji) {
-  var EmojiReg = /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig;
-  if (!EmojiReg.test(emoji) && !/http/.test(emoji))
-    console.warn("设置的\"" + emoji + "\"既不是emoji字符也不是网络图片！");
-  data[key] = emoji;
-}
-module.exports = {
-  parseEmoji,
-  getEmoji,
-  setEmoji,
-  removeEmoji
+  }),
+  getEmoji: (key) => data[key],
+  setEmoji: (key, emoji) => (data[key] = emoji, undefined),
+  removeEmoji: (key) => (data[key] = undefined)
 }

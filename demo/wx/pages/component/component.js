@@ -24,6 +24,7 @@ Page({
     //示例代码
     stylecode: code.stylecode,
     tagStylecode: code.tagStylecode,
+    svgcode:code.svgcode,
     loadingcode: code.loadingcode,
     sourcecode: code.sourcecode,
     //支持的标签列表
@@ -337,12 +338,22 @@ Page({
       code: "border:1px solid #cccccc;border-radius:3px"
     },
     update: `<ul>
+    <li>2019.12.30:
+      <ol>
+        <li><code>A</code> 增加支持<code>svg</code>系列标签</li>
+        <li><code>U</code> 减小了解析结果的大小（约<code>3%</code>），减小了插件包的大小</li>
+        <li><code>U</code> <code>h1-6</code>标签支持通过组件递归显示（即可以在其中使用图片、链接等）</li>
+        <li><code>U</code> 解决了<code>Audits</code>测评中<code>a</code>标签可点击元素的响应区域过小的问题</li>
+        <li><code>F</code> 修复了一个样式优先级的错误</li>
+      </ol>
+    </li>
+    </br>
     <li>2019.12.21:
       <ol>
         <li><code>F</code> 修复了使用<code>font</code>标签的<code>size</code>属性时出错的问题</li>
       </ol>
     </li>
-    <br />
+    </br>
     <li>2019.12.15:
       <ol>
         <li><code>A</code> 增加<code>setContent</code>的<code>api</code>，用于设置<code>string</code>类型的数据，可以减少一次<code>setData</code></li>
@@ -354,7 +365,7 @@ Page({
         <li><code>D</code> 删除了<code>animation-duration</code>属性</code>
       </ol>
     </li>
-    <br />
+    </br>
     <li>2019.12.10:
       <ol>
         <li><code>A</code> 增加了<code>cache-id</code>属性，可以将解析结果缓存到<code>globalData</code>中，多次打开不用重复解析</li> 
@@ -366,7 +377,7 @@ Page({
         <li><code>U</code> <code>error</code>回调将返回该视频的<code>context</code>对象，可以修改播放源</li>
       </ol>
     </li>
-    <br />
+    </br>
     <li>2019.12.3:
       <ol>
         <li><code>A</code> 增加了<code>domain</code>属性，设置后可以自动给图片链接拼接主域名或协议名</li>
@@ -374,77 +385,41 @@ Page({
         <li><code>U</code> <code>CssHandler</code>补丁包增加支持<code>before</code>和<code>after</code>伪类</li>
       </ol>
     </li>
-    <br />
+    </br>
     <li>2019.11.29:
       <ol>
         <li><code>U</code> <code>linkpress</code>和<code>imgtap</code>回调增加<code>ignore</code>函数，在回调中调用此函数将不自动进行链接跳转/图片预览操作，可以屏蔽指定的链接/图片或进行自定义操作</li>
       </ol>
     </li>
-    <br />
+    </br>
     <li>2019.11.28:
       <ol>
         <li><code>U</code> <code>table</code>标签支持了<code>border</code>, <code>cellpadding</code>, <code>cellspacing</code></li>
       </ol>
     </li>
-    <br />
+    </br>
     <li>2019.10.29:
       <ol>
         <li><code>F</code> 修复了部分行内标签被错误换行的问题</li>
       </ol>
     </li>
-    <br />
+    </br>
     <li>2019.10.27:
       <ol>
         <li><code>F</code> 修复了部分情况下多张相同的图片仅第一张可显示的问题</li>
       </ol>
     </li>
-    <br />
+    </br>
     <li>2019.10.24:
       <ol>
         <li><code>U</code><code>uni-app</code>包支持在<code>APP</code>端使用</li>
       </ol>
     </li>
-    <br />
+    </br>
     <li>2019.10.17:
       <ol>
         <li><code>A</code> 增加了<code>CssHandler</code>补丁包（可支持多层的<code>css</code>选择器）</li>
         <li><code>U</code> <code>uni-app</code>包支持在<code>H5</code>端使用</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.9.28:
-      <ol>
-        <li><code>A</code> 增加了<code>lazy-load</code>属性（可用于图片懒加载）</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.9.25:
-      <ol>
-        <li><code>A</code> 增加了<code>uni-app</code>插件包</li>
-        <li><code>F</code> 修复了部分情况下显示样式出错的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.9.22:
-      <ol>
-        <li><code>U</code> 支持引入<code>wxss</code>文件中的外部样式</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.9.21:
-      <ol>
-        <li><code>A</code> 增加了对百度小程序的支持</li>
-        <li style='word-break:break-all'><code>U</code> 为与百度小程序包统一，所有事件的返回值改为<code>object</code>类型（影响<code>bindimgtap</code>和<code>bindlinkpress</code>）</li>
-        <li><code>U</code> 优化了补丁包的引入方式</li>
-        <li><code>F</code> 修复了<code>autopause</code>属性在某些情况下会失效的问题</li>
-      </ol>
-    </li>
-    <br />
-    <li>2019.9.18:
-      <ol>
-        <li><code>A</code> 增加了在<code>wepy</code>中的使用方法</li>
-        <li><code>F</code> 修复了部分情况下<code>style</code>标签解析结果缺少<code>;</code>导致匹配失效的问题</code>
-        <li><code>F</code> 修复了<code>0917</code>版本中<code>a</code>标签失效的问题</li>
       </ol>
     </li>
   </ul>`

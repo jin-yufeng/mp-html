@@ -55,7 +55,6 @@ module.exports = {
     return [item];
   },
   notContinue: function(item) {
-    if (item.name == 'a' || item.name == 'li' || item.name == 'ol' || item.name == 'ul') return true;
-    return !(item["continue"] || inlineTags[item.name]);
+    return !(item.c || inlineTags[item.name] || item["continue"]);
   }
 }

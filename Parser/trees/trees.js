@@ -30,16 +30,9 @@ Component({
     this.loadSource = (target) => {
       var index = (this.data.controls[target.id] ? this.data.controls[target.id].index : 0) + 1;
       if (index < target.dataset.source.length) {
-        if (!this.data.controls[target.id])
-          this.setData({
-            [`controls.${target.id}`]: {
-              index
-            }
-          })
-        else
-          this.setData({
-            [`controls.${target.id}.index`]: index
-          })
+        this.setData({
+          [`controls.${target.id}.index`]: index
+        })
         return true;
       }
       return false;
@@ -52,7 +45,7 @@ Component({
     // 视频播放事件
     playEvent(e) {
       if (this._top && (this._top.videoContexts || []).length > 1 && this._top.data.autopause) {
-        for (let video of this._top.videoContexts) {
+        for (var video of this._top.videoContexts) {
           if (video.id == e.currentTarget.id) continue;
           video.pause();
         }
@@ -69,9 +62,11 @@ Component({
           ignore: () => preview = false
         })
         if (preview && this._top.data.autopreview) {
+          var urls = this._top.imgList || [],
+            current = urls[attrs.i] ? urls[attrs.i] : (urls = [attrs.src], attrs.src);
           wx.previewImage({
-            current: this._top.imgList[attrs.i] || attrs.src,
-            urls: this._top.imgList || [attrs.src]
+            current,
+            urls
           })
         }
       }
@@ -81,7 +76,6 @@ Component({
       if (!this._top) return;
       var jump = true,
         attrs = e.currentTarget.dataset.attrs;
-      delete attrs.style;
       attrs.ignore = () => jump = false;
       this._top.triggerEvent('linkpress', attrs);
       if (jump) {

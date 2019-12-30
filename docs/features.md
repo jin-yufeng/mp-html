@@ -1,4 +1,4 @@
-## 功能介绍 {docsify-ignore}##
+## 功能介绍 {docsify-ignore} ##
 *注：以下所有代码示例均为微信原生框架代码*
 
 ### 匹配 style 标签 ###  
@@ -36,7 +36,34 @@ data:{
 | style 标签 | 1 | style 标签所在的 parser | 其中优先级标签名选择器 < class 选择器 < id 选择器 |
 | [tag-style](#设置默认的标签样式) | 2 | 设置了该属性的 parser | 标签的默认样式 |
 | [userAgentStyles](/instructions#配置项) | 3 | 所有 parser | 标签的默认样式 |
-| [外部样式](/instructions#使用外部样式) | 4 | 所有 parser | 仅支持 class 选择器 |
+| 属性样式 | 4 | 设置了该属性的标签 | 如 size, align, border 等属性产生的样式 |
+| [外部样式](/instructions#使用外部样式) | 5 | 所有 parser | 仅支持 class 选择器 |
+
+默认不支持 `link` 标签的样式（小程序端发起网络请求有限制），如果需要可通过以下代码获取 `link` 的内容后再传入给组件进行解析（需配置域名）  
+```javascript
+// html 为包含 link 标签的富文本内容
+var links = [];
+html = html.replace(/<link.*?href=['"]*([\S]*?)['"].*?>/g, function() {
+  if (arguments[1].includes(".css"))
+    links.push(arguments[1])
+  return '';
+})
+function getLink(i) {
+  if (i < links.length){
+    wx.request({
+      url: links[i],
+      success(e) {
+        if (e.statusCode == 200)
+          html = "<style>" + e.data + "</style>" + html;
+        getLink(i + 1);
+      },
+      fail: () => getLink(i + 1)
+    })
+  } else
+    this.setData({html});
+}
+getLink(0);
+```
 
 ### 设置默认的标签样式 ###
 支持给各个标签设置默认的效果  
@@ -91,6 +118,21 @@ ready(){
   })
 }
 ```
+
+### svg 支持 ###
+支持直接使用所有 `svg` 系列标签  
+示例：  
+``` wxml
+<parser html="{{html}}" />
+```
+``` javascript
+data:{
+  html:'<svg><circle cx="100" cy="50" r="40" stroke="black" stroke-width="2" fill="red" /></svg>'
+}
+```
+<svg><circle cx="100" cy="50" r="40" stroke="black" stroke-width="2" fill="red" /></svg>
+
+!> 该功能将 `svg` 标签进行一定转换后通过 `img` 显示，但不可预览，且除 `uni-app` 的 `H5` 端不能响应点击事件  
 
 ### 自动设置标题 ###
 若存在 `title` 标签，将自动把其内容设置到页面标题上（可通过 `autosetTitle` 属性控制）  
@@ -218,6 +260,8 @@ ready(){
 | rp | 高版本不显示，可用于兼容 |
 | rt |   |
 | ruby |   |
+
+>除列举的标签外，还支持所有 `svg` 系列的标签（必须包裹在 `svg` 标签内，否则无效）  
 
 >支持图片点击（可自动预览）、链接点击事件（可自动复制链接），不支持其他事件（如 `onclick` 等）  
 

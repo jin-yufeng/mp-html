@@ -1,242 +1,107 @@
 /* 配置文件 */
-// 信任的属性列表，不在列表中的属性将被移除
-const trustAttrs = {
-  align: true,
-  alt: true,
-  "app-id": true,
-  appId: true,
-  author: true,
-  autoplay: true,
-  border: true,
-  cellpadding: true,
-  cellspacing: true,
-  class: true,
-  color: true,
-  colspan: true,
-  controls: true,
-  "data-src": true,
-  dir: true,
-  face: true,
-  height: true,
-  href: true,
-  id: true,
-  ignore: true,
-  loop: true,
-  muted: true,
-  name: true,
-  path: true,
-  poster: true,
-  rowspan: true,
-  size: true,
-  span: true,
-  src: true,
-  start: true,
-  style: true,
-  type: true,
-  "unit-id": true,
-  unitId: true,
-  width: true
+function makeMap(str) {
+  var map = Object.create(null),
+    list = str.split(',');
+  for (var item of list)
+    map[item] = true;
+  return map;
 }
-// 信任的标签列表，1 表示可以用 trees 组件模拟并继续递归显示
-const trustTags = {
-  a: 0,
-  abbr: 1,
-  ad: 0,
-  audio: 0,
-  b: 1,
-  blockquote: 1,
-  br: 0,
-  code: 1,
-  col: 0,
-  colgroup: 0,
-  dd: 1,
-  del: 1,
-  dl: 1,
-  dt: 1,
-  div: 1,
-  em: 1,
-  fieldset: 0,
-  h1: 0,
-  h2: 0,
-  h3: 0,
-  h4: 0,
-  h5: 0,
-  h6: 0,
-  hr: 0,
-  i: 1,
-  img: 1,
-  ins: 1,
-  label: 1,
-  legend: 0,
-  li: 0,
-  ol: 0,
-  p: 1,
-  q: 1,
-  source: 0,
-  span: 1,
-  strong: 1,
-  sub: 0,
-  sup: 0,
-  table: 0,
-  tbody: 0,
-  td: 0,
-  tfoot: 0,
-  th: 0,
-  thead: 0,
-  tr: 0,
-  title: 0,
-  u: 1,
-  ul: 0,
-  video: 1
-};
+// 信任的属性列表，不在列表中的属性将被移除
+const trustAttrs = makeMap("align,alt,app-id,appId,author,autoplay,border,cellpadding,cellspacing,class,color,colspan,controls,data-src,dir,face,height,href,id,ignore,loop,muted,name,path,poster,rowspan,size,span,src,start,style,type,unit-id,unitId,width,xmlns");
+// 信任的标签，将保持标签名不变
+const trustTags = makeMap("a,abbr,ad,audio,b,blockquote,br,code,col,colgroup,dd,del,dl,dt,div,em,fieldset,h1,h2,h3,h4,h5,h6,hr,i,img,ins,label,legend,li,ol,p,q,source,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,title,u,ul,video");
 // 块级标签，将被转为 div
-const blockTags = {
-  address: true,
-  article: true,
-  aside: true,
-  body: true,
-  center: true,
-  cite: true,
-  footer: true,
-  header: true,
-  html: true,
-  nav: true,
-  pre: true,
-  section: true
-};
-// 被移除的标签
-const ignoreTags = {
-  area: true,
-  base: true,
-  basefont: true,
-  canvas: true,
-  circle: true,
-  command: true,
-  ellipse: true,
-  embed: true,
-  frame: true,
-  head: true,
-  iframe: true,
-  input: true,
-  isindex: true,
-  keygen: true,
-  line: true,
-  link: true,
-  map: true,
-  meta: true,
-  param: true,
-  path: true,
-  polygon: true,
-  polyline: true,
-  rect: true,
-  script: true,
-  source: true,
-  textarea: true,
-  track: true,
-  use: true,
-  wbr: true
-};
+const blockTags = makeMap("address,article,aside,body,center,cite,footer,header,html,nav,pre,section");
+// 被移除的标签（其中 svg 系列标签会被转为图片）
+const ignoreTags = makeMap("area,base,basefont,canvas,circle,command,ellipse,embed,frame,head,iframe,input,isindex,keygen,line,link,map,meta,param,path,polygon,rect,script,source,svg,textarea,track,use,wbr");
+// 只能用 rich-text 显示的标签（其中图片不能预览、不能显示视频、音频等）
+const richOnlyTags = makeMap("a,ad,audio,colgroup,fieldset,legend,li,ol,sub,sup,table,tbody,td,tfoot,th,thead,tr,ul,video");
 // 自闭合标签
-const selfClosingTags = {
-  area: true,
-  base: true,
-  basefont: true,
-  br: true,
-  col: true,
-  circle: true,
-  ellipse: true,
-  embed: true,
-  frame: true,
-  hr: true,
-  img: true,
-  input: true,
-  isindex: true,
-  keygen: true,
-  line: true,
-  link: true,
-  meta: true,
-  param: true,
-  path: true,
-  polygon: true,
-  polyline: true,
-  rect: true,
-  source: true,
-  track: true,
-  use: true,
-  wbr: true
-};
+const selfClosingTags = makeMap("area,base,basefont,br,col,circle,ellipse,embed,frame,hr,img,input,isindex,keygen,line,link,meta,param,path,polygon,rect,source,track,use,wbr");
 // 默认的标签样式
 const userAgentStyles = {
-  a: "display:inline;color:#366092;word-break:break-all;",
-  address: "font-style:italic;",
-  blockquote: "background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px;",
-  center: "text-align:center;",
-  cite: "font-style:italic;",
-  code: "padding:0 1px 0 1px;margin-left:2px;margin-right:2px;background-color:#f8f8f8;border-radius:3px;",
-  dd: "margin-left:40px;",
-  img: "max-width:100%;",
-  mark: "display:inline;background-color:yellow;",
-  pre: "font-family:monospace;white-space:pre;overflow:scroll;",
-  s: "display:inline;text-decoration:line-through;",
-  u: "display:inline;text-decoration:underline;"
+  a: "color:#366092;word-break:break-all;padding:1.5px 0 1.5px 0",
+  address: "font-style:italic",
+  blockquote: "background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px",
+  center: "text-align:center",
+  cite: "font-style:italic",
+  code: "padding:0 1px 0 1px;margin-left:2px;margin-right:2px;background-color:#f8f8f8;border-radius:3px",
+  dd: "margin-left:40px",
+  img: "max-width:100%",
+  mark: "background-color:yellow",
+  pre: "font-family:monospace;white-space:pre;overflow:scroll",
+  s: "text-decoration:line-through",
+  u: "text-decoration:underline"
 };
-// 版本兼容（基础库 2.7.1 以上 rich-text 增加支持大量标签
+// 版本兼容（基础库 2.7.1 以上 rich-text 增加支持大量标签）
 const SDKVersion = wx.getSystemInfoSync().SDKVersion;
-var versionHigherThan = (version = '') => {
-  var v1 = SDKVersion.split('.');
-  var v2 = version.split('.');
-  const len = Math.max(v1.length, v2.length);
-  while (v1.length < len)
-    v1.push('0');
-  while (v2.length < len)
-    v2.push('0');
-  for (let i = 0; i < len; i++) {
-    const num1 = parseInt(v1[i]);
-    const num2 = parseInt(v2[i]);
-    if (num1 > num2) return true;
-    if (num1 < num2) return false;
+
+function versionHigherThan(version = '') {
+  var v1 = SDKVersion.split('.'),
+    v2 = version.split('.');
+  while (v1.length != v2.length)
+    v1.length < v2.length ? v1.push('0') : v2.push('0');
+  for (var i = 0; i < v1.length; i++) {
+    if (v1[i] == v2[i]) continue;
+    if (parseInt(v1[i]) > parseInt(v2[i])) return true;
+    return false;
   }
   return true;
 };
 if (versionHigherThan("2.7.1")) {
-  trustTags.bdi = 0;
-  trustTags.bdo = 0;
-  trustTags.caption = 0;
-  trustTags.rt = 0;
-  trustTags.ruby = 0;
+  trustTags.bdi = true;
+  trustTags.bdo = true;
+  trustTags.caption = true;
+  trustTags.rt = true;
+  trustTags.ruby = true;
   ignoreTags.rp = true;
-  trustTags.big = 1;
-  trustTags.small = 1;
-  trustTags.pre = 0;
-  delete blockTags.pre;
+  trustTags.big = true;
+  trustTags.small = true;
+  trustTags.pre = true;
+  richOnlyTags.bdi = true;
+  richOnlyTags.bdo = true;
+  richOnlyTags.caption = true;
+  richOnlyTags.rt = true;
+  richOnlyTags.ruby = true;
+  richOnlyTags.pre = true;
+  blockTags.pre = undefined;
 } else {
   blockTags.caption = true;
-  userAgentStyles.big = "display:inline;font-size:1.2em;";
-  userAgentStyles.small = "display:inline;font-size:0.8em;";
+  userAgentStyles.big = "display:inline;font-size:1.2em";
+  userAgentStyles.small = "display:inline;font-size:0.8em";
 }
+
+function bubbling(Parser) {
+  for (var i = Parser._STACK.length - 1; i >= 0; i--) {
+    if (!richOnlyTags[Parser._STACK[i].name])
+      Parser._STACK[i].c = 1;
+    else return false;
+  }
+  return true;
+};
 module.exports = {
   // 高亮处理函数
   highlight: null,
-  // 处理标签的属性，需要通过组件递归方式显示的标签需要调用 Parser.bubbling()
+  // 处理标签的属性，需要通过组件递归方式显示的标签需要调用 bubbling(Parser)
   LabelAttrsHandler(node, Parser) {
-    node.attrs.style = node.attrs.style || '';
+    node.attrs.style = Parser.CssHandler.match(node.name, node.attrs, node) + (node.attrs.style || '');
     switch (node.name) {
       case "div":
       case 'p':
         if (node.attrs.align) {
           node.attrs.style = "text-align:" + node.attrs.align + ';' + node.attrs.style;
-          delete node.attrs.align;
+          node.attrs.align = undefined;
         }
         break;
       case "img":
         if (node.attrs["data-src"]) {
           node.attrs.src = node.attrs.src || node.attrs["data-src"];
-          delete node.attrs['data-src'];
+          node.attrs['data-src'] = undefined;
         }
         if (node.attrs.src) {
           if (!node.attrs.ignore) {
-            node.attrs.i = (Parser._imgNum++).toString();
-            if (Parser.bubbling() == 'a') node.attrs.ignore = "true"; // 图片在链接中不可预览
+            if (bubbling(Parser)) node.attrs.i = (Parser._imgNum++).toString();
+            else node.attrs.ignore = "true";
           }
           if (Parser._domain && node.attrs.src[0] == '/') {
             if (node.attrs.src[1] == '/') node.attrs.src = Parser._protocol + ":" + node.attrs.src;
@@ -246,24 +111,24 @@ module.exports = {
         break;
       case 'a':
       case 'ad':
-        Parser.bubbling();
+        bubbling(Parser);
         break;
       case 'font':
         if (node.attrs.color) {
           node.attrs.style = 'color:' + node.attrs.color + ';' + node.attrs.style;
-          delete node.attrs.color;
+          node.attrs.color = undefined;
         }
         if (node.attrs.face) {
           node.attrs.style = "font-family:" + node.attrs.face + ';' + node.attrs.style;
-          delete node.attrs.face;
+          node.attrs.face = undefined;
         }
         if (node.attrs.size) {
           var size = parseInt(node.attrs.size);
           if (size < 1) size = 1;
           else if (size > 7) size = 7;
-          let map = [10, 13, 16, 18, 24, 32, 48];
-          node.attrs.style = "font-size:" + map[size - 1] + "px;" + node.attrs.style;
-          delete node.attrs.size;
+          var map = ["xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"];
+          node.attrs.style = "font-size:" + map[size - 1] + ';' + node.attrs.style;
+          node.attrs.size = undefined;
         }
         break;
       case 'video':
@@ -273,11 +138,11 @@ module.exports = {
         if (node.name == "video") {
           if (node.attrs.width) {
             node.attrs.style = "width:" + parseFloat(node.attrs.width) + (node.attrs.width.includes('%') ? '%' : "px") + ';' + node.attrs.style;
-            delete node.attrs.width;
+            node.attrs.width = undefined;
           }
           if (node.attrs.height) {
             node.attrs.style = "height:" + parseFloat(node.attrs.height) + (node.attrs.height.includes('%') ? '%' : "px") + ';' + node.attrs.style;
-            delete node.attrs.height;
+            node.attrs.height = undefined;
           }
           if (Parser._videoNum > 3) node.lazyLoad = true;
         }
@@ -285,7 +150,7 @@ module.exports = {
         if (node.attrs.src) node.attrs.source.push(node.attrs.src);
         if (!node.attrs.controls && !node.attrs.autoplay)
           console.warn("存在没有 controls 属性的 " + node.name + " 标签，可能导致无法播放", node);
-        Parser.bubbling();
+        bubbling(Parser);
         break;
       case "source":
         var parent = Parser._STACK[Parser._STACK.length - 1];
@@ -295,7 +160,6 @@ module.exports = {
         }
         break;
     }
-    node.attrs.style = Parser.CssHandler.match(node.name, node.attrs, node) + node.attrs.style;
     if (Parser._domain && node.attrs.style.includes("url"))
       node.attrs.style = node.attrs.style.replace(/url\s*\(['"\s]*(\S*?)['"\s]*\)/, function() {
         var src = arguments[1];
@@ -304,8 +168,8 @@ module.exports = {
           else return "url(" + Parser._domain + src + ')';
         } else return arguments[0];
       })
-    if (!node.attrs.style) delete node.attrs.style;
-    if (Parser._useAnchor && node.attrs.id) Parser.bubbling();
+    if (!node.attrs.style) node.attrs.style = undefined;
+    if (Parser._useAnchor && node.attrs.id) bubbling(Parser);
   },
   trustAttrs,
   trustTags,

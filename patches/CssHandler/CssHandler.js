@@ -4,7 +4,7 @@
  文档地址：https://jin-yufeng.github.io/Parser
  author：JinYufeng
 */
-const config = require("./config.js");
+const userAgentStyles = require("./config.js").userAgentStyles;
 function _matchClass(match_class, selector_class) {
   if (!match_class || !match_class.length || !selector_class || !selector_class.length) return false;
   else if (match_class.length == 1 && selector_class.length == 1) {
@@ -66,19 +66,21 @@ function matchClass(match_name, match_class, match_id, selector) {
   return -1;
 }
 class CssHandler {
-  constructor(tagStyle) {
-    this.styles = tagStyle;
+  constructor(tagStyle = {}) {
+    this.styles = Object.assign({}, tagStyle);
   };
   getStyle(data) {
     var style = '';
-    data = data.replace(/<style[\s\S]*?>([\s\S]*?)<\/style[\s\S]*?>/g, function () {
+    data = data.replace(/<[sS][tT][yY][lL][eE][\s\S]*?>([\s\S]*?)<\/[sS][tT][yY][lL][eE][\s\S]*?>/g, function () {
       style += arguments[1];
       return '';
     })
     this.styles = new CssParser(style, this.styles).parse();
     return data;
   };
-  parseCss = (css) => new CssParser(css, {}, true).parse();
+  parseCss(css) {
+    return new CssParser(css, {}, true).parse();
+  };
   match(name, attrs, element) {
     var match_class = [];
     if (attrs.class) {
@@ -184,7 +186,7 @@ function isBlankChar(c) {
   return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' || c == '\f';
 };
 class CssParser {
-  constructor(data, tagStyle = {}, api) {
+  constructor(data, tagStyle, api) {
     this.data = data;
     this.res = this.merge(tagStyle, api);
     this._floor = 0;
@@ -195,18 +197,16 @@ class CssParser {
     this._stateHandler = this.SpaceHandler;
   };
   merge(tagStyle, api) {
-    var merge;
-    if (api) merge = JSON.parse(JSON.stringify(tagStyle));
-    else {
-      merge = JSON.parse(JSON.stringify(config.userAgentStyles));
-      for (var key in tagStyle)
-        merge[key] = (merge[key] || '') + tagStyle[key];
-    }
+	if (!api)
+      for (var item in userAgentStyles) {
+        if (tagStyle[item]) tagStyle[item] = userAgentStyles[item] + ';' + tagStyle[item];
+        else tagStyle[item] = userAgentStyles[item];
+      }
     var res = [];
-    for (var key in merge) {
+    for (var key in tagStyle) {
       res.push({
         key,
-        content: merge[key]
+        content: tagStyle[key]
       })
     }
     return res;
@@ -268,7 +268,7 @@ class CssParser {
       } else {
         if (flag) {
           if (pos == 0) content = content.substring(i);
-          else if (i - pos > 1) content = content.substring(0, pos) + ' ' + content.substring(i);
+          else if (i - pos > 1) content = content.substring(0, pos) + (content[pos - 1] == ';' ? (pos--, '') : ' ') + content.substring(i);
           i = pos;
           flag = false;
         }

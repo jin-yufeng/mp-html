@@ -27,7 +27,7 @@ var demo1 = `<style>
     </section>
   </section>
   <p style="border: 0px none;">
-    <br />
+    </br>
     <table style="border:none;border-radius:8px;width:100%;">
       <tbody>
         <tr style="border-bottom:1px solid #ccc;background-color:#f5f5f4; background-image: -webkit-linear-gradient(top,#f5f5f4,rgb(245,245,244));">
@@ -135,14 +135,14 @@ var demo1 = `<style>
     </table>
   </p>
   <p>
-    <br />
+    </br>
   </p>
   <div id="adContainer">
     <ad unit-id="adunit-bb2f664ec0e5875c"></ad>
     <div style="font-size:12px;color:gray;text-align:center;">文中广告</div>
   </div>
   <p>
-    <br />
+    </br>
   </p>
   <section id="anchor" style="border: 0px none;">
     <section style="padding: 10px;">
@@ -185,7 +185,7 @@ var demo1 = `<style>
               <p><strong>粗体</strong>与<i>斜体</i></p>
               <p>连续&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;空格</p>
               <p><big>大一号</big>正常<small>小一号</small></p>
-              <br />
+              </br>
               <p>以下基础库2.7.1开始支持：</p>
               <p><bdo dir="rtl">从右往左排列</bdo>（复制的内容是正序的）</p>
               <p><ruby>注音<rt><rp>(</rp>ZhuYin</rt><rp>)</rp></ruby></p>
@@ -206,14 +206,14 @@ var demo1 = `<style>
     </section>
   </section>
   <blockquote>段落引用：一切都像刚睡醒的样子，欣欣然张开了眼。山朗润起来了，水涨起来了，太阳的脸红起来了。</blockquote>
-  <br />
+  </br>
   <h1>h1标题</h1>
   <h2>h2标题</h2>
   <h3>h3标题</h3>
   <h4>h4标题</h4>
   <h5>h5标题</h5>
   <h6>h6标题</h6>
-  <br />
+  </br>
   <section style="border: 0px none;">
     <section style="padding: 10px;">
       <section style="box-shadow:0px 0px 5px #e5e5e5 ;height:65px;">
@@ -256,9 +256,18 @@ var demo1 = `<style>
   </section>
   <p style="text-align: center;">
     <span style="font-size: 12px; color: #A5A5A5;">装饰图片，设置ignore属性后将不可预览</span>
-    <br />
+    </br>
   </p>
-  <br />
+  </br>
+  <section style="text-align:center">
+    <svg width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;">
+      <path fill="#000" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z">
+        <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/>
+      </path>
+    </svg>
+    <div style="font-size: 12px; color: #A5A5A5; text-align: center">svg动画</div>
+  </section>
+  </br>
   <section>
     <section style="margin: 1em auto; white-space: normal; border: 0px none; text-align: center; padding: 0px; padding: 5px;border:1px solid #ddd;overflow: hidden;">
       <section style="white-space: nowrap; width:100%; overflow-x: scroll;">
@@ -286,7 +295,7 @@ var demo1 = `<style>
       </p>
     </section>
   </section>
-  <br />
+  </br>
   <section style="border: 0px none;">
     <section style="padding: 10px;">
       <section style="box-shadow:0px 0px 5px #e5e5e5 ;height:65px;">
@@ -311,17 +320,17 @@ var demo1 = `<style>
         <img src="/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174"/>
       </a>
       <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>
-      <br />
+      </br>
       <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>
       <p style="font-size:12px;color:gray">外部链接，点击可以复制</p>
-      <br />
+      </br>
       <a href="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%99%84%E4%BB%B6%E7%A4%BA%E4%BE%8B.docx?sign=558e8df1107441b038ecbb5aaafefa11&t=1556120797">附件示例.docx</a>
       <p style="font-size:12px;color:gray">附件链接，点击将下载和打开</p>
-      <br />
+      </br>
       <a href="#anchor">锚点</a>
       <p style="font-size:12px;color:gray">内部锚点链接，点击将跳转到文字渲染栏</p>
     </div>
-    <br />
+    </br>
   </section>
   <section style="border: 0px none;">
     <section style="padding: 10px;">
@@ -358,7 +367,7 @@ var demo1 = `<style>
             </li>
           </ol>
         </p>
-        <br />
+        </br>
         <p style="margin-left:5%;">无序列表
           <ul>
             <li>标题1
@@ -375,7 +384,7 @@ var demo1 = `<style>
     </section>
   </section>
   <p>
-    <br />
+    </br>
   </p>
   <section style="border: 0px none;">
     <section style="padding: 10px;">
@@ -774,1171 +783,1562 @@ var demo2 = `<title>整体示例</title>
   </section>
 </section>`;
 var demo3 = [{
-  "children": [{
-    "children": [{
-      "children": [{
-        "children": [{
-          "children": [{
-            "text": " 腾讯财报首次披露金融科技及企业服务收入，小程序等带动To B增长 ",
-            "type": "text"
-          }],
-          "name": "h2",
-          "attrs": {
-            "style": ";font-weight:400;font-size:16px;font-size:22px;line-height:1.4;margin-bottom:14px;"
-          }
-        }, {
-          "children": [{
-            "children": [{
-              "children": [{
-                "text": " 微信公开课 ",
-                "type": "text"
-              }],
-              "continue": true,
-              "name": "a",
-              "attrs": {
-                "style": ";color:#366092;display:inline;word-break:break-all;overflow:auto;",
-                "href": "javascript:void(0);"
-              }
-            }],
-            "name": "span",
-            "attrs": {
-              "style": ";display:inline-block;vertical-align:middle;margin:0 10px 10px 0;font-size:15px;-webkit-tap-highlight-color:rgba(0,0,0,0);position:relative;"
-            },
-            "continue": true
-          }, {
-            "children": [],
-            "continue": true,
-            "name": "em",
-            "attrs": {
-              "style": ";font-style:normal;display:inline-block;vertical-align:middle;margin:0 10px 10px 0;font-size:15px;-webkit-tap-highlight-color:rgba(0,0,0,0);color:rgba(0,0,0,0.3);"
-            }
-          }],
-          "name": "div",
-          "attrs": {
-            "style": ";margin-bottom:22px;line-height:20px;font-size:0;word-wrap:break-word;word-break:break-all;"
-          },
-          "continue": true
-        }, {
-          "children": [{
-            "children": [{
-              "children": [{
-                "children": [{
-                  "children": [{
-                    "text": "刚刚，腾讯发布了2019年Q1财报，截至2019年3月31日，微信及WeChat的合并月活跃账户数增至",
-                    "type": "text"
-                  }, {
-                    "children": [{
-                      "children": [{
-                        "text": "11.",
-                        "type": "text"
-                      }],
-                      "name": "span",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;color: rgb(61, 167, 66);"
-                      }
-                    }],
-                    "name": "strong",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                    }
-                  }, {
-                    "children": [{
-                      "children": [{
-                        "text": "12亿",
-                        "type": "text"
-                      }],
-                      "name": "span",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;color: rgb(61, 167, 66);"
-                      }
-                    }],
-                    "name": "strong",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                    }
-                  }, {
-                    "text": "，同比增长",
-                    "type": "text"
-                  }, {
-                    "children": [{
-                      "children": [{
-                        "text": "6.9%",
-                        "type": "text"
-                      }],
-                      "name": "span",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;color: rgb(61, 167, 66);"
-                      }
-                    }],
-                    "name": "strong",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                    }
-                  }, {
-                    "text": "。",
-                    "type": "text"
-                  }],
-                  "name": "span",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-right: 8px;margin-left: 8px;"
-                }
-              }, {
-                "children": [{
-                  "children": [],
-                  "name": "br",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-right: 8px;margin-left: 8px;"
-                }
-              }],
-              "name": "div",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;letter-spacing: 1px;line-height: 1.8;"
-              }
-            }, {
-              "children": [{
-                "children": [{
-                  "children": [{
-                    "text": "我们为大家摘录了小程序相关的重点信息。",
-                    "type": "text"
-                  }],
-                  "name": "span",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-right: 8px;margin-left: 8px;"
-                }
-              }, {
-                "children": [{
-                  "children": [],
-                  "name": "br",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-right: 8px;margin-left: 8px;"
-                }
-              }, {
-                "children": [{
-                  "children": [{
-                    "children": [{
-                      "children": [{
-                        "children": [],
-                        "name": "div",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: 0.5em;margin-bottom: 0.5em;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height: 1px;background-color: rgb(61, 167, 66);box-sizing: border-box;"
-                        }
-                      }],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;vertical-align: top;width: 40%;box-sizing: border-box;"
-                      }
-                    }, {
-                      "children": [{
-                        "children": [{
-                          "children": [{
-                            "children": [{
-                              "text": "1",
-                              "type": "text"
-                            }],
-                            "name": "p",
-                            "attrs": {
-                              "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;width: 1.6em;height: 1.6em;line-height: 1.6em;border-radius: 100%;margin-left: auto;margin-right: auto;font-size: 18px;color: rgb(255, 255, 255);background-color: rgb(61, 167, 66);box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;box-sizing: border-box;"
-                            }
-                          }, {
-                            "children": [],
-                            "name": "div",
-                            "attrs": {
-                              "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;width: 0px;margin-top: -0.76em;border-bottom: 0.8em solid rgb(61, 167, 66);border-left: 0.8em solid transparent !important;border-right: 0.5em solid transparent !important;box-sizing: border-box;"
-                            }
-                          }],
-                          "name": "div",
-                          "attrs": {
-                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;box-sizing: border-box;"
-                          }
-                        }],
-                        "name": "div",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: -10px;margin-right: 0%;margin-left: 0%;text-align: center;font-size: 10px;box-sizing: border-box;"
-                        }
-                      }],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;vertical-align: top;width: 20%;box-sizing: border-box;"
-                      }
-                    }, {
-                      "children": [{
-                        "children": [{
-                          "children": [],
-                          "name": "br",
-                          "attrs": {
-                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                          }
-                        }],
-                        "name": "div",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: 0.5em;margin-bottom: 0.5em;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height: 1px;background-color: rgb(61, 167, 66);box-sizing: border-box;"
-                        }
-                      }],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;vertical-align: top;width: 40%;box-sizing: border-box;"
-                      }
-                    }],
-                    "name": "div",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-right: 0%;margin-left: 0%;box-sizing: border-box;"
-                    }
-                  }, {
-                    "children": [{
-                      "children": [{
-                        "children": [],
-                        "name": "div",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;padding-left: 5px;vertical-align: middle;display: inline-block;box-sizing: border-box;"
-                        }
-                      }],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;text-align: left;box-sizing: border-box;"
-                      }
-                    }, {
-                      "children": [{
-                        "children": [{
-                          "children": [{
-                            "children": [{
-                              "text": "小程序、支付、企业微信协同带来to B收入增长",
-                              "type": "text"
-                            }],
-                            "name": "strong",
-                            "attrs": {
-                              "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;"
-                            }
-                          }],
-                          "name": "span",
-                          "attrs": {
-                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 14px;"
-                          }
-                        }],
-                        "name": "div",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;padding-left: 5px;vertical-align: middle;display: inline-block;box-sizing: border-box;"
-                        }
-                      }],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;text-align: left;box-sizing: border-box;"
-                      }
-                    }, {
-                      "children": [{
-                        "children": [{
-                          "children": [],
-                          "name": "br",
-                          "attrs": {
-                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                          }
-                        }],
-                        "name": "span",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;color: rgb(51, 51, 51);text-align: justify;font-family: PingFangSC-Light;"
-                        }
-                      }],
-                      "name": "p",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;"
-                      }
-                    }, {
-                      "children": [{
-                        "children": [{
-                          "text": "自本季起，我们开始在财报中",
-                          "type": "text"
-                        }],
-                        "name": "span",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                        }
-                      }, {
-                        "children": [{
-                          "children": [{
-                            "children": [{
-                              "text": "单独披露",
-                              "type": "text"
-                            }],
-                            "name": "span",
-                            "attrs": {
-                              "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-family: PingFangSC-Light;font-size: 15px;color: rgb(61, 167, 66);"
-                            }
-                          }],
-                          "name": "strong",
-                          "attrs": {
-                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                          }
-                        }],
-                        "name": "span",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                        }
-                      }, {
-                        "children": [{
-                          "text": "「金融科技及企业服务」这一新部分情况。该服务在本季产生人民币",
-                          "type": "text"
-                        }],
-                        "name": "span",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                        }
-                      }, {
-                        "children": [{
-                          "children": [{
-                            "children": [{
-                              "text": "218亿",
-                              "type": "text"
-                            }],
-                            "name": "span",
-                            "attrs": {
-                              "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-family: PingFangSC-Light;font-size: 15px;color: rgb(61, 167, 66);"
-                            }
-                          }],
-                          "name": "strong",
-                          "attrs": {
-                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                          }
-                        }],
-                        "name": "span",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                        }
-                      }, {
-                        "children": [{
-                          "text": "元的收入，其规模及范围反映了该服",
-                          "type": "text"
-                        }],
-                        "name": "span",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                        }
-                      }, {
-                        "children": [{
-                          "text": "务与我们部分现有消费者服务产生协同效益（例如我们的通信及社交平台与点对点支付服务之间的协同效益，或我们的小程序与企业微信服务之间的协同效益）。",
-                          "type": "text"
-                        }],
-                        "name": "span",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                        }
-                      }, {
-                        "children": [],
-                        "name": "br",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                        }
-                      }],
-                      "name": "p",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;text-align: justify;margin-left: 8px;margin-right: 8px;"
-                      }
-                    }],
-                    "name": "div",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: -4px;margin-right: 0%;margin-left: 0%;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;color: rgb(62, 62, 62);text-align: center;box-sizing: border-box;"
-                    }
-                  }],
-                  "name": "div",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;width: 100%;vertical-align: top;box-sizing: border-box;"
-                  }
-                }],
-                "name": "div",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;font-size: 16px;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin: 10px 0%;box-sizing: border-box;"
-                }
-              }],
-              "name": "div",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;letter-spacing: 1px;line-height: 1.8;"
-              }
-            }, {
-              "children": [{
-                "children": [{
-                  "children": [],
-                  "name": "br",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-right: 8px;margin-left: 8px;"
-                }
-              }, {
-                "children": [{
-                  "children": [{
-                    "children": [{
-                      "children": [{
-                        "children": [],
-                        "name": "div",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: 0.5em;margin-bottom: 0.5em;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;background-color: rgb(61, 167, 66);height: 1px;box-sizing: border-box;"
-                        }
-                      }],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;vertical-align: top;width: 40%;box-sizing: border-box;"
-                      }
-                    }, {
-                      "children": [{
-                        "children": [{
-                          "children": [{
-                            "children": [{
-                              "text": "2",
-                              "type": "text"
-                            }],
-                            "name": "p",
-                            "attrs": {
-                              "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;background-color: rgb(61, 167, 66);width: 1.6em;height: 1.6em;line-height: 1.6em;border-radius: 100%;margin-left: auto;margin-right: auto;font-size: 18px;color: rgb(255, 255, 255);box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;box-sizing: border-box;"
-                            }
-                          }, {
-                            "children": [],
-                            "name": "div",
-                            "attrs": {
-                              "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;width: 0px;margin-top: -0.76em;border-bottom: 0.8em solid rgb(61, 167, 66);border-left: 0.8em solid transparent !important;border-right: 0.5em solid transparent !important;box-sizing: border-box;"
-                            }
-                          }],
-                          "name": "div",
-                          "attrs": {
-                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;box-sizing: border-box;"
-                          }
-                        }],
-                        "name": "div",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: -10px;margin-right: 0%;margin-left: 0%;text-align: center;font-size: 10px;box-sizing: border-box;"
-                        }
-                      }],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;vertical-align: top;width: 20%;box-sizing: border-box;"
-                      }
-                    }, {
-                      "children": [{
-                        "children": [],
-                        "name": "div",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: 0.5em;margin-bottom: 0.5em;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;background-color: rgb(61, 167, 66);height: 1px;box-sizing: border-box;"
-                        }
-                      }],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;vertical-align: top;width: 40%;box-sizing: border-box;"
-                      }
-                    }],
-                    "name": "div",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-right: 0%;margin-left: 0%;box-sizing: border-box;"
-                    }
-                  }, {
-                    "children": [{
-                      "children": [{
-                        "children": [{
-                          "text": "小程序广告能力增强，帮助开发者变现",
-                          "type": "text"
-                        }],
-                        "name": "strong",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;"
-                        }
-                      }],
-                      "name": "span",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 14px;"
-                      }
-                    }],
-                    "name": "p",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: -4px;margin-right: 0%;margin-left: 0%;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;text-align: center;font-size: 15px;color: rgb(62, 62, 62);box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;box-sizing: border-box;"
-                    }
-                  }],
-                  "name": "div",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;width: 100%;vertical-align: top;box-sizing: border-box;"
-                  }
-                }],
-                "name": "div",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;font-size: 16px;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin: 10px 0%;box-sizing: border-box;"
-                }
-              }, {
-                "children": [{
-                  "children": [],
-                  "name": "span",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;"
-                  }
-                }, {
-                  "children": [],
-                  "name": "br",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-right: 8px;margin-left: 8px;"
-                }
-              }],
-              "name": "div",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-              }
-            }, {
-              "children": [{
-                "children": [{
-                  "text": "财报期内，社交及其他广告收入增长",
-                  "type": "text"
-                }, {
-                  "children": [{
-                    "children": [{
-                      "text": "34%",
-                      "type": "text"
-                    }],
-                    "name": "span",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;color: rgb(61, 167, 66);"
-                    }
-                  }],
-                  "name": "strong",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }, {
-                  "text": "至人民币",
-                  "type": "text"
-                }, {
-                  "children": [{
-                    "children": [{
-                      "text": "98.98亿元",
-                      "type": "text"
-                    }],
-                    "name": "span",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;color: rgb(61, 167, 66);"
-                    }
-                  }],
-                  "name": "strong",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }, {
-                  "text": "，主要是由于微信朋友圈、小程序及QQ看点的广告收入增长。",
-                  "type": "text"
-                }, {
-                  "children": [],
-                  "name": "br",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }],
-                "name": "span",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                }
-              }],
-              "name": "p",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-left: 8px;margin-right: 8px;"
-              }
-            }, {
-              "children": [{
-                "children": [],
-                "name": "br",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                }
-              }],
-              "name": "p",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-right: 8px;margin-left: 8px;"
-              }
-            }, {
-              "children": [{
-                "children": [{
-                  "text": "小程序的banner广告、激励式插屏广告帮助开发者实现更多收入变现。",
-                  "type": "text"
-                }],
-                "name": "span",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-family: PingFangSC-Light;font-size: 15px;"
-                }
-              }],
-              "name": "p",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-left: 8px;margin-right: 8px;"
-              }
-            }, {
-              "children": [{
-                "children": [],
-                "name": "br",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                }
-              }],
-              "name": "p",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-right: 8px;margin-left: 8px;white-space: normal;font-family: -apple-system-font, BlinkMacSystemFont, Arial, sans-serif;"
-              }
-            }, {
-              "children": [{
-                "children": [{
-                  "children": [{
-                    "children": [{
-                      "children": [],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: 0.5em;margin-bottom: 0.5em;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;background-color: rgb(61, 167, 66);height: 1px;box-sizing: border-box;"
-                      }
-                    }],
-                    "name": "div",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;vertical-align: top;width: 40%;box-sizing: border-box;"
-                    }
-                  }, {
-                    "children": [{
-                      "children": [{
-                        "children": [{
-                          "children": [{
-                            "text": "3",
-                            "type": "text"
-                          }],
-                          "name": "p",
-                          "attrs": {
-                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;background-color: rgb(61, 167, 66);width: 1.6em;height: 1.6em;line-height: 1.6em;border-radius: 100%;margin-left: auto;margin-right: auto;font-size: 18px;color: rgb(255, 255, 255);box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;box-sizing: border-box;"
-                          }
-                        }, {
-                          "children": [],
-                          "name": "div",
-                          "attrs": {
-                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;width: 0px;margin-top: -0.76em;border-bottom: 0.8em solid rgb(61, 167, 66);border-left: 0.8em solid transparent !important;border-right: 0.5em solid transparent !important;box-sizing: border-box;"
-                          }
-                        }],
-                        "name": "div",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;box-sizing: border-box;"
-                        }
-                      }],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: -10px;margin-right: 0%;margin-left: 0%;text-align: center;font-size: 10px;box-sizing: border-box;"
-                      }
-                    }],
-                    "name": "div",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;vertical-align: top;width: 20%;box-sizing: border-box;"
-                    }
-                  }, {
-                    "children": [{
-                      "children": [],
-                      "name": "div",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: 0.5em;margin-bottom: 0.5em;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;background-color: rgb(61, 167, 66);height: 1px;box-sizing: border-box;"
-                      }
-                    }],
-                    "name": "div",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;vertical-align: top;width: 40%;box-sizing: border-box;"
-                    }
-                  }],
-                  "name": "div",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-right: 0%;margin-left: 0%;box-sizing: border-box;"
-                  }
-                }, {
-                  "children": [{
-                    "children": [{
-                      "children": [{
-                        "text": "小程序社交拼团玩法促进用户稳健增长",
-                        "type": "text"
-                      }],
-                      "name": "strong",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;"
-                      }
-                    }],
-                    "name": "span",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 14px;"
-                    }
-                  }],
-                  "name": "p",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-top: -4px;margin-right: 0%;margin-left: 0%;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;text-align: center;font-size: 15px;color: rgb(62, 62, 62);box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;box-sizing: border-box;"
-                  }
-                }],
-                "name": "div",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;display: inline-block;width: 100%;vertical-align: top;box-sizing: border-box;"
-                }
-              }],
-              "name": "div",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;font-size: 16px;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;box-sizing: border-box;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin: 10px 0%;box-sizing: border-box;"
-              }
-            }, {
-              "children": [{
-                "children": [{
-                  "children": [],
-                  "name": "br",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }],
-                "name": "span",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                }
-              }],
-              "name": "p",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-right: 8px;margin-left: 8px;"
-              }
-            }, {
-              "children": [{
-                "children": [{
-                  "text": "微信用户能够在群内分享资讯、产品及服务等各种",
-                  "type": "text"
-                }, {
-                  "children": [{
-                    "children": [{
-                      "text": "垂直领域的小程序",
-                      "type": "text"
-                    }],
-                    "name": "span",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;color: rgb(61, 167, 66);"
-                    }
-                  }],
-                  "name": "strong",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }, {
-                  "text": "，促进社区拼团等服务模式的扩展，使微信",
-                  "type": "text"
-                }, {
-                  "children": [{
-                    "children": [{
-                      "text": "非游戏类小程序的活跃用户群持续稳健增长",
-                      "type": "text"
-                    }],
-                    "name": "span",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;color: rgb(61, 167, 66);"
-                    }
-                  }],
-                  "name": "strong",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }, {
-                  "text": "。",
-                  "type": "text"
-                }, {
-                  "children": [],
-                  "name": "br",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }],
-                "name": "span",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;font-family: PingFangSC-Light;"
-                }
-              }],
-              "name": "p",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-left: 8px;margin-right: 8px;"
-              }
-            }, {
-              "children": [{
-                "children": [],
-                "name": "br",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                }
-              }],
-              "name": "p",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;"
-              }
-            }, {
-              "children": [{
-                "children": [{
-                  "children": [{
-                    "text": "财报中微信的完整信息，可查看下方长图获取：",
-                    "type": "text"
-                  }],
-                  "name": "span",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-family: PingFangSC-Light;font-size: 15px;"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-left: 8px;margin-right: 8px;"
-                }
-              }, {
-                "children": [{
-                  "children": [],
-                  "name": "span",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 15px;"
-                  }
-                }, {
-                  "children": [],
-                  "name": "br",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;margin-right: 8px;margin-left: 8px;"
-                }
-              }, {
-                "children": [{
-                  "children": [],
-                  "name": "img",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;width: 556px;height: 1594px;max-width:100% !important",
-                    "src": "https://mmbiz.qpic.cn/mmbiz_jpg/ib3nLDnR1dIicDCIdl9BadGbjm2yVvAiaKTOYkEohsfpr5V67HUI7Xib48FLOGddoz2x1KEwA3HSrmZ1YpAmXz8Eiaw/640?wx_fmt=jpeg"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;text-align: center;"
-                },
-                "continue": true
-              }, {
-                "children": [{
-                  "children": [],
-                  "name": "img",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;max-width:100% !important",
-                    "src": "https://mmbiz.qpic.cn/mmbiz_jpg/ib3nLDnR1dIicDCIdl9BadGbjm2yVvAiaKT3f3TNoR5AErOUw5sE6w2xnBcreia1xwVFp8Y6ibAGLMH8XY2SDpUBiayQ/640?wx_fmt=jpeg"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;text-align: center;"
-                },
-                "continue": true
-              }, {
-                "children": [{
-                  "children": [],
-                  "name": "img",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;width: 556px;height: 1743px;max-width:100% !important",
-                    "src": "https://mmbiz.qpic.cn/mmbiz_jpg/ib3nLDnR1dIicDCIdl9BadGbjm2yVvAiaKTzSbnz3Qic4E26K9RsZq5hQxIySMIN3KfbKic01NQSgD2gicdkuDCicnOMg/640?wx_fmt=jpeg"
-                  }
-                }, {
-                  "children": [],
-                  "name": "br",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                  }
-                }],
-                "name": "p",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;text-align: center;"
-                },
-                "continue": true
-              }],
-              "name": "div",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;letter-spacing: 1px;line-height: 1.8;"
-              },
-              "continue": true
-            }, {
-              "children": [{
-                "children": [],
-                "name": "br",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                }
-              }],
-              "name": "p",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;"
-              }
-            }],
-            "name": "div",
-            "attrs": {
-              "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-size: 16px;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-            },
-            "continue": true
-          }, {
-            "children": [{
-              "children": [{
-                "children": [{
-                  "children": [{
-                    "children": [],
-                    "name": "img",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;width:2em;margin-right: 8px;vertical-align: middle;display: inline-block;box-sizing: border-box !important;overflow-wrap: break-word !important;visibility: visible !important;width: 2em !important;max-width:100% !important",
-                      "src": "https://mmbiz.qpic.cn/mmbiz_png/ib3nLDnR1dIibmNttyqg6BQkibIhPGxIb1IqJQmFVjJMzIN0ecCkIo9O861Lh8soya5OfhW6Wp7yx5wRUocI49XjQ/640?wx_fmt=png"
-                    }
-                  }, {
-                    "children": [{
-                      "children": [{
-                        "text": "微信公开课",
-                        "type": "text"
-                      }],
-                      "name": "span",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;font-size: 15px;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                      }
-                    }],
-                    "name": "p",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;max-width: 100%;min-height: 1em;vertical-align: middle;display: inline-block;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                    }
-                  }],
-                  "name": "div",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;float: left;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                  },
-                  "continue": true
-                }, {
-                  "children": [{
-                    "children": [{
-                      "text": "微信ID:wx-gongkaike",
-                      "type": "text"
-                    }],
-                    "name": "span",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;font-size: 15px;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                    }
-                  }],
-                  "name": "p",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;float: right;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;max-width: 100%;min-height: 1em;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                  }
-                }],
-                "name": "div",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;overflow: hidden;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                },
-                "continue": true
-              }, {
-                "children": [{
-                  "children": [{
-                    "children": [],
-                    "name": "div",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;box-sizing: border-box;border-radius: 50%;width: 4.5em;height: 4.5em;overflow: hidden;display: inline-block;overflow-wrap: break-word !important;"
-                    }
-                  }, {
-                    "children": [{
-                      "children": [],
-                      "name": "img",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;width:4.5em;margin-right: auto;margin-bottom: 5px;margin-left: auto;display: block;box-sizing: border-box !important;overflow-wrap: break-word !important;visibility: visible !important;width: 4.5em !important;max-width:100% !important",
-                        "src": "https://mmbiz.qpic.cn/mmbiz_png/ib3nLDnR1dIibmNttyqg6BQkibIhPGxIb1IcthOBBUyzFNiaxI7CRoCqaxiaaltb2CwOjky5gibyicsjDftTGjBacsr7Q/640?wx_fmt=png"
-                      }
-                    }],
-                    "name": "div",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;box-sizing: border-box;border-radius: 50%;width: 4.5em;height: 4.5em;overflow: hidden;display: inline-block;overflow-wrap: break-word !important;"
-                    },
-                    "continue": true
-                  }, {
-                    "children": [{
-                      "children": [{
-                        "text": "1.点击历史信息，查看更多内容",
-                        "type": "text"
-                      }],
-                      "name": "span",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;font-size: 14px;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                      }
-                    }],
-                    "name": "p",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;text-align: left;color: rgb(83, 83, 83);font-size: 0.5em;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;max-width: 100%;min-height: 1em;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                    }
-                  }, {
-                    "children": [{
-                      "children": [{
-                        "text": "2.长按右侧二维码，关注微信公开课",
-                        "type": "text"
-                      }],
-                      "name": "span",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;font-size: 14px;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                      }
-                    }],
-                    "name": "p",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;text-align: left;color: rgb(83, 83, 83);font-size: 0.5em;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;max-width: 100%;min-height: 1em;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                    }
-                  }],
-                  "name": "div",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;width: 10em;float: left;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                  },
-                  "continue": true
-                }, {
-                  "children": [{
-                    "children": [],
-                    "name": "img",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;width:8em;box-sizing: border-box !important;overflow-wrap: break-word !important;visibility: visible !important;width: 8em !important;max-width:100% !important",
-                      "src": "https://mmbiz.qpic.cn/mmbiz_png/ib3nLDnR1dIibmNttyqg6BQkibIhPGxIb1IxGpRvfT0Z5qhgRRMroIHI5t0U4Qzb54D03z5kUCJYFUZ4RUzXMkvMg/640?wx_fmt=png"
-                    }
-                  }, {
-                    "children": [{
-                      "children": [{
-                        "children": [{
-                          "text": "长按二维码关注",
-                          "type": "text"
-                        }],
-                        "name": "span",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;font-size: 14px;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                        }
-                      }],
-                      "name": "p",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;letter-spacing: 0.544px;max-width: 100%;min-height: 1em;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                      }
-                    }, {
-                      "children": [{
-                        "children": [],
-                        "name": "br",
-                        "attrs": {
-                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
-                        }
-                      }],
-                      "name": "p",
-                      "attrs": {
-                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;clear:both;min-height:1em;"
-                      }
-                    }],
-                    "name": "div",
-                    "attrs": {
-                      "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;color: rgb(83, 83, 83);font-size: 0.5em;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                    }
-                  }],
-                  "name": "div",
-                  "attrs": {
-                    "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;width: 7em;float: right;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-                  },
-                  "continue": true
-                }],
-                "name": "div",
-                "attrs": {
-                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;padding: 0.5em;max-width: 100%;box-sizing: border-box;border-color: rgb(37, 196, 0);overflow: hidden;border-top-width: 1px;border-top-style: solid;border-bottom-width: 1px;border-bottom-style: solid;overflow-wrap: break-word !important;"
-                },
-                "continue": true
-              }],
-              "name": "div",
-              "attrs": {
-                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;letter-spacing: 1px;line-height: 1.8;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;line-height: 1.8;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;color: rgb(62, 62, 62);letter-spacing: 0.544px;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;max-width: 100%;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin: 1em auto;max-width: 100%;box-sizing: border-box;line-height: 25.6px;border-width: medium;border-style: none;border-color: currentcolor;width: 20em;text-align: center;overflow-wrap: break-word !important;"
-              },
-              "continue": true
-            }],
-            "name": "div",
-            "attrs": {
-              "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;font-family: -apple-system-font, BlinkMacSystemFont, Arial, sans-serif;letter-spacing: 0.544px;white-space: normal;widows: 1;max-width: 100%;box-sizing: border-box !important;overflow-wrap: break-word !important;;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;margin-right: auto;margin-left: auto;max-width: 100%;width: 568.677px;box-sizing: border-box !important;overflow-wrap: break-word !important;"
-            },
-            "continue": true
-          }],
-          "name": "div",
-          "attrs": {
-            "style": ";overflow:hidden;color:#333;font-size:17px;word-wrap:break-word;-webkit-hyphens:auto;-ms-hyphens:auto;hyphens:auto;text-align:justify;position:relative;z-index:0;"
-          },
-          "continue": true
-        }],
-        "name": "div",
-        "attrs": {
-          "style": ";"
-        },
-        "continue": true
-      }, {
-        "children": [],
-        "name": "ul",
-        "attrs": {
-          "style": ";"
-        }
-      }, {
-        "children": [{
-          "children": [{
-            "children": [{
-              "children": [{
-                "children": [{
-                  "text": " 在看",
-                  "type": "text"
-                }],
-                "name": "span",
-                "attrs": {
-                  "style": ";"
-                }
-              }],
-              "name": "span",
-              "attrs": {
-                "style": ";"
-              }
-            }],
-            "name": "span",
-            "attrs": {
-              "style": ";visibility: hidden;"
-            }
-          }],
-          "name": "div",
-          "attrs": {
-            "style": ";"
-          }
-        }],
-        "name": "div",
-        "attrs": {
-          "style": ";padding-top:15px;"
-        }
-      }],
-      "name": "div",
-      "attrs": {
-        "style": ";"
-      },
-      "continue": true
-    }],
-    "name": "div",
-    "attrs": {
-      "style": ";padding:20px 16px 12px;padding:calc(20px + constant(safe-area-inset-top)) calc(16px + constant(safe-area-inset-right)) 12px calc(16px + constant(safe-area-inset-left));padding:calc(20px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 12px calc(16px + env(safe-area-inset-left));background-color:#fafafa;background-color:#fff;"
-    },
-    "continue": true
-  }, {
-    "children": [],
-    "name": "div",
-    "attrs": {
-      "style": ";padding:0 16px 16px;padding:0 calc(16px + constant(safe-area-inset-right)) calc(16px + constant(safe-area-inset-bottom)) calc(16px + constant(safe-area-inset-left));padding:0 calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));"
-    }
-  }],
   "name": "div",
   "attrs": {
-    "style": ";-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.6;;;-webkit-touch-callout:none;font-family:-apple-system-font,BlinkMacSystemFont,\"Helvetica Neue\",\"PingFang SC\",\"Hiragino Sans GB\",\"Microsoft YaHei UI\",\"Microsoft YaHei\",Arial,sans-serif;color:#333;background-color:#f2f2f2;letter-spacing:.034em;;;;;word-wrap:break-word;-webkit-hyphens:auto;-ms-hyphens:auto;hyphens:auto;"
+    "style": "-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.6;"
   },
-  "continue": true,
+  "children": [{
+    "name": "div",
+    "attrs": {
+      "style": "-webkit-touch-callout:none;font-family:-apple-system-font,BlinkMacSystemFont,\"Helvetica Neue\",\"PingFang SC\",\"Hiragino Sans GB\",\"Microsoft YaHei UI\",\"Microsoft YaHei\",Arial,sans-serif;color:#333;background-color:#f2f2f2;letter-spacing:.034em;"
+    },
+    "children": [{
+      "name": "div",
+      "attrs": {
+        "style": ""
+      },
+      "children": [{
+        "name": "div",
+        "attrs": {}
+      }, {
+        "name": "div",
+        "attrs": {
+          "style": "word-wrap:break-word;-webkit-hyphens:auto;-ms-hyphens:auto;hyphens:auto;"
+        },
+        "children": [{
+          "name": "div",
+          "attrs": {
+            "style": "padding:calc(20px + constant(safe-area-inset-top)) calc(16px + constant(safe-area-inset-right)) 12px calc(16px + constant(safe-area-inset-left));padding:calc(20px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 12px calc(16px + env(safe-area-inset-left));padding:20px 16px 12px;background-color:#fff;"
+          },
+          "children": [{
+            "name": "div",
+            "attrs": {
+              "style": ""
+            },
+            "children": [{
+              "name": "div",
+              "attrs": {
+                "style": "position:relative;"
+              },
+              "children": [{
+                "name": "h2",
+                "attrs": {
+                  "style": "font-weight:400;font-size:22px;line-height:1.4;margin-bottom:14px;"
+                },
+                "children": [{
+                  "type": "text",
+                  "text": " 腾讯财报首次披露金融科技及企业服务收入，小程序等带动To B增长 "
+                }]
+              }, {
+                "name": "div",
+                "attrs": {
+                  "style": "margin-bottom:22px;line-height:20px;font-size:0;word-wrap:break-word;word-break:break-all;"
+                },
+                "children": [{
+                  "name": "span",
+                  "attrs": {
+                    "style": "display:inline-block;vertical-align:middle;margin:0 10px 10px 0;font-size:15px;-webkit-tap-highlight-color:rgba(0,0,0,0);position:relative;"
+                  },
+                  "children": [{
+                    "name": "a",
+                    "attrs": {
+                      "href": "javascript:void(0);",
+                      "style": "display:inline;color:#576b95;word-break:break-all;text-decoration:none;-webkit-tap-highlight-color:rgba(0,0,0,0);"
+                    },
+                    "children": [{
+                      "type": "text",
+                      "text": " 微信公开课 "
+                    }]
+                  }],
+                  "c": 1
+                }, {
+                  "name": "em",
+                  "attrs": {
+                    "style": "font-style:normal;display:inline-block;vertical-align:middle;margin:0 10px 10px 0;font-size:15px;-webkit-tap-highlight-color:rgba(0,0,0,0);color:rgba(0,0,0,0.3);"
+                  }
+                }],
+                "c": 1
+              }, {
+                "name": "div",
+                "attrs": {
+                  "style": "overflow:hidden;color:#333;font-size:17px;word-wrap:break-word;-webkit-hyphens:auto;-ms-hyphens:auto;hyphens:auto;text-align:justify;position:relative;z-index:0;visibility:visible ;"
+                },
+                "children": [{
+                  "name": "div",
+                  "attrs": {
+                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:16px;"
+                  },
+                  "children": [{
+                    "name": "div",
+                    "attrs": {
+                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                    },
+                    "children": [{
+                      "name": "div",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                      },
+                      "children": [{
+                        "name": "div",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                        },
+                        "children": [{
+                          "name": "div",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;letter-spacing:1px;line-height:1.8;"
+                          },
+                          "children": [{
+                            "name": "p",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-right:8px;margin-left:8px;"
+                            },
+                            "children": [{
+                              "name": "span",
+                              "attrs": {
+                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                              },
+                              "children": [{
+                                "type": "text",
+                                "text": "刚刚，腾讯发布了2019年Q1财报，截至2019年3月31日，微信及WeChat的合并月活跃账户数增至"
+                              }, {
+                                "name": "strong",
+                                "attrs": {
+                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                },
+                                "children": [{
+                                  "name": "span",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;color:rgb(61, 167, 66);"
+                                  },
+                                  "children": [{
+                                    "type": "text",
+                                    "text": "11."
+                                  }]
+                                }]
+                              }, {
+                                "name": "strong",
+                                "attrs": {
+                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                },
+                                "children": [{
+                                  "name": "span",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;color:rgb(61, 167, 66);"
+                                  },
+                                  "children": [{
+                                    "type": "text",
+                                    "text": "12亿"
+                                  }]
+                                }]
+                              }, {
+                                "type": "text",
+                                "text": "，同比增长"
+                              }, {
+                                "name": "strong",
+                                "attrs": {
+                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                },
+                                "children": [{
+                                  "name": "span",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;color:rgb(61, 167, 66);"
+                                  },
+                                  "children": [{
+                                    "type": "text",
+                                    "text": "6.9%"
+                                  }]
+                                }]
+                              }, {
+                                "type": "text",
+                                "text": "。"
+                              }]
+                            }]
+                          }, {
+                            "name": "p",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-right:8px;margin-left:8px;"
+                            },
+                            "children": [{
+                              "name": "br",
+                              "attrs": {
+                                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                              }
+                            }]
+                          }]
+                        }]
+                      }]
+                    }, {
+                      "name": "div",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                      },
+                      "children": [{
+                        "name": "div",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                        },
+                        "children": [{
+                          "name": "div",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;letter-spacing:1px;line-height:1.8;"
+                          },
+                          "children": [{
+                            "name": "p",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-right:8px;margin-left:8px;"
+                            },
+                            "children": [{
+                              "name": "span",
+                              "attrs": {
+                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                              },
+                              "children": [{
+                                "type": "text",
+                                "text": "我们为大家摘录了小程序相关的重点信息。"
+                              }]
+                            }]
+                          }, {
+                            "name": "p",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-right:8px;margin-left:8px;"
+                            },
+                            "children": [{
+                              "name": "br",
+                              "attrs": {
+                                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                              }
+                            }]
+                          }, {
+                            "name": "div",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:16px;"
+                            },
+                            "children": [{
+                              "name": "div",
+                              "attrs": {
+                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                              },
+                              "children": [{
+                                "name": "div",
+                                "attrs": {
+                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin:10px 0%;"
+                                },
+                                "children": [{
+                                  "name": "div",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;width:100%;vertical-align:top;"
+                                  },
+                                  "children": [{
+                                    "name": "div",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                    },
+                                    "children": [{
+                                      "name": "div",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-right:0%;margin-left:0%;"
+                                      },
+                                      "children": [{
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;vertical-align:top;width:40%;"
+                                        },
+                                        "children": [{
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                          },
+                                          "children": [{
+                                            "name": "div",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:0.5em;margin-bottom:0.5em;"
+                                            },
+                                            "children": [{
+                                              "name": "div",
+                                              "attrs": {
+                                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;height:1px;background-color:rgb(61, 167, 66);"
+                                              }
+                                            }]
+                                          }]
+                                        }]
+                                      }, {
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;vertical-align:top;width:20%;"
+                                        },
+                                        "children": [{
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                          },
+                                          "children": [{
+                                            "name": "div",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:-10px;margin-right:0%;margin-left:0%;text-align:center;font-size:10px;"
+                                            },
+                                            "children": [{
+                                              "name": "div",
+                                              "attrs": {
+                                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;"
+                                              },
+                                              "children": [{
+                                                "name": "div",
+                                                "attrs": {
+                                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;width:1.6em;height:1.6em;line-height:1.6em;border-radius:100%;margin-left:auto;margin-right:auto;font-size:18px;color:rgb(255, 255, 255);background-color:rgb(61, 167, 66);"
+                                                },
+                                                "children": [{
+                                                  "name": "p",
+                                                  "attrs": {
+                                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;"
+                                                  },
+                                                  "children": [{
+                                                    "type": "text",
+                                                    "text": "1"
+                                                  }]
+                                                }]
+                                              }, {
+                                                "name": "div",
+                                                "attrs": {
+                                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;width:0px;margin-top:-0.76em;border-bottom:0.8em solid rgb(61, 167, 66);border-left:0.8em solid transparent ;border-right:0.5em solid transparent ;"
+                                                }
+                                              }]
+                                            }]
+                                          }]
+                                        }]
+                                      }, {
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;vertical-align:top;width:40%;"
+                                        },
+                                        "children": [{
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                          },
+                                          "children": [{
+                                            "name": "div",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:0.5em;margin-bottom:0.5em;"
+                                            },
+                                            "children": [{
+                                              "name": "div",
+                                              "attrs": {
+                                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;height:1px;background-color:rgb(61, 167, 66);"
+                                              },
+                                              "children": [{
+                                                "name": "br",
+                                                "attrs": {
+                                                  "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                                                }
+                                              }]
+                                            }]
+                                          }]
+                                        }]
+                                      }]
+                                    }]
+                                  }, {
+                                    "name": "div",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                    },
+                                    "children": [{
+                                      "name": "div",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:-4px;margin-right:0%;margin-left:0%;"
+                                      },
+                                      "children": [{
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;color:rgb(62, 62, 62);text-align:center;"
+                                        },
+                                        "children": [{
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;text-align:left;"
+                                          },
+                                          "children": [{
+                                            "name": "div",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;padding-left:5px;vertical-align:middle;display:inline-block;"
+                                            }
+                                          }]
+                                        }, {
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;text-align:left;"
+                                          },
+                                          "children": [{
+                                            "name": "div",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;padding-left:5px;vertical-align:middle;display:inline-block;"
+                                            },
+                                            "children": [{
+                                              "name": "span",
+                                              "attrs": {
+                                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:14px;"
+                                              },
+                                              "children": [{
+                                                "name": "strong",
+                                                "attrs": {
+                                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                                },
+                                                "children": [{
+                                                  "type": "text",
+                                                  "text": "小程序、支付、企业微信协同带来to B收入增长"
+                                                }]
+                                              }]
+                                            }]
+                                          }]
+                                        }, {
+                                          "name": "p",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;"
+                                          },
+                                          "children": [{
+                                            "name": "span",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;color:rgb(51, 51, 51);text-align:justify;font-family:PingFangSC-Light;"
+                                            },
+                                            "children": [{
+                                              "name": "br",
+                                              "attrs": {
+                                                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                                              }
+                                            }]
+                                          }]
+                                        }, {
+                                          "name": "p",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;text-align:justify;margin-left:8px;margin-right:8px;"
+                                          },
+                                          "children": [{
+                                            "name": "span",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                                            },
+                                            "children": [{
+                                              "type": "text",
+                                              "text": "自本季起，我们开始在财报中"
+                                            }]
+                                          }, {
+                                            "name": "span",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                                            },
+                                            "children": [{
+                                              "name": "strong",
+                                              "attrs": {
+                                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                              },
+                                              "children": [{
+                                                "name": "span",
+                                                "attrs": {
+                                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-family:PingFangSC-Light;font-size:15px;color:rgb(61, 167, 66);"
+                                                },
+                                                "children": [{
+                                                  "type": "text",
+                                                  "text": "单独披露"
+                                                }]
+                                              }]
+                                            }]
+                                          }, {
+                                            "name": "span",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                                            },
+                                            "children": [{
+                                              "type": "text",
+                                              "text": "「金融科技及企业服务」这一新部分情况。该服务在本季产生人民币"
+                                            }]
+                                          }, {
+                                            "name": "span",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                                            },
+                                            "children": [{
+                                              "name": "strong",
+                                              "attrs": {
+                                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                              },
+                                              "children": [{
+                                                "name": "span",
+                                                "attrs": {
+                                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-family:PingFangSC-Light;font-size:15px;color:rgb(61, 167, 66);"
+                                                },
+                                                "children": [{
+                                                  "type": "text",
+                                                  "text": "218亿"
+                                                }]
+                                              }]
+                                            }]
+                                          }, {
+                                            "name": "span",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                                            },
+                                            "children": [{
+                                              "type": "text",
+                                              "text": "元的收入，其规模及范围反映了该服"
+                                            }]
+                                          }, {
+                                            "name": "span",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                                            },
+                                            "children": [{
+                                              "type": "text",
+                                              "text": "务与我们部分现有消费者服务产生协同效益（例如我们的通信及社交平台与点对点支付服务之间的协同效益，或我们的小程序与企业微信服务之间的协同效益）。"
+                                            }]
+                                          }, {
+                                            "name": "br",
+                                            "attrs": {
+                                              "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                                            }
+                                          }]
+                                        }]
+                                      }]
+                                    }]
+                                  }]
+                                }]
+                              }]
+                            }]
+                          }]
+                        }]
+                      }]
+                    }, {
+                      "name": "div",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                      },
+                      "children": [{
+                        "name": "p",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-right:8px;margin-left:8px;"
+                        },
+                        "children": [{
+                          "name": "br",
+                          "attrs": {
+                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                          }
+                        }]
+                      }, {
+                        "name": "div",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:16px;"
+                        },
+                        "children": [{
+                          "name": "div",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                          },
+                          "children": [{
+                            "name": "div",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin:10px 0%;"
+                            },
+                            "children": [{
+                              "name": "div",
+                              "attrs": {
+                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;width:100%;vertical-align:top;"
+                              },
+                              "children": [{
+                                "name": "div",
+                                "attrs": {
+                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                },
+                                "children": [{
+                                  "name": "div",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-right:0%;margin-left:0%;"
+                                  },
+                                  "children": [{
+                                    "name": "div",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;vertical-align:top;width:40%;"
+                                    },
+                                    "children": [{
+                                      "name": "div",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                      },
+                                      "children": [{
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:0.5em;margin-bottom:0.5em;"
+                                        },
+                                        "children": [{
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;background-color:rgb(61, 167, 66);height:1px;"
+                                          }
+                                        }]
+                                      }]
+                                    }]
+                                  }, {
+                                    "name": "div",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;vertical-align:top;width:20%;"
+                                    },
+                                    "children": [{
+                                      "name": "div",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                      },
+                                      "children": [{
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:-10px;margin-right:0%;margin-left:0%;text-align:center;font-size:10px;"
+                                        },
+                                        "children": [{
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;"
+                                          },
+                                          "children": [{
+                                            "name": "div",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;background-color:rgb(61, 167, 66);width:1.6em;height:1.6em;line-height:1.6em;border-radius:100%;margin-left:auto;margin-right:auto;font-size:18px;color:rgb(255, 255, 255);"
+                                            },
+                                            "children": [{
+                                              "name": "p",
+                                              "attrs": {
+                                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;"
+                                              },
+                                              "children": [{
+                                                "type": "text",
+                                                "text": "2"
+                                              }]
+                                            }]
+                                          }, {
+                                            "name": "div",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;width:0px;margin-top:-0.76em;border-bottom:0.8em solid rgb(61, 167, 66);border-left:0.8em solid transparent ;border-right:0.5em solid transparent ;"
+                                            }
+                                          }]
+                                        }]
+                                      }]
+                                    }]
+                                  }, {
+                                    "name": "div",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;vertical-align:top;width:40%;"
+                                    },
+                                    "children": [{
+                                      "name": "div",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                      },
+                                      "children": [{
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:0.5em;margin-bottom:0.5em;"
+                                        },
+                                        "children": [{
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;background-color:rgb(61, 167, 66);height:1px;"
+                                          }
+                                        }]
+                                      }]
+                                    }]
+                                  }]
+                                }]
+                              }, {
+                                "name": "div",
+                                "attrs": {
+                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                },
+                                "children": [{
+                                  "name": "div",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:-4px;margin-right:0%;margin-left:0%;"
+                                  },
+                                  "children": [{
+                                    "name": "div",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;text-align:center;font-size:15px;color:rgb(62, 62, 62);"
+                                    },
+                                    "children": [{
+                                      "name": "p",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;"
+                                      },
+                                      "children": [{
+                                        "name": "span",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:14px;"
+                                        },
+                                        "children": [{
+                                          "name": "strong",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                          },
+                                          "children": [{
+                                            "type": "text",
+                                            "text": "小程序广告能力增强，帮助开发者变现"
+                                          }]
+                                        }]
+                                      }]
+                                    }]
+                                  }]
+                                }]
+                              }]
+                            }]
+                          }]
+                        }]
+                      }, {
+                        "name": "p",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-right:8px;margin-left:8px;"
+                        },
+                        "children": [{
+                          "name": "span",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;"
+                          }
+                        }, {
+                          "name": "br",
+                          "attrs": {
+                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                          }
+                        }]
+                      }]
+                    }, {
+                      "name": "p",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-left:8px;margin-right:8px;"
+                      },
+                      "children": [{
+                        "name": "span",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                        },
+                        "children": [{
+                          "type": "text",
+                          "text": "财报期内，社交及其他广告收入增长"
+                        }, {
+                          "name": "strong",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                          },
+                          "children": [{
+                            "name": "span",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;color:rgb(61, 167, 66);"
+                            },
+                            "children": [{
+                              "type": "text",
+                              "text": "34%"
+                            }]
+                          }]
+                        }, {
+                          "type": "text",
+                          "text": "至人民币"
+                        }, {
+                          "name": "strong",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                          },
+                          "children": [{
+                            "name": "span",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;color:rgb(61, 167, 66);"
+                            },
+                            "children": [{
+                              "type": "text",
+                              "text": "98.98亿元"
+                            }]
+                          }]
+                        }, {
+                          "type": "text",
+                          "text": "，主要是由于微信朋友圈、小程序及QQ看点的广告收入增长。"
+                        }, {
+                          "name": "br",
+                          "attrs": {
+                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                          }
+                        }]
+                      }]
+                    }, {
+                      "name": "p",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-right:8px;margin-left:8px;"
+                      },
+                      "children": [{
+                        "name": "br",
+                        "attrs": {
+                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                        }
+                      }]
+                    }, {
+                      "name": "p",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-left:8px;margin-right:8px;"
+                      },
+                      "children": [{
+                        "name": "span",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-family:PingFangSC-Light;font-size:15px;"
+                        },
+                        "children": [{
+                          "type": "text",
+                          "text": "小程序的banner广告、激励式插屏广告帮助开发者实现更多收入变现。"
+                        }]
+                      }]
+                    }, {
+                      "name": "p",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-right:8px;margin-left:8px;white-space:normal;font-family:-apple-system-font, BlinkMacSystemFont, Arial, sans-serif;"
+                      },
+                      "children": [{
+                        "name": "br",
+                        "attrs": {
+                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                        }
+                      }]
+                    }, {
+                      "name": "div",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:16px;"
+                      },
+                      "children": [{
+                        "name": "div",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                        },
+                        "children": [{
+                          "name": "div",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin:10px 0%;"
+                          },
+                          "children": [{
+                            "name": "div",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;width:100%;vertical-align:top;"
+                            },
+                            "children": [{
+                              "name": "div",
+                              "attrs": {
+                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                              },
+                              "children": [{
+                                "name": "div",
+                                "attrs": {
+                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-right:0%;margin-left:0%;"
+                                },
+                                "children": [{
+                                  "name": "div",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;vertical-align:top;width:40%;"
+                                  },
+                                  "children": [{
+                                    "name": "div",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                    },
+                                    "children": [{
+                                      "name": "div",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:0.5em;margin-bottom:0.5em;"
+                                      },
+                                      "children": [{
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;background-color:rgb(61, 167, 66);height:1px;"
+                                        }
+                                      }]
+                                    }]
+                                  }]
+                                }, {
+                                  "name": "div",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;vertical-align:top;width:20%;"
+                                  },
+                                  "children": [{
+                                    "name": "div",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                    },
+                                    "children": [{
+                                      "name": "div",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:-10px;margin-right:0%;margin-left:0%;text-align:center;font-size:10px;"
+                                      },
+                                      "children": [{
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;"
+                                        },
+                                        "children": [{
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;background-color:rgb(61, 167, 66);width:1.6em;height:1.6em;line-height:1.6em;border-radius:100%;margin-left:auto;margin-right:auto;font-size:18px;color:rgb(255, 255, 255);"
+                                          },
+                                          "children": [{
+                                            "name": "p",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;"
+                                            },
+                                            "children": [{
+                                              "type": "text",
+                                              "text": "3"
+                                            }]
+                                          }]
+                                        }, {
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;width:0px;margin-top:-0.76em;border-bottom:0.8em solid rgb(61, 167, 66);border-left:0.8em solid transparent ;border-right:0.5em solid transparent ;"
+                                          }
+                                        }]
+                                      }]
+                                    }]
+                                  }]
+                                }, {
+                                  "name": "div",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;display:inline-block;vertical-align:top;width:40%;"
+                                  },
+                                  "children": [{
+                                    "name": "div",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                    },
+                                    "children": [{
+                                      "name": "div",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:0.5em;margin-bottom:0.5em;"
+                                      },
+                                      "children": [{
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;background-color:rgb(61, 167, 66);height:1px;"
+                                        }
+                                      }]
+                                    }]
+                                  }]
+                                }]
+                              }]
+                            }, {
+                              "name": "div",
+                              "attrs": {
+                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                              },
+                              "children": [{
+                                "name": "div",
+                                "attrs": {
+                                  "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin-top:-4px;margin-right:0%;margin-left:0%;"
+                                },
+                                "children": [{
+                                  "name": "div",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;text-align:center;font-size:15px;color:rgb(62, 62, 62);"
+                                  },
+                                  "children": [{
+                                    "name": "p",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;"
+                                    },
+                                    "children": [{
+                                      "name": "span",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:14px;"
+                                      },
+                                      "children": [{
+                                        "name": "strong",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                                        },
+                                        "children": [{
+                                          "type": "text",
+                                          "text": "小程序社交拼团玩法促进用户稳健增长"
+                                        }]
+                                      }]
+                                    }]
+                                  }]
+                                }]
+                              }]
+                            }]
+                          }]
+                        }]
+                      }]
+                    }, {
+                      "name": "p",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-right:8px;margin-left:8px;"
+                      },
+                      "children": [{
+                        "name": "span",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                        },
+                        "children": [{
+                          "name": "br",
+                          "attrs": {
+                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                          }
+                        }]
+                      }]
+                    }, {
+                      "name": "p",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-left:8px;margin-right:8px;"
+                      },
+                      "children": [{
+                        "name": "span",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;font-family:PingFangSC-Light;"
+                        },
+                        "children": [{
+                          "type": "text",
+                          "text": "微信用户能够在群内分享资讯、产品及服务等各种"
+                        }, {
+                          "name": "strong",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                          },
+                          "children": [{
+                            "name": "span",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;color:rgb(61, 167, 66);"
+                            },
+                            "children": [{
+                              "type": "text",
+                              "text": "垂直领域的小程序"
+                            }]
+                          }]
+                        }, {
+                          "type": "text",
+                          "text": "，促进社区拼团等服务模式的扩展，使微信"
+                        }, {
+                          "name": "strong",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                          },
+                          "children": [{
+                            "name": "span",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;color:rgb(61, 167, 66);"
+                            },
+                            "children": [{
+                              "type": "text",
+                              "text": "非游戏类小程序的活跃用户群持续稳健增长"
+                            }]
+                          }]
+                        }, {
+                          "type": "text",
+                          "text": "。"
+                        }, {
+                          "name": "br",
+                          "attrs": {
+                            "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                          }
+                        }]
+                      }]
+                    }, {
+                      "name": "div",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                      },
+                      "children": [{
+                        "name": "div",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                        },
+                        "children": [{
+                          "name": "div",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                          },
+                          "children": [{
+                            "name": "p",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;"
+                            },
+                            "children": [{
+                              "name": "br",
+                              "attrs": {
+                                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                              }
+                            }]
+                          }]
+                        }]
+                      }]
+                    }, {
+                      "name": "div",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                      },
+                      "children": [{
+                        "name": "div",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;"
+                        },
+                        "children": [{
+                          "name": "div",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;letter-spacing:1px;line-height:1.8;"
+                          },
+                          "children": [{
+                            "name": "p",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-left:8px;margin-right:8px;"
+                            },
+                            "children": [{
+                              "name": "span",
+                              "attrs": {
+                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-family:PingFangSC-Light;font-size:15px;"
+                              },
+                              "children": [{
+                                "type": "text",
+                                "text": "财报中微信的完整信息，可查看下方长图获取："
+                              }]
+                            }]
+                          }, {
+                            "name": "p",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;margin-right:8px;margin-left:8px;"
+                            },
+                            "children": [{
+                              "name": "span",
+                              "attrs": {
+                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;"
+                              }
+                            }, {
+                              "name": "br",
+                              "attrs": {
+                                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                              }
+                            }]
+                          }, {
+                            "name": "p",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;text-align:center;"
+                            },
+                            "children": [{
+                              "name": "img",
+                              "attrs": {
+                                "class": "rich_pages",
+                                "style": ";max-width:100%;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;width: 556px;height: 1594px;",
+                                "src": "https://mmbiz.qpic.cn/mmbiz_jpg/ib3nLDnR1dIicDCIdl9BadGbjm2yVvAiaKTOYkEohsfpr5V67HUI7Xib48FLOGddoz2x1KEwA3HSrmZ1YpAmXz8Eiaw/640?wx_fmt=jpeg",
+                                "i": "0"
+                              }
+                            }],
+                            "c": 1
+                          }, {
+                            "name": "p",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;text-align:center;"
+                            },
+                            "children": [{
+                              "name": "img",
+                              "attrs": {
+                                "class": "rich_pages",
+                                "style": ";max-width:100%;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;true",
+                                "src": "https://mmbiz.qpic.cn/mmbiz_jpg/ib3nLDnR1dIicDCIdl9BadGbjm2yVvAiaKT3f3TNoR5AErOUw5sE6w2xnBcreia1xwVFp8Y6ibAGLMH8XY2SDpUBiayQ/640?wx_fmt=jpeg",
+                                "i": "1"
+                              }
+                            }],
+                            "c": 1
+                          }, {
+                            "name": "p",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;text-align:center;"
+                            },
+                            "children": [{
+                              "name": "img",
+                              "attrs": {
+                                "class": "rich_pages",
+                                "style": ";max-width:100%;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;width: 556px;height: 1743px;",
+                                "src": "https://mmbiz.qpic.cn/mmbiz_jpg/ib3nLDnR1dIicDCIdl9BadGbjm2yVvAiaKTzSbnz3Qic4E26K9RsZq5hQxIySMIN3KfbKic01NQSgD2gicdkuDCicnOMg/640?wx_fmt=jpeg",
+                                "i": "2"
+                              }
+                            }, {
+                              "name": "br",
+                              "attrs": {
+                                "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                              }
+                            }],
+                            "c": 1
+                          }],
+                          "c": 1
+                        }],
+                        "c": 1
+                      }],
+                      "c": 1
+                    }, {
+                      "name": "p",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;"
+                      },
+                      "children": [{
+                        "name": "br",
+                        "attrs": {
+                          "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                        }
+                      }]
+                    }],
+                    "c": 1
+                  }],
+                  "c": 1
+                }, {
+                  "name": "div",
+                  "attrs": {
+                    "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;font-family:-apple-system-font, BlinkMacSystemFont, Arial, sans-serif;letter-spacing:0.544px;white-space:normal;widows:1;overflow-wrap:break-word ;"
+                  },
+                  "children": [{
+                    "name": "div",
+                    "attrs": {
+                      "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;margin-right:auto;margin-left:auto;width:568.677px;overflow-wrap:break-word ;"
+                    },
+                    "children": [{
+                      "name": "div",
+                      "attrs": {
+                        "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;overflow-wrap:break-word ;"
+                      },
+                      "children": [{
+                        "name": "div",
+                        "attrs": {
+                          "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;letter-spacing:1px;line-height:1.8;overflow-wrap:break-word ;"
+                        },
+                        "children": [{
+                          "name": "div",
+                          "attrs": {
+                            "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;overflow-wrap:break-word ;"
+                          },
+                          "children": [{
+                            "name": "div",
+                            "attrs": {
+                              "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;overflow-wrap:break-word ;"
+                            },
+                            "children": [{
+                              "name": "div",
+                              "attrs": {
+                                "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;line-height:1.8;overflow-wrap:break-word ;"
+                              },
+                              "children": [{
+                                "name": "div",
+                                "attrs": {
+                                  "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;overflow-wrap:break-word ;"
+                                },
+                                "children": [{
+                                  "name": "div",
+                                  "attrs": {
+                                    "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;overflow-wrap:break-word ;"
+                                  },
+                                  "children": [{
+                                    "name": "div",
+                                    "attrs": {
+                                      "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;overflow-wrap:break-word ;"
+                                    },
+                                    "children": [{
+                                      "name": "div",
+                                      "attrs": {
+                                        "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;overflow-wrap:break-word ;"
+                                      },
+                                      "children": [{
+                                        "name": "div",
+                                        "attrs": {
+                                          "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;color:rgb(62, 62, 62);letter-spacing:0.544px;overflow-wrap:break-word ;"
+                                        },
+                                        "children": [{
+                                          "name": "div",
+                                          "attrs": {
+                                            "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;overflow-wrap:break-word ;"
+                                          },
+                                          "children": [{
+                                            "name": "div",
+                                            "attrs": {
+                                              "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;margin:1em auto;line-height:25.6px;border-width:medium;border-style:none;border-color:currentcolor;width:20em;text-align:center;overflow-wrap:break-word ;"
+                                            },
+                                            "children": [{
+                                              "name": "div",
+                                              "attrs": {
+                                                "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;overflow:hidden;overflow-wrap:break-word ;"
+                                              },
+                                              "children": [{
+                                                "name": "div",
+                                                "attrs": {
+                                                  "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;float:left;overflow-wrap:break-word ;"
+                                                },
+                                                "children": [{
+                                                  "name": "img",
+                                                  "attrs": {
+                                                    "class": "true",
+                                                    "width": "2em",
+                                                    "style": ";max-width:100%;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;margin-right: 8px;vertical-align: middle;display: inline-block;box-sizing: border-box !important;overflow-wrap: break-word !important;visibility: visible !important;width: 2em !important;",
+                                                    "src": "https://mmbiz.qpic.cn/mmbiz_png/ib3nLDnR1dIibmNttyqg6BQkibIhPGxIb1IqJQmFVjJMzIN0ecCkIo9O861Lh8soya5OfhW6Wp7yx5wRUocI49XjQ/640?wx_fmt=png",
+                                                    "i": "3"
+                                                  }
+                                                }, {
+                                                  "name": "p",
+                                                  "attrs": {
+                                                    "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;vertical-align:middle;display:inline-block;overflow-wrap:break-word ;"
+                                                  },
+                                                  "children": [{
+                                                    "name": "span",
+                                                    "attrs": {
+                                                      "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;overflow-wrap:break-word ;"
+                                                    },
+                                                    "children": [{
+                                                      "type": "text",
+                                                      "text": "微信公开课"
+                                                    }]
+                                                  }]
+                                                }],
+                                                "c": 1
+                                              }, {
+                                                "name": "div",
+                                                "attrs": {
+                                                  "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;float:right;overflow-wrap:break-word ;"
+                                                },
+                                                "children": [{
+                                                  "name": "p",
+                                                  "attrs": {
+                                                    "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;overflow-wrap:break-word ;"
+                                                  },
+                                                  "children": [{
+                                                    "name": "span",
+                                                    "attrs": {
+                                                      "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:15px;overflow-wrap:break-word ;"
+                                                    },
+                                                    "children": [{
+                                                      "type": "text",
+                                                      "text": "微信ID:wx-gongkaike"
+                                                    }]
+                                                  }]
+                                                }]
+                                              }],
+                                              "c": 1
+                                            }, {
+                                              "name": "div",
+                                              "attrs": {
+                                                "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;padding:0.5em;border-color:rgb(37, 196, 0);overflow:hidden;border-top-width:1px;border-top-style:solid;border-bottom-width:1px;border-bottom-style:solid;overflow-wrap:break-word ;"
+                                              },
+                                              "children": [{
+                                                "name": "div",
+                                                "attrs": {
+                                                  "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;width:10em;float:left;overflow-wrap:break-word ;"
+                                                },
+                                                "children": [{
+                                                  "name": "div",
+                                                  "attrs": {
+                                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;border-radius:50%;width:4.5em;height:4.5em;overflow:hidden;display:inline-block;overflow-wrap:break-word ;"
+                                                  }
+                                                }, {
+                                                  "name": "div",
+                                                  "attrs": {
+                                                    "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;border-radius:50%;width:4.5em;height:4.5em;overflow:hidden;display:inline-block;overflow-wrap:break-word ;"
+                                                  },
+                                                  "children": [{
+                                                    "name": "img",
+                                                    "attrs": {
+                                                      "class": "true",
+                                                      "width": "4.5em",
+                                                      "style": ";max-width:100%;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;margin-right: auto;margin-bottom: 5px;margin-left: auto;display: block;box-sizing: border-box !important;overflow-wrap: break-word !important;visibility: visible !important;width: 4.5em !important;",
+                                                      "src": "https://mmbiz.qpic.cn/mmbiz_png/ib3nLDnR1dIibmNttyqg6BQkibIhPGxIb1IcthOBBUyzFNiaxI7CRoCqaxiaaltb2CwOjky5gibyicsjDftTGjBacsr7Q/640?wx_fmt=png",
+                                                      "i": "4"
+                                                    }
+                                                  }],
+                                                  "c": 1
+                                                }, {
+                                                  "name": "div",
+                                                  "attrs": {
+                                                    "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;text-align:left;color:rgb(83, 83, 83);font-size:0.5em;overflow-wrap:break-word ;"
+                                                  },
+                                                  "children": [{
+                                                    "name": "p",
+                                                    "attrs": {
+                                                      "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;overflow-wrap:break-word ;"
+                                                    },
+                                                    "children": [{
+                                                      "name": "span",
+                                                      "attrs": {
+                                                        "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:14px;overflow-wrap:break-word ;"
+                                                      },
+                                                      "children": [{
+                                                        "type": "text",
+                                                        "text": "1.点击历史信息，查看更多内容"
+                                                      }]
+                                                    }]
+                                                  }]
+                                                }, {
+                                                  "name": "div",
+                                                  "attrs": {
+                                                    "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;text-align:left;color:rgb(83, 83, 83);font-size:0.5em;overflow-wrap:break-word ;"
+                                                  },
+                                                  "children": [{
+                                                    "name": "p",
+                                                    "attrs": {
+                                                      "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;overflow-wrap:break-word ;"
+                                                    },
+                                                    "children": [{
+                                                      "name": "span",
+                                                      "attrs": {
+                                                        "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:14px;overflow-wrap:break-word ;"
+                                                      },
+                                                      "children": [{
+                                                        "type": "text",
+                                                        "text": "2.长按右侧二维码，关注微信公开课"
+                                                      }]
+                                                    }]
+                                                  }]
+                                                }],
+                                                "c": 1
+                                              }, {
+                                                "name": "div",
+                                                "attrs": {
+                                                  "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;width:7em;float:right;overflow-wrap:break-word ;"
+                                                },
+                                                "children": [{
+                                                  "name": "img",
+                                                  "attrs": {
+                                                    "class": "true",
+                                                    "width": "8em",
+                                                    "style": ";max-width:100%;;max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;height:auto!important;box-sizing: border-box !important;overflow-wrap: break-word !important;visibility: visible !important;width: 8em !important;",
+                                                    "src": "https://mmbiz.qpic.cn/mmbiz_png/ib3nLDnR1dIibmNttyqg6BQkibIhPGxIb1IxGpRvfT0Z5qhgRRMroIHI5t0U4Qzb54D03z5kUCJYFUZ4RUzXMkvMg/640?wx_fmt=png",
+                                                    "i": "5"
+                                                  }
+                                                }, {
+                                                  "name": "div",
+                                                  "attrs": {
+                                                    "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;color:rgb(83, 83, 83);font-size:0.5em;overflow-wrap:break-word ;"
+                                                  },
+                                                  "children": [{
+                                                    "name": "p",
+                                                    "attrs": {
+                                                      "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;letter-spacing:0.544px;overflow-wrap:break-word ;"
+                                                    },
+                                                    "children": [{
+                                                      "name": "span",
+                                                      "attrs": {
+                                                        "style": "max-width:100%;box-sizing:border-box ;-webkit-box-sizing:border-box;word-wrap:break-word;font-size:14px;overflow-wrap:break-word ;"
+                                                      },
+                                                      "children": [{
+                                                        "type": "text",
+                                                        "text": "长按二维码关注"
+                                                      }]
+                                                    }]
+                                                  }, {
+                                                    "name": "p",
+                                                    "attrs": {
+                                                      "style": "max-width:100%;box-sizing:border-box;-webkit-box-sizing:border-box;word-wrap:break-word;clear:both;min-height:1em;"
+                                                    },
+                                                    "children": [{
+                                                      "name": "br",
+                                                      "attrs": {
+                                                        "style": ";max-width:100%!important;box-sizing:border-box!important;-webkit-box-sizing:border-box!important;word-wrap:break-word!important;"
+                                                      }
+                                                    }]
+                                                  }]
+                                                }],
+                                                "c": 1
+                                              }],
+                                              "c": 1
+                                            }],
+                                            "c": 1
+                                          }],
+                                          "c": 1
+                                        }],
+                                        "c": 1
+                                      }],
+                                      "c": 1
+                                    }],
+                                    "c": 1
+                                  }],
+                                  "c": 1
+                                }],
+                                "c": 1
+                              }],
+                              "c": 1
+                            }],
+                            "c": 1
+                          }],
+                          "c": 1
+                        }],
+                        "c": 1
+                      }],
+                      "c": 1
+                    }],
+                    "c": 1
+                  }],
+                  "c": 1
+                }],
+                "c": 1
+              }],
+              "c": 1
+            }, {
+              "name": "ul",
+              "attrs": {}
+            }, {
+              "name": "div",
+              "attrs": {
+                "style": "padding-top:15px;"
+              },
+              "children": [{
+                "name": "div",
+                "attrs": {
+                  "style": "display:-webkit-box;display:-webkit-flex;display:flex;"
+                },
+                "children": [{
+                  "name": "div",
+                  "attrs": {
+                    "style": "-webkit-box-flex:1;-webkit-flex:1;flex:1;"
+                  }
+                }, {
+                  "name": "span",
+                  "attrs": {
+                    "style": "visibility:hidden;"
+                  },
+                  "children": [{
+                    "name": "span",
+                    "attrs": {},
+                    "children": [{
+                      "name": "span",
+                      "attrs": {},
+                      "children": [{
+                        "type": "text",
+                        "text": "在看"
+                      }]
+                    }, {
+                      "name": "span",
+                      "attrs": {}
+                    }]
+                  }]
+                }]
+              }]
+            }],
+            "c": 1
+          }],
+          "c": 1
+        }, {
+          "name": "div",
+          "attrs": {
+            "style": "padding:0 calc(16px + constant(safe-area-inset-right)) calc(16px + constant(safe-area-inset-bottom)) calc(16px + constant(safe-area-inset-left));padding:0 calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));padding:0 16px 16px;"
+          },
+          "children": [{
+            "name": "div",
+            "attrs": {
+              "style": ""
+            },
+            "children": [{
+              "name": "div",
+              "attrs": {}
+            }, {
+              "name": "div",
+              "attrs": {}
+            }],
+            "c": 1
+          }],
+          "c": 1
+        }],
+        "c": 1
+      }],
+      "c": 1
+    }],
+    "c": 1
+  }],
+  "c": 1,
   "PoweredBy": "Parser"
 }];
 module.exports = {

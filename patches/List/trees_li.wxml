@@ -1,23 +1,23 @@
 <!--请将本段复制到 Parser/trees/trees.wxml 中 wx:if="{{Handler.notContinue(item)}}" 的 block 中-->
 <!--列表-->
 <block wx:elif="{{item.continue}}">
-  <ol wx:if="{{item.name == 'ol'}}" id="{{item.attrs.id}}" start="{{item.attrs.start}}" type="{{item.attrs.type}}" class="{{item.attrs.class}}" style="{{item.attrs.style}}">
+  <ol wx:if="{{item.name=='ol'}}" id="{{item.attrs.id}}" start="{{item.attrs.start}}" type="{{item.attrs.type}}" class="{{item.attrs.class}}" style="{{item.attrs.style||''}}">
     <block wx:for="{{item.children}}" wx:key="index">
-      <li wx:if="{{item.name == 'li'}}" id="{{item.attrs.id}}" class="{{item.attrs.class}}" style="{{item.attrs.style}}">
+      <li wx:if="{{item.name=='li'}}" id="{{item.attrs.id}}" class="{{item.attrs.class}}" style="{{item.attrs.style||''}}">
         <trees id="{{item.attrs.id}}" class="_node" nodes="{{item.children}}" controls="{{controls}}" />
       </li>
       <trees wx:else id="{{item.attrs.id}}" class="_node" nodes="{{[item]}}" controls="{{controls}}" />
     </block>
   </ol>
-  <ul wx:elif="{{item.name == 'ul'}}" id="{{item.attrs.id}}" class="{{item.attrs.class}}" style="{{item.attrs.style}}">
+  <ul wx:elif="{{item.name=='ul'}}" id="{{item.attrs.id}}" class="{{item.attrs.class}}" style="{{item.attrs.style||''}}">
     <block wx:for="{{item.children}}" wx:key="index">
-      <li wx:if="{{item.name == 'li'}}" id="{{item.attrs.id}}" class="{{item.attrs.class}}" style="{{item.attrs.style}}">
+      <li wx:if="{{item.name=='li'}}" id="{{item.attrs.id}}" class="{{item.attrs.class}}" style="{{item.attrs.style||''}}">
         <trees class="_node" id="{{item.attrs.id}}" nodes="{{item.children}}" controls="{{controls}}" />
       </li>
       <trees wx:else id="{{item.attrs.id}}" class="_node" nodes="{{[item]}}" controls="{{controls}}" />
     </block>
   </ul>
-  <li wx:elif="{{item.name == 'li'}}" id="{{item.attrs.id}}" class="{{item.attrs.class}}" style="{{item.attrs.style}}">
+  <li wx:elif="{{item.name=='li'}}" id="{{item.attrs.id}}" class="{{item.attrs.class}}" style="{{item.attrs.style||''}}">
     <trees id="{{item.attrs.id}}" class="_node" nodes="{{item.children}}" controls="{{controls}}" />
   </li>
 </block>

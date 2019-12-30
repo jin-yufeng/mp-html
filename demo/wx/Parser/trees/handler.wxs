@@ -45,7 +45,7 @@ module.exports = {
       item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp('margin[^;]+', "gi"), "");
     if (!imgLoad) {
       delete item.attrs.src;
-      item.attrs.style += ";width:5px !important;height:5px !important";
+      item.attrs.style += ";width:20px !important;height:20px !important";
     }
     return [item];
   },
@@ -55,7 +55,7 @@ module.exports = {
     return [item];
   },
   notContinue: function(item) {
-    if (item.name == 'a' || item.name == 'li' || item.name == 'ol' || item.name == 'ul') return true;
-    return !(item["continue"] || inlineTags[item.name]);
+    if (item.name == 'li' || item.name == 'ol' || item.name == 'ul') return true;
+    return !(item.c || inlineTags[item.name] || item["continue"]);
   }
 }

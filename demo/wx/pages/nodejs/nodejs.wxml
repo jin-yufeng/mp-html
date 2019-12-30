@@ -16,6 +16,7 @@
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="tagStyle" bindtap="gosection">更多的style匹配模式</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="supportTag" bindtap="gosection">支持更多的标签</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="highlight" bindtap="gosection">代码高亮</view>
+        <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="compress" bindtap="gosection">智能压缩</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="entity" bindtap="gosection">解析实体编码</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="website" bindtap="gosection">支持website模式</view>
         <view class="link" style="margin-left:5%;" hover-class='link-hover' data-section="file" bindtap="gosection">支持file模式</view>
@@ -80,6 +81,13 @@
           <code>highlightjs</code>官网），示例：
           <Parser html="{{codedemo}}" />
           <view style="font-size:12px;color:gray;text-align:center;margin-top:-5px;">javascript语言，github-gist风格</view>
+        </view>
+        <!--智能压缩-->
+        <view id="compress" class="weui-article__h2">智能压缩</view>
+        <view class="weui-article__section">
+          除前端包的压缩功能外，还支持自动去除重复的
+          <code>style</code>样式，自动去除空标签，自动去除
+          <code>display:none</code>的标签等方式进一步减小解析结果的大小，加快传输和渲染速度
         </view>
         <!--解析实体编码-->
         <view id="entity" class="weui-article__h2">解析实体编码</view>
@@ -177,7 +185,7 @@
             <code>emoji</code>字符😄</view>
           <view style="margin-top:5px">compress：是否进行自动压缩（默认为
             <code>true</code>），打开后会通过移除
-            <code>display:none</code>的节点，移除空标签，合并一些层级等，对于一些复杂的网页能减小大小</view>
+            <code>display:none</code>的节点，移除空标签，合并一些层级等，对于一些复杂的网页能减小大小；将该值设置成2时将进行强力压缩（移除所有标签的<code>id</code>和<code>class</code>属性，移除后不能使用锚点，不能匹配<code>wxss</code>中的样式）</view>
           <view style="margin-top:5px">maxDepth：前端显示时的最大递归深度，为0或负数时代表不限制（默认为0）。层数超过限制时，会直接使用
             <code>rich-text</code>显示而不再递归，可能导致图片不能预览，链接无法点击，视频和音频无法显示等问题；但过深的深度可能导致渲染时间较长；对于复杂的内容可以适当进行限制</view>
         </view>
@@ -198,7 +206,7 @@
       <!--更新日志-->
       <view id="update" class="weui-article__h1">更新日志</view>
       <view class="weui-article__section">
-        <Parser html="{{update}}" tag-style="{{codeStyle}}"/>
+        <Parser html="{{update}}" tag-style="{{codeStyle}}" />
       </view>
     </view>
   </view>

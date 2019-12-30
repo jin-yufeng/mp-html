@@ -1,5 +1,5 @@
 :host{
-  display:block
+  display:block;
 }
 .point_type1{
   width:0.3em;
