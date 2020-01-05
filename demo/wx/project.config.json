@@ -21,7 +21,7 @@
 		}
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.9.4",
+	"libVersion": "2.10.0",
 	"appid": "touristappid",
 	"projectname": "%E5%AF%8C%E6%96%87%E6%9C%AC%E6%8F%92%E4%BB%B6",
 	"cloudfunctionTemplateRoot": "",

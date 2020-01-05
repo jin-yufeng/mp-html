@@ -1,3 +1,9 @@
+/*
+ 给顶层标签的一些样式取出给 rich-text
+ github地址：https://github.com/jin-yufeng/Parser
+ 文档地址：https://jin-yufeng.github.io/Parser
+ author：JinYufeng
+*/
 var inlineTags = {
 	abbr: true,
 	b: true,
@@ -19,38 +25,49 @@ var inlineTags = {
 }
 module.exports = {
 	getStyle: function(style, display) {
-		var res = "";
-		var reg = getRegExp("float[^;]+(?![\s\S]*?float)", "i");
-		if (reg.test(style)) res += reg.exec(style)[0];
-		reg = getRegExp("margin[^;]+", "gi");
-		if (reg.test(style)) res += (';' + style.match(reg).join(';'));
-		reg = getRegExp("display\s*:\s*([^;]*)(?![\s\S]*?display)", "i");
-		if (reg.test(style) && reg.exec(style)[1] != "flex") res += (';' + reg.exec(style)[0]);
-		else res += (';display:' + display);
-		reg = getRegExp("flex[^;]*:[^;]+", "ig");
-		if (reg.test(style)) res += (';' + style.match(reg).join(';'));
-		reg = getRegExp("[^;\s]*width[^;]+", "ig");
-		if (reg.test(style)) res += (';' + style.match(reg).join(';'));
+		var tmp, res = "";
+		if (style) {
+			style = style.toLowerCase();
+			if (style.indexOf("float") != -1) res += style.match(getRegExp("float[^;]+(?![\s\S]*?float)"))[0];
+			if (style.indexOf("margin") != -1) res += (';' + style.match(getRegExp("margin[^;]+", "g")).join(';'));
+			if (style.indexOf("display") != -1 && (tmp = style.match(getRegExp("display\s*:\s*([^;]*)(?![\s\S]*?display)")),
+					tmp[1].indexOf("flex") == -1)) res += (';' + tmp[0]);
+			else res += (';display:' + display);
+			tmp = style.match(getRegExp("flex[^;]*:[^;]+", "g"));
+			if (tmp) res += (';' + tmp.join(';'));
+			if (style.indexOf("width") != -1) res += (';' + style.match(getRegExp("[^;\s]*width[^;]+", "g")).join(';'));
+		} else res = ("display:" + display);
 		return res;
 	},
 	setImgStyle: function(item, imgMode, imgLoad) {
-		if (imgMode == "widthFix") item.attrs.style = (item.attrs.style || '') + ";height:auto !important";
-		if (item.attrs.style)
-			item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp(
-				'margin[^;]+', "gi"), "");
+		var img = {
+			name: "img",
+			attrs: JSON.parse(JSON.stringify(item.attrs))
+		}
+		if (img.attrs.style)
+			img.attrs.style = img.attrs.style.toLowerCase().replace(getRegExp("width[^;]*?%", "g"), "width:100%").replace(
+				getRegExp('margin[^;]+', "g"), "");
+		if (imgMode == "widthFix") img.attrs.style = (img.attrs.style || '') + ";height:auto !important";
 		if (!imgLoad) {
-			delete item.attrs.src;
-			item.attrs.style += ";width:20px !important;height:20px !important";
+			img.attrs.src = "";
+			img.attrs.style += ";width:20px !important;height:20px !important";
+		}
+		return [img];
+	},
+	setStyle: function(item) {
+		if (item.attrs.style) {
+			var newItem = {
+				name: item.name,
+				attrs: JSON.parse(JSON.stringify(item.attrs)),
+				children: item.children
+			}
+			newItem.attrs.style = newItem.attrs.style.toLowerCase().replace(getRegExp("width[^;]*?%", "g"), "width:100%").replace(
+				getRegExp('margin[^;]+', "g"), "");
+			return [newItem];
 		}
 		return [item];
 	},
-	setStyle: function(item) {
-		if (item.attrs.style)
-			item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp(
-				'margin[^;]+', "gi"), "");
-		return [item];
-	},
-	notContinue: function(item) {
-		return !(item.c || inlineTags[item.name] || item["continue"]);
+	isInlineTag: function(name) {
+		return !!inlineTags[name];
 	}
 }

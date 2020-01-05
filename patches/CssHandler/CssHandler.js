@@ -4,7 +4,7 @@
  文档地址：https://jin-yufeng.github.io/Parser
  author：JinYufeng
 */
-const userAgentStyles = require("./config.js").userAgentStyles;
+const config = require("./config.js");
 function _matchClass(match_class, selector_class) {
   if (!match_class || !match_class.length || !selector_class || !selector_class.length) return false;
   else if (match_class.length == 1 && selector_class.length == 1) {
@@ -182,9 +182,6 @@ class CssHandler {
     }
   }
 }
-function isBlankChar(c) {
-  return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '\v' || c == '\f';
-};
 class CssParser {
   constructor(data, tagStyle, api) {
     this.data = data;
@@ -198,9 +195,9 @@ class CssParser {
   };
   merge(tagStyle, api) {
 	if (!api)
-      for (var item in userAgentStyles) {
-        if (tagStyle[item]) tagStyle[item] = userAgentStyles[item] + ';' + tagStyle[item];
-        else tagStyle[item] = userAgentStyles[item];
+      for (var item in config.userAgentStyles) {
+        if (tagStyle[item]) tagStyle[item] = config.userAgentStyles[item] + ';' + tagStyle[item];
+        else tagStyle[item] = config.userAgentStyles[item];
       }
     var res = [];
     for (var key in tagStyle) {
@@ -222,13 +219,12 @@ class CssParser {
       this._stateHandler = this.StyleNameHandler;
     } else if (c == '/' && this.data[this._i + 1] == '*')
       this.CommentHandler();
-    else if (!isBlankChar(c) && c != ';')
+    else if (!config.blankChar[c] && c != ';')
       this._stateHandler = this.IgnoreHandler;
   };
   CommentHandler() {
-    this._i = this.data.indexOf("*/", this._i);
+    this._i = this.data.indexOf("*/", this._i) + 1;
     if (this._i == -1) this._i = this.data.length;
-    this._i++;
     this._stateHandler = this.SpaceHandler;
   };
   IgnoreHandler(c) {
@@ -241,7 +237,7 @@ class CssParser {
       this._name = this.data.substring(this._sectionStart, this._i);
       this._sectionStart = this._i + 1;
       this.ContentHandler();
-    } else if (isBlankChar(c)) {
+    } else if (config.blankChar[c]) {
       this._name = this.data.substring(this._sectionStart, this._i);
       this._stateHandler = this.NameSpaceHandler;
     } else if (c == '[') this._stateHandler = this.IgnoreHandler;
@@ -250,32 +246,20 @@ class CssParser {
     if (c == '{') {
       this._sectionStart = this._i + 1;
       this.ContentHandler();
-    } else if (!isBlankChar(c))
+    } else if (!config.blankChar[c])
       this._stateHandler = this.StyleNameHandler;
   };
   ContentHandler() {
     this._i = this.data.indexOf('}', this._i);
     if (this._i == -1) this._i = this.data.length;
     // 去除空白符
-    var flag = false,
-      pos, content = this.data.substring(this._sectionStart, this._i);
-    for (var i = 0; i < content.length; i++) {
-      if (isBlankChar(content[i])) {
-        if (!flag) {
-          pos = i;
-          flag = true;
-        }
-      } else {
-        if (flag) {
-          if (pos == 0) content = content.substring(i);
-          else if (i - pos > 1) content = content.substring(0, pos) + (content[pos - 1] == ';' ? (pos--, '') : ' ') + content.substring(i);
-          i = pos;
-          flag = false;
-        }
-      }
-    }
-    if (flag) content = content.substring(0, pos);
-    this._content = content;
+    var content = this.data.substring(this._sectionStart, this._i).trim();
+    for (var i = content.length, tmp = [content[--i]]; --i > 0;)
+      if (!config.blankChar[content[i]] || !config.blankChar[tmp[0]])
+        if ((content[i] == ';' || content[i] == ':') && config.blankChar[tmp[0]]) tmp[0] = content[i];
+        else tmp.unshift(content[i]);
+    tmp.unshift(content[0]); 
+    this._content = tmp.join('');
     var items = this._name.split(/\s*,\s*/);
     for (let item of items)
       this.setClass(item);

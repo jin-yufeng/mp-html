@@ -50,7 +50,8 @@
             /* SDK配置 */
             "sdkConfigs" : {}
         },
-        "nvueCompiler" : "uni-app"
+        "nvueCompiler" : "uni-app",
+        "compilerVersion" : 3
     },
     /* 快应用特有相关 */
     "quickapp" : {},

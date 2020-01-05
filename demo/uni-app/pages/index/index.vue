@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<parser @parse="parse" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error"
-		 show-with-animation lazy-load :autocopy="autocopy" use-anchor ref="rtf" >加载中...</parser>
+		 show-with-animation lazy-load :autocopy="autocopy" use-anchor ref="rtf" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la">加载中...</parser>
 	</view>
 </template>
 
@@ -37,7 +37,7 @@
 			},
 			ready(res) {
 				console.log("ready", res);
-				console.log("api: getText\n" + this.$refs.rtf.getText());
+				//console.log("api: getText\n" + this.$refs.rtf.getText());
 				console.log("imgList", this.$refs.rtf.imgList);
 			},
 			imgtap(res) {

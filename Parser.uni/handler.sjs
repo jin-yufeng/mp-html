@@ -19,44 +19,34 @@ var inlineTags = {
 }
 export default {
 	getStyle: function(style, display) {
-		var res = "";
-		var reg = getRegExp("float\s*:\s*[^;]*", "i");
-		if (reg.test(style)) res += reg.exec(style)[0];
-		reg = getRegExp("margin[^;]*", "gi");
-		var margin = reg.exec(style);
-		while (margin) {
-			res += (';' + margin[0]);
-			margin = reg.exec(style);
-		}
-		reg = getRegExp("display\s*:\s*([^;]*)", "i");
-		if (reg.test(style) && reg.exec(style)[1] != "flex") res += (';' + reg.exec(style)[0]);
-		else res += (';display:' + display);
-		reg = getRegExp("flex\s*:[^;]*", "i");
-		if (reg.test(style)) res += (';' + reg.exec(style)[0]);
-		reg = getRegExp("[^;\s]*width[^;]*", "ig");
-		var width = reg.exec(style);
-		while (width) {
-			res += (';' + width[0]);
-			width = reg.exec(style);
-		}
+		var tmp, res = "";
+		if (style) {
+			style = style.toLowerCase();
+			if (style.indexOf("float") != -1) res += style.match(getRegExp("float[^;]+(?![\s\S]*?float)"))[0];
+			if (style.indexOf("margin") != -1) res += (';' + style.match(getRegExp("margin[^;]+", "g")).join(';'));
+			if (style.indexOf("display") != -1 && (tmp = style.match(getRegExp("display\s*:\s*([^;]*)(?![\s\S]*?display)")),
+					tmp[1].indexOf("flex") == -1)) res += (';' + tmp[0]);
+			else res += (';display:' + display);
+			tmp = style.match(getRegExp("flex[^;]*:[^;]+", "g"));
+			if (tmp) res += (';' + tmp.join(';'));
+			if (style.indexOf("width") != -1) res += (';' + style.match(getRegExp("[^;\s]*width[^;]+", "g")).join(';'));
+		} else res = ("display:" + display);
 		return res;
 	},
 	setImgStyle: function(item, imgMode) {
-		if (imgMode == "widthFix")
-			item.attrs.style = (item.attrs.style || '') + ";height:auto !important";
-		if (getRegExp("[^-]width[^pev;]+").test(";" + item.attrs.style))
-			item.attrs.style = (item.attrs.style || '') + ";width:100%";
 		if (item.attrs.style)
-			item.attrs.style = item.attrs.style.replace(getRegExp('margin[^;]*', "gi"), "");
+			item.attrs.style = item.attrs.style.toLowerCase().replace(getRegExp("width[^;]*?%", "g"), "width:100%").replace(
+				getRegExp('margin[^;]+', "g"), "");
+		if (imgMode == "widthFix") item.attrs.style = (item.attrs.style || '') + ";height:auto !important";
 		return [item];
 	},
 	setStyle: function(item) {
 		if (item.attrs.style)
-			item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp(
-				'margin[^;]+', "gi"), "");
+			item.attrs.style = item.attrs.style.toLowerCase().replace(getRegExp("width[^;]*?%", "g"), "width:100%").replace(
+				getRegExp('margin[^;]+', "g"), "");
 		return [item];
 	},
-	notContinue: function(item) {
-		return !(item.c || inlineTags[item.name] || item["continue"]);
+	isInlineTag: function(name) {
+		return !!inlineTags[name];
 	}
 }

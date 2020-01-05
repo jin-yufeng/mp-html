@@ -8,20 +8,20 @@
 <template>
 	<view>
 		<!--#ifdef H5-->
-		<slot v-if="!html && !nodes.length"></slot>
-		<div :id="'rtf' + uid" :style="(selectable ? 'user-select:text;-webkit-user-select:text;' : '') + (showWithAnimation ? ('opacity:0;' + showAnimation) : '')"></div>
+		<slot v-if="!html&&!nodes.length"></slot>
+		<div :id="'rtf'+uid" :style="(selectable?'user-select:text;-webkit-user-select:text;':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')"></div>
 		<!--#endif-->
 		<!--#ifndef H5-->
-		<slot v-if="!html[0].name && !html[0].type && !nodes.length"></slot>
+		<slot v-if="(!html||(!html[0].name&&!html[0].type))&&!nodes.length"></slot>
 		<!--#endif-->
 		<!--#ifdef MP-ALIPAY-->
-		<view class="_contain" :style="(selectable ? 'user-select:text;-webkit-user-select:text;' : '') + (showWithAnimation ? ('opacity:0;' + showAnimation) : '')">
-			<trees :nodes="nodes.length ? nodes : (html[0].name || html[0].type ? html : [])" :imgMode="imgMode" />
+		<view class="_contain" :style="(selectable?'user-select:text;-webkit-user-select:text;':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')">
+			<trees :nodes="nodes.length?nodes:(html[0].name||html[0].type?html:[])" :imgMode="imgMode" />
 		</view>
 		<!--#endif-->
 		<!--#ifndef MP-ALIPAY || H5-->
-		<trees class="_contain" :style="'display:block;' + (selectable ? 'user-select:text;-webkit-user-select:text;' : '') + (showWithAnimation ? ('opacity:0;' + showAnimation) : '')"
-		 :nodes="nodes.length ? nodes : (html[0].name || html[0].type ? html : [])" :imgMode="imgMode" :loadVideo="loadVideo" />
+		<trees class="_contain" :style="'display:block;'+(selectable?'user-select:text;-webkit-user-select:text;':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')"
+		 :nodes="nodes.length?nodes:(html&&(html[0].name||html[0].type)?html:[])" :imgMode="imgMode" :loadVideo="loadVideo" />
 		<!--#endif-->
 	</view>
 </template>
@@ -34,8 +34,8 @@
 	const cache = getApp().parserCache = {};
 	const CssHandler = require("./libs/CssHandler.js");
 	// 散列函数（计算 cache 的 key）
-	const Hash = (str) => {
-		for (var i = 0, hash = 5381, len = str.length; i < len; i++)
+	function Hash(str) {
+		for (var i = str.length, hash = 5381; i--;)
 			hash += (hash << 5) + str.charCodeAt(i);
 		return hash;
 	};
@@ -46,7 +46,7 @@
 	const config = require('./libs/config.js');
 	// #ifdef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
 	// 图片链接去重
-	const Deduplication = (src) => {
+	function Deduplication(src) {
 		if (src.indexOf("http") != 0) return src;
 		var newSrc = '';
 		for (var i = 0; i < src.length; i++) {
@@ -66,10 +66,9 @@
 				// #endif
 				// #ifdef H5
 				uid: this._uid,
-				showAnimation: '',
 				// #endif
+				showAnimation: '',
 				// #ifndef H5
-				showAnimation: {},
 				controls: {},
 				// #endif
 				nodes: []
@@ -386,19 +385,17 @@
 					if (observed) return;
 					else this.nodes = [];
 				} else if (typeof html == "string") {
-					var res;
 					// 缓存读取
 					if (this.useCache) {
 						var hash = Hash(html);
 						if (cache[hash])
-							res = cache[hash];
+							this.nodes = cache[hash];
 						else {
-							res = parseHtmlSync(html, this);
-							cache[hash] = res;
+							this.nodes = parseHtmlSync(html, this);
+							cache[hash] = this.nodes;
 						}
-					} else res = parseHtmlSync(html, this);
-					this.nodes = res;
-					this.$emit('parse', res);
+					} else this.nodes = parseHtmlSync(html, this);
+					this.$emit('parse', this.nodes);
 				} else if (html.constructor == Array) {
 					if (!observed) this.nodes = html;
 					else this.nodes = [];
@@ -414,8 +411,9 @@
 							CssHandler: new CssHandler(this.tagStyle)
 						};
 						Parser.CssHandler.getStyle('');
-						const DFS = (nodes) => {
-							for (var node of nodes) {
+
+						function DFS(nodes) {
+							for (var i = nodes.length, node; node = nodes[--i];) {
 								if (node.type == "text") continue;
 								node.attrs = node.attrs || {};
 								for (var item in node.attrs) {
@@ -448,15 +446,17 @@
 				this.loadVideo = false;
 				// #endif
 				if (document) this.document = new document("html", this.html || html, this);
+
 				this.$nextTick(() => {
 					this.imgList.length = 0;
 					this.videoContexts = [];
 					const getContext = (components) => {
-						for (let component of components) {
+						for (var i = components.length; i--;) {
+							let component = components[i];
 							if (component.$options.name == "trees") {
 								var observered = false;
-								for (var item of component.nodes) {
-									if (item.continue) continue;
+								for (var j = component.nodes.length, item; item = component.nodes[--j];) {
+									if (item.c) continue;
 									if (item.name == 'img') {
 										if (item.attrs.src && item.attrs.i) {
 											// #ifndef MP-ALIPAY || APP-PLUS
@@ -477,7 +477,7 @@
 												component._observer.relativeToViewport({
 													top: 1000,
 													bottom: 1000
-												}).observe('.img', res => {
+												}).observe('._img', res => {
 													component.imgLoad = true;
 													component._observer.disconnect();
 													component._observer = null;
@@ -499,13 +499,12 @@
 										wx.createAudioContext(item.attrs.id, component).play();
 									// #endif
 									// 设置标题
-									else if (item.name == "title") {
-										if (item.children[0].type == "text" && item.children[0].text && this.autosetTitle)
-											uni.setNavigationBarTitle({
-												title: item.children[0].text
-											})
-									}
-									// #ifdef MP-BAIDU || MP-ALIPAY
+									else if (item.name == "title" && this.autosetTitle && item.children[0].type == "text" && item.children[
+											0].text)
+										uni.setNavigationBarTitle({
+											title: item.children[0].text
+										})
+									// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
 									if (item.attrs && item.attrs.id) {
 										this.anchors = this.anchors || [];
 										this.anchors.push({
@@ -545,8 +544,9 @@
 						if (whiteSpace && (((node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" ||
 								/h[1-6]/.test(node.name)) && text && text[text.length - 1] != '\n') || node.name == "br"))
 							text += '\n';
-						for (var child of node.children || [])
-							DFS(child);
+						if (node.children)
+							for (var i = 0; i < node.children.length; i++)
+								DFS(node.children[i]);
 						if (whiteSpace && (node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" || /h[1-6]/.test(
 								node.name)) && text && text[text.length - 1] != '\n')
 							text += '\n';
@@ -556,8 +556,7 @@
 				var nodes = ((this.nodes && this.nodes.length) ? this.nodes : (this.html[0] && (this.html[0].name || this.html[0].type) ?
 					this.html : []));
 				if (!nodes.length) return "";
-				for (var node of nodes)
-					DFS(node);
+				for (var i = 0; i < this.data.html.length; i++) DFS(this.data.html[i]);
 				return text;
 			},
 			navigateTo(obj) {
@@ -579,10 +578,10 @@
 				}
 				if (!obj.id) Scroll("._contain");
 				else {
-					// #ifndef MP-BAIDU || MP-ALIPAY
+					// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
 					Scroll('._contain >>> #' + obj.id + ', ._contain >>> .' + obj.id);
 					// #endif
-					// #ifdef MP-BAIDU || MP-ALIPAY
+					// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
 					for (var anchor of this.anchors) {
 						if (anchor.id == obj.id) {
 							Scroll("#" + obj.id + ", ." + obj.id, anchor.node);
@@ -594,11 +593,9 @@
 			// #endif
 			getVideoContext(id) {
 				if (!id) return this.videoContexts;
-				else {
-					for (var video of this.videoContexts) {
-						if (video.id == id) return video;
-					}
-				}
+				else
+					for (var i = this.videoContexts.length; i--;)
+						if (this.videoContexts[i].id == id) return this.videoContexts[i];
 				return null;
 			}
 		}

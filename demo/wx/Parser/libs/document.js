@@ -11,17 +11,16 @@ const _setData = function(Component, key, value) {
   })
 }
 const _search = function(nodes, id, site, Component) {
-  for (var i = 0; i < (nodes || []).length; i++) {
-    if (nodes[i].type == "text")
-      continue;
+  if (!nodes || !nodes.length) return null;
+  for (var i = nodes.length; i--;) {
+    if (nodes[i].type == "text") continue;
     site += ("[" + i + "]");
     if (nodes[i].attrs && nodes[i].attrs.id == id)
       return new element(nodes[i], site, Component);
     else {
       site += ".children";
       var find = _search(nodes[i].children, id, site, Component);
-      if (find != null)
-        return find;
+      if (find != null) return find;
       site = site.substring(0, site.length - 9);
     }
     site = site.substring(0, site.length - ("[" + i + "]").length);
@@ -34,11 +33,11 @@ class element {
     this.nodes = nodes;
     this.styles = {};
     var styleArr = (nodes.attrs.style || '').split(';');
-    for (var style of styleArr) {
-      if (!style.includes(':')) continue;
-      var info = style.split(':');
-      this.styles[info[0].replace(/(^\s*)|(\s*$)/g, "")] = info[1];
-    }
+    for (var i = styleArr.length; i--;)
+      if (!styleArr[i].includes(':')) {
+        var info = styleArr[i].split(':');
+        this.styles[info[0].trim()] = info[1];
+      }
     this._site = site;
     this._Component = Component;
     this.nodes.attrs = this.nodes.attrs || {};

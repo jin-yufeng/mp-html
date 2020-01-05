@@ -47,10 +47,11 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| Parser | 45.2KB | 微信小程序插件包 |
-| Parser.min | 31.5KB | 微信小程序插件包压缩版（功能相同） |
+| Parser | 44.5KB | 微信小程序插件包 |
+| Parser.min | 29.9KB | 微信小程序插件包压缩版（功能相同） |
 | Parser.uni | 58.9KB | `uni-app` 插件包（可以编译到所有平台） |
 
+百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
 ### 在原生框架中使用 ###
 1. 下载 `Parser` 文件夹至小程序目录  
@@ -178,6 +179,9 @@
 
 
 ## 更新日志 ##
+- 2020.1.5
+  1. `U` `uni-app` 支持 `APP` 的 `v3` 模式编译  
+  2. `U` 精简和优化了部分代码  
 - 2019.12.30  
   1. `A` 增加支持 `svg` 系列标签（通过转换为 `img` 实现，不可预览，不可响应点击事件） [详细](https://jin-yufeng.github.io/Parser/#/features#svg-支持)  
   2. `U` 减小了解析结果的大小（去除了一些不必要的内容，约减小 `3%`），减小了包的大小  
@@ -210,19 +214,5 @@
   9. `F` 修复了 `uni-app` 包编译到 `H5` 时在微信内置浏览器中无法显示、存在多个 `parser` 标签时相互覆盖等问题 [详细](https://github.com/jin-yufeng/Parser/issues/59)  
   
   *此版本较之前版本在 `api` 和补丁包的引入方式上有不兼容的地方，请注意*
-
-- 2019.12.3:
-  1. `A` 增加了 `domain` 属性，可以设置主域名，设置后对于图片链接将自动拼接上主域名或协议名 [详细](https://github.com/jin-yufeng/Parser/issues/56)
-  2. `A` 增加了 `use-anchor` 属性，可以设置页面内锚点 [详细](https://github.com/jin-yufeng/Parser/issues/55)
-  3. `U` `CssHandler` 补丁包增加支持 `before` 和 `after` 伪类
-- 2019.11.29:
-  1. `U` `linkpress`, `imgtap` 回调中增加一个 `ignore` 函数，在回调中调用此函数将不自动进行链接跳转/图片预览操作，可以屏蔽指定的链接/图片或进行自定义操作 [详细](https://github.com/jin-yufeng/Parser/issues/51)  
-- 2019.11.28:
-  1. `U` `table` 标签支持了 `border`, `cellpadding`, `cellspacing` 属性 [详细](https://github.com/jin-yufeng/Parser/issues/49)  
-  2. `U` 重构了 `uni-app` 包编译到 `H5` 时的显示方式，采用 `html` 原生的标签渲染，实现了以下优化（仅针对 `H5` 平台，其他**不变**）：
-     - 支持所有浏览器支持的标签和属性  
-     - `style` 标签支持所有浏览器支持的选择器
-     - `error` 回调增加支持 `img`，且返回组件的 `DOM` 实例，修改属性后可以直接对页面生效  
-     另外，通过一些转换，原来的属性和事件依然全部支持（不再有 `parser` 回调，因为不进行解析）  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

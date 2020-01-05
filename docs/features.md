@@ -43,7 +43,7 @@ data:{
 ```javascript
 // html 为包含 link 标签的富文本内容
 var links = [];
-html = html.replace(/<link.*?href=['"]*([\S]*?)['"].*?>/g, function() {
+html = html.replace(/<link.*?href=['"]*([\S]*?)['"]*.*?>/g, function() {
   if (arguments[1].includes(".css"))
     links.push(arguments[1])
   return '';

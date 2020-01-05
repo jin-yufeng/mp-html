@@ -13,8 +13,8 @@ try {
   document = require("./libs/document.js");
 } catch (e) {}
 // 散列函数（计算 cache 的 key）
-const Hash = (str) => {
-  for (var i = 0, hash = 5381, len = str.length; i < len; i++)
+function Hash(str) {
+  for (var i = str.length, hash = 5381; i--;)
     hash += (hash << 5) + str.charCodeAt(i);
   return hash;
 };
@@ -26,7 +26,7 @@ const showAnimation = wx.createAnimation({
   timingFunction: "ease"
 }).opacity(1).step().export();
 // 图片链接去重
-const Deduplication = (src) => {
+function Deduplication(src) {
   if (src.indexOf("http") != 0) return src;
   var newSrc = '';
   for (var i = 0; i < src.length; i++) {
@@ -120,22 +120,23 @@ Component({
         else {
           if (whiteSpace && (((node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" || /h[1-6]/.test(node.name)) && text && text[text.length - 1] != '\n') || node.name == "br"))
             text += '\n';
-          for (var child of node.children || [])
-            DFS(child);
+          if (node.children)
+            for (var i = 0; i < node.children.length; i++)
+              DFS(node.children[i]);
           if (whiteSpace && (node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" || /h[1-6]/.test(node.name)) && text && text[text.length - 1] != '\n')
             text += '\n';
           else if (whiteSpace && node.name == "td") text += '\t';
         }
       }
       if (!this.data.html || !this.data.html.length) return "";
-      for (var node of this.data.html) DFS(node);
+      for (var i = 0; i < this.data.html.length; i++) DFS(this.data.html[i]);
       return text;
     };
     this.getVideoContext = (id) => {
       if (!id) return this.videoContexts;
       else
-        for (var video of this.videoContexts)
-          if (video.id == id) return video;
+        for (var i = this.videoContexts.length; i--;)
+          if (this.videoContexts[i].id == id) return this.videoContexts[i];
       return null;
     };
     this.imgList = [];
@@ -170,18 +171,16 @@ Component({
         if (obversed) return;
         data.html = '';
       } else if (typeof html == "string") {
-        var res;
         // 缓存读取
         if (this.data.useCache) {
           var hash = Hash(html);
-          if (cache[hash]) res = cache[hash];
+          if (cache[hash]) data.html = cache[hash];
           else {
-            res = parseHtmlSync(html, this.data);
-            cache[hash] = res;
+            data.html = parseHtmlSync(html, this.data);
+            cache[hash] = data.html;
           }
-        } else res = parseHtmlSync(html, this.data);
-        data.html = res;
-        this.triggerEvent('parse', res);
+        } else data.html = parseHtmlSync(html, this.data);
+        this.triggerEvent('parse', data.html);
       } else if (html.constructor == Array) {
         // 非本插件产生的 array 需要进行一些转换
         if (html.length && html[0].PoweredBy != "Parser") {
@@ -195,8 +194,9 @@ Component({
             CssHandler: new CssHandler(this.data.tagStyle)
           };
           Parser.CssHandler.getStyle('');
-          const DFS = (nodes) => {
-            for (var node of nodes) {
+
+          function DFS(nodes) {
+            for (var i = nodes.length, node; node = nodes[--i];) {
               if (node.type == "text") continue;
               node.attrs = node.attrs || {};
               for (var item in node.attrs) {
@@ -232,9 +232,13 @@ Component({
       this.videoContexts = [];
       if (document) this.document = new document("html", data.html || html, this);
       var nodes = [this.selectComponent('#contain')].concat(this.selectAllComponents('#contain>>>._node'));
-      for (var node of nodes) {
+      for (var i = nodes.length; i--;) {
+        let node = nodes[i];
         node._top = this;
-        for (var item of node.data.nodes) {
+        var observed = !!node._observer;
+        var j = node.data.nodes.length,
+          item;
+        for (var j = node.data.nodes.length, item; item = node.data.nodes[--j];) {
           if (item.continue) continue;
           // 获取图片列表
           if (item.name == 'img') {
@@ -242,6 +246,28 @@ Component({
               if (this.imgList.indexOf(item.attrs.src) == -1)
                 this.imgList[item.attrs.i] = item.attrs.src;
               else this.imgList[item.attrs.i] = Deduplication(item.attrs.src);
+            }
+            if (!observed) {
+              observed = true;
+              // 懒加载
+              (wx.nextTick || setTimeout)(() => {
+                if (this.data.lazyLoad && node.createIntersectionObserver) {
+                  node._observer = node.createIntersectionObserver();
+                  node._observer.relativeToViewport({
+                    top: 1000,
+                    bottom: 1000
+                  }).observe('._img', () => {
+                    node.setData({
+                      imgLoad: true
+                    })
+                    node._observer.disconnect();
+                    node._observer = undefined;
+                  })
+                } else
+                  node.setData({
+                    imgLoad: true
+                  })
+              }, 50)
             }
           }
           // 音视频控制
@@ -252,45 +278,13 @@ Component({
           } else if (item.name == 'audio' && item.attrs.autoplay)
             wx.createAudioContext(item.attrs.id, node).play();
           // 设置标题
-          else if (item.name == "title") {
-            if (item.children[0].type == "text" && item.children[0].text && this.data.autosetTitle)
-              wx.setNavigationBarTitle({
-                title: item.children[0].text
-              })
-          }
+          else if (item.name == "title" && this.data.autosetTitle && item.children[0].type == "text" && item.children[0].text)
+            wx.setNavigationBarTitle({
+              title: item.children[0].text
+            })
         }
-        if (node.data.imgLoad)
-          node.setData({
-            imgLoad: false
-          })
       }
       (wx.nextTick || setTimeout)(() => {
-        // 图片懒加载
-        for (let node of nodes) {
-          for (var item of node.data.nodes) {
-            if (item.name == 'img') {
-              if (this.data.lazyLoad && node.createIntersectionObserver) {
-                if (node._observer) node._observer.disconnect();
-                node._observer = node.createIntersectionObserver();
-                node._observer.relativeToViewport({
-                  top: 1000,
-                  bottom: 1000
-                }).observe('.img', res => {
-                  node.setData({
-                    imgLoad: true
-                  })
-                  node._observer.disconnect();
-                  node._observer = null;
-                })
-              } else {
-                node.setData({
-                  imgLoad: true
-                })
-              }
-              break;
-            }
-          }
-        }
         this.createSelectorQuery().select('#contain').boundingClientRect(res => {
           this.triggerEvent('ready', res);
         }).exec();

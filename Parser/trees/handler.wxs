@@ -25,36 +25,35 @@ var inlineTags = {
 }
 module.exports = {
   getStyle: function(style, display) {
-    var res = "";
-    var reg = getRegExp("float[^;]+(?![\s\S]*?float)", "i");
-    if (reg.test(style)) res += reg.exec(style)[0];
-    reg = getRegExp("margin[^;]+", "gi");
-    if (reg.test(style)) res += (';' + style.match(reg).join(';'));
-    reg = getRegExp("display\s*:\s*([^;]*)(?![\s\S]*?display)", "i");
-    if (reg.test(style) && reg.exec(style)[1] != "flex") res += (';' + reg.exec(style)[0]);
-    else res += (';display:' + display);
-    reg = getRegExp("flex[^;]*:[^;]+", "ig");
-    if (reg.test(style)) res += (';' + style.match(reg).join(';'));
-    reg = getRegExp("[^;\s]*width[^;]+", "ig");
-    if (reg.test(style)) res += (';' + style.match(reg).join(';'));
+    var tmp, res = "";
+    if (style) {
+      style = style.toLowerCase();
+      if (style.indexOf("float") != -1) res += style.match(getRegExp("float[^;]+(?![\s\S]*?float)"))[0];
+      if (style.indexOf("margin") != -1) res += (';' + style.match(getRegExp("margin[^;]+", "g")).join(';'));
+      if (style.indexOf("display") != -1 && (tmp = style.match(getRegExp("display\s*:\s*([^;]*)(?![\s\S]*?display)")), tmp[1].indexOf("flex") == -1)) res += (';' + tmp[0]);
+      else res += (';display:' + display);
+      tmp = style.match(getRegExp("flex[^;]*:[^;]+", "g"));
+      if (tmp) res += (';' + tmp.join(';'));
+      if (style.indexOf("width") != -1) res += (';' + style.match(getRegExp("[^;\s]*width[^;]+", "g")).join(';'));
+    } else res = ("display:" + display);
     return res;
   },
   setImgStyle: function(item, imgMode, imgLoad) {
-    if (imgMode == "widthFix") item.attrs.style = (item.attrs.style || '') + ";height:auto !important";
     if (item.attrs.style)
-      item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp('margin[^;]+', "gi"), "");
+      item.attrs.style = item.attrs.style.toLowerCase().replace(getRegExp("width[^;]*?%", "g"), "width:100%").replace(getRegExp('margin[^;]+', "g"), "");
+    if (imgMode == "widthFix") item.attrs.style = (item.attrs.style || '') + ";height:auto !important";
     if (!imgLoad) {
-      delete item.attrs.src;
-      item.attrs.style += ";width:5px !important;height:5px !important";
+      item.attrs.src = "";
+      item.attrs.style += ";width:20px !important;height:20px !important";
     }
     return [item];
   },
   setStyle: function(item) {
     if (item.attrs.style)
-      item.attrs.style = item.attrs.style.replace(getRegExp("width[^;]*?%", "gi"), "width:100%").replace(getRegExp('margin[^;]+', "gi"), "");
+      item.attrs.style = item.attrs.style.toLowerCase().replace(getRegExp("width[^;]*?%", "g"), "width:100%").replace(getRegExp('margin[^;]+', "g"), "");
     return [item];
   },
-  notContinue: function(item) {
-    return !(item.c || inlineTags[item.name] || item["continue"]);
+  isInlineTag: function(name) {
+    return !!inlineTags[name];
   }
 }

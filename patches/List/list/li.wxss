@@ -1,26 +1,43 @@
-:host{
-  display:block;
+:host {
+  display: flex;
 }
-.point_type1{
-  width:0.3em;
-  height:0.3em;
-  overflow: hidden;
+.ol {
+  width: 36px;
+  text-align: right;
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+.ul {
+  margin-left: 23px;
+  margin-right: 12px;
+  line-height: normal;
+  flex-shrink: 0;
+}
+.type1::before {
+  content: '█';
+  width: 0.3em;
+  height: 0.3em;
+  line-height: 0.3em;
   border-radius: 50%;
+  overflow: hidden;
   color: inherit;
-  display:inline-block;
+  display: inline-block;
 }
-.point_type2{
-  width:0.23em;
-  height:0.23em;
+.type2::before {
+  content: '';
+  width: 0.23em;
+  height: 0.23em;
   background-color: transparent;
-  border:0.05em solid black;
+  border: 0.05em solid black;
   border-radius: 50%;
-  display:inline-block;
+  display: inline-block;
 }
-.point_type3{
-  width:0.3em;
-  height:0.3em;
+.type3::before {
+  content: '█';
+  width: 0.3em;
+  height: 0.3em;
+  line-height: 0.3em;
   overflow: hidden;
   color: inherit;
-  display:inline-block;
+  display: inline-block;
 }

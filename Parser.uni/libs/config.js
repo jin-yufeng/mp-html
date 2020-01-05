@@ -2,8 +2,8 @@
 function makeMap(str) {
 	var map = Object.create(null),
 		list = str.split(',');
-	for (var item of list)
-		map[item] = true;
+	for (var i = list.length; i--;)
+		map[list[i]] = true;
 	return map;
 }
 // 信任的属性列表，不在列表中的属性将被移除 
@@ -39,6 +39,8 @@ const richOnlyTags = makeMap(
 const selfClosingTags = makeMap(
 	"area,base,basefont,br,col,circle,ellipse,embed,frame,hr,img,input,isindex,keygen,line,link,meta,param,path,polygon,rect,source,track,use,wbr"
 );
+// 空白字符
+const blankChar = makeMap(" ,\u00A0,\t,\r,\n,\f");
 // 默认的标签样式
 var userAgentStyles = {
 	a: "color:#366092;word-break:break-all;padding:1.5px 0 1.5px 0",
@@ -96,7 +98,7 @@ if (versionHigherThan("2.7.1")) {
 }
 // #endif
 function bubbling(Parser) {
-	for (var i = Parser._STACK.length - 1; i >= 0; i--) {
+	for (var i = Parser._STACK.length; i--;) {
 		if (!richOnlyTags[Parser._STACK[i].name])
 			Parser._STACK[i].c = 1;
 		else return false;
@@ -206,6 +208,7 @@ module.exports = {
 	blockTags,
 	ignoreTags,
 	selfClosingTags,
+	blankChar,
 	userAgentStyles,
 	// #ifndef MP-ALIPAY || H5
 	versionHigherThan,

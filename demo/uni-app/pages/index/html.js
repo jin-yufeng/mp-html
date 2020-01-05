@@ -228,14 +228,14 @@ module.exports = `<style>
     <section>
       <section style="width: 100%; padding: 10px 0px; box-sizing: border-box;">
         <section style="width: 100%;margin-bottom:5px;">
-          <img style="width: 100%;display: block;" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174"/>
+          <img style="width: 100%;display: block;" src="/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174"/>
         </section>
         <section style="margin-top:5px; display: flex;justify-content: center;-webkit-justify-content: center;display: -webkit-flex;">
           <section style="width: 100%;margin-right: 5px;">
-            <img style="width: 100%;display: block;" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-2.jpg?sign=a54a0bf5bd2d632c7962f2b4e4e7018b&t=1560246712"/>
+            <img style="width: 100%;display: block;" src="/demo1-2.jpg?sign=a54a0bf5bd2d632c7962f2b4e4e7018b&t=1560246712"/>
           </section>
           <section style="width: 100%;">
-            <img style="width: 100%;display: block;" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-2.jpg?sign=a54a0bf5bd2d632c7962f2b4e4e7018b&t=1560246712"/>
+            <img style="width: 100%;display: block;" src="/demo1-2.jpg?sign=a54a0bf5bd2d632c7962f2b4e4e7018b&t=1560246712"/>
           </section>
         </section>
       </section>
@@ -243,7 +243,7 @@ module.exports = `<style>
   </section>
   <section style="border: 0px none;">
     <section style="width: 60%;margin: 0px auto;">
-      <img style="width: 100%;display: block;" ignore src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351" />
+      <img style="width: 100%;display: block;" ignore src="/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351" />
     </section>
   </section>
   <p style="text-align: center;">
@@ -264,19 +264,19 @@ module.exports = `<style>
     <section style="margin: 1em auto; white-space: normal; border: 0px none; text-align: center; padding: 0px; padding: 5px;border:1px solid #ddd;overflow: hidden;">
       <section style="white-space: nowrap; width:100%; overflow-x: scroll;">
         <section style="display: inline-block;word-wrap: break-word;white-space: normal;vertical-align: top;">
-          <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-4.jpg?sign=56c2d54fe1e02af9514bcc4f328210ce&t=1560248345" style="display: inline-block;width:100%;"/>
+          <img src="/demo1-4.jpg?sign=56c2d54fe1e02af9514bcc4f328210ce&t=1560248345" style="display: inline-block;width:100%;"/>
           <p style="font-size:12px; text-align:center;">
             图片1
           </p>
         </section>
         <section style="display: inline-block;word-wrap: break-word;white-space: normal;vertical-align: top;">
-          <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-5.jpg?sign=fddebceb1040a2bdfba71e36702d49aa&t=1560248515" style="display: inline-block;width:100%;"/>
+          <img src="/demo1-5.jpg?sign=fddebceb1040a2bdfba71e36702d49aa&t=1560248515" style="display: inline-block;width:100%;"/>
           <p style="font-size:12px; text-align:center;">
             图片2
           </p>
         </section>
         <section style="display: inline-block;word-wrap: break-word;white-space: normal;vertical-align: top;">
-          <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-6.jpg?sign=1f37b2e407a2190394e3edade9ae0d5f&t=1560248535" style="display: inline-block;width:100%"/>
+          <img src="/demo1-6.jpg?sign=1f37b2e407a2190394e3edade9ae0d5f&t=1560248535" style="display: inline-block;width:100%"/>
           <p style="font-size:12px; text-align:center;">
             图片3
           </p>
@@ -309,7 +309,7 @@ module.exports = `<style>
   <section style="border: 0px none;">
     <div style="text-align: center;">
       <a href="/pages/turn/turn">
-        <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174"/>
+        <img src="/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174"/>
       </a>
       <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>
       <br />

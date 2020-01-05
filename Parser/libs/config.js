@@ -2,14 +2,14 @@
 function makeMap(str) {
   var map = Object.create(null),
     list = str.split(',');
-  for (var item of list)
-    map[item] = true;
+  for (var i = list.length; i--;)
+    map[list[i]] = true;
   return map;
 }
 // 信任的属性列表，不在列表中的属性将被移除
 const trustAttrs = makeMap("align,alt,app-id,appId,author,autoplay,border,cellpadding,cellspacing,class,color,colspan,controls,data-src,dir,face,height,href,id,ignore,loop,muted,name,path,poster,rowspan,size,span,src,start,style,type,unit-id,unitId,width,xmlns");
 // 信任的标签，将保持标签名不变
-const trustTags = makeMap("a,abbr,ad,audio,b,blockquote,br,code,col,colgroup,dd,del,dl,dt,div,em,fieldset,h1,h2,h3,h4,h5,h6,hr,i,img,ins,label,legend,li,ol,p,q,source,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,title,u,ul,video");
+const trustTags = makeMap("a,abbr,ad,audio,b,blockquote,br,code,col,colgroup,dd,del,dl,dt,div,em,fieldset,h1,h2,h3,h4,h5,h6,hr,i,img,ins,label,legend,li,ol,p,q,source,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,title,ul,video");
 // 块级标签，将被转为 div
 const blockTags = makeMap("address,article,aside,body,center,cite,footer,header,html,nav,pre,section");
 // 被移除的标签（其中 svg 系列标签会被转为图片）
@@ -18,6 +18,8 @@ const ignoreTags = makeMap("area,base,basefont,canvas,circle,command,ellipse,emb
 const richOnlyTags = makeMap("a,ad,audio,colgroup,fieldset,legend,li,ol,sub,sup,table,tbody,td,tfoot,th,thead,tr,ul,video");
 // 自闭合标签
 const selfClosingTags = makeMap("area,base,basefont,br,col,circle,ellipse,embed,frame,hr,img,input,isindex,keygen,line,link,meta,param,path,polygon,rect,source,track,use,wbr");
+// 空白字符
+const blankChar = makeMap(" ,\u00A0,\t,\r,\n,\f");
 // 默认的标签样式
 const userAgentStyles = {
   a: "color:#366092;word-break:break-all;padding:1.5px 0 1.5px 0",
@@ -72,7 +74,7 @@ if (versionHigherThan("2.7.1")) {
 }
 
 function bubbling(Parser) {
-  for (var i = Parser._STACK.length - 1; i >= 0; i--) {
+  for (var i = Parser._STACK.length; i--;) {
     if (!richOnlyTags[Parser._STACK[i].name])
       Parser._STACK[i].c = 1;
     else return false;
@@ -176,6 +178,7 @@ module.exports = {
   blockTags,
   ignoreTags,
   selfClosingTags,
+  blankChar,
   userAgentStyles,
   versionHigherThan
 }

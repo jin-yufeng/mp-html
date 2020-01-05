@@ -45,9 +45,9 @@ Component({
     // 视频播放事件
     playEvent(e) {
       if (this._top && (this._top.videoContexts || []).length > 1 && this._top.data.autopause) {
-        for (var video of this._top.videoContexts) {
-          if (video.id == e.currentTarget.id) continue;
-          video.pause();
+        for (var i = this._top.videoContexts.length; i--;) {
+          if (this._top.videoContexts[i].id != e.currentTarget.id)
+            this._top.videoContexts[i].pause();
         }
       }
     },

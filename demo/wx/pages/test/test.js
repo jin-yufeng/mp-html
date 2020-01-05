@@ -160,7 +160,6 @@ Page({
       if (this.data.modeIndex == 3) mode = 'markdown';
       else if (this.data.modeIndex == 2) mode = 'website';
       else mode = 'html';
-      wx.cloud.init();
       wx.cloud.callFunction({
         name: 'parser',
         data: {

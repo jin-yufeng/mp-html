@@ -260,11 +260,6 @@ Page({
       default: 'false',
       notice: '是否使用渐显动画效果'
     }, {
-      name: 'animation-\nduration',
-      type: 'Number',
-      default: '400',
-      notice: '动画持续时间（单位ms）'
-    }, {
       name: 'use-anchor',
       type: 'Boolean',
       default: 'false',
@@ -338,6 +333,12 @@ Page({
       code: "border:1px solid #cccccc;border-radius:3px"
     },
     update: `<ul>
+    <li>2020.1.5:
+      <ol>
+        <li><code>U</code> 精简和优化了一些代码</li>
+      </ol>
+    </li>
+    </br>
     <li>2019.12.30:
       <ol>
         <li><code>A</code> 增加支持<code>svg</code>系列标签</li>
@@ -443,10 +444,7 @@ Page({
       section = "update";
     this.setData({
       page: this.data.page + 1,
-    },()=>{
-      this.setData({
-        section
-      })
+      section
     })
   },
   gotop() {

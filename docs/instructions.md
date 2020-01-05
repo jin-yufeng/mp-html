@@ -3,8 +3,8 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 45.2KB | 微信小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.5KB | 微信小程序插件包压缩版（功能相同） |
+| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 44.5KB | 微信小程序插件包 |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 29.9KB | 微信小程序插件包压缩版（功能相同） |
 | [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 58.9KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
@@ -14,6 +14,8 @@
 4. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`
 5. 支付宝小程序不支持 `autopause` 属性，没有 `getVideoContext` 的 `api`  
 6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性
+
+!>百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
 
 !>`uni-app` 包为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
 需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式
@@ -502,7 +504,7 @@ console.log(versionHigherThan("2.7.1"));
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `4.77KB`（`min` 版本 `3.89KB`）  
+  `4.78KB`（`min` 版本 `3.74KB`）  
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
@@ -574,18 +576,14 @@ error(e){
   模拟 `ol`、`ul`、`li` 标签  
   `ol` 标签支持 `start` 和 `type` 属性；`ul` 标签会自动根据层级显示不同的样式  
 - 大小  
-  `4.67KB`  
+  `4.50KB`  
 
 !>此补丁包**仅能**在微信小程序中使用  
 
 - 使用方法  
   1. 将 `list` 文件夹复制到 `Parser` 文件夹下  
-  2. 将 `trees.li.wxml` 中的内容复制到 `Parser/trees/trees.wxml` 中 `wx:if="{{Handler.notContinue(item)}}"` 的 `block` 中的任意位置
-  3. 在 `Parser/trees/handler.wxs` 中的 `notContinue` 函数开头添加  
-     ```javascript
-     if(item.name=='li'||item.name=='ol'||item.name=='ul') return true;
-     ```
-  4. 在 `Parser/trees/trees.json` 中添加
+  2. 将 `trees.li.wxml` 中的内容复制到 `Parser/trees/trees.wxml` 中 列表 的标识处  
+  3. 在 `Parser/trees/trees.json` 中添加
      ```json
      "usingComponents": {
        "trees": "./trees",
@@ -594,10 +592,11 @@ error(e){
        "li": "../list/li"
      }
      ```  
-  5. 将 `Parser/libs/config.js` 中 `richOnlyTags` 结构体中去掉 `ol`、`ul`、`li`  
+  4. 将 `Parser/libs/config.js` 中 `richOnlyTags` 结构体中去掉 `ol`、`ul`、`li`  
   - 可参考 `demo` 文件夹中的 [Parser](https://github.com/jin-yufeng/Parser/tree/master/demo/wx/Parser)（已装载此补丁包）  
   
->对于 `ol` 标签，`type` 为阿拉伯数字（默认）时没有数量限制；为字母时最多包含26个子项；为罗马数字时最多包含20个子项
+>对于 `ol` 标签，`type` 为阿拉伯数字（默认）时没有数量限制；为字母时最多包含26个子项；为罗马数字时最多包含20个子项  
+>不支持 `list-style` 的 `css` 样式，请使用 `type` 属性
 
 - 在其他页面中使用  
   该包将列表封装成自定义组件，可以直接在其他页面上使用  
@@ -650,7 +649,7 @@ error(e){
 | .class::after | .demo::after | &lt;element class="demo" ::after&gt; |
 
 - 大小（与原大小相比增加）  
-  `4.7KB`（`min` 版本：`3.07KB`）  
+  `4.65KB`（`min` 版本：`3.08KB`）  
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
