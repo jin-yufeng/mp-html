@@ -156,8 +156,8 @@ class MpHtmlParser {
   // 节点出栈处理
   popNode(node) {
     // 替换一些标签名
-    if (config.blockTags[node.name]) node.name = 'div';
-    else if (!config.trustTags[node.name]) node.name = 'span';
+    if (config.blockTags[node.name]) node.name = "div";
+    else if (!config.trustTags[node.name]) node.name = "span";
     // 空白符处理
     if (node.pre) {
       this._whiteSpace = false;
@@ -166,8 +166,38 @@ class MpHtmlParser {
         if (this._STACK[i].pre)
           this._whiteSpace = true;
     }
+    // 处理列表
+    if (node.c) {
+      if (node.name == "ul") {
+        var floor = 1;
+        for (var i = this._STACK.length; i--;)
+          if (this._STACK[i].name == "ul") floor++;
+        if (floor != 1)
+          for (i = node.children.length; i--;)
+            node.children[i].floor = floor;
+      } else if (node.name == "ol") {
+        function convert(num, type) {
+          if (type == 'a') return String.fromCharCode(97 + (num - 1) % 26);
+          if (type == 'A') return String.fromCharCode(65 + (num - 1) % 26);
+          if (type == 'i' || type == 'I') {
+            num = (num - 1) % 99 + 1;
+            var one = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'],
+              ten = ['X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC'],
+              res = (ten[Math.floor(num / 10) - 1] || '') + (one[num % 10 - 1] || '');
+            if (type == 'i') return res.toLowerCase();
+            return res;
+          }
+          return num;
+        }
+        for (var i = 0, num = 1, child; child = node.children[i++];)
+          if (child.name == "li") {
+            child.type = "ol";
+            child.num = convert(num++, node.attrs.type) + '.';
+          }
+      }
+    }
     // 处理表格的边框
-    if (node.name == 'table') {
+    if (node.name == "table") {
       if (node.attrs.border)
         node.attrs.style = "border:" + node.attrs.border + "px solid gray;" + (node.attrs.style || '');
       if (node.attrs.hasOwnProperty("cellspacing"))

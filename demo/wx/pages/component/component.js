@@ -202,9 +202,6 @@ Page({
     uni: code.uni,
     emoji: code.emoji,
     apicode: code.apicode,
-    listJson: code.listJson,
-    listJson2: code.listJson2,
-    listWxml: code.listWxml,
     //属性
     attrs: [{
       name: 'html',
@@ -333,6 +330,14 @@ Page({
       code: "border:1px solid #cccccc;border-radius:3px"
     },
     update: `<ul>
+    <li>2020.1.7:
+      <ol>
+        <li><code>U</code> 支持模拟显示<code>li</code>, <code>ol</code>, <code>ul</code>标签（即可以在其中放图片、链接、视频等，支持<code>ol</code>的<code>type</code>属性，支持多层<code>ul</code>）</li>
+        <li><code>D</code> 删除了<code>List</code>补丁包（已在主包中实现）</li>
+        <li><code>F</code> 修复了传入的<code>html</code>为数组时预览会出现顺序颠倒的问题</li>
+      </ol>
+    </li>
+    </br>
     <li>2020.1.5:
       <ol>
         <li><code>U</code> 精简和优化了一些代码</li>

@@ -12,7 +12,7 @@
 		<div :id="'rtf'+uid" :style="(selectable?'user-select:text;-webkit-user-select:text;':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')"></div>
 		<!--#endif-->
 		<!--#ifndef H5-->
-		<slot v-if="(!html||(!html[0].name&&!html[0].type))&&!nodes.length"></slot>
+		<slot v-if="(!html||!html.length||(!html[0].name&&!html[0].type))&&!nodes.length"></slot>
 		<!--#endif-->
 		<!--#ifdef MP-ALIPAY-->
 		<view class="_contain" :style="(selectable?'user-select:text;-webkit-user-select:text;':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')">
@@ -21,7 +21,7 @@
 		<!--#endif-->
 		<!--#ifndef MP-ALIPAY || H5-->
 		<trees class="_contain" :style="'display:block;'+(selectable?'user-select:text;-webkit-user-select:text;':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')"
-		 :nodes="nodes.length?nodes:(html&&(html[0].name||html[0].type)?html:[])" :imgMode="imgMode" :loadVideo="loadVideo" />
+		 :nodes="nodes.length?nodes:(html&&html.length&&(html[0].name||html[0].type)?html:[])" :imgMode="imgMode" :loadVideo="loadVideo" />
 		<!--#endif-->
 	</view>
 </template>
@@ -413,7 +413,7 @@
 						Parser.CssHandler.getStyle('');
 
 						function DFS(nodes) {
-							for (var i = nodes.length, node; node = nodes[--i];) {
+							for (var i = 0, node; node = nodes[i++];) {
 								if (node.type == "text") continue;
 								node.attrs = node.attrs || {};
 								for (var item in node.attrs) {

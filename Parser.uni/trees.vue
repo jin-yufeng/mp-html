@@ -29,8 +29,8 @@
 			<!--视频-->
 			<view v-else-if="item.name=='video'">
 				<!--#ifdef APP-PLUS-->
-				<view v-if="(!loadVideo||item.lazyLoad)&&(!controls[item.attrs.id]||!controls[item.attrs.id].play)" :id="item.attrs.id" :class="'_video '+(item.attrs.class||'')"
-				 :style="item.attrs.style||''" @tap="_loadVideo" />
+				<view v-if="(!loadVideo||item.lazyLoad)&&(!controls[item.attrs.id]||!controls[item.attrs.id].play)" :id="item.attrs.id"
+				 :class="'_video '+(item.attrs.class||'')" :style="item.attrs.style||''" @tap="_loadVideo" />
 				<!--#endif-->
 				<!--#ifndef APP-PLUS-->
 				<view v-if="item.lazyLoad&&!controls[item.attrs.id].play" :id="item.attrs.id" :class="'_video '+(item.attrs.class||'')"
@@ -60,6 +60,23 @@
 			<ad v-else-if="item.name=='ad'" :appid="item.attrs.appid" :apid="item.attrs.apid" :type="item.attrs.type" :class="item.attrs.class||''"
 			 :style="item.attrs.style" @error="adError"></ad>
 			<!--#endif-->
+			<!--列表-->
+			<view v-else-if="item.name=='li'" :class="(item.attrs.class||'')+' _li'" :style="(item.attrs.style||'')+';display:flex'">
+				<view v-if="item.type=='ol'" class="_ol-before">{{item.num}}</view>
+				<view v-else class="_ul-before">
+					<view v-if="item.floor%3==0" class="_ul-type1">█</view>
+					<view v-else-if="item.floor%3==2" class="_ul-type2" />
+					<view v-else class="_ul-type1" style="border-radius:50%">█</view>
+				</view>
+				<!--#ifdef MP-ALIPAY-->
+				<view>
+					<trees :nodes="item.children" :imgMode="imgMode" />
+				</view>
+				<!--#endif-->
+				<!--#ifndef MP-ALIPAY-->
+				<trees class="_node" :nodes="item.children" :imgMode="imgMode" :loadVideo="loadVideo" style="display:block" />
+				<!--#endif-->
+			</view>
 			<!--富文本-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY || APP-PLUS-->
 			<rich-text v-else-if="!(item.c||handler.isInlineTag(item.name)||item.continue)" :id="item.attrs.id" :class="'__'+item.name"
@@ -209,7 +226,6 @@
 				});
 			},
 			loadSource(target) {
-				console.log(target)
 				var index = (this.controls[target.id] ? this.controls[target.id].index : 0) + 1;
 				if (index < target.dataset.source.length) {
 					this.$set(this.controls[target.id], "index", index);
@@ -272,7 +288,10 @@
 
 	._blockquote,
 	._div,
-	._p {
+	._p,
+	._ol,
+	._ul,
+	._li {
 		display: block;
 	}
 
@@ -316,6 +335,38 @@
 
 	._ins {
 		text-decoration: underline;
+	}
+
+	._ol-before {
+		width: 36px;
+		text-align: right;
+		margin-right: 5px;
+		flex-shrink: 0;
+	}
+
+	._ul-before {
+		margin-left: 23px;
+		margin-right: 12px;
+		line-height: normal;
+		flex-shrink: 0;
+	}
+
+	._ul-type1 {
+		width: 0.3em;
+		height: 0.3em;
+		line-height: 0.3em;
+		color: inherit;
+		display: inline-block;
+		overflow: hidden;
+	}
+
+	._ul-type2 {
+		width: 0.23em;
+		height: 0.23em;
+		background-color: transparent;
+		border: 0.05em solid black;
+		border-radius: 50%;
+		display: inline-block;
 	}
 
 	._q::before {

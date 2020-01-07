@@ -24,9 +24,18 @@
     poster="{{item.attrs.poster}}" name="{{item.attrs.name}}" author="{{item.attrs.author}}" style="{{item.attrs.style}}" data-source="{{item.attrs.source}}" binderror="audioError" />
   <!--广告-->
   <ad wx:elif="{{item.name=='ad'}}" unit-id="{{item.attrs['unit-id']}}" class="{{item.attrs.class}}" style="{{item.attrs.style}}" binderror="adError" />
+  <!--列表-->
+  <view wx:elif="{{item.name=='li'}}" class="{{item.attrs.class}} _li" style="{{item.attrs.style}};display:flex">
+    <view wx:if="{{item.type=='ol'}}" class="_ol-before">{{item.num}}</view>
+    <view wx:else class="_ul-before">
+      <view wx:if="{{item.floor%3==0}}" class="_ul-type1">█</view>
+      <view wx:elif="{{item.floor%3==2}}" class="_ul-type2" />
+      <view wx:else class="_ul-type1" style="border-radius:50%">█</view>
+    </view>
+    <trees class="_node" nodes="{{item.children}}" controls="{{controls}}" style="display:block" />
+  </view>
   <!--富文本-->
   <rich-text wx:elif="{{!(item.c||Handler.isInlineTag(item.name)||item.continue)}}" id="{{item.attrs.id}}" class="__{{item.name}}" style="{{Handler.getStyle(item.attrs.style,'block')}}" nodes="{{Handler.setStyle(item)}}" />
-  <!--列表-->
   <!--继续递归-->
   <trees wx:else id="{{item.attrs.id}}" class="_node _{{item.name}} {{item.attrs.class}}" style="{{item.attrs.style}}" nodes="{{item.children}}" controls="{{controls}}" />
 </block>

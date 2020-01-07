@@ -19,7 +19,7 @@
 ._small {
   font-size: 0.8em;
 }
-._blockquote, ._div, ._p {
+._blockquote, ._div, ._p, ._ul, ._ol, ._li {
   display:block;
 }
 ._code {
@@ -48,6 +48,34 @@
 }
 ._ins {
   text-decoration: underline;
+}
+._ol-before {
+  width: 36px;
+  text-align: right;
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+._ul-before {
+  margin-left: 23px;
+  margin-right: 12px;
+  line-height: normal;
+  flex-shrink: 0;
+}
+._ul-type1 {
+  width:0.3em;
+  height:0.3em;
+  line-height:0.3em;
+  color:inherit;
+  display:inline-block;
+  overflow:hidden;
+}
+._ul-type2 {
+  width:0.23em;
+  height:0.23em;
+  background-color:transparent;
+  border:0.05em solid black;
+  border-radius:50%;
+  display:inline-block;
 }
 ._q::before {
   content: '"';

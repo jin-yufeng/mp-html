@@ -1,9 +1,6 @@
 {
   "component": true,
   "usingComponents": {
-    "trees": "./trees",
-    "ol": "../list/ol",
-    "ul": "../list/ul",
-    "li": "../list/li"
+    "trees": "./trees"
   }
 }

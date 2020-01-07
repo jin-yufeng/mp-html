@@ -3,9 +3,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 44.5KB | 微信小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 29.9KB | 微信小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 58.9KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 46.7KB | 微信小程序插件包 |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.3KB | 微信小程序插件包压缩版（功能相同） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 61.2KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
 1. 百度小程序和支付宝小程序不支持 `lazy-load` 属性
@@ -20,8 +20,7 @@
 !>`uni-app` 包为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
 需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式
 
-!>表格和列表由于较难通过模板循环的方式显示，将直接通过 `rich-text` 进行渲染，因此请尽量避免在列表和表格中加入图片或链接，否则将无法预览或点击（但可以正常显示）  
-列表引入 [list 补丁包](#List) 后可以解决这个问题    
+!>表格由于较难通过模板循环的方式显示，将直接通过 `rich-text` 进行渲染，因此请尽量避免在表格中加入图片或链接，否则将无法预览或点击（但可以正常显示）  
 
 > 若需要自定义链接受到点击时的效果，可对 `Parser/trees` 文件夹下的 `trees.wxss` 中的 `navigator-hover` 进行修改（默认下划线+半透明）
 
@@ -568,72 +567,6 @@ error(e){
   }
 }
 ```
-
-### List ### 
-- 背景  
-  在原插件中，由于列表较难通过模拟实现，是直接使用 `rich-text` 来显示列表，这导致列表中的图片无法预览，链接无法点击，此补丁包可以解决这个问题  
-- 功能  
-  模拟 `ol`、`ul`、`li` 标签  
-  `ol` 标签支持 `start` 和 `type` 属性；`ul` 标签会自动根据层级显示不同的样式  
-- 大小  
-  `4.50KB`  
-
-!>此补丁包**仅能**在微信小程序中使用  
-
-- 使用方法  
-  1. 将 `list` 文件夹复制到 `Parser` 文件夹下  
-  2. 将 `trees.li.wxml` 中的内容复制到 `Parser/trees/trees.wxml` 中 列表 的标识处  
-  3. 在 `Parser/trees/trees.json` 中添加
-     ```json
-     "usingComponents": {
-       "trees": "./trees",
-       "ol": "../list/ol",
-       "ul": "../list/ul",
-       "li": "../list/li"
-     }
-     ```  
-  4. 将 `Parser/libs/config.js` 中 `richOnlyTags` 结构体中去掉 `ol`、`ul`、`li`  
-  - 可参考 `demo` 文件夹中的 [Parser](https://github.com/jin-yufeng/Parser/tree/master/demo/wx/Parser)（已装载此补丁包）  
-  
->对于 `ol` 标签，`type` 为阿拉伯数字（默认）时没有数量限制；为字母时最多包含26个子项；为罗马数字时最多包含20个子项  
->不支持 `list-style` 的 `css` 样式，请使用 `type` 属性
-
-- 在其他页面中使用  
-  该包将列表封装成自定义组件，可以直接在其他页面上使用  
-  1. 在需要使用的页面的 `json` 文件中添加
-     ```json
-     {
-       "usingComponents": {
-         "ol": "/Parser/list/ol",
-         "ul": "/Parser/list/ul",
-         "li": "/Parser/list/li"
-       }
-     }
-     ```
-  2. 可以直接使用 `ol`、`ul`、`li` 标签来显示列表  
-     ```html
-     <ol>
-       <li>类型1-1</li>
-       <li>类型1-2</li>
-     </ol>
-     <ol type="A" start="3" style="margin-top:5px;">
-       <li>类型2-3</li>
-       <li>类型2-4</li>
-     </ol>
-     <ol type="I" start="5" style="margin-top:5px;">
-       <li>类型3-5</li>
-       <li>类型3-6</li>
-     </ol>
-     <ul style="margin-top:10px">
-       <li>层级1
-         <ul>
-           <li>层级2
-             <ul><li>层级3</li></ul>
-           </li>
-         </ul>
-       </li>
-     </ul>
-     ```
     
 ### CssHandler ###
 - 功能：支持更多的 `css` 选择器  

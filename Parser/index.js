@@ -196,7 +196,7 @@ Component({
           Parser.CssHandler.getStyle('');
 
           function DFS(nodes) {
-            for (var i = nodes.length, node; node = nodes[--i];) {
+            for (var i = 0, node; node = nodes[i++];) {
               if (node.type == "text") continue;
               node.attrs = node.attrs || {};
               for (var item in node.attrs) {

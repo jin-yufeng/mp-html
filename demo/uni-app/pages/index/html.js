@@ -343,10 +343,9 @@ module.exports = `<style>
     <section style="color:#262626">
         <p style="margin-left:5%;">有序列表
           <ol>
-            <li>
-              <p>多级列表</p>
+            <li>多级列表
               <ol>
-                <li>子标题1</li>
+                <li><a>子标题1</a></li>
                 <li>子标题2</li>
                 <li>子标题3</li>
               </ol>
@@ -361,7 +360,7 @@ module.exports = `<style>
           <ul>
             <li>标题1
               <ul>
-                <li>子标题1</li>
+                <li><a>子标题1</a></li>
                 <li>子标题2</li>
                 <li>子标题3</li>
               </ul>

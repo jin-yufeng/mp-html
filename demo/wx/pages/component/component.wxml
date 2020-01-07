@@ -39,7 +39,6 @@
           <view class="link_h2" hover-class='link-hover' data-section="patches" bindtap="gosection">补丁包</view>
           <view class="link_h3" hover-class='link-hover' data-section="patchEmoji" bindtap="gosection">emoji</view>
           <view class="link_h3" hover-class='link-hover' data-section="patchDocument" bindtap="gosection">document</view>
-          <view class="link_h3" hover-class='link-hover' data-section="patchList" bindtap="gosection">List</view>
           <view class="link_h3" hover-class='link-hover' data-section="patchCssHandler" bindtap="gosection">CssHandler</view>
           <view class="link_h2" hover-class='link-hover' data-section="libRequire" bindtap="gosection">基础库要求</view>
           <view class="link_h2" hover-class='link-hover' data-section="download" bindtap="gosection">下载链接</view>
@@ -290,51 +289,6 @@
           </view>
           <view style="margin-top:5px">示例</view>
           <rich-text nodes="{{apicode}}"></rich-text>
-          <!--List补丁包-->
-          <view id="patchList" style="margin-top:5px">
-            3.
-            <code>List</code>
-          </view>
-          <view>功能：模拟实现列表（在原插件中，由于列表较难模拟实现，是直接通过
-            <code>rich-text</code>组件显示，这将导致列表中的图片无法预览，链接无法点击等问题，本补丁包可以解决这个问题）</view>
-          <view>
-            <code>ol</code>组件支持
-            <code>start</code>和
-            <code>type</code>属性；
-            <code>ul</code>组件支持按照层级自动变化符号，这几个组件同样可以在其他页面使用</view>
-          <view style="margin-top:5px">在其他页面使用：
-            <view>在使用页面的
-              <code>json</code>文件中加入以下内容即可直接使用
-              <code>ol</code>、
-              <code>ul</code>、
-              <code>li</code>标签</view>
-            <rich-text nodes="{{listJson2}}"></rich-text>
-            <view>示例：</view>
-            <rich-text nodes="{{listWxml}}"></rich-text>
-            <ol>
-              <li>类型1-1</li>
-              <li>类型1-2</li>
-            </ol>
-            <ol type="A" start="3" style="margin-top:5px;">
-              <li>类型2-3</li>
-              <li>类型2-4</li>
-            </ol>
-            <ol type="I" start="5" style="margin-top:5px;">
-              <li>类型3-5</li>
-              <li>类型3-6</li>
-            </ol>
-            <ul style="margin-top:10px">
-              <li>层级1
-                <ul>
-                  <li>层级2
-                    <ul>
-                      <li>层级3</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </view>
           <!--CssHandler补丁包-->
           <view id="patchCssHandler" style="margin-top:5px">
             4.
