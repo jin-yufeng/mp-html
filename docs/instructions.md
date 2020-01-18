@@ -3,9 +3,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 46.7KB | 微信小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.3KB | 微信小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 61.2KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 46.9KB | 微信小程序插件包 |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.4KB | 微信小程序插件包压缩版（功能相同） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 61.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
 1. 百度小程序和支付宝小程序不支持 `lazy-load` 属性
@@ -625,6 +625,7 @@ parser(html).then(function(res){
      ```wxml
      <element wx:elif="{{item.name=='element'}}" xxx="{{item.attrs.xxx}}" />
      ```
+  5. 如果有使用自定义组件或插件需要在 `trees.json` 中声明（可选）  
 
 ## 许可与支持 ##
 - 许可  
@@ -638,14 +639,49 @@ parser(html).then(function(res){
    图片变形一般是由于对 `img` 标签同时设置了 `width` 和 `height`，由于 `max-width:100%` 的限制，宽度被缩小但高度不变导致了变形  
    *解决方案：* 将 `img-mode` 属性设置成 `widthFix`，图片会根据设置的宽度，高度自适应，可解决图片的变形问题，但设置的高度会失效  
 
-2. 禁止横向滚动问题  
+2. 图片间隙问题
+   多张图片连续排列时，由于 `img` 的默认 `display` 是 `inline-block`，每张图片的底部会有空隙，如果不需要，可以对该 `img` 设置 `display:block` 或者 `float:left`  
+   *解决方案：*  
+   - 直接设置行内样式：在需要的 `img` 的 `style` 属性中添加
+   - 通过 `style` 标签添加
+     ```html
+     <style>
+     /* 对所有图片生效 */
+     img {
+       display:block;
+     }
+     /* 对特定 class 的图片生效 */
+     .xximg {
+       display:block;
+     }
+     </style>
+     <img class="xximg" src="xxxx" />
+     ```
+   - 通过 `tag-style` 属性添加（将对所有图片生效）
+     ```javascript
+     data: {
+       tagStyle: {
+         img: "display:block"
+       }
+     }
+     ```
+   - 通过 `wxss` 设置  
+     通过以下方法可以对所有图片生效（所有 `parser` 组件中的图片），必须写在 `trees.wxss` 中，其他写法可能均不能生效（不推荐）
+     ```css
+     ._img {
+       font-size:0;
+       display:block !important;
+     }
+     ```
+
+3. 禁止横向滚动问题  
    默认情况下，当内容超出屏幕宽度时可以横向滚动；如果要禁用滚动，请在 `parser` 标签的 `style` 属性中加上 `overflow: hidden`（如果通过 `class` 设置还要加上 `!important`）  
    *解决方案：*  
    ```wxml
    <parser style="overflow:hidden" html="{{html}}"></parser>
    ```
 
-3. 关于换行符  
+4. 关于换行符  
    `html` 中换行只能使用 `br` 标签，其他的包括 `↵`, `\n` 等都是无效的，只会原样显示  
    *解决方案：*可自行通过正则替换  
    ```javascript
@@ -653,21 +689,21 @@ parser(html).then(function(res){
    html = html.replace(/↵/g,""); // 移除所有↵
    html = html.replace(/↵/g,"<br />") // 全部替换为 br 标签
    ```
-4. 表格和列表中的图片/链接无法点击  
+5. 表格和列表中的图片/链接无法点击  
    由于表格和列表较难模拟，将直接通过 `rich-text` 显示，因此其中的图片和链接将无法点击  
    *解决方案：*列表可以通过引入 [List补丁包](#List) 解决（仅能用于微信原生包）；表格由于 `colspan` 和 `rowspan` 无法模拟，目前只有 `rich-text` 能够有最佳的显示效果；请尽量避免在其中使用图片或链接，否则将无法点击  
 
-5. 关于 `img`  
+6. 关于 `img`  
    本插件用 `rich-text` 中的 `img` 显示图片而不是用 `image` 组件，原因在于 `img` 更贴近于 `html` 中图片的显示模式：在没有设置宽高时，自动按原大小显示；设置了宽或高时，按比例进行缩放；同时设置了宽高时，按设置的值显示。若用 `image` 组件实现这样的效果需要较为复杂的处理，且需要多次 `setData`，影响性能。  
    但也因此会存在一些问题，如 `img` 加载失败时没有 `error` 回调、无法使用 `lazy-load`（目前已通过其他方式实现）、无法使用微信小程序中的 `show-menu-by-longpress`（长按识别小程序码，但在预览时可以）等
 
-6. 关于编辑器  
+7. 关于编辑器  
    本插件没有专门配套的富文本编辑器，一般来说，能够导出 `html` 的富文本编辑器都是支持的；另外本插件仅支持显示富文本，没有编辑功能  
   
-7. 部分 `style` 标签中的样式无法被匹配  
+8. 部分 `style` 标签中的样式无法被匹配  
    本插件并不是支持所有的选择器，请留意支持的选择器类型，如果用了不支持的选择器，该样式将被忽略  
   
-8. 不能正确显示一些网站的问题  
+9. 不能正确显示一些网站的问题  
    很多网站的内容是在 `js` 脚本中动态加载的，这些内容在本插件解析中将被直接忽略（包括 `iframe` 视频）；本插件并不能替代 `web-view` 的功能，仅建议用于富文本编辑器编辑的富文本或简单的静态网页  
 
 ### 反馈问题 ###

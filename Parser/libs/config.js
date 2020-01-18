@@ -100,15 +100,9 @@ module.exports = {
           node.attrs.src = node.attrs.src || node.attrs["data-src"];
           node.attrs['data-src'] = undefined;
         }
-        if (node.attrs.src) {
-          if (!node.attrs.ignore) {
-            if (bubbling(Parser)) node.attrs.i = (Parser._imgNum++).toString();
-            else node.attrs.ignore = "true";
-          }
-          if (Parser._domain && node.attrs.src[0] == '/') {
-            if (node.attrs.src[1] == '/') node.attrs.src = Parser._protocol + ":" + node.attrs.src;
-            else node.attrs.src = Parser._domain + node.attrs.src;
-          }
+        if (node.attrs.src && !node.attrs.ignore) {
+          if (bubbling(Parser)) node.attrs.i = (Parser._imgNum++).toString();
+          else node.attrs.ignore = "true";
         }
         break;
       case 'a':
@@ -162,13 +156,13 @@ module.exports = {
         }
         break;
     }
-    if (Parser._domain && node.attrs.style.includes("url"))
-      node.attrs.style = node.attrs.style.replace(/url\s*\(['"\s]*(\S*?)['"\s]*\)/, function() {
-        var src = arguments[1];
-        if (src && src[0] == '/') {
-          if (src[1] == '/') return "url(" + Parser._protocol + ':' + src + ')';
-          else return "url(" + Parser._domain + src + ')';
-        } else return arguments[0];
+    if (node.attrs.style.includes("url"))
+      node.attrs.style = node.attrs.style.replace(/url\s*\(['"\s]*(.*?)['"]*\)/, function($, $1) {
+        if ($1 && $1[0] == '/') {
+          if ($1[1] == '/') return "url(" + Parser._protocol + ':' + $1 + ')';
+          else if (Parser._domain) return "url(" + Parser._domain + $1 + ')';
+        }
+        return $;
       })
     if (!node.attrs.style) node.attrs.style = undefined;
     if (Parser._useAnchor && node.attrs.id) bubbling(Parser);

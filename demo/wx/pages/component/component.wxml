@@ -291,7 +291,7 @@
           <rich-text nodes="{{apicode}}"></rich-text>
           <!--CssHandler补丁包-->
           <view id="patchCssHandler" style="margin-top:5px">
-            4.
+            3.
             <code>CssHandler</code>
           </view>
           <view>功能：支持更多的

@@ -330,6 +330,14 @@ Page({
       code: "border:1px solid #cccccc;border-radius:3px"
     },
     update: `<ul>
+    <li>2020.1.18:
+      <ol>
+        <li><code>U</code> <code>domain</code>属性支持自动填充所有<code>src</code>属性的值（包括视频、音频、图片；协议名默认<code>http</code>）</li>
+        <li><code>U</code> 优化了实体的处理（支持所有形如<code>&amp;#123;</code>的实体编码）</li>
+        <li><code>F</code> 修复了图片一开始裂开之后又好了的问题</li>
+      </ol>
+    </li>
+    </br>
     <li>2020.1.7:
       <ol>
         <li><code>U</code> 支持模拟显示<code>li</code>, <code>ol</code>, <code>ul</code>标签（即可以在其中放图片、链接、视频等，支持<code>ol</code>的<code>type</code>属性，支持多层<code>ul</code>）</li>
@@ -419,13 +427,6 @@ Page({
     <li>2019.10.24:
       <ol>
         <li><code>U</code><code>uni-app</code>包支持在<code>APP</code>端使用</li>
-      </ol>
-    </li>
-    </br>
-    <li>2019.10.17:
-      <ol>
-        <li><code>A</code> 增加了<code>CssHandler</code>补丁包（可支持多层的<code>css</code>选择器）</li>
-        <li><code>U</code> <code>uni-app</code>包支持在<code>H5</code>端使用</li>
       </ol>
     </li>
   </ul>`

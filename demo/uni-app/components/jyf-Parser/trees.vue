@@ -226,9 +226,14 @@
 				});
 			},
 			loadSource(target) {
-				var index = (this.controls[target.id] ? this.controls[target.id].index : 0) + 1;
-				if (index < target.dataset.source.length) {
-					this.$set(this.controls[target.id], "index", index);
+				if (target.dataset.source.length <= 1) return false;
+				if (!this.controls[target.id]) {
+					this.$set(this.controls, target.id, {
+						index: 1
+					})
+					return true;
+				} else if (this.controls[target.id] && this.controls[target.id].index < target.dataset.source.length) {
+					this.$set(this.controls[target.id], "index", this.controls[target.id].index + 1);
 					return true;
 				}
 				return false;

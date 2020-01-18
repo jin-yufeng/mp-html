@@ -153,8 +153,8 @@ Component({
     this.setContent = (html, options, obversed) => {
       if (typeof options == "object")
         for (var key in options) {
-          key = key.replace(/-(\w)/g, function() {
-            return arguments[1].toUpperCase();
+          key = key.replace(/-(\w)/g, function($, $1) {
+            return $1.toUpperCase();
           })
           this.data[key] = options[key];
         }

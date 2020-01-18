@@ -20,7 +20,7 @@ class MpHtmlParser {
     this._attrValue = '';
     this._attrs = {};
     this._domain = options.domain;
-    this._protocol = options.domain ? (options.domain.includes("://") ? this._domain.split("://")[0] : "http") : undefined;
+    this._protocol = options.domain && options.domain.includes("://") ? this._domain.split("://")[0] : "http";
     this._i = 0;
     this._sectionStart = 0;
     this._state = this.Text;
@@ -37,8 +37,8 @@ class MpHtmlParser {
     if (emoji) this.data = emoji.parseEmoji(this.data);
     // 高亮处理
     if (config.highlight)
-      this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]*?)<\/[pP][rR][eE][\s\S]*?>/g, function() {
-        return "<pre" + arguments[1] + '>' + config.highlight(arguments[2], "<pre" + arguments[1] + '>') + "</pre>";
+      this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]*?)<\/[pP][rR][eE][\s\S]*?>/g, function($, $1, $2) {
+        return "<pre" + $1 + '>' + config.highlight($2, "<pre" + $1 + '>') + "</pre>";
       })
     for (var len = this.data.length; this._i < len; this._i++)
       this._state(this.data[this._i]);
@@ -52,8 +52,13 @@ class MpHtmlParser {
   };
   // 设置属性
   setAttr() {
-    if (config.trustAttrs[this._attrName])
+    if (config.trustAttrs[this._attrName]) {
+      if (this._attrName == "src" && this._attrValue[0] == '/') {
+        if (this._attrValue[1] == '/') this._attrValue = this._protocol + ':' + this._attrValue;
+        else if (this._domain) this._attrValue = this._domain + this._attrValue;
+      }
       this._attrs[this._attrName] = (this._attrValue ? this._attrValue : (this._attrName == "src" ? "" : "true"));
+    }
     this._attrValue = '';
     while (config.blankChar[this.data[this._i]]) this._i++;
     if (this.checkClose()) this.setNode();
@@ -70,20 +75,21 @@ class MpHtmlParser {
       if (!has) return;
       text = tmp.join('');
     }
-    while (text.includes("&nbsp;")) text = text.replace("&nbsp;", '\u00A0');
-    // 检查实体
+    // 处理实体
     var i = text.indexOf('&'),
-      j, decode;
-    while (i != -1 && i < text.length) {
-      j = text.indexOf(';', i);
-      if (j - i >= 2 && j - i <= 7) {
-        var entity = text.substring(i, j);
-        if (!entity.includes("sp") && !entity.includes("lt") && !entity.includes("gt")) {
-          decode = true
-          break;
-        }
+      j, u, decode;
+    while (i != -1) {
+      j = text.indexOf(';', i + 2);
+      if (j == -1) break;
+      if (text[i + 1] == '#') {
+        u = parseInt((text[i + 2] == 'x' ? '0' : '') + text.substring(i + 2, j));
+        if (!isNaN(u)) text = text.substring(0, i) + String.fromCharCode(u) + text.substring(j + 1);
+      } else {
+        u = text.substring(i + 1, j);
+        if (u == "nbsp") text = text.substring(0, i) + '\u00A0' + text.substring(j + 1); // 解决连续 &nbsp; 失效的问题
+        else if (u != "lt" && u != "gt" && u != "amp" && u != "ensp" && u != "emsp") decode = true;
       }
-      i = text.indexOf('&', i + 1);
+      i = text.indexOf('&', i + 2);
     }
     var slibings = this._STACK.length ? this._STACK[this._STACK.length - 1].children : this.DOM;
     if (slibings.length && slibings[slibings.length - 1].type == "text") {

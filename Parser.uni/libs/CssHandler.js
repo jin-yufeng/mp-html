@@ -11,8 +11,8 @@ class CssHandler {
 	};
 	getStyle(data) {
 		var style = '';
-		data = data.replace(/<[sS][tT][yY][lL][eE][\s\S]*?>([\s\S]*?)<\/[sS][tT][yY][lL][eE][\s\S]*?>/g, function() {
-			style += arguments[1];
+		data = data.replace(/<[sS][tT][yY][lL][eE][\s\S]*?>([\s\S]*?)<\/[sS][tT][yY][lL][eE][\s\S]*?>/g, function($, $1) {
+			style += $1;
 			return '';
 		})
 		this.styles = new CssParser(style, this.styles).parse();

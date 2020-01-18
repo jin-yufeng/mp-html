@@ -47,9 +47,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| Parser | 46.7KB | 微信小程序插件包 |
-| Parser.min | 31.3KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.uni | 61.2KB | `uni-app` 插件包（可以编译到所有平台） |
+| Parser | 46.9KB | 微信小程序插件包 |
+| Parser.min | 31.4KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.uni | 61.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -159,9 +159,9 @@
 |:---:|:---:|:---:|
 | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374" width="200" /> | <img src="https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg" width="200" /> | <img src="https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg" width="200" /> | 
 
-| 恋爱宝典xcx | 恋爱宝典（QQ） |
-|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200"> | <img src="https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png" width="200"> |
+| 恋爱宝典xcx | 恋爱宝典（QQ） | 飞马港 |
+|:---:|:---:|:---:|
+| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200"> | <img src="https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png" width="200"> | <img src="https://mpkf.weixin.qq.com/cgi-bin/kfgetimgdata?fansuin=1232521380&msgid=1738&source=acceptedmsg&token=981852383&mode=large" width="200"> |
 
 欢迎添加：[链接](https://github.com/jin-yufeng/Parser/issues/27)  
 
@@ -179,6 +179,10 @@
 
 
 ## 更新日志 ##
+- 2020.1.18
+  1. `U` `domain` 属性支持自动填充所有 `src` 属性的值（包括视频、音频、图片；协议名默认 `http`）  
+  2. `U` 优化了实体的处理（支持所有形如 `&#123;` 的实体编码）  
+  3. `F` 修复了图片一开始裂开之后又好了的问题
 - 2019.1.7
   1. `U` 支持模拟显示 `li`, `ol`, `ul` 标签（即可以在其中放图片、链接、视频等，支持 `ol` 的 `type` 属性，支持多层 `ul`，暂不支持 `list-style` 的 `css` 样式）
   2. `D` 删除了 `List` 补丁包（在主包中已经默认支持）  
@@ -194,29 +198,5 @@
   5. `F` 修复了一个样式优先级的错误（属性样式的优先级应该最低）[详细](https://github.com/jin-yufeng/Parser/issues/67)  
 - 2019.12.21  
   1. `F` 修复了使用 `font` 标签的 `size` 属性报错的问题 [详细](https://github.com/jin-yufeng/Parser/issues/63)
-- 2019.12.15:
-  1. `A` 增加 `setContent` 的 `api`，用于设置 `string` 类型的数据，可以减少一次 `setData` [详细](https://jin-yufeng.github.io/Parser/#/instructions#setcontent)  
-  2. `A` 增加 `imgList` 的 `api`，可以获取封面、设置缩略图等 [详细](https://jin-yufeng.github.io/Parser/#/instructions#imglist)
-  3. `U` `a` 标签支持了 `app-id` 和 `path` 属性，可以跳转其他小程序（需要在 `app.json` 中配置跳转名单）  
-  4. `U` `domain` 属性支持自动补全 `css` 中 `url` 的路径
-  5. `U` `cache-id` 属性更名为 `use-cache`，只用选择是否使用缓存即可，缓存 `id` 会自动通过 `hash` 函数获取  
-  6. `U` `html` 属性传入 `array` 类型时即使没有设置 `continue`，组件也会自动进行设置（即可以传入和 `rich-text` 完全相同的格式）[详细](https://jin-yufeng.github.io/Parser/#/instructions#组件属性)  
-  7. `U` 所有内置样式选择器名改为以下划线开头，避免与自定义样式的选择器冲突  
-  8. `U` `document` 补丁包增加 `getStyle` 和 `setStyle` 方法（返回值格式有更改） [详细](https://jin-yufeng.github.io/Parser/#/instructions#document)  
-  9. `D` 废弃了 `html` 属性的 `object` 类型，请直接将 `html` 设置成原 `object.nodes`（即 `array` 类型，`imgList` 等其他信息可直接从 `nodes` 中获取） [详细](https://jin-yufeng.github.io/Parser/#/instructions#组件属性)  
-  10. `D` 删除了 `animation-duration` 属性，需要修改动画时长的，可直接在 `index.js` 中修改  
-  11. `D` 不再对百度版插件包进行维护，如有需要可从过去版本获取  
-- 2019.12.10:
-  1. `A` 增加了 `cache-id` 属性，可以将解析结果缓存到 `globalData` 中，多次打开不用重复解析 [详细](https://jin-yufeng.github.io/Parser/#/instructions#组件属性)  
-  2. `A` 增加了 `getText` 的 `api`，可以获取到一个富文本中的所有文本内容 [详细](https://jin-yufeng.github.io/Parser/#/instructions#gettext)  
-  3. `A` 增加了 `getVideoContext` 的 `api`，可以获取到视频的 `context` 对象，用于操作播放状态 [详细](https://jin-yufeng.github.io/Parser/#/instructions#getvideocontext)  
-  4. `A` 增加了 `highlight` 代码高亮处理接口 [详细](https://jin-yufeng.github.io/Parser/#/instructions#配置项)  
-  5. `A` 增加了长内容的解决方案 [详细](https://jin-yufeng.github.io/Parser/#/instructions#长内容处理)  
-  6. `U` 重构了解析脚本，提高了解析速度，减小了包的大小  
-  7. `U` 解决了微信最新版开发者工具会报 `wx:key="" does not look like a valid key name` 的警告的问题  
-  8. `U` `error` 回调将返回该视频的 `context` 对象，可以修改播放源 [详细](https://jin-yufeng.github.io/Parser/#/instructions#回调函数)  
-  9. `F` 修复了 `uni-app` 包编译到 `H5` 时在微信内置浏览器中无法显示、存在多个 `parser` 标签时相互覆盖等问题 [详细](https://github.com/jin-yufeng/Parser/issues/59)  
-  
-  *此版本较之前版本在 `api` 和补丁包的引入方式上有不兼容的地方，请注意*
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

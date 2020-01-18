@@ -374,8 +374,8 @@
 			setContent(html, options, observed) {
 				if (typeof options == "object")
 					for (var key in options) {
-						key = key.replace(/-(\w)/g, function() {
-							return arguments[1].toUpperCase();
+						key = key.replace(/-(\w)/g, function($, $1) {
+							return $1.toUpperCase();
 						})
 						this[key] = options[key];
 					}
@@ -396,7 +396,7 @@
 						}
 					} else this.nodes = parseHtmlSync(html, this);
 					this.$emit('parse', this.nodes);
-				} else if (html.constructor == Array) {
+				} else if (Object.prototype.toString.call(html) == "[object Array]") {
 					if (!observed) this.nodes = html;
 					else this.nodes = [];
 					// 非本插件产生的 array 需要进行一些转换

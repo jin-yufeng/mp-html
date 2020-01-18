@@ -43,7 +43,7 @@ module.exports = {
       item.attrs.style = item.attrs.style.toLowerCase().replace(getRegExp("width[^;]*?%", "g"), "width:100%").replace(getRegExp('margin[^;]+', "g"), "");
     if (imgMode == "widthFix") item.attrs.style = (item.attrs.style || '') + ";height:auto !important";
     if (!imgLoad) {
-      item.attrs.src = "";
+      delete item.attrs.src;
       item.attrs.style += ";width:20px !important;height:20px !important";
     }
     return [item];
