@@ -108,8 +108,7 @@ export default{
 平台差异：  
 1. `a` 标签 `autocopy` 属性的表现效果：`H5` 中将直接跳转对应网页；小程序和 `APP` 中将复制链接；`APP` 中建议在 `@linkpress` 回调中跳转到 `web-view` 页面（可参考示例项目）  
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
-3. 仅微信小程序、`QQ` 小程序、百度小程序支持 `ad` 组件  
-4. 微信小程序、`QQ` 小程序、`H5`、`APP` 支持所有实体编码  
-5. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`  
-6. 支付宝小程序不支持 `autopause` 属性  
-7. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
+3. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
+4. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`  
+5. 支付宝小程序不支持 `autopause` 属性  
+6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  

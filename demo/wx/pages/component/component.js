@@ -33,7 +33,7 @@ Page({
       attrs: 'alt, src, height, width, ignore'
     }, {
       name: 'video',
-      attrs: 'src, controls, loop, autoplay, \nmuted, height, width, unit-id'
+      attrs: 'src, controls, loop, autoplay, \nmuted, height, width, unit-id, \nposter'
     }, {
       name: 'audio',
       attrs: 'src, controls, loop, autoplay, \nposter, name, author'
@@ -330,6 +330,14 @@ Page({
       code: "border:1px solid #cccccc;border-radius:3px"
     },
     update: `<ul>
+    <li>2020.1.20:
+      <ol>
+        <li><code>U</code> <code>video</code>增加支持<code>poster</code>属性</li>
+        <li><code>F</code> 修复了部分情况下表格处理出错的问题</li>
+        <li><code>F</code> 修复了使用单独的<code>&lt;/p></code>出错的问题</li>
+      </ol>
+    </li>
+    </br>
     <li>2020.1.18:
       <ol>
         <li><code>U</code> <code>domain</code>属性支持自动填充所有<code>src</code>属性的值（包括视频、音频、图片；协议名默认<code>http</code>）</li>

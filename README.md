@@ -48,8 +48,8 @@
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
 | Parser | 46.9KB | 微信小程序插件包 |
-| Parser.min | 31.4KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.uni | 61.6KB | `uni-app` 插件包（可以编译到所有平台） |
+| Parser.min | 31.5KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.uni | 61.9KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -161,7 +161,7 @@
 
 | 恋爱宝典xcx | 恋爱宝典（QQ） | 飞马港 |
 |:---:|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200"> | <img src="https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png" width="200"> | <img src="https://mpkf.weixin.qq.com/cgi-bin/kfgetimgdata?fansuin=1232521380&msgid=1738&source=acceptedmsg&token=981852383&mode=large" width="200"> |
+| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200"> | <img src="https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png" width="200"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657" width="200"> |
 
 欢迎添加：[链接](https://github.com/jin-yufeng/Parser/issues/27)  
 
@@ -179,6 +179,11 @@
 
 
 ## 更新日志 ##
+- 2020.1.19
+  1. `U` `video` 标签增加支持 `poster` 属性  
+  2. `F` 修复了部分情况下表格处理出错的问题 [详细](https://github.com/jin-yufeng/Parser/issues/77)  
+  3. `F` 修复了使用单独的 `</p>` 出错的问题  
+  4. `F` 修复了 `uni-app` 包 `width` 属性处理出错的问题  
 - 2020.1.18
   1. `U` `domain` 属性支持自动填充所有 `src` 属性的值（包括视频、音频、图片；协议名默认 `http`）  
   2. `U` 优化了实体的处理（支持所有形如 `&#123;` 的实体编码）  

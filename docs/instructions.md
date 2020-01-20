@@ -4,16 +4,16 @@
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
 | [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 46.9KB | 微信小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.4KB | 微信小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 61.6KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.5KB | 微信小程序插件包压缩版（功能相同） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 61.9KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
-1. 百度小程序和支付宝小程序不支持 `lazy-load` 属性
-2. 仅微信小程序、`QQ`小程序、百度小程序支持 `ad` 组件
-3. 微信小程序、`QQ`小程序、`H5`、`APP` 支持所有实体编码
-4. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`
-5. 支付宝小程序不支持 `autopause` 属性，没有 `getVideoContext` 的 `api`  
-6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性
+1. `a` 标签 `autocopy` 属性的表现效果：`H5` 中将直接跳转对应网页；小程序和 `APP` 中将复制链接；`APP` 中建议在 `@linkpress` 回调中跳转到 `web-view` 页面（可参考示例项目）  
+2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
+3. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
+4. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`  
+5. 支付宝小程序不支持 `autopause` 属性  
+6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
 
 !>百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
 

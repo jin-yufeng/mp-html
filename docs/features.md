@@ -136,7 +136,7 @@ data:{
 
 ### 自动设置标题 ###
 若存在 `title` 标签，将自动把其内容设置到页面标题上（可通过 `autosetTitle` 属性控制）  
-并将在 `parser`（解析完成）回调中返回，可用于转发设置
+并将在 `parse`（解析完成）回调中返回，可用于转发设置
 
 ### 自动填充图片链接 ###
 1. 设置 `domain` 属性后，将自动给图片链接拼接上主域名或协议名
@@ -168,9 +168,8 @@ data:{
 ?>百度小程序的 `rich-text` 本身支持 `selectable` 属性（需要百度 `APP 11.10` 以上）；但微信小程序不支持；本插件**均可实现**支持复制（且**没有版本要求**）  
 
 ### 实体编码支持 ###
-支持各类 `html` 实体编码
+支持所有形如 `&#123;` 的实体编码和大部分常用的形如 `&nbsp;` 的实体编码（微信、QQ、H5、APP 支持全部实体）  
 
-!>微信小程序 / `QQ` 小程序等支持所有 `html` 实体编码；百度小程序等仅支持一些常用的实体编码，如 `&nbsp;`、`&lt;`、`&quot;` 等
 
 ### 智能压缩 ###  
 支持自动通过以下方式对解析结果进行压缩，可以有效提升性能：
@@ -185,7 +184,7 @@ data:{
 | a | href, app-id, path |
 | abbr |  |
 | address |  |
-| ad | unit-id / appid, apid, type |
+| ad | unit-id / appid, apid, type / adpid |
 | article |  |
 | aside |  |
 | audio | author, autoplay, controls, loop, name, poster, src |
@@ -248,7 +247,7 @@ data:{
 | tt |  |
 | u |  |
 | ul |  |
-| video | autoplay, controls, height, loop, muted, src, unit-id, width |
+| video | autoplay, controls, height, loop, muted, poster, src, unit-id, width |
 
 以下标签仅微信小程序基础库 `2.7.1` 以上可用：  
 
@@ -295,6 +294,6 @@ data:{
 
 | 恋爱宝典xcx | 恋爱宝典（QQ） | 飞马港 |
 |:---:|:---:|:---:|
-| ![恋爱宝典xcx](https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg ':size=200') | ![恋爱宝典](https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png ':size=200') | ![飞马港](https://mpkf.weixin.qq.com/cgi-bin/kfgetimgdata?fansuin=1232521380&msgid=1738&source=acceptedmsg&token=981852383&mode=large ':size=200') |
+| ![恋爱宝典xcx](https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg ':size=200') | ![恋爱宝典](https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png ':size=200') | ![飞马港](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657 ':size=200') |
 
 欢迎添加：[链接](https://github.com/jin-yufeng/Parser/issues/27)  

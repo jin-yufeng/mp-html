@@ -37,7 +37,7 @@
 				 :style="item.attrs.style||''" @tap="_loadVideo" />
 				<!--#endif-->
 				<video v-else :src="controls[item.attrs.id]?item.attrs.source[controls[item.attrs.id].index] : item.attrs.src" :id="item.attrs.id"
-				 :loop="item.attrs.loop" :controls="item.attrs.controls" :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
+				 :loop="item.attrs.loop" :controls="item.attrs.controls" :poster="item.attrs.poster" :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
 				 :unit-id="item.attrs['unit-id']" :class="item.attrs.class" :muted="item.attrs.muted" :style="item.attrs.style||''"
 				 :data-source="item.attrs.source" @play="playEvent" @error="videoError" />
 			</view>
@@ -52,13 +52,17 @@
 				<trees :nodes="item.children" :imgMode="imgMode" />
 			</view>
 			<!--广告-->
-			<!--#ifdef MP-WEIXIN || MP-QQ-->
+			<!--#ifdef MP-WEIXIN || MP-QQ || MP-TOUTIAO-->
 			<ad v-else-if="item.name=='ad'" :unit-id="item.attrs['unit-id']" :class="item.attrs.class||''" :style="item.attrs.style||''"
-			 @error="adError"></ad>
+			 @error="adError" />
 			<!--#endif-->
 			<!--#ifdef MP-BAIDU-->
 			<ad v-else-if="item.name=='ad'" :appid="item.attrs.appid" :apid="item.attrs.apid" :type="item.attrs.type" :class="item.attrs.class||''"
-			 :style="item.attrs.style" @error="adError"></ad>
+			 :style="item.attrs.style||''" @error="adError" />
+			<!--#endif-->
+			<!--#ifdef APP-PLUS-->
+			<ad v-else-if="item.name=='ad'" :adpid="item.attrs.adpid" :class="item.attrs.class||''" :style="item.attrs.style||''"
+			 @error="adError" />
 			<!--#endif-->
 			<!--列表-->
 			<view v-else-if="item.name=='li'" :class="(item.attrs.class||'')+' _li'" :style="(item.attrs.style||'')+';display:flex'">

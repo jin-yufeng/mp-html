@@ -297,7 +297,7 @@ class MpHtmlParser {
 					return;
 				}
 				if (elem.type == 'text') return;
-				for (var i = 0; i < elem.children.length; i++)
+				for (var i = 0; i < (elem.children || []).length; i++)
 					setBorder(elem.children[i]);
 			}
 			if (node.attrs.border || node.attrs.hasOwnProperty("cellpadding"))
@@ -427,10 +427,10 @@ class MpHtmlParser {
 				}
 			} else if (name == 'p' || name == "br") {
 				var slibings = this._STACK.length ? this._STACK[this._STACK.length - 1].children : this.DOM;
-				var node = {
-					name
-				}
-				slibings.push(node);
+				slibings.push({
+					name,
+					attrs: {}
+				});
 			}
 			this._i = this.data.indexOf('>', this._i);
 			if (this._i == -1) this._i = this.data.length;

@@ -161,7 +161,7 @@ module.exports = {
 				if (node.name == "video") {
 					node.attrs.style = node.attrs.style || '';
 					if (node.attrs.width) {
-						node.attrs.style = "width:" + parseFloat(node.attrs.width) + (node.attrs.height.includes('%') ? '%' : "px") +
+						node.attrs.style = "width:" + parseFloat(node.attrs.width) + (node.attrs.width.includes('%') ? '%' : "px") +
 							';' + node.attrs.style;
 						node.attrs.width = undefined;
 					}
