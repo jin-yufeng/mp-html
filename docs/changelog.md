@@ -1,5 +1,9 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.01.23 ####
+1. `A` 添加了一个打包工具 [详细](/instructions#打包工具)  
+2. `U` 支持 `rpx`单位  
+
 #### 2020.01.19 ####
 1. `U` `video` 标签增加支持 `poster` 属性  
 2. `F` 修复了部分情况下表格处理出错的问题 [详细](https://github.com/jin-yufeng/Parser/issues/77)  

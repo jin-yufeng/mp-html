@@ -330,6 +330,12 @@ Page({
       code: "border:1px solid #cccccc;border-radius:3px"
     },
     update: `<ul>
+    <li>2020.1.23:
+      <ol>
+        <li><code>U</code> 支持<code>rpx</code>单位</li>
+      </ol>
+    </li>
+    </br>
     <li>2020.1.20:
       <ol>
         <li><code>U</code> <code>video</code>增加支持<code>poster</code>属性</li>

@@ -34,7 +34,7 @@ const ignoreTags = makeMap(
 );
 // 只能用 rich-text 显示的标签（其中图片不能预览、不能显示视频、音频等） 
 const richOnlyTags = makeMap(
-	"a,ad,audio,colgroup,fieldset,legend,sub,sup,table,tbody,td,tfoot,th,thead,tr,video");
+	"a,colgroup,fieldset,legend,sub,sup,table,tbody,td,tfoot,th,thead,tr");
 // 自闭合标签
 const selfClosingTags = makeMap(
 	"area,base,basefont,br,col,circle,ellipse,embed,frame,hr,img,input,isindex,keygen,line,link,meta,param,path,polygon,rect,source,track,use,wbr"
@@ -56,6 +56,7 @@ var userAgentStyles = {
 	s: "text-decoration:line-through",
 	u: "text-decoration:underline"
 };
+const rpx = uni.getSystemInfoSync().screenWidth / 750;
 // #ifndef MP-ALIPAY || H5
 const SDKVersion = uni.getSystemInfoSync().SDKVersion;
 
@@ -194,6 +195,10 @@ module.exports = {
 				}
 				return $;
 			})
+		if (node.attrs.style.includes("rpx"))
+			node.attrs.style = node.attrs.style.replace(/[0-9.]*rpx/, function($) {
+				return parseFloat($) * rpx + "px";
+			})
 		if (!node.attrs.style) node.attrs.style = undefined;
 		if (Parser._useAnchor && node.attrs.id) bubbling(Parser);
 	},
@@ -207,5 +212,6 @@ module.exports = {
 	// #ifndef MP-ALIPAY || H5
 	versionHigherThan,
 	// #endif
-	makeMap
+	makeMap,
+	rpx
 }

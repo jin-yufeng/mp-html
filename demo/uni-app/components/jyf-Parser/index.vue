@@ -184,12 +184,10 @@
 				}
 				if (typeof html != 'string') html = this.Dom2Str(html.nodes || html);
 				// 处理 rpx
-				if (/[0-9.]*?rpx/.test(html)) {
-					const rpx = uni.getSystemInfoSync().screenWidth / 750;
-					html = html.replace(/([0-9.]*?)rpx/g, function() {
-						return parseFloat(arguments[1]) * rpx + "px";
+				if (html.includes("rpx"))
+					html = html.replace(/[0-9.]*rpx/g, function($) {
+						return parseFloat($) * config.rpx + "px";
 					})
-				}
 				// 处理 tag-style 和 userAgentStyles
 				var style = "<style>";
 				for (var item in config.userAgentStyles)

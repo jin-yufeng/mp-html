@@ -47,9 +47,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| Parser | 46.9KB | 微信小程序插件包 |
-| Parser.min | 31.5KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.uni | 61.9KB | `uni-app` 插件包（可以编译到所有平台） |
+| Parser | 47.1KB | 微信小程序插件包 |
+| Parser.min | 31.6KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.uni | 62.0KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -179,6 +179,9 @@
 
 
 ## 更新日志 ##
+- 2020.1.23
+  1. `A` 添加了一个打包工具 [详细](https://jin-yufeng.github.io/Parser/#/instructions?id=打包工具)  
+  2. `U` 支持 `rpx` 单位  
 - 2020.1.19
   1. `U` `video` 标签增加支持 `poster` 属性  
   2. `F` 修复了部分情况下表格处理出错的问题 [详细](https://github.com/jin-yufeng/Parser/issues/77)  
@@ -201,7 +204,5 @@
   3. `U` `h1-6` 标签支持通过组件递归显示（即可以在其中使用图片、链接等）  
   4. `U` 解决了 `Audits` 测评中 `a` 标签可点击元素的响应区域过小的问题  
   5. `F` 修复了一个样式优先级的错误（属性样式的优先级应该最低）[详细](https://github.com/jin-yufeng/Parser/issues/67)  
-- 2019.12.21  
-  1. `F` 修复了使用 `font` 标签的 `size` 属性报错的问题 [详细](https://github.com/jin-yufeng/Parser/issues/63)
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

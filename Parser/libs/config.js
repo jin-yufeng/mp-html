@@ -15,7 +15,7 @@ const blockTags = makeMap("address,article,aside,body,center,cite,footer,header,
 // 被移除的标签（其中 svg 系列标签会被转为图片）
 const ignoreTags = makeMap("area,base,basefont,canvas,circle,command,ellipse,embed,frame,head,iframe,input,isindex,keygen,line,link,map,meta,param,path,polygon,rect,script,source,svg,textarea,track,use,wbr");
 // 只能用 rich-text 显示的标签（其中图片不能预览、不能显示视频、音频等）
-const richOnlyTags = makeMap("a,ad,audio,colgroup,fieldset,legend,sub,sup,table,tbody,td,tfoot,th,thead,tr,video");
+const richOnlyTags = makeMap("a,colgroup,fieldset,legend,sub,sup,table,tbody,td,tfoot,th,thead,tr");
 // 自闭合标签
 const selfClosingTags = makeMap("area,base,basefont,br,col,circle,ellipse,embed,frame,hr,img,input,isindex,keygen,line,link,meta,param,path,polygon,rect,source,track,use,wbr");
 // 空白字符
@@ -35,6 +35,7 @@ const userAgentStyles = {
   s: "text-decoration:line-through",
   u: "text-decoration:underline"
 };
+const rpx = wx.getSystemInfoSync().screenWidth / 750;
 // 版本兼容（基础库 2.7.1 以上 rich-text 增加支持大量标签）
 const SDKVersion = wx.getSystemInfoSync().SDKVersion;
 
@@ -163,6 +164,10 @@ module.exports = {
           else if (Parser._domain) return "url(" + Parser._domain + $1 + ')';
         }
         return $;
+      })
+    if (node.attrs.style.includes("rpx"))
+      node.attrs.style = node.attrs.style.replace(/[0-9.]*rpx/, function($) {
+        return parseFloat($) * rpx + "px";
       })
     if (!node.attrs.style) node.attrs.style = undefined;
     if (Parser._useAnchor && node.attrs.id) bubbling(Parser);

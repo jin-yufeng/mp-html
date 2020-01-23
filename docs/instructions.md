@@ -3,9 +3,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 46.9KB | 微信小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.5KB | 微信小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 61.9KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 47.1KB | 微信小程序插件包 |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.6KB | 微信小程序插件包压缩版（功能相同） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 62.0KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
 1. `a` 标签 `autocopy` 属性的表现效果：`H5` 中将直接跳转对应网页；小程序和 `APP` 中将复制链接；`APP` 中建议在 `@linkpress` 回调中跳转到 `web-view` 页面（可参考示例项目）  
@@ -25,6 +25,10 @@
 > 若需要自定义链接受到点击时的效果，可对 `Parser/trees` 文件夹下的 `trees.wxss` 中的 `navigator-hover` 进行修改（默认下划线+半透明）
 
 以下统称为 `Parser`  
+
+### 打包工具 ###
+本插件提供了一个打包工具（`pack.jar` 是可执行文件，`pack.java` 是源代码），可以按需生成需要的插件包  
+![打包工具](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md7.png?sign=0e1d048ea91f4154a0a53ab55b45e4ca&t=1579784564)
 
 ### 在原生框架中使用 ###
 1. 下载 [Parser](#插件包说明) 文件夹至小程序目录  
@@ -507,7 +511,7 @@ console.log(versionHigherThan("2.7.1"));
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
-  !>在 uni-app 中使用时需要将 index.vue 中的 33 行修改为 const Document = require('./document.js');  
+  !>在 uni-app 中使用时需要将 index.vue 中的 33 行修改为 const Document = require('./libs/document.js');  
   
 document 类：  
 获取方式：可通过 `this.selectComponent("#id").document` 获取  
