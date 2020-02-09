@@ -118,7 +118,6 @@
 | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
 | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
 | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
-| animation-duration | Number | 400 | 否 | 动画持续时间 |
 | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 |
 | use-cache | Boolean | false | 否 | 是否使用缓存，设置后将会把解析结果进行缓存，下次打开不用重复解析 |
   
@@ -159,9 +158,9 @@
 |:---:|:---:|:---:|
 | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374" width="200" /> | <img src="https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg" width="200" /> | <img src="https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg" width="200" /> | 
 
-| 恋爱宝典xcx | 恋爱宝典（QQ） | 飞马港 |
+| 恋爱宝典xcx | 飞马港 | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) |
 |:---:|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200"> | <img src="https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png" width="200"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657" width="200"> |
+| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657" width="200"> | <img src="https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg" width="200"> |
 
 欢迎添加：[链接](https://github.com/jin-yufeng/Parser/issues/27)  
 

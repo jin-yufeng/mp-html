@@ -92,7 +92,8 @@ data:{
 
 ### 懒加载 ###
 - 图片  
-  通过设置 `lazy-load` 属性，可以实现图片懒加载，在图片进入当前可视范围上下 `1000px` 范围内时再进行加载
+  通过设置 `lazy-load` 属性，可以实现图片懒加载，在图片进入当前可视范围上下 `1000px` 范围内时再进行加载  
+
 - 视频  
   当视频数量超过三个时，将仅加载前三个视频，其他的用图片代替，避免一次加载过多视频导致卡死  
   另外通过设置 `autopause` 可以实现播放一个视频时自动暂停其他所有视频
@@ -292,8 +293,8 @@ data:{
 |:---:|:---:|:---:|
 | ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374 ':size=200') | ![多么生活](https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg ':size=200') | ![SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg ':size=200') |
 
-| 恋爱宝典xcx | 恋爱宝典（QQ） | 飞马港 |
+| 恋爱宝典xcx | 飞马港 | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) |
 |:---:|:---:|:---:|
-| ![恋爱宝典xcx](https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg ':size=200') | ![恋爱宝典](https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png ':size=200') | ![飞马港](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657 ':size=200') |
+| ![恋爱宝典xcx](https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg ':size=200') | ![飞马港](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657 ':size=200') | ![程序员技术之旅](https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg ':size=200') |
 
 欢迎添加：[链接](https://github.com/jin-yufeng/Parser/issues/27)  

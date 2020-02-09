@@ -77,7 +77,6 @@ export default{
   | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
   | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
   | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
-  | animation-duration | Number | 400 | 否 | 动画持续时间 |
   | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 |
   | use-cache | Boolean | false | 否 | 是否使用缓存，设置后将会把解析结果进行缓存，下次打开不用重复解析 |
 

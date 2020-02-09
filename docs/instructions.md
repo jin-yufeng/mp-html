@@ -246,25 +246,11 @@ linkpress(e){
 | ignoreTags | 移除的标签列表 |
 | selfClosingTags | 自闭合的标签列表 |
 | userAgentStyles | 默认的样式 |
-| highlight | 高亮处理函数 |
+| highlight | [高亮处理函数](#处理代码高亮) |
 | LabelAttrsHandler | 标签属性处理函数 |
 | trustAttrs | 信任的属性 |
 
 ?>配置项在 `/libs/config.js` 中配置，对所有 `parser` 标签生效
-
-- 关于高亮函数  
-  高亮函数用于实现代码高亮，这里留有一个接口，如有需要可自行实现此函数。高亮处理函数的输入值有两个，第一个是 `pre` 标签的内容，第二个是该 `pre` 标签的属性列表（可以记录语言信息等），返回值是高亮处理后的 `html` 文本；示例（以 [prismjs](https://prismjs.com/) 为例）：
-
-  ```javascript
-  // libs/config.js
-  const Prism = require('./prism.js');
-  var highlight = (content, attrs) => Prism.highlight(content, Prism.languages.javascript, 'javascript');
-  ```
-  同时需要通过 [外部样式](#使用外部样式) 或 `style` 标签引入高亮样式
-  ```css
-  /* trees/trees.wxss */
-  @import '../libs/prism.wxss';
-  ```
 
 !>不在信任的属性列表中的属性将被移除  
 不在信任的标签列表中的标签，除被移除的标签外，块级标签列表中的标签将被转为 `div` 标签，其他被转为 `span` 标签
@@ -327,8 +313,8 @@ Page({
 | 版本 | 功能 | 覆盖率 |
 |:---:|:---:|:---:|
 | >=2.2.5 | 全部正常 | 99.19% |
-| 1.9.3-2.2.4 | 不支持部分 html 实体 | 0.68% |
-| 1.6.3-1.9.2 | 不支持部分 html 实体<br>不支持 lazy-load 属性 | 0.05% |
+| 1.9.3-2.2.4 | 不支持个别 html 实体 | 0.68% |
+| 1.6.3-1.9.2 | 不支持个别 html 实体<br>不支持 lazy-load 属性 | 0.05% |
 | <1.6.6 | 无法使用 | 0.05% |
 
 !>使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
@@ -483,6 +469,7 @@ console.log(versionHigherThan("2.7.1"));
 
 ## 补丁包 ##
 [patches](https://github.com/jin-yufeng/Parser/tree/master/patches) 文件夹中准备了一些补丁包，可根据需要选用，可以实现更加丰富的功能  
+> 可以通过 [打包工具](#打包工具) 打包需要的插件包  
 
 ### emoji ###  
 - 功能  
@@ -614,22 +601,96 @@ parser(html).then(function(res){
 ```
 详细文档参考： [npm链接](https://www.npmjs.com/package/parser-wxapp)
 
-## 二次开发 ##
+## 原理和二次开发 ##
+
+### 原理简介 ###  
+本插件对于节点下有 图片 链接 视频 等特殊标签的，通过 `trees` 组件递归显示，否则直接通过 `rich-text` 组件显示，通过这样的方式，既可以充分利用 `rich-text` 渲染效果好，效率高的优点，也解决了 `rich-text` 屏蔽所有事件的问题，同时通过一些特殊处理，可以实现更加丰富的功能。  
+详细可见：[小程序富文本能力的深入研究与应用](https://developers.weixin.qq.com/community/develop/article/doc/0006e05c1e8dd80b78a8d49f356413)  
+
+### 流程图 ###
 - 解析过程流程图  
   ![解析流程图](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E8%A7%A3%E6%9E%90%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?sign=e56509c626c1466e4fc61128f784acbc&t=1575800648)  
   
 - 渲染过程流程图  
   ![渲染流程图](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?sign=3a3b10fe783bc068ad5f6800badf4f14&t=1575800687)  
 
-- 如何添加一个自定义标签  
-  1. 在 `config.js` 中的 `trustAttrs` 中添加需要用到的属性  
-  2. 在 `config.js` 中的 `trustTags` 中添加该标签名（如果该标签不能被 `trees` 组件模拟，还需要添加到 `richOnlyTags`）  
-  3. 在 `config.js` 中的 `LabelAttrHandler` 中进行自定义的属性处理（可选）  
-  4. 在 `trees.wxml` 中添加该组件
-     ```wxml
-     <element wx:elif="{{item.name=='element'}}" xxx="{{item.attrs.xxx}}" />
-     ```
-  5. 如果有使用自定义组件或插件需要在 `trees.json` 中声明（可选）  
+### 添加一个自定义标签 ###  
+1. 在 `config.js` 中的 `trustAttrs` 中添加需要用到的属性（否则将被移除）  
+2. 在 `config.js` 中的 `trustTags` 中添加该标签名（否则将被转为 `span`）  
+3. 在 `config.js` 中的 `LabelAttrHandler` 中添加  
+   ```javascript
+   case "element":     // 标签名
+     bubbling(Parser); // 对该标签所有祖先节点添加一个标记，使得该标签不被 rich-text 包含，而是通过 trees 组件递归显示其祖先节点
+     // 如果还需要自定义处理某些属性也可以在这里添加
+     break;
+   ```  
+4. 在 `trees.wxml` 中添加该组件  
+   ```wxml
+   <element wx:elif="{{item.name=='element'}}" xxx="{{item.attrs.xxx}}">
+     <!--如果该标签内部还有其他节点还需要在这里添加一个 trees 标签-->
+   </element>
+   ```
+5. 如果有使用自定义组件或插件需要在 `trees.json` 中声明（可选）  
+  
+### 添加自定义事件 ### 
+为节省大小，默认情况下仅支持 `img` 和 `a` 标签的点击事件，如果还需要其他事件，可以自行在 `trees.wxml` 中绑定和处理  
+
+!> 如果给除 `img`、`a`、`video`、`audio` 外的标签添加事件，还需要在 `config.js` 中的 `LabelAttrHandler` 中添加  
+```javascript
+case "element":     // 标签名
+  bubbling(Parser); // 对该标签所有祖先节点添加一个标记，使得该标签不被 rich-text 包含，而是通过 trees 组件递归显示其祖先节点
+  break;
+```
+
+### 处理代码高亮 ###  
+本插件给代码高亮留有一个接口，在 `config.js` 的 `highlight` 函数，默认为 `null`，如有需要可自行实现此函数。高亮处理函数的输入值有两个，第一个是 `pre` 标签的内容，第二个是该 `pre` 标签的属性列表（可以记录语言信息等），返回值是高亮处理后的 `html` 文本  
+示例（以 [prismjs](https://prismjs.com/) 为例）：
+
+```html
+<pre lan="c">int a;
+a = 3;</pre>
+```
+
+1. 下载需要的 `prism.js` 和 `prism.css` 至 `libs` 目录（`css` 更名为 `wxss`）  
+2. 在 `config.js` 的 `trustAttrs` 中添加 `lan`（标记语言信息）
+3. 在 `config.js` 中实现 `highlight` 函数
+   ```javascript
+   // config.js
+   const Prism = require('./prism.js');
+   module.exports = {
+     // 高亮处理函数
+     highlight(content, attrs) {
+       var lan = attrs.match(/lan\s*=\s*["'](.*?)["']/);
+       if (!lan)
+         return content; // 没有设置语言
+       lan = lan[1];
+       switch (lan) {
+         case "javascript":
+         case "js":
+           return Prism.highlight(content, Prism.languages.javascript, "javascript");
+         case "html":
+           return Prism.highlight(content, Prism.languages.html, "html");
+         case "css":
+           return Prism.highlight(content, Prism.languages.css, "css");
+         case "c":
+         case "cpp":
+           return Prism.highlight(content, Prism.languages.clike, "clike");
+         default:
+           return content;
+       }
+     },
+     ...
+   }
+   ```
+4. 在 `trees.wxss` 中引入样式
+   ```css
+   /* trees/trees.wxss */
+   @import '../libs/prism.wxss';
+   ```
+5. 其中部分不支持的选择器（标签名选择器）可以通过 [tag-style](/features#设置默认的标签样式) 属性引入  
+  
+最终效果：  
+![高亮效果](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md8.png?sign=e613714b597ceb1fa6d5b802a54fd246&t=1581226152)
 
 ## 许可与支持 ##
 - 许可  
@@ -639,53 +700,129 @@ parser(html).then(function(res){
 
 ## 问题反馈 ##
 ### 常见问题 ###
-1. 图片变形问题  
-   图片变形一般是由于对 `img` 标签同时设置了 `width` 和 `height`，由于 `max-width:100%` 的限制，宽度被缩小但高度不变导致了变形  
-   *解决方案：* 将 `img-mode` 属性设置成 `widthFix`，图片会根据设置的宽度，高度自适应，可解决图片的变形问题，但设置的高度会失效  
 
-2. 图片间隙问题
-   多张图片连续排列时，由于 `img` 的默认 `display` 是 `inline-block`，每张图片的底部会有空隙，如果不需要，可以对该 `img` 设置 `display:block` 或者 `float:left`  
-   *解决方案：*  
-   - 直接设置行内样式：在需要的 `img` 的 `style` 属性中添加
-   - 通过 `style` 标签添加
-     ```html
-     <style>
-     /* 对所有图片生效 */
-     img {
-       display:block;
-     }
-     /* 对特定 class 的图片生效 */
-     .xximg {
-       display:block;
-     }
-     </style>
-     <img class="xximg" src="xxxx" />
-     ```
-   - 通过 `tag-style` 属性添加（将对所有图片生效）
-     ```javascript
-     data: {
-       tagStyle: {
-         img: "display:block"
-       }
-     }
-     ```
-   - 通过 `wxss` 设置  
-     通过以下方法可以对所有图片生效（所有 `parser` 组件中的图片），必须写在 `trees.wxss` 中，其他写法可能均不能生效（不推荐）
-     ```css
-     ._img {
-       font-size:0;
-       display:block !important;
-     }
-     ```
+#### 图片变形问题 ####  
+图片变形一般是由于对 `img` 标签同时设置了 `width` 和 `height`，由于 `max-width:100%` 的限制，宽度被缩小但高度不变导致了变形  
+  
+*解决方案：* 将 `img-mode` 属性设置成 `widthFix`，图片会根据设置的宽度，高度自适应，可解决图片的变形问题，但设置的高度会失效  
+  
+*相关 issue：*[#7](https://github.com/jin-yufeng/Parser/issues/7)
 
-3. 禁止横向滚动问题  
-   默认情况下，当内容超出屏幕宽度时可以横向滚动；如果要禁用滚动，请在 `parser` 标签的 `style` 属性中加上 `overflow: hidden`（如果通过 `class` 设置还要加上 `!important`）  
-   *解决方案：*  
+#### 图片间隙问题 ####
+多张图片连续排列时，由于 `img` 的默认 `display` 是 `inline-block`，每张图片的底部会有空隙，如果不需要，可以对该 `img` 设置 `display:block` 或者 `float:left`  
+  
+*解决方案：*  
+1. 直接设置行内样式  
+   在需要的 `img` 的 `style` 属性中添加  
+2. 通过 `style` 标签添加
+   ```html
+   <style>
+   /* 对所有图片生效 */
+   img {
+     display:block;
+   }
+   /* 对特定 class 的图片生效 */
+   .xximg {
+     display:block;
+   }
+   </style>
+   <img class="xximg" src="xxxx" />
+   ```
+3. 通过 `tag-style` 属性添加（将对所有图片生效）  
+   ```wxml
+   <parser html="{{html}}" tag-style="{{tagStyle}}"></parser>
+   ```
+   ```javascript
+   data: {
+     tagStyle: {
+       img: "display:block"
+     }
+   }
+   ```
+4. 通过 `wxss` 设置  
+   通过以下方法可以对所有图片生效（所有 `parser` 组件中的图片），必须写在 `trees.wxss` 中，其他写法可能均不能生效（不推荐）
+   ```css
+   ._img {
+     font-size:0;
+     display:block !important;
+   }
+   ```  
+  
+*相关 issue：*[#25](https://github.com/jin-yufeng/Parser/issues/25)、[#65](https://github.com/jin-yufeng/Parser/issues/65)、[#74](https://github.com/jin-yufeng/Parser/issues/74)
+
+#### 图片懒加载问题 ####  
+部分情况下，可能出现懒加载无效的问题，可以检查是否存在以下问题  
+1. 懒加载的属性名是 `lazy-load` 或 `lazyLoad` 而不是 `lazyload`  
+2. 图片懒加载仅对当前视图以下 `1000px` 以外的图片才有效，请确认文章是否有这么长  
+3. 文章全是图片或有很多图片  
+   图片开始加载的时候，高度会变为 0，然后逐步增加到原大小，这时后面的图片就会进入懒加载的范围而被加载，直到前面图片加载完的部分高度超过懒加载的阈值范围后才会停止加载，因此如果图片很多或全是图片可能一次加载过多图片。这时可以给 `img` 设置一个 `min-height`（可以设置为所有图片高度的最小值），可以一定程度上解决这个问题。
+   ```css
+   /* trees.wxss
+      也可以通过 style 标签或 tag-style 属性设置
+   */
+   ._img {
+     min-height: 225px;
+   }
+   ```  
+4. 所有图片或很多图片都在一个 `div` 内  
+   为节省 `setData` 的次数，懒加载以一个 `div` 为单位，即一个 `div` 内所有图片一次性加载，而不是每张图片都需要进行一次 `setData`，因此如果一个 `div` 里有过多 `img` 也会一次性加载，如果需要单独加载需要给 `img` 套上一个 `div`  
+
+#### 云文件 ID 问题 ####  
+默认情况下不支持云文件 ID 链接（`cloud://`）
+    
+*解决方案：*  
+如果需要使用，可以通过以下代码进行转换（会一定程度上增加解析时间）
+```javascript
+// 假设 html 为需要进行解析的字符串
+var cloudUrls = html.match(/cloud:\/\/[^'">\)\s]*/g);
+wx.cloud.getTempFileURL({
+  fileList: cloudUrls,
+  success: (res) => {
+    for(var i = 0; i < cloudUrls.length; i++) {
+      if (res.fileList[i].tempFileURL)
+        html = html.replace(cloudUrls[i], res.fileList[i].tempFileURL);
+    }
+    // 将 html 传给本插件
+    this.setData({
+      html
+    })
+  },
+  fail: (err) => {
+    console.error(err)
+    this.setData({
+      html
+    })
+  }
+})
+```
+
+#### 横向滚动的问题 ####  
+从其他网站或编辑器中移植富文本时可能因为手机屏幕宽度小而导致内容超出宽度出现滚动条  
+  
+*解决方案：*  
+1. 禁用滚动  
+   在 `parser` 标签的 `style` 属性中加上 `overflow: hidden`（如果通过 `class` 设置还要加上 `!important`）即可禁用横向滚动  
    ```wxml
    <parser style="overflow:hidden" html="{{html}}"></parser>
+   ```  
+2. 通过 `tag-style` 设置 `max-width:100%`  
+   ```wxml
+   <parser html="{{html}}" tag-style="{{tagStyle}}"></parser>
    ```
+   ```javascript
+   data: {
+     tagStyle: {
+       p: "max-width:100%",
+       div: "max-width:100%",
+       section: "max-width:100%"
+     }
+   }
+   ```  
+  
+*相关 issue：*[#6](https://github.com/jin-yufeng/Parser/issues/6)、[#44](https://github.com/jin-yufeng/Parser/issues/44)、[#50](https://github.com/jin-yufeng/Parser/issues/50)、[#66](https://github.com/jin-yufeng/Parser/issues/66)
 
-4. 关于换行符  
+#### 其他问题 ####
+1. 关于换行符  
    `html` 中换行只能使用 `br` 标签，其他的包括 `↵`, `\n` 等都是无效的，只会原样显示  
    *解决方案：*可自行通过正则替换  
    ```javascript
@@ -693,21 +830,21 @@ parser(html).then(function(res){
    html = html.replace(/↵/g,""); // 移除所有↵
    html = html.replace(/↵/g,"<br />") // 全部替换为 br 标签
    ```
-5. 表格和列表中的图片/链接无法点击  
-   由于表格和列表较难模拟，将直接通过 `rich-text` 显示，因此其中的图片和链接将无法点击  
-   *解决方案：*列表可以通过引入 [List补丁包](#List) 解决（仅能用于微信原生包）；表格由于 `colspan` 和 `rowspan` 无法模拟，目前只有 `rich-text` 能够有最佳的显示效果；请尽量避免在其中使用图片或链接，否则将无法点击  
+2. 表格的图片/链接无法点击  
+   表格由于 `colspan` 和 `rowspan` 无法模拟，目前只有 `rich-text` 能够有最佳的显示效果；请尽量避免在其中使用图片或链接，否则将无法点击  
 
-6. 关于 `img`  
+3. 关于 `img`  
    本插件用 `rich-text` 中的 `img` 显示图片而不是用 `image` 组件，原因在于 `img` 更贴近于 `html` 中图片的显示模式：在没有设置宽高时，自动按原大小显示；设置了宽或高时，按比例进行缩放；同时设置了宽高时，按设置的值显示。若用 `image` 组件实现这样的效果需要较为复杂的处理，且需要多次 `setData`，影响性能。  
    但也因此会存在一些问题，如 `img` 加载失败时没有 `error` 回调、无法使用 `lazy-load`（目前已通过其他方式实现）、无法使用微信小程序中的 `show-menu-by-longpress`（长按识别小程序码，但在预览时可以）等
 
-7. 关于编辑器  
+4. 关于编辑器  
    本插件没有专门配套的富文本编辑器，一般来说，能够导出 `html` 的富文本编辑器都是支持的；另外本插件仅支持显示富文本，没有编辑功能  
+   *相关 issue：*[#10](https://github.com/jin-yufeng/Parser/issues/10)
   
-8. 部分 `style` 标签中的样式无法被匹配  
+5. 部分 `style` 标签中的样式无法被匹配  
    本插件并不是支持所有的选择器，请留意支持的选择器类型，如果用了不支持的选择器，该样式将被忽略  
   
-9. 不能正确显示一些网站的问题  
+6. 不能正确显示一些网站的问题  
    很多网站的内容是在 `js` 脚本中动态加载的，这些内容在本插件解析中将被直接忽略（包括 `iframe` 视频）；本插件并不能替代 `web-view` 的功能，仅建议用于富文本编辑器编辑的富文本或简单的静态网页  
 
 ### 反馈问题 ###
