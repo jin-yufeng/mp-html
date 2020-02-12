@@ -6,23 +6,18 @@
  author：JinYufeng
 -->
 <template>
-	<view>
-		<!--#ifdef H5-->
-		<slot v-if="!html&&!nodes.length"></slot>
-		<div :id="'rtf'+uid" :style="(selectable?'user-select:text;-webkit-user-select:text;':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')"></div>
-		<!--#endif-->
-		<!--#ifndef H5-->
+	<view style="display: inherit;">
 		<slot v-if="(!html||!html.length||(!html[0].name&&!html[0].type))&&!nodes.length"></slot>
-		<!--#endif-->
-		<!--#ifdef MP-ALIPAY-->
-		<view class="_contain" :style="(selectable?'user-select:text;-webkit-user-select:text;':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')">
-			<trees :nodes="nodes.length?nodes:(html[0].name||html[0].type?html:[])" :imgMode="imgMode" />
+		<view class="_contain" :style="(selectable?'user-select:text;-webkit-user-select:text;':'')+(showWithAnimation?'opacity:0;':'')+'display:inherit;'"
+		 :animation="showAnimation" @tap="tap" @touchstart="touchstart" @touchmove="touchmove">
+			<!--#ifdef H5-->
+			<div :id="'rtf'+uid"></div>
+			<!--#endif-->
+			<!--#ifndef H5-->
+			<trees :nodes="nodes.length?nodes:(html&&html.length&&(html[0].name||html[0].type)?html:[])" :imgMode="imgMode"
+			 :loadVideo="loadVideo" />
+			<!--#endif-->
 		</view>
-		<!--#endif-->
-		<!--#ifndef MP-ALIPAY || H5-->
-		<trees class="_contain" :style="'display:block;'+(selectable?'user-select:text;-webkit-user-select:text;':'')+(showWithAnimation?('opacity:0;'+showAnimation):'')"
-		 :nodes="nodes.length?nodes:(html&&html.length&&(html[0].name||html[0].type)?html:[])" :imgMode="imgMode" :loadVideo="loadVideo" />
-		<!--#endif-->
 	</view>
 </template>
 
@@ -41,8 +36,9 @@
 	};
 	// #endif
 	// 动画
-	const showAnimation =
-		"transition:400ms ease 0ms;transition-property:transform,opacity;transform-origin:50% 50% 0;-webkit-transition:400ms ease 0ms;-webkit-transform:;-webkit-transition-property:transform,opacity;-webkit-transform-origin:50% 50% 0;opacity: 1"
+	const showAnimation = uni.createAnimation({
+		timingFunction: "ease"
+	}).opacity(1).step().export();
 	const config = require('./libs/config.js');
 	// #ifdef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
 	// 图片链接去重
@@ -80,61 +76,67 @@
 		},
 		// #endif
 		props: {
-			'html': {
+			"html": {
 				type: null,
 				default: null
 			},
-			'autocopy': {
+			"autocopy": {
 				type: Boolean,
 				default: true
 			},
 			// #ifndef MP-ALIPAY
-			'autopause': {
+			"autopause": {
 				type: Boolean,
 				default: true
 			},
 			// #endif
-			'autopreview': {
+			"autopreview": {
 				type: Boolean,
 				default: true
 			},
-			'autosetTitle': {
+			"autosetTitle": {
 				type: Boolean,
 				default: true
 			},
-			'domain': {
+			"domain": {
 				type: String,
 				default: null
 			},
-			'imgMode': {
+			// #ifndef MP-BAIDU || MP-ALIPAY
+			"gestureZoom": {
+				type: Boolean,
+				default: false
+			},
+			// #endif
+			"imgMode": {
 				type: String,
 				default: 'default'
 			},
 			// #ifdef MP-WEIXIN || MP-QQ || H5 || APP-PLUS
-			'lazyLoad': {
+			"lazyLoad": {
 				type: Boolean,
 				default: false
 			},
 			// #endif
-			'selectable': {
+			"selectable": {
 				type: Boolean,
 				default: false
 			},
-			'tagStyle': {
+			"tagStyle": {
 				type: Object,
 				default: () => {
 					return {};
 				}
 			},
-			'showWithAnimation': {
+			"showWithAnimation": {
 				type: Boolean,
 				default: false
 			},
-			'useAnchor': {
+			"useAnchor": {
 				type: Boolean,
 				default: false
 			},
-			'useCache': {
+			"useCache": {
 				type: Boolean,
 				default: false
 			}
@@ -589,6 +591,50 @@
 				}
 			},
 			// #endif
+			tap(e) {
+				// #ifndef MP-BAIDU || MP-ALIPAY
+				if (this.gestureZoom && e.timeStamp - this.lastTime < 300) {
+					this.animation = uni.createAnimation({
+						transformOrigin: (e.touches[0].pageX - e.currentTarget.offsetLeft) + "px " + (e.touches[0].pageY - e.currentTarget
+							.offsetTop) + "px 0"
+					})
+					// #ifdef MP-TOUTIAO
+					this.animation.opacity(1);
+					// #endif
+					if (this.zoomIn)
+						this.animation.scale(1).step();
+					else {
+						this.animation.scale(2).step();
+						this.translateX = 0;
+					}
+					this.zoomIn = !this.zoomIn;
+					this.showAnimation = this.animation.export();
+				}
+				this.lastTime = e.timeStamp;
+				// #endif
+			},
+			touchstart(e) {
+				// #ifndef MP-BAIDU || MP-ALIPAY
+				if (e.touches.length == 1)
+					this.lastX = e.touches[0].pageX;
+				// #endif
+			},
+			touchmove(e) {
+				// #ifndef MP-BAIDU || MP-ALIPAY
+				var diff = e.touches[0].pageX - this.lastX;
+				if (this.zoomIn && e.touches.length == 1 && Math.abs(diff) > 20) {
+					this.translateX += diff;
+					if (Math.abs(this.translateX) < 100)
+						this.animation.translateX(this.translateX).step();
+					else {
+						this.animation.translateX(0).scale(1).step();
+						this.zoomIn = false;
+					}
+					this.showAnimation = this.animation.export();
+					this.lastX = e.touches[0].pageX;
+				}
+				// #endif
+			},
 			getVideoContext(id) {
 				if (!id) return this.videoContexts;
 				else

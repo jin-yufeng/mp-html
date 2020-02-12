@@ -108,8 +108,7 @@ class CssParser {
 		} else if (!config.blankChar[c]) {
 			if (this._comma) {
 				this._state = this.StyleName;
-				this._sectionStart = this._i;
-				this._i--;
+				this._sectionStart = this._i--;
 				this._comma = false;
 			} else this._state = this.Ignore;
 		}

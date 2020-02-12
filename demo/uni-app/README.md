@@ -46,19 +46,20 @@
 
 ## 使用方法 ##
 ```html
-<parser :html="html"></parser>
+<jyf-parser :html="html"></jyf-parser>
 ```
 ```javascript
-import parser from "@/components/jyf-Parser/index"
+import parser from "@/components/jyf-parser/jyf-parser"; // HBuilderX 2.5.5 及以上可以不需要
 export default{
- components: {
-   parser
- },
- data() {
-   return {
-     html: '<div>Hello World!</div>'
-   }
- }
+  // HBuilderX 2.5.5 及以上可以不需要
+  components: {
+    "jyf-parser": parser
+  },
+  data() {
+    return {
+      html: '<div>Hello World!</div>'
+    }
+  }
 }
 ```
 
@@ -73,6 +74,7 @@ export default{
   | autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 |
   | autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题上 |
   | domain | String |  | 否 | 主域名，设置后将对于图片地址将自动拼接主域名或协议名 |
+  | gesture-zoom | Boolean | false | 否 | 是否开启双击缩放 |
   | img-mode | String | default | 否 | 图片显示模式 |
   | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
   | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
@@ -107,7 +109,8 @@ export default{
 平台差异：  
 1. `a` 标签 `autocopy` 属性的表现效果：`H5` 中将直接跳转对应网页；小程序和 `APP` 中将复制链接；`APP` 中建议在 `@linkpress` 回调中跳转到 `web-view` 页面（可参考示例项目）  
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
-3. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
-4. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`  
-5. 支付宝小程序不支持 `autopause` 属性  
-6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
+3. 百度、支付宝小程序不支持 `gesture-zoom` 属性  
+4. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
+5. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`  
+6. 支付宝小程序不支持 `autopause` 属性  
+7. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  

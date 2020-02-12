@@ -2,7 +2,10 @@
 const htmls = require('./htmls.js');
 Page({
   onLoad(e) {
-    this.selectComponent("#article").setContent(htmls['demo' + e.index]);
+    // 第二篇文章禁用双击缩放
+    this.selectComponent("#article").setContent(htmls['demo' + e.index], e.index == "2" ? {
+      "gesture-zoom": false
+    } : {});
   },
   onError(e) {
     console.error(e)

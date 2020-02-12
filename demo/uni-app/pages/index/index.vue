@@ -1,13 +1,13 @@
 <template>
 	<view>
-		<parser @parse="parse" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error"
-		 show-with-animation lazy-load :autocopy="autocopy" use-anchor ref="rtf" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la">加载中...</parser>
+		<jyf-parser @parse="parse" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error" gesture-zoom
+		 show-with-animation lazy-load :autocopy="autocopy" use-anchor ref="rtf" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la">加载中...</jyf-parser>
 	</view>
 </template>
 
 <script>
-	import parser from "@/components/jyf-Parser/index"
-	const versionHigherThan = require("@/components/jyf-Parser/libs/config.js").versionHigherThan;
+	import parser from "@/components/jyf-parser/jyf-parser"; // HBuilderX 2.5.5 及以上可以不需要
+	const versionHigherThan = require("@/components/jyf-parser/libs/config.js").versionHigherThan;
 	const testHtml = require("./html.js");
 	export default {
 		data() {
@@ -20,8 +20,9 @@
 				// #endif
 			}
 		},
+		// HBuilderX 2.5.5 及以上可以不需要
 		components: {
-			parser
+			"jyf-parser": parser
 		},
 		onLoad() {
 			// #ifndef MP-ALIPAY || H5 || APP-PLUS 

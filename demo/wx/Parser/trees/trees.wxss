@@ -1,5 +1,5 @@
 /* 可在这里引入需要的自定义样式 */
-
+@import "../libs/prism.wxss";
 /* 链接受到点击的hover-class，可自定义修改 */
 .navigator-hover {
   opacity: 0.7;

@@ -47,9 +47,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| Parser | 47.1KB | 微信小程序插件包 |
-| Parser.min | 31.6KB | 微信小程序插件包压缩版（功能相同） |
-| Parser.uni | 62.0KB | `uni-app` 插件包（可以编译到所有平台） |
+| Parser | 48.4KB | 微信小程序插件包 |
+| Parser.min | 32.5KB | 微信小程序插件包压缩版（功能相同） |
+| Parser.uni | 62.9KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -154,13 +154,13 @@
 
 ## 案例体验 ##
 
-| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | 多么生活 | [SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program) |
-|:---:|:---:|:---:|
-| <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374" width="200" /> | <img src="https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg" width="200" /> | <img src="https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg" width="200" /> | 
+| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | 多么生活 | [SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program) | 飞马港 |
+|:---:|:---:|:---:|:---:|
+| <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374" width="200" /> | <img src="https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg" width="200" /> | <img src="https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg" width="200" /> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657" width="200"> |
 
-| 恋爱宝典xcx | 飞马港 | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) |
-|:---:|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657" width="200"> | <img src="https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg" width="200"> |
+| 恋爱宝典xcx | 恋爱宝典（QQ） | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 古典文学名著阅读 |
+|:---:|:---:|:---:|:---:|
+| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200"> | <img src="https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png" width="200"> | <img src="https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg" width="200"> | <img src="https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567" width="200"> |
 
 欢迎添加：[链接](https://github.com/jin-yufeng/Parser/issues/27)  
 
@@ -178,6 +178,9 @@
 
 
 ## 更新日志 ##
+- 2020.2.12
+  1. `A` 增加了 `gesture-zoom` 属性，可以设置双击缩放（默认 `false`）  
+  2. `U` `uni-app` 包修改命名使得符合 `easycom` 规则（`HBuilder X 2.5.5` 以上可以直接使用，无需引入；**之前版本的引入路径有变化**）[详细](https://github.com/jin-yufeng/Parser/issues/79)  
 - 2020.1.23
   1. `A` 添加了一个打包工具 [详细](https://jin-yufeng.github.io/Parser/#/instructions?id=打包工具)  
   2. `U` 支持 `rpx` 单位  
@@ -197,11 +200,5 @@
 - 2020.1.5
   1. `U` `uni-app` 支持 `APP` 的 `v3` 模式编译  
   2. `U` 精简和优化了部分代码  
-- 2019.12.30  
-  1. `A` 增加支持 `svg` 系列标签（通过转换为 `img` 实现，不可预览，不可响应点击事件） [详细](https://jin-yufeng.github.io/Parser/#/features#svg-支持)  
-  2. `U` 减小了解析结果的大小（去除了一些不必要的内容，约减小 `3%`），减小了包的大小  
-  3. `U` `h1-6` 标签支持通过组件递归显示（即可以在其中使用图片、链接等）  
-  4. `U` 解决了 `Audits` 测评中 `a` 标签可点击元素的响应区域过小的问题  
-  5. `F` 修复了一个样式优先级的错误（属性样式的优先级应该最低）[详细](https://github.com/jin-yufeng/Parser/issues/67)  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

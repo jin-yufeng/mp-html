@@ -166,11 +166,15 @@ data:{
 ### 长按复制 ###
 通过设置`selectable`属性可以实现长按复制任意内容  
 
+?> 如果需要设置局部可复制，可以给对应的标签的 `style` 属性里加上 `user-select:text;-webkit-user-select:text`
+
 ?>百度小程序的 `rich-text` 本身支持 `selectable` 属性（需要百度 `APP 11.10` 以上）；但微信小程序不支持；本插件**均可实现**支持复制（且**没有版本要求**）  
 
 ### 实体编码支持 ###
 支持所有形如 `&#123;` 的实体编码和大部分常用的形如 `&nbsp;` 的实体编码（微信、QQ、H5、APP 支持全部实体）  
 
+### 手势缩放 ###
+通过设置 `gesture-zoom` 属性，可以实现双击缩放，放大局部的内容进行查看。
 
 ### 智能压缩 ###  
 支持自动通过以下方式对解析结果进行压缩，可以有效提升性能：
@@ -289,12 +293,12 @@ data:{
 
 ### 案例体验 ###
 
-| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | 多么生活 | [SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program) |
-|:---:|:---:|:---:|
-| ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374 ':size=200') | ![多么生活](https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg ':size=200') | ![SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg ':size=200') |
+| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | 多么生活 | [SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program) | 飞马港 |
+|:---:|:---:|:---:|:---:|
+| ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374 ':size=200') | ![多么生活](https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg ':size=200') | ![SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg ':size=200') | ![飞马港](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657 ':size=200') |
 
-| 恋爱宝典xcx | 飞马港 | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) |
-|:---:|:---:|:---:|
-| ![恋爱宝典xcx](https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg ':size=200') | ![飞马港](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657 ':size=200') | ![程序员技术之旅](https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg ':size=200') |
+| 恋爱宝典xcx | 恋爱宝典（QQ） | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 古典文学名著阅读 |
+|:---:|:---:|:---:|:---:|
+| ![恋爱宝典xcx](https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg ':size=200') | ![恋爱宝典](https://user-images.githubusercontent.com/22900470/70422223-5ae3e700-1aa6-11ea-97ce-fec96d17408f.png ':size=200') | ![程序员技术之旅](https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg ':size=200') | ![古典文学名著阅读](https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567 ':size=200') |
 
 欢迎添加：[链接](https://github.com/jin-yufeng/Parser/issues/27)  

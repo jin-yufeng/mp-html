@@ -92,12 +92,13 @@ if (versionHigherThan("2.7.1")) {
 	richOnlyTags.ruby = true;
 	richOnlyTags.pre = true;
 	blockTags.pre = undefined;
-} else {
+} else 
+// #endif
+{
 	blockTags.caption = true;
 	userAgentStyles.big = "display:inline;font-size:1.2em";
 	userAgentStyles.small = "display:inline;font-size:0.8em";
 }
-// #endif
 function bubbling(Parser) {
 	for (var i = Parser._STACK.length; i--;) {
 		if (!richOnlyTags[Parser._STACK[i].name])

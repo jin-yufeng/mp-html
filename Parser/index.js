@@ -38,7 +38,7 @@ function Deduplication(src) {
 }
 Component({
   properties: {
-    'html': {
+    "html": {
       type: null,
       value: null,
       observer: function(html) {
@@ -46,51 +46,55 @@ Component({
         this.setContent(html, undefined, true);
       }
     },
-    'autocopy': {
+    "autocopy": {
       type: Boolean,
       value: true
     },
-    'autopause': {
+    "autopause": {
       type: Boolean,
       value: true
     },
-    'autopreview': {
+    "autopreview": {
       type: Boolean,
       value: true
     },
-    'autosetTitle': {
+    "autosetTitle": {
       type: Boolean,
       value: true
     },
-    'domain': {
+    "domain": {
       type: String,
       value: null
     },
-    'imgMode': {
+    "gestureZoom": {
+      type: Boolean,
+      value: false
+    },
+    "imgMode": {
       type: String,
       value: "default"
     },
-    'lazyLoad': {
+    "lazyLoad": {
       type: Boolean,
       value: false
     },
-    'selectable': {
+    "selectable": {
       type: Boolean,
       value: false
     },
-    'tagStyle': {
+    "tagStyle": {
       type: Object,
       value: {}
     },
-    'showWithAnimation': {
+    "showWithAnimation": {
       type: Boolean,
       value: false
     },
-    'useAnchor': {
+    "useAnchor": {
       type: Boolean,
       value: false
     },
-    'useCache': {
+    "useCache": {
       type: Boolean,
       value: false
     }
@@ -289,6 +293,46 @@ Component({
           this.triggerEvent('ready', res);
         }).exec();
       }, 50)
+    }
+  },
+  methods: {
+    tap(e) {
+      if (this.data.gestureZoom && e.timeStamp - this.lastTime < 300) {
+        this.animation = wx.createAnimation({
+          transformOrigin: (e.detail.x - e.currentTarget.offsetLeft) + "px " + (e.detail.y - e.currentTarget.offsetTop) + "px 0"
+        })
+        if (this.zoomIn)
+          this.animation.scale(1).step();
+        else {
+          this.animation.scale(2).step();
+          this.translateX = 0;
+        }
+        this.zoomIn = !this.zoomIn;
+        this.setData({
+          showAnimation: this.animation.export()
+        })
+      }
+      this.lastTime = e.timeStamp;
+    },
+    touchstart(e) {
+      if (e.touches.length == 1)
+        this.lastX = e.touches[0].pageX;
+    },
+    touchmove(e) {
+      var diff = e.touches[0].pageX - this.lastX;
+      if (this.zoomIn && e.touches.length == 1 && Math.abs(diff) > 20) {
+        this.translateX += diff;
+        if (Math.abs(this.translateX) < 100)
+          this.animation.translateX(this.translateX).step();
+        else {
+          this.animation.translateX(0).scale(1).step();
+          this.zoomIn = false;
+        }
+        this.setData({
+          showAnimation: this.animation.export()
+        })
+        this.lastX = e.touches[0].pageX;
+      }
     }
   }
 })

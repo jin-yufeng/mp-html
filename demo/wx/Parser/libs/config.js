@@ -82,9 +82,25 @@ function bubbling(Parser) {
   }
   return true;
 };
+const Prism = require('./prism.js');
 module.exports = {
   // 高亮处理函数
-  highlight: null,
+  highlight(content, attrs) {
+    content = content.replace(/&lt;/g, "<").replace(/&#123;/g, "{");
+    var lan = attrs.match(/lan=["'](.*?)["']/);
+    if(lan) lan = lan[1];
+    else return content;
+    switch (lan) {
+      case "js":
+        return Prism.highlight(content, Prism.languages.javascript, "javascript");
+      case "html":
+        return Prism.highlight(content, Prism.languages.html, "html");
+      case "json":
+        return Prism.highlight(content, Prism.languages.json, "json");
+      default:
+        return content;
+    }
+  },
   // 处理标签的属性，需要通过组件递归方式显示的标签需要调用 bubbling(Parser)
   LabelAttrsHandler(node, Parser) {
     node.attrs.style = Parser.CssHandler.match(node.name, node.attrs, node) + (node.attrs.style || '');

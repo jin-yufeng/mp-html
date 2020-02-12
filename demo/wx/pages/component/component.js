@@ -1,11 +1,11 @@
 // miniprogram/pages/component/component.js
-const code = require('./code.js');
 Page({
   data: {
     page: 1,
     //标签的默认样式
     tagStyle: {
-      code: "font-style:italic;color:#005cc5;margin-left:3px;margin-right:3px;background-color:white"
+      pre: "padding:5px 10px 5px 10px;margin:15px 0 15px 0;border-radius:5px;background:#f5f2f0;text-shadow: 0 1px white;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace",
+      code: "background-color:#f0f0f0;font-size:85%;margin:0 3px 0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace"
     },
     //支持的匹配模式
     styles: [{
@@ -21,12 +21,6 @@ Page({
       example: 'img',
       match: '<img>'
     }],
-    //示例代码
-    stylecode: code.stylecode,
-    tagStylecode: code.tagStylecode,
-    svgcode:code.svgcode,
-    loadingcode: code.loadingcode,
-    sourcecode: code.sourcecode,
     //支持的标签列表
     mediaTags: [{
       name: 'img',
@@ -194,14 +188,68 @@ Page({
     }, {
       name: 'ruby'
     }],
-    //示例代码
-    errorcode: code.errorcode,
-    json: code.json,
-    wxml: code.wxml,
-    js: code.js,
-    uni: code.uni,
-    emoji: code.emoji,
-    apicode: code.apicode,
+    wxUse: `<li style="margin-bottom:5px">在原生框架中使用</li>
+    <ol style="margin-left:5px">
+      <li>下载<code>Parser</code>文件夹（<code>Parser.min</code>是压缩版本，功能相同）至小程序目录</li>
+      <li>在需要使用页面的<code>json</code>文件中添加
+        <pre lan="json" style="margin:8px 0 8px -5px">{
+  "usingComponents": {
+    "parser": "/Parser/index"
+  }
+}</pre>
+      </li>
+      <li>在需要使用页面的<code>wxml</code>文件中添加
+        <pre lan="html" style="margin:8px 0 8px -5px"><parser html="&#123;{html}}" /></pre>
+      </li>
+      <li>在需要使用页面的<code>js</code>文件中添加
+        <pre lan="js" style="margin:8px 0 8px -5px">onLoad(){
+  this.setData({
+    html: "<div>Hello World!</div>"
+  })
+}</pre>
+      </li>
+    </ol>`,
+    uniUse: `<li style="margin-top:5px;margin-bottom:5px">在<code>uni-app</code>中使用</li>
+    <ol style="margin-left:5px">
+      <li>下载<code>Parser.uni</code>文件夹至<code>components</code>目录下（更名为<code>Parser</code>）</li>
+      <li>在需要使用页面的<code>vue</code>文件中添加<pre lan="html" style="margin:8px 0 8px -5px"><template>
+  <view>
+    <jyf-parser :html="html"></jyf-parser>
+  </view>
+</template>
+<script>
+import parser from "@/components/jyf-parser/jyf-parser"; // HbuilderX 2.5.5 及以上可以不需要
+export default {
+  // HbuilderX 2.5.5 及以上可以不需要
+  components: {
+    "jyf-parser": parser
+  },
+  data() {
+    return {
+      html: "<div>Hello World!</div>"
+    }
+  }
+}
+</script></pre>
+      </li>
+    </ol>
+    <li>可以直接通过<code>uni-app</code>插件市场引入：<a href='https://ext.dcloud.net.cn/plugin?id=805'>链接</a></li>
+    <div style="margin-top:5px">在其他框架中使用可见：<a href="https://jin-yufeng.github.io/Parser/#/instructions?id=在其他框架中使用">在其他框架中使用</a></div>`,
+    documentCode: `<pre lan="html"><parser id="article" html="{{html}}" binderror="error" /></pre>
+    <pre lan="js">data: {
+  html: "...<div id='adContainer'><ad unit-id='...'></ad></div>..."
+}
+error(e) {
+  // 广告组件加载出错
+  if(e.detail.source == "ad") {
+    // 获取document
+    var document = this.selectComponent("#article").document;
+    // 查找广告框容器
+    var adContainer = document.getElementById("adContainer");
+    if(adContainer)
+      res.data.setStyle("display", "none"); // 隐藏广告容器
+  }
+}</pre>`,
     //属性
     attrs: [{
       name: 'html',
@@ -236,6 +284,11 @@ Page({
       type: 'String',
       default: '',
       notice: '主域名，设置后将自动给图片链接拼接上主域名或协议名'
+    }, {
+      name: 'gesture-zoom',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否开启双击缩放'
     }, {
       name: 'img-mode',
       type: 'String',
@@ -326,10 +379,13 @@ Page({
       percent: "0.05%"
     }],
     //更新日志
-    codeStyle:{
-      code: "border:1px solid #cccccc;border-radius:3px"
-    },
     update: `<ul>
+    <li>2020.2.12:
+      <ol>
+        <li><code>A</code> 增加了<code>gesture-zoom</code> 属性，可以设置双击缩放（默认<code>false</code>）</li>
+      </ol>
+    </li>
+    </br>
     <li>2020.1.23:
       <ol>
         <li><code>U</code> 支持<code>rpx</code>单位</li>
@@ -423,24 +479,6 @@ Page({
     <li>2019.11.28:
       <ol>
         <li><code>U</code> <code>table</code>标签支持了<code>border</code>, <code>cellpadding</code>, <code>cellspacing</code></li>
-      </ol>
-    </li>
-    </br>
-    <li>2019.10.29:
-      <ol>
-        <li><code>F</code> 修复了部分行内标签被错误换行的问题</li>
-      </ol>
-    </li>
-    </br>
-    <li>2019.10.27:
-      <ol>
-        <li><code>F</code> 修复了部分情况下多张相同的图片仅第一张可显示的问题</li>
-      </ol>
-    </li>
-    </br>
-    <li>2019.10.24:
-      <ol>
-        <li><code>U</code><code>uni-app</code>包支持在<code>APP</code>端使用</li>
       </ol>
     </li>
   </ul>`

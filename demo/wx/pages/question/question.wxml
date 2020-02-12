@@ -16,35 +16,46 @@
         <code>img-mode</code>属性设置为
         <code>widthFix</code>，图片将根据设置的宽度，高度自适应显示，可解决图片的变形问题，但设置的高度会失效</view>
     </view>
-    <view class="weui-article__h2">2. 禁止横向滚动的问题</view>
+    <view class="weui-article__h2">2. 图片间隙问题</view>
     <view class="weui-article__section section">
-      <view>当内容宽度超出页面宽度时，会出现横向滚动条；如果要禁用横向滚动条，请在
+      多张图片连续排列时，由于
+      <code>img</code>的默认
+      <code>display</code>是
+      <code>inline-block</code>，每张图片的底部都会有一个空隙。
+      <view>解决方案：可以给对应的图片的
+        <code>style</code>属性中加上
+        <code>display:block</code>或
+        <code>float:left</code>（也可以通过
+        <code>tag-style</code>属性或
+        <code>style</code>标签设置）</view>
+    </view>
+    <view class="weui-article__h2">3. 横向滚动的问题</view>
+    <view class="weui-article__section section">
+      从其他地方移植富文本时，可能因为移动端屏幕宽度小超出宽度而出现滚动条。
+      <view>解决方案：</view>
+      <view>1. 禁用横向滚动条：在
         <code>parser</code>标签的
         <code>style</code>属性中加上
         <code>overflow:hidden</code>
       </view>
+      <view>2. 通过
+        <code>tag-style</code>属性给
+        <code>p</code>、
+        <code>section</code>、
+        <code>div</code>等标签设置
+        <code>max-width:100%</code>来限制宽度</view>
     </view>
-    <view class="weui-article__h2">3. 关于换行符</view>
+    <view class="weui-article__h2">4. 关于换行符</view>
     <view class="weui-article__section section">
       根据
       <code>html</code>的标准，换行符↵是无效的，只会原样显示，如果要换行应使用
       <code>br</code>标签，可自行通过正则替换
     </view>
-    <view class="weui-article__h2">4. 关于编辑器</view>
+    <view class="weui-article__h2">5. 关于编辑器</view>
     <view class="weui-article__section section">
       本插件没有专门配套的编辑器，一般来说，能够导出
       <code>html</code>的编辑器都是可以的；另外本插件仅能显示富文本，没有编辑的功能。
     </view>
-    <view class="weui-article__h2">5. 部分
-      <code>style</code>标签中的样式无法匹配</view>
-    <view class="weui-article__section section">
-      本插件并不支持所有的选择器，需要留意支持的选择器类型，如果使用了不支持的选择器，该样式将被忽略
-    </view>
-    <view class="weui-article__h2">6. 不能正确显示一些网站的问题</view>
-    <view class="weui-article__section section">
-      <view>很多网站的内容是在
-        <code>js</code>脚本中动态加载的（包括<code>iframe</code>视频），这些内容在插件解析中会被直接忽略，可能导致一些动态加载的复杂网页无法正确显示；本插件不能完全取代
-        <code>web-view</code>的功能，建议用于富文本编辑器中编辑的富文本或简单的静态网页。</view>
-    </view>
+    <parser html="<div>更多常见问题可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions?id=%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98'>常见问题</a></div>" />
   </view>
 </view>

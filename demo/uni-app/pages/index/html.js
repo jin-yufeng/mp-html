@@ -180,6 +180,7 @@ module.exports = `<style>
               <p>引用：<q>这是一句引用的文字</q>，这是<code>code</code>标签</p>
               <p><strong>粗体</strong>与<i>斜体</i></p>
               <p>连续&nbsp;&nbsp;&nbsp;&nbsp;空格</p>
+							<p><big>双击可以缩放</big></p>
               <p><big>大一号</big>正常<small>小一号</small></p>
             </p>
           </section>

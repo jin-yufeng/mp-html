@@ -79,7 +79,7 @@
         <view class="weui-article__section">
           <code>pre</code>标签内的代码将自动高亮显示，自动检测语言，支持80余种风格（详细可参考
           <code>highlightjs</code>官网），示例：
-          <Parser html="{{codedemo}}" />
+          <parser html="{{codedemo}}" />
           <view style="font-size:12px;color:gray;text-align:center;margin-top:-5px;">javascript语言，github-gist风格</view>
         </view>
         <!--智能压缩-->
@@ -105,7 +105,7 @@
             <code>https://</code>开头），设置
             <code>website</code>模式，插件将自动获取该页面的内容并进行解析（仅限简单的静态网页）</view>
           示例：
-          <Parser html="{{website}}" />
+          <parser html='<pre lan="js" style="margin-top:5px">await parser("https://example.com", "website");</pre>' tag-style="{{tagStyle}}" />
         </view>
         <!--支持file模式-->
         <view id="file" class="weui-article__h2">支持
@@ -119,9 +119,10 @@
         <view id="markdown" class="weui-article__h2">支持
           <code>markdown</code>模式</view>
         <view class="weui-article__section">
-          支持解析markdown，包括表格，代码高亮等，例如：
-          <Parser html="<pre># 示例\n| 标题1 | 标题2 |\n|:---:|:---:|\n| 栏目1 | 栏目2 |</pre>" />
-          <Parser html="{{markdown}}" />
+          支持解析
+          <code>markdown</code>，包括表格，代码高亮等，例如：
+          <parser html="<pre># 示例\n| 标题1 | 标题2 |\n|:---:|:---:|\n| 栏目1 | 栏目2 |</pre>" />
+          <parser html="{{markdown}}" />
         </view>
       </view>
       <!--使用方法-->
@@ -130,14 +131,8 @@
         <!--使用步骤-->
         <view id="useStep" class="weui-article__h2">使用步骤</view>
         <view class="weui-article__section">
-          <Parser html="<ol><li>安装支持包</li></ol>" />
-          <view style="margin-left:10%;">
-            <Parser html="{{npm}}" />
-          </view>
-          <Parser html="<ol start=2><li>在需要使用的<code>js</code>文件中添加：</li></ol>" tag-style="{{tagStyle}}" />
-          <view style="margin-left:10%;">
-            <Parser html="{{node}}" />
-          </view>
+          <parser html='<ol><li>安装支持包<pre style="margin:8px 0 8px -5px">npm install parser-wxapp</pre></li><li>在需要使用的<code>js</code>文件中添加：<pre lan="js" style="margin:8px 0 8px -5px">const parser = require("parser-wxapp");\nvar html = "<div>Hello World!</div>";\nparser(html).then(function(res) {\n  console.log(res);\n})</pre></li></ol>'
+            tag-style="{{tagStyle}}" />
         </view>
         <!--参数-->
         <view id="argument" class="weui-article__h2">参数</view>
@@ -185,9 +180,12 @@
             <code>emoji</code>字符😄</view>
           <view style="margin-top:5px">compress：是否进行自动压缩（默认为
             <code>true</code>），打开后会通过移除
-            <code>display:none</code>的节点，移除空标签，合并一些层级等，对于一些复杂的网页能减小大小；将该值设置成2时将进行强力压缩（移除所有标签的<code>id</code>和<code>class</code>属性，移除后不能使用锚点，不能匹配<code>wxss</code>中的样式）</view>
+            <code>display:none</code>的节点，移除空标签，合并一些层级等，对于一些复杂的网页能减小大小；将该值设置成2时将进行强力压缩（移除所有标签的
+            <code>id</code>和
+            <code>class</code>属性，移除后不能使用锚点，不能匹配
+            <code>wxss</code>中的样式）</view>
           <view style="margin-top:5px">maxDepth：前端显示时的最大递归深度，为0或负数时代表不限制（默认为0）。层数超过限制时，会直接使用
-            <code>rich-text</code>显示而不再递归，可能导致图片不能预览，链接无法点击，视频和音频无法显示等问题；但过深的深度可能导致渲染时间较长；对于复杂的内容可以适当进行限制</view>
+            <code>rich-text</code>显示而不再递归，可能导致图片、链接无法点击，视频和音频无法显示等问题；但过深的深度可能导致渲染时间较长；对于复杂的内容可以适当进行限制</view>
         </view>
         <!--返回值-->
         <view id="callback" class="weui-article__h2">返回值</view>
@@ -201,12 +199,12 @@
       <!--下载链接-->
       <view id="download" class="weui-article__h1">下载链接</view>
       <view class="weui-article__section">
-        <Parser html='npm链接：<a href="https://www.npmjs.com/package/parser-wxapp">点击复制链接</a>' />
+        <parser html='npm链接：<a href="https://www.npmjs.com/package/parser-wxapp">点击复制链接</a>' />
       </view>
       <!--更新日志-->
       <view id="update" class="weui-article__h1">更新日志</view>
       <view class="weui-article__section">
-        <Parser html="{{update}}" tag-style="{{codeStyle}}" />
+        <parser html="{{update}}" tag-style="{{tagStyle}}" />
       </view>
     </view>
   </view>

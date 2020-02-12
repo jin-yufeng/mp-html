@@ -1,5 +1,5 @@
 {
   "usingComponents": {
-    "Parser": "/Parser/index"
+    "parser": "/Parser/index"
   }
 }

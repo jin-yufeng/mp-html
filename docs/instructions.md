@@ -3,17 +3,18 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 47.1KB | 微信小程序插件包 |
-| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 31.6KB | 微信小程序插件包压缩版（功能相同） |
-| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 62.0KB | `uni-app` 插件包（可以编译到所有平台） |
+| [Parser](https://github.com/jin-yufeng/Parser/tree/master/Parser) | 48.4KB | 微信小程序插件包 |
+| [Parser.min](https://github.com/jin-yufeng/Parser/tree/master/Parser.min) | 32.5KB | 微信小程序插件包压缩版（功能相同） |
+| [Parser.uni](https://github.com/jin-yufeng/Parser/tree/master/Parser.uni) | 62.9KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
 1. `a` 标签 `autocopy` 属性的表现效果：`H5` 中将直接跳转对应网页；小程序和 `APP` 中将复制链接；`APP` 中建议在 `@linkpress` 回调中跳转到 `web-view` 页面（可参考示例项目）  
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
-3. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
-4. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`  
-5. 支付宝小程序不支持 `autopause` 属性  
-6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
+3. 百度、支付宝小程序不支持 `gesture-zoom` 属性  
+4. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
+5. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`  
+6. 支付宝小程序不支持 `autopause` 属性  
+7. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
 
 !>百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
 
@@ -55,19 +56,20 @@
 
 ### 在uni-app中使用 ###
 - 使用 `uni-app` 包（可以编译到所有小程序平台）  
-  1. 下载 [Parser](#插件包说明) 文件夹到 `components` 目录下（更名为 `Parser`）  
+  1. 下载 [Parser](#插件包说明) 文件夹到 `components` 目录下（更名为 `jyf-parser`）  
   2. 在需要使用页面的`vue`文件中添加  
      ```vue
      <template>
        <view>
-         <parser :html="html"></parser>
+         <jyf-parser :html="html"></jyf-parser>
        </view>
      </template>
      <script>
-     import parser from "@/components/Parser/index"
+     import parser from "@/components/jyf-parser/jyf-parser"; // HbuilderX 2.5.5 及以上可以不需要
      export default{
+       // HbuilderX 2.5.5 及以上可以不需要
        components: {
-         parser
+         "jyf-parser": parser
        },
        data() {
          return {
@@ -158,6 +160,7 @@
 | autopreview | Boolean | true | 否 | 是否允许点击图片时自动预览 | [20190913](/changelog#_20190913) |
 | autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题上 | [20190724](/changelog#_20190724) |
 | domain | String |  | 否 | 主域名，设置后将给图片地址自动拼接上主域名或协议名 | [20191202](/changelog#_20191202) |
+| gesture-zoom | Boolean | false | 否 | 是否开启双击缩放 | [20200212](/changelog#_20200212) |
 | img-mode | String | default | 否 | 图片显示模式 | [20190610](/changelog#_20190610) |
 | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 | [20190928](/changelog#_20190928) |
 | selectable | Boolean | false | 否 | 是否允许长按复制内容 | [20190603](/changelog#_20190603) |
@@ -837,14 +840,17 @@ wx.cloud.getTempFileURL({
    本插件用 `rich-text` 中的 `img` 显示图片而不是用 `image` 组件，原因在于 `img` 更贴近于 `html` 中图片的显示模式：在没有设置宽高时，自动按原大小显示；设置了宽或高时，按比例进行缩放；同时设置了宽高时，按设置的值显示。若用 `image` 组件实现这样的效果需要较为复杂的处理，且需要多次 `setData`，影响性能。  
    但也因此会存在一些问题，如 `img` 加载失败时没有 `error` 回调、无法使用 `lazy-load`（目前已通过其他方式实现）、无法使用微信小程序中的 `show-menu-by-longpress`（长按识别小程序码，但在预览时可以）等
 
-4. 关于编辑器  
+4. 关于 `markdown`  
+   插件本身不支持 `markdown`，如果需要可先自行通过 `markdown` 库转为 `html` 后再进行解析和显示，其中一些标签的默认样式可以放在 `tag-style` 属性中  
+
+5. 关于编辑器  
    本插件没有专门配套的富文本编辑器，一般来说，能够导出 `html` 的富文本编辑器都是支持的；另外本插件仅支持显示富文本，没有编辑功能  
    *相关 issue：*[#10](https://github.com/jin-yufeng/Parser/issues/10)
   
-5. 部分 `style` 标签中的样式无法被匹配  
+6. 部分 `style` 标签中的样式无法被匹配  
    本插件并不是支持所有的选择器，请留意支持的选择器类型，如果用了不支持的选择器，该样式将被忽略  
   
-6. 不能正确显示一些网站的问题  
+7. 不能正确显示一些网站的问题  
    很多网站的内容是在 `js` 脚本中动态加载的，这些内容在本插件解析中将被直接忽略（包括 `iframe` 视频）；本插件并不能替代 `web-view` 的功能，仅建议用于富文本编辑器编辑的富文本或简单的静态网页  
 
 ### 反馈问题 ###

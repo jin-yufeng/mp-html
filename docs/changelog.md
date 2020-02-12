@@ -1,5 +1,9 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.02.12 ####
+1. `A` 增加了 `gesture-zoom` 属性，可以设置双击缩放（默认 `false`）
+2. `U` `uni-app` 包修改命名使得符合 `easycom` 规则（`HBuilder X 2.5.5` 以上可以直接使用，无需引入；**之前版本的引入路径有变化**）[详细](https://github.com/jin-yufeng/Parser/issues/79)
+
 #### 2020.01.23 ####
 1. `A` 添加了一个打包工具 [详细](/instructions#打包工具)  
 2. `U` 支持 `rpx`单位  

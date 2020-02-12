@@ -26,9 +26,10 @@ page {
   font-size: 14px;
 }
 code {
-  font-style: italic;
-  color: #005cc5;
-  margin-left: 1px;
+  background-color: #f0f0f0;
+  font-size: 85%;
   margin-right: 3px;
-  font-family: monospace;
+  padding: 2px 5px 2px 5px;
+  border-radius: 2px;
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
 }

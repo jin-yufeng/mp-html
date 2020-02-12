@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.util.regex.Matcher;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -48,9 +49,9 @@ class core {
 	boolean isMin = false;
 
 	// 包大小
-	final float wxSize = 47.1f;
-	final float wxMinSize = 31.6f;
-	final float uniAppSize = 62.0f;
+	final float wxSize = 48.4f;
+	final float wxMinSize = 32.5f;
+	final float uniAppSize = 62.9f;
 	final float emojiSize = 4.35f;
 	final float emojiMinSize = 3.22f;
 	final float domSize = 4.78f;
@@ -118,7 +119,7 @@ class core {
 		final File desktop = FileSystemView.getFileSystemView().getHomeDirectory();
 		JLabel dirLabel = new JLabel("生成目录：");
 		dirLabel.setBounds(20, 190, 80, 20);
-		JTextField dir = new JTextField(desktop.getAbsolutePath() + "\\Parser");
+		JTextField dir = new JTextField(desktop.getAbsolutePath() + File.separator + "Parser");
 		dir.setBounds(100, 190, 230, 20);
 		frame.add(dir);
 		frame.add(dirLabel);
@@ -136,7 +137,10 @@ class core {
 				int result = jfc.showOpenDialog(frame);
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File file = jfc.getSelectedFile();
-					dir.setText(file.getAbsolutePath() + "\\Parser");
+					if (typeWx.isSelected())
+						dir.setText(file.getAbsolutePath() + File.separator + "Parser");
+					else
+						dir.setText(file.getAbsolutePath() + File.separator + "jyf-parser");
 				}
 			}
 
@@ -151,6 +155,20 @@ class core {
 			@Override
 			public void itemStateChanged(ItemEvent item) {
 				size.setText(calcSize()); // 重新计算大小
+				String[] path = dir.getText().split(Matcher.quoteReplacement(File.separator));
+				if (path.length > 1) {
+					if (item.getStateChange() == ItemEvent.SELECTED) {
+						if (path[path.length - 1].equals("jyf-parser")) {
+							path[path.length - 1] = "Parser";
+							dir.setText(String.join(File.separator, path));
+						}
+					} else if (path[path.length - 1].equals("Parser")) {
+						path[path.length - 1] = "jyf-parser";
+						dir.setText(String.join(File.separator, path));
+					}
+
+				}
+
 			}
 
 		});
@@ -242,7 +260,7 @@ class core {
 						}
 						if (document.isSelected()) {
 							BufferedReader reader = new BufferedReader(
-									new InputStreamReader(new FileInputStream(newPath + "/index.vue"), "utf-8"));
+									new InputStreamReader(new FileInputStream(newPath + "/jyf-parser.vue"), "utf-8"));
 							boolean changed = false;
 							while ((line = reader.readLine()) != null) {
 								if (!changed && line.indexOf("var document") != -1) {
@@ -252,7 +270,8 @@ class core {
 									content.append(line + endl);
 							}
 							reader.close();
-							FileOutputStream writer = new FileOutputStream(new File(newPath + "/index.vue"), false);
+							FileOutputStream writer = new FileOutputStream(new File(newPath + "/jyf-parser.vue"),
+									false);
 							writer.write(content.toString().getBytes("utf-8"));
 							writer.close();
 						}
@@ -270,7 +289,7 @@ class core {
 					Runtime.getRuntime().exec(cmdDir);
 					JOptionPane.showMessageDialog(null, "生成成功", "成功", JOptionPane.PLAIN_MESSAGE);
 				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "失败", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "失败", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 

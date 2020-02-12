@@ -1,5 +1,5 @@
 <!--pages/demo/demo.wxml-->
-<Parser id="article" bindlinkpress="linkTap" lazy-load show-with-animation autocopy="{{false}}" selectable use-anchor use-cache domain="https://6874-html-foe72-1259071903.tcb.qcloud.la" binderror="onError">
+<Parser id="article" bindlinkpress="linkTap" lazy-load show-with-animation autocopy="{{false}}" selectable use-anchor use-cache gesture-zoom domain="https://6874-html-foe72-1259071903.tcb.qcloud.la" binderror="onError">
   <view class="loading-cell">
     <view class="line-bounce">
       <text></text>

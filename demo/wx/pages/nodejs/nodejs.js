@@ -3,7 +3,8 @@ const code = require('./code.js');
 Page({
   data: {
     tagStyle: {
-      code: "font-style: italic; color: #005cc5;margin-left:3px;margin-right:3px;"
+      pre: "padding:5px 10px 5px 10px;margin:15px 0 15px 0;border-radius:5px;background:#f5f2f0;text-shadow: 0 1px white;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace",
+      code: "background-color:#f0f0f0;font-size:85%;margin:0 3px 0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace"
     },
     //更多的style匹配模式
     stylesMore: [{
@@ -47,14 +48,8 @@ Page({
     }],
     //示例代码
     codedemo: code.codedemo,
-    website: code.website,
     markdown: code.markdown,
-    npm: code.npm,
-    node: code.node,
     //更新日志
-    codeStyle: {
-      code: "border:1px solid #cccccc;border-radius:3px"
-    },
     update: `<ul>
     <li>2019.12.30:
       <ol>
