@@ -1,5 +1,5 @@
-<!--pages/demo/demo.wxml-->
-<Parser id="article" bindlinkpress="linkTap" lazy-load show-with-animation autocopy="{{false}}" selectable use-anchor use-cache gesture-zoom domain="https://6874-html-foe72-1259071903.tcb.qcloud.la" binderror="onError">
+<!-- demo.wxml -->
+<parser id="article" lazy-load show-with-animation selectable use-anchor use-cache gesture-zoom domain="https://6874-html-foe72-1259071903.tcb.qcloud.la" bindlinkpress="linkpress" bindimglongtap="imglongtap" bindready="ready" binderror="error">
   <view class="loading-cell">
     <view class="line-bounce">
       <text></text>
@@ -9,4 +9,5 @@
       <text></text>
     </view>
   </view>
-</Parser>
+</parser>
+<actionsheet show="{{showActionsheet}}" actions="{{groups}}" bindactiontap="actiontap" />

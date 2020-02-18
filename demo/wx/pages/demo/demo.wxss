@@ -1,4 +1,4 @@
-/* pages/demo/demo.wxss */
+/* demo.wxss */
 .loading-cell {
   position:absolute;
   width:100%;

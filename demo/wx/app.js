@@ -1,3 +1,11 @@
-//app.js
-wx.cloud.init();
-App({})
+// app.js
+App({
+  onLaunch() {
+    // wx.cloud.init();
+  },
+  onPageNotFound() {
+    wx.redirectTo({
+      url: "/pages/index/index",
+    })
+  }
+})

@@ -4,25 +4,26 @@
 ### 匹配 style 标签 ###  
 支持解析和匹配 `style` 标签中的样式，支持以下选择器
   
-| 选择器 | 举例 | 匹配 |
-|----|----|----|
-| .class | .demo | &lt;element class="demo"&gt; |
-| #id | #demo | &lt;element id="demo"&gt; |
-| element | img | &lt;img&gt; |
+| 名称 | 示例 |
+|:---:|:---:|
+| class 选择器 | .the-class |
+| id 选择器 | #the-id |
+| 标签名选择器 | img |
+| 多选择器的并集 | .the-class, #the-id |
 
 示例：  
 ``` wxml
 <parser html="{{html}}" />
 ```
 ``` javascript
-data:{
-  html:'<style>.a{font-style:italic}#b{font-weight:bold}p{text-align:center}</style>'
-	+'<p><span class="a">Hello </span><span id="b">World!</span></p>'
-}
+Page({
+  data:{
+    html:'<style>.a{font-style:italic}#b{font-weight:bold}p{text-align:center}</style>'
+  	  + '<p><span class="a">Hello </span><span id="b">World!</span></p>'
+  }
+})
 ```
 <p style="text-align:center"><span style="font-style:italic;">Hello </span><span style="font-weight:bold;">World!</span></p>  
-
->支持通过逗号分隔的多个相同的选择器，例如 `.a,.b,div{}`  
 
 >`uni-app` 包编译到 `H5` 平台时支持所有浏览器支持的选择器  
 
@@ -39,32 +40,6 @@ data:{
 | 属性样式 | 4 | 设置了该属性的标签 | 如 size, align, border 等属性产生的样式 |
 | [外部样式](/instructions#使用外部样式) | 5 | 所有 parser | 仅支持 class 选择器 |
 
-默认不支持 `link` 标签的样式（小程序端发起网络请求有限制），如果需要可通过以下代码获取 `link` 的内容后再传入给组件进行解析（需配置域名）  
-```javascript
-// html 为包含 link 标签的富文本内容
-var links = [];
-html = html.replace(/<link.*?href=['"]*([\S]*?)['"]*.*?>/g, function() {
-  if (arguments[1].includes(".css"))
-    links.push(arguments[1])
-  return '';
-})
-function getLink(i) {
-  if (i < links.length){
-    wx.request({
-      url: links[i],
-      success(e) {
-        if (e.statusCode == 200)
-          html = "<style>" + e.data + "</style>" + html;
-        getLink(i + 1);
-      },
-      fail: () => getLink(i + 1)
-    })
-  } else
-    this.setData({html});
-}
-getLink(0);
-```
-
 ### 设置默认的标签样式 ###
 支持给各个标签设置默认的效果  
 示例（给表格设置默认的边框）：
@@ -72,14 +47,67 @@ getLink(0);
 <parser html="{{html}}" tag-style="{{tagStyle}}" />
 ```
 ```javascript
-data:{
-  tagStyle:{
-    table: 'border-collapse:collapse;border-top:1px solid gray;border-left:1px solid gray;',
-    th: 'border-right:1px solid gray;border-bottom:1px solid gray;',
-    td: 'border-right:1px solid gray;border-bottom:1px solid gray;'
+Page({
+  data:{
+    tagStyle:{
+      table: 'border-collapse:collapse;border-top:1px solid gray;border-left:1px solid gray;',
+      th: 'border-right:1px solid gray;border-bottom:1px solid gray;',
+      td: 'border-right:1px solid gray;border-bottom:1px solid gray;'
+    }
   }
-}
+})
 ```
+
+### svg 支持 ###
+支持直接使用所有 `svg` 系列标签  
+示例：  
+``` wxml
+<parser html="{{html}}" />
+```
+``` javascript
+Page({
+  data:{
+    html:'<svg><circle cx="100" cy="50" r="40" stroke="#3b5b81" stroke-width="2" fill="#5aa0b3" /></svg>'
+  }
+})
+```
+<svg><circle cx="100" cy="50" r="40" stroke="#3b5b81" stroke-width="2" fill="#5aa0b3" /></svg>
+
+!> 该功能将 `svg` 标签进行一定转换后通过 `img` 显示，但不可预览，且除 `uni-app` 的 `H5` 端外不能响应点击事件  
+
+### 设置锚点 ###
+支持设置页面内锚点（设置 `id` 即可），可通过 `a` 标签跳转，也可以通过获取组件实例手动跳转
+
+```wxml
+<parser id="article" html="{{html}}" use-anchor bindready="ready"></parser>
+```
+```javascript
+Page({
+  data:{
+    html: "<a href='#test'>点我跳转锚点</a>" + // 点击此 a 标签可以跳转锚点
+    "..." +
+    "<div id='test'></div>"
+  },
+  ready(){
+    // 通过获取组件实例按需手动跳转
+    this.selectComponent("#article").navigateTo({
+      id: "test",
+      success: console.log,
+      fail: console.error
+    })
+  }
+})
+```
+
+### 手势缩放 ###
+通过设置 `gesture-zoom` 属性，可以实现双击缩放，放大局部的内容进行查看。
+
+### 长按复制 ###
+通过设置 `selectable` 属性可以实现长按复制任意内容  
+
+?> 如果需要设置局部可复制，可以给对应的标签的 `style` 属性里加上 `user-select:text;-webkit-user-select:text`
+
+?>百度小程序的 `rich-text` 本身支持 `selectable` 属性（需要百度 `APP 11.10` 以上）；但微信小程序不支持；本插件**均可实现**支持复制（且**没有版本要求**）  
 
 ### 多媒体多资源加载 ###
 支持在 `video` 和 `audio` 标签中设置多个 `source` 标签，本插件将按顺序进行加载，若前面的链接无法播放，将自动切换下一个链接进行加载和播放，直到最后一个链接；可用于解决平台差异，最大程度避免无法播放
@@ -90,6 +118,20 @@ data:{
 </video>
 ```
 
+### 自动设置标题 ###
+若存在 `title` 标签，将自动把其内容设置到页面标题上（可通过 `autosetTitle` 属性控制）  
+
+### 设置加载提示 ###
+可以在 `parser` 标签内添加加载提示或动画，将在未加载完成或内容为空时显示，加载完成后自动隐藏；另外通过设置 `show-with-animation` 属性，可以实现内容渐显的动画效果    
+```wxml
+<parser html="{{html}}" show-with-animation>加载中...</parser>
+```
+
+### 智能压缩 ###  
+支持自动通过以下方式对解析结果进行压缩，可以有效提升性能：
+- 将一些只有一个子节点的标签进行合并，以实现减小深度的效果，根据内容不同，可以减少 `15%~60%` 的深度  
+- 在非 `pre` 标签且没有 `white-space:pre` 属性时自动去除没用的空白符  
+
 ### 懒加载 ###
 - 图片  
   通过设置 `lazy-load` 属性，可以实现图片懒加载，在图片进入当前可视范围上下 `1000px` 范围内时再进行加载  
@@ -98,88 +140,24 @@ data:{
   当视频数量超过三个时，将仅加载前三个视频，其他的用图片代替，避免一次加载过多视频导致卡死  
   另外通过设置 `autopause` 可以实现播放一个视频时自动暂停其他所有视频
 
-### 设置锚点 ###
-支持设置页面内锚点（设置 `id` 即可），可通过 `a` 标签跳转，也可以通过获取组件实例手动跳转
-
-```wxml
-<parser id="article" html="{{html}}" use-anchor bindready="ready"></parser>
-```
-```javascript
-data:{
-  html: "<a href='#test'>点我跳转锚点</a>" + // 点击此 a 标签可以跳转锚点
-  "..." +
-  "<div id='test'></div>"
-},
-ready(){
-  // 通过获取组件实例按需手动跳转
-  this.selectComponent("#article").navigateTo({
-    id: "test",
-    success: console.log,
-    fail: console.error
-  })
-}
-```
-
-### svg 支持 ###
-支持直接使用所有 `svg` 系列标签  
-示例：  
-``` wxml
-<parser html="{{html}}" />
-```
-``` javascript
-data:{
-  html:'<svg><circle cx="100" cy="50" r="40" stroke="black" stroke-width="2" fill="red" /></svg>'
-}
-```
-<svg><circle cx="100" cy="50" r="40" stroke="black" stroke-width="2" fill="red" /></svg>
-
-!> 该功能将 `svg` 标签进行一定转换后通过 `img` 显示，但不可预览，且除 `uni-app` 的 `H5` 端不能响应点击事件  
-
-### 自动设置标题 ###
-若存在 `title` 标签，将自动把其内容设置到页面标题上（可通过 `autosetTitle` 属性控制）  
-并将在 `parse`（解析完成）回调中返回，可用于转发设置
-
-### 自动填充图片链接 ###
-1. 设置 `domain` 属性后，将自动给图片链接拼接上主域名或协议名
+### 自动填充链接 ###
+1. 设置 `domain` 属性后，将自动给链接拼接上主域名或协议名（包括所有 `src` 属性和 `css` 中的 `url`）
    ```wxml
    <parser html="{{html}}" domain="https://example.com"></parser>
    ```
    ```javascript
-   data:{
-     html:"<img src='/path/xxx.png'>" // 将被拼接成 https://example.com/path/xxx.png
-   }
+   Page({
+     data: {
+       // 将被拼接成 https://example.com/path/xxx.png
+       html: "<img src='/path/xxx.png'>"
+         + "<div style='background-image:url(//example.com/path/xxx.png)'></div>"
+     }
+   })
    ```
 2. 对于只有 `data-src` 没有 `src` 属性的图片，将自动把 `data-src` 的值设置成 `src`，避免无法显示
 
-### 设置加载提示 ###
-可以在 `parser` 标签内添加加载提示或动画，将在未加载完成或内容为空时显示，加载完成后自动隐藏  
-```wxml
-<parser html="{{html}}">加载中...</parser>
-```
-
-### 动画显示效果 ###  
-通过设置 `show-with-animation` 属性可以实现内容加载完成后渐显的动画效果  
-```wxml
-<parser html="{{html}}" show-with-animation animation-duration="500" />
-```
-
-### 长按复制 ###
-通过设置`selectable`属性可以实现长按复制任意内容  
-
-?> 如果需要设置局部可复制，可以给对应的标签的 `style` 属性里加上 `user-select:text;-webkit-user-select:text`
-
-?>百度小程序的 `rich-text` 本身支持 `selectable` 属性（需要百度 `APP 11.10` 以上）；但微信小程序不支持；本插件**均可实现**支持复制（且**没有版本要求**）  
-
 ### 实体编码支持 ###
 支持所有形如 `&#123;` 的实体编码和大部分常用的形如 `&nbsp;` 的实体编码（微信、QQ、H5、APP 支持全部实体）  
-
-### 手势缩放 ###
-通过设置 `gesture-zoom` 属性，可以实现双击缩放，放大局部的内容进行查看。
-
-### 智能压缩 ###  
-支持自动通过以下方式对解析结果进行压缩，可以有效提升性能：
-- 将一些只有一个子节点的标签进行合并，以实现减小深度的效果，根据内容不同，可以减少 `15%~60%` 的深度  
-- 在非 `pre` 标签且没有 `white-space:pre` 属性时自动去除没用的空白符  
 
 ### 支持丰富的标签 ###
 支持以下标签和属性：   
@@ -267,7 +245,7 @@ data:{
 
 >除列举的标签外，还支持所有 `svg` 系列的标签（必须包裹在 `svg` 标签内，否则无效）  
 
->支持图片点击（可自动预览）、链接点击事件（可自动复制链接），不支持其他事件（如 `onclick` 等）  
+>支持图片点击（可自动预览）、长按事件和链接点击事件（可自动复制链接），不支持其他事件（如 `onclick` 等）  
 
 >全局支持 `id`、`style`、`class` 属性，`class` 可以匹配 `style` 标签中的样式和 `trees.wxss` 中的样式；其他不支持的属性将被移除  
 

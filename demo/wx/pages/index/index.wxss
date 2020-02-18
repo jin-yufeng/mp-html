@@ -1,4 +1,4 @@
-/**index.wxss**/
+/* index.wxss */
 page {
   background-color: #f8f8f8;
 }
@@ -14,9 +14,17 @@ button::after {
   border: none;
 }
 .weui-flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
   -webkit-box-align: center;
   -webkit-align-items: center;
   align-items: center;
+}
+.weui-flex__item {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
 }
 .weui-cells {
   margin-top: 0;
@@ -36,6 +44,29 @@ button::after {
 }
 .weui-cell:before {
   right: 15px;
+}
+.weui-cell_access {
+  color: inherit;
+}
+.weui-cell__ft_in-access {
+  padding-right: 13px;
+  position: relative;
+}
+.weui-cell__ft_in-access:after {
+  content: " ";
+  display: inline-block;
+  height: 6px;
+  width: 6px;
+  border-width: 2px 2px 0 0;
+  border-color: #c8c8cd;
+  border-style: solid;
+  -webkit-transform: matrix(0.71, 0.71, -.71, 0.71, 0, 0);
+  transform: matrix(0.71, 0.71, -.71, 0.71, 0, 0);
+  top: -2px;
+  position: absolute;
+  top: 50%;
+  margin-top: -4px;
+  right: 2px;
 }
 .kind-list__item {
   margin: 10px 0;

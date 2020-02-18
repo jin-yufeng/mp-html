@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<jyf-parser @parse="parse" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error" gesture-zoom
-		 show-with-animation lazy-load :autocopy="autocopy" use-anchor ref="rtf" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la">加载中...</jyf-parser>
+		 show-with-animation lazy-load use-anchor ref="rtf" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la">加载中...</jyf-parser>
 	</view>
 </template>
 
@@ -10,24 +10,9 @@
 	const versionHigherThan = require("@/components/jyf-parser/libs/config.js").versionHigherThan;
 	const testHtml = require("./html.js");
 	export default {
-		data() {
-			return {
-				// #ifdef APP-PLUS
-				autocopy: false
-				// #endif
-				// #ifndef APP-PLUS
-				autocopy: true
-				// #endif
-			}
-		},
 		// HBuilderX 2.5.5 及以上可以不需要
 		components: {
 			"jyf-parser": parser
-		},
-		onLoad() {
-			// #ifndef MP-ALIPAY || H5 || APP-PLUS 
-			console.log("api: versionHigherThan'2.7.1'?", versionHigherThan('2.7.1'))
-			// #endif
 		},
 		onReady(){
 			this.$refs.rtf.setContent(testHtml);
@@ -47,10 +32,12 @@
 			linkpress(res) {
 				console.log("linkpress", res);
 				// #ifdef APP-PLUS
-				if (/http/.test(res.href))
+				if (/http/.test(res.href)) {
+					res.ignore();
 					uni.navigateTo({
 						url: '../web/web?src=' + res.href
 					})
+				}
 				// #endif
 			},
 			error(res) {

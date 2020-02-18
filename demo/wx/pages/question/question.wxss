@@ -1,4 +1,4 @@
-/* miniprogram/pages/question/question.wxss */
+/* question.wxss */
 .section {
   margin-left: 5%;
   text-align: justify;

@@ -1,0 +1,30 @@
+/* docs.wxss */
+.table {
+  font-size: 14px;
+  border-left: 1px solid #dfe2e5;
+  border-top: 1px solid #dfe2e5;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+.tr {
+  display: flex;
+}
+.th {
+  font-weight: bold;
+}
+.td, .th {
+  padding: 3px;
+  border-right: 1px solid #dfe2e5;
+  border-bottom: 1px solid #dfe2e5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.link {
+  color: #366092;
+  padding: 1.5px 0 1.5px 0;
+  display: inline;
+}
+.weui-article__p {
+  margin: 0 0 0.8em;
+}

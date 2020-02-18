@@ -1,0 +1,50 @@
+/*
+ 给顶层标签的一些样式取出给 rich-text
+ github地址：https://github.com/jin-yufeng/Parser
+ 文档地址：https://jin-yufeng.github.io/Parser
+ author：JinYufeng
+*/
+module.exports = {
+	getStyle: function(style, display) {
+		var tmp, res = "";
+		if (style) {
+			style = style.toLowerCase();
+			if (style.indexOf("float") != -1) res += style.match(getRegExp("float[^;]+", "g")).pop();
+			if (style.indexOf("margin") != -1) res += (';' + style.match(getRegExp("margin[^;]+", "g")).join(';'));
+			if (style.indexOf("display") != -1 && (tmp = style.match(getRegExp("display[^;]+", "g")).pop(), tmp.indexOf("flex") ==
+					-1)) res += (';' + tmp);
+			else res += (';display:' + display);
+			tmp = style.match(getRegExp("flex[^;]*:[^;]+", "g"));
+			if (tmp) res += (';' + tmp.join(';'));
+			if (style.indexOf("width") != -1) res += (';' + style.match(getRegExp("[^;\s]*width[^;]+", "g")).join(';'));
+		} else res = ("display:" + display);
+		return res;
+	},
+	setImgStyle: function(item, imgLoad) {
+		var img = {
+			name: "img",
+			attrs: JSON.parse(JSON.stringify(item.attrs))
+		}
+		if (img.attrs.style)
+			img.attrs.style = img.attrs.style.toLowerCase().replace(getRegExp("width[^;]+%", "g"), "width:100%").replace(
+				getRegExp('margin[^;]+', "g"), "");
+		if (!imgLoad) {
+			delete img.attrs.src;
+			img.attrs.style += ";width:20px !important;height:20px !important";
+		}
+		return [img];
+	},
+	setStyle: function(item) {
+		if (item.attrs.style) {
+			var newItem = {
+				name: item.name,
+				attrs: JSON.parse(JSON.stringify(item.attrs)),
+				children: item.children
+			}
+			newItem.attrs.style = newItem.attrs.style.toLowerCase().replace(getRegExp("width[^;]+%", "g"), "width:100%").replace(
+				getRegExp('margin[^;]+', "g"), "");
+			return [newItem];
+		}
+		return [item];
+	}
+}

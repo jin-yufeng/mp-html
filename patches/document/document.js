@@ -137,7 +137,7 @@ class element {
     return true;
   }
 }
-class document {
+class dom {
   constructor(root, nodes, Component) {
     this._root = root;
     this.nodes = nodes;
@@ -153,4 +153,4 @@ class document {
     else return null;
   }
 }
-module.exports = document;
+module.exports = dom;

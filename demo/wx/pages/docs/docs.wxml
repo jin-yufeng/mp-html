@@ -1,0 +1,304 @@
+<!-- docs.wxml -->
+<view class="page__hd">
+  <view class="page__title">说明文档</view>
+  <view class="page__desc">{{titles[index]}}</view>
+</view>
+<view class="page__bd">
+  <view class="weui-article">
+    <!--功能介绍-->
+    <block wx:if="{{index==0}}">
+      <!--解析 style 标签-->
+      <view class="weui-article__h2">解析 style 标签</view>
+      <view class="weui-article__section">
+        支持将
+        <code>style</code>标签中的样式解析到各个标签的
+        <code>style</code>属性中去，支持以下选择器：
+        <view class="table">
+          <view class="tr">
+            <view class="th" style="width:50%">名称</view>
+            <view class="th" style="width:50%;">示例</view>
+          </view>
+          <view wx:for="{{selectors}}" wx:key="index" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:50%">{{item.name}}</view>
+            <view class="td" style="width:50%;">{{item.example}}</view>
+          </view>
+        </view>
+        示例：
+        <parser html="{{selectorCode}}" tag-style="{{tagStyle}}" />
+        <view style="color:gray;text-align:center;font-size:12px;">解析结果</view>
+      </view>
+      <!--设置标签的默认样式-->
+      <view class="weui-article__h2">设置标签的默认样式</view>
+      <view class="weui-article__section">
+        可以对标签设置任意自定义的样式，示例：
+        <parser html="{{tagStyleCode}}" tag-style="{{tagStyle}}" />
+      </view>
+      <!--svg 支持-->
+      <view class="weui-article__h2">svg 支持</view>
+      <view class="weui-article__section">
+        可以直接使用所有
+        <code>svg</code> 系列标签，示例：
+        <parser html="{{svgCode}}" tag-style="{{tagStyle}}" />
+      </view>
+      <!--锚点跳转-->
+      <view class="weui-article__h2">锚点跳转</view>
+      <view class="weui-article__section">
+        <code>a</code>标签支持跳转锚点（也可以通过
+        <code>api</code>手动跳转锚点），示例：
+        <parser html="{{anchorCode}}" tag-style="{{tagStyle}}" />
+      </view>
+      <!--手势缩放-->
+      <view id="gestureZoom" class="weui-article__h2">手势缩放</view>
+      <view class="weui-article__section">
+        可以通过设置
+        <code>gesture-zoom</code>属性实现双击缩放，放大局部区域进行查看。
+        <view>
+          <navigator class="link" url="../demo/demo?index=0">立即体验</navigator>
+        </view>
+      </view>
+      <!--内容可复制-->
+      <view class="weui-article__h2">内容可复制</view>
+      <view class="weui-article__section">
+        <parser html="<div>当<code>selectable</code>属性被设置为<code>true</code>时，可以通过长按复制内容（本段文字可以体验）" tag-style="{{tagStyle}}" selectable />
+      </view>
+      <!--多资源加载-->
+      <view class="weui-article__h2">多资源加载</view>
+      <view class="weui-article__section">
+        可以通过在
+        <code>video</code>和
+        <code>audio</code>标签中设置多个
+        <code>source</code>标签来设置多个源，插件将按顺序进行加载；可用于解决平台支持性差异，最大程度避免无法播放，示例：
+        <parser html="{{sourceCode}}" tag-style="{{tagStyle}}" />
+      </view>
+      <!--自动设置标题-->
+      <view class="weui-article__h2">自动设置标题</view>
+      <view class="weui-article__section">
+        若
+        <code>html</code>中存在
+        <code>title</code>标签，将自动把
+        <code>title</code>标签的内容设置到页面的标题上
+      </view>
+      <!--添加加载提示-->
+      <view class="weui-article__h2">添加加载提示</view>
+      <view class="weui-article__section">
+        可以在
+        <code>parser</code>标签内添加加载提示，将在未加载完成或内容为空时显示，加载完成后自动隐藏；另外，通过设置
+        <code>show-with-animation</code>属性，可以实现内容渐显的动画效果，示例：
+        <parser html="{{loadingCode}}" tag-style="{{tagStyle}}" />
+      </view>
+      <!--智能压缩-->
+      <view class="weui-article__h2">智能压缩</view>
+      <view class="weui-article__section">
+        本插件可以通过以下方法实现自动压缩解析结果，可以有效提升性能
+        <parser html="{{compress}}" tag-style="{{tagStyle}}" />
+      </view>
+      <!--懒加载-->
+      <view class="weui-article__h2">懒加载</view>
+      <view class="weui-article__section">
+        <view class="weui-article__p">图片的懒加载由
+          <code>lazy-load</code>属性控制，开启后将对视图范围以下
+          <code>1000px</code>以外的图片进行懒加载</view>
+        <view class="weui-article__p">
+          <view>视频的懒加载强制开启，当视频数量超过 3 个时，将仅加载前 3 个，其他的用图片占位，点击播放时再进行加载和播放，避免同时加载过多视频导致页面卡死</view>
+          <view>另外视频支持播放一个视频时自动暂停其他视频（可通过
+            <code>autopause</code>属性控制）</view>
+        </view>
+      </view>
+      <!--自动填充链接-->
+      <view class="weui-article__h2">自动填充链接</view>
+      <view class="weui-article__section">
+        通过设置
+        <code>domain</code>属性，可以自动给链接填充主域名或协议名（目前支持给所有
+        <code>src</code>属性和
+        <code>css</code>中的
+        <code>url</code>进行填充），示例：
+        <parser html="{{completerCode}}" tag-style="{{tagStyle}}" />
+      </view>
+      <!--支持丰富的标签-->
+      <view class="weui-article__h2">支持丰富的标签</view>
+      <view class="weui-article__section">
+        本插件支持所有
+        <code>rich-text</code>支持的标签，并增加支持以下标签或属性
+        <view class="table">
+          <view class="tr">
+            <view class="th" style="width:26%">标签</view>
+            <view class="th" style="width:74%;">属性</view>
+          </view>
+          <view wx:for="{{tags}}" wx:key="name" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:26%">{{item.name}}</view>
+            <view class="td" style="width:74%;">
+              <text>{{item.attrs}}</text>
+            </view>
+          </view>
+        </view>
+        另外，
+        <code>rich-text</code>在基础库
+        <code>2.7.1</code>以上增加支持大量语义化标签，除下列标签外，其他均可以在低版本基础库支持
+        <view class="table">
+          <view class="tr">
+            <view class="th" style="width:26%">标签</view>
+            <view class="th" style="width:74%;">属性</view>
+          </view>
+          <view wx:for="{{newTags}}" wx:key="name" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:26%">{{item.name}}</view>
+            <view class="td" style="width:74%;">
+              <text>{{item.attrs}}</text>
+            </view>
+          </view>
+        </view>
+        对于不支持的标签，除个别将被直接移除外（如
+        <code>script</code>等），其他将被转为
+        <code>span</code>标签，因此可以使用更多语义化标签
+      </view>
+      <!--支持丰富的事件-->
+      <view class="weui-article__h2">支持丰富的事件</view>
+      <view class="weui-article__section">
+        默认支持以下事件：
+        <parser html="{{eventsIntro}}" tag-style="{{tagStyle}}" />
+      </view>
+      <!--性能指标-->
+      <view class="weui-article__h2">性能指标</view>
+      <view class="weui-article__section">
+        本插件解析和渲染效率高；轻量化（
+        <code>48.3KB</code>，
+        <code>min</code>版本
+        <code>32.4KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+        <parser html="{{errorCode}}" tag-style="{{tagStyle}}" />
+      </view>
+      <view class="link" style="display:block;text-align:center" bindtap="nextSection">下一章：使用方法</view>
+    </block>
+    <!--使用方法-->
+    <block wx:elif="{{index==1}}">
+      <!--使用步骤-->
+      <view class="weui-article__h2">使用步骤</view>
+      <view class="weui-article__section">
+        <parser html='{{usage}}' tag-style="{{tagStyle}}" />
+      </view>
+      <!--组件属性-->
+      <view class="weui-article__h2">组件属性</view>
+      <view class="weui-article__section">
+        <view class="table">
+          <view class="tr">
+            <view class="th" style="width:30%">属性</view>
+            <view class="th" style="width:20%;">类型</view>
+            <view class="th" style="width:16%;">默认</view>
+            <view class="th" style="width:34%;">说明</view>
+          </view>
+          <view wx:for="{{attrs}}" wx:key="index" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:30%">
+              <text>{{item.name}}</text>
+            </view>
+            <view class="td" style="width:20%;">
+              <text>{{item.type}}</text>
+            </view>
+            <view class="td" style="width:16%;">{{item.default}}</view>
+            <view class="td" style="width:34%;">{{item.notice}}</view>
+          </view>
+        </view>
+        <parser html="详细可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions?id=组件属性'>组件属性</a>" />
+      </view>
+      <!--事件-->
+      <view class="weui-article__h2">事件</view>
+      <view class="weui-article__section">
+        <view class="table">
+          <view class="tr">
+            <view class="th" style="width:35%">名称</view>
+            <view class="th" style="width:65%;">说明</view>
+          </view>
+          <view wx:for="{{events}}" wx:key="index" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:35%">{{item.name}}</view>
+            <view class="td" style="width:65%;">{{item.notice}}</view>
+          </view>
+        </view>
+        <parser html="详细可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions?id=事件'>事件</a>" />
+      </view>
+      <!--api-->
+      <view class="weui-article__h2">api</view>
+      <view class="weui-article__section">
+        本插件实例中提供了一些
+        <code>api</code>函数（必须在
+        <code>ready</code>事件中或之后才能调用），获取实例的方法：
+        <parser html="{{apiCode}}" tag-style="{{tagStyle}}" />
+      </view>
+      <!--使用外部样式-->
+      <view class="weui-article__h2">使用外部样式</view>
+      <view class="weui-article__section">
+        如果需要引入
+        <code>wxss</code>中的外部样式，只需要在
+        <code>parser/trees/trees.wxss</code>中通过
+        <code>@import</code>引入需要的样式文件即可（只能使用
+        <code>class</code>选择器）
+      </view>
+      <!--补丁包-->
+      <view class="weui-article__h2">补丁包</view>
+      <view class="weui-article__section">
+        本插件在
+        <code>patches</code>文件夹中提供了一些可选的补丁包，可以实现更加丰富的功能
+        <view class="weui-article__p">
+          1.
+          <code>emoji</code>
+          <view>功能：将形如
+            <code>[笑脸]</code>的文本解析为
+            <code>emoji</code>小表情😄
+          </view>
+        </view>
+        <view class="weui-article__p">
+          2.
+          <code>document</code>
+          <view>功能：实现类似
+            <code>web</code>中的
+            <code>document</code>对象，可以动态操作
+            <code>DOM</code>，示例：
+          </view>
+          <parser html="{{documentCode}}" tag-style="{{tagStyle}}" />
+        </view>
+        <view class="weui-article__p">
+          3.
+          <code>CssHandler</code>
+          <view>功能：支持更多的
+            <code>css</code>选择器
+          </view>
+          <view class="table">
+            <view class="tr">
+              <view class="th" style="width:40%">名称</view>
+              <view class="th" style="width:60%;">示例</view>
+            </view>
+            <view wx:for="{{moreSelectors}}" wx:key="index" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+              <view class="td" style="width:40%">{{item.name}}</view>
+              <view class="td" style="width:60%;">{{item.example}}</view>
+            </view>
+          </view>
+        </view>
+        <parser html="详细可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions?id=补丁包'>补丁包</a>" />
+      </view>
+      <!--基础库要求-->
+      <view class="weui-article__h2">基础库要求</view>
+      <view class="weui-article__section">
+        <view class="table">
+          <view class="tr">
+            <view class="th" style="width:30%">版本</view>
+            <view class="th" style="width:50%;">功能</view>
+            <view class="th" style="width:20%;">覆盖率</view>
+          </view>
+          <view wx:for="{{versions}}" wx:key="index" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
+            <view class="td" style="width:30%">{{item.version}}</view>
+            <view class="td" style="width:50%;">{{item.features}}</view>
+            <view class="td" style="width:20%;">{{item.percent}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="link" style="display:flex;justify-content:center;margin:0 5%">
+        <view bindtap="prevSection">上一章：功能介绍</view>
+        <view style="flex:1"></view>
+        <view bindtap="nextSection">下一章：更新日志</view>
+      </view>
+    </block>
+    <!--更新日志-->
+    <block wx:elif="{{index==2}}">
+      <view class="weui-article__section">
+        <parser html="{{changelog}}" tag-style="{{tagStyle}}" />
+      </view>
+      <view class="link" style="display:block;text-align:center" bindtap="prevSection">上一章：使用方法</view>
+    </block>
+  </view>
+</view>

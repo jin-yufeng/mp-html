@@ -1,8 +1,7 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/component/component",
-    "pages/nodejs/nodejs",
+    "pages/docs/docs",
     "pages/demo/demo",
     "pages/test/test",
     "pages/question/question"

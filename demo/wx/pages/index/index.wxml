@@ -1,4 +1,4 @@
-<!--index.wxml-->
+<!-- index.wxml -->
 <view class="page">
   <view class="page__hd">
     <view class="page__title">Parser</view>
@@ -12,8 +12,8 @@
             <view class="weui-flex__item">{{item.name}}</view>
             <image class="kind-list__img" src="/images/{{item.id}}.png"></image>
           </view>
-          <view class="kind-list__item-bd {{item.open ? 'kind-list__item-bd_show' : ''}}">
-            <view class="weui-cells {{item.open ? 'weui-cells_show' : ''}}">
+          <view class="kind-list__item-bd {{item.open?'kind-list__item-bd_show':''}}">
+            <view class="weui-cells {{item.open?'weui-cells_show':''}}">
               <block wx:for="{{item.pages}}" wx:for-item="page" wx:key="name">
                 <navigator wx:if="{{page.url}}" url="{{page.url}}" class="weui-cell weui-cell_access">
                   <view class="weui-cell__bd">{{page.name}}</view>

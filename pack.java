@@ -49,9 +49,9 @@ class core {
 	boolean isMin = false;
 
 	// 包大小
-	final float wxSize = 48.4f;
-	final float wxMinSize = 32.5f;
-	final float uniAppSize = 62.9f;
+	final float wxSize = 48.2f;
+	final float wxMinSize = 32.3f;
+	final float uniAppSize = 62.7f;
 	final float emojiSize = 4.35f;
 	final float emojiMinSize = 3.22f;
 	final float domSize = 4.78f;
@@ -119,7 +119,7 @@ class core {
 		final File desktop = FileSystemView.getFileSystemView().getHomeDirectory();
 		JLabel dirLabel = new JLabel("生成目录：");
 		dirLabel.setBounds(20, 190, 80, 20);
-		JTextField dir = new JTextField(desktop.getAbsolutePath() + File.separator + "Parser");
+		JTextField dir = new JTextField(desktop.getAbsolutePath() + File.separator + "parser");
 		dir.setBounds(100, 190, 230, 20);
 		frame.add(dir);
 		frame.add(dirLabel);
@@ -138,7 +138,7 @@ class core {
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File file = jfc.getSelectedFile();
 					if (typeWx.isSelected())
-						dir.setText(file.getAbsolutePath() + File.separator + "Parser");
+						dir.setText(file.getAbsolutePath() + File.separator + "parser");
 					else
 						dir.setText(file.getAbsolutePath() + File.separator + "jyf-parser");
 				}
@@ -159,10 +159,10 @@ class core {
 				if (path.length > 1) {
 					if (item.getStateChange() == ItemEvent.SELECTED) {
 						if (path[path.length - 1].equals("jyf-parser")) {
-							path[path.length - 1] = "Parser";
+							path[path.length - 1] = "parser";
 							dir.setText(String.join(File.separator, path));
 						}
-					} else if (path[path.length - 1].equals("Parser")) {
+					} else if (path[path.length - 1].equals("parser")) {
 						path[path.length - 1] = "jyf-parser";
 						dir.setText(String.join(File.separator, path));
 					}
@@ -233,11 +233,11 @@ class core {
 					// 拷贝主包
 					if (typeWx.isSelected()) {
 						if (min.isSelected())
-							copyDir("./Parser.min", newPath);
+							copyDir("./parser.min", newPath);
 						else
-							copyDir("./Parser", newPath);
+							copyDir("./parser", newPath);
 					} else {
-						copyDir("./Parser.uni", newPath);
+						copyDir("./parser.uni", newPath);
 						String line, endl = String.format("%n");
 						StringBuffer content = new StringBuffer();
 						// uni-app 包装载 emoji 和 document 补丁包时需要修改部分内容
