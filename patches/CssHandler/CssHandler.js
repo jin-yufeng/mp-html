@@ -1,67 +1,39 @@
 /*
- CssHandler 补丁包
- github地址：https://github.com/jin-yufeng/Parser
- 文档地址：https://jin-yufeng.github.io/Parser
- author：JinYufeng
+  CssHandler 补丁包
+  github地址：https://github.com/jin-yufeng/Parser
+  文档地址：https://jin-yufeng.github.io/Parser
+  author：JinYufeng
 */
 const config = require("./config.js");
-function _matchClass(match_class, selector_class) {
-  if (!match_class || !match_class.length || !selector_class || !selector_class.length) return false;
-  else if (match_class.length == 1 && selector_class.length == 1) {
-    if (match_class[0] == selector_class[0]) return true;
-    else return false;
-  } else if (match_class.length < selector_class.length) return false;
-  else {
-    for (var i of selector_class) {
-      var matched = false;
-      for (var j of match_class) {
-        if (j == i) matched = true;
-      }
-      if (matched == false) return false;
-    }
-    return true;
+// 匹配 class
+function matchClass(match, selector) {
+  if (!match || !match.length || !selector || !selector.length) return false;
+  if (match.length == 1 && selector.length == 1) return match[0] == selector[0];
+  if (match.length < selector.length) return false;
+  for (var i = selector; i--;) {
+    var matched = false;
+    for (var j = match.length; j--;)
+      if (match[j] == selector[i]) matched = true;
+    if (!matched) return false;
   }
+  return true;
 }
-
-function _matchId(match_id, selector_id) {
-  if (!match_id || !match_id.length || !selector_id || !selector_id.length) return false;
-  if (match_id.length == 1 && selector_id.length == 1) {
-    if (match_id[0] == selector_id[0]) return true;
-    else return false;
-  } else if (match_id.length < selector_id.length) return false;
-  else {
-    for (var i of selector_id) {
-      var matched = false;
-      for (var j of match_id) {
-        if (j == i) matched = true;
-      }
-      if (matched == false) return false;
-    }
-    return true;
-  }
-}
-
-function matchClass(match_name, match_class, match_id, selector) {
+// 匹配样式
+function matchStyle(match_name, match_class, match_id, selector) {
   if (selector == '*') return 0;
-  var selector_name = selector.match(/^[^\.#\[\]\s]+/);
-  var selector_class = selector.match(/\.[^\.#\[\]\s]+/g);
-  var selector_id = selector.match(/#[^\.#\[\]\s]+/g);
+  var selector_name = selector.match(/^[^\.#\s]+/);
+  var selector_class = selector.match(/\.[^\.#\s]+/g);
+  var selector_id = selector.match(/#[^\.#\s]+/);
   if (selector_id) {
-    if (_matchId(match_id, selector_id)) {
-      if ((selector_class && !_matchClass(match_class, selector_class)) || (selector_name && match_name != selector_name[0]))
-        return -1;
-      else
-        return 2;
-    } else
-      return -1;
+    if (match_id == selector_id) {
+      if ((selector_class && !matchClass(match_class, selector_class)) || (selector_name && match_name != selector_name[0])) return -1;
+      else return 2;
+    } else return -1;
   } else if (selector_class) {
-    if (_matchClass(match_class, selector_class)) {
-      if (selector_name && match_name != selector_name[0])
-        return -1;
-      else
-        return 1;
-    } else
-      return -1;
+    if (matchClass(match_class, selector_class)) {
+      if (selector_name && match_name != selector_name[0]) return -1;
+      else return 1;
+    } else return -1;
   } else if (selector_name && match_name == selector_name[0]) return 0;
   return -1;
 }
@@ -71,59 +43,52 @@ class CssHandler {
   };
   getStyle(data) {
     var style = '';
-    data = data.replace(/<[sS][tT][yY][lL][eE][\s\S]*?>([\s\S]*?)<\/[sS][tT][yY][lL][eE][\s\S]*?>/g, function () {
-      style += arguments[1];
+    data = data.replace(/<[sS][tT][yY][lL][eE][\s\S]*?>([\s\S]*?)<\/[sS][tT][yY][lL][eE][\s\S]*?>/g, function ($, $1) {
+      style += $1;
       return '';
     })
-    this.styles = new CssParser(style, this.styles).parse();
+    this.styles = parseCss(style, this.styles);
     return data;
-  };
-  parseCss(css) {
-    return new CssParser(css, {}, true).parse();
   };
   match(name, attrs, element) {
     var match_class = [];
     if (attrs.class) {
-      var matchs = attrs.class.split(/\s/);
-      for (var i of matchs) {
-        match_class.push('.' + i);
-      }
-    }
-    var match_id = [];
-    if (attrs.id) {
-      var matchs = attrs.id.split(/\s/);
-      for (var i of matchs) {
-        match_id.push('#' + i);
-      }
+      var match = attrs.class.split(/\s+/);
+      for (var i = match.length; i--;)
+        match_class.unshift('.' + match[i]);
     }
     var matchedName = '',
       matchedClass = '',
       matchedId = '',
-      key, sign = false,
-      item;
+      key, flag = false; // 子选择器标识
     element.i = [];
     element.index = [];
     element.pseudo = [];
-
-    for (var i = 0; i < this.styles.length; i++) {
-      item = this.styles[i];
+    for (var i = 0, item; item = this.styles[i]; i++) {
       if (item.key[0] == '>') {
         key = item.key.substring(1);
-        sign = true;
+        flag = true;
       } else {
         key = item.key;
-        sign = false;
+        flag = false;
       }
-      var matchRes = matchClass(name, match_class, match_id, key);
+      var matchRes = matchStyle(name, match_class, attrs.id ? '#' + attrs.id : '', key);
       if (matchRes != -1) {
-        if (!item.hasOwnProperty('index') || item.index == (item.list.length - 1)) {
-          if (item.pseudo) element.pseudo.push(item);
-          else if (matchRes == 0)
-            matchedName += (';' + item.content);
-          else if (matchRes == 1)
-            matchedClass += (';' + item.content);
-          else
-            matchedId += (';' + item.content);
+        if (!item.hasOwnProperty('index') || item.index == item.list.length - 1) {
+          var matchAttr = true;
+          if (item.attr) {
+            for (var j = 0; j < item.attr.length; j++) {
+              if (!item.attr[j].hasOwnProperty("value")) {
+                if (!attrs.hasOwnProperty(item.attr[j].name)) matchAttr = false;
+              } else if (attrs[item.attr[j].name] != item.attr[j].value) matchAttr = false;
+            }
+          }
+          if (matchAttr) {
+            if (item.pseudo) element.pseudo.push(item);
+            else if (matchRes == 0) matchedName += ';' + item.content;
+            else if (matchRes == 1) matchedClass += ';' + item.content;
+            else matchedId += ';' + item.content;
+          }
         } else {
           element.i.push(i);
           element.index.push(item.index);
@@ -131,7 +96,7 @@ class CssHandler {
           item.key = item.list[item.index];
         }
       }
-      if (sign) {
+      if (flag) {
         element.i.push(i);
         element.index.push(item.index);
         item.index--;
@@ -139,29 +104,37 @@ class CssHandler {
       }
     }
     if (!element.i.length) {
-      delete element.i;
-      delete element.index;
+      element.i = undefined;
+      element.index = undefined;
     }
     if (!element.pseudo.length)
-      delete element.pseudo;
-    return (matchedName ? (matchedName + ';') : '') + (matchedClass ? (matchedClass + ";") : '') + (matchedId ? (matchedId + ";") : '');
+      element.pseudo = undefined;
+    return matchedName + ';' + matchedClass + ";" + matchedId + ";";
   };
   pop(element) {
     // 多层class匹配标记
-    if (element.hasOwnProperty("i")) {
+    if (element.i) {
       for (var i = 0; i < element.i.length; i++) {
-        this.styles[element.i[i]].key = this.styles[element.i[i]].list[element.index[i]];
-        this.styles[element.i[i]].index = element.index[i];
+        var j = element.i[i];
+        this.styles[j].key = this.styles[j].list[element.index[i]];
+        this.styles[j].index = element.index[i];
       }
-      delete element.i;
-      delete element.index;
+      element.i = undefined;
+      element.index = undefined;
     }
     // 伪类
-    if (element.hasOwnProperty("pseudo")) {
+    if (element.pseudo) {
       for (var item of element.pseudo) {
         var content;
-        var style = item.content.replace(/content\s*:\s*['"]([\S]*?)['"];*/, function () {
-          content = arguments[1];
+        var style = item.content.replace(/content:([^;\n]*)/, function ($, $1) {
+          // 转换 attr
+          content = $1.replace(/attr\((.+?)\)/, function ($, $1) {
+            return element.attrs[$1.trim()] || '';
+          }).replace(/\s*['"](.*?)['"]\s*/g, "$1")
+            // 转换 \xxx
+            .replace(/\\(\w{4})/, function ($, $1) {
+              return String.fromCharCode(parseInt($1, 16));
+            });
           return '';
         })
         var child = {
@@ -182,113 +155,105 @@ class CssHandler {
     }
   }
 }
-class CssParser {
-  constructor(data, tagStyle, api) {
-    this.data = data;
-    this.res = this.merge(tagStyle, api);
-    this._floor = 0;
-    this._i = 0;
-    this._name = '';
-    this._content = '';
-    this._sectionStart = 0;
-    this._stateHandler = this.SpaceHandler;
-  };
-  merge(tagStyle, api) {
-	if (!api)
-      for (var item in config.userAgentStyles) {
-        if (tagStyle[item]) tagStyle[item] = config.userAgentStyles[item] + ';' + tagStyle[item];
-        else tagStyle[item] = config.userAgentStyles[item];
+
+function parseCss(data, tagStyle) {
+  var keys = [];
+  for (var item in config.userAgentStyles) {
+    if (tagStyle[item]) tagStyle[item] = config.userAgentStyles[item] + ';' + tagStyle[item];
+    else tagStyle[item] = config.userAgentStyles[item];
+  }
+  for (var key in tagStyle) {
+    keys.push({
+      key,
+      content: tagStyle[key]
+    })
+  }
+  var j, i = 0;
+
+  function ignore() {
+    var floor = 1;
+    for (var k = j + 1; k < data.length; k++) {
+      if (data[k] == '{') floor++;
+      else if (data[k] == '}')
+        if (--floor == 0) break;
+    }
+    i = k + 1;
+  }
+  data = data.replace(/\/\*[\s\S]*?\*\//g, '');
+  while (i < data.length) {
+    j = data.indexOf('{', i);
+    if (j == -1) break;
+    var name = data.substring(i, j);
+    if (name[0] == '@') {
+      // @media 查询
+      if (name.substring(0, 6) == "@media") {
+        var info = name.match(/\((.+?):(.+?)\)/);
+        if (info && info[2].includes("px")) {
+          var value = parseInt(info[2]);
+          if ((info[1] == "min-width" && config.screenWidth > value) || (info[1] == "max-width" && config.screenWidth < value)) {
+            i = j + 1;
+            continue;
+          }
+          ignore();
+        }
+      } else
+        ignore();
+      continue;
+    }
+    name = name.trim();
+    if (name[0] == '}') name = name.substring(1);
+    if (name[0] != '.' && name[0] != '#' && name[0] != '[' && name[0] != '*' && !(name >= 'a' && name <= 'z') && !(name >= 'A' && name <= 'Z')) {
+      ignore();
+      continue;
+    }
+    var list = name.split(',')
+    i = j + 1;
+    j = data.indexOf('}', i);
+    if (j == -1) break;
+    var content = data.substring(i, j);
+    i = j + 1;
+    for (var k = 0; k < list.length; k++) {
+      var item = {
+        key: list[k].trim(),
+        content
       }
-    var res = [];
-    for (var key in tagStyle) {
-      res.push({
-        key,
-        content: tagStyle[key]
-      })
+      // 伪类
+      if (item.key.includes(':')) {
+        var info = item.key.split(':');
+        item.key = info[0].trim();
+        item.pseudo = info.pop();
+        if (item.pseudo != "before" && item.pseudo != "after") continue;
+      }
+      // 属性选择器
+      if (item.key.includes('[')) {
+        item.attr = [];
+        item.key = item.key.replace(/\[(.+?)\]/g, function ($, $1) {
+          if ($1.includes('=')) {
+            var info = $1.split('=');
+            var value = info[1].trim();
+            if ((value[0] == '"' && value[value.length - 1] == '"') || (value[0] == "'" && value[value.length - 1] == "'")) value = value.substring(1, value.length - 1);
+            item.attr.push({
+              name: info[0].trim(),
+              value
+            })
+          } else
+            item.attr.push({
+              name: $1.trim()
+            })
+          return '';
+        }).trim()
+        if (!item.key) item.key = '*';
+      }
+      // 后代选择器
+      if (item.key.includes(' ') || item.key.includes('>')) {
+        var tmp = item.key.replace(/\s*>\s*/g, ' >').split(/\s+/);
+        item.list = tmp;
+        item.key = tmp[0];
+        item.index = 0;
+      }
+      keys.push(item)
     }
-    return res;
-  };
-  parse() {
-    for (; this._i < this.data.length; this._i++)
-      this._stateHandler(this.data[this._i]);
-    return this.res;
-  };
-  SpaceHandler(c) {
-    if (c == '.' || c == '#' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-      this._sectionStart = this._i;
-      this._stateHandler = this.StyleNameHandler;
-    } else if (c == '/' && this.data[this._i + 1] == '*')
-      this.CommentHandler();
-    else if (!config.blankChar[c] && c != ';')
-      this._stateHandler = this.IgnoreHandler;
-  };
-  CommentHandler() {
-    this._i = this.data.indexOf("*/", this._i) + 1;
-    if (this._i == -1) this._i = this.data.length;
-    this._stateHandler = this.SpaceHandler;
-  };
-  IgnoreHandler(c) {
-    if (c == '{') this._floor++;
-    else if (c == '}' && --this._floor <= 0)
-      this._stateHandler = this.SpaceHandler;
-  };
-  StyleNameHandler(c) {
-    if (c == '{') {
-      this._name = this.data.substring(this._sectionStart, this._i);
-      this._sectionStart = this._i + 1;
-      this.ContentHandler();
-    } else if (config.blankChar[c]) {
-      this._name = this.data.substring(this._sectionStart, this._i);
-      this._stateHandler = this.NameSpaceHandler;
-    } else if (c == '[') this._stateHandler = this.IgnoreHandler;
-  };
-  NameSpaceHandler(c) {
-    if (c == '{') {
-      this._sectionStart = this._i + 1;
-      this.ContentHandler();
-    } else if (!config.blankChar[c])
-      this._stateHandler = this.StyleNameHandler;
-  };
-  ContentHandler() {
-    this._i = this.data.indexOf('}', this._i);
-    if (this._i == -1) this._i = this.data.length;
-    // 去除空白符
-    var content = this.data.substring(this._sectionStart, this._i).trim();
-    for (var i = content.length, tmp = [content[--i]]; --i > 0;)
-      if (!config.blankChar[content[i]] || !config.blankChar[tmp[0]])
-        if ((content[i] == ';' || content[i] == ':') && config.blankChar[tmp[0]]) tmp[0] = content[i];
-        else tmp.unshift(content[i]);
-    tmp.unshift(content[0]); 
-    this._content = tmp.join('');
-    var items = this._name.split(/\s*,\s*/);
-    for (let item of items)
-      this.setClass(item);
-    this._stateHandler = this.SpaceHandler;
-  };
-  setClass(key) {
-    var pseudo;
-    if (key.includes(':')) {
-      var info = key.split(/\s*:+\s*/);
-      key = info[0];
-      pseudo = info[1];
-      if (pseudo != "before" && pseudo != "after") return;
-    }
-    if (!/[\s>]/.test(key)) {
-      this.res.push({
-        key: key,
-        content: this._content,
-        pseudo
-      })
-    } else {
-      key = key.replace(/\s*>\s*/g, ' >').split(/\s/);
-      this.res.push({
-        key: key[0],
-        index: 0,
-        list: key,
-        content: this._content,
-        pseudo
-      })
-    }
-  };
+  }
+  return keys;
 }
 module.exports = CssHandler;

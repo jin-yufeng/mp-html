@@ -1,8 +1,8 @@
 /*
- 解析和匹配 Css 的选择器
- github地址：https://github.com/jin-yufeng/Parser
- 文档地址：https://jin-yufeng.github.io/Parser
- author：JinYufeng
+  解析和匹配 Css 的选择器
+  github地址：https://github.com/jin-yufeng/Parser
+  文档地址：https://jin-yufeng.github.io/Parser
+  author：JinYufeng
 */
 const config = require("./config.js");
 class CssHandler {
@@ -19,15 +19,15 @@ class CssHandler {
     return data;
   };
   match(name, attrs) {
-    var tmp, matched = ((tmp = this.styles[name]) ? (tmp + ';') : '');
+    var tmp, matched = (tmp = this.styles[name]) ? tmp + ';' : '';
     if (attrs.class) {
       var classes = attrs.class.split(' ');
       for (var i = 0; i < classes.length; i++)
         if (tmp = this.styles['.' + classes[i]])
-          matched += (tmp + ';');
+          matched += tmp + ';';
     }
     if (tmp = this.styles['#' + attrs.id])
-      matched += (tmp + ';');
+      matched += tmp + ';';
     return matched;
   };
 }
@@ -40,10 +40,10 @@ class CssParser {
       if (tagStyle[item]) tagStyle[item] = config.userAgentStyles[item] + ';' + tagStyle[item];
       else tagStyle[item] = config.userAgentStyles[item];
     }
+    this._comma = false;
     this._floor = 0;
     this._i = 0;
     this._list = [];
-    this._comma = false;
     this._sectionStart = 0;
     this._state = this.Space;
   };
@@ -69,30 +69,29 @@ class CssParser {
   };
   Ignore(c) {
     if (c == '{') this._floor++;
-    else if (c == '}' && --this._floor <= 0) {
+    else if (c == '}' && !--this._floor) {
       this._list = [];
       this._state = this.Space;
     }
   };
   StyleName(c) {
     if (config.blankChar[c]) {
-      this._list.push(this.data.substring(this._sectionStart, this._i));
+      if (this._sectionStart != this._i)
+        this._list.push(this.data.substring(this._sectionStart, this._i));
       this._state = this.NameSpace;
     } else if (c == '{') {
       this._list.push(this.data.substring(this._sectionStart, this._i));
-      this._floor = 1;
       this._sectionStart = this._i + 1;
       this.Content();
     } else if (c == ',') {
       this._list.push(this.data.substring(this._sectionStart, this._i));
       this._sectionStart = this._i + 1;
       this._comma = true;
-    } else if (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9') && c != '.' && c != '#' && c != '-' && c != '_')
+    } else if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < '0' || c > '9') && c != '.' && c != '#' && c != '-' && c != '_')
       this._state = this.Ignore;
   };
   NameSpace(c) {
     if (c == '{') {
-      this._floor = 1;
       this._sectionStart = this._i + 1;
       this.Content();
     } else if (c == ',') {
@@ -110,16 +109,10 @@ class CssParser {
   Content() {
     this._i = this.data.indexOf('}', this._i);
     if (this._i == -1) this._i = this.data.length;
-    // 去除空白符
-    var content = this.data.substring(this._sectionStart, this._i).trim();
-    for (var i = content.length, tmp = [content[--i]]; --i > 0;)
-      if (!config.blankChar[content[i]] || !config.blankChar[tmp[0]])
-        if ((content[i] == ';' || content[i] == ':') && config.blankChar[tmp[0]]) tmp[0] = content[i];
-        else tmp.unshift(content[i]);
-    tmp.unshift(content[0]);
-    content = tmp.join('');
-    for (var i = this._list.length; i--;)
-      this.res[this._list[i]] = (this.res[this._list[i]] || '') + content;
+    var content = this.data.substring(this._sectionStart, this._i);
+    for (var i = this._list.length, item; item = this._list[--i];)
+      if (this.res[item]) this.res[item] += ';' + content;
+      else this.res[item] = content;
     this._list = [];
     this._state = this.Space;
   }

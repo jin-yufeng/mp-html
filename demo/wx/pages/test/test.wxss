@@ -2,6 +2,35 @@
 page {
   background-color: #f8f8f8;
 }
+.parse-view {
+  margin-top: 0;
+  padding: 10px;
+}
+.editor-view {
+  border-top: 1rpx solid #d9d9d9;
+  border-bottom: 1rpx solid #d9d9d9;
+  position: relative;
+  background: #2d2d2d;
+  color: #ccc;
+}
+.highlight-view {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 10px;
+}
+.editor {
+  padding: 10px;
+  height: auto;
+  word-break: break-all;
+  font-family: monospace;
+  caret-color: #ccc;
+}
+.labels {
+  display: flex;
+  justify-content: center;
+  margin: 5px 0;
+}
 .label {
   font-size: 13px;
   text-align: center;
@@ -23,27 +52,9 @@ page {
   color: #999;
   font-size: 14px;
 }
-.weui-cells_after-title {
-  margin-top: 0;
-}
 .weui-textarea {
   display: block;
   width: 100%;
-}
-.weui-cell_switch {
-  padding-top: 6px;
-  padding-bottom: 6px;
-}
-.weui-cell_select {
-  padding: 0;
-}
-.weui-cell__hd_in-select-after {
-  padding-left: 15px;
-}
-.weui-label {
-  width: 105px;
-  word-wrap: break-word;
-  word-break: break-all;
 }
 .weui-btn {
   margin-top: 15px;
@@ -53,4 +64,7 @@ page {
 }
 .weui-btn-area {
   margin: 1.17647059em 15px 0.3em;
+}
+.ql-editor.ql-blank:before {
+  color: #ccc;
 }

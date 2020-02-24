@@ -1,178 +1,159 @@
 /*
- parser 主模块组件
- github地址：https://github.com/jin-yufeng/Parser
- 文档地址：https://jin-yufeng.github.io/Parser
- author：JinYufeng
+  parser 主组件
+  github地址：https://github.com/jin-yufeng/Parser
+  文档地址：https://jin-yufeng.github.io/Parser
+  author：JinYufeng
 */
-const parseHtml = require('./libs/MpHtmlParser.js');
 const cache = getApp().parserCache = {};
-const CssHandler = require("./libs/CssHandler.js");
 const config = require("./libs/config.js");
-var document;
+const CssHandler = require("./libs/CssHandler.js");
+var document; // 引入补丁包
 try {
   document = require("./libs/document.js");
 } catch (e) {}
-// 散列函数（计算 cache 的 key）
-function Hash(str) {
+const fs = wx.getFileSystemManager ? wx.getFileSystemManager() : null;
+const parseHtml = require("./libs/MpHtmlParser.js");
+// 渐显动画
+const showAnimation = wx.createAnimation({
+  timingFunction: "ease"
+}).opacity(1).step().export();
+// 计算 cache 的 key
+function hash(str) {
   for (var i = str.length, hash = 5381; i--;)
     hash += (hash << 5) + str.charCodeAt(i);
   return hash;
 };
-// 动画
-const hideAnimation = wx.createAnimation({
-  timingFunction: "ease"
-}).opacity(0).step().export();
-const showAnimation = wx.createAnimation({
-  timingFunction: "ease"
-}).opacity(1).step().export();
-// 图片链接去重
-function Deduplicate(src) {
-  if (src.indexOf("http") != 0) return src;
-  var newSrc = '';
-  for (var i = 0; i < src.length; i++) {
-    newSrc += (Math.random() >= 0.5 ? src[i].toUpperCase() : src[i].toLowerCase());
-    if (src[i] == '/' && src[i - 1] != '/' && src[i + 1] != '/') break;
-  }
-  newSrc += src.substring(i + 1);
-  return newSrc;
-}
 Component({
   properties: {
     "html": {
       type: null,
-      value: null,
       observer: function(html) {
+        // 防止循环调用
         if (this._refresh) return this._refresh = false;
-        this.setContent(html, undefined, true);
+        this.setContent(html, true);
       }
-    },
-    "autopause": {
-      type: Boolean,
-      value: true
     },
     "autosetTitle": {
       type: Boolean,
       value: true
     },
-    "domain": {
-      type: String,
-      value: null
-    },
-    "gestureZoom": {
+    "autopause": {
       type: Boolean,
-      value: false
+      value: true
     },
-    "lazyLoad": {
-      type: Boolean,
-      value: false
-    },
-    "selectable": {
-      type: Boolean,
-      value: false
-    },
-    "tagStyle": {
-      type: Object,
-      value: {}
-    },
-    "showWithAnimation": {
-      type: Boolean,
-      value: false
-    },
-    "useAnchor": {
-      type: Boolean,
-      value: false
-    },
-    "useCache": {
-      type: Boolean,
-      value: false
-    }
+    "domain": String,
+    "gestureZoom": Boolean,
+    "lazyLoad": Boolean,
+    "selectable": Boolean,
+    "tagStyle": Object,
+    "showWithAnimation": Boolean,
+    "useAnchor": Boolean,
+    "useCache": Boolean
   },
   created() {
-    // api
+    // 锚点跳转
     this.navigateTo = (obj) => {
       obj.fail = obj.fail || (() => {});
       if (!this.data.useAnchor)
         return obj.fail({
           errMsg: "Use-anchor attribute is disabled"
         })
-      const query = this.createSelectorQuery();
-      query.select("#contain" + (obj.id ? (">>>#" + obj.id) : '')).boundingClientRect();
-      query.selectViewport().scrollOffset();
-      query.exec(res => {
-        if (!res || !res[0])
-          return obj.fail({
-            errMsg: "Label not found"
-          });
-        wx.pageScrollTo({
-          scrollTop: res[1].scrollTop + res[0].top,
-          success: obj.success,
-          fail: obj.fail
+      this.createSelectorQuery()
+        .select("#root" + (obj.id ? ">>>#" + obj.id : '')).boundingClientRect()
+        .selectViewport().scrollOffset().exec(res => {
+          if (!res[0])
+            return obj.fail({
+              errMsg: "Label not found"
+            });
+          wx.pageScrollTo({
+            scrollTop: res[1].scrollTop + res[0].top,
+            success: obj.success,
+            fail: obj.fail
+          })
         })
-      })
     };
-    this.getText = (whiteSpace = true) => {
-      var text = "";
-      const DFS = (node) => {
-        if (node.type == "text") return text += node.text;
-        else {
-          if (whiteSpace && (((node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" || /h[1-6]/.test(node.name)) && text && text[text.length - 1] != '\n') || node.name == "br"))
-            text += '\n';
-          if (node.children)
-            for (var i = 0; i < node.children.length; i++)
-              DFS(node.children[i]);
-          if (whiteSpace && (node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" || /h[1-6]/.test(node.name)) && text && text[text.length - 1] != '\n')
-            text += '\n';
-          else if (whiteSpace && node.name == "td") text += '\t';
+    // 获取文本
+    this.getText = () => {
+      var text = '';
+
+      function DFS(nodes) {
+        if (!nodes) return;
+        for (var i = 0, node; node = nodes[i++];) {
+          if (node.type == "text") text += node.text;
+          else if (node.type == "br") text += '\n';
+          else {
+            // 块级标签前后加换行
+            var block = node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" || (node.name[0] == 'h' && node.name[1] > '0' && node.name[1] < '7');
+            if (block && text && text[text.length - 1] != '\n') text += '\n';
+            DFS(node.children);
+            if (block && text[text.length - 1] != '\n') text += '\n';
+            else if (node.name == "td" || node.name == "th") text += '\t';
+          }
         }
       }
-      if (!this.data.html || !this.data.html.length) return "";
-      for (var i = 0; i < this.data.html.length; i++) DFS(this.data.html[i]);
-      return text;
+      DFS(this.data.html);
+      return text.replace(/&nbsp;/g, '\u00A0');
     };
+    // 获取视频 context
     this.getVideoContext = (id) => {
       if (!id) return this.videoContexts;
-      else
-        for (var i = this.videoContexts.length; i--;)
-          if (this.videoContexts[i].id == id) return this.videoContexts[i];
+      for (var i = this.videoContexts.length; i--;)
+        if (this.videoContexts[i].id == id) return this.videoContexts[i];
       return null;
     };
+    // 图片数组
     this.imgList = [];
+    this.imgList.setItem = function(i, src) {
+      this[i] = src;
+      // 暂存 base64
+      if (src.includes("base64")) {
+        var fileInfo = src.match(/data:image\/(\S+?);base64,(\S+)/);
+        if (!fileInfo) return;
+        var filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${fileInfo[1]}`;
+        fs && fs.writeFile({
+          filePath,
+          data: fileInfo[2],
+          encoding: "base64",
+          success: () => this[i] = filePath
+        })
+      }
+      // 去重 
+      else if (this.includes(src)) {
+        if (src.substring(0, 4) != "http") return;
+        var newSrc = '';
+        for (var j = 0; j < src.length; j++) {
+          newSrc += Math.random() >= 0.5 ? src[j].toUpperCase() : src[j].toLowerCase();
+          if (src[j] == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
+        }
+        newSrc += src.substring(j + 1);
+        this[i] = newSrc;
+      }
+    }
     this.imgList.each = function(f) {
       for (var i = 0; i < this.length; i++) {
         var newSrc = f(this[i], i, this);
-        if (newSrc) {
-          if (this.includes(newSrc)) this[i] = Deduplicate(newSrc);
-          else this[i] = newSrc;
-        }
+        if (newSrc) this.setItem(i, newSrc);
       }
     }
-    this._refresh = false; // 防止循环调用
-    this.setContent = (html, options, obversed) => {
-      if (typeof options == "object")
-        for (var key in options) {
-          key = key.replace(/-(\w)/g, function($, $1) {
-            return $1.toUpperCase();
-          })
-          this.data[key] = options[key];
-        }
+    // 渲染富文本
+    this._refresh = false;
+    this.setContent = (html, obversed) => {
       var data = {
         controls: {}
       };
-      if (this.data.showWithAnimation) {
+      if (this.data.showWithAnimation)
         data.showAnimation = showAnimation;
-        data.hideAnimation = hideAnimation;
-      }
       if (!html) {
         if (obversed) return;
         data.html = '';
       } else if (typeof html == "string") {
         // 缓存读取
         if (this.data.useCache) {
-          var hash = Hash(html);
-          if (cache[hash]) data.html = cache[hash];
+          var hashValue = hash(html);
+          if (cache[hashValue]) data.html = cache[hashValue];
           else {
             data.html = parseHtml(html, this.data);
-            cache[hash] = data.html;
+            cache[hashValue] = data.html;
           }
         } else data.html = parseHtml(html, this.data);
         this.triggerEvent('parse', data.html);
@@ -184,11 +165,10 @@ Component({
             _videoNum: 0,
             _audioNum: 0,
             _domain: this.data.domain,
-            _protocol: this.data.domain ? (this.data.domain.includes("://") ? this.data.domain.split("://")[0] : "http") : undefined,
+            _protocol: this.data.domain && this.data.domain.includes("://") ? this.data.domain.split("://")[0] : "http",
             _STACK: [],
             CssHandler: new CssHandler(this.data.tagStyle)
           };
-          Parser.CssHandler.getStyle('');
 
           function DFS(nodes) {
             for (var i = 0, node; node = nodes[i++];) {
@@ -198,9 +178,9 @@ Component({
                 if (!config.trustAttrs[item]) node.attrs[item] = undefined;
                 else if (typeof node.attrs[item] != "string") node.attrs[item] = node.attrs[item].toString();
               }
-              config.LabelAttrsHandler(node, Parser);
-              if (config.blockTags[node.name]) node.name = 'div';
-              else if (!config.trustTags[node.name]) node.name = 'span';
+              config.LabelHandler(node, Parser);
+              if (config.blockTags[node.name]) node.name = "div";
+              else if (!config.trustTags[node.name]) node.name = "span";
               if (node.children && node.children.length) {
                 Parser._STACK.push(node);
                 DFS(node.children);
@@ -212,61 +192,52 @@ Component({
           data.html = html;
         }
         if (!obversed) data.html = html;
-      } else if (typeof html == 'object' && html.nodes) {
+      } else if (typeof html == "object" && html.nodes) {
         data.html = html.nodes;
-        console.warn("Parser 类型错误：object 类型已废弃，请直接将 html 设置为 object.nodes （array 类型）");
-      } else {
-        return this.triggerEvent('error', {
-          source: "parse",
-          errMsg: "错误的html类型：" + typeof html
-        });
-      }
+        console.warn("错误的 html 类型：object 类型已废弃，请直接将 html 设置为 object.nodes");
+      } else
+        return console.warn("错误的 html 类型：" + typeof html);
       this._refresh = !!data.html;
       this.setData(data);
       this.imgList.length = 0;
       this.videoContexts = [];
       if (document) this.document = new document("html", data.html || html, this);
-      var nodes = [this.selectComponent('#contain')].concat(this.selectAllComponents('#contain>>>._node'));
+      var nodes = this.selectAllComponents('#root,#root>>>._node')
       for (var i = nodes.length; i--;) {
         let node = nodes[i];
         node._top = this;
         var observed = !!node._observer;
-        var j = node.data.nodes.length,
-          item;
         for (var j = node.data.nodes.length, item; item = node.data.nodes[--j];) {
-          if (item.continue) continue;
+          if (item.c) continue;
           // 获取图片列表
-          if (item.name == 'img') {
-            if (item.attrs.src && item.attrs.i) {
-              if (this.imgList.indexOf(item.attrs.src) == -1)
-                this.imgList[item.attrs.i] = item.attrs.src;
-              else this.imgList[item.attrs.i] = Deduplicate(item.attrs.src);
-            }
+          if (item.name == "img") {
+            if (item.attrs.src && item.attrs.i)
+              this.imgList.setItem(item.attrs.i, item.attrs.src);
             if (!observed) {
               observed = true;
               // 懒加载
-              (wx.nextTick || setTimeout)(() => {
-                if (this.data.lazyLoad && node.createIntersectionObserver) {
+              if (this.data.lazyLoad && node.createIntersectionObserver) {
+                (wx.nextTick || setTimeout)(() => {
                   node._observer = node.createIntersectionObserver();
                   node._observer.relativeToViewport({
                     top: 1000,
                     bottom: 1000
-                  }).observe('._img', () => {
+                  }).observe("._img", () => {
                     node.setData({
                       imgLoad: true
                     })
                     node._observer.disconnect();
                     node._observer = undefined;
                   })
-                } else
-                  node.setData({
-                    imgLoad: true
-                  })
-              }, 50)
+                }, 50)
+              } else
+                node.setData({
+                  imgLoad: true
+                })
             }
           }
           // 音视频控制
-          else if (item.name == 'video') {
+          else if (item.name == "video") {
             var context = wx.createVideoContext(item.attrs.id, node);
             context.id = item.attrs.id;
             this.videoContexts.push(context);
@@ -280,12 +251,21 @@ Component({
         }
       }
       (wx.nextTick || setTimeout)(() => {
-        this.createSelectorQuery().select('#contain').boundingClientRect(res => {
+        this.createSelectorQuery().select("#root").boundingClientRect(res => {
           this.width = res.width;
-          this.triggerEvent('ready', res);
+          this.triggerEvent("ready", res);
         }).exec();
       }, 50)
     }
+  },
+  detached() {
+    // 删除暂存
+    this.imgList.each((item) => {
+      if (item && item.includes(wx.env.USER_DATA_PATH))
+        fs && fs.unlink({
+          filePath: item
+        })
+    })
   },
   methods: {
     tap(e) {

@@ -1,8 +1,8 @@
 /*
- document补丁包
- github地址：https://github.com/jin-yufeng/Parser
- 文档地址：https://jin-yufeng.github.io/Parser
- author：JinYufeng
+  document补丁包
+  github地址：https://github.com/jin-yufeng/Parser
+  文档地址：https://jin-yufeng.github.io/Parser
+  author：JinYufeng
 */
 const _setData = function(Component, key, value) {
   Component._refresh = true;
@@ -14,7 +14,7 @@ const _search = function(nodes, id, site, Component) {
   if (!nodes || !nodes.length) return null;
   for (var i = nodes.length; i--;) {
     if (nodes[i].type == "text") continue;
-    site += ("[" + i + "]");
+    site += '[' + i + ']';
     if (nodes[i].attrs && nodes[i].attrs.id == id)
       return new element(nodes[i], site, Component);
     else {
@@ -23,7 +23,7 @@ const _search = function(nodes, id, site, Component) {
       if (find != null) return find;
       site = site.substring(0, site.length - 9);
     }
-    site = site.substring(0, site.length - ("[" + i + "]").length);
+    site = site.substring(0, site.length - ('[' + i + ']').length);
   }
   return null;
 }
@@ -34,9 +34,9 @@ class element {
     this.styles = {};
     var styleArr = (nodes.attrs.style || '').split(';');
     for (var i = styleArr.length; i--;)
-      if (!styleArr[i].includes(':')) {
+      if (styleArr[i].includes(':')) {
         var info = styleArr[i].split(':');
-        this.styles[info[0].trim()] = info[1];
+        this.styles[info[0]] = info[1];
       }
     this._site = site;
     this._Component = Component;
@@ -59,10 +59,7 @@ class element {
     if (this._text) return this.nodes.children[0].text;
     else return null;
   }
-  /* 增加子节点
-   * @param nodes 需要增加的节点数组（格式同rich-text）
-   * @param i     加入的位置
-   */
+  // 增加子节点
   addChildren(nodes, i) {
     if (typeof nodes == "object" && i >= 0 && i <= this.nodes.children.length) {
       this.nodes.children.splice(i, 0, nodes);
@@ -83,7 +80,7 @@ class element {
   // 获取第 i 个子节点
   getChildren(i) {
     if (i >= 0 && i < this.nodes.children.length)
-      return new element(this.nodes.childrens[i], this._site + ".children[" + i + "]", this._Component);
+      return new element(this.nodes.childrens[i], this._site + ".children[" + i + ']', this._Component);
     else return null;
   }
   // 获取某个属性
@@ -112,7 +109,7 @@ class element {
         this.styles[key] = value;
         var style = '';
         for (var item in this.styles)
-          style += (item + ':' + this.styles[item] + ';');
+          style += item + ':' + this.styles[item] + ';';
         this.nodes.attrs.style = style;
       } else this.nodes.attrs.style = (this.nodes.attrs.style || '') + ';' + key + ':' + value;
       _setData(this._Component, this._site, this.nodes);
@@ -129,15 +126,13 @@ class element {
   getElementById(id) {
     return _search(this.nodes, id, this._site, this._Component);
   }
-  /* 更新这个结点
-   * 修改了 this.nodes 后需要调用这个方法同步到 UI
-   */
+  // 更新结点
   update() {
     _setData(this._Component, this._site, this.nodes);
     return true;
   }
 }
-class document {
+class dom {
   constructor(root, nodes, Component) {
     this._root = root;
     this.nodes = nodes;
@@ -149,8 +144,8 @@ class document {
   }
   getChildren(i) {
     if (i >= 0 && i < (this.nodes.children || []).length)
-      return new element(this.nodes.childrens[i], this._root + ".children[" + i + "]", this._Component);
+      return new element(this.nodes.childrens[i], this._root + ".children[" + i + ']', this._Component);
     else return null;
   }
 }
-module.exports = document;
+module.exports = dom;

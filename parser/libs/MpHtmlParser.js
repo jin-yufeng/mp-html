@@ -1,13 +1,13 @@
 /*
- 将 html 解析为适用于小程序 rich-text 的 DOM 结构
- github地址：https://github.com/jin-yufeng/Parser
- 文档地址：https://jin-yufeng.github.io/Parser
- author：JinYufeng
+  将 html 解析为适用于小程序 rich-text 的 DOM 结构
+  github地址：https://github.com/jin-yufeng/Parser
+  文档地址：https://jin-yufeng.github.io/Parser
+  author：JinYufeng
 */
-const CssHandler = require("./CssHandler.js");
 const config = require("./config.js");
 const blankChar = config.blankChar;
-var emoji;
+const CssHandler = require("./CssHandler.js");
+var emoji; // 引入补丁包
 try {
   emoji = require("./emoji.js");
 } catch (e) {};
@@ -20,8 +20,8 @@ class MpHtmlParser {
     this._attrValue = '';
     this._attrs = {};
     this._domain = options.domain;
-    this._protocol = options.domain && options.domain.includes("://") ? this._domain.split("://")[0] : "http";
     this._i = 0;
+    this._protocol = this._domain && this._domain.includes("://") ? this._domain.split("://")[0] : "http";
     this._sectionStart = 0;
     this._state = this.Text;
     this._STACK = [];
@@ -33,18 +33,17 @@ class MpHtmlParser {
     this._whiteSpace = false;
   };
   parse() {
-    if (this.CssHandler) this.data = this.CssHandler.getStyle(this.data);
     if (emoji) this.data = emoji.parseEmoji(this.data);
     // 高亮处理
     if (config.highlight)
-      this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]*?)<\/[pP][rR][eE][\s\S]*?>/g, function($, $1, $2) {
-        return "<pre" + $1 + '>' + config.highlight($2, "<pre" + $1 + '>') + "</pre>";
+      this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]+?)<\/[pP][rR][eE][\s\S]*?>/g, function($, $1, $2) {
+        return "<pre" + $1 + '>' + config.highlight($2, $1) + "</pre>";
       })
+    this.data = this.CssHandler.getStyle(this.data);
     for (var len = this.data.length; this._i < len; this._i++)
       this._state(this.data[this._i]);
     if (this._state == this.Text) this.setText();
-    while (this._STACK.length)
-      this.popNode(this._STACK.pop());
+    while (this._STACK.length) this.popNode(this._STACK.pop());
     if (this.DOM.length) this.DOM[0].PoweredBy = "Parser";
     return this.DOM;
   };
@@ -55,7 +54,7 @@ class MpHtmlParser {
         if (this._attrValue[1] == '/') this._attrValue = this._protocol + ':' + this._attrValue;
         else if (this._domain) this._attrValue = this._domain + this._attrValue;
       }
-      this._attrs[this._attrName] = (this._attrValue ? this._attrValue : (this._attrName == "src" ? "" : "true"));
+      this._attrs[this._attrName] = this._attrValue ? this._attrValue : (this._attrName == "src" || this._attrName == "alt" ? '' : 'T');
     }
     this._attrValue = '';
     while (blankChar[this.data[this._i]]) this._i++;
@@ -84,7 +83,8 @@ class MpHtmlParser {
         if (!isNaN(u)) text = text.substring(0, i) + String.fromCharCode(u) + text.substring(j + 1);
       } else {
         u = text.substring(i + 1, j);
-        if (u == "nbsp") text = text.substring(0, i) + '\u00A0' + text.substring(j + 1); // 解决连续 &nbsp; 失效的问题
+        if (u == "nbsp")
+          text = text.substring(0, i) + '\u00A0' + text.substring(j + 1); // 解决连续 &nbsp; 失效的问题
         else if (u != "lt" && u != "gt" && u != "amp" && u != "ensp" && u != "emsp") decode = true;
       }
       i = text.indexOf('&', i + 2);
@@ -107,7 +107,7 @@ class MpHtmlParser {
       name: this._tagName.toLowerCase(),
       attrs: this._attrs
     }
-    config.LabelAttrsHandler(node, this);
+    config.LabelHandler(node, this);
     this._attrs = {};
     if (!config.selfClosingTags[node.name]) {
       if (config.ignoreTags[node.name]) {
@@ -123,7 +123,7 @@ class MpHtmlParser {
             if (this._i == -1) this._i = this.data.length;
             else this._sectionStart = this._i + 1;
             this._state = this.Text;
-            // 处理svg
+            // 处理 svg
             if (node.name == "svg") {
               var src = this.data.substring(j, this._i + 1);
               if (!node.attrs.xmlns) src = " xmlns=\"http://www.w3.org/2000/svg\"" + src;
@@ -134,7 +134,7 @@ class MpHtmlParser {
               node.name = "img";
               node.attrs = {
                 src: "data:image/svg+xml;utf8," + src.replace(/#/g, "%23"),
-                ignore: "true"
+                ignore: 'T'
               }
               slibings.push(node);
             }
@@ -150,7 +150,7 @@ class MpHtmlParser {
     this._state = this.Text;
     if (!config.ignoreTags[node.name]) {
       // 检查空白符是否有效
-      if (node.name == "pre" || (node.attrs.style && node.attrs.style.toLowerCase().includes("white-space") && node.attrs.style.toLowerCase().includes("pre"))) {
+      if (node.name == "pre" || (node.attrs.style && node.attrs.style.includes("white-space") && node.attrs.style.includes("pre"))) {
         this._whiteSpace = true;
         node.pre = true;
       }
@@ -185,8 +185,8 @@ class MpHtmlParser {
           if (type == 'A') return String.fromCharCode(65 + (num - 1) % 26);
           if (type == 'i' || type == 'I') {
             num = (num - 1) % 99 + 1;
-            var one = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'],
-              ten = ['X', 'XX', 'XXX', 'XL', 'L', 'LX', 'LXX', 'LXXX', 'XC'],
+            var one = ['I', "II", "III", "IV", 'V', "VI", "VII", "VIII", "IX"],
+              ten = ['X', "XX", "XXX", "XL", 'L', "LX", "LXX", "LXXX", "XC"],
               res = (ten[Math.floor(num / 10) - 1] || '') + (one[num % 10 - 1] || '');
             if (type == 'i') return res.toLowerCase();
             return res;
@@ -208,14 +208,14 @@ class MpHtmlParser {
         node.attrs.style = "border-spacing:" + node.attrs.cellspacing + "px;" + (node.attrs.style || '');
 
       function setBorder(elem) {
-        if (elem.name == 'th' || elem.name == 'td') {
+        if (elem.name == "th" || elem.name == "td") {
           if (node.attrs.border)
             elem.attrs.style = "border:" + node.attrs.border + "px solid gray;" + (elem.attrs.style || '');
           if (node.attrs.hasOwnProperty("cellpadding"))
             elem.attrs.style = "padding:" + node.attrs.cellpadding + "px;" + (elem.attrs.style || '');
           return;
         }
-        if (elem.type == 'text') return;
+        if (elem.type == "text") return;
         for (var i = (elem.children || []).length; i--;)
           setBorder(elem.children[i]);
       }
@@ -228,20 +228,20 @@ class MpHtmlParser {
       var child = node.children[0].attrs;
       node.attrs.style = node.attrs.style || '';
       child.style = child.style || '';
-      if (node.attrs.style.includes("padding") && (node.attrs.style.includes("margin") || child.style.includes("margin")) && node.attrs.style.includes("display") && child.style.includes("display") && !(node.attrs.id && node.attrs.id) && !(node.attrs.class && child.class)) {
+      if (!node.attrs.style.includes("padding") && (!node.attrs.style.includes("margin") || !child.style.includes("margin")) && !node.attrs.style.includes("display") && !child.style.includes("display") && !node.attrs.id && !node.attrs.id && !node.attrs.class && !child.class) {
         if (child.style.includes("padding"))
           child.style = "box-sizing:border-box;" + child.style;
-        node.attrs.style = node.attrs.style + ";" + child.style;
+        node.attrs.style = node.attrs.style + ';' + child.style;
         node.attrs.id = (child.id || '') + (node.attrs.id || '');
         node.attrs.class = (child.class || '') + (node.attrs.class || '');
         node.children = node.children[0].children;
-      } else if (!node.attrs.style) node.attrs.style = undefined;
-      else if (!child.style) child.style = undefined;
-      child = undefined;
+      } else {
+        if (!node.attrs.style) node.attrs.style = undefined;
+        if (!child.style) child.style = undefined;
+      }
     }
-    // 多层样式处理
-    if (this.CssHandler.pop)
-      this.CssHandler.pop(node);
+    // 后代选择器处理
+    this.CssHandler.pop && this.CssHandler.pop(node);
   };
   // 工具函数
   checkClose() {
@@ -283,7 +283,7 @@ class MpHtmlParser {
       if (this._i == -1) return this._i = this.data.length;
       else this._i = this._i + 2;
     } else
-      (this._i = this.data.indexOf(">", this._i + 1)) == -1 ? this._i = this.data.length : null;
+      (this._i = this.data.indexOf('>', this._i + 1)) == -1 ? this._i = this.data.length : null;
     this._sectionStart = this._i + 1;
     this._state = this.Text;
   };

@@ -1,7 +1,7 @@
 // app.js
 App({
   onLaunch() {
-    // wx.cloud.init();
+    wx.cloud.init();
   },
   onPageNotFound() {
     wx.redirectTo({

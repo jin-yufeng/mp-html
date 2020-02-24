@@ -24,70 +24,71 @@ Page({
       example: ".the-class, #the-id"
     }],
     // 选择器示例代码
-    selectorCode: `<pre lan="html">&lt;style>
+    selectorCode: `<pre><code class="language-html"><style>
 .demo {
-  font-style:italic;
+  font-style: italic;
 }
 #demo2 {
-  font-weight:bold;
+  font-weight: bold;
 }
 p {
-  text-align:center;
-  font-size:30px;
+  text-align: center;
+  font-size: 30px;
 }
 </style>
 <p>
   <span class="demo">Hello </span>
   <span id="demo2">World!</span>
-</p></pre>
+</p></code></pre>
 <style>.demo{font-style:italic;}#demo2{font-weight:bold;}p{text-align:center;font-size:30px;}</style>
 <p><span class="demo">Hello </span><span id="demo2">World!</span></p>`,
     // tag-style 示例代码
-    tagStyleCode: `<pre lan="javascript">Page({
+    tagStyleCode: `<pre><code class="language-javascript">Page({
   data: {
     tagStyle: {
-      code:"background-color:#f0f0f0;border-radius:2px;font-family:monospace;"
+      code: "background-color:#f0f0f0;border-radius:2px;font-family:monospace;"
     }
   }
-})</pre>
-<pre lan="html" style="margin:15px 0 10px 0"><parser html="<code>test</code>" tag-style="{{tagStyle}}" /></pre>
+})</code></pre>
+<pre style="margin:15px 0 10px 0"><code class="language-html"><parser html="<code>test</code>" tag-style="{{tagStyle}}" /></code></pre>
 解析结果：<code>test</code>`,
     // svg 示例代码
-    svgCode: `<pre lan="html"><svg>
+    svgCode: `<pre><code class="language-html"><svg>
   <circle cx="100" cy="50" r="40" stroke="#3b5b81" stroke-width="2" fill="#5aa0b3" />
-</svg></pre>
+</svg></code></pre>
 <p>解析结果：</p>
 <svg width="200" height="100">
   <circle cx="100" cy="50" r="40" stroke="#3b5b81" stroke-width="2" fill="#5aa0b3" />
 </svg>`,
     // 锚点跳转示例代码
-    anchorCode: `<pre lan="html"><div id="anchor">我是锚点</div>
+    anchorCode: `<pre><code class="language-html"><div id="anchor">我是锚点</div>
 ···
-<a href="#anchor">点我跳转锚点</a></pre>
+<a href="#anchor">点我跳转锚点</a></code></pre>
 <a href="../demo/demo?index=0&anchor=true">立即体验</a>`,
     // 多资源加载示例代码
-    sourceCode: `<pre lan="html"><video controls>
+    sourceCode: `<pre><code class="language-html"><video controls>
   <source src="demo1.mov" />
   <source src="demo2.webm" />
-</video></pre>`,
+</video></code></pre>`,
     // 加载提示示例代码
-    loadingCode: `<pre lan="wxml"><parser html="{{html}}" show-with-animation>
+    loadingCode: `<pre><code class="language-wxml"><parser html="{{html}}" show-with-animation>
   加载中...
-</parser></pre>`,
+</parser></code></pre>`,
     // 智能压缩
     compress: `<ol style="margin:10px 0 0 -15px">
   <li>将一些只有一个子节点的标签进行合并来减小节点的深度</li>
   <li>在非<code>pre</code>标签且没有<code>white-space:pre</code>时自动去除空白符</li>
+  <li>压缩<code>style</code>属性的值，去除重复的属性和多余的空格</li>
 </ol>`,
     // 自动填充链接示例代码
-    completerCode: `<pre lan="javascript">Page({
+    completerCode: `<pre><code class="language-javascript">Page({
   data: {
     // 将被填充为 https://example.com/pics/pic.png
     html: "<img src='//example.com/pics/pic.png'>" +
       "<div style='background-image:url(/pics/pic.png)'>"
   }
-})</pre>
-<pre lan="wxml" style="margin-top:15px"><parser html="{{html}}" domain="https://example.com" /></pre>`,
+})</code></pre>
+<pre style="margin-top:15px"><code class="language-wxml"><parser html="{{html}}" domain="https://example.com" /></code></pre>`,
     // 与 rich-text 相比增加的标签
     tags: [{
       name: "a",
@@ -139,44 +140,44 @@ p {
     <div>链接受到点击时，若<code>href</code>属性的值是网络链接，将自动复制链接；若是内部路径，则自动跳转页面；若设置了<code>app-id</code>和<code>path</code>，则将跳转其他小程序；同时触发<code>linkpress</code>事件，可进行自定义处理</div>
   </li>
   <li>图片点击事件
-    <div>图片受到点击时，将自动进行预览（可通过属性控制），同时触发<code>imgtap</code>事件，可进行自定义处理</div>
+    <div>图片受到点击时，将自动进行预览（支持<code>base64</code>，可通过属性控制），同时触发<code>imgtap</code>事件，可进行自定义处理</div>
   </li>
   <li>图片长按事件
     <div>将触发<code>imglongtap</code>事件，可进行自定义处理（如显示菜单等，可在 <a href="../demo/demo?index=0">功能示例</a> 中长按图片体验）</div>
   </li>
 </ol>`,
     // 错误示例代码
-    errorCode: `<pre lan="html"><!--冒号不匹配-->
+    errorCode: `<pre><code class="language-html"><!--冒号不匹配-->
 <div style="font-family:"宋体"">Hello</div>
 <!--标签首位不匹配-->
 <div> World!</p>
 <!--异形标签-->
 <o:p></o:p>
 <!--缺少尾标签-->
-<div>!</pre>
+<div>!</code></pre>
 <div style="margin-top:20px">更多功能可见：<a href="https://jin-yufeng.github.io/Parser/#/">功能介绍</a></div>`,
     // 使用步骤
     usage: `<div>在原生框架中使用</div>
 <ol style="margin-left:-15px">
   <li>复制<code>parser</code>文件夹（<code>parser.min</code>是压缩版本，功能相同）至<code>components</code>目录下</li>
   <li>在需要使用页面的<code>json</code>文件中添加
-    <pre lan="json" style="margin:8px 0">{
+    <pre style="margin:8px 0"><code class="language-json">{
   "usingComponents": {
     "parser": "/components/parser/parser"
   }
-}</pre>
+}</code></pre>
   </li>
   <li>在需要使用页面的<code>wxml</code>文件中添加
-    <pre lan="wxml" style="margin:8px 0"><parser html="{{html}}" /></pre>
+    <pre style="margin:8px 0"><code class="language-wxml"><parser html="{{html}}" /></code></pre>
   </li>
   <li>在需要使用页面的<code>js</code>文件中添加
-    <pre lan="javascript" style="margin:8px 0">Page({
+    <pre style="margin:8px 0"><code class="language-javascript">Page({
   onLoad() {
     this.setData({
       html: "<div>Hello World!</div>"
     })
   }
-})</pre>
+})</code></pre>
   </li>
 </ol>
 </br>
@@ -184,7 +185,7 @@ p {
 <ol style="margin-left:-15px">
   <li>复制<code>parser.uni</code>文件夹至<code>components</code>目录下（更名为<code>jyf-parser</code>）</li>
   <li>在需要使用页面的<code>vue</code>文件中添加
-    <pre lan="vue" style="margin:8px 0"><template>
+    <pre style="margin:8px 0"><code class="language-vue"><template>
   <view>
     <jyf-parser :html="html"></jyf-parser>
   </view>
@@ -195,7 +196,7 @@ import parser from "@/components/jyf-parser/jyf-parser";
 export default {
   // HbuilderX 2.5.5 及以上可以不需要引入
   components: {
-    "jyf-parser":parser
+    "jyf-parser": parser
   },
   data() {
     return {
@@ -203,7 +204,7 @@ export default {
     }
   }
 }
-</script></pre>
+</script></code></pre>
   </li>
 </ol>
 <li style="margin-left:-15px">可以直接通过 <a href="https://ext.dcloud.net.cn/plugin?id=805">插件市场</a> 引入</li>
@@ -284,8 +285,8 @@ export default {
       notice: "图片被长按时触发，返回图片地址"
     }],
     // document 补丁包示例代码
-    documentCode: `<pre lan="html"><parser id="article" html="{{html}}" binderror="error" /></pre>
-<pre lan="javascript" style="margin-top:15px">Page({
+    documentCode: `<pre><code class="language-wxml"><parser id="article" html="{{html}}" binderror="error" /></code></pre>
+<pre style="margin-top:15px"><code class="language-javascript">Page({
   data: {
     html: "...<div id='adContainer'><ad unit-id='...'></ad></div>..."
   },
@@ -300,7 +301,7 @@ export default {
         adContainer.setStyle("display", "none"); // 隐藏广告容器
     }
   }
-})</pre>`,
+})</code></pre>`,
     // cssHandler 补丁包
     moreSelectors: [{
       name: "通配符",
@@ -312,11 +313,17 @@ export default {
       name: "子选择器",
       example: ".the-class1>.the-class2"
     }, {
+      name: "属性选择器",
+      example: "[name=\"123\"]"
+    }, {
       name: "before 伪类",
       example: ".the-class::before"
     }, {
       name: "after 伪类",
       example: ".the-class::after"
+    }, {
+      name: "@media 查询",
+      example: "@media(min-width:300px)"
     }],
     // 基础库要求
     versions: [{
@@ -333,79 +340,81 @@ export default {
       percent: "0.02%"
     }],
     // 获取组件实例的方法
-    apiCode: `<pre lan="wxml"><parser id="article" html="{{html}}" bindready="ready" /></pre>
-<pre lan="javascript" style="margin-top:15px">Page({
+    apiCode: `<pre><code class="language-wxml"><parser id="article" html="{{html}}" bindready="ready" /></code></pre>
+<pre style="margin-top:15px"><code class="language-javascript">Page({
   ready() {
     var context = this.selectComponent("#article");
     // 通过 context 调用 api 函数
   }
-})</pre>
+})</code></pre>
 <ol style="margin-left:-15px">
   <li><code>getText</code>
     <div>功能：获取所有文本内容</div>
-    <div>输入值：<code>whiteSpace</code>，设置为<code>true</code>时遇到块级标签等会自动添加换行符，增强可读性，默认<code>true</code></div>
-    <pre lan="javascript">// context 为组件实例
+    <pre><code class="language-javascript">// context 为组件实例
 var text = context.getText();
-console.log(text)</pre>
+console.log(text)</code></pre>
   </li>
   <li><code>navigateTo</code>
     <div>功能：跳转锚点</div>
     <div>输入值：一个<code>object</code>，<code>id</code>是锚点的<code>id</code>（为空时将跳转到组件开头），<code>success</code>和<code>fail</code>是成功和失败回调（需要配合<code>use-anchor</code>属性使用）
-    <pre lan="javascript">// context 为组件实例
+    <pre><code class="language-javascript">// context 为组件实例
 context.navigateTo({
   id: "anchor",
   success: console.log,
   fail: console.error
-})</pre>
+})</code></pre>
   </li>
   <li><code>getVideoContext</code>
     <div>功能：获取视频的<code>context</code>对象，可用于操控视频的播放</div>
     <div>输入值：<code>video</code>标签的<code>id</code>（不输入则返回所有视频的数组）</div>
-    <pre lan="javascript">// context 为组件实例
+    <pre><code class="language-javascript">// context 为组件实例
 var video = context.getVideoContext("the-id"); // id 为 the-id 的视频对象
-var videos = context.getVideoContext(); // 获取所有视频的对象</pre>
+var videos = context.getVideoContext(); // 获取所有视频的对象</code></pre>
   </li>
   <li><code>imgList</code>
     <div>功能：获取所有图片数组（这是一个<strong>属性</strong>）
     <div>另外，该数组还提供一个<code>each</code>方法，通过<code>return</code>可以改变数组中的值，该数组用于图片的预览，可以通过此方法设置预览时的大图</div>
-    <pre lan="javascript">// context 是组件对象
+    <pre><code class="language-javascript">// context 是组件对象
 var imgList = context.imgList;
 var cover = imgList[0]; // 首图作为转发封面
 imgList.each((src, i, arr) => {
   console.log(src);
   // 若有 return 将改变原数组，可将缩略图链接替换为大图链接
   return src.replace("thumb", "");
-})</pre>
+})</code></pre>
   </li>
   <li><code>setContent</code>
     <div>功能：解析和渲染<code>html</code>内容（功能上同<code>html</code>属性）</div>
     <div>说明：当<code>html</code>为<code>string</code>类型时无法直接渲染，需要经过解析后再次<code>setData</code>，因此通过此方法可以避免这次无用的<code>setData</code>，提高性能</div>
-    <div>输入值：<code>html</code>是具体字符串，<code>attrs</code>是需要设置的其他属性</div>
-    <pre lan="wxml"><parser id="article" /></pre>
-    <pre lan="javascript" style="margin-top:15px">Page({
+    <div>输入值：<code>html</code>是富文本字符串</div>
+    <pre><code class="language-wxml"><parser id="article" /></code></pre>
+    <pre style="margin-top:15px"><code class="language-javascript">Page({
   onLoad(){
     var html = "<div>Hello World!</div>";
-    var tagStyle = {
-      div: "text-align: justify"
-    };
     // 此 api 不需要等到 ready
     var context = this.selectComponent("#article");
-    context.setContent(html, {
-      tagStyle
-    })
+    context.setContent(html);
     /* 等价于
     this.setData({
-      html,
-      tagStyle
+      html
     })
     但可以减少一次 setData */
   }
-})</pre>
+})</code></pre>
   </li>
 </ol>`,
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.2.23
+    <ol>
+      <li><code>U</code> 支持自动压缩<code>style</code>属性，移除重复的样式，可以减少解析结果大小</li>
+      <li><code>U</code> 支持预览<code>base64</code>图片（通过暂存到本地实现）</li>
+      <li><code>U</code> <code>CssHandler</code>补丁包支持属性选择器和<code>@media</code>，伪类中的<code>content</code>支持<code>attr()</code></li>
+      <li><code>U</code> 精简了部分代码</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.2.17
     <ol>
       <li><code>A</code> 增加了<code>imglongtap</code>事件，图片被长按时触发，可用于显示自定义菜单</li>

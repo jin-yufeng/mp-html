@@ -1,10 +1,10 @@
 /*
- emoji补丁包
- github地址：https://github.com/jin-yufeng/Parser
- 文档地址：https://jin-yufeng.github.io/Parser
- author：JinYufeng
+  emoji补丁包
+  github地址：https://github.com/jin-yufeng/Parser
+  文档地址：https://jin-yufeng.github.io/Parser
+  author：JinYufeng
 */
-const reg = /\[(.*?)\]/g;
+const reg = /\[(\S+?)\]/g;
 const data = {
   "笑脸": "😄",
   "生病": "😷",
@@ -185,16 +185,16 @@ const data = {
   "禁止": "⛔"
 }
 module.exports = {
-  parseEmoji: (text) => text.replace(reg, function() {
-    if (data[arguments[1]]) {
-      if (data[arguments[1]].includes("http"))
-        return "<img src=\"" + data[arguments[1]] + "\" style=\"width:16px;height:16px;display:inline-block\" ignore >"
+  parseEmoji: (text) => text.replace(reg, function($, $1) {
+    if (data[$1]) {
+      if (data[$1].includes("http"))
+        return "<img src=\"" + data[$1] + "\" style=\"width:16px;height:16px;display:inline-block\" ignore >"
       else
-        return data[arguments[1]];
+        return data[$1];
     } else
-      return arguments[0];
+      return $;
   }),
   getEmoji: (key) => data[key],
-  setEmoji: (key, emoji) => (data[key] = emoji, undefined),
-  removeEmoji: (key) => (data[key] = undefined)
+  setEmoji: (key, emoji) => data[key] = emoji,
+  removeEmoji: (key) => data[key] = undefined
 }

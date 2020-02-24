@@ -1,5 +1,12 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.02.23 ####
+1. `U` 支持自动压缩 `style` 属性，移除重复的样式，可以减少解析结果大小  
+2. `U` 支持预览 `base64` 图片（通过暂存到本地实现）  
+3. `U` `CssHandler` 补丁包支持属性选择器和 `@media`，伪类中的 `content` 支持 `attr()` [详细](/instructions#CssHandler)  
+4. `U` 精简了部分代码  
+5. `U` `uni-app` 包 `APP(v3)` 端支持 `iframe` 标签  
+
 #### 2020.02.17 ####
 1. `A` 增加了 `imglongtap` 事件，图片被长按时触发，可用于显示自定义菜单 [详细](/instructions#事件)  
 2. `U` 优化了双击缩放的效果

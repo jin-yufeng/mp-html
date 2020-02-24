@@ -3,18 +3,18 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 48.2KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 32.3KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 62.7KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 46.7KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.9KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.1KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
 1. `a` 标签 `autocopy` 属性的表现效果：`H5` 中将直接跳转对应网页；小程序和 `APP` 中将复制链接；`APP` 中建议在 `@linkpress` 事件中跳转到 `web-view` 页面（可参考示例项目）  
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
 3. 百度、支付宝小程序和 `APP` 不支持 `gesture-zoom` 属性  
 4. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
-5. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`  
-6. 支付宝小程序不支持 `autopause` 属性  
-7. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
+5. 支付宝小程序不支持 `autopause` 属性  
+6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
+7. `H5` 端支持所有浏览器支持的标签，`APP(v3)` 支持 `iframe` 标签  
 
 !>百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
 
@@ -236,7 +236,7 @@ linkpress(e){
 | selfClosingTags | 自闭合的标签列表 |
 | userAgentStyles | 默认的样式 |
 | highlight | [高亮处理函数](#处理代码高亮) |
-| LabelAttrsHandler | 标签属性处理函数 |
+| LabelHandler | 标签属性处理函数 |
 | trustAttrs | 信任的属性 |
 
 ?>配置项在 `/libs/config.js` 中配置，对所有 `parser` 标签生效
@@ -342,8 +342,7 @@ Page({
   ```
 
 #### getText ####
-功能：获取富文本中的所有文本内容  
-输入值：`whiteSpace`，设置成 `true` 时遇到块级标签会自动添加一个换行符，增强可读性（默认 `true`）  
+功能：获取富文本中的所有文本内容    
 使用方法：
 ```javascript
 // context 为组件实例
@@ -378,7 +377,7 @@ var videos = context.getVideoContext(); // 返回所有视频的数组
 功能：获取所有图片数组，可用于转发图的封面等（注意：这是一个**属性**，不是一个函数）  
 另外，该数组提供了一个 `each` 方法，功能与数组的 `forEach` 基本相同，但可以通过 `return` 改变数组中的值  
 该数组用于图片的预览，因此可以在 `img` 的 `src` 中使用缩略图，再将此数组中的地址改为原图，即可实现预览时查看大图的效果  
-设置时若与数组中已存在的元素重复，将自动通过改变域名大小写的方式去重，避免在预览时出现定位错误  
+设置时若与数组中已存在的元素重复，将自动通过改变域名大小写的方式去重，避免在预览时出现定位错误；若设置 `base64` 图片，将自动暂存到本地，避免无法预览  
   
 使用方法：
 ```javascript
@@ -396,7 +395,7 @@ imgList.each((src, i, arr)=>{
 #### setContent ####
 功能：解析并渲染 `html` 内容（功能上同 `html` 属性）  
 说明：当 `html` 为字符串类型时，该字符串并不能直接在视图层进行渲染，而是在插件内部完成解析后再次 `setData` 并进行渲染的，因此，对字符串类型的 `html` 进行 `setData` 是没有必要的，会带来不必要的性能开销（此 `api` 不需要等到 `ready` 事件）  
-输入值：`html` 为具体的字符串，`options` 可以设置其他的属性（可选）  
+输入值：`html` 为富文本字符串  
 
 使用方法：
 ```wxml
@@ -404,18 +403,12 @@ imgList.each((src, i, arr)=>{
 ```
 ```javascript
 var html = "<div>Hello World!</div>";
-var tagStyle = {
-  div: "text-align: justify"
-};
 /* 以下代码等价于
 this.setData({
-  html,
-  tagStyle
+  html
 })
 但通过 setData 会带来不必要的性能开销 */
-this.selectComponent("#article").setContent(html, {
-  tagStyle
-})
+this.selectComponent("#article").setContent(html);
 ```
 
 ## 补丁包 ##
@@ -426,7 +419,7 @@ this.selectComponent("#article").setContent(html, {
 - 功能  
   将形如 `[笑脸]` 的文本解析为 `emoji` 小表情  
 - 大小  
-  `4.35KB`（`min` 版本 `3.22KB`）  
+  `4.29KB`（`min` 版本 `3.16KB`）  
 - 使用方法  
   将 `emoji.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `emoji.js`）  
   
@@ -445,11 +438,11 @@ this.selectComponent("#article").setContent(html, {
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `4.77KB`（`min` 版本 `3.73KB`）  
+  `4.57KB`（`min` 版本 `3.72KB`）  
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
-  !>在 uni-app 中使用时需要将 jyf-parser.vue 中的 26 行修改为 const Document = require('./libs/document.js');  
+  !>在 uni-app 中使用时需要将 jyf-parser.vue 中的 30 行修改为 const Document = require('./libs/document.js');  
   
 document 类：  
 获取方式：可通过 `this.selectComponent("#id").document` 获取  
@@ -520,11 +513,19 @@ error(e){
 | 通配符 | * |
 | 后代选择器 | .the-class1 .the-class2 |
 | 子选择器 | .the-class1>.the-class2 |
+| 属性选择器 | [name="123"] |
 | before 伪类 | .the-class::before |
 | after 伪类 | .the-class::after |
+| @media 查询 | @media (min-width:300px){} |
 
+附加说明：  
+1. 属性选择器仅支持选择 [配置项](#配置项) 中添加到 `trustAttrs` 的属性，如有需要先要添加到列表  
+2. 属性选择器仅支持 `[hidden]`（存在 `hidden` 属性即可）和 `[name="123"]`（`name` 属性的值等于 `123`）两种形式  
+3. `before` 和 `after` 伪类中的 `content` 支持 `attr()` 函数（替换为某个属性的值，同样需要添加到`trustAttrs`）以及形如 `\200b` 的字符  
+4. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
+  
 - 大小（与原大小相比增加）  
-  `4.65KB`（`min` 版本：`3.08KB`）  
+  `4.42KB`（`min` 版本：`1.27KB`）  
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
@@ -537,16 +538,12 @@ error(e){
 详细可见：[小程序富文本能力的深入研究与应用](https://developers.weixin.qq.com/community/develop/article/doc/0006e05c1e8dd80b78a8d49f356413)  
 
 ### 流程图 ###
-- 解析过程流程图  
-  ![解析流程图](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E8%A7%A3%E6%9E%90%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?sign=e56509c626c1466e4fc61128f784acbc&t=1575800648)  
-  
-- 渲染过程流程图  
-  ![渲染流程图](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?sign=3a3b10fe783bc068ad5f6800badf4f14&t=1575800687)  
+
 
 ### 添加一个自定义标签 ###  
 1. 在 `config.js` 中的 `trustAttrs` 中添加需要用到的属性（否则将被移除）  
 2. 在 `config.js` 中的 `trustTags` 中添加该标签名（否则将被转为 `span`）  
-3. 在 `config.js` 中的 `LabelAttrHandler` 中添加  
+3. 在 `config.js` 中的 `LabelHandler` 中添加  
    ```javascript
    case "element":     // 标签名
      bubbling(Parser); // 对该标签所有祖先节点添加一个标记，使得该标签不被 rich-text 包含，而是通过 trees 组件递归显示其祖先节点
@@ -564,7 +561,7 @@ error(e){
 ### 添加自定义事件 ### 
 为节省大小，默认情况下仅支持 `img` 和 `a` 标签的点击事件，如果还需要其他事件，可以自行在 `trees.wxml` 中绑定和处理  
 
-!> 如果给除 `img`、`a`、`video`、`audio` 外的标签添加事件，还需要在 `config.js` 中的 `LabelAttrHandler` 中添加  
+!> 如果给除 `img`、`a`、`video`、`audio` 外的标签添加事件，还需要在 `config.js` 中的 `LabelHandler` 中添加  
 ```javascript
 case "element":     // 标签名
   bubbling(Parser); // 对该标签所有祖先节点添加一个标记，使得该标签不被 rich-text 包含，而是通过 trees 组件递归显示其祖先节点
@@ -619,7 +616,8 @@ a = 3;</pre>
   
 最终效果：  
 ![高亮效果](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md8.png?sign=e613714b597ceb1fa6d5b802a54fd246&t=1581226152)  
-可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)
+可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)  
+还可以进一步实现一个高亮的代码编辑框（可以参考示例小程序的 *自定义测试* 页面）
 
 ## 许可与支持 ##
 - 许可  

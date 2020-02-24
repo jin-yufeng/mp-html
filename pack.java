@@ -49,15 +49,15 @@ class core {
 	boolean isMin = false;
 
 	// 包大小
-	final float wxSize = 48.2f;
-	final float wxMinSize = 32.3f;
-	final float uniAppSize = 62.7f;
-	final float emojiSize = 4.35f;
-	final float emojiMinSize = 3.22f;
-	final float domSize = 4.78f;
-	final float domMinSize = 3.74f;
-	final float cssSize = 4.65f;
-	final float cssMinSize = 3.08f;
+	final float wxSize = 46.7f;
+	final float wxMinSize = 30.9f;
+	final float uniAppSize = 59.1f;
+	final float emojiSize = 4.29f;
+	final float emojiMinSize = 3.16f;
+	final float domSize = 4.57f;
+	final float domMinSize = 3.72f;
+	final float cssSize = 4.42f;
+	final float cssMinSize = 1.27f;
 
 	// 构造函数
 	core() {
@@ -239,9 +239,9 @@ class core {
 					} else {
 						copyDir("./parser.uni", newPath);
 						String line, endl = String.format("%n");
-						StringBuffer content = new StringBuffer();
 						// uni-app 包装载 emoji 和 document 补丁包时需要修改部分内容
 						if (emoji.isSelected()) {
+							StringBuffer content = new StringBuffer();
 							BufferedReader reader = new BufferedReader(new InputStreamReader(
 									new FileInputStream(newPath + "/libs/MpHtmlParser.js"), "utf-8"));
 							boolean changed = false;
@@ -259,6 +259,7 @@ class core {
 							writer.close();
 						}
 						if (document.isSelected()) {
+							StringBuffer content = new StringBuffer();
 							BufferedReader reader = new BufferedReader(
 									new InputStreamReader(new FileInputStream(newPath + "/jyf-parser.vue"), "utf-8"));
 							boolean changed = false;

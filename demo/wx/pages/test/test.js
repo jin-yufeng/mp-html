@@ -1,30 +1,40 @@
 // test.js
+const parseHtml = require("../../components/parser/libs/MpHtmlParser.js");
 const marked = require("./marked.min.js");
-var htmlString;
 var videoAd = null;
 // 计算可用次数
-const today = new Date().getFullYear() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getDate();
-const storge = wx.getStorageSync(today);
-var times = (storge === '' ? 3 : storge);
+const today = new Date().toLocaleDateString();
+var times = 3;
+wx.getStorage({
+  key: today,
+  success: (res) => times = res.data
+})
 Page({
   // 数据
   data: {
-    // 标签的默认样式
-    tagStyle: {
-      pre: "padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#272822;color:#f8f8f2;line-height: 1.5;text-shadow:0 1px rgba(0,0,0,0.3);font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;position:relative;user-select:text",
-      code: "background-color:#f0f0f0;font-size:85%;margin:0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace"
-    },
-    parseing: false,
     modes: ['html 解析', 'markdown 解析'],
     ad: false
   },
-  // 
+  // 页面加载
   onLoad(e) {
+    wx.createSelectorQuery().select("#editor").context((res) => {
+      this.editor = res.context;
+    }).exec();
+    var tagStyle = {
+      pre: "padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#272822;color:#f8f8f2;line-height: 1.5;text-shadow:0 1px rgba(0,0,0,0.3);font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;position:relative;user-select:text",
+      code: "background-color:#f0f0f0;font-size:85%;margin:0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace"
+    }
+    // markdown 表格样式
+    if (e.index == "1") {
+      tagStyle.table = 'border-collapse:collapse;border-top:1px solid gray;border-left:1px solid gray';
+      tagStyle.th = 'border-right:1px solid gray;border-bottom:1px solid gray;padding:5px';
+      tagStyle.td = 'border-right:1px solid gray;border-bottom:1px solid gray;padding:5px';
+    }
     this.setData({
       index: e.index,
-      times: times
+      tagStyle,
+      times
     })
-    htmlString = "";
     // 激励视频广告
     if (wx.createRewardedVideoAd) {
       videoAd = wx.createRewardedVideoAd({
@@ -36,9 +46,10 @@ Page({
         })
       })
       videoAd.onError((err) => {
-        this.setData({
-          ad: false
-        })
+        if (this.data.ad)
+          this.setData({
+            ad: false
+          })
       })
       videoAd.onClose((res) => {
         if (res && res.isEnded) {
@@ -48,7 +59,6 @@ Page({
           wx.showToast({
             title: '成功获取',
           })
-          wx.setStorageSync(today, times);
         } else {
           wx.showToast({
             title: '获取失败',
@@ -57,24 +67,24 @@ Page({
       })
     }
   },
-  // 输入字符串
-  inputHtml(e) {
-    htmlString = e.detail.value;
+  // 保存剩余次数
+  onUnload() {
+    wx.setStorageSync(today, times);
   },
   // 增加模板
   addTemplate(e) {
+    var template;
     switch (e.target.dataset.type) {
       case "table":
         if (this.data.index == "0")
-          htmlString +=
+          template =
           `<table border="1">
   <tr>
     <td>标题1</td>
-    <td>标题2</td>
-    <td>标题3</td>
+    <td colspan="2">标题2</td>
   </tr>
   <tr>
-    <td rowspan=2>内容1</td>
+    <td rowspan="2">内容1</td>
     <td>内容2</td>
     <td>内容3</td>
   </tr>
@@ -84,14 +94,14 @@ Page({
   </tr>
 </table>`;
         else
-          htmlString +=
+          template =
           `| 标题1 | 标题2 |
 |:---:|:---:|
 | 内容1 | 内容2 |`;
         break;
       case "list":
         if (this.data.index == "0")
-          htmlString +=
+          template =
           `<ol>
   <li>类型1-1</li>
   <li>类型1-2</li>
@@ -116,7 +126,7 @@ Page({
   </li>
 </ul>`;
         else
-          htmlString +=
+          template =
           `- 无序列表1
 - 无序列表2
 1. 有序列表1
@@ -124,23 +134,29 @@ Page({
         break;
       case "img":
         if (this.data.index == "0")
-          htmlString +=
-          `<div style="text-align:center;">
+          template =
+          `<style>.desc{color:gray;font-size:12px;}</style>
+<div style="text-align:center;">
   <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174" />
-  <p style="color:gray;font-size:12px;text-align:center">点击图片预览</p>
+  <p class="desc">点击图片预览</p>
   </br>
   <img width="200" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-7.png?sign=8f8d76e641ab2c9aa5ac93dab36f8422&t=1581751574" />
-  <p style="color:gray;font-size:12px">长按扫描</p>
+  <p class="desc">长按扫描</p>
+  </br>
+  <svg width="200" height="100">
+    <circle cx="100" cy="50" r="40" stroke="#3b5b81" stroke-width="2" fill="#5aa0b3" />
+  </svg>
+  <p class="desc">svg 图片</p>
   </br>
   <img ignore src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351" width="50%"/>
-  <p style="color:gray;font-size:12px">装饰图片不能预览</p>
+  <p class="desc">装饰图片不能预览</p>
 </div>`;
         else
-          htmlString += "![示例图片](https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174)"
+          template = "![示例图片](https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174)"
         break;
       case 'a':
-        if (this.data.index == "0")
-          htmlString +=
+        if (this.data.index == '0')
+          template =
           `<div style="text-align:center">
   <a href="/pages/docs/docs?index=0">
     <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174" />
@@ -151,55 +167,64 @@ Page({
   <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>
 </div>`;
         else
-          htmlString += "[GitHub链接](https://github.com/jin-yufeng/Parser)";
+          template = "[GitHub链接](https://github.com/jin-yufeng/Parser)";
         break;
       case "code":
         if (this.data.index == "0")
-          htmlString += "<pre lan=\"javascript\">var i = 0;</pre>";
+          template = "<pre><code class=\"language-javascript\">var i = 0;</code></pre>";
         else
-          htmlString += "```javascript\nvar i = 0;\n```";
+          template = "```javascript\nvar i = 0;\n```";
         break;
     }
-    this.setData({
-      htmlString
+    this.editor.insertText({
+      text: template
     })
+  },
+  input(e) {
+    var text = e.detail.text;
+    if (text.includes('\t')) text = text.replace(/\t/g, "    ");
+    if (text.includes('&')) text = text.replace(/&/g, "&amp;");
+    if (text.includes("pre")) text = text.replace(/</g, "&lt;");
+    // 过长内容不再高亮
+    if (e.detail.text.length > 10000) {
+      this.setData({
+        tooLong: true
+      })
+    } else
+      this.setData({
+        tooLong: false,
+        code: parseHtml("<pre style='white-space:pre-wrap;word-break:break-all'><code class='language-" + (this.data.index == "0" ? "html" : "md") + "-editor'>" + text + "</code></pre>")
+      })
   },
   // 清空内容
-  clearHtml() {
-    htmlString = '';
+  clear() {
+    this.editor.clear();
     this.setData({
-      html: '',
-      htmlString: '',
-      parseing: false,
-    })
-  },
-  // 对焦
-  focus() {
-    this.setData({
-      parseing: false,
-      focus: true,
+      html: ''
     })
   },
   // 进行解析
-  parseHtml() {
-    if (!htmlString) {
-      wx.showModal({
-        title: "失败",
-        content: "内容不能为空！",
-        showCancel: false
-      })
-      return;
-    }
-    var content = htmlString;
-    if (this.data.index == '1')
-      content = marked(content);
-    this.setData({
-      parseing: true,
-      html: content,
-      htmlString,
-      times: (--times)
+  parse() {
+    this.editor.getContents({
+      success: (res) => {
+        var html = res.text;
+        if (!html)
+          return wx.showModal({
+            title: "失败",
+            content: "内容不能为空！",
+            showCancel: false
+          })
+        if (this.data.index == '1')
+          html = marked(html);
+        this.setData({
+          html,
+          times: (--times)
+        })
+        wx.pageScrollTo({
+          selector: "#result"
+        })
+      }
     })
-    wx.setStorageSync(today, times);
   },
   // 图片长按
   imglongtap(e) {
@@ -235,7 +260,7 @@ Page({
   },
   // 图片菜单点击
   actiontap(e) {
-    if(!e.detail.value)
+    if (!e.detail.value)
       wx.setClipboardData({
         data: this.url
       })

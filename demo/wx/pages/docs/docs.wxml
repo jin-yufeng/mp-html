@@ -160,9 +160,9 @@
       <view class="weui-article__h2">性能指标</view>
       <view class="weui-article__section">
         本插件解析和渲染效率高；轻量化（
-        <code>48.3KB</code>，
+        <code>46.7KB</code>，
         <code>min</code>版本
-        <code>32.4KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+        <code>30.9KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
         <parser html="{{errorCode}}" tag-style="{{tagStyle}}" />
       </view>
       <view class="link" style="display:block;text-align:center" bindtap="nextSection">下一章：使用方法</view>

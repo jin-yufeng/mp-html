@@ -109,6 +109,6 @@ export default{
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
 3. 百度、支付宝小程序和 `APP` 不支持 `gesture-zoom` 属性  
 4. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
-5. 支付宝小程序、`H5`、`APP` 没有 `versionHigherThan` 的 `api`  
-6. 支付宝小程序不支持 `autopause` 属性  
-7. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
+5. 支付宝小程序不支持 `autopause` 属性  
+6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
+7. `H5` 端支持所有浏览器支持的标签，`APP(v3)` 支持 `iframe` 标签  

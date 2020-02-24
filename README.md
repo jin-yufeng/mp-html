@@ -1,7 +1,7 @@
 # Parser
 小程序富文本插件（本文档动态更新，建议 `star` 收藏）  
 
->新版文档链接：[Parser插件文档](https://jin-yufeng.github.io/Parser)  
+>新版文档链接：[Parser 插件文档](https://jin-yufeng.github.io/Parser)  
 
 ## 功能简介 ##
 - 支持解析 `style` 标签中的全局样式  
@@ -52,9 +52,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 48.2KB | 微信小程序插件包 |
-| parser.min | 32.3KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 62.7KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 46.7KB | 微信小程序插件包 |
+| parser.min | 30.9KB | 微信小程序插件包压缩版（功能相同） |
+| parser.uni | 59.1KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -179,6 +179,13 @@
 
 
 ## 更新日志 ##
+- 2020.2.23
+  1. `U` 支持自动压缩 `style` 属性，移除重复的样式，可以减少解析结果大小  
+  2. `U` 支持预览 `base64` 图片（通过暂存到本地实现）  
+  3. `U` `CssHandler` 补丁包支持属性选择器和 `@media`，伪类中的 `content` 支持 `attr()` [详细](https://jin-yufeng.github.io/Parser/#/instructions?id=csshandler)  
+  4. `U` 精简了部分代码  
+  5. `U` `uni-app` 包 `APP` 端支持 `iframe` 标签  
+
 - 2020.2.17
   1. `A` 增加了 `imglongtap` 事件，图片被长按时触发，可用于显示自定义菜单 [详细](https://jin-yufeng.github.io/Parser/#/instructions#事件)  
   2. `U` 优化了双击缩放的效果  
@@ -197,16 +204,5 @@
 - 2020.1.23
   1. `A` 添加了一个打包工具 [详细](https://jin-yufeng.github.io/Parser/#/instructions?id=打包工具)  
   2. `U` 支持 `rpx` 单位  
-
-- 2020.1.19
-  1. `U` `video` 标签增加支持 `poster` 属性  
-  2. `F` 修复了部分情况下表格处理出错的问题 [详细](https://github.com/jin-yufeng/Parser/issues/77)  
-  3. `F` 修复了使用单独的 `</p>` 出错的问题  
-  4. `F` 修复了 `uni-app` 包 `width` 属性处理出错的问题  
-
-- 2020.1.18
-  1. `U` `domain` 属性支持自动填充所有 `src` 属性的值（包括视频、音频、图片；协议名默认 `http`）  
-  2. `U` 优化了实体的处理（支持所有形如 `&#123;` 的实体编码）  
-  3. `F` 修复了图片一开始裂开之后又好了的问题  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

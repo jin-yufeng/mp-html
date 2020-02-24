@@ -266,7 +266,7 @@ var article1 = `<style>
         <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"/>
       </path>
     </svg>
-    <div style="font-size: 12px; color: #A5A5A5; text-align: center">svg动画</div>
+    <div style="font-size: 12px; color: #A5A5A5">svg动画</div>
   </section>
   </br>
   <section style="text-align:center">

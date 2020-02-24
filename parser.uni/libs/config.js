@@ -1,6 +1,6 @@
 /* 配置文件 */
-function makeMap(str) {
-	var map = {},
+function makeMap(str, obj = {}) {
+	var map = obj,
 		list = str.split(',');
 	for (var i = list.length; i--;)
 		map[list[i]] = true;
@@ -8,35 +8,20 @@ function makeMap(str) {
 }
 // 信任的属性列表，不在列表中的属性将被移除 
 const trustAttrs = makeMap(
-	"align,alt,app-id,appId,"
-	// #ifdef MP-BAIDU
-	+
-	"appid,apid,"
-	// #endif
-	+
-	"author,autoplay,border,cellpadding,cellspacing,class,color,colspan,controls,data-src,dir,face,height,href,id,ignore,loop,muted,name,path,poster,rowspan,size,span,src,start,style,type,"
-	// #ifdef MP-WEIXIN || MP-QQ
-	+
-	"unit-id,unitId,"
-	// #endif
-	+
-	"width,xmlns"
+	"align,allowfullscreen,alt,app-id,appId,appid,apid,author,autoplay,border,cellpadding,cellspacing,class,color,colspan,controls,data-src,dir,face,frameborder,height,href,id,ignore,loop,muted,name,path,poster,rowspan,size,span,src,start,style,type,unit-id,unitId,width,xmlns"
 );
 // 信任的标签，将保持标签名不变 
 const trustTags = makeMap(
-	"a,abbr,ad,audio,b,blockquote,br,code,col,colgroup,dd,del,dl,dt,div,em,fieldset,h1,h2,h3,h4,h5,h6,hr,i,img,ins,label,legend,li,ol,p,q,source,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,title,u,ul,video"
+	"a,abbr,ad,audio,b,blockquote,br,code,col,colgroup,dd,del,dl,dt,div,em,fieldset,h1,h2,h3,h4,h5,h6,hr,i,img,iframe,ins,label,legend,li,ol,p,q,source,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,title,u,ul,video"
 );
 // 块级标签，将被转为 div
 const blockTags = makeMap("address,article,aside,body,center,cite,footer,header,html,nav,pre,section");
-// 行内标签
-const inlineTags = makeMap("abbr,b,big,code,del,em,font,i,ins,label,mark,q,s,small,span,strong,u");
 // 被移除的标签（其中 svg 系列标签会被转为图片） 
 const ignoreTags = makeMap(
-	"area,base,basefont,canvas,circle,command,ellipse,embed,frame,head,iframe,input,isindex,keygen,line,link,map,meta,param,path,polygon,rect,script,source,svg,textarea,track,use,wbr"
+	"area,base,basefont,canvas,circle,command,ellipse,embed,frame,head,input,isindex,keygen,line,link,map,meta,param,path,polygon,rect,script,source,svg,textarea,track,use,wbr"
 );
 // 只能用 rich-text 显示的标签（其中图片不能预览、不能显示视频、音频等） 
-const richOnlyTags = makeMap(
-	"a,colgroup,fieldset,legend,sub,sup,table,tbody,td,tfoot,th,thead,tr");
+const richOnlyTags = makeMap("a,colgroup,fieldset,legend,sub,sup,table,tbody,td,tfoot,th,thead,tr");
 // 自闭合标签
 const selfClosingTags = makeMap(
 	"area,base,basefont,br,col,circle,ellipse,embed,frame,hr,img,input,isindex,keygen,line,link,meta,param,path,polygon,rect,source,track,use,wbr"
@@ -61,21 +46,9 @@ const screenWidth = wx.getSystemInfoSync().screenWidth;
 // #ifdef MP-WEIXIN
 // 版本兼容
 if (wx.canIUse("editor")) {
-	trustTags.bdi = true;
-	trustTags.bdo = true;
-	trustTags.caption = true;
-	trustTags.rt = true;
-	trustTags.ruby = true;
+	makeMap("bdi,bdo,caption,rt,ruby,big,small,pre", trustTags);
+	makeMap("bdi,bdo,caption,rt,ruby,pre", richOnlyTags);
 	ignoreTags.rp = true;
-	trustTags.big = true;
-	trustTags.small = true;
-	trustTags.pre = true;
-	richOnlyTags.bdi = true;
-	richOnlyTags.bdo = true;
-	richOnlyTags.caption = true;
-	richOnlyTags.rt = true;
-	richOnlyTags.ruby = true;
-	richOnlyTags.pre = true;
 	blockTags.pre = undefined;
 } else
 // #endif
@@ -97,114 +70,130 @@ module.exports = {
 	// 高亮处理函数
 	highlight: null,
 	// 处理标签的属性，需要通过组件递归方式显示的标签需要调用 bubbling(Parser)
-	LabelAttrsHandler(node, Parser) {
-		node.attrs.style = Parser.CssHandler.match(node.name, node.attrs, node) + (node.attrs.style || '');
+	LabelHandler(node, Parser) {
+		var attrs = node.attrs;
+		attrs.style = Parser.CssHandler.match(node.name, attrs, node) + (attrs.style || '');
 		switch (node.name) {
 			case "div":
 			case 'p':
-				if (node.attrs.align) {
-					node.attrs.style = "text-align:" + node.attrs.align + ';' + node.attrs.style;
-					node.attrs.align = undefined;
+				if (attrs.align) {
+					attrs.style = "text-align:" + attrs.align + ';' + attrs.style;
+					attrs.align = undefined;
 				}
 				break;
 			case "img":
-				if (node.attrs["data-src"]) {
-					node.attrs.src = node.attrs.src || node.attrs["data-src"];
-					node.attrs["data-src"] = undefined;
+				if (attrs["data-src"]) {
+					attrs.src = attrs.src || attrs["data-src"];
+					attrs["data-src"] = undefined;
 				}
-				// 当设置的宽度超过屏幕宽度时自动宽度自适应
-				var styles = node.attrs.style.split(";");
-				for (var i = styles.length, item; item = styles[--i];)
-					if (item.includes("width") && !item.includes('%') && parseInt(item.split(':').pop()) > screenWidth) {
-						node.attrs.style += ";height:auto !important";
-						break;
-					}
-				if (node.attrs.width && parseInt(node.attrs.width) > screenWidth)
-					node.attrs.style += ";height:auto !important";
-				if (node.attrs.src && !node.attrs.ignore) {
-					if (bubbling(Parser)) node.attrs.i = (Parser._imgNum++).toString();
-					else node.attrs.ignore = "true";
+				if (attrs.width && parseInt(attrs.width) > screenWidth)
+					attrs.style += ";height:auto !important";
+				if (attrs.src && !attrs.ignore) {
+					if (bubbling(Parser)) attrs.i = (Parser._imgNum++).toString();
+					else attrs.ignore = 'T';
 				}
 				break;
 			case 'a':
 			case "ad":
+			case "iframe":
 				bubbling(Parser);
 				break;
 			case "font":
-				if (node.attrs.color) {
-					node.attrs.style = "color:" + node.attrs.color + ';' + node.attrs.style;
-					node.attrs.color = undefined;
+				if (attrs.color) {
+					attrs.style = "color:" + attrs.color + ';' + attrs.style;
+					attrs.color = undefined;
 				}
-				if (node.attrs.face) {
-					node.attrs.style = "font-family:" + node.attrs.face + ';' + node.attrs.style;
-					node.attrs.face = undefined;
+				if (attrs.face) {
+					attrs.style = "font-family:" + attrs.face + ';' + attrs.style;
+					attrs.face = undefined;
 				}
-				if (node.attrs.size) {
-					var size = parseInt(node.attrs.size);
+				if (attrs.size) {
+					var size = parseInt(attrs.size);
 					if (size < 1) size = 1;
 					else if (size > 7) size = 7;
 					var map = ["xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"];
-					node.attrs.style = "font-size:" + map[size - 1] + ';' + node.attrs.style;
-					node.attrs.size = undefined;
+					attrs.style = "font-size:" + map[size - 1] + ';' + attrs.style;
+					attrs.size = undefined;
 				}
 				break;
 			case "video":
 			case "audio":
-				if (node.attrs.id) Parser['_' + node.name + "Num"]++;
-				else node.attrs.id = (node.name + (++Parser['_' + node.name + "Num"]));
+				if (attrs.id) Parser['_' + node.name + "Num"]++;
+				else attrs.id = (node.name + (++Parser['_' + node.name + "Num"]));
 				if (node.name == "video") {
-					node.attrs.style = node.attrs.style || '';
-					if (node.attrs.width) {
-						node.attrs.style = "width:" + parseFloat(node.attrs.width) + (node.attrs.width.includes('%') ? '%' : "px") +
-							';' + node.attrs.style;
-						node.attrs.width = undefined;
+					attrs.style = attrs.style || '';
+					if (attrs.width) {
+						attrs.style = "width:" + parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : "px") +
+							';' + attrs.style;
+						attrs.width = undefined;
 					}
-					if (node.attrs.height) {
-						node.attrs.style = "height:" + parseFloat(node.attrs.height) + (node.attrs.height.includes('%') ? '%' : "px") +
-							';' + node.attrs.style;
-						node.attrs.height = undefined;
+					if (attrs.height) {
+						attrs.style = "height:" + parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : "px") +
+							';' + attrs.style;
+						attrs.height = undefined;
 					}
 					if (Parser._videoNum > 3) node.lazyLoad = true;
 				}
-				node.attrs.source = [];
-				if (node.attrs.src) node.attrs.source.push(node.attrs.src);
-				if (!node.attrs.controls && !node.attrs.autoplay)
-					console.warn("存在没有controls属性的 " + node.name + " 标签，可能导致无法播放", node);
+				attrs.source = [];
+				if (attrs.src) attrs.source.push(attrs.src);
+				if (!attrs.controls && !attrs.autoplay)
+					console.warn("存在没有 controls 属性的 " + node.name + " 标签，可能导致无法播放", node);
 				bubbling(Parser);
 				break;
 			case "source":
 				var parent = Parser._STACK[Parser._STACK.length - 1];
 				if (parent && (parent.name == "video" || parent.name == "audio")) {
-					parent.attrs.source.push(node.attrs.src);
-					if (!parent.attrs.src) parent.attrs.src = node.attrs.src;
+					parent.attrs.source.push(attrs.src);
+					if (!parent.attrs.src) parent.attrs.src = attrs.src;
 				}
 				break;
 		}
-		if (node.attrs.style.includes("url"))
-			node.attrs.style = node.attrs.style.replace(/url\s*\(['"\s]*(.*?)['"]*\)/, function($, $1) {
-				if ($1 && $1[0] == '/') {
-					if ($1[1] == '/') return "url(" + Parser._protocol + ':' + $1 + ')';
-					else if (Parser._domain) return "url(" + Parser._domain + $1 + ')';
+		// 压缩 style
+		var styles = attrs.style.toLowerCase().split(';'),
+			compressed = {};
+		attrs.style = "";
+		for (var i = 0, len = styles.length; i < len; i++) {
+			var info = styles[i].split(':');
+			if (info.length != 2) continue;
+			var key = info[0].trim(),
+				value = info[1].trim();
+			// 填充链接
+			if (value.includes("url")) {
+				var j = value.indexOf('(');
+				if (j++ != -1) {
+					while (value[j] == '"' || value[j] == "'" || blankChar[value[j]]) j++;
+					if (value[j] == '/') {
+						if (value[j + 1] == '/') value = value.substring(0, j) + Parser._protocol + ':' + value.substring(j);
+						else if (Parser._domain) value = value.substring(0, j) + Parser._domain + value.substring(j);
+					}
 				}
-				return $;
-			})
-		if (node.attrs.style.includes("rpx"))
-			node.attrs.style = node.attrs.style.replace(/[0-9.]*rpx/, function($) {
-				return parseFloat($) * screenWidth / 750 + "px";
-			})
-		if (!node.attrs.style) node.attrs.style = undefined;
-		if (Parser._useAnchor && node.attrs.id) bubbling(Parser);
+			}
+			// 转换 rpx
+			else if (value.includes("rpx"))
+				value = value.replace(/[0-9.]*rpx/g, function($) {
+					return parseFloat($) * screenWidth / 750 + "px";
+				})
+			if (value.includes("-webkit") || value.includes("-moz") || value.includes("-ms") || value.includes("-o") || value.includes(
+					"safe"))
+				attrs.style += ';' + key + ':' + value;
+			else if (!compressed[key] || value.includes("import") || !compressed[key].includes("import"))
+				compressed[key] = value;
+		}
+		if (node.name == "img" && compressed.width && compressed.width.includes("%") && parseInt(compressed.width) >
+			screenWidth)
+			compressed.height = "auto !important";
+		for (var key in compressed)
+			attrs.style += ';' + key + ':' + compressed[key];
+		attrs.style = attrs.style.substr(1);
+		if (!attrs.style) attrs.style = undefined;
+		if (Parser._useAnchor && attrs.id) bubbling(Parser);
 	},
 	trustAttrs,
 	trustTags,
 	blockTags,
-	inlineTags,
 	ignoreTags,
 	selfClosingTags,
 	blankChar,
 	userAgentStyles,
-	makeMap,
-	// #ifdef H5
-	rpx: screenWidth / 750,
-	// #endif
+	screenWidth
 }

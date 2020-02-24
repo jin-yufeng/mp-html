@@ -5,35 +5,27 @@
     <view class="page__desc">您可以输入字符串或点击下方模板进行测试</view>
   </view>
   <view class="page__bd">
-    <view class="weui-cells__title">解析结果</view>
-    <view class="weui-cells weui-cells_after-title" style="padding:15px">
+    <view class="weui-cells__title" id="result">解析结果</view>
+    <view class="weui-cells parse-view">
       <parser html="{{html}}" tag-style="{{tagStyle}}" bindimglongtap="imglongtap" />
     </view>
-    <form bindsubmit='parseHtml'>
-      <view class="weui-cells__title">输入字符</view>
-      <view class="weui-cells weui-cells_after-title">
-        <view class="weui-cell">
-          <view class="weui-cell__bd">
-            <textarea wx:if="{{!parseing}}" focus="{{focus}}" value="{{htmlString}}" bindinput="inputHtml" class="weui-textarea" placeholder="{{modes[index]}}" style="height:10em" maxlength="-1" />
-            <text wx:else space="nbsp" bindtap="focus" class="weui-textarea" style="height:10em;word-break:break-all;overflow:hidden">{{htmlString}}</text>
-          </view>
-        </view>
-      </view>
-      <view style="display:flex;justify-content:center;margin:5px 0;">
-        <block>
-          <view class="label" data-type="table" bindtap="addTemplate">表格</view>
-          <view class="label" data-type="list" bindtap="addTemplate">列表</view>
-          <view class="label" data-type="img" bindtap="addTemplate">图片</view>
-          <view class="label" data-type="a" bindtap="addTemplate">链接</view>
-          <view class="label" data-type="code" bindtap="addTemplate">代码</view>
-        </block>
-      </view>
-      <view class="weui-btn-area">
-        <button class="weui-btn" form-type='submit' type="primary" disabled="{{times==0}}">解析（今日剩{{times}}次）</button>
-        <button class="weui-btn" bindtap="showAd" wx:if="{{ad}}">看广告加次数</button>
-        <button class="weui-btn" bindtap="clearHtml">清空</button>
-      </view>
-    </form>
+    <view class="weui-cells__title">输入字符</view>
+    <view class="editor-view">
+      <parser hidden="{{tooLong}}" class="highlight-view" html="{{code}}" />
+      <editor id="editor" class="editor" placeholder="{{modes[index]}}" style="color:{{tooLong?'#ccc':'transparent'}}" bindinput="input" />
+    </view>
+    <view class="labels">
+      <view class="label" data-type="table" bindtap="addTemplate">表格</view>
+      <view class="label" data-type="list" bindtap="addTemplate">列表</view>
+      <view class="label" data-type="img" bindtap="addTemplate">图片</view>
+      <view class="label" data-type="a" bindtap="addTemplate">链接</view>
+      <view class="label" data-type="code" bindtap="addTemplate">代码</view>
+    </view>
+    <view class="weui-btn-area">
+      <button class="weui-btn" bindtap="parse" type="primary" disabled="{{times==0}}">解析（今日剩{{times}}次）</button>
+      <button class="weui-btn" bindtap="showAd" wx:if="{{ad}}">看广告加次数</button>
+      <button class="weui-btn" bindtap="clear">清空</button>
+    </view>
   </view>
 </view>
 <actionsheet show="{{showActionsheet}}" actions="{{groups}}" bindactiontap="actiontap" />

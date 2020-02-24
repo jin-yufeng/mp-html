@@ -1,33 +1,38 @@
+var inlineTags = {
+	abbr: 1,
+	b: 1,
+	big: 1,
+	code: 1,
+	del: 1,
+	em: 1,
+	i: 1,
+	ins: 1,
+	label: 1,
+	q: 1,
+	small: 1,
+	span: 1,
+	strong: 1
+}
 export default {
+	// 从 rich-text 顶层标签的样式中取出一些给 rich-text
 	getStyle: function(style, display) {
-		var tmp, res = "";
 		if (style) {
-			style = style.toLowerCase();
-			if (style.indexOf("float") != -1) res += style.match(getRegExp("float[^;]+", "g")).pop();
-			if (style.indexOf("margin") != -1) res += (';' + style.match(getRegExp("margin[^;]+", "g")).join(';'));
-			if (style.indexOf("display") != -1 && (tmp = style.match(getRegExp("display[^;]+", "g")).pop(), tmp.indexOf("flex") ==
-					-1)) res += (';' + tmp);
-			else res += (';display:' + display);
-			tmp = style.match(getRegExp("flex[^;]*:[^;]+", "g"));
-			if (tmp) res += (';' + tmp.join(';'));
-			if (style.indexOf("width") != -1) res += (';' + style.match(getRegExp("[^;\s]*width[^;]+", "g")).join(';'));
-		} else res = ("display:" + display);
-		return res;
+			var i, j, res = "";
+			if ((i = style.indexOf("display")) != -1)
+				res = style.substring(i, (j = style.indexOf(';', i)) == -1 ? style.length : j);
+			else res = "display:" + display;
+			if (style.indexOf("flex") != -1) res += ';' + style.match(getRegExp("flex[:-][^;]+/g")).join(';');
+			return res;
+		} else return "display:" + display;
 	},
-	setImgStyle: function(item, imgMode) {
-		if (item.attrs.style)
-			item.attrs.style = item.attrs.style.toLowerCase().replace(getRegExp("width[^;]*?%", "g"), "width:100%").replace(
-				getRegExp('margin[^;]+', "g"), "");
-		if (imgMode == "widthFix") item.attrs.style = (item.attrs.style || '') + ";height:auto !important";
+	getNode: function(item) {
 		return [item];
 	},
-	setStyle: function(item) {
-		if (item.attrs.style)
-			item.attrs.style = item.attrs.style.toLowerCase().replace(getRegExp("width[^;]*?%", "g"), "width:100%").replace(
-				getRegExp('margin[^;]+', "g"), "");
-		return [item];
-	},
-	isInlineTag: function(name) {
-		return !!inlineTags[name];
+	// 是否通过 rich-text 显示
+	useRichText: function(item) {
+		// rich-text 不支持 inline
+		if (item.c || inlineTags[item.name] || (item.attrs.style && item.attrs.style.indexOf("display:inline") != -1))
+			return false;
+		return true;
 	}
 }
