@@ -537,9 +537,6 @@ error(e){
 本插件对于节点下有 图片 链接 视频 等特殊标签的，通过 `trees` 组件递归显示，否则直接通过 `rich-text` 组件显示，通过这样的方式，既可以充分利用 `rich-text` 渲染效果好，效率高的优点，也解决了 `rich-text` 屏蔽所有事件的问题，同时通过一些特殊处理，可以实现更加丰富的功能。  
 详细可见：[小程序富文本能力的深入研究与应用](https://developers.weixin.qq.com/community/develop/article/doc/0006e05c1e8dd80b78a8d49f356413)  
 
-### 流程图 ###
-
-
 ### 添加一个自定义标签 ###  
 1. 在 `config.js` 中的 `trustAttrs` 中添加需要用到的属性（否则将被移除）  
 2. 在 `config.js` 中的 `trustTags` 中添加该标签名（否则将被转为 `span`）  

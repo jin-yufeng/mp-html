@@ -1,7 +1,10 @@
 # Parser
-小程序富文本插件（本文档动态更新，建议 `star` 收藏）  
+> 小程序富文本插件，详见 [文档](https://jin-yufeng.github.io/Parser)  
 
->新版文档链接：[Parser 插件文档](https://jin-yufeng.github.io/Parser)  
+![star](https://badgen.net/github/stars/jin-yufeng/Parser)
+![forks](https://badgen.net/github/forks/jin-yufeng/Parser)
+![last-commit](https://badgen.net/github/last-commit/jin-yufeng/Parser)
+![license](https://badgen.net/github/license/jin-yufeng/Parser)  
 
 ## 功能简介 ##
 - 支持解析 `style` 标签中的全局样式  

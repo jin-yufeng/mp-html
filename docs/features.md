@@ -1,3 +1,11 @@
+# Parser {docsify-ignore} #
+> 小程序富文本插件  
+
+![star](https://badgen.net/github/stars/jin-yufeng/Parser)
+![forks](https://badgen.net/github/forks/jin-yufeng/Parser)
+![last-commit](https://badgen.net/github/last-commit/jin-yufeng/Parser)
+![license](https://badgen.net/github/license/jin-yufeng/Parser)  
+
 ## 功能介绍 {docsify-ignore} ##
 *注：以下所有代码示例均为微信原生框架代码*
 
@@ -129,9 +137,10 @@ Page({
 
 ### 智能压缩 ###  
 支持自动通过以下方式对解析结果进行压缩，可以有效提升性能：
-- 将一些只有一个子节点的标签进行合并，以实现减小深度的效果，根据内容不同，可以减少 `15%~60%` 的深度  
+- 将一些只有一个子节点的标签进行合并，可以减小节点的深度  
 - 在非 `pre` 标签且没有 `white-space:pre` 属性时自动去除没用的空白符  
 - 压缩 `style` 属性，去除重复的属性和多余的空格  
+- 移除不支持的属性和一些不支持的标签  
 
 ### 懒加载 ###
 - 图片  
