@@ -28,7 +28,6 @@ Component({
     "html": {
       type: null,
       observer: function(html) {
-        // 防止循环调用
         if (this._refresh) return this._refresh = false;
         this.setContent(html, true);
       }
@@ -50,9 +49,60 @@ Component({
     "useAnchor": Boolean,
     "useCache": Boolean
   },
+  relations: {
+    "../parser-group/parser-group": {
+      type: "ancestor"
+    }
+  },
   created() {
+    // 图片数组
+    this.imgList = [];
+    this.imgList.setItem = function(i, src) {
+      // 暂存 base64
+      if (src.includes("base64")) {
+        this[i] = src;
+        var fileInfo = src.match(/data:image\/(\S+?);base64,(\S+)/);
+        if (!fileInfo) return;
+        var filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${fileInfo[1]}`;
+        fs && fs.writeFile({
+          filePath,
+          data: fileInfo[2],
+          encoding: "base64",
+          success: () => this[i] = filePath
+        })
+      }
+      // 去重 
+      else if (this.includes(src)) {
+        if (src.substring(0, 4) != "http") return this[i] = src;;
+        var newSrc = '';
+        for (var j = 0; j < src.length; j++) {
+          newSrc += Math.random() > 0.5 ? src[j].toUpperCase() : src[j];
+          if (src[j] == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
+        }
+        newSrc += src.substring(j + 1);
+        this[i] = newSrc;
+      } else this[i] = src;
+    }
+    this.imgList.each = function(f) {
+      for (var i = 0; i < this.length; i++) {
+        var newSrc = f(this[i], i, this);
+        if (newSrc) this.setItem(i, newSrc);
+      }
+    }
+    this._refresh = false; // 防止循环渲染
+  },
+  detached() {
+    // 删除暂存
+    this.imgList.each((item) => {
+      if (item && item.includes(wx.env.USER_DATA_PATH))
+        fs && fs.unlink({
+          filePath: item
+        })
+    })
+  },
+  methods: {
     // 锚点跳转
-    this.navigateTo = (obj) => {
+    navigateTo(obj) {
       obj.fail = obj.fail || (() => {});
       if (!this.data.useAnchor)
         return obj.fail({
@@ -61,19 +111,21 @@ Component({
       this.createSelectorQuery()
         .select("#root" + (obj.id ? ">>>#" + obj.id : '')).boundingClientRect()
         .selectViewport().scrollOffset().exec(res => {
-          if (!res[0])
+          if (!res[0]) {
+            if (this.group) return this.group.navigateTo(this.i, obj);
             return obj.fail({
               errMsg: "Label not found"
             });
+          }
           wx.pageScrollTo({
             scrollTop: res[1].scrollTop + res[0].top,
             success: obj.success,
             fail: obj.fail
           })
         })
-    };
+    },
     // 获取文本
-    this.getText = () => {
+    getText() {
       var text = '';
 
       function DFS(nodes) {
@@ -93,51 +145,16 @@ Component({
       }
       DFS(this.data.html);
       return text.replace(/&nbsp;/g, '\u00A0');
-    };
+    },
     // 获取视频 context
-    this.getVideoContext = (id) => {
+    getVideoContext(id) {
       if (!id) return this.videoContexts;
       for (var i = this.videoContexts.length; i--;)
         if (this.videoContexts[i].id == id) return this.videoContexts[i];
       return null;
-    };
-    // 图片数组
-    this.imgList = [];
-    this.imgList.setItem = function(i, src) {
-      this[i] = src;
-      // 暂存 base64
-      if (src.includes("base64")) {
-        var fileInfo = src.match(/data:image\/(\S+?);base64,(\S+)/);
-        if (!fileInfo) return;
-        var filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${fileInfo[1]}`;
-        fs && fs.writeFile({
-          filePath,
-          data: fileInfo[2],
-          encoding: "base64",
-          success: () => this[i] = filePath
-        })
-      }
-      // 去重 
-      else if (this.includes(src)) {
-        if (src.substring(0, 4) != "http") return;
-        var newSrc = '';
-        for (var j = 0; j < src.length; j++) {
-          newSrc += Math.random() >= 0.5 ? src[j].toUpperCase() : src[j].toLowerCase();
-          if (src[j] == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
-        }
-        newSrc += src.substring(j + 1);
-        this[i] = newSrc;
-      }
-    }
-    this.imgList.each = function(f) {
-      for (var i = 0; i < this.length; i++) {
-        var newSrc = f(this[i], i, this);
-        if (newSrc) this.setItem(i, newSrc);
-      }
-    }
+    },
     // 渲染富文本
-    this._refresh = false;
-    this.setContent = (html, obversed) => {
+    setContent(html, obversed) {
       var data = {
         controls: {}
       };
@@ -175,7 +192,7 @@ Component({
               if (node.type == "text") continue;
               node.attrs = node.attrs || {};
               for (var item in node.attrs) {
-                if (!config.trustAttrs[item]) node.attrs[item] = undefined;
+                if (!config.trustAttrs[item]) node.attrs[item] = void 0;
                 else if (typeof node.attrs[item] != "string") node.attrs[item] = node.attrs[item].toString();
               }
               config.LabelHandler(node, Parser);
@@ -185,7 +202,7 @@ Component({
                 Parser._STACK.push(node);
                 DFS(node.children);
                 Parser._STACK.pop();
-              } else node.children = undefined;
+              } else node.children = void 0;
             }
           }
           DFS(html);
@@ -227,7 +244,7 @@ Component({
                       imgLoad: true
                     })
                     node._observer.disconnect();
-                    node._observer = undefined;
+                    node._observer = void 0;
                   })
                 }, 50)
               } else
@@ -256,19 +273,9 @@ Component({
           this.triggerEvent("ready", res);
         }).exec();
       }, 50)
-    }
-  },
-  detached() {
-    // 删除暂存
-    this.imgList.each((item) => {
-      if (item && item.includes(wx.env.USER_DATA_PATH))
-        fs && fs.unlink({
-          filePath: item
-        })
-    })
-  },
-  methods: {
-    tap(e) {
+    },
+    // 事件处理
+    _tap(e) {
       if (this.data.gestureZoom && e.timeStamp - this.lastTime < 300) {
         if (this.zoomIn) {
           this.animation.translateX(0).scale(1).step();
@@ -295,11 +302,11 @@ Component({
       }
       this.lastTime = e.timeStamp;
     },
-    touchstart(e) {
+    _touchstart(e) {
       if (e.touches.length == 1)
         this.initX = this.lastX = e.touches[0].pageX;
     },
-    touchmove(e) {
+    _touchmove(e) {
       var diff = e.touches[0].pageX - this.lastX;
       if (this.zoomIn && e.touches.length == 1 && Math.abs(diff) > 20) {
         this.lastX = e.touches[0].pageX;

@@ -104,9 +104,9 @@
 				}
 			}
 			this.imgList.setItem = function(i, src) {
-				this[i] = src;
 				// 暂存 base64
 				if (src.includes("base64")) {
+					this[i] = src;
 					var fileInfo = src.match(/data:image\/(\S+?);base64,(\S+)/);
 					if (!fileInfo) return;
 					// #ifdef MP-WEIXIN || MP-TOUTIAO
@@ -132,16 +132,17 @@
 				// #ifndef MP-ALIPAY || APP-PLUS
 				// 去重 
 				else if (this.includes(src)) {
-					if (src.substring(0, 4) != "http") return;
+					if (src.substring(0, 4) != "http") return this[i] = src;
 					var newSrc = '';
 					for (var j = 0; j < src.length; j++) {
-						newSrc += Math.random() >= 0.5 ? src[j].toUpperCase() : src[j].toLowerCase();
+						newSrc += Math.random() > 0.5 ? src[j].toUpperCase() : src[j];
 						if (src[j] == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
 					}
 					newSrc += src.substring(j + 1);
 					this[i] = newSrc;
 				}
 				// #endif
+				else this[i] = src;
 			}
 			this.setContent(this.html, true);
 		},

@@ -5,16 +5,16 @@
 |:---:|:---:|:---:|
 | [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 46.7KB | 微信小程序插件包 |
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.9KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.1KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.8KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
-1. `a` 标签 `autocopy` 属性的表现效果：`H5` 中将直接跳转对应网页；小程序和 `APP` 中将复制链接；`APP` 中建议在 `@linkpress` 事件中跳转到 `web-view` 页面（可参考示例项目）  
+1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
 3. 百度、支付宝小程序和 `APP` 不支持 `gesture-zoom` 属性  
 4. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
 5. 支付宝小程序不支持 `autopause` 属性  
 6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
-7. `H5` 端支持所有浏览器支持的标签，`APP(v3)` 支持 `iframe` 标签  
+7. `H5` 端支持所有浏览器支持的标签，`APP(v3)` 支持 `iframe` 和 `embed` 标签  
 
 !>百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
 
@@ -26,10 +26,6 @@
 > 若需要自定义链接受到点击时的效果，可对 `parser/trees` 文件夹下的 `trees.wxss` 中的 `navigator-hover` 进行修改（默认下划线+半透明）
 
 以下统称为 `parser`  
-
-### 打包工具 ###
-本插件提供了一个打包工具（`pack.jar` 是可执行文件，`pack.java` 是源代码），可以按需生成需要的插件包  
-![打包工具](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md7.png?sign=0e1d048ea91f4154a0a53ab55b45e4ca&t=1579784564)
 
 ### 在原生框架中使用 ###
 1. 复制 [parser](#插件包说明) 文件夹至 `components` 目录  
@@ -244,56 +240,6 @@ linkpress(e){
 !>不在信任的属性列表中的属性将被移除  
 不在信任的标签列表中的标签，除被移除的标签外，块级标签列表中的标签将被转为 `div` 标签，其他被转为 `span` 标签
 
-### 长内容处理 ###
-如果富文本内容特别长，通过 `setData` 无法设置或者有超出 `1000` 个标签，可以采用微信官方提供的 [长列表组件](https://developers.weixin.qq.com/miniprogram/dev/extended/component-plus/recycle-view.html) 进行处理（需要将内容拆分成多个章节，且需要提供每个章节的高度），这里提供一个简单的示例  
-```wxml
-<recycle-view batch="{{batchSetRecycleData}}" id="recycleId">
-  <recycle-item wx:for="{{recycleList}}" wx:key="id">
-      <parser html="{{item.content}}" />
-  </recycle-item>
-</recycle-view>
-```
-```javascript
-const createRecycleContext = require('miniprogram-recycle-view')
-Page({
-  onReady: function() {
-    this.ctx = createRecycleContext({
-      id: 'recycleId',
-      dataKey: 'recycleList',
-      page: this,
-      itemSize: this.itemSizeFunc
-    })
-    // 这里设置了 100 个章节，每个章节高度为 500px
-    var longarray = [];
-    for (var i = 1; i <= 100; i++) {
-      longarray.push({
-        id: "section" + i,
-        content: "<div style='width:100vw;height:500px;display:flex;justify-content:center;align-items:center'>section" + i + "</div>"
-      })
-    }
-    this.ctx.append(longarray)
-  },
-  itemSizeFunc: function(item, idx) {
-    // 可以给不同章节设置不同的高度
-    return {
-      width: this.ctx.transformRpx(750),
-      height: 500
-    }
-  }
-})
-```
-```json
-{
-  "usingComponents": {
-    "recycle-view": "/miniprogram_npm/miniprogram-recycle-view/recycle-view",
-    "recycle-item": "/miniprogram_npm/miniprogram-recycle-view/recycle-item",
-    "parser": "/components/parser/parser"
-  }
-}
-```
-
-!>拆分成多个 `parser` 标签后预览时不能直接通过左右滑动查看所有图片，如果需要可以获取组件实例并修改 `component.imgList`
-
 ### 基础库要求 ###
 微信小程序：
   
@@ -411,6 +357,10 @@ this.setData({
 this.selectComponent("#article").setContent(html);
 ```
 
+### 打包工具 ###
+本插件提供了一个打包工具（`pack.jar` 是可执行文件，`pack.java` 是源代码），可以按需生成需要的插件包（便于添加补丁包）  
+![打包工具](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md7.png?sign=0e1d048ea91f4154a0a53ab55b45e4ca&t=1579784564)
+
 ## 补丁包 ##
 [patches](https://github.com/jin-yufeng/Parser/tree/master/patches) 文件夹中准备了一些补丁包，可根据需要选用，可以实现更加丰富的功能  
 > 可以通过 [打包工具](#打包工具) 打包需要的插件包  
@@ -504,7 +454,8 @@ error(e){
 ```
     
 ### CssHandler ###
-- 功能：支持更多的 `css` 选择器  
+- 功能  
+  支持更多的 `css` 选择器  
   
 使用本补丁包后**增加**支持的选择器（原包支持的选择器可见 [链接](#匹配style标签)）：
 
@@ -525,11 +476,40 @@ error(e){
 4. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
   
 - 大小（与原大小相比增加）  
-  `4.42KB`（`min` 版本：`1.27KB`）  
+  `4.5KB`（`min` 版本：`1.35KB`）  
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
 !>使用该补丁包后会一定程度上减慢解析速度，如非必要不建议使用  
+
+### parser-group ###
+> 该包仅支持 微信端 使用，暂不支持通过 [打包工具](#打包工具) 打包  
+- 功能  
+  有时一个页面会用到多个 `parser` 标签，默认情况下，不同的 `parser` 标签之间是相互独立的，用 `parser-group` 标签包裹起来可以组合成一个整体，实现：  
+  1. 图片预览时可以通过左右滑动查看该 `group` 内所有图片  
+  2. 一个 `parser` 标签内的 `a` 标签可以跳转到另一个 `parser` 标签内的锚点（优先跳转同一个 `parser` 内的锚点，不存在再按照顺序查找，都需要开启 `use-anchor` 属性）  
+  3. 一个 `parser` 标签内的视频播放时，将自动暂停该 `group` 内所有 `parser` 标签内的视频（前提是 `autopause` 属性的值为 `true`）  
+- 大小  
+  `2.35KB`  
+- 使用方法  
+  1. 将 `parser-group` 文件夹拷贝到 `components` 目录下即可（必须与 `parser` 文件夹同级）  
+  2. 在需要使用页面的 `json` 文件中添加  
+     ```json
+     {
+       "usingComponents": {
+         "parser-group": "/components/parser-group/parser-group",
+         "parser": "/components/parser/parser"
+       }
+     }
+     ```
+  3. 在需要使用页面的 `wxml` 文件中将需要组合成一个 `group` 的 `parser` 标签包裹在 `parser-group` 中即可  
+     ```wxml
+     <parser-group>
+       <parser html="{{html1}}" />
+       <view>...</view>
+       <parser html="{{html2}}" />
+     </parser-group>
+     ```
 
 ## 原理和二次开发 ##
 
@@ -614,7 +594,60 @@ a = 3;</pre>
 最终效果：  
 ![高亮效果](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md8.png?sign=e613714b597ceb1fa6d5b802a54fd246&t=1581226152)  
 可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)  
-还可以进一步实现一个高亮的代码编辑框（可以参考示例小程序的 *自定义测试* 页面）
+还可以进一步实现一个高亮的代码编辑框（可以参考示例小程序的 *自定义测试* 页面）  
+
+### 长内容处理 ###
+如果富文本内容特别长，通过 `setData` 无法设置或者有超出 `1000` 个标签，可以采用微信官方提供的 [长列表组件](https://developers.weixin.qq.com/miniprogram/dev/extended/component-plus/recycle-view.html) 进行处理（需要将内容拆分成多个章节，且需要提供每个章节的高度），这里提供一个简单的示例  
+```wxml
+<parser-group>
+  <recycle-view batch="{{batchSetRecycleData}}" id="recycleId">
+    <recycle-item wx:for="{{recycleList}}" wx:key="id">
+      <parser html="{{item.content}}" />
+    </recycle-item>
+  </recycle-view>
+</parser-group>
+```
+```javascript
+const createRecycleContext = require("miniprogram-recycle-view")
+Page({
+  onReady: function() {
+    this.ctx = createRecycleContext({
+      id: 'recycleId',
+      dataKey: 'recycleList',
+      page: this,
+      itemSize: this.itemSizeFunc
+    })
+    // 这里设置了 100 个章节，每个章节高度为 500px
+    var longarray = [];
+    for (var i = 1; i <= 100; i++) {
+      longarray.push({
+        id: "section" + i,
+        content: "<div style='width:100vw;height:500px;display:flex;justify-content:center;align-items:center'>section" + i + "</div>"
+      })
+    }
+    this.ctx.append(longarray)
+  },
+  itemSizeFunc: function(item, idx) {
+    // 可以给不同章节设置不同的高度
+    return {
+      width: this.ctx.transformRpx(750),
+      height: 500
+    }
+  }
+})
+```
+```json
+{
+  "usingComponents": {
+    "recycle-view": "/miniprogram_npm/miniprogram-recycle-view/recycle-view",
+    "recycle-item": "/miniprogram_npm/miniprogram-recycle-view/recycle-item",
+    "parser": "/components/parser/parser",
+    "parser-group": "/components/parser-group/parser-group"
+  }
+}
+```
+
+>用 `parser-group` 标签包裹可以使得图片预览时可以通过左右滑动查看所有章节中的图片，详见 [parser-group](#parser-group)  
 
 ## 许可与支持 ##
 - 许可  

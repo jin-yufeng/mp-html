@@ -44,7 +44,7 @@ class CssParser {
 		this._floor = 0;
 		this._i = 0;
 		this._list = [];
-		this._sectionStart = 0;
+		this._start = 0;
 		this._state = this.Space;
 	};
 	parse() {
@@ -55,7 +55,7 @@ class CssParser {
 	// 状态机
 	Space(c) {
 		if (c == '.' || c == '#' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-			this._sectionStart = this._i;
+			this._start = this._i;
 			this._state = this.StyleName;
 		} else if (c == '/' && this.data[this._i + 1] == '*')
 			this.Comment();
@@ -76,16 +76,16 @@ class CssParser {
 	};
 	StyleName(c) {
 		if (config.blankChar[c]) {
-			if (this._sectionStart != this._i)
-				this._list.push(this.data.substring(this._sectionStart, this._i));
+			if (this._start != this._i)
+				this._list.push(this.data.substring(this._start, this._i));
 			this._state = this.NameSpace;
 		} else if (c == '{') {
-			this._list.push(this.data.substring(this._sectionStart, this._i));
-			this._sectionStart = this._i + 1;
+			this._list.push(this.data.substring(this._start, this._i));
+			this._start = this._i + 1;
 			this.Content();
 		} else if (c == ',') {
-			this._list.push(this.data.substring(this._sectionStart, this._i));
-			this._sectionStart = this._i + 1;
+			this._list.push(this.data.substring(this._start, this._i));
+			this._start = this._i + 1;
 			this._comma = true;
 		} else if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < '0' || c > '9') && c != '.' && c != '#' && c != '-' &&
 			c != '_')
@@ -93,16 +93,16 @@ class CssParser {
 	};
 	NameSpace(c) {
 		if (c == '{') {
-			this._sectionStart = this._i + 1;
+			this._start = this._i + 1;
 			this.Content();
 		} else if (c == ',') {
 			this._comma = true;
-			this._sectionStart = this._i + 1;
+			this._start = this._i + 1;
 			this._state = this.StyleName;
 		} else if (!config.blankChar[c]) {
 			if (this._comma) {
 				this._state = this.StyleName;
-				this._sectionStart = this._i--;
+				this._start = this._i--;
 				this._comma = false;
 			} else this._state = this.Ignore;
 		}
@@ -110,7 +110,7 @@ class CssParser {
 	Content() {
 		this._i = this.data.indexOf('}', this._i);
 		if (this._i == -1) this._i = this.data.length;
-		var content = this.data.substring(this._sectionStart, this._i);
+		var content = this.data.substring(this._start, this._i);
 		for (var i = this._list.length; i--;)
 			this.res[this._list[i]] = (this.res[this._list[i]] || '') + content;
 		this._list = [];

@@ -22,7 +22,7 @@ class MpHtmlParser {
     this._domain = options.domain;
     this._i = 0;
     this._protocol = this._domain && this._domain.includes("://") ? this._domain.split("://")[0] : "http";
-    this._sectionStart = 0;
+    this._start = 0;
     this._state = this.Text;
     this._STACK = [];
     this._tagName = '';
@@ -30,7 +30,7 @@ class MpHtmlParser {
     this._imgNum = 0;
     this._videoNum = 0;
     this._useAnchor = options.useAnchor;
-    this._whiteSpace = false;
+    this._pre = false;
   };
   parse() {
     if (emoji) this.data = emoji.parseEmoji(this.data);
@@ -65,7 +65,7 @@ class MpHtmlParser {
   setText() {
     var text = this.getSelection();
     if (!text) return;
-    if (!this._whiteSpace) {
+    if (!this._pre) {
       // 移除空白符
       for (var tmp = [], i = text.length, has = false, c; c = text[--i];)
         if ((!blankChar[c] && (has = true)) || (!blankChar[tmp[0]] && (c = ' '))) tmp.unshift(c);
@@ -87,7 +87,7 @@ class MpHtmlParser {
           text = text.substring(0, i) + '\u00A0' + text.substring(j + 1); // 解决连续 &nbsp; 失效的问题
         else if (u != "lt" && u != "gt" && u != "amp" && u != "ensp" && u != "emsp") decode = true;
       }
-      i = text.indexOf('&', i + 2);
+      i = text.indexOf('&', i + 1);
     }
     var slibings = this._STACK.length ? this._STACK[this._STACK.length - 1].children : this.DOM;
     if (slibings.length && slibings[slibings.length - 1].type == "text") {
@@ -116,12 +116,12 @@ class MpHtmlParser {
         while (this._i < this.data.length) {
           (this._i = this.data.indexOf("</", this._i + 1)) == -1 ? this._i = this.data.length : null;
           this._i += 2;
-          this._sectionStart = this._i;
+          this._start = this._i;
           while (!blankChar[this.data[this._i]] && this.data[this._i] != '>' && this.data[this._i] != '/') this._i++;
-          if (this.data.substring(this._sectionStart, this._i).toLowerCase() == node.name) {
+          if (this.data.substring(this._start, this._i).toLowerCase() == node.name) {
             this._i = this.data.indexOf('>', this._i);
             if (this._i == -1) this._i = this.data.length;
-            else this._sectionStart = this._i + 1;
+            else this._start = this._i + 1;
             this._state = this.Text;
             // 处理 svg
             if (node.name == "svg") {
@@ -130,7 +130,7 @@ class MpHtmlParser {
               this._i = j;
               while (this.data[j] != '<') j--;
               src = this.data.substring(j, this._i) + src;
-              this._i = this._sectionStart - 1;
+              this._i = this._start - 1;
               node.name = "img";
               node.attrs = {
                 src: "data:image/svg+xml;utf8," + src.replace(/#/g, "%23"),
@@ -146,12 +146,12 @@ class MpHtmlParser {
       node.children = [];
     }
     if (this.data[this._i] == '/') this._i++;
-    this._sectionStart = this._i + 1;
+    this._start = this._i + 1;
     this._state = this.Text;
     if (!config.ignoreTags[node.name]) {
       // 检查空白符是否有效
       if (node.name == "pre" || (node.attrs.style && node.attrs.style.includes("white-space") && node.attrs.style.includes("pre"))) {
-        this._whiteSpace = true;
+        this._pre = true;
         node.pre = true;
       }
       slibings.push(node);
@@ -164,11 +164,11 @@ class MpHtmlParser {
     else if (!config.trustTags[node.name]) node.name = "span";
     // 空白符处理
     if (node.pre) {
-      this._whiteSpace = false;
-      node.pre = undefined;
+      this._pre = false;
+      node.pre = void 0;
       for (var i = this._STACK.length; i--;)
         if (this._STACK[i].pre)
-          this._whiteSpace = true;
+          this._pre = true;
     }
     // 处理列表
     if (node.c) {
@@ -236,8 +236,8 @@ class MpHtmlParser {
         node.attrs.class = (child.class || '') + (node.attrs.class || '');
         node.children = node.children[0].children;
       } else {
-        if (!node.attrs.style) node.attrs.style = undefined;
-        if (!child.style) child.style = undefined;
+        if (!node.attrs.style) node.attrs.style = void 0;
+        if (!child.style) child.style = void 0;
       }
     }
     // 后代选择器处理
@@ -250,9 +250,9 @@ class MpHtmlParser {
     return false;
   };
   getSelection(trim) {
-    var str = (this._sectionStart == this._i ? '' : this.data.substring(this._sectionStart, this._i));
+    var str = (this._start == this._i ? '' : this.data.substring(this._start, this._i));
     while (trim && (blankChar[this.data[++this._i]] || (this._i--, false)));
-    this._sectionStart = this._i + 1;
+    this._start = this._i + 1;
     return str;
   };
   // 状态机
@@ -267,7 +267,7 @@ class MpHtmlParser {
         this._i++;
         next = this.data[this._i + 1];
         if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z')) {
-          this._sectionStart = this._i + 1;
+          this._start = this._i + 1;
           this._state = this.EndTag;
         } else
           this._state = this.Comment;
@@ -284,7 +284,7 @@ class MpHtmlParser {
       else this._i = this._i + 2;
     } else
       (this._i = this.data.indexOf('>', this._i + 1)) == -1 ? this._i = this.data.length : null;
-    this._sectionStart = this._i + 1;
+    this._start = this._i + 1;
     this._state = this.Text;
   };
   TagName(c) {
@@ -302,13 +302,13 @@ class MpHtmlParser {
       this._attrName = this.getSelection(true).toLowerCase();
       if (this.data[this._i] == '=') {
         while (blankChar[this.data[++this._i]]);
-        this._sectionStart = this._i--;
+        this._start = this._i--;
         this._state = this.AttrValue;
       } else this.setAttr();
     } else if (c == '=') {
       this._attrName = this.getSelection().toLowerCase();
       while (blankChar[this.data[++this._i]]);
-      this._sectionStart = this._i--;
+      this._start = this._i--;
       this._state = this.AttrValue;
     } else if (this.checkClose()) {
       this._attrName = this.getSelection().toLowerCase();
@@ -317,7 +317,7 @@ class MpHtmlParser {
   };
   AttrValue(c) {
     if (c == '"' || c == "'") {
-      this._sectionStart++;
+      this._start++;
       if ((this._i = this.data.indexOf(c, this._i + 1)) == -1) return this._i = this.data.length;
     } else
       for (; !blankChar[this.data[this._i]] && this.data[this._i] != '>'; this._i++);

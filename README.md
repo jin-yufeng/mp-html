@@ -57,7 +57,7 @@
 |:---:|:---:|:---:|
 | parser | 46.7KB | 微信小程序插件包 |
 | parser.min | 30.9KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 59.1KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.uni | 59.8KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -182,6 +182,11 @@
 
 
 ## 更新日志 ##
+- 2020.2.26
+  1. `A` 添加了 `parser-group` 补丁包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#parser-group)  
+  2. `U` `uni-app` 包 `App` 端支持 `a` 标签链接为文档时自动下载和打开，`v3` 支持 `embed` 标签  
+  3. `F` 修复了部分情况下连续实体编码失效的问题  
+
 - 2020.2.23
   1. `U` 支持自动压缩 `style` 属性，移除重复的样式，可以减少解析结果大小  
   2. `U` 支持预览 `base64` 图片（通过暂存到本地实现）  
@@ -203,9 +208,5 @@
 - 2020.2.12
   1. `A` 增加了 `gesture-zoom` 属性，可以设置双击缩放（默认 `false`）  
   2. `U` `uni-app` 包修改命名使得符合 `easycom` 规则（`HBuilder X 2.5.5` 以上可以直接使用，无需引入；**之前版本的引入路径有变化**）[详细](https://github.com/jin-yufeng/Parser/issues/79)  
-
-- 2020.1.23
-  1. `A` 添加了一个打包工具 [详细](https://jin-yufeng.github.io/Parser/#/instructions?id=打包工具)  
-  2. `U` 支持 `rpx` 单位  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

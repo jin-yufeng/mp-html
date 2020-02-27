@@ -32,10 +32,10 @@
 			linkpress(res) {
 				console.log("linkpress", res);
 				// #ifdef APP-PLUS
-				if (/http/.test(res.href)) {
+				if (res.href && res.href.includes("http")) {
 					res.ignore();
 					uni.navigateTo({
-						url: '../web/web?src=' + res.href
+						url: "../web/web?src=" + res.href
 					})
 				}
 				// #endif

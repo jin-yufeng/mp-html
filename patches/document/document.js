@@ -1,5 +1,5 @@
 /*
-  document补丁包
+  document 补丁包
   github地址：https://github.com/jin-yufeng/Parser
   文档地址：https://jin-yufeng.github.io/Parser
   author：JinYufeng

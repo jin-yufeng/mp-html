@@ -12,13 +12,19 @@ const trustAttrs = makeMap(
 );
 // 信任的标签，将保持标签名不变 
 const trustTags = makeMap(
-	"a,abbr,ad,audio,b,blockquote,br,code,col,colgroup,dd,del,dl,dt,div,em,fieldset,h1,h2,h3,h4,h5,h6,hr,i,img,iframe,ins,label,legend,li,ol,p,q,source,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,title,u,ul,video"
+	"a,abbr,ad,audio,b,blockquote,br,code,col,colgroup,dd,del,dl,dt,div,em,fieldset,h1,h2,h3,h4,h5,h6,hr,i,img,ins,label,legend,li,ol,p,q,source,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,title,u,ul,video"
+	// #ifdef APP-PLUS
+	+ ",embed,iframe"
+	// #endif
 );
 // 块级标签，将被转为 div
 const blockTags = makeMap("address,article,aside,body,center,cite,footer,header,html,nav,pre,section");
 // 被移除的标签（其中 svg 系列标签会被转为图片） 
 const ignoreTags = makeMap(
-	"area,base,basefont,canvas,circle,command,ellipse,embed,frame,head,input,isindex,keygen,line,link,map,meta,param,path,polygon,rect,script,source,svg,textarea,track,use,wbr"
+	"area,base,basefont,canvas,circle,command,ellipse,frame,head,input,isindex,keygen,line,link,map,meta,param,path,polygon,rect,script,source,svg,textarea,track,use,wbr"
+	// #ifndef APP-PLUS
+	+ ",embed,iframe"
+	// #endif
 );
 // 只能用 rich-text 显示的标签（其中图片不能预览、不能显示视频、音频等） 
 const richOnlyTags = makeMap("a,colgroup,fieldset,legend,sub,sup,table,tbody,td,tfoot,th,thead,tr");
@@ -95,7 +101,10 @@ module.exports = {
 				break;
 			case 'a':
 			case "ad":
+			// #ifdef APP-PLUS
 			case "iframe":
+			case "embed":
+			// #endif
 				bubbling(Parser);
 				break;
 			case "font":

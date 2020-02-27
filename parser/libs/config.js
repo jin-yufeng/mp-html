@@ -40,7 +40,7 @@ if (wx.canIUse("editor")) {
   makeMap("bdi,bdo,caption,rt,ruby,big,small,pre", trustTags);
   makeMap("bdi,bdo,caption,rt,ruby,pre", richOnlyTags);
   ignoreTags.rp = true;
-  blockTags.pre = undefined;
+  blockTags.pre = void 0;
 } else {
   blockTags.caption = true;
   userAgentStyles.big = "display:inline;font-size:1.2em";
@@ -67,13 +67,13 @@ module.exports = {
       case 'p':
         if (attrs.align) {
           attrs.style = "text-align:" + attrs.align + ';' + attrs.style;
-          attrs.align = undefined;
+          attrs.align = void 0;
         }
         break;
       case "img":
         if (attrs["data-src"]) {
           attrs.src = attrs.src || attrs["data-src"];
-          attrs["data-src"] = undefined;
+          attrs["data-src"] = void 0;
         }
         if (attrs.width && parseInt(attrs.width) > screenWidth)
           attrs.style += ";height:auto !important";
@@ -89,11 +89,11 @@ module.exports = {
       case "font":
         if (attrs.color) {
           attrs.style = "color:" + attrs.color + ';' + attrs.style;
-          attrs.color = undefined;
+          attrs.color = void 0;
         }
         if (attrs.face) {
           attrs.style = "font-family:" + attrs.face + ';' + attrs.style;
-          attrs.face = undefined;
+          attrs.face = void 0;
         }
         if (attrs.size) {
           var size = parseInt(attrs.size);
@@ -101,7 +101,7 @@ module.exports = {
           else if (size > 7) size = 7;
           var map = ["xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"];
           attrs.style = "font-size:" + map[size - 1] + ';' + attrs.style;
-          attrs.size = undefined;
+          attrs.size = void 0;
         }
         break;
       case "video":
@@ -111,11 +111,11 @@ module.exports = {
         if (node.name == "video") {
           if (attrs.width) {
             attrs.style = "width:" + parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : "px") + ';' + attrs.style;
-            attrs.width = undefined;
+            attrs.width = void 0;
           }
           if (attrs.height) {
             attrs.style = "height:" + parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : "px") + ';' + attrs.style;
-            attrs.height = undefined;
+            attrs.height = void 0;
           }
           if (Parser._videoNum > 3) node.lazyLoad = true;
         }
@@ -168,7 +168,7 @@ module.exports = {
     for (var key in compressed)
       attrs.style += ';' + key + ':' + compressed[key];
     attrs.style = attrs.style.substr(1);
-    if (!attrs.style) attrs.style = undefined;
+    if (!attrs.style) attrs.style = void 0;
     if (Parser._useAnchor && attrs.id) bubbling(Parser);
   },
   trustAttrs,

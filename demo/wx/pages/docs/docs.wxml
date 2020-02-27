@@ -269,6 +269,13 @@
             </view>
           </view>
         </view>
+        <view class="weui-article__p">
+          4.
+          <code>parser-group</code>
+          <view>功能：将多个<code>parser</code>标签组合在一起，可以实现：
+            <parser html="{{parserGroup}}" tag-style="{{tagStyle}}" />
+          </view>
+        </view>
         <parser html="详细可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions?id=补丁包'>补丁包</a>" />
       </view>
       <!--基础库要求-->
@@ -286,6 +293,11 @@
             <view class="td" style="width:20%;">{{item.percent}}</view>
           </view>
         </view>
+      </view>
+      <view class="weui-article__h2">下载链接</view>
+      <view class="weui-article__section">
+        <view>许可：MIT License</view>
+        <parser html="获取：<a href='https://github.com/jin-yufeng/Parser'>https://github.com/jin-yufeng/Parser</a>" />
       </view>
       <view class="link" style="display:flex;justify-content:center;margin:0 5%">
         <view bindtap="prevSection">上一章：功能介绍</view>

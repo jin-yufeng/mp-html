@@ -1,3 +1,3 @@
 <!--parser 主组件-->
 <slot wx:if="{{!html[0].name && !html[0].type}}" />
-<trees id="root" style="{{(showWithAnimation ? 'opacity:0' : '') + (selectable ? ';user-select:text;-webkit-user-select:text' : '')}}" animation="{{showAnimation}}" controls="{{controls}}" nodes="{{html[0].name||html[0].type ? html : []}}" bindtap="tap" bindtouchstart="touchstart" bindtouchmove="touchmove" />
+<trees id="root" style="{{(showWithAnimation ? 'opacity:0' : '') + (selectable ? ';user-select:text;-webkit-user-select:text' : '')}}" animation="{{showAnimation}}" controls="{{controls}}" nodes="{{html[0].name||html[0].type ? html : []}}" bindtap="_tap" bindtouchstart="_touchstart" bindtouchmove="_touchmove" />

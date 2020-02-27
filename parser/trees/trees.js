@@ -9,9 +9,9 @@ Component({
     nodes: Array,
     controls: Object
   },
-  created() {
+  methods: {
     // 提交错误事件
-    this.triggerError = (source, target, errMsg, errCode, context) => {
+    triggerError(source, target, errMsg, errCode, context) {
       this._top && this._top.triggerEvent('error', {
         source,
         target,
@@ -19,23 +19,19 @@ Component({
         errCode,
         context
       });
-    };
+    },
     // 加载其他源
-    this.loadSource = (target) => {
+    loadSource(target) {
       var index = this.data.controls[target.id] ? this.data.controls[target.id].index + 1 : 1;
       if (index < target.dataset.source.length)
         return this.setData({
           [`controls.${target.id}.index`]: index
         }), true;
       return false;
-    }
-  },
-  detached() {
-    if (this._observer) this._observer.disconnect();
-  },
-  methods: {
+    },
     // 视频播放事件
     play(e) {
+      this._top.group && this._top.group.pause(this._top.i);
       if (this._top.videoContexts.length > 1 && this._top.data.autopause) {
         for (var i = this._top.videoContexts.length; i--;) {
           if (this._top.videoContexts[i].id != e.currentTarget.id)
@@ -43,7 +39,7 @@ Component({
         }
       }
     },
-    // 图片预览事件
+    // 图片点击事件
     imgtap(e) {
       var attrs = e.currentTarget.dataset.attrs;
       if (!attrs.ignore) {
@@ -54,6 +50,7 @@ Component({
           ignore: () => preview = false
         })
         if (preview) {
+          if (this._top.group) return this._top.group.preview(this._top.i, attrs.i);
           var urls = this._top.imgList,
             current = urls[attrs.i] ? urls[attrs.i] : (urls = [attrs.src], attrs.src);
           wx.previewImage({
@@ -123,5 +120,8 @@ Component({
         }
       })
     }
+  },
+  detached() {
+    this._observer && this._observer.disconnect();
   }
 })

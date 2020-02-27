@@ -51,13 +51,13 @@ class core {
 	// 包大小
 	final float wxSize = 46.7f;
 	final float wxMinSize = 30.9f;
-	final float uniAppSize = 59.1f;
+	final float uniAppSize = 59.8f;
 	final float emojiSize = 4.29f;
 	final float emojiMinSize = 3.16f;
 	final float domSize = 4.57f;
 	final float domMinSize = 3.72f;
-	final float cssSize = 4.42f;
-	final float cssMinSize = 1.27f;
+	final float cssSize = 4.5f;
+	final float cssMinSize = 1.35f;
 
 	// 构造函数
 	core() {

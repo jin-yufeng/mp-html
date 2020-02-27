@@ -6,7 +6,7 @@
   author：JinYufeng
 -->
 <template>
-	<view style="display:inherit;flex-direction:inherit;white-space:inherit;max-width:100%;">
+	<view class="interlayer">
 		<block v-for="(item, index) in nodes" v-bind:key="index">
 			<!--图片-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY || APP-PLUS-->
@@ -82,7 +82,9 @@
 			</view>
 			<!--#ifdef APP-PLUS-->
 			<iframe v-else-if="item.name=='iframe'" :style="item.attrs.style" :allowfullscreen="item.attrs.allowfullscreen"
-			 :frameborder="item.attrs.frameborder" :width="item.attrs.width" :height="item.attrs.height" :src="item.attrs.src"></iframe>
+			 :frameborder="item.attrs.frameborder" :width="item.attrs.width" :height="item.attrs.height" :src="item.attrs.src" />
+			<embed v-else-if="item.name=='embed'" :style="item.attrs.style" :width="item.attrs.width" :height="item.attrs.height"
+			 :src="item.attrs.src" />
 			<!--#endif-->
 			<!--富文本-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY || APP-PLUS-->
@@ -128,10 +130,7 @@
 				default: []
 			},
 			// #ifdef APP-PLUS
-			loadVideo: {
-				type: Boolean,
-				default: false
-			}
+			loadVideo: Boolean
 			// #endif
 		},
 		mounted() {
@@ -208,14 +207,31 @@
 									id: attrs.href.substring(1)
 								})
 						} else if (attrs.href.indexOf("http") == 0 || attrs.href.indexOf("//") == 0) {
-							uni.setClipboardData({
-								data: attrs.href,
-								success() {
-									uni.showToast({
-										title: "链接已复制"
-									});
-								}
-							});
+							// #ifdef APP-PLUS
+							if (attrs.href.includes(".doc") || attrs.href.includes(".xls") || attrs.href.includes(".ppt") || attrs.href.includes(
+									".pdf")) {
+								uni.showLoading({
+									title: "文件下载中"
+								})
+								uni.downloadFile({
+									url: attrs.href,
+									success(res) {
+										wx.openDocument({
+											filePath: res.tempFilePath
+										})
+									},
+									complete: uni.hideLoading
+								})
+							} else
+								// #endif
+								uni.setClipboardData({
+									data: attrs.href,
+									success() {
+										uni.showToast({
+											title: "链接已复制"
+										});
+									}
+								});
 						} else
 							uni.navigateTo({
 								url: attrs.href
@@ -284,6 +300,17 @@
 	}
 
 	/* #endif */
+
+	.interlayer {
+		display: inherit;
+		flex-direction: inherit;
+		flex-wrap: inherit;
+		justify-content: inherit;
+		align-items: inherit;
+		align-content: inherit;
+		white-space: inherit;
+		max-width: 100%;
+	}
 
 	._b,
 	._strong {

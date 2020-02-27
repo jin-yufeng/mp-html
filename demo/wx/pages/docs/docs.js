@@ -79,6 +79,7 @@ p {
   <li>将一些只有一个子节点的标签进行合并来减小节点的深度</li>
   <li>在非<code>pre</code>标签且没有<code>white-space:pre</code>时自动去除空白符</li>
   <li>压缩<code>style</code>属性的值，去除重复的属性和多余的空格</li>
+  <li>移除不支持的属性和一些不支持的标签</li>
 </ol>`,
     // 自动填充链接示例代码
     completerCode: `<pre><code class="language-javascript">Page({
@@ -325,6 +326,13 @@ export default {
       name: "@media 查询",
       example: "@media(min-width:300px)"
     }],
+    // parser-group 补丁包
+    parserGroup: 
+`<ol style="margin-left:-15px">
+  <li>图片预览时可以通过左右滑动查看该<code>group</code>下所有图片</li>
+  <li>一个<code>parser</code>标签中的<code>a</code>标签可以跳转另一个<code>parser</code>中的锚点（需开启<code>use-anchor</code>属性）</li>
+  <li>播放一个视频时可以自动暂停该<code>group</code>下所有视频（需开启<code>antopause</code>属性）</li>
+</ol>`,
     // 基础库要求
     versions: [{
       version: ">=2.2.5",
@@ -406,6 +414,13 @@ imgList.each((src, i, arr) => {
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.2.26
+    <ol>
+      <li><code>A</code> 添加了<code>parser-group</code>的补丁包</li>
+      <li><code>F</code> 修复了部分情况下连续实体编码失效的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.2.23
     <ol>
       <li><code>U</code> 支持自动压缩<code>style</code>属性，移除重复的样式，可以减少解析结果大小</li>
