@@ -6,7 +6,7 @@ Page({
     titles: ["功能介绍", "使用方法", "更新日志"],
     // 标签的默认样式
     tagStyle: {
-      pre: "padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#2d2d2d;color:#ccc;line-height: 1.5;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;position:relative;user-select:text;-webkit-user-select:text",
+      pre: "padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#2d2d2d;color:#ccc;line-height: 1.5;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;position:relative",
       code: "background-color:#f0f0f0;font-size:85%;margin:0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace"
     },
     // 支持的选择器
@@ -70,13 +70,17 @@ p {
   <source src="demo1.mov" />
   <source src="demo2.webm" />
 </video></code></pre>`,
+    sourceCode2: `<pre><code class="language-html"><picture>
+  <source media="(min-width:500px)" src="high-quality.jpg" />
+  <source media="(min-width:400px)" src="middle-quality.jpg" />
+  <img src="low-quality.jpg" />
+</picture></code></pre>`,
     // 加载提示示例代码
     loadingCode: `<pre><code class="language-wxml"><parser html="{{html}}" show-with-animation>
   加载中...
 </parser></code></pre>`,
     // 智能压缩
     compress: `<ol style="margin:10px 0 0 -15px">
-  <li>将一些只有一个子节点的标签进行合并来减小节点的深度</li>
   <li>在非<code>pre</code>标签且没有<code>white-space:pre</code>时自动去除空白符</li>
   <li>压缩<code>style</code>属性的值，去除重复的属性和多余的空格</li>
   <li>移除不支持的属性和一些不支持的标签</li>
@@ -107,8 +111,11 @@ p {
       name: "font",
       attrs: "color, face, size"
     }, {
+      name: "picture",
+      attrs: "alt, height, width, src"
+    }, {
       name: "source",
-      attrs: "src"
+      attrs: "media, src"
     }, {
       name: "svg",
       attrs: "svg 系列所有标签"
@@ -141,7 +148,7 @@ p {
     <div>链接受到点击时，若<code>href</code>属性的值是网络链接，将自动复制链接；若是内部路径，则自动跳转页面；若设置了<code>app-id</code>和<code>path</code>，则将跳转其他小程序；同时触发<code>linkpress</code>事件，可进行自定义处理</div>
   </li>
   <li>图片点击事件
-    <div>图片受到点击时，将自动进行预览（支持<code>base64</code>，可通过属性控制），同时触发<code>imgtap</code>事件，可进行自定义处理</div>
+    <div>图片受到点击时，将自动进行预览（支持<code>base64</code>，可通过属性控制），同时触发<code>imgtap</code>事件，可进行自定义处理（对于装饰性图片，可以设置<code>ignore</code>属性，将无法预览）</div>
   </li>
   <li>图片长按事件
     <div>将触发<code>imglongtap</code>事件，可进行自定义处理（如显示菜单等，可在 <a href="../demo/demo?index=0">功能示例</a> 中长按图片体验）</div>
@@ -294,12 +301,8 @@ export default {
   error(e) {
     // 广告组件加载出错
     if(e.detail.source == "ad") {
-      // 获取document
       var document = this.selectComponent("#article").document;
-      // 查找广告框容器
-      var adContainer = document.getElementById("adContainer");
-      if(adContainer)
-        adContainer.setStyle("display", "none"); // 隐藏广告容器
+      document.getElementById("adContainer").setStyle("display", "none");
     }
   }
 })</code></pre>`,
@@ -327,8 +330,7 @@ export default {
       example: "@media(min-width:300px)"
     }],
     // parser-group 补丁包
-    parserGroup: 
-`<ol style="margin-left:-15px">
+    parserGroup: `<ol style="margin-left:-15px">
   <li>图片预览时可以通过左右滑动查看该<code>group</code>下所有图片</li>
   <li>一个<code>parser</code>标签中的<code>a</code>标签可以跳转另一个<code>parser</code>中的锚点（需开启<code>use-anchor</code>属性）</li>
   <li>播放一个视频时可以自动暂停该<code>group</code>下所有视频（需开启<code>antopause</code>属性）</li>
@@ -414,6 +416,16 @@ imgList.each((src, i, arr) => {
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.3.1
+    <ol>
+      <li><code>U</code> 支持<code>picture</code>标签，可以在不同大小的屏幕上显示不同链接的图片</li>
+      <li><code>U</code> 支持在<code>sub</code>、<code>sup</code>标签中使用<code>a</code>标签</li>
+      <li><code>U</code> 给<code>document</code>补丁包增加和修改了一些方法</li>
+      <li><code>F</code> 修复了由于自动压缩产生的一些问题（主要是<code>background-image</code>）</li>
+      <li><code>F</code> 修复了使用<code>show-with-animation</code>属性时个别情况下可能出现白屏的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.2.26
     <ol>
       <li><code>A</code> 添加了<code>parser-group</code>的补丁包</li>
@@ -529,18 +541,6 @@ imgList.each((src, i, arr) => {
       <li><code>A</code> 增加了<code>domain</code>属性，设置后可以自动给图片链接拼接主域名或协议名</li>
       <li><code>A</code> 增加了<code>use-anchor</code>属性，可以选择是否使用页面内锚点</li>
       <li><code>U</code> <code>CssHandler</code>补丁包增加支持<code>before</code>和<code>after</code>伪类</li>
-    </ol>
-  </li>
-  </br>
-  <li>2019.11.29
-    <ol>
-      <li><code>U</code> <code>linkpress</code>和<code>imgtap</code>事件增加<code>ignore</code>函数，在事件中调用此函数将不自动进行链接跳转/图片预览操作，可以屏蔽指定的链接/图片或进行自定义操作</li>
-    </ol>
-  </li>
-  </br>
-  <li>2019.11.28
-    <ol>
-      <li><code>U</code> <code>table</code>标签支持了<code>border</code>, <code>cellpadding</code>, <code>cellspacing</code></li>
     </ol>
   </li>
 </ul>

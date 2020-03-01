@@ -47,7 +47,14 @@
     <source src="demo2.webm" />
   </video>
   ```
-  
+  支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接
+  ```html
+  <picture>
+    <source media="(min-width:400px)" src="high-quality.jpg">
+    <source media="(min-width:250px)" src="middle-quality.jpg">
+    <img src="low-quality.jpg" />
+  </picture>
+  ```
 更多功能可见：[功能介绍](https://jin-yufeng.github.io/Parser/#/)
 
 ## 使用方法 ##
@@ -55,9 +62,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 46.7KB | 微信小程序插件包 |
-| parser.min | 30.9KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 59.8KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 45.2KB | 微信小程序插件包 |
+| parser.min | 30.0KB | 微信小程序插件包压缩版（功能相同） |
+| parser.uni | 58.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -182,6 +189,14 @@
 
 
 ## 更新日志 ##
+- 2020.3.1  
+  1. `A` `uni-app` 包 `H5` 端增加 `editable` 属性，可以编辑内容  
+  2. `U` 支持 `picture` 标签，可以在不同大小的屏幕上显示不同链接的图片 [详细](https://jin-yufeng.github.io/Parser/#/#多媒体多资源加载)  
+  3. `U` 支持在 `sub`、`sup` 标签中使用 `a` 标签  
+  4. `U` 给 `document` 补丁包添加和修改了一些方法 [详细](https://jin-yufeng.github.io/Parser/#/instructions#document)  
+  5. `F` 修复了由于自动压缩带来的一些问题（主要是 `background-image`）  
+  6. `F` 修复了使用 `show-with-animation` 属性时个别情况下会白屏的问题 [详细](https://github.com/jin-yufeng/Parser/issues/82)
+
 - 2020.2.26
   1. `A` 添加了 `parser-group` 补丁包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#parser-group)  
   2. `U` `uni-app` 包 `App` 端支持 `a` 标签链接为文档时自动下载和打开，`v3` 支持 `embed` 标签  

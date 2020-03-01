@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<jyf-parser @parse="parse" @ready="ready" @imgtap="imgtap" @linkpress="linkpress" @error="error" gesture-zoom
-		 show-with-animation lazy-load use-anchor ref="rtf" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la">加载中...</jyf-parser>
+		 show-with-animation lazy-load use-anchor ref="article" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la">加载中...</jyf-parser>
 	</view>
 </template>
 
@@ -14,8 +14,8 @@
 		components: {
 			"jyf-parser": parser
 		},
-		onReady(){
-			this.$refs.rtf.setContent(testHtml);
+		onReady() {
+			this.$refs.article.setContent(testHtml);
 		},
 		methods: {
 			parse(res) {
@@ -23,8 +23,8 @@
 			},
 			ready(res) {
 				console.log("ready", res);
-				//console.log("api: getText\n" + this.$refs.rtf.getText());
-				console.log("imgList", this.$refs.rtf.imgList);
+				//console.log("api: getText\n" + this.$refs.article.getText());
+				console.log("imgList", this.$refs.article.imgList);
 			},
 			imgtap(res) {
 				console.log("imgtap", res);

@@ -56,19 +56,21 @@
           <navigator class="link" url="../demo/demo?index=0">立即体验</navigator>
         </view>
       </view>
+      <!--多资源加载-->
+      <view class="weui-article__h2">多资源加载</view>
+      <view class="weui-article__section">
+        在
+        <code>video</code>和
+        <code>audio</code>标签中设置多个
+        <code>source</code>标签，插件将按顺序进行加载；可用于解决平台支持性差异，最大程度避免无法播放，示例：
+        <parser html="{{sourceCode}}" tag-style="{{tagStyle}}" />
+        在<code>picture</code>标签中设置多个<code>source</code>，可以在不同大小的屏幕上显示不同的图片（通过<code>media</code>查询），对于较大的图片可以进行优化，示例：
+        <parser html="{{sourceCode2}}" tag-style="{{tagStyle}}" />
+      </view>
       <!--内容可复制-->
       <view class="weui-article__h2">内容可复制</view>
       <view class="weui-article__section">
         <parser html="<div>当<code>selectable</code>属性被设置为<code>true</code>时，可以通过长按复制内容（本段文字可以体验）" tag-style="{{tagStyle}}" selectable />
-      </view>
-      <!--多资源加载-->
-      <view class="weui-article__h2">多资源加载</view>
-      <view class="weui-article__section">
-        可以通过在
-        <code>video</code>和
-        <code>audio</code>标签中设置多个
-        <code>source</code>标签来设置多个源，插件将按顺序进行加载；可用于解决平台支持性差异，最大程度避免无法播放，示例：
-        <parser html="{{sourceCode}}" tag-style="{{tagStyle}}" />
       </view>
       <!--自动设置标题-->
       <view class="weui-article__h2">自动设置标题</view>
@@ -160,9 +162,9 @@
       <view class="weui-article__h2">性能指标</view>
       <view class="weui-article__section">
         本插件解析和渲染效率高；轻量化（
-        <code>46.7KB</code>，
+        <code>45.2KB</code>，
         <code>min</code>版本
-        <code>30.9KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+        <code>30.0KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
         <parser html="{{errorCode}}" tag-style="{{tagStyle}}" />
       </view>
       <view class="link" style="display:block;text-align:center" bindtap="nextSection">下一章：使用方法</view>

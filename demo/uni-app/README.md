@@ -46,7 +46,7 @@
 
 ## 使用方法 ##
 ```html
-<jyf-parser :html="html"></jyf-parser>
+<jyf-parser :html="html" ref="article"></jyf-parser>
 ```
 ```javascript
 import parser from "@/components/jyf-parser/jyf-parser"; // HBuilderX 2.5.5 及以上可以不需要
@@ -57,8 +57,14 @@ export default{
   },
   data() {
     return {
-      html: '<div>Hello World!</div>'
+      html: ''
     }
+  },
+  onReady() {
+    // 方式 1
+    this.html = '<div>Hello World!</div>';
+    // 方式 2，一般来说性能更好
+    this.$refs.article.setContent('<div>Hello World!</div>');
   }
 }
 ```
@@ -71,6 +77,7 @@ export default{
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
   | autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题上 |
   | domain | String |  | 否 | 主域名，设置后将对于图片地址将自动拼接主域名或协议名 |
+  | editable | Boolean | false | 否 | 是否可编辑，**仅 H5 可用** |
   | gesture-zoom | Boolean | false | 否 | 是否开启双击缩放 |
   | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
   | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
@@ -100,9 +107,10 @@ export default{
 ## 注意事项 ##
 1. 本插件需要使用 `HBuilderX 2.2.5` 及以上版本进行编译  
 2. 本插件通过组件递归的方式显示节点树，因此必须使用自定义组件模式编译  
-3. 本插件支持小程序、`H5`、`APP`（不支持 `nvue`）端使用   
-4. 百度小程序基础库版本 `3.60`（客户端版本 `11.9`）以下的可能无法正常显示  
-5. `table` 标签由于难以模拟，将直接使用 `rich-text` 显示，其中的图片链接无法点击  
+3. 模板文件（`trees.vue`）中包含 `ad` 标签（用于显示富文本中的广告），若不需要或审核有要求可自行去除  
+4. 本插件支持小程序、`H5`、`APP`（不支持 `nvue`）端使用   
+5. 百度小程序基础库版本 `3.60`（客户端版本 `11.9`）以下的可能无法正常显示  
+6. `table` 标签由于难以模拟，将直接使用 `rich-text` 显示，其中的图片链接无法点击  
 
 平台差异：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  

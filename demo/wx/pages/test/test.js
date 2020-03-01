@@ -1,5 +1,5 @@
 // test.js
-const parseHtml = require("../../components/parser/libs/MpHtmlParser.js");
+const MpHtmlParser = require("../../components/parser/libs/MpHtmlParser.js");
 const marked = require("./marked.min.js");
 var videoAd = null;
 // 计算可用次数
@@ -17,6 +17,16 @@ Page({
   },
   // 页面加载
   onLoad(e) {
+    if (!wx.canIUse("editor")) {
+      wx.showModal({
+        title: "失败",
+        content: "微信版本过低，暂时无法使用此功能",
+        showCancel: false
+      })
+      return wx.redirectTo({
+        url: '/pages/index/index',
+      });
+    }
     wx.createSelectorQuery().select("#editor").context((res) => {
       this.editor = res.context;
     }).exec();
@@ -148,7 +158,11 @@ Page({
   </svg>
   <p class="desc">svg 图片</p>
   </br>
-  <img ignore src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351" width="50%"/>
+  <!--响应式布局-->
+  <picture width="50%" ignore>
+    <source media="(min-width:420px)" src="/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351">
+    <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-3-thumb.gif?sign=22dc3b4bb766e6ec77923d1b086ba6a0&t=1582804673" />
+  </picture>
   <p class="desc">装饰图片不能预览</p>
 </div>`;
         else
@@ -193,7 +207,7 @@ Page({
     } else
       this.setData({
         tooLong: false,
-        code: parseHtml("<pre style='white-space:pre-wrap;word-break:break-all'><code class='language-" + (this.data.index == "0" ? "html" : "md") + "-editor'>" + text + "</code></pre>")
+        code: new MpHtmlParser("<pre style='white-space:pre-wrap;word-break:break-all'><code class='language-" + (this.data.index == "0" ? "html" : "md") + "-editor'>" + text + "</code></pre>").parse()
       })
   },
   // 清空内容

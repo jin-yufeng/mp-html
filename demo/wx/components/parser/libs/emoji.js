@@ -1,7 +1,7 @@
 /*
-  emoji补丁包
-  github地址：https://github.com/jin-yufeng/Parser
-  文档地址：https://jin-yufeng.github.io/Parser
+  emoji 补丁包
+  github：https://github.com/jin-yufeng/Parser
+  docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
 */
 const reg = /\[(\S+?)\]/g;

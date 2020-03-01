@@ -1,5 +1,13 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.03.01 ####
+1. `A` `uni-app` 包 `H5` 端增加 `editable` 属性，可以编辑内容  
+2. `U` 支持 `picture` 标签，可以在不同大小的屏幕上显示不同链接的图片 [详细](/features#多媒体多资源加载)  
+3. `U` 支持在 `sub`、`sup` 标签中使用 `a` 标签  
+4. `U` 给 `document` 补丁包添加和修改了一些方法 [详细](/instructions#document)  
+5. `F` 修复了由于自动压缩带来的一些问题（主要是 `background-image`）  
+6. `F` 修复了使用 `show-with-animation` 属性时个别情况下会白屏的问题 [详细](https://github.com/jin-yufeng/Parser/issues/82)  
+
 #### 2020.02.26 ####
 1. `A` 添加了 `parser-group` 补丁包 [详细](/instructions#parser-group)  
 2. `U` `uni-app` 包 `App` 端支持 `a` 标签链接为文档时自动下载和打开，`v3` 支持 `embed` 标签  

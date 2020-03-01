@@ -3,9 +3,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 46.7KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.9KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.8KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 45.2KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.9KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
@@ -165,9 +165,9 @@
   
 说明：  
 - 关于 `html`  
+  - 推荐通过 [setContent](#setContent) 方法传入，可以提高性能  
   - 传入的格式为 `array` 时，不需要进行解析，可以一定程度上提高性能  
-    
-  - 如果传入没有设置 `continue` 标识（用于标识节点下是否有图片链接等，如果有将通过组件递归方式显示，否则直接通过 `rich-text` 显示）的数组（区分方式是查看 `html[0].PoweredBy` 是否等于 `Parser`），插件也会自动进行设置，并同时处理 `tag-style`、`domain`、`use-anchor` 等一些属性的效果，但会产生额外的性能开销   
+  - 本插件在解析的过程中会进行一些转换和设置一些标识，使得能够正确的渲染和使用；若传入非本插件产生的数组（区分方式是查看 `html[0].PoweredBy` 是否等于 `Parser`），插件会自动进行设置，并同时处理 `tag-style`、`domain`、`use-anchor` 等一些属性的效果，但会产生额外的性能开销   
 
 - 关于 `tag-style`  
   可以设置标签的默认样式，形如 `{标签名：样式}` 的结构体，例如 `{ img: "display:block" }` 表示给 `img` 标签设置默认的块级标签效果  
@@ -177,6 +177,23 @@
   
 - 关于 `use-cache`  
   设置为 `true` 时将对解析结果进行缓存，在一个应用生命周期内多次打开，不需要重复解析，可以节省时间，建议对较长的内容且可能多次打开的内容设置缓存（可以通过 `getApp().parserCache` 管理缓存）  
+
+- 关于 `editable`  
+  仅 `uni-app` 的 `H5` 端支持，设置后可以对富文本内容进行编辑，编辑完成后可以通过 `document` 获取内容  
+  ```vue
+  <template>
+    <jyf-parser ref="article" editable />
+  </template>
+  <script>
+  export default {
+    methods: {
+      getContent() {
+        console.log(this.$refs.article.innerHtml);
+      }
+    }
+  }
+  </script>
+  ```
 
 ### 事件 ###
 
@@ -323,7 +340,7 @@ var videos = context.getVideoContext(); // 返回所有视频的数组
 功能：获取所有图片数组，可用于转发图的封面等（注意：这是一个**属性**，不是一个函数）  
 另外，该数组提供了一个 `each` 方法，功能与数组的 `forEach` 基本相同，但可以通过 `return` 改变数组中的值  
 该数组用于图片的预览，因此可以在 `img` 的 `src` 中使用缩略图，再将此数组中的地址改为原图，即可实现预览时查看大图的效果  
-设置时若与数组中已存在的元素重复，将自动通过改变域名大小写的方式去重，避免在预览时出现定位错误；若设置 `base64` 图片，将自动暂存到本地，避免无法预览  
+设置时若与数组中已存在的元素重复，将自动通过改变域名大小写的方式去重，避免在预览时出现定位错误；若设置 `base64` 图片，将自动暂存到本地，避免无法预览（若需要修改单个图片，可以通过 `setItem(i, src)` 的方法，也可以进行同样处理）  
   
 使用方法：
 ```javascript
@@ -369,7 +386,7 @@ this.selectComponent("#article").setContent(html);
 - 功能  
   将形如 `[笑脸]` 的文本解析为 `emoji` 小表情  
 - 大小  
-  `4.29KB`（`min` 版本 `3.16KB`）  
+  `4.28KB`（`min` 版本 `3.16KB`）  
 - 使用方法  
   将 `emoji.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `emoji.js`）  
   
@@ -388,51 +405,55 @@ this.selectComponent("#article").setContent(html);
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `4.57KB`（`min` 版本 `3.72KB`）  
+  `6.80KB`（`min` 版本 `5.15KB`）  
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
-  !>在 uni-app 中使用时需要将 jyf-parser.vue 中的 30 行修改为 const Document = require('./libs/document.js');  
+  !>在 uni-app 中使用时需要将 jyf-parser.vue 中的 28 行修改为 const document = require('./libs/document.js');  
   
-document 类：  
-获取方式：可通过 `this.selectComponent("#id").document` 获取  
-`Api` 列表:   
+- `document` 类：  
+  获取方式：可通过 `this.selectComponent("#id").document` 获取  
+  `Api` 列表:   
 
-| 名称 | 输入值 | 返回值 | 功能 |
-|:---:|:---:|:---:|:---:|
-| getElementById | id | element | 按照 id 查找 element |
-| getChildren | i | element | 获取根节点的第 i 个子节点的 element 实例 | 
+  | 名称 | 输入值 | 返回值 | 功能 |
+  |:---:|:---:|:---:|:---:|
+  | getElementById | id | element | 按照 id 查找 element |
+  | getElementsByClassName | className | element [] | 按照 class 查找 element |
+  | getElementsByTagName | name | element [] | 按照 标签名 查找 element |
+  | createElement | name | element | 创建标签名为 name 的标签 |
+  | write | html（String / Array） |  | 写入 html 内容 |
    
-element 类：  
-属性名：
+- `element` 类：  
+  属性名：
 
-| 名称 | 功能 |
-|:---:|---|
-| id | 该节点的id值 |
-| nodes | 该节点的结构体，可以直接对这个结构体进行修改（修改后需要调用 update 方法同步到 UI，修改时要注意格式，更建议使用下方的 api 方法进行修改） |
-
-`Api` 列表：
-
-| 名称 | 输入值 | 返回值 | 功能 |
-|:---:|:---:|:---:|:---:|
-| getText |   | text | 获取文本内容（仅直接包含文本的标签可用） |
-| setText | text |   | 修改文本内容（仅直接包含文本的标签可用） |
-| addChildren | nodes, i |   | 在第 i 个位置添加子节点，nodes 为一个结构体，格式同 rich-text |
-| removeChildren | i |   | 移除第 i 个子节点 |
-| getChildren | i |   | 获取第 i 个子节点的 element 实例 |
-| getAttr | key | attr | 获取某个属性值 |
-| setAttr | key, value |   | 设置某个属性值 |
-| getStyle | key | style | 获取某个样式的值 |
-| setStyle | key, value | 设置某个样式的值 |
-| getElementById | id | element | 在子节点中按照 id 查找 element |
-| update |   |   | 若修改了 element.nodes 需要调用此方法同步到 UI |
-
-返回格式：  
-对于 `get` 类的方法，获取成功则返回获取到的值，否则返回 `null`；对于 `set` 类的方法，设置成功返回 `true`，否则返回 `false`  
+  | 名称 | 功能 |
+  |:---:|---|
+  | nodeName | 该标签的标签名 |
+  | id | 该节点的 id 值 |
+  | attributes | 该节点的属性列表，修改需要调用 setAttribute |
+  | style | 该属性的样式列表，修改需要调用 setStyle |
+  | childNodes | 该节点下的子节点，修改需要调用 child 相关 api |
+  | innerText | 该节点下的文本内容，支持获取和 **设置** |
+  | innerHtml | 该节点下的 html 内容，支持获取和 **设置** |
   
-!>所有方法必须在 `html` 被 `setData` 完成后才能调用  
+  `Api` 列表：
 
-!>每次执行除了 `get` 以外的方法都需要进行一次局部的 `setData` 更新，请不要过于频繁的调用，否则可能影响性能
+  | 名称 | 输入值 | 返回值 | 功能 |
+  |:---:|:---:|:---:|:---:|
+  | appendChild | element |  | 在子节点的末尾添加节点 |
+  | removeChild | element |  | 移除某个子节点 |
+  | replaceChild | oldVal, newVal（element） |  | 替换某个子节点 |
+  | getAttribute | key | value | 获取某个属性值 |
+  | setAttribute | key, value |  | 设置某个属性的值 |
+  | getStyle | key | value | 获取某个样式的值 |
+  | setStyle | key, value |  | 设置某个样式的值 |
+  | getElementById | id | element | 按照 id 查找 element |
+  | getElementsByClassName | className | element [] | 按照 class 查找 element |
+  | getElementsByTagName | name | element [] | 按照 标签名 查找 element |
+
+1. 对于没有标注返回值的方法，设置成功则返回 `true`，否则返回 `false`  
+2. 所有方法需要在 `html` 被 `setData` 完成后调用
+3. 所有 `set` 类的方法，在一个同步流结束后刷新到 `ui`，请不要过于频繁的调用
 
 综合示例：  
 ```wxml
@@ -446,9 +467,7 @@ error(e){
   // 广告组件加载出错
   if (e.detail.source == "ad") {
     var document = this.selectComponent("#article").document;
-    var adContainer = document.getElementById("adContainer");
-    if (adContainer)
-      adContainer.setStyle("display", "none");
+    document.getElementById("adContainer").setStyle("display", "none");
   }
 }
 ```
@@ -476,7 +495,7 @@ error(e){
 4. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
   
 - 大小（与原大小相比增加）  
-  `4.5KB`（`min` 版本：`1.35KB`）  
+  `4.49KB`（`min` 版本：`1.35KB`）  
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
@@ -490,7 +509,7 @@ error(e){
   2. 一个 `parser` 标签内的 `a` 标签可以跳转到另一个 `parser` 标签内的锚点（优先跳转同一个 `parser` 内的锚点，不存在再按照顺序查找，都需要开启 `use-anchor` 属性）  
   3. 一个 `parser` 标签内的视频播放时，将自动暂停该 `group` 内所有 `parser` 标签内的视频（前提是 `autopause` 属性的值为 `true`）  
 - 大小  
-  `2.35KB`  
+  `2.33KB`  
 - 使用方法  
   1. 将 `parser-group` 文件夹拷贝到 `components` 目录下即可（必须与 `parser` 文件夹同级）  
   2. 在需要使用页面的 `json` 文件中添加  

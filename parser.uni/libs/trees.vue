@@ -1,7 +1,7 @@
 <!--
   trees 递归显示组件
-  github地址：https://github.com/jin-yufeng/Parser
-  文档地址：https://jin-yufeng.github.io/Parser
+  github：https://github.com/jin-yufeng/Parser 
+  docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
 -->
@@ -30,7 +30,7 @@
 			<view v-else-if="item.name=='video'">
 				<!--#ifdef APP-PLUS-->
 				<view v-if="(!loadVideo||item.lazyLoad)&&(!controls[item.attrs.id]||!controls[item.attrs.id].play)" :id="item.attrs.id"
-				 :class="'_video '+(item.attrs.class||'')" :style="item.attrs.style||''" @tap="_loadVideo" />
+				 :class="'_video '+(item.attrs.class||'')" :style="item.attrs.style||''" @tap="loadVideo" />
 				<!--#endif-->
 				<!--#ifndef APP-PLUS-->
 				<view v-if="item.lazyLoad&&!controls[item.attrs.id].play" :id="item.attrs.id" :class="'_video '+(item.attrs.class||'')"
@@ -38,13 +38,13 @@
 				<!--#endif-->
 				<video v-else :id="item.attrs.id" :class="item.attrs.class" :style="item.attrs.style||''" :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
 				 :controls="item.attrs.controls" :loop="item.attrs.loop" :muted="item.attrs.muted" :poster="item.attrs.poster" :src="controls[item.attrs.id] ? item.attrs.source[controls[item.attrs.id].index] : item.attrs.src"
-				 :unit-id="item.attrs['unit-id']" :data-source="item.attrs.source" @play="play" @error="videoError" />
+				 :unit-id="item.attrs['unit-id']" :data-source="item.attrs.source" data-from="video" @play="play" @error="error" />
 			</view>
 			<!--音频-->
 			<audio v-else-if="item.name=='audio'" :id="item.attrs.id" :class="item.attrs.class" :style="item.attrs.style||''"
 			 :author="item.attrs.author" :controls="item.attrs.controls" :loop="item.attrs.loop" :name="item.attrs.name" :poster="item.attrs.poster"
 			 :src="controls[item.attrs.id] ? item.attrs.source[controls[item.attrs.id].index] : item.attrs.src" :data-source="item.attrs.source"
-			 @error="audioError" />
+			 data-audio="audio" @error="error" />
 			<!--链接-->
 			<view v-else-if="item.name=='a'" :class="'_a '+(item.attrs.class||'')" hover-class="navigator-hover" :style="item.attrs.style||''"
 			 :data-attrs="item.attrs" @tap="linkpress">
@@ -53,15 +53,15 @@
 			<!--广告-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || MP-TOUTIAO-->
 			<ad v-else-if="item.name=='ad'" :class="item.attrs.class||''" :style="item.attrs.style||''" :unit-id="item.attrs['unit-id']"
-			 @error="adError" />
+			 data-from="ad" @error="error" />
 			<!--#endif-->
 			<!--#ifdef MP-BAIDU-->
 			<ad v-else-if="item.name=='ad'" :class="item.attrs.class||''" :style="item.attrs.style||''" :appid="item.attrs.appid"
-			 :apid="item.attrs.apid" :type="item.attrs.type" @error="adError" />
+			 :apid="item.attrs.apid" :type="item.attrs.type" data-from="ad" @error="error" />
 			<!--#endif-->
 			<!--#ifdef APP-PLUS-->
 			<ad v-else-if="item.name=='ad'" :class="item.attrs.class||''" :style="item.attrs.style||''" :adpid="item.attrs.adpid"
-			 @error="adError" />
+			 data-from="ad" @error="error" />
 			<!--#endif-->
 			<!--列表-->
 			<view v-else-if="item.name=='li'" :class="(item.attrs.class||'')+' _li'" :style="(item.attrs.style||'')+';display:flex'">
@@ -72,12 +72,12 @@
 					<view v-else class="_ul-type1" style="border-radius:50%">█</view>
 				</view>
 				<!--#ifdef MP-ALIPAY-->
-				<view>
+				<view class="_li-after">
 					<trees :nodes="item.children" />
 				</view>
 				<!--#endif-->
 				<!--#ifndef MP-ALIPAY-->
-				<trees class="_node" :nodes="item.children" :loadVideo="loadVideo" style="display:block" />
+				<trees class="_node _li-after" :nodes="item.children" :loadVideo="loadVideo" />
 				<!--#endif-->
 			</view>
 			<!--#ifdef APP-PLUS-->
@@ -120,15 +120,12 @@
 			return {
 				controls: {},
 				// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
-				imgLoad: false,
+				imgLoad: false
 				// #endif
 			}
 		},
 		props: {
-			nodes: {
-				type: Array,
-				default: []
-			},
+			nodes: Array,
 			// #ifdef APP-PLUS
 			loadVideo: Boolean
 			// #endif
@@ -153,12 +150,10 @@
 		methods: {
 			// #ifndef MP-ALIPAY
 			play(e) {
-				if (this._top.videoContexts.length > 1 && this._top.autopause) {
-					for (var i = this._top.videoContexts.length; i--;) {
+				if (this._top.videoContexts.length > 1 && this._top.autopause)
+					for (var i = this._top.videoContexts.length; i--;)
 						if (this._top.videoContexts[i].id != e.currentTarget.id)
 							this._top.videoContexts[i].pause();
-					}
-				}
 			},
 			// #endif
 			imgtap(e) {
@@ -181,10 +176,12 @@
 				}
 			},
 			imglongtap(e) {
-				this._top.$emit("imglongtap", {
-					id: e.currentTarget.id,
-					src: e.currentTarget.dataset.attrs.src
-				})
+				var attrs = e.currentTarget.dataset.attrs;
+				if (!attrs.ignore)
+					this._top.$emit("imglongtap", {
+						id: e.currentTarget.id,
+						src: attrs.src
+					})
 			},
 			linkpress(e) {
 				var jump = true,
@@ -193,10 +190,10 @@
 				this._top.$emit("linkpress", attrs);
 				if (jump) {
 					// #ifdef MP
-					if (attrs["app-id"] || attrs.appId) {
+					if (attrs["app-id"]) {
 						return uni.navigateToMiniProgram({
-							appId: attrs["app-id"] || attrs.appId,
-							path: attrs.path || ''
+							appId: attrs["app-id"],
+							path: attrs.path
 						})
 					}
 					// #endif
@@ -239,41 +236,24 @@
 					}
 				}
 			},
-			triggerError(source, target, errMsg, errCode, context) {
-				this._top.$emit("error", {
-					source,
+			error(e) {
+				var context, target = e.currentTarget;
+				if (target.dataset.from == "video" || target.dataset.from == "audio") {
+					// 加载其他 source
+					var index = this.controls[target.id] ? this.controls[target.id].index + 1 : 1;
+					if (index < target.dataset.source.length)
+						this.$set(this.controls[target.id], "index", index);
+					if (target.dataset.from == "video") context = uni.createVideoContext(target.id, this)
+				}
+				this._top && this._top.$emit("error", {
+					source: target.dataset.from,
 					target,
-					errMsg,
-					errCode,
+					errMsg: e.detail.errMsg,
+					errCode: e.detail.errCode,
 					context
 				});
 			},
-			loadSource(target) {
-				if (target.dataset.source.length <= 1) return false;
-				if (!this.controls[target.id]) {
-					this.$set(this.controls, target.id, {
-						index: 1
-					})
-					return true;
-				} else if (this.controls[target.id] && this.controls[target.id].index < target.dataset.source.length) {
-					this.$set(this.controls[target.id], "index", this.controls[target.id].index + 1);
-					return true;
-				}
-				return false;
-			},
-			adError(e) {
-				this.triggerError("ad", e.currentTarget, e.detail.errMsg, e.detail.errorCode);
-			},
-			videoError(e) {
-				if (!this.loadSource(e.currentTarget) && this._top)
-					this.triggerError("video", e.currentTarget, e.detail.errMsg, undefined, uni.createVideoContext(e.currentTarget.id,
-						this));
-			},
-			audioError(e) {
-				if (!this.loadSource(e.currentTarget))
-					this.triggerError("audio", e.currentTarget, e.detail.errMsg);
-			},
-			_loadVideo(e) {
+			loadVideo(e) {
 				this.$set(this.controls, e.currentTarget.id, {
 					play: true,
 					index: 0
@@ -315,14 +295,6 @@
 	._b,
 	._strong {
 		font-weight: bold;
-	}
-
-	._big {
-		font-size: 1.2em;
-	}
-
-	._small {
-		font-size: 0.8em;
 	}
 
 	._blockquote,
@@ -413,6 +385,12 @@
 		display: inline-block;
 	}
 
+	._li-after {
+		display: block;
+		flex: 1;
+		width: 0;
+	}
+
 	._q::before {
 		content: '"';
 	}
@@ -421,11 +399,20 @@
 		content: '"';
 	}
 
+	._sub {
+		vertical-align: sub;
+		font-size: smaller;
+	}
+
+	._sup {
+		vertical-align: super;
+		font-size: smaller;
+	}
+
+
 	._a,
 	._abbr,
 	._b,
-	._big,
-	._small,
 	._code,
 	._del,
 	._em,
@@ -434,13 +421,13 @@
 	._label,
 	._q,
 	._span,
-	._strong {
+	._strong,
+	._sub,
+	._sup {
 		display: inline;
 	}
 
 	/* #ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY */
-	.__sub,
-	.__sup,
 	.__bdo,
 	.__bdi,
 	.__ruby,
@@ -461,7 +448,7 @@
 		content: '';
 		border-width: 15px 0 15px 30px;
 		border-style: solid;
-		border-color: transparent transparent transparent white;
+		border-left-color: white;
 		position: absolute;
 		left: 50%;
 		top: 50%;

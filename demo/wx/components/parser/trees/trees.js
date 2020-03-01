@@ -1,43 +1,35 @@
 /*
   trees 递归子组件
-  github地址：https://github.com/jin-yufeng/Parser
-  文档地址：https://jin-yufeng.github.io/Parser
+  github：https://github.com/jin-yufeng/Parser
+  docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
 */
 Component({
+  data: {
+    controls: {}
+  },
   properties: {
-    nodes: Array,
-    controls: Object
+    nodes: Array
   },
   methods: {
-    // 提交错误事件
-    triggerError(source, target, errMsg, errCode, context) {
-      this._top && this._top.triggerEvent('error', {
-        source,
-        target,
-        errMsg,
-        errCode,
-        context
-      });
-    },
-    // 加载其他源
-    loadSource(target) {
-      var index = this.data.controls[target.id] ? this.data.controls[target.id].index + 1 : 1;
-      if (index < target.dataset.source.length)
-        return this.setData({
-          [`controls.${target.id}.index`]: index
-        }), true;
-      return false;
+    // 自定义事件
+    copyCode(e) {
+      wx.showActionSheet({
+        itemList: ["复制代码"],
+        success: () => {
+          wx.setClipboardData({
+            data: this._top.document.getElementById(e.currentTarget.id).innerText
+          })
+        }
+      })
     },
     // 视频播放事件
     play(e) {
       this._top.group && this._top.group.pause(this._top.i);
-      if (this._top.videoContexts.length > 1 && this._top.data.autopause) {
-        for (var i = this._top.videoContexts.length; i--;) {
+      if (this._top.videoContexts.length > 1 && this._top.data.autopause)
+        for (var i = this._top.videoContexts.length; i--;)
           if (this._top.videoContexts[i].id != e.currentTarget.id)
             this._top.videoContexts[i].pause();
-        }
-      }
     },
     // 图片点击事件
     imgtap(e) {
@@ -61,10 +53,12 @@ Component({
       }
     },
     imglongtap(e) {
-      this._top.triggerEvent("imglongtap", {
-        id: e.currentTarget.id,
-        src: e.currentTarget.dataset.attrs.src
-      })
+      var attrs = e.currentTarget.dataset.attrs;
+      if (!attrs.ignore)
+        this._top.triggerEvent("imglongtap", {
+          id: e.currentTarget.id,
+          src: attrs.src
+        })
     },
     // 链接点击事件
     linkpress(e) {
@@ -73,10 +67,10 @@ Component({
       attrs.ignore = () => jump = false;
       this._top.triggerEvent("linkpress", attrs);
       if (jump) {
-        if (attrs["app-id"] || attrs.appId)
+        if (attrs["app-id"])
           wx.navigateToMiniProgram({
-            appId: attrs["app-id"] || attrs.appId,
-            path: attrs.path || ''
+            appId: attrs["app-id"],
+            path: attrs.path
           })
         else if (attrs.href) {
           if (attrs.href[0] == '#')
@@ -100,25 +94,33 @@ Component({
       }
     },
     // 错误事件
-    adError(e) {
-      this.triggerError("ad", e.currentTarget, e.detail.errMsg, e.detail.errCode);
-    },
-    videoError(e) {
-      if (!this.loadSource(e.currentTarget) && this._top)
-        this.triggerError("video", e.currentTarget, e.detail.errMsg, undefined, this._top.getVideoContext(e.currentTarget.id));
-    },
-    audioError(e) {
-      if (!this.loadSource(e.currentTarget))
-        this.triggerError("audio", e.currentTarget, e.detail.errMsg);
+    error(e) {
+      var context, target = e.currentTarget;
+      if (target.dataset.from == "Video" || target.dataset.from == "Audio") {
+        // 加载其他 source
+        var index = this.data.controls[target.id] ? this.data.controls[target.id].index + 1 : 1;
+        if (index < target.dataset.source.length)
+          return this.setData({
+            [`controls.${target.id}`]: index
+          });
+        context = wx[`create${target.dataset.from}Context`](target.id, this);
+      }
+      this._top && this._top.triggerEvent("error", {
+        source: target.dataset.from.toLowerCase(),
+        target,
+        errMsg: e.detail.errMsg,
+        errCode: e.detail.errCode,
+        context
+      });
     },
     // 加载视频
     loadVideo(e) {
-      this.setData({
-        [`controls.${e.currentTarget.id}`]: {
-          play: true,
-          index: 0
-        }
-      })
+      for (var i = this.data.nodes.length; i--;)
+        if (this.data.nodes[i].attrs.id == e.currentTarget.id)
+          return this.setData({
+            [`nodes[${i}].lazyLoad`]: false,
+            [`nodes[${i}].attrs.autoplay`]: true
+          })
     }
   },
   detached() {

@@ -1,7 +1,7 @@
 /*
   将 html 解析为适用于小程序 rich-text 的 DOM 结构
-  github地址：https://github.com/jin-yufeng/Parser
-  文档地址：https://jin-yufeng.github.io/Parser
+  github：https://github.com/jin-yufeng/Parser
+  docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
 */
 const config = require("./config.js");
@@ -37,7 +37,7 @@ class MpHtmlParser {
     // 高亮处理
     if (config.highlight)
       this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]+?)<\/[pP][rR][eE][\s\S]*?>/g, function($, $1, $2) {
-        return "<pre" + $1 + '>' + config.highlight($2, $1) + "</pre>";
+        return `<pre${$1}>${config.highlight($2, $1)}</pre>`;
       })
     this.data = this.CssHandler.getStyle(this.data);
     for (var len = this.data.length; this._i < len; this._i++)
@@ -160,6 +160,14 @@ class MpHtmlParser {
   // 节点出栈处理
   popNode(node) {
     // 替换一些标签名
+    if (node.name == "picture") {
+      node.name = "img";
+      if (!node.attrs.src && node.children.length && node.children[0].name == "img")
+        node.attrs.src = node.children[0].attrs.src;
+      if (node.attrs.src && !node.attrs.ignore)
+        node.attrs.i = (this._imgNum++).toString();
+      return node.children = void 0;
+    }
     if (config.blockTags[node.name]) node.name = "div";
     else if (!config.trustTags[node.name]) node.name = "span";
     // 空白符处理
@@ -203,16 +211,16 @@ class MpHtmlParser {
     // 处理表格的边框
     if (node.name == "table") {
       if (node.attrs.border)
-        node.attrs.style = "border:" + node.attrs.border + "px solid gray;" + (node.attrs.style || '');
+        node.attrs.style = `border:${node.attrs.border}px solid gray;${node.attrs.style || ''}`;
       if (node.attrs.hasOwnProperty("cellspacing"))
-        node.attrs.style = "border-spacing:" + node.attrs.cellspacing + "px;" + (node.attrs.style || '');
+        node.attrs.style = `border-spacing:${node.attrs.cellspacing}px;${node.attrs.style || ''}`;
 
       function setBorder(elem) {
         if (elem.name == "th" || elem.name == "td") {
           if (node.attrs.border)
-            elem.attrs.style = "border:" + node.attrs.border + "px solid gray;" + (elem.attrs.style || '');
+            elem.attrs.style = `border:${node.attrs.border}px solid gray;${elem.attrs.style || ''}`;
           if (node.attrs.hasOwnProperty("cellpadding"))
-            elem.attrs.style = "padding:" + node.attrs.cellpadding + "px;" + (elem.attrs.style || '');
+            elem.attrs.style = `padding:${node.attrs.cellpadding}px;${elem.attrs.style || ''}`;
           return;
         }
         if (elem.type == "text") return;
@@ -222,23 +230,6 @@ class MpHtmlParser {
       if (node.attrs.border || node.attrs.hasOwnProperty("cellpadding"))
         for (var i = node.children.length; i--;)
           setBorder(node.children[i]);
-    }
-    // 合并一些不必要的层，减小节点深度
-    if (node.children.length == 1 && node.name == "div" && node.children[0].name == "div") {
-      var child = node.children[0].attrs;
-      node.attrs.style = node.attrs.style || '';
-      child.style = child.style || '';
-      if (!node.attrs.style.includes("padding") && (!node.attrs.style.includes("margin") || !child.style.includes("margin")) && !node.attrs.style.includes("display") && !child.style.includes("display") && !node.attrs.id && !node.attrs.id && !node.attrs.class && !child.class) {
-        if (child.style.includes("padding"))
-          child.style = "box-sizing:border-box;" + child.style;
-        node.attrs.style = node.attrs.style + ';' + child.style;
-        node.attrs.id = (child.id || '') + (node.attrs.id || '');
-        node.attrs.class = (child.class || '') + (node.attrs.class || '');
-        node.children = node.children[0].children;
-      } else {
-        if (!node.attrs.style) node.attrs.style = void 0;
-        if (!child.style) child.style = void 0;
-      }
     }
     // 后代选择器处理
     this.CssHandler.pop && this.CssHandler.pop(node);
@@ -322,7 +313,7 @@ class MpHtmlParser {
     } else
       for (; !blankChar[this.data[this._i]] && this.data[this._i] != '>'; this._i++);
     this._attrValue = this.getSelection();
-    while (this._attrValue.includes("&quot;")) this._attrValue = this._attrValue.replace("&quot;", '');
+    while (this._attrValue.includes("&quot;")) this._attrValue = this._attrValue.replace("&quot;", '"');
     this.setAttr();
   };
   EndTag(c) {
@@ -354,4 +345,4 @@ class MpHtmlParser {
     }
   };
 };
-module.exports = (data, options) => new MpHtmlParser(data, options).parse();
+module.exports = MpHtmlParser;

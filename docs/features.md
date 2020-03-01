@@ -125,6 +125,15 @@ Page({
   <source src="demo2.webm" />
 </video>
 ```
+支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接
+```html
+<picture>
+  <source media="(min-width:400px)" src="high-quality.jpg">
+  <source media="(min-width:250px)" src="middle-quality.jpg">
+  <img src="low-quality.jpg" />
+</picture>
+```
+> media 仅支持 min-width 或 max-width，单位仅支持 px，首个 source 匹配成功后就不再进行匹配
 
 ### 自动设置标题 ###
 若存在 `title` 标签，将自动把其内容设置到页面标题上（可通过 `autosetTitle` 属性控制）  
@@ -137,7 +146,6 @@ Page({
 
 ### 智能压缩 ###  
 支持自动通过以下方式对解析结果进行压缩，可以有效提升性能：
-- 将一些只有一个子节点的标签进行合并，可以减小节点的深度  
 - 在非 `pre` 标签且没有 `white-space:pre` 属性时自动去除没用的空白符  
 - 压缩 `style` 属性，去除重复的属性和多余的空格  
 - 移除不支持的属性和一些不支持的标签  
@@ -219,12 +227,13 @@ Page({
 | nav |  |
 | ol | start, type |
 | p | align |
+| picture | alt, height, width, src |
 | pre |  |
 | q |  |
 | s |  |
 | section |  |
 | small |  |
-| source | src |
+| source | media, src |
 | span |  |
 | strong |  |
 | style |  |

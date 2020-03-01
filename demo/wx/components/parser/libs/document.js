@@ -1,151 +1,214 @@
 /*
-  document补丁包
-  github地址：https://github.com/jin-yufeng/Parser
-  文档地址：https://jin-yufeng.github.io/Parser
+  document 补丁包
+  github：https://github.com/jin-yufeng/Parser
+  docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
 */
-const _setData = function(Component, key, value) {
-  Component._refresh = true;
-  Component.setData({
-    [key]: value
-  })
-}
-const _search = function(nodes, id, site, Component) {
-  if (!nodes || !nodes.length) return null;
-  for (var i = nodes.length; i--;) {
-    if (nodes[i].type == "text") continue;
-    site += '[' + i + ']';
-    if (nodes[i].attrs && nodes[i].attrs.id == id)
-      return new element(nodes[i], site, Component);
-    else {
-      site += ".children";
-      var find = _search(nodes[i].children, id, site, Component);
-      if (find != null) return find;
-      site = site.substring(0, site.length - 9);
-    }
-    site = site.substring(0, site.length - ('[' + i + ']').length);
-  }
-  return null;
-}
+const MpHtmlParser = require("./MpHtmlParser.js");
 class element {
-  constructor(nodes, site, Component) {
-    this.id = (nodes.type == "text" ? "" : nodes.attrs.id);
-    this.nodes = nodes;
-    this.styles = {};
-    var styleArr = (nodes.attrs.style || '').split(';');
-    for (var i = styleArr.length; i--;)
+  constructor(node, path, context) {
+    node.attrs = node.attrs || {};
+    node.children = node.children || [];
+    this.nodeName = node.name;
+    this.id = node.attrs.id;
+    this._node = node;
+    this.childNodes = [];
+    for (var i = 0; i < node.children.length; i++)
+      if (node.children[i].name)
+        this.childNodes.push(new element(node.children[i], `${path}.children[${i}]`, this._context));
+    this.attributes = this._node.attrs;
+    this.style = {};
+    var styleArr = (node.attrs.style || '').split(';');
+    for (var i = 0; i < styleArr.length; i++)
       if (styleArr[i].includes(':')) {
         var info = styleArr[i].split(':');
-        this.styles[info[0]] = info[1];
+        this.style[info[0]] = info[1];
       }
-    this._site = site;
-    this._Component = Component;
-    this.nodes.attrs = this.nodes.attrs || {};
-    this.nodes.children = this.nodes.children || [];
-    if (nodes.children[0].type == "text")
-      this._text = true;
+    this._path = path;
+    this._context = context;
+    this._dirty = false;
   }
-  // 设置文本，设置成功返回 true
-  setText(text) {
-    if (this._text && typeof text == "string") {
-      this.nodes.children[0].text = text;
-      _setData(this._Component, this._site, this.nodes);
-      return true;
+  // 获取 / 设置 文本
+  get innerText() {
+    return this._context.getText([this._node]);
+  }
+  set innerText(text) {
+    this._node.children = [{
+      type: "text",
+      text
+    }];
+    this.childNodes = [];
+    this._setData();
+  }
+  // 获取 / 设置 html
+  get innerHtml() {
+    var html = '';
+
+    function Dom2Str(node) {
+      if (node.type == "text")
+        html += node.text;
+      else {
+        html += '<' + node.name;
+        for (var attr in node.attrs)
+          if (node.attrs[attr])
+            html += ` ${attr}="${node.attrs[attr]}"`;
+        if (!node.children || !node.children.length) html += "/>";
+        else {
+          html += '>';
+          for (var i = 0; i < node.children.length; i++)
+            Dom2Str(node.children[i]);
+          html += "</" + node.name + '>';
+        }
+      }
     }
-    return false;
+    Dom2Str(this._node);
+    return html;
   }
-  // 获取文本
-  getText() {
-    if (this._text) return this.nodes.children[0].text;
+  set innerHtml(value) {
+    this._node.children = new MpHtmlParser(value, this._context.data).parse();
+    for (var i = 0; i < this._node.children.length; i++)
+      if (this._node.children[i].name)
+        this.childNodes.push(new element(this._node.children[i], `${path}.children[${i}]`, this._context));
+  }
+  // 添加 / 删除 / 替换 节点
+  appendChild(child) {
+    if (child.constructor != element) return false;
+    this.childNodes.push(child);
+    this._node.children.push(child._node);
+    child.path = `${this._path}.children[${this._node.children.length - 1}]`;
+    this._setData();
+    return true;
+  }
+  removeChild(child) {
+    if (child.constructor != element) return false;
+    var i = this.childNodes.indexOf(child);
+    if (i == -1) return false;
+    this.childNodes.splice(i, 1);
+    this._node.children.splice(i, 1);
+    this._setData();
+    return true;
+  }
+  replaceChild(oldVal, newVal) {
+    if (oldVal.constructor != element) return false;
+    if (newVal.constructor != element) return false;
+    var i = this.childNodes.indexOf(child);
+    if (i == -1) return false;
+    this.childNodes[i] = newVal;
+    this._node.children[i] = newVal._node;
+    newVal.path = `${this._path}.children[${i}]`;
+    return true;
+  }
+  // 获取 / 设置 某个属性
+  getAttribute(key) {
+    if (this._node.attrs.hasOwnProperty(key))
+      return this._node.attrs[key];
     else return null;
   }
-  // 增加子节点
-  addChildren(nodes, i) {
-    if (typeof nodes == "object" && i >= 0 && i <= this.nodes.children.length) {
-      this.nodes.children.splice(i, 0, nodes);
-      _setData(this._Component, this._site, this.nodes);
-      return true;
-    }
-    return false;
-  }
-  // 移除第 i 个子节点
-  removeChildren(i) {
-    if (i >= 0 && i < this.nodes.children.length) {
-      this.nodes.children.splice(i, 1);
-      _setData(this._Component, this._site, this.nodes);
-      return true;
-    }
-    return false;
-  }
-  // 获取第 i 个子节点
-  getChildren(i) {
-    if (i >= 0 && i < this.nodes.children.length)
-      return new element(this.nodes.childrens[i], this._site + ".children[" + i + ']', this._Component);
-    else return null;
-  }
-  // 获取某个属性
-  getAttr(key) {
-    if (this.nodes.attrs.hasOwnProperty(key))
-      return this.nodes.attrs[key];
-    else return null;
-  }
-  // 设置某个属性
-  setAttr(key, value) {
-    this.nodes.attrs[key] = value;
-    _setData(this._Component, this._site, this.nodes);
+  setAttribute(key, value) {
+    this._node.attrs[key] = value;
+    this._setData();
     return true;
   }
   // 获取某个样式
   getStyle(key) {
     key = key.replace(/(A-Z)/g, "-$1").toLowerCase();
-    if (this.styles.hasOwnProperty(key)) return this.styles[key];
+    if (this.style.hasOwnProperty(key)) return this.style[key];
     else return null;
   }
   // 设置某个样式
   setStyle(key, value) {
-    if (typeof key == "string") {
-      key = key.replace(/(A-Z)/g, "-$1").toLowerCase();
-      if (this.styles.hasOwnProperty(key)) {
-        this.styles[key] = value;
-        var style = '';
-        for (var item in this.styles)
-          style += item + ':' + this.styles[item] + ';';
-        this.nodes.attrs.style = style;
-      } else this.nodes.attrs.style = (this.nodes.attrs.style || '') + ';' + key + ':' + value;
-      _setData(this._Component, this._site, this.nodes);
-    }
-    return false;
-  }
-  // 移除某个属性
-  removeAttr(key) {
-    this.nodes.attrs[key] = undefined;
-    _setData(this._Component, this._site, this.nodes);
+    key = key.replace(/(A-Z)/g, "-$1").toLowerCase();
+    if (this.style.hasOwnProperty(key)) {
+      this.style[key] = value;
+      var style = '';
+      for (var item in this.style)
+        style += item + ':' + this.style[item] + ';';
+      this._node.attrs.style = style;
+    } else this._node.attrs.style = `${this._node.attrs.style || ''};${key}:${value}`;
+    this._setData();
     return true;
   }
-  // 查找子节点
+  // 查找节点
+  _search(node, path, search, type) {
+    if (node.type == "text") return;
+    if (type == "id" && node.attrs && node.attrs.id == search)
+      return this._nodeList.push(new element(node, path, this._context));
+    if ((type == "name" && node.name == search) || (type == "class" && node.attrs && node.attrs.class == search))
+      this._nodeList.push(new element(node, path, this._context));
+    if (node.children && node.children.length)
+      for (var i = node.children.length; i--;)
+        this._search(node.children[i], `${path}.children[${i}]`, search, type);
+  }
   getElementById(id) {
-    return _search(this.nodes, id, this._site, this._Component);
+    this._nodeList = [];
+    this._search(this._node, this._path, id, "id");
+    return this._nodeList[0];
   }
-  // 更新结点
-  update() {
-    _setData(this._Component, this._site, this.nodes);
-    return true;
+  getElementsByClassName(className) {
+    this._nodeList = [];
+    this._search(this._node, this._path, className, "class");
+    return this._nodeList;
+  }
+  getElementsByTagName(name) {
+    this._nodeList = [];
+    this._search(this._node, this._path, name, "name");
+    return this._nodeList;
+  }
+  // 更新视图
+  _setData() {
+    this._dirty = true;
+    setTimeout(() => {
+      if (this._dirty) {
+        this._context._refresh = true;
+        this._context.setData({
+          [this._path]: this._node
+        })
+        this._dirty = false;
+      }
+    }, 0)
   }
 }
 class dom {
-  constructor(root, nodes, Component) {
-    this._root = root;
-    this.nodes = nodes;
-    this._Component = Component;
+  constructor(nodes, path, context) {
+    this._nodes = nodes;
+    this._path = path;
+    this._context = context;
   }
-  // 按id查找节点
+  _search(nodes, path, search, type) {
+    for (var i = 0, node; node = (nodes || [])[i]; i++) {
+      if (node.type == "text") continue;
+      if (type == "id" && node.attrs && node.attrs.id == search)
+        return this._nodeList.push(new element(node, `${path}[${i}]`, this._context));
+      if ((type == "name" && node.name == search) || (type == "class" && node.attrs && node.attrs.class == search))
+        this._nodeList.push(new element(node, `${path}[${i}]`, this._context));
+      this._search(node.children, `${path}[${i}].children`, search, type);
+    }
+  }
   getElementById(id) {
-    return _search(this.nodes, id, this._root, this._Component);
+    this._nodeList = [];
+    this._search(this._nodes, this._path, id, "id");
+    return this._nodeList[0];
   }
-  getChildren(i) {
-    if (i >= 0 && i < (this.nodes.children || []).length)
-      return new element(this.nodes.childrens[i], this._root + ".children[" + i + ']', this._Component);
-    else return null;
+  getElementsByClassName(className) {
+    this._nodeList = [];
+    this._search(this._nodes, this._path, className, "class");
+    return this._nodeList;
+  }
+  getElementsByTagName(name) {
+    this._nodeList = [];
+    this._search(this._nodes, this._path, name, "name");
+    return this._nodeList;
+  }
+  createElement(name) {
+    return new element({
+      name
+    }, '', this._context);
+  }
+  write(value) {
+    this._context.setData({
+      [this._path]: value.constructor == Array ? value : new MpHtmlParser(value, this._context.data).parse()
+    })
+    return true;
   }
 }
 module.exports = dom;
