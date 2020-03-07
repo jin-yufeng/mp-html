@@ -52,9 +52,7 @@
       <view class="weui-article__section">
         可以通过设置
         <code>gesture-zoom</code>属性实现双击缩放，放大局部区域进行查看。
-        <view>
-          <navigator class="link" url="../demo/demo?index=0">立即体验</navigator>
-        </view>
+        <navigator class="link" hover-class="link-hover" style="display:block" url="../demo/demo?index=0">立即体验</navigator>
       </view>
       <!--多资源加载-->
       <view class="weui-article__h2">多资源加载</view>
@@ -63,8 +61,10 @@
         <code>video</code>和
         <code>audio</code>标签中设置多个
         <code>source</code>标签，插件将按顺序进行加载；可用于解决平台支持性差异，最大程度避免无法播放，示例：
-        <parser html="{{sourceCode}}" tag-style="{{tagStyle}}" />
-        在<code>picture</code>标签中设置多个<code>source</code>，可以在不同大小的屏幕上显示不同的图片（通过<code>media</code>查询），对于较大的图片可以进行优化，示例：
+        <parser html="{{sourceCode}}" tag-style="{{tagStyle}}" /> 在
+        <code>picture</code>标签中设置多个
+        <code>source</code>，可以在不同大小的屏幕上显示不同的图片（通过
+        <code>media</code>查询），对于较大的图片可以进行优化，示例：
         <parser html="{{sourceCode2}}" tag-style="{{tagStyle}}" />
       </view>
       <!--内容可复制-->
@@ -99,9 +99,11 @@
       <view class="weui-article__section">
         <view class="weui-article__p">图片的懒加载由
           <code>lazy-load</code>属性控制，开启后将对视图范围以下
-          <code>1000px</code>以外的图片进行懒加载</view>
+          <code>900px</code>以外的图片进行懒加载</view>
         <view class="weui-article__p">
-          <view>视频的懒加载强制开启，当视频数量超过 3 个时，将仅加载前 3 个，其他的用图片占位，点击播放时再进行加载和播放，避免同时加载过多视频导致页面卡死</view>
+          <view>视频的懒加载强制开启，当视频数量超过
+            <code>3</code>个时，将仅加载前
+            <code>3</code>个，其他的用图片占位，点击播放时再进行加载和播放，避免同时加载过多视频导致页面卡死</view>
           <view>另外视频支持播放一个视频时自动暂停其他视频（可通过
             <code>autopause</code>属性控制）</view>
         </view>
@@ -162,12 +164,12 @@
       <view class="weui-article__h2">性能指标</view>
       <view class="weui-article__section">
         本插件解析和渲染效率高；轻量化（
-        <code>45.2KB</code>，
+        <code>45.9KB</code>，
         <code>min</code>版本
-        <code>30.0KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+        <code>30.6KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
         <parser html="{{errorCode}}" tag-style="{{tagStyle}}" />
       </view>
-      <view class="link" style="display:block;text-align:center" bindtap="nextSection">下一章：使用方法</view>
+      <view class="link" hover-class="link-hover" style="display:block;text-align:center" bindtap="nextSection">下一章：使用方法</view>
     </block>
     <!--使用方法-->
     <block wx:elif="{{index==1}}">
@@ -218,8 +220,7 @@
       <view class="weui-article__h2">api</view>
       <view class="weui-article__section">
         本插件实例中提供了一些
-        <code>api</code>函数（必须在
-        <code>ready</code>事件中或之后才能调用），获取实例的方法：
+        <code>api</code>函数，获取实例的方法：
         <parser html="{{apiCode}}" tag-style="{{tagStyle}}" />
       </view>
       <!--使用外部样式-->
@@ -274,7 +275,8 @@
         <view class="weui-article__p">
           4.
           <code>parser-group</code>
-          <view>功能：将多个<code>parser</code>标签组合在一起，可以实现：
+          <view>功能：将多个
+            <code>parser</code>标签组合在一起，可以实现：
             <parser html="{{parserGroup}}" tag-style="{{tagStyle}}" />
           </view>
         </view>
@@ -302,9 +304,9 @@
         <parser html="获取：<a href='https://github.com/jin-yufeng/Parser'>https://github.com/jin-yufeng/Parser</a>" />
       </view>
       <view class="link" style="display:flex;justify-content:center;margin:0 5%">
-        <view bindtap="prevSection">上一章：功能介绍</view>
+        <view hover-class="link-hover" bindtap="prevSection">上一章：功能介绍</view>
         <view style="flex:1"></view>
-        <view bindtap="nextSection">下一章：更新日志</view>
+        <view hover-class="link-hover" bindtap="nextSection">下一章：更新日志</view>
       </view>
     </block>
     <!--更新日志-->
@@ -312,7 +314,7 @@
       <view class="weui-article__section">
         <parser html="{{changelog}}" tag-style="{{tagStyle}}" />
       </view>
-      <view class="link" style="display:block;text-align:center" bindtap="prevSection">上一章：使用方法</view>
+      <view class="link" hover-class="link-hover" style="display:block;text-align:center" bindtap="prevSection">上一章：使用方法</view>
     </block>
   </view>
 </view>

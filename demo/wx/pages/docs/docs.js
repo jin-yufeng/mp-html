@@ -46,7 +46,7 @@ p {
     tagStyleCode: `<pre><code class="language-javascript">Page({
   data: {
     tagStyle: {
-      code: "background-color:#f0f0f0;border-radius:2px;font-family:monospace;"
+      code: "background-color:#f0f0f0;border-radius:2px;font-family:monospace"
     }
   }
 })</code></pre>
@@ -64,7 +64,7 @@ p {
     anchorCode: `<pre><code class="language-html"><div id="anchor">我是锚点</div>
 ···
 <a href="#anchor">点我跳转锚点</a></code></pre>
-<a href="../demo/demo?index=0&anchor=true">立即体验</a>`,
+<a href="../demo/demo?index=0&anchor=anchor">立即体验</a>`,
     // 多资源加载示例代码
     sourceCode: `<pre><code class="language-html"><video controls>
   <source src="demo1.mov" />
@@ -148,7 +148,7 @@ p {
     <div>链接受到点击时，若<code>href</code>属性的值是网络链接，将自动复制链接；若是内部路径，则自动跳转页面；若设置了<code>app-id</code>和<code>path</code>，则将跳转其他小程序；同时触发<code>linkpress</code>事件，可进行自定义处理</div>
   </li>
   <li>图片点击事件
-    <div>图片受到点击时，将自动进行预览（支持<code>base64</code>，可通过属性控制），同时触发<code>imgtap</code>事件，可进行自定义处理（对于装饰性图片，可以设置<code>ignore</code>属性，将无法预览）</div>
+    <div>图片受到点击时，将自动进行预览（支持<code>base64</code>），同时触发<code>imgtap</code>事件，可进行自定义处理（对于装饰性图片，可以设置<code>ignore</code>属性，将无法预览）</div>
   </li>
   <li>图片长按事件
     <div>将触发<code>imglongtap</code>事件，可进行自定义处理（如显示菜单等，可在 <a href="../demo/demo?index=0">功能示例</a> 中长按图片体验）</div>
@@ -277,8 +277,11 @@ export default {
       name: "bindparse",
       notice: "解析完成时触发，返回解析结果，对这个结果进行修改，将在渲染时生效"
     }, {
+      name: "bindload",
+      notice: "dom 结构加载完成时触发，无返回值，可以调用 api"
+    }, {
       name: "bindready",
-      notice: "渲染完成时触发，返回组件框的位置大小信息"
+      notice: "渲染完成时触发，返回组件框的位置大小信息（将等待所有图片加载完毕，延时较长）"
     }, {
       name: "binderror",
       notice: "出错时触发，返回错误来源和信息，音视频出错时还会返回 context 对象"
@@ -292,6 +295,84 @@ export default {
       name: "bindimglongtap",
       notice: "图片被长按时触发，返回图片地址"
     }],
+    // api
+    apiCode: `<pre><code class="language-wxml"><parser id="article" html="{{html}}" bindload="load" /></code></pre>
+<pre style="margin-top:15px"><code class="language-javascript">Page({
+  load() {
+    var context = this.selectComponent("#article");
+    // 通过 context 调用 api 函数
+  }
+})</code></pre>
+<ol style="margin-left:-15px">
+  <div style="margin:10px 0 10px 25px">以下<code>api</code>必须在<code>load</code>事件中或之后使用</div>
+  <li><code>getText</code>
+    <div>功能：获取所有文本内容</div>
+    <pre><code class="language-javascript">// context 为组件实例
+var text = context.getText();
+console.log(text)</code></pre>
+  </li>
+  <li><code>navigateTo</code>
+    <div>功能：跳转锚点</div>
+    <div>输入值：一个<code>object</code>，<code>id</code>是锚点的<code>id</code>（为空时将跳转到组件开头），<code>success</code>和<code>fail</code>是成功和失败回调（需要配合<code>use-anchor</code>属性使用）</div>
+    <div>为确保跳转位置准确，建议在<code>ready</code>事件中或之后使用</div>
+    <pre><code class="language-javascript">// context 为组件实例
+context.navigateTo({
+  id: "anchor",
+  success: console.log,
+  fail: console.error
+})</code></pre>
+  </li>
+  <li><code>getVideoContext</code>
+    <div>功能：获取视频的<code>context</code>对象，可用于操控视频的播放</div>
+    <div>输入值：<code>video</code>标签的<code>id</code>（不输入则返回所有视频的数组）</div>
+    <pre><code class="language-javascript">// context 为组件实例
+var video = context.getVideoContext("the-id"); // id 为 the-id 的视频对象
+var videos = context.getVideoContext(); // 获取所有视频的对象</code></pre>
+  </li>
+  <li><code>imgList</code>
+    <div>功能：获取所有图片数组（这是一个<strong>属性</strong>）
+    <div>另外，该数组还提供一个<code>each</code>方法，通过<code>return</code>可以改变数组中的值，该数组用于图片的预览，可以通过此方法设置预览时的大图</div>
+    <pre><code class="language-javascript">// context 是组件对象
+var imgList = context.imgList;
+var cover = imgList[0]; // 首图作为转发封面
+imgList.each((src, i, arr) => {
+  console.log(src);
+  // 若有 return 将改变原数组，可将缩略图链接替换为大图链接
+  return src.replace("thumb", "");
+})</code></pre>
+  </li>
+  <div style="margin:10px 0 10px 25px">以下<code>api</code>可以立即使用</div>
+  <li><code>setContent</code>
+    <div>功能：解析和渲染<code>html</code>内容（功能上同<code>html</code>属性）</div>
+    <div>说明：当<code>html</code>为<code>string</code>类型时无法直接渲染，需要经过解析后再次<code>setData</code>，因此通过此方法可以避免这次无用的<code>setData</code>，提高性能</div>
+    <div>输入值：<code>html</code>是富文本字符串</div>
+    <pre><code class="language-wxml"><parser id="article" /></code></pre>
+    <pre style="margin-top:15px"><code class="language-javascript">Page({
+  onLoad(){
+    var html = "<div>Hello World!</div>";
+    var context = this.selectComponent("#article");
+    context.setContent(html);
+    /* 等价于
+    this.setData({
+      html
+    })
+    但可以减少一次 setData */
+  }
+})</code></pre>
+  </li>
+  <li><code>preLoad</code>
+    <div>功能：预加载富文本中的图片</div>
+    <div>说明：若某段富文本图片较多或内容较长，可以在其他页面或当前页面未进行显示时进行预加载（不会在视图上显示）</div>
+    <div>输入值：<code>html</code>（<code>String</code>/<code>Array</code>），<code>num</code>（最大图片数量，不输入将预加载全部图片）</div>
+    <pre><code class="language-wxml"><parser id="preLoad" /></code></pre>
+    <pre><code class="language-javascript">Page({
+  onLoad(){
+    // 预加载完毕后在其他页面或当前页面使用这段富文本时就可以不用加载图片
+    this.selectComponent("#preLoad").preLoad(html);
+  }
+})</code></pre>
+  </li>
+</ol>`,
     // document 补丁包示例代码
     documentCode: `<pre><code class="language-wxml"><parser id="article" html="{{html}}" binderror="error" /></code></pre>
 <pre style="margin-top:15px"><code class="language-javascript">Page({
@@ -339,83 +420,27 @@ export default {
     versions: [{
       version: ">=2.2.5",
       features: "完全正常",
-      percent: "99.67%"
+      percent: "99.8%"
     }, {
       version: "1.6.3-2.2.4",
       features: "不支持 lazy-load 属性",
-      percent: "0.31%"
+      percent: "0.2%"
     }, {
       version: "<1.6.3",
       features: "无法使用",
-      percent: "0.02%"
+      percent: "<0.01%"
     }],
-    // 获取组件实例的方法
-    apiCode: `<pre><code class="language-wxml"><parser id="article" html="{{html}}" bindready="ready" /></code></pre>
-<pre style="margin-top:15px"><code class="language-javascript">Page({
-  ready() {
-    var context = this.selectComponent("#article");
-    // 通过 context 调用 api 函数
-  }
-})</code></pre>
-<ol style="margin-left:-15px">
-  <li><code>getText</code>
-    <div>功能：获取所有文本内容</div>
-    <pre><code class="language-javascript">// context 为组件实例
-var text = context.getText();
-console.log(text)</code></pre>
-  </li>
-  <li><code>navigateTo</code>
-    <div>功能：跳转锚点</div>
-    <div>输入值：一个<code>object</code>，<code>id</code>是锚点的<code>id</code>（为空时将跳转到组件开头），<code>success</code>和<code>fail</code>是成功和失败回调（需要配合<code>use-anchor</code>属性使用）
-    <pre><code class="language-javascript">// context 为组件实例
-context.navigateTo({
-  id: "anchor",
-  success: console.log,
-  fail: console.error
-})</code></pre>
-  </li>
-  <li><code>getVideoContext</code>
-    <div>功能：获取视频的<code>context</code>对象，可用于操控视频的播放</div>
-    <div>输入值：<code>video</code>标签的<code>id</code>（不输入则返回所有视频的数组）</div>
-    <pre><code class="language-javascript">// context 为组件实例
-var video = context.getVideoContext("the-id"); // id 为 the-id 的视频对象
-var videos = context.getVideoContext(); // 获取所有视频的对象</code></pre>
-  </li>
-  <li><code>imgList</code>
-    <div>功能：获取所有图片数组（这是一个<strong>属性</strong>）
-    <div>另外，该数组还提供一个<code>each</code>方法，通过<code>return</code>可以改变数组中的值，该数组用于图片的预览，可以通过此方法设置预览时的大图</div>
-    <pre><code class="language-javascript">// context 是组件对象
-var imgList = context.imgList;
-var cover = imgList[0]; // 首图作为转发封面
-imgList.each((src, i, arr) => {
-  console.log(src);
-  // 若有 return 将改变原数组，可将缩略图链接替换为大图链接
-  return src.replace("thumb", "");
-})</code></pre>
-  </li>
-  <li><code>setContent</code>
-    <div>功能：解析和渲染<code>html</code>内容（功能上同<code>html</code>属性）</div>
-    <div>说明：当<code>html</code>为<code>string</code>类型时无法直接渲染，需要经过解析后再次<code>setData</code>，因此通过此方法可以避免这次无用的<code>setData</code>，提高性能</div>
-    <div>输入值：<code>html</code>是富文本字符串</div>
-    <pre><code class="language-wxml"><parser id="article" /></code></pre>
-    <pre style="margin-top:15px"><code class="language-javascript">Page({
-  onLoad(){
-    var html = "<div>Hello World!</div>";
-    // 此 api 不需要等到 ready
-    var context = this.selectComponent("#article");
-    context.setContent(html);
-    /* 等价于
-    this.setData({
-      html
-    })
-    但可以减少一次 setData */
-  }
-})</code></pre>
-  </li>
-</ol>`,
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.3.7
+    <ol>
+      <li><code>A</code> 增加了<code>preLoad</code>的<code>api</code>，可以预加载富文本中的图片</li>
+      <li><code>A</code> 增加<code>bindload</code>事件（<code>dom</code>加载完毕时触发，即原<code>ready</code>事件，<code>ready</code>事件更改为所有图片加载完毕时触发，可以获取准确大小）</li>
+      <li><code>U</code> 优化了不开启<code>lazy-load</code>属性时图片的加载速度；另外开启懒加载时，首图（较大概率直接进入视野）也将不经过判断直接加载，避免因懒加载判断拖慢加载速度</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.3.1
     <ol>
       <li><code>U</code> 支持<code>picture</code>标签，可以在不同大小的屏幕上显示不同链接的图片</li>
@@ -533,14 +558,6 @@ imgList.each((src, i, arr) => {
       <li><code>U</code> 重构了解析脚本，提高了解析速度，减小了包的大小</li>  
       <li><code>U</code> 解决了微信最新版开发者工具会报 <code>wx: key = "" does not look like a valid key name</code> 的警告的问题</li>  
       <li><code>U</code> <code>error</code>事件将返回该视频的<code>context</code>对象，可以修改播放源</li>
-    </ol>
-  </li>
-  </br>
-  <li>2019.12.3
-    <ol>
-      <li><code>A</code> 增加了<code>domain</code>属性，设置后可以自动给图片链接拼接主域名或协议名</li>
-      <li><code>A</code> 增加了<code>use-anchor</code>属性，可以选择是否使用页面内锚点</li>
-      <li><code>U</code> <code>CssHandler</code>补丁包增加支持<code>before</code>和<code>after</code>伪类</li>
     </ol>
   </li>
 </ul>

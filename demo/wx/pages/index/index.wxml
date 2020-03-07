@@ -1,4 +1,5 @@
 <!-- index.wxml -->
+<parser id="preLoad" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la" />
 <view class="page">
   <view class="page__hd">
     <view class="page__title">Parser</view>

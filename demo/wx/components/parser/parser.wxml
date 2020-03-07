@@ -1,3 +1,4 @@
 <!--parser 主组件-->
-<slot wx:if="{{!html[0].name && !html[0].type}}" />
-<trees id="root" style="{{(selectable ? 'user-select:text;-webkit-user-select:text' : '') + showAnimation}}" animation="{{animation}}" nodes="{{html[0].name || html[0].type ? html : []}}" bindtap="_tap" bindtouchstart="_touchstart" bindtouchmove="_touchmove" />
+<slot wx:if="{{!html[0].name&&!html[0].type}}" />
+<trees class="_top" style="{{selectable?'user-select:text;-webkit-user-select:text;':''}}{{showAnimation}}" animation="{{animation}}" lazy-load="{{lazyLoad}}" nodes="{{html[0].name||html[0].type?html:[]}}" bindtap="_tap" bindtouchstart="_touchstart" bindtouchmove="_touchmove" />
+<image wx:for="{{imgs}}" wx:key="index" id="{{index}}" src="{{item}}" hidden bindload="_load" />

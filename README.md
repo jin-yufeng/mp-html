@@ -62,9 +62,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 45.2KB | 微信小程序插件包 |
-| parser.min | 30.0KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 58.4KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 45.9KB | 微信小程序插件包 |
+| parser.min | 30.6KB | 微信小程序插件包压缩版（功能相同） |
+| parser.uni | 59.1KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -144,7 +144,8 @@
 | 名称 | 功能 | 说明 |
 |:----:|----|----|
 | bindparse | 解析完成时触发 | 返回解析结果（一个 nodes 数组，仅传入的 html 类型为 String 时会触发），可以对该结果进行自定义修改，将在渲染时生效 |
-| bindready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息） |
+| bindload | dom 加载完成时触发 | 所有节点被添加到节点树中时触发，无返回值，可以调用 api |
+| bindready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息），所有图片（除懒加载）加载完成时才会触发，图片较大时可能 **延时较长** |
 | binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息，context 是视频的 context 对象 |
 | bindimgtap | 图片被点击时触发 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览 |
 | bindimglongtap | 图片被长按时触发 | 返回一个 object，其中 src 是图片链接 |
@@ -189,6 +190,11 @@
 
 
 ## 更新日志 ##
+- 2020.3.7
+  1. `A` 增加了 `preLoad` 的 `api`，可以预加载富文本中的图片 [详细](https://jin-yufeng.github.io/Parser/#/instructions#preload)
+  2. `A` 增加了 `bindload` 事件（`dom` 加载完成时触发，即原 `ready` 事件，`ready` 事件更改为所有图片(除懒加载)加载完毕时触发，可以获取准确大小）[详细](https://jin-yufeng.github.io/Parser/#/instructions#事件)  
+  3. `U` 优化了不开启 `lazy-load` 属性时的加载速度；另外开启懒加载时，首图（较大概率直接进入视野）也将不经过判断直接加载，避免因懒加载判断拖慢加载速度  
+
 - 2020.3.1  
   1. `A` `uni-app` 包 `H5` 端增加 `editable` 属性，可以编辑内容  
   2. `U` 支持 `picture` 标签，可以在不同大小的屏幕上显示不同链接的图片 [详细](https://jin-yufeng.github.io/Parser/#/#多媒体多资源加载)  

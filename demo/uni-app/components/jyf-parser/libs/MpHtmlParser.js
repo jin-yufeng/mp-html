@@ -33,9 +33,8 @@ class MpHtmlParser {
 		if (emoji) this.data = emoji.parseEmoji(this.data);
 		// 高亮处理
 		if (config.highlight)
-			this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]+?)<\/[pP][rR][eE][\s\S]*?>/g, function($, $1, $2) {
-				return `<pre${$1}>${config.highlight($2, $1)}</pre>`;
-			})
+			this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]+?)<\/[pP][rR][eE][\s\S]*?>/g, ($, $1, $2) =>
+				`<pre${$1}>${config.highlight($2, $1)}</pre>`);
 		this.data = this.CssHandler.getStyle(this.data);
 		for (var len = this.data.length; this._i < len; this._i++)
 			this._state(this.data[this._i]);
@@ -43,22 +42,21 @@ class MpHtmlParser {
 		while (this._STACK.length) this.popNode(this._STACK.pop());
 		// #ifdef MP-BAIDU || MP-TOUTIAO
 		// 将顶层标签的一些样式提取出来给 rich-text
-		function setContain(nodes) {
-			for (var i = nodes.length, element; element = nodes[--i];) {
-				if (element.type == "text") continue;
-				if (!element.c) {
-					var style = element.attrs.style;
+		(function setContain(ns) {
+			for (var i = ns.length, n; n = ns[--i];) {
+				if (n.type == "text") continue;
+				if (!n.c) {
+					var style = n.attrs.style;
 					if (style) {
 						var j, k, res = "";
 						if ((j = style.indexOf("display")) != -1)
 							res = style.substring(j, (k = style.indexOf(';', j)) == -1 ? style.length : k);
 						if (style.indexOf("flex") != -1) res += ';' + style.match(getRegExp("flex[:-][^;]+/g")).join(';');
-						element.attrs.containStyle = res;
+						n.attrs.containStyle = res;
 					}
-				} else setContain(element.children);
+				} else setContain(n.children);
 			}
-		};
-		setContain(this.DOM);
+		})(this.DOM);
 		// #endif
 		if (this.DOM.length) this.DOM[0].PoweredBy = "Parser";
 		return this.DOM;

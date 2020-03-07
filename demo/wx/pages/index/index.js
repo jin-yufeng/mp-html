@@ -1,4 +1,5 @@
 // index.js
+const htmls = require('../demo/htmls.js');
 Page({
   // 数据
   data: {
@@ -50,6 +51,12 @@ Page({
         url: ''
       }]
     }]
+  },
+  onReady() {
+    // 预加载富文本图片
+    var context = this.selectComponent("#preLoad");
+    context.preLoad(htmls[0], 5);
+    context.preLoad(htmls[1], 5);
   },
   // 切换 tab
   kindToggle(e) {

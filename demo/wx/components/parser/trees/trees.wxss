@@ -1,21 +1,14 @@
 /* 在这里引入需要的自定义样式 */
 @import "../libs/prism.wxss";
 
-/* 链接受到点击的样式 */
-.navigator-hover {
-  opacity: 0.7;
-  text-decoration: underline;
+:host, ._a {
+  display: inline;
 }
-/* 以下内容不建议修改 */
-:host {
-  display: inherit;
-  float: inherit;
+._blockquote, ._div, ._p, ._ul, ._ol, ._li {
+  display: block;
 }
 ._b, ._strong {
   font-weight: bold;
-}
-._blockquote, ._div, ._p, ._ul, ._ol, ._li {
-  display:block;
 }
 ._code {
   font-family: monospace;
@@ -42,44 +35,50 @@
   font-size: 0.67em;
 }
 ._h1, ._h2, ._h3, ._h4, ._h5, ._h6 {
-  font-weight: bold;
   display: block;
+  font-weight: bold;
+}
+._hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+._img {
+  display: inline-block;
+  text-indent: 0;
 }
 ._ins {
   text-decoration: underline;
 }
-._ol-before {
-  width: 36px;
-  text-align: right;
+._li {
+  flex: 1;
+  width: 0;
+}
+._ol-bef {
   margin-right: 5px;
-  flex-shrink: 0;
+  text-align: right;
+  width: 36px;
 }
-._ul-before {
-  margin-left: 23px;
-  margin-right: 12px;
+._ul-bef {
   line-height: normal;
-  flex-shrink: 0;
+  margin: 0 12px 0 23px;
 }
-._ul-type1 {
-  width: 0.3em;
+._ol-bef, ._ul_bef {
+  flex: none;
+  user-select: none;
+}
+._ul-p1 {
+  display: inline-block;
   height: 0.3em;
   line-height: 0.3em;
-  color: inherit;
-  display: inline-block;
   overflow: hidden;
+  width: 0.3em;
 }
-._ul-type2 {
-  width: 0.23em;
-  height: 0.23em;
-  background-color: transparent;
+._ul-p2 {
   border: 0.05em solid black;
   border-radius: 50%;
   display: inline-block;
-}
-._li-after {
-  display: block;
-  flex: 1;
-  width: 0;
+  height: 0.23em;
+  width: 0.23em;
 }
 ._q::before {
   content: '"';
@@ -88,33 +87,30 @@
   content: '"';
 }
 ._sub {
-  vertical-align: sub;
   font-size: smaller;
+  vertical-align: sub;
 }
 ._sup {
-  vertical-align: super;
   font-size: smaller;
-}
-._a, ._abbr, ._b, ._code, ._del, ._em, ._i, ._ins, ._label, ._q, ._span, ._strong, ._sub, ._sup {
-  display: inline;
+  vertical-align: super;
 }
 .__bdi, .__bdo, .__ruby, .__rt {
-  display: inline-block !important;
+  display: inline-block;
 }
 ._video {
   background-color: black;
-  width: 300px;
-  height: 225px;
   display: inline-block;
+  height: 225px;
   position: relative;
+  width: 300px;
 }
 ._video::after {
+  border-left-color: white;
+  border-style: solid;
+  border-width: 15px 0 15px 30px;
   content: '';
-	border-width: 15px 0 15px 30px;
-	border-style: solid;
-	border-left-color: white;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin: -15px 0 0 -15px;
+  left: 50%;
+  margin: -15px 0 0 -15px;
+  position: absolute;
+  top: 50%;
 }

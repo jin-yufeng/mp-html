@@ -43,10 +43,7 @@ class CssHandler {
   };
   getStyle(data) {
     var style = '';
-    data = data.replace(/<[sS][tT][yY][lL][eE][\s\S]*?>([\s\S]*?)<\/[sS][tT][yY][lL][eE][\s\S]*?>/g, function ($, $1) {
-      style += $1;
-      return '';
-    })
+    data = data.replace(/<[sS][tT][yY][lL][eE][\s\S]*?>([\s\S]*?)<\/[sS][tT][yY][lL][eE][\s\S]*?>/g, ($, $1) => (style += $1, ''));
     this.styles = parseCss(style, this.styles);
     return data;
   };
@@ -126,15 +123,11 @@ class CssHandler {
     if (element.pseudo) {
       for (var item of element.pseudo) {
         var content;
-        var style = item.content.replace(/content:([^;\n]*)/, function ($, $1) {
+        var style = item.content.replace(/content:([^;\n]*)/, ($, $1) => {
           // 转换 attr
-          content = $1.replace(/attr\((.+?)\)/, function ($, $1) {
-            return element.attrs[$1.trim()] || '';
-          }).replace(/\s*['"](.*?)['"]\s*/g, "$1")
+          content = $1.replace(/attr\((.+?)\)/, ($, $1) => element.attrs[$1.trim()] || '').replace(/\s*['"](.*?)['"]\s*/g, "$1")
             // 转换 \xxx
-            .replace(/\\(\w{4})/, function ($, $1) {
-              return String.fromCharCode(parseInt($1, 16));
-            });
+            .replace(/\\(\w{4})/, ($, $1) => String.fromCharCode(parseInt($1, 16)));
           return '';
         })
         var child = {
@@ -227,7 +220,7 @@ function parseCss(data, tagStyle) {
       // 属性选择器
       if (item.key.includes('[')) {
         item.attr = [];
-        item.key = item.key.replace(/\[(.+?)\]/g, function ($, $1) {
+        item.key = item.key.replace(/\[(.+?)\]/g, ($, $1) => {
           if ($1.includes('=')) {
             var info = $1.split('=');
             var value = info[1].trim();

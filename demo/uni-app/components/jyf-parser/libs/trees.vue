@@ -10,74 +10,71 @@
 		<block v-for="(item, index) in nodes" v-bind:key="index">
 			<!--图片-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY || APP-PLUS-->
-			<rich-text v-if="item.name=='img'" :id="item.attrs.id" class="_img" :style="'text-indent:0;'+handler.getStyle(item.attrs.style, 'inline-block')"
-			 :nodes='handler.getNode(item, imgLoad)' :data-attrs="item.attrs" @tap="imgtap" @longpress="imglongtap" />
+			<rich-text v-if="item.name=='img'" :id="item.attrs.id" class="_img" :style="''+handler.getStyle(item.attrs.style)"
+			 :nodes="handler.getNode(item,!lazyLoad||imgLoad)" :data-attrs="item.attrs" @tap="imgtap" @longpress="imglongtap" />
 			<!--#endif-->
 			<!--#ifdef MP-BAIDU || MP-TOUTIAO-->
-			<rich-text v-if="item.name=='img'" :id="item.attrs.id" :style="'text-indent:0;'+item.attrs.containStyle" :nodes='[item]'
+			<rich-text v-if="item.name=='img'" :id="item.attrs.id" class="_img" :style="item.attrs.containStyle" :nodes='[item]'
 			 :data-attrs="item.attrs" @tap="imgtap" @longpress="imglongtap" />
 			<!--#endif-->
 			<!--文本-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || APP-PLUS-->
-			<text v-else-if="item.type=='text'&&!item.decode" decode>{{item.text}}</text>
-			<rich-text v-else-if="item.type=='text'" style="display:inline-block" :nodes="[item]"></rich-text>
+			<rich-text v-else-if="item.decode" style="display:inline-block" :nodes="[item]"></rich-text>
 			<!--#endif-->
-			<!--#ifdef MP-ALIPAY-->
 			<text v-else-if="item.type=='text'" decode>{{item.text}}</text>
-			<!--#endif-->
 			<text v-else-if="item.name=='br'">\n</text>
 			<!--视频-->
 			<view v-else-if="item.name=='video'">
 				<!--#ifdef APP-PLUS-->
 				<view v-if="(!loadVideo||item.lazyLoad)&&(!controls[item.attrs.id]||!controls[item.attrs.id].play)" :id="item.attrs.id"
-				 :class="'_video '+(item.attrs.class||'')" :style="item.attrs.style||''" @tap="loadVideo" />
+				 :class="'_video '+(item.attrs.class||'')" :style="item.attrs.style" @tap="_loadVideo" />
 				<!--#endif-->
 				<!--#ifndef APP-PLUS-->
 				<view v-if="item.lazyLoad&&!controls[item.attrs.id].play" :id="item.attrs.id" :class="'_video '+(item.attrs.class||'')"
-				 :style="item.attrs.style||''" @tap="_loadVideo" />
+				 :style="item.attrs.style" @tap="_loadVideo" />
 				<!--#endif-->
-				<video v-else :id="item.attrs.id" :class="item.attrs.class" :style="item.attrs.style||''" :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
+				<video v-else :id="item.attrs.id" :class="item.attrs.class" :style="item.attrs.style" :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
 				 :controls="item.attrs.controls" :loop="item.attrs.loop" :muted="item.attrs.muted" :poster="item.attrs.poster" :src="controls[item.attrs.id] ? item.attrs.source[controls[item.attrs.id].index] : item.attrs.src"
 				 :unit-id="item.attrs['unit-id']" :data-source="item.attrs.source" data-from="video" @play="play" @error="error" />
 			</view>
 			<!--音频-->
-			<audio v-else-if="item.name=='audio'" :id="item.attrs.id" :class="item.attrs.class" :style="item.attrs.style||''"
+			<audio v-else-if="item.name=='audio'" :id="item.attrs.id" :class="item.attrs.class" :style="item.attrs.style"
 			 :author="item.attrs.author" :controls="item.attrs.controls" :loop="item.attrs.loop" :name="item.attrs.name" :poster="item.attrs.poster"
 			 :src="controls[item.attrs.id] ? item.attrs.source[controls[item.attrs.id].index] : item.attrs.src" :data-source="item.attrs.source"
 			 data-audio="audio" @error="error" />
 			<!--链接-->
-			<view v-else-if="item.name=='a'" :class="'_a '+(item.attrs.class||'')" hover-class="navigator-hover" :style="item.attrs.style||''"
+			<view v-else-if="item.name=='a'" :class="'_a '+(item.attrs.class||'')" hover-class="_hover" :style="item.attrs.style"
 			 :data-attrs="item.attrs" @tap="linkpress">
 				<trees :nodes="item.children" />
 			</view>
-			<!--广告-->
+			<!--广告（按需打开注释）-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || MP-TOUTIAO-->
-			<ad v-else-if="item.name=='ad'" :class="item.attrs.class||''" :style="item.attrs.style||''" :unit-id="item.attrs['unit-id']"
-			 data-from="ad" @error="error" />
+			<!--<ad v-else-if="item.name=='ad'" :class="item.attrs.class" :style="item.attrs.style" :unit-id="item.attrs['unit-id']"
+			 data-from="ad" @error="error" />-->
 			<!--#endif-->
 			<!--#ifdef MP-BAIDU-->
-			<ad v-else-if="item.name=='ad'" :class="item.attrs.class||''" :style="item.attrs.style||''" :appid="item.attrs.appid"
-			 :apid="item.attrs.apid" :type="item.attrs.type" data-from="ad" @error="error" />
+			<!--<ad v-else-if="item.name=='ad'" :class="item.attrs.class" :style="item.attrs.style" :appid="item.attrs.appid"
+			 :apid="item.attrs.apid" :type="item.attrs.type" data-from="ad" @error="error" />-->
 			<!--#endif-->
 			<!--#ifdef APP-PLUS-->
-			<ad v-else-if="item.name=='ad'" :class="item.attrs.class||''" :style="item.attrs.style||''" :adpid="item.attrs.adpid"
-			 data-from="ad" @error="error" />
+			<!--<ad v-else-if="item.name=='ad'" :class="item.attrs.class" :style="item.attrs.style" :adpid="item.attrs.adpid"
+			 data-from="ad" @error="error" />-->
 			<!--#endif-->
 			<!--列表-->
-			<view v-else-if="item.name=='li'" :class="(item.attrs.class||'')+' _li'" :style="(item.attrs.style||'')+';display:flex'">
-				<view v-if="item.type=='ol'" class="_ol-before">{{item.num}}</view>
-				<view v-else class="_ul-before">
-					<view v-if="item.floor%3==0" class="_ul-type1">█</view>
-					<view v-else-if="item.floor%3==2" class="_ul-type2" />
-					<view v-else class="_ul-type1" style="border-radius:50%">█</view>
+			<view v-else-if="item.name=='li'" :class="item.attrs.class" :style="(item.attrs.style||'')+';display:flex'">
+				<view v-if="item.type=='ol'" class="_ol-bef">{{item.num}}</view>
+				<view v-else class="_ul-bef">
+					<view v-if="item.floor%3==0" class="_ul-p1">█</view>
+					<view v-else-if="item.floor%3==2" class="_ul-p2" />
+					<view v-else class="_ul-p1" style="border-radius:50%">█</view>
 				</view>
 				<!--#ifdef MP-ALIPAY-->
-				<view class="_li-after">
+				<view class="_li">
 					<trees :nodes="item.children" />
 				</view>
 				<!--#endif-->
 				<!--#ifndef MP-ALIPAY-->
-				<trees class="_node _li-after" :nodes="item.children" :loadVideo="loadVideo" />
+				<trees class="_node _li" :nodes="item.children" :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
 				<!--#endif-->
 			</view>
 			<!--#ifdef APP-PLUS-->
@@ -88,21 +85,21 @@
 			<!--#endif-->
 			<!--富文本-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY || APP-PLUS-->
-			<rich-text v-else-if="handler.useRichText(item)" :id="item.attrs.id" :class="'__'+item.name" :style="''+handler.getStyle(item.attrs.style, 'block')"
+			<rich-text v-else-if="handler.useRichText(item)" :id="item.attrs.id" :class="'_p __'+item.name" :style="''+handler.getStyle(item.attrs.style)"
 			 :nodes="[item]" />
 			<!--#endif-->
 			<!--#ifdef MP-BAIDU || MP-TOUTIAO-->
-			<rich-text v-else-if="!(item.c||item.continue)" :id="item.attrs.id" :style="item.attrs?item.attrs.containStyle:''"
+			<rich-text v-else-if="!(item.c||item.continue)" :id="item.attrs.id" :class="_p" :style="item.attrs.containStyle"
 			 :nodes="[item]" />
 			<!--#endif-->
 			<!--#ifdef MP-ALIPAY-->
-			<view v-else :id="item.attrs.id" :class="'_'+item.name+' '+(item.attrs.class||'')" :style="item.attrs.style||''">
+			<view v-else :id="item.attrs.id" :class="'_'+item.name+' '+(item.attrs.class||'')" :style="item.attrs.style">
 				<trees :nodes="item.children" />
 			</view>
 			<!--#endif-->
 			<!--#ifndef MP-ALIPAY-->
-			<trees v-else :class="item.attrs.id+' _'+item.name+' '+(item.attrs.class||'')" :style="item.attrs.style||''" :nodes="item.children"
-			 :loadVideo="loadVideo" />
+			<trees v-else :class="(item.attrs.id||'')+' _'+item.name+' '+(item.attrs.class||'')" :style="item.attrs.style"
+			 :nodes="item.children" :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
 			<!--#endif-->
 		</block>
 	</view>
@@ -126,6 +123,9 @@
 		},
 		props: {
 			nodes: Array,
+			// #ifdef MP-WEIXIN || MP-QQ || H5 || APP-PLUS
+			lazyLoad: Boolean,
+			// #endif
 			// #ifdef APP-PLUS
 			loadVideo: Boolean
 			// #endif
@@ -253,7 +253,7 @@
 					context
 				});
 			},
-			loadVideo(e) {
+			_loadVideo(e) {
 				this.$set(this.controls, e.currentTarget.id, {
 					play: true,
 					index: 0
@@ -266,30 +266,23 @@
 <style>
 	/* 在这里引入自定义的外部样式 */
 
-	/* 链接受到点击时的样式 */
-	.navigator-hover {
-		opacity: 0.7;
-		text-decoration: underline;
-	}
-
-	/* 以下内容不建议修改 */
 	/* #ifdef MP-WEIXIN || APP-PLUS */
-	:host {
-		display: inherit;
-		float: inherit;
+	:host,
+	._a {
+		display: inline;
 	}
 
 	/* #endif */
 
 	.interlayer {
+		align-content: inherit;
+		align-items: inherit;
 		display: inherit;
 		flex-direction: inherit;
 		flex-wrap: inherit;
 		justify-content: inherit;
-		align-items: inherit;
-		align-content: inherit;
-		white-space: inherit;
 		max-width: 100%;
+		white-space: inherit;
 	}
 
 	._b,
@@ -345,50 +338,60 @@
 	._h4,
 	._h5,
 	._h6 {
-		font-weight: bold;
 		display: block;
+		font-weight: bold;
+	}
+
+	._hover {
+		opacity: 0.7;
+		text-decoration: underline;
+	}
+
+	._img {
+		display: inline-block;
+		text-indent: 0;
 	}
 
 	._ins {
 		text-decoration: underline;
 	}
 
-	._ol-before {
-		width: 36px;
-		text-align: right;
+	._li {
+		flex: 1;
+		width: 0;
+	}
+
+	._ol-bef {
 		margin-right: 5px;
-		flex-shrink: 0;
+		text-align: right;
+		width: 36px;
 	}
 
-	._ul-before {
-		margin-left: 23px;
-		margin-right: 12px;
+	._ul-bef {
 		line-height: normal;
-		flex-shrink: 0;
+		margin: 0 12px 0 23px;
 	}
 
-	._ul-type1 {
-		width: 0.3em;
+	._ol-bef,
+	._ul_bef {
+		flex: none;
+		user-select: none;
+	}
+
+	._ul-p1 {
+		display: inline-block;
 		height: 0.3em;
 		line-height: 0.3em;
-		color: inherit;
-		display: inline-block;
 		overflow: hidden;
+		width: 0.3em;
 	}
 
-	._ul-type2 {
-		width: 0.23em;
-		height: 0.23em;
-		background-color: transparent;
+	._ul-p2 {
 		border: 0.05em solid black;
 		border-radius: 50%;
 		display: inline-block;
-	}
-
-	._li-after {
-		display: block;
-		flex: 1;
-		width: 0;
+		height: 0.23em;
+		width: 0.23em;
 	}
 
 	._q::before {
@@ -400,16 +403,16 @@
 	}
 
 	._sub {
-		vertical-align: sub;
 		font-size: smaller;
+		vertical-align: sub;
 	}
 
 	._sup {
-		vertical-align: super;
 		font-size: smaller;
+		vertical-align: super;
 	}
 
-
+	/* #ifndef MP-WEIXIN || APP-PLUS */
 	._a,
 	._abbr,
 	._b,
@@ -427,31 +430,33 @@
 		display: inline;
 	}
 
+	/* #endif */
+
 	/* #ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY */
 	.__bdo,
 	.__bdi,
 	.__ruby,
 	.__rt {
-		display: inline-block !important;
+		display: inline-block;
 	}
 
 	/* #endif */
 	._video {
 		background-color: black;
-		width: 300px;
-		height: 225px;
 		display: inline-block;
+		height: 225px;
 		position: relative;
+		width: 300px;
 	}
 
 	._video::after {
-		content: '';
-		border-width: 15px 0 15px 30px;
-		border-style: solid;
 		border-left-color: white;
-		position: absolute;
+		border-style: solid;
+		border-width: 15px 0 15px 30px;
+		content: '';
 		left: 50%;
-		top: 50%;
 		margin: -15px 0 0 -15px;
+		position: absolute;
+		top: 50%;
 	}
 </style>

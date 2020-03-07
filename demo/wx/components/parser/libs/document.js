@@ -42,9 +42,8 @@ class element {
   }
   // 获取 / 设置 html
   get innerHtml() {
-    var html = '';
-
-    function Dom2Str(node) {
+    return (function f(node) {
+      var html = '';
       if (node.type == "text")
         html += node.text;
       else {
@@ -56,13 +55,12 @@ class element {
         else {
           html += '>';
           for (var i = 0; i < node.children.length; i++)
-            Dom2Str(node.children[i]);
+            html += f(node.children[i]);
           html += "</" + node.name + '>';
         }
       }
-    }
-    Dom2Str(this._node);
-    return html;
+      return html;
+    })(this._node);
   }
   set innerHtml(value) {
     this._node.children = new MpHtmlParser(value, this._context.data).parse();

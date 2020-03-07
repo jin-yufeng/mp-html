@@ -6,14 +6,13 @@ Page({
     this.index = e.index;
     this.context = this.selectComponent("#article");
     this.context.setContent(htmls[e.index]);
-    if (e.anchor)
-      this.goto = true;
+    this.anchor = e.anchor;
   },
   // 富文本渲染完成
   ready() {
-    if (this.goto)
+    if (this.anchor)
       this.context.navigateTo({
-        id: "anchor"
+        id: this.anchor
       })
   },
   // 富文本出错事件

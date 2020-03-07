@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
 */
-const cache = getApp().parserCache = {};
+const cache = {};
 const config = require("./libs/config.js");
 const CssHandler = require("./libs/CssHandler.js");
 var document; // 引入补丁包
@@ -66,7 +66,7 @@ Component({
         return this[i] = newSrc;
       }
       this[i] = src;
-      // 暂存 data:image
+      // 暂存 data src
       if (src.includes("data:image")) {
         var fileInfo = src.match(/data:image\/(\S+?);(\S+?),(.+)/);
         if (!fileInfo) return;
@@ -92,6 +92,7 @@ Component({
           filePath: item
         })
     })
+    clearInterval(this.interval);
   },
   methods: {
     // 锚点跳转
@@ -101,7 +102,7 @@ Component({
           errMsg: "Anchor is disabled"
         })
       this.createSelectorQuery()
-        .select("#root" + (obj.id ? ">>>#" + obj.id : '')).boundingClientRect()
+        .select("._top" + (obj.id ? ">>>#" + obj.id : '')).boundingClientRect()
         .selectViewport().scrollOffset().exec(res => {
           if (!res[0]) {
             if (this.group) return this.group.navigateTo(this.i, obj);
@@ -159,28 +160,26 @@ Component({
         // 非本插件产生的 array 需要进行一些转换
         if (html.length && html[0].PoweredBy != "Parser") {
           var Parser = new MpHtmlParser('', this.data);
-
-          function DFS(nodes) {
-            for (var i = 0, node; node = nodes[i]; i++) {
-              if (node.type == "text") continue;
-              node.attrs = node.attrs || {};
-              for (var item in node.attrs) {
-                if (!config.trustAttrs[item]) node.attrs[item] = void 0;
-                else if (typeof node.attrs[item] != "string") node.attrs[item] = node.attrs[item].toString();
+          (function f(ns) {
+            for (var i = 0, n; n = ns[i]; i++) {
+              if (n.type == "text") continue;
+              n.attrs = n.attrs || {};
+              for (var item in n.attrs) {
+                if (!config.trustAttrs[item]) n.attrs[item] = void 0;
+                else if (typeof n.attrs[item] != "string") n.attrs[item] = n.attrs[item].toString();
               }
-              config.LabelHandler(node, Parser);
-              if (config.ignoreTags[node.name]) {
-                nodes.splice(i--, 1);
+              config.LabelHandler(n, Parser);
+              if (config.ignoreTags[n.name]) {
+                ns.splice(i--, 1);
                 continue;
               }
-              if (node.children && node.children.length) {
-                Parser._STACK.push(node);
-                DFS(node.children);
+              if (n.children && n.children.length) {
+                Parser._STACK.push(n);
+                f(n.children);
                 Parser.popNode(Parser._STACK.pop());
-              } else node.children = void 0;
+              } else n.children = void 0;
             }
-          }
-          DFS(html);
+          })(html);
           data.html = html;
         }
         if (!obversed) data.html = html;
@@ -189,12 +188,12 @@ Component({
         console.warn("错误的 html 类型：object 类型已废弃");
       } else
         return console.warn("错误的 html 类型：" + typeof html);
-      if (this.data.showWithAnimation) data.showAnimation = ";animation: show .5s";
+      if (this.data.showWithAnimation) data.showAnimation = "animation: show .5s";
       if ((this._refresh = !!data.html) || data.showAnimation) this.setData(data);
       this.imgList.length = 0;
       this.videoContexts = [];
       if (document) this.document = new document(data.html || html, "html", this);
-      var nodes = this.selectAllComponents("#root,#root>>>._node");
+      var nodes = this.selectAllComponents("._top,._top>>>._node");
       for (var i = nodes.length; i--;) {
         let node = nodes[i];
         node._top = this;
@@ -205,15 +204,15 @@ Component({
           if (item.name == "img") {
             if (item.attrs.i)
               this.imgList.setItem(item.attrs.i, item.attrs.src);
-            if (!observed) {
+            if (!observed && item.attrs.i != "0") {
               observed = true;
               // 懒加载
               if (this.data.lazyLoad && node.createIntersectionObserver) {
                 (wx.nextTick || setTimeout)(() => {
                   node._observer = node.createIntersectionObserver();
                   node._observer.relativeToViewport({
-                    top: 1000,
-                    bottom: 1000
+                    top: 900,
+                    bottom: 900
                   }).observe("._img", () => {
                     node.setData({
                       imgLoad: true
@@ -244,12 +243,48 @@ Component({
             })
         }
       }
-      (wx.nextTick || setTimeout)(() => {
-        this.createSelectorQuery().select("#root").boundingClientRect(res => {
+      (wx.nextTick || setTimeout)(() => this.triggerEvent("load"), 50);
+      var height;
+      this.interval = setInterval(() => {
+        this.createSelectorQuery().select("._top").boundingClientRect(res => {
           this.width = res.width;
-          this.triggerEvent("ready", res);
+          if (res.height == height) {
+            this.triggerEvent("ready", res)
+            clearInterval(this.interval);
+          }
+          height = res.height;
         }).exec();
-      }, 50)
+      }, 350)
+    },
+    // 预加载
+    preLoad(html, num) {
+      if (typeof html == "string") {
+        var id = hash(html);
+        html = new MpHtmlParser(html, this.data).parse();
+        cache[id] = html;
+      }
+      var imgs, wait = [];
+      (function f(ns) {
+        for (var i = 0, n; n = ns[i++];) {
+          if (n.name == "img" && n.attrs.src && !wait.includes(n.attrs.src))
+            wait.push(n.attrs.src);
+          f(n.children || []);
+        }
+      })(html);
+      if (num) wait = wait.slice(0, num);
+      this.wait = (this.wait || []).concat(wait);
+      if (!this.data.imgs) imgs = this.wait.splice(0, 15);
+      else if (this.data.imgs.length < 15)
+        imgs = this.data.imgs.concat(this.wait.splice(0, 15 - this.data.imgs.length));
+      imgs && this.setData({
+        imgs
+      });
+    },
+    _load(e) {
+      if (this.wait.length)
+        this.setData({
+          [`imgs[${e.target.id}]`]: this.wait.shift()
+        })
     },
     // 事件处理
     _tap(e) {

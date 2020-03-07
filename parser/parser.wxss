@@ -3,6 +3,9 @@
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
 }
+._top {
+  display: inherit;
+}
 @keyframes show {
   0% {
     opacity: 0;

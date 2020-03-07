@@ -15,15 +15,14 @@ var inlineTags = {
 }
 export default {
 	// 从 rich-text 顶层标签的样式中取出一些给 rich-text
-	getStyle: function(style, display) {
+	getStyle: function(style) {
 		if (style) {
-			var i, j, res = "";
+			var i, j, res = '';
 			if ((i = style.indexOf("display")) != -1)
 				res = style.substring(i, (j = style.indexOf(';', i)) == -1 ? style.length : j);
-			else res = "display:" + display;
 			if (style.indexOf("flex") != -1) res += ';' + style.match(getRegExp("flex[:-][^;]+/g")).join(';');
 			return res;
-		} else return "display:" + display;
+		} else return '';
 	},
 	getNode: function(item) {
 		return [item];

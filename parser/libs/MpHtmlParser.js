@@ -36,9 +36,7 @@ class MpHtmlParser {
     if (emoji) this.data = emoji.parseEmoji(this.data);
     // 高亮处理
     if (config.highlight)
-      this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]+?)<\/[pP][rR][eE][\s\S]*?>/g, function($, $1, $2) {
-        return `<pre${$1}>${config.highlight($2, $1)}</pre>`;
-      })
+      this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]+?)<\/[pP][rR][eE][\s\S]*?>/g, ($, $1, $2) => `<pre${$1}>${config.highlight($2, $1)}</pre>`);
     this.data = this.CssHandler.getStyle(this.data);
     for (var len = this.data.length; this._i < len; this._i++)
       this._state(this.data[this._i]);

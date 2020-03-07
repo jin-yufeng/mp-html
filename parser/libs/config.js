@@ -60,13 +60,13 @@ module.exports = {
   highlight: null,
   // 处理标签的属性，需要通过组件递归方式显示的标签需要调用 bubbling(Parser)
   LabelHandler(node, Parser) {
-    var attrs = node.attrs;
-    attrs.style = Parser.CssHandler.match(node.name, attrs, node) + (attrs.style || '');
+    var attrs = node.attrs,
+      style = Parser.CssHandler.match(node.name, attrs, node) + (attrs.style || '');
     switch (node.name) {
       case "div":
       case 'p':
         if (attrs.align) {
-          attrs.style = `text-align:${attrs.align};${attrs.style}`;
+          style = `text-align:${attrs.align};${style}`;
           attrs.align = void 0;
         }
         break;
@@ -76,7 +76,7 @@ module.exports = {
           attrs["data-src"] = void 0;
         }
         if (attrs.width && parseInt(attrs.width) > screenWidth)
-          attrs.style += ";height:auto !important";
+          style += ";height:auto !important";
         if (attrs.src && !attrs.ignore) {
           if (bubbling(Parser)) attrs.i = (Parser._imgNum++).toString();
           else attrs.ignore = 'T';
@@ -88,11 +88,11 @@ module.exports = {
         break;
       case "font":
         if (attrs.color) {
-          attrs.style = `color:${attrs.color};${attrs.style}`;
+          style = `color:${attrs.color};${style}`;
           attrs.color = void 0;
         }
         if (attrs.face) {
-          attrs.style = `font-family:${attrs.face};${attrs.style}`;
+          style = `font-family:${attrs.face};${style}`;
           attrs.face = void 0;
         }
         if (attrs.size) {
@@ -100,7 +100,7 @@ module.exports = {
           if (size < 1) size = 1;
           else if (size > 7) size = 7;
           var map = ["xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"];
-          attrs.style = `font-size:${map[size - 1]};${attrs.style}`;
+          style = `font-size:${map[size - 1]};${style}`;
           attrs.size = void 0;
         }
         break;
@@ -110,11 +110,11 @@ module.exports = {
         else attrs.id = (node.name + (++Parser[`_${node.name}Num`]));
         if (node.name == "video") {
           if (attrs.width) {
-            attrs.style = `width:${parseFloat(attrs.width) + attrs.width.includes('%') ? '%' : "px"};${attrs.style}`;
+            style = `width:${parseFloat(attrs.width) + attrs.width.includes('%') ? '%' : "px"};${style}`;
             attrs.width = void 0;
           }
           if (attrs.height) {
-            attrs.style = `height:${parseFloat(attrs.height) + attrs.height.includes('%') ? '%' : "px"};${attrs.style}`;
+            style = `height:${parseFloat(attrs.height) + attrs.height.includes('%') ? '%' : "px"};${style}`;
             attrs.height = void 0;
           }
           if (Parser._videoNum > 3) node.lazyLoad = true;
@@ -126,7 +126,7 @@ module.exports = {
         bubbling(Parser);
         break;
       case "source":
-        var i, parent = Parser._STACK[Parser._STACK.length - 1];
+        var parent = Parser._STACK[Parser._STACK.length - 1];
         if (!parent || !attrs.src) break;
         if (parent.name == "video" || parent.name == "audio")
           parent.attrs.source.push(attrs.src);
@@ -139,9 +139,9 @@ module.exports = {
         }
     }
     // 压缩 style
-    var styles = attrs.style.split(';'),
+    var styles = style.split(';'),
       compressed = {};
-    attrs.style = "";
+    style = '';
     for (var i = 0, len = styles.length; i < len; i++) {
       var info = styles[i].split(':');
       if (info.length < 2) continue;
@@ -160,20 +160,18 @@ module.exports = {
       }
       // 转换 rpx
       else if (value.includes("rpx"))
-        value = value.replace(/[0-9.]*rpx/g, function($) {
-          return parseFloat($) * screenWidth / 750 + "px";
-        })
+        value = value.replace(/[0-9.]*rpx/g, $ => parseFloat($) * screenWidth / 750 + "px");
       if (value.includes("-webkit") || value.includes("-moz") || value.includes("-ms") || value.includes("-o") || value.includes("safe"))
-        attrs.style += `;${key}:${value}`;
+        style += `;${key}:${value}`;
       else if (!compressed[key] || value.includes("import") || !compressed[key].includes("import"))
         compressed[key] = value;
     }
     if (node.name == "img" && compressed.width && compressed.width.includes("%") && parseInt(compressed.width) > screenWidth)
       compressed.height = "auto !important";
     for (var key in compressed)
-      attrs.style += `;${key}:${compressed[key]}`;
-    attrs.style = attrs.style.substr(1);
-    if (attrs.style == '') attrs.style = void 0;
+      style += `;${key}:${compressed[key]}`;
+    style = style.substr(1);
+    if (style) attrs.style = style;
     if (Parser._useAnchor && attrs.id) bubbling(Parser);
   },
   trustAttrs,

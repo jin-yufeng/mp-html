@@ -8,22 +8,23 @@
 <template>
 	<view style="display:inherit;">
 		<slot v-if="!nodes.length"></slot>
-		<view class="_contain" :style="showAnimation+(selectable?';user-select:text;-webkit-user-select:text':'')" :animation="scaleAnimation"
+		<view class="_top" :style="showAnimation+(selectable?';user-select:text;-webkit-user-select:text':'')" :animation="scaleAnimation"
 		 @tap="_tap" @touchstart="_touchstart" @touchmove="_touchmove">
 			<!--#ifdef H5-->
 			<div :id="'rtf'+uid" :contentEditable="editable"></div>
 			<!--#endif-->
 			<!--#ifndef H5-->
-			<trees :nodes="nodes" :loadVideo="loadVideo" />
+			<trees :nodes="nodes" :lazy-load="lazyLoad" :loadVideo="loadVideo" />
 			<!--#endif-->
 		</view>
+		<image v-for="(item, index) in imgs" v-bind:key="index" :id="index" :src="item" hidden @load="_load" />
 	</view>
 </template>
 
 <script>
 	// #ifndef H5
 	import trees from "./libs/trees";
-	const cache = getApp().parserCache = {};
+	const cache = {};
 	const CssHandler = require("./libs/CssHandler.js");
 	var document; // document 补丁包 https://jin-yufeng.github.io/Parser/#/instructions?id=document
 	// #ifdef MP-WEIXIN || MP-TOUTIAO
@@ -50,7 +51,8 @@
 				// #endif
 				scaleAnimation: '',
 				showAnimation: '',
-				nodes: []
+				nodes: [],
+				imgs: []
 			}
 		},
 		// #ifndef H5
@@ -115,7 +117,7 @@
 				}
 				// #endif
 				this[i] = src;
-				// 暂存 data:image
+				// 暂存 data src
 				if (src.includes("data:image")) {
 					var fileInfo = src.match(/data:image\/(\S+?);(\S+?),(.+)/);
 					if (!fileInfo) return;
@@ -142,14 +144,14 @@
 			}
 			if (!this.nodes.length) this.setContent(this.html, true);
 		},
-		beforeDestroy: function() {
+		beforeDestroy() {
 			// #ifdef H5
 			if (this._observer) this._observer.disconnect();
 			// #endif
-			this.imgList.each((item) => {
+			this.imgList.each(item => {
 				// #ifdef APP-PLUS
 				if (item && item.includes("_doc")) {
-					plus.io.resolveLocalFileSystemURL(item, function(entry) {
+					plus.io.resolveLocalFileSystemURL(item, entry => {
 						entry.remove();
 					});
 				}
@@ -161,6 +163,7 @@
 					})
 				// #endif
 			})
+			clearInterval(this.interval);
 		},
 		methods: {
 			// #ifdef H5
@@ -189,9 +192,7 @@
 				if (typeof html != "string") html = this.Dom2Str(html.nodes || html);
 				// 处理 rpx
 				if (html.includes("rpx"))
-					html = html.replace(/[0-9.]*rpx/g, function($) {
-						return (parseFloat($) * config.screenWidth / 750) + "px";
-					})
+					html = html.replace(/[0-9.]*rpx/g, $ => parseFloat($) * config.screenWidth / 750 + "px");
 				// 处理 tag-style 和 userAgentStyles
 				var style = "<style>@keyframes show{0%{opacity:0}100%{opacity:1}}";
 				for (var item in config.userAgentStyles)
@@ -219,7 +220,7 @@
 							}
 						}
 					}, {
-						rootMargin: "1000px 0px 1000px 0px"
+						rootMargin: "900px 0px 900px 0px"
 					})
 				}
 				var component = this;
@@ -239,20 +240,18 @@
 							img.src = (this.domain.includes("://") ? this.domain.split("://")[0] : "http") + ':' + img.getAttribute("src");
 						else img.src = this.domain + img.getAttribute("src");
 					}
-					if (!img.hasAttribute("ignore")) {
+					if (!img.hasAttribute("ignore") && img.parentElement.nodeName != 'A') {
 						img.i = j++;
 						component.imgList.push(img.src);
-						if (img.parentElement.nodeName != 'A') {
-							img.onclick = function() {
-								var preview = true;
-								this.ignore = () => preview = false;
-								component.$emit("imgtap", this);
-								if (preview) {
-									uni.previewImage({
-										current: this.i,
-										urls: component.imgList
-									});
-								}
+						img.onclick = function() {
+							var preview = true;
+							this.ignore = () => preview = false;
+							component.$emit("imgtap", this);
+							if (preview) {
+								uni.previewImage({
+									current: this.i,
+									urls: component.imgList
+								});
 							}
 						}
 					}
@@ -262,7 +261,7 @@
 							target: this
 						});
 					}
-					if (component.lazyLoad && this._observer) {
+					if (component.lazyLoad && this._observer && img.i != 0) {
 						img.setAttribute("data-src", img.src);
 						img.removeAttribute("src");
 						this._observer.observe(img);
@@ -330,9 +329,7 @@
 				this.document = this.rtf;
 				this.$nextTick(() => {
 					this.nodes = [1];
-					var rect = this.rtf.getBoundingClientRect();
-					this.width = rect.width;
-					this.$emit("ready", rect);
+					this.$emit("load");
 				})
 				setTimeout(() => this.showAnimation = '', 500);
 				// #endif
@@ -356,28 +353,26 @@
 					// 非本插件产生的 array 需要进行一些转换
 					if (html.length && html[0].PoweredBy != "Parser") {
 						var Parser = new MpHtmlParser(html, this);
-
-						function DFS(nodes) {
-							for (var i = 0, node; node = nodes[i]; i++) {
-								if (node.type == "text") continue;
-								node.attrs = node.attrs || {};
-								for (var item in node.attrs) {
-									if (!config.trustAttrs[item]) node.attrs[item] = void 0;
-									else if (typeof node.attrs[item] != "string") node.attrs[item] = node.attrs[item].toString();
+						(function f(ns) {
+							for (var i = 0, n; n = ns[i]; i++) {
+								if (n.type == "text") continue;
+								n.attrs = n.attrs || {};
+								for (var item in n.attrs) {
+									if (!config.trustAttrs[item]) n.attrs[item] = void 0;
+									else if (typeof n.attrs[item] != "string") n.attrs[item] = n.attrs[item].toString();
 								}
-								config.LabelHandler(node, Parser);
-								if (config.ignoreTags[node.name]) {
-									nodes.splice(i--, 1);
+								config.LabelHandler(n, Parser);
+								if (config.ignoreTags[n.name]) {
+									ns.splice(i--, 1);
 									continue;
 								}
-								if (node.children && node.children.length) {
-									Parser._STACK.push(node);
-									DFS(node.children);
+								if (n.children && n.children.length) {
+									Parser._STACK.push(n);
+									f(n.children);
 									Parser.popNode(Parser._STACK.pop());
-								} else node.children = void 0;
+								} else n.children = void 0;
 							}
-						}
-						DFS(html);
+						})(html);
 					}
 					this.nodes = html;
 				} else if (typeof html == "object" && html.nodes) {
@@ -392,84 +387,75 @@
 				this.$nextTick(() => {
 					this.imgList.length = 0;
 					this.videoContexts = [];
-					const getContext = (components) => {
-						for (var i = components.length; i--;) {
-							let component = components[i];
-							if (component.$options.name == "trees") {
-								var observered = false;
-								for (var j = component.nodes.length, item; item = component.nodes[--j];) {
-									if (item.c) continue;
-									if (item.name == "img") {
-										if (item.attrs.i)
-											this.imgList.setItem(item.attrs.i, item.attrs.src);
-										// #ifndef MP-ALIPAY
-										if (!observered) {
-											observered = true;
-											if (this.lazyLoad && uni.createIntersectionObserver) {
-												if (component._observer) component._observer.disconnect();
-												component._observer = uni.createIntersectionObserver(component);
-												component._observer.relativeToViewport({
-													top: 1000,
-													bottom: 1000
-												}).observe("._img", res => {
-													component.imgLoad = true;
-													if (component._observer) {
-														component._observer.disconnect();
-														component._observer = null;
-													}
-												})
-											} else
-												component.imgLoad = true;
-										}
-										// #endif
-									}
-									// #ifndef MP-ALIPAY
-									else if (item.name == "video") {
-										var context = uni.createVideoContext(item.attrs.id, component);
-										context.id = item.attrs.id;
-										this.videoContexts.unshift(context);
-									}
-									// #endif
-									// #ifdef MP-WEIXIN
-									else if (item.name == "audio" && item.attrs.autoplay)
-										wx.createAudioContext(item.attrs.id, component).play();
-									// #endif
-									// 设置标题
-									else if (item.name == "title" && this.autosetTitle && item.children[0].type == "text")
-										uni.setNavigationBarTitle({
-											title: item.children[0].text
-										})
-									// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
-									if (item.attrs && item.attrs.id) {
-										this.anchors = this.anchors || [];
-										this.anchors.push({
-											id: item.attrs.id,
-											node: component
-										})
-									}
-									// #endif
-								}
-							}
-							if (component.$children.length)
-								getContext(component.$children)
-						}
-					}
 					// #ifdef MP-TOUTIAO
 					setTimeout(() => {
 						// #endif
-						getContext(this.$children);
-						// #ifndef APP-PLUS
-						this.createSelectorQuery()
-						// #endif
-						// #ifdef APP-PLUS
-						uni.createSelectorQuery().in(this)
-							// #endif
-							.select("._contain").boundingClientRect().exec(res => {
-								this.width = (res[0] ? res[0] : res).width;
-								this.$emit("ready", res);
-							});
+						var f = (cs) => {
+							for (var i = cs.length; i--;) {
+								let c = cs[i];
+								if (c.$options.name == "trees") {
+									var observered = false;
+									for (var j = c.nodes.length, item; item = c.nodes[--j];) {
+										if (item.c) continue;
+										if (item.name == "img") {
+											if (item.attrs.i)
+												this.imgList.setItem(item.attrs.i, item.attrs.src);
+											// #ifndef MP-ALIPAY
+											if (!observered && item.attrs.i != "0") {
+												observered = true;
+												if (this.lazyLoad && uni.createIntersectionObserver) {
+													if (c._observer) c._observer.disconnect();
+													c._observer = uni.createIntersectionObserver(c);
+													c._observer.relativeToViewport({
+														top: 900,
+														bottom: 900
+													}).observe("._img", res => {
+														c.imgLoad = true;
+														if (c._observer) {
+															c._observer.disconnect();
+															c._observer = null;
+														}
+													})
+												} else
+													c.imgLoad = true;
+											}
+											// #endif
+										}
+										// #ifndef MP-ALIPAY
+										else if (item.name == "video") {
+											var context = uni.createVideoContext(item.attrs.id, c);
+											context.id = item.attrs.id;
+											this.videoContexts.unshift(context);
+										}
+										// #endif
+										// #ifdef MP-WEIXIN
+										else if (item.name == "audio" && item.attrs.autoplay)
+											wx.createAudioContext(item.attrs.id, c).play();
+										// #endif
+										// 设置标题
+										else if (item.name == "title" && this.autosetTitle && item.children[0].type == "text")
+											uni.setNavigationBarTitle({
+												title: item.children[0].text
+											})
+										// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
+										if (item.attrs && item.attrs.id) {
+											this.anchors = this.anchors || [];
+											this.anchors.push({
+												id: item.attrs.id,
+												node: c
+											})
+										}
+										// #endif
+									}
+								}
+								if (c.$children.length)
+									f(c.$children)
+							}
+						}
+						f(this.$children);
 						// #ifdef MP-TOUTIAO
 					}, 200)
+					this.$emit("load");
 					// #endif
 					// #ifdef APP-PLUS
 					setTimeout(() => {
@@ -478,6 +464,30 @@
 					// #endif
 				})
 				// #endif
+				var height;
+				this.interval = setInterval(() => {
+					// #ifdef H5
+					var res = [this.rtf.getBoundingClientRect()];
+					// #endif
+					// #ifndef APP-PLUS
+					this.createSelectorQuery()
+					// #endif
+					// #ifdef APP-PLUS
+					uni.createSelectorQuery().in(this)
+						// #endif
+						// #ifndef H5
+						.select("._top").boundingClientRect().exec(res => {
+							// #endif
+							this.width = res[0].width;
+							if (res[0].height == height) {
+								this.$emit("ready", res[0])
+								clearInterval(this.interval);
+							}
+							height = res[0].height;
+							// #ifndef H5
+						});
+					// #endif
+				}, 350)
 				if (this.showWithAnimation) this.showAnimation = "animation:show .5s";
 			},
 			getText(nodes = this.html || this.nodes) {
@@ -535,10 +545,10 @@
 							uni.pageScrollTo(obj);
 						})
 				}
-				if (!obj.id) Scroll("._contain");
+				if (!obj.id) Scroll("._top");
 				else {
 					// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-					Scroll("._contain >>> #" + obj.id + ', ._contain >>> .' + obj.id);
+					Scroll("._top >>> #" + obj.id + ', ._top >>> .' + obj.id);
 					// #endif
 					// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
 					for (var anchor of this.anchors)
@@ -554,6 +564,44 @@
 					for (var i = this.videoContexts.length; i--;)
 						if (this.videoContexts[i].id == id) return this.videoContexts[i];
 				return null;
+			},
+			// 预加载
+			preLoad(html, num) {
+				// #ifdef H5
+				if (html.constructor == Array)
+					html = this.Dom2Str(html);
+				var contain = document.createElement('div');
+				contain.innerHTML = html;
+				var imgs = contain.querySelectorAll("img");
+				for (var i = imgs.length - 1; i >= num; i--)
+					imgs[i].removeAttribute("src");
+				// #endif
+				// #ifndef H5
+				if (typeof html == "string") {
+					var id = hash(html);
+					html = new MpHtmlParser(html, this).parse();
+					cache[id] = html;
+				}
+				var wait = [];
+				(function f(ns) {
+					for (var i = 0, n; n = ns[i++];) {
+						if (n.name == "img" && n.attrs.src && !wait.includes(n.attrs.src))
+							wait.push(n.attrs.src);
+						f(n.children || []);
+					}
+				})(html);
+				if (num) wait = wait.slice(0, num);
+				this.wait = (this.wait || []).concat(wait);
+				if (!this.imgs) this.imgs = this.wait.splice(0, 15);
+				else if (this.imgs.length < 15)
+					this.imgs = this.imgs.concat(this.wait.splice(0, 15 - this.imgs.length));
+				// #endif
+			},
+			_load(e) {
+				// #ifndef H5
+				if (this.wait.length)
+					this.$set(this.imgs, e.target.id, this.wait.shift());
+				// #endif
 			},
 			_tap(e) {
 				// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
@@ -628,7 +676,7 @@
 		-webkit-overflow-scrolling: touch;
 	}
 
-	._contain {
+	._top {
 		display: inherit;
 	}
 

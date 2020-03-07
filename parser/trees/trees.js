@@ -9,7 +9,8 @@ Component({
     controls: {}
   },
   properties: {
-    nodes: Array
+    nodes: Array,
+    lazyLoad: Boolean
   },
   methods: {
     // 视频播放事件

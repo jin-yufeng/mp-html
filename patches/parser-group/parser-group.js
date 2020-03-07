@@ -4,17 +4,6 @@
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
 */
-// 图片链接去重
-function deduplicate(src) {
-  if (src.substring(0, 4) != "http") return src;
-  var newSrc = '';
-  for (var j = 0; j < src.length; j++) {
-    newSrc += Math.random() >= 0.5 ? src[j].toUpperCase() : src[j].toLowerCase();
-    if (src[j] == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
-  }
-  newSrc += src.substring(j + 1);
-  return newSrc;
-}
 Component({
   relations: {
     "../parser/parser": {
@@ -40,9 +29,17 @@ Component({
       for (var i = 0; i < this.groups.length; i++) {
         if (this.groups[i]) {
           var cImgList = this.groups[i].imgList;
-          for (var j = 0; j < cImgList.length; j++) {
-            if (!imgList.includes(cImgList[j])) imgList.push(cImgList[j]);
-            else imgList.push(deduplicate(cImgList[j]));
+          for (var j = 0, src; src = cImgList[j]; j++) {
+            if (!imgList.includes(src) || src.substring(0, 4) != "http") imgList.push(src);
+            else {
+				var newSrc = '';
+				for (var j = 0; j < src.length; j++) {
+					newSrc += Math.random() >= 0.5 ? src[j].toUpperCase() : src[j].toLowerCase();
+					if (src[j] == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
+				}
+				newSrc += src.substring(j + 1);
+				imgList.push(newSrc);
+			}
           }
           if (i < comI)
             index += cImgList.length;

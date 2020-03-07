@@ -1,5 +1,16 @@
 <!-- demo.wxml -->
-<parser id="article" lazy-load show-with-animation selectable use-anchor use-cache gesture-zoom domain="https://6874-html-foe72-1259071903.tcb.qcloud.la" bindlinkpress="linkpress" bindimglongtap="imglongtap" bindready="ready" binderror="error">
+<parser id="article"
+  domain="https://6874-html-foe72-1259071903.tcb.qcloud.la"
+  gesture-zoom
+  selectable
+  show-with-animation
+  use-anchor
+  use-cache
+  binderror="error"
+  bindimglongtap="imglongtap"
+  bindlinkpress="linkpress"
+  bindready="ready">
+  <!--loading-->
   <view class="loading-cell">
     <view class="line-bounce">
       <text></text>

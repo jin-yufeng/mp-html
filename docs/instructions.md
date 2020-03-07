@@ -3,9 +3,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 45.2KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.9KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.4KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 45.9KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.6KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.1KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（主要指 `uni-app` 包）：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
@@ -22,8 +22,6 @@
 需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式
 
 !>表格由于较难通过模板循环的方式显示，将直接通过 `rich-text` 进行渲染，因此请尽量避免在表格中加入图片或链接，否则将无法预览或点击（但可以正常显示）  
-
-> 若需要自定义链接受到点击时的效果，可对 `parser/trees` 文件夹下的 `trees.wxss` 中的 `navigator-hover` 进行修改（默认下划线+半透明）
 
 以下统称为 `parser`  
 
@@ -176,7 +174,7 @@
   设置为 `true` 后将把所有设置了 `id` 的标签都通过节点递归的方式显示（否则无法知晓锚点位置），会一定程度上减慢渲染速度，非必要不建议开启  
   
 - 关于 `use-cache`  
-  设置为 `true` 时将对解析结果进行缓存，在一个应用生命周期内多次打开，不需要重复解析，可以节省时间，建议对较长的内容且可能多次打开的内容设置缓存（可以通过 `getApp().parserCache` 管理缓存）  
+  设置为 `true` 时将对解析结果进行缓存，在一个应用生命周期内多次打开，不需要重复解析，可以节省时间，建议对较长的内容且可能多次打开的内容设置缓存  
 
 - 关于 `editable`  
   仅 `uni-app` 的 `H5` 端支持，设置后可以对富文本内容进行编辑，编辑完成后可以通过 `document` 获取内容  
@@ -200,7 +198,8 @@
 | 名称 | 触发 | 说明 |
 |:----:|:----:|----|
 | bindparse | 解析完成时触发 | 返回解析结果（一个 nodes 数组，仅传入的 html 类型为 String 时会触发），可以对该结果进行自定义修改，将在渲染时生效 |
-| bindready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息） |
+| bindload | dom 加载完成时触发 | 所有节点被添加到节点树中时触发，无返回值，可以调用 api |
+| bindready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息），所有图片（除懒加载）加载完成时才会触发，图片较大时可能 **延时较长** |
 | binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码，target 包含出错标签的具体信息，context 是视频的 context 对象，可以设置新的源 |
 | bindimgtap | 图片被点击时触发 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在事件中调用将不进行预览；可用于阻挡 onShow 的调用 |
 | bindimglongtap | 图片被长按时触发 | 返回一个 object，其中 src 是图片链接，可用于显示自定义菜单 |
@@ -262,9 +261,9 @@ linkpress(e){
   
 | 版本 | 功能 | 覆盖率 |
 |:---:|:---:|:---:|
-| >=2.2.5 | 全部正常 | 99.67% |
-| 1.6.3-2.2.4 | 不支持 lazy-load 属性 | 0.31% |
-| <1.6.6 | 无法使用 | 0.02% |
+| >=2.2.5 | 全部正常 | 99.8% |
+| 1.6.3-2.2.4 | 不支持 lazy-load 属性 | 0.2% |
+| <1.6.6 | 无法使用 | <0.01% |
 
 !>使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
 
@@ -272,14 +271,14 @@ linkpress(e){
 
 ### Api ### 
 
-本插件的组件实例中提供了一些 `api` 函数（必须在 `ready` 事件中或之后才能调用），获取实例的方法：  
+本插件的组件实例中提供了一些 `api` 函数，获取实例的方法：  
 - 微信原生框架  
   ```wxml
-  <parser id="article" html="{{html}}" bindready="ready"></parser>
+  <parser id="article" html="{{html}}" bindload="load"></parser>
   ```
   ```javascript
   Page({
-    ready() {
+    load() {
       var context = this.selectComponent("#article");
       // 通过 context 调用 api 函数
     }
@@ -289,13 +288,13 @@ linkpress(e){
   ```vue
   <template>
     <view>
-      <parser ref="article" @ready="ready"></parser>
+      <parser ref="article" @load="load"></parser>
     </view>
   </template>
   <script>
   export default {
     method: {
-      ready() {
+      load() {
         var context = this.$refs.article;
         // 通过 context 调用 api 函数
       }
@@ -303,6 +302,8 @@ linkpress(e){
   }
   </script>
   ```
+
+> 以下 `api` 必须在 `load` 事件中或之后才能调用  
 
 #### getText ####
 功能：获取富文本中的所有文本内容    
@@ -316,6 +317,7 @@ console.log(text);
 #### navigateTo ####
 功能：跳转到指定的锚点  
 输入值：一个 `object`，`id` 为锚点的 `id`（为空时将跳转到组件顶部），`success` 和 `fail` 是成功和失败的回调（需要配合 `use-anchor` 属性使用）  
+为确保跳转位置准确，建议在 `ready` 事件中或之后使用  
 使用方法：  
 ```javascript
 // context 为组件实例
@@ -355,9 +357,11 @@ imgList.each((src, i, arr)=>{
 })
 ```
 
+> 以下 `api` 可以立即执行  
+
 #### setContent ####
 功能：解析并渲染 `html` 内容（功能上同 `html` 属性）  
-说明：当 `html` 为字符串类型时，该字符串并不能直接在视图层进行渲染，而是在插件内部完成解析后再次 `setData` 并进行渲染的，因此，对字符串类型的 `html` 进行 `setData` 是没有必要的，会带来不必要的性能开销（此 `api` 不需要等到 `ready` 事件）  
+说明：当 `html` 为字符串类型时，该字符串并不能直接在视图层进行渲染，而是在插件内部完成解析后再次 `setData` 并进行渲染的，因此，对字符串类型的 `html` 进行 `setData` 是没有必要的，会带来不必要的性能开销  
 输入值：`html` 为富文本字符串  
 
 使用方法：
@@ -372,6 +376,23 @@ this.setData({
 })
 但通过 setData 会带来不必要的性能开销 */
 this.selectComponent("#article").setContent(html);
+```
+
+#### preLoad ####
+功能：预加载富文本中的图片  
+说明：若某段富文本图片较多或内容较长，可以在其他页面或当前页面未进行显示时进行预加载（不会在视图上显示）  
+1. 预加载主要针对图片；同时若传入的字符串，还将缓存解析结果（使用时通过 `use-cache` 属性即可读取）  
+2. 为避免短时间内发起过多图片请求，最多同时加载 `15` 张图片  
+3. 可以同时预加载多段内容，也可以在显示内容的同时预加载其他内容  
+
+输入值：`html`（`String` / `Array`），`num`（最大图片数量，不输入将预加载所有图片）  
+使用方法：
+```wxml
+<parser id="preLoad" />
+```
+```javascript
+// 预加载完毕后在其他页面或当前页面使用这段富文本时就可以不用加载图片
+this.selectComponent("#preLoad").preLoad(html);
 ```
 
 ### 打包工具 ###
@@ -405,7 +426,7 @@ this.selectComponent("#article").setContent(html);
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `6.80KB`（`min` 版本 `5.15KB`）  
+  `6.79KB`（`min` 版本 `5.16KB`）  
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
@@ -495,7 +516,7 @@ error(e){
 4. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
   
 - 大小（与原大小相比增加）  
-  `4.49KB`（`min` 版本：`1.35KB`）  
+  `4.39KB`（`min` 版本：`1.35KB`）  
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
@@ -509,7 +530,7 @@ error(e){
   2. 一个 `parser` 标签内的 `a` 标签可以跳转到另一个 `parser` 标签内的锚点（优先跳转同一个 `parser` 内的锚点，不存在再按照顺序查找，都需要开启 `use-anchor` 属性）  
   3. 一个 `parser` 标签内的视频播放时，将自动暂停该 `group` 内所有 `parser` 标签内的视频（前提是 `autopause` 属性的值为 `true`）  
 - 大小  
-  `2.33KB`  
+  `2.24KB`  
 - 使用方法  
   1. 将 `parser-group` 文件夹拷贝到 `components` 目录下即可（必须与 `parser` 文件夹同级）  
   2. 在需要使用页面的 `json` 文件中添加  
@@ -614,6 +635,7 @@ a = 3;</pre>
 ![高亮效果](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md8.png?sign=e613714b597ceb1fa6d5b802a54fd246&t=1581226152)  
 可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)  
 还可以进一步实现一个高亮的代码编辑框（可以参考示例小程序的 *自定义测试* 页面）  
+*相关 issue：*[#83](https://github.com/jin-yufeng/Parser/issues/83)
 
 ### 长内容处理 ###
 如果富文本内容特别长，通过 `setData` 无法设置或者有超出 `1000` 个标签，可以采用微信官方提供的 [长列表组件](https://developers.weixin.qq.com/miniprogram/dev/extended/component-plus/recycle-view.html) 进行处理（需要将内容拆分成多个章节，且需要提供每个章节的高度），这里提供一个简单的示例  
@@ -709,11 +731,12 @@ Page({
    }
    ```
 4. 通过 `wxss` 设置  
-   通过以下方法可以对所有图片生效（所有 `parser` 组件中的图片），必须写在 `trees.wxss` 中，其他写法可能均不能生效（不推荐）
+   将 `trees.wxss` 中的 `._img` 修改为以下内容（其他写法可能均不能生效）  
    ```css
    ._img {
-     font-size:0;
-     display:block !important;
+     text-indent: 0;
+     font-size: 0;
+     display: block;
    }
    ```  
   
@@ -722,7 +745,7 @@ Page({
 #### 图片懒加载问题 ####  
 部分情况下，可能出现懒加载无效的问题，可以检查是否存在以下问题  
 1. 懒加载的属性名是 `lazy-load` 或 `lazyLoad` 而不是 `lazyload`  
-2. 图片懒加载仅对当前视图以下 `1000px` 以外的图片才有效，请确认文章是否有这么长  
+2. 图片懒加载仅对当前视图以下 `900px` 以外的图片才有效（即图片顶部的位置要在屏幕高度 + `900px` 以外的才会被懒加载），请确认文章是否有这么长  
 3. 文章全是图片或有很多图片  
    图片开始加载的时候，高度会变为 0，然后逐步增加到原大小，这时后面的图片就会进入懒加载的范围而被加载，直到前面图片加载完的部分高度超过懒加载的阈值范围后才会停止加载，因此如果图片很多或全是图片可能一次加载过多图片。这时可以给 `img` 设置一个 `min-height`（可以设置为所有图片高度的最小值），可以一定程度上解决这个问题。
    ```css
@@ -735,6 +758,8 @@ Page({
    ```  
 4. 所有图片或很多图片都在一个 `div` 内  
    为节省 `setData` 的次数，懒加载以一个 `div` 为单位，即一个 `div` 内所有图片一次性加载，而不是每张图片都需要进行一次 `setData`，因此如果一个 `div` 里有过多 `img` 也会一次性加载，如果需要单独加载需要给 `img` 套上一个 `div`  
+5. 第一张图片没有被控制  
+   为优化体验，避免首图（较大概率直接进入视野）因懒加载判断减慢加载速度，将不进行判断直接加载，因此懒加载的控制对于第一张图是无效的
 
 #### 显示公众号网页 ####
 如需显示公众号的文章，可参考以下步骤  

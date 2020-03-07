@@ -185,7 +185,7 @@ const data = {
   "禁止": "⛔"
 }
 module.exports = {
-  parseEmoji: (text) => text.replace(reg, function($, $1) {
+  parseEmoji: (text) => text.replace(reg, ($, $1) => {
     if (data[$1]) {
       if (data[$1].includes("http"))
         return "<img src=\"" + data[$1] + "\" style=\"width:16px;height:16px;display:inline-block\" ignore >"
