@@ -41,6 +41,16 @@
     <source src="demo2.webm" />
   </video>
   ```
+  支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接；若设置 `webp` 图片将只有 `android` 端采用，可用于兼容
+  ```html
+  <picture>
+    <source media="(min-width:400px)" src="high-quality.jpg">
+    <source media="(min-width:250px)" src="middle-quality.jpg">
+    <!--webp 图片将只有 android 端采用-->
+    <source src="xxx.webp">
+    <img src="low-quality.jpg" />
+  </picture>
+  ```
  
 更多功能可见：[功能介绍](https://jin-yufeng.github.io/Parser/#/)
 
@@ -76,8 +86,8 @@ export default{
   | html | String/Array | | 是 | 要显示的富文本数据，格式同 rich-text |
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
   | autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题上 |
+  | compress | Number | 0 | 否 | 压缩等级，可以选择是否移除 id 和 class |
   | domain | String |  | 否 | 主域名，设置后将对于图片地址将自动拼接主域名或协议名 |
-  | editable | Boolean | false | 否 | 是否可编辑，**仅 H5 可用** |
   | gesture-zoom | Boolean | false | 否 | 是否开启双击缩放 |
   | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
   | selectable | Boolean | false | 否 | 是否允许长按复制内容 |

@@ -73,6 +73,8 @@ p {
     sourceCode2: `<pre><code class="language-html"><picture>
   <source media="(min-width:500px)" src="high-quality.jpg" />
   <source media="(min-width:400px)" src="middle-quality.jpg" />
+  <!--webp 图片将只有 android 端采用-->
+  <source src="xxx.webp" />
   <img src="low-quality.jpg" />
 </picture></code></pre>`,
     // 加载提示示例代码
@@ -80,11 +82,19 @@ p {
   加载中...
 </parser></code></pre>`,
     // 智能压缩
-    compress: `<ol style="margin:10px 0 0 -15px">
+    compress: `<ul style="margin:10px 0 0 -15px">
+  <li>移除空标签并自动合并一些不必要的层级</li>
   <li>在非<code>pre</code>标签且没有<code>white-space:pre</code>时自动去除空白符</li>
   <li>压缩<code>style</code>属性的值，去除重复的属性和多余的空格</li>
   <li>移除不支持的属性和一些不支持的标签</li>
-</ol>`,
+</ul>
+<div style="margin-top:10px">
+  通过设置<code>compress</code>属性，还可以实现以下压缩（在匹配完<code>style</code>标签中的样式后）：
+</div>
+<ul style="margin:10px 0 0 -15px">
+  <li>移除所有<code>id</code>属性（将无法使用锚点）</li>
+  <li>移除所有<code>class</code>属性（将无法匹配<code>wxss</code>中的样式）</li>
+</ul>`,
     // 自动填充链接示例代码
     completerCode: `<pre><code class="language-javascript">Page({
   data: {
@@ -104,6 +114,9 @@ p {
     }, {
       name: "audio",
       attrs: "author, autoplay, controls,\nloop, name, poster, src"
+    }, {
+      name: "base",
+      attrs: "href"
     }, {
       name: "div, p",
       attrs: "align"
@@ -233,6 +246,11 @@ export default {
       default: "true",
       notice: "是否自动将 title 标签的内容设置到页面标题"
     }, {
+      name: "compress",
+      type: "Number",
+      default: "0",
+      notice: "压缩等级，可以选择是否移除 id 和 class"
+    }, {
       name: "domain",
       type: "String",
       default: '',
@@ -330,9 +348,9 @@ var video = context.getVideoContext("the-id"); // id 为 the-id 的视频对象
 var videos = context.getVideoContext(); // 获取所有视频的对象</code></pre>
   </li>
   <li><code>imgList</code>
-    <div>功能：获取所有图片数组（这是一个<strong>属性</strong>）
+    <div>功能：获取所有图片数组（这是一个<strong>属性</strong>）</div>
     <div>另外，该数组还提供一个<code>each</code>方法，通过<code>return</code>可以改变数组中的值，该数组用于图片的预览，可以通过此方法设置预览时的大图</div>
-    <pre><code class="language-javascript">// context 是组件对象
+    <pre><code class="language-javascript">// context 是组件实例
 var imgList = context.imgList;
 var cover = imgList[0]; // 首图作为转发封面
 imgList.each((src, i, arr) => {
@@ -341,11 +359,19 @@ imgList.each((src, i, arr) => {
   return src.replace("thumb", "");
 })</code></pre>
   </li>
+  <li><code>rect</code>
+    <div>功能：获取富文本内容的大小和位置（这是一个<strong>属性</strong>）</div>
+    <div>应在<code>ready</code>事件后使用，否则可能无法获取或不准确</div>
+    <pre><code class="language-javascript">// context 是组件实例
+var rect = context.rect;
+console.log(rect.width); // 宽度
+console.log(rect.height); // 高度</code></pre>
+  </li>
   <div style="margin:10px 0 10px 25px">以下<code>api</code>可以立即使用</div>
   <li><code>setContent</code>
     <div>功能：解析和渲染<code>html</code>内容（功能上同<code>html</code>属性）</div>
     <div>说明：当<code>html</code>为<code>string</code>类型时无法直接渲染，需要经过解析后再次<code>setData</code>，因此通过此方法可以避免这次无用的<code>setData</code>，提高性能</div>
-    <div>输入值：<code>html</code>是富文本字符串</div>
+    <div>输入值：<code>html</code>是富文本字符串，<code>append</code>表示是否在尾部追加</div>
     <pre><code class="language-wxml"><parser id="article" /></code></pre>
     <pre style="margin-top:15px"><code class="language-javascript">Page({
   onLoad(){
@@ -371,6 +397,42 @@ imgList.each((src, i, arr) => {
     this.selectComponent("#preLoad").preLoad(html);
   }
 })</code></pre>
+  </li>
+</ol>`,
+    // 配置项示例代码
+    configCode:
+`<ol style="margin-left:-15px">
+  <li><code>filter</code>
+    <div>功能：过滤器函数，可以对解析到的标签进行自定义处理，将在渲染时生效</div>
+    <div>输入值：<code>node</code>为解析到的节点的结构体，<code>context</code>是解析器实例（可以获取一些解析选项和方法）</div>
+    <div>返回值：若返回<code>false</code>，将移除此节点</div>
+    <pre><code class="language-javascript">filter(node, ctx) {
+  if(node.name == "xxx") return false; // 将移除 xxx 标签
+  if(node.name == "yyy") ctx.bubble(); // 不能被 rich-text 包含的标签需要调用此方法
+}</code></pre>
+  </li>
+  <li><code>highlight</code>
+    <div>功能：处理代码高亮</div>
+    <div>输入值：<code>content</code>为<code>pre</code>标签中的内容，<code>attrs</code>是<code>pre</code>标签的属性列表（可以记录语言信息）</div>
+    <div>返回值：高亮处理后的结果</div>
+    <pre><code class="language-javascript">highlight(content, attrs) {
+  attrs["data-content"] = content; // 记录原始文本，可用于长按复制
+  if(attrs.lan)
+    return Prism.highlight(content, Prism.languages[attrs.lan], attrs.lan);
+  else
+    return content;
+}</code></pre>
+  </li>
+  <li><code>onText</code>
+    <div>功能：处理文本（解析到文本时触发，可以替换特殊符号）</div>
+    <div>输入值：<code>text</code>是解析到的文本；<code>hasTag</code>是一个函数，若返回值中含有<code>html</code>标签（如图片）则需要调用，将重新解析这段文本</div>
+    <div>返回值：若不为空将把这段文本设置成返回值</div>
+    <pre><code class="language-javascript">onText(text, hasTag) {
+  if(text.includes("$math$")) {
+    hasTag();
+    retrun text.replace("$math$", "<img src='xxx.jpg'>"); // 替换数学公式符号为图片
+  }
+}</code></pre>
   </li>
 </ol>`,
     // document 补丁包示例代码
@@ -433,6 +495,18 @@ imgList.each((src, i, arr) => {
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.3.12
+    <ol>
+      <li><code>A</code> 增加了<code>compress</code>属性，可以设置压缩等级</li>
+      <li><code>A</code> 配置项中增加了<code>filter</code>和<code>onText</code>方法，可以在解析过程中进行一些自定义的处理</li>
+      <li><code>A</code> 增加了<code>rect</code>的<code>api</code>，可以获取富文本内容大小和位置</li>
+      <li><code>U</code> <code>picture</code>标签中若设置<code>webp</code>的<code>source</code>，将只有<code>android</code>端采用，可用于兼容</li>
+      <li><code>U</code> <code>setContent</code>的<code>api</code>支持传入<code>append</code>参数表示是否在尾部追加（用于加载更多）</li>
+      <li><code>U</code> 支持通过<code>base</code>标签设置主域名（同<code>domain</code>属性，但优先级更低）</li>
+      <li><code>F</code> 修复了在<code>ready</code>事件触发前再次设置数据会导致<code>ready</code>事件不停触发的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.3.7
     <ol>
       <li><code>A</code> 增加了<code>preLoad</code>的<code>api</code>，可以预加载富文本中的图片</li>
@@ -546,18 +620,6 @@ imgList.each((src, i, arr) => {
       <li><code>U</code> <code>cache-id</code>属性更名为<code>use-cache</code>，只用选择是否使用缓存即可，缓存 <code>id</code>会自动通过<code>hash</code>函数获取</li>
       <li><code>D</code> 废弃了<code>html</code>属性的<code>object</code>类型，直接设置<code>array</code>即可（<code>imgList</code>等其他信息可以从<code>nodes</code>中获取）</li>
       <li><code>D</code> 删除了<code>animation-duration</code>属性</code>
-    </ol>
-  </li>
-  </br>
-  <li>2019.12.10
-    <ol>
-      <li><code>A</code> 增加了<code>cache-id</code>属性，可以将解析结果缓存到<code>globalData</code>中，多次打开不用重复解析</li> 
-      <li><code>A</code> 增加了<code>getText</code>的<code>api</code>，可以获取到一个富文本中的所有文本内容</li>
-      <li><code>A</code> 增加了<code>getVideoContext</code>的<code>api</code>，可以获取到视频的<code>context</code>对象，用于操作播放状态</li>
-      <li><code>A</code> 增加了<code>highlight</code>代码高亮处理接口</li>
-      <li><code>U</code> 重构了解析脚本，提高了解析速度，减小了包的大小</li>  
-      <li><code>U</code> 解决了微信最新版开发者工具会报 <code>wx: key = "" does not look like a valid key name</code> 的警告的问题</li>  
-      <li><code>U</code> <code>error</code>事件将返回该视频的<code>context</code>对象，可以修改播放源</li>
     </ol>
   </li>
 </ul>

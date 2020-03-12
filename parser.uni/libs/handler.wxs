@@ -20,7 +20,7 @@ module.exports = {
 			var i, j, res = '';
 			if ((i = style.indexOf("display")) != -1)
 				res = style.substring(i, (j = style.indexOf(';', i)) == -1 ? style.length : j);
-			if (style.indexOf("flex") != -1) res += ';' + style.match(getRegExp("flex[:-][^;]+/g")).join(';');
+			if (style.indexOf("flex") != -1) res += ';' + (style.match(getRegExp("flex[:-][^;]+/g")) || []).join(';');
 			return res;
 		} else return '';
 	},
@@ -32,7 +32,7 @@ module.exports = {
 				attrs: JSON.parse(JSON.stringify(item.attrs))
 			}
 			delete img.attrs.src;
-			img.attrs.style += ";width:20px !important;height:20px !important";
+			img.attrs.style += ";width:20px;height:20px";
 			return [img];
 		} else return [item];
 	},

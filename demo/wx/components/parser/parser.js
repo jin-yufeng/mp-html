@@ -3,29 +3,28 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
+  update：2020/03/12
 */
-const cache = {};
-const config = require("./libs/config.js");
-const CssHandler = require("./libs/CssHandler.js");
-var document; // 引入补丁包
+var cache = {},
+  cfg = require("./libs/config.js"),
+  Parser = require("./libs/MpHtmlParser.js"),
+  fs = wx.getFileSystemManager && wx.getFileSystemManager();
 try {
-  document = require("./libs/document.js");
+  var dom = require("./libs/document.js");
 } catch (e) {}
-const fs = wx.getFileSystemManager ? wx.getFileSystemManager() : null;
-const MpHtmlParser = require("./libs/MpHtmlParser.js");
 // 计算 cache 的 key
 function hash(str) {
-  for (var i = str.length, hash = 5381; i--;)
-    hash += (hash << 5) + str.charCodeAt(i);
-  return hash;
-};
+  for (var i = str.length, val = 5381; i--;)
+    val += (val << 5) + str.charCodeAt(i);
+  return val;
+}
 Component({
   properties: {
     "html": {
       type: null,
-      observer: function(html) {
-        if (this._refresh) return this._refresh = false;
-        this.setContent(html, true);
+      observer(html) {
+        if (this._refresh) this._refresh = false;
+        else this.setContent(html, false, true);
       }
     },
     "autosetTitle": {
@@ -36,6 +35,7 @@ Component({
       type: Boolean,
       value: true
     },
+    "compress": Number,
     "domain": String,
     "gestureZoom": Boolean,
     "lazyLoad": Boolean,
@@ -54,45 +54,45 @@ Component({
     // 图片数组
     this.imgList = [];
     this.imgList.setItem = function(i, src) {
-      if (!src) return;
+      if (!i || !src) return;
       // 去重
-      if (src.includes("http") && this.includes(src)) {
+      if (src.indexOf("http") == 0 && this.includes(src)) {
         var newSrc = '';
         for (var j = 0, c; c = src[j]; j++) {
-          newSrc += Math.random() > 0.5 ? c.toUpperCase() : c;
           if (c == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
+          newSrc += Math.random() > 0.5 ? c.toUpperCase() : c;
         }
-        newSrc += src.substring(j + 1);
+        newSrc += src.substring(j);
         return this[i] = newSrc;
       }
       this[i] = src;
       // 暂存 data src
       if (src.includes("data:image")) {
-        var fileInfo = src.match(/data:image\/(\S+?);(\S+?),(.+)/);
-        if (!fileInfo) return;
-        var filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${fileInfo[1]}`;
+        var info = src.match(/data:image\/(\S+?);(\S+?),(.+)/);
+        if (!info) return;
+        var filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${info[1]}`;
         fs && fs.writeFile({
           filePath,
-          data: fileInfo[3],
-          encoding: fileInfo[2],
-          success: (res) => this[i] = filePath
+          data: info[3],
+          encoding: info[2],
+          success: () => this[i] = filePath
         })
       }
     }
     this.imgList.each = function(f) {
-      for (var i = 0; i < this.length; i++)
+      for (var i = 0, len = this.length; i < len; i++)
         this.setItem(i, f(this[i], i, this));
     }
   },
   detached() {
     // 删除暂存
-    this.imgList.each((item) => {
-      if (item && item.includes(wx.env.USER_DATA_PATH))
-        fs && fs.unlink({
-          filePath: item
+    this.imgList.each(src => {
+      if (src && src.includes(wx.env.USER_DATA_PATH) && fs)
+        fs.unlink({
+          filePath: src
         })
     })
-    clearInterval(this.interval);
+    clearInterval(this._timer);
   },
   methods: {
     // 锚点跳转
@@ -102,155 +102,145 @@ Component({
           errMsg: "Anchor is disabled"
         })
       this.createSelectorQuery()
-        .select("._top" + (obj.id ? ">>>#" + obj.id : '')).boundingClientRect()
+        .select(".top" + (obj.id ? ">>>#" + obj.id : '')).boundingClientRect()
         .selectViewport().scrollOffset().exec(res => {
-          if (!res[0]) {
-            if (this.group) return this.group.navigateTo(this.i, obj);
-            return obj.fail && obj.fail({
-              errMsg: "Label not found"
-            });
-          }
+          if (!res[0])
+            return this.group ? this.group.navigateTo(this.i, obj) :
+              obj.fail && obj.fail({
+                errMsg: "Label not found"
+              });
           obj.scrollTop = res[1].scrollTop + res[0].top;
           wx.pageScrollTo(obj);
         })
     },
     // 获取文本
-    getText(nodes = this.data.html) {
-      var text = '';
-      for (var i = 0, node; node = nodes[i++];) {
-        if (node.type == "text") text += node.text.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-        else if (node.type == "br") text += '\n';
+    getText(ns = this.data.html) {
+      var txt = '';
+      for (var i = 0, n; n = ns[i++];) {
+        if (n.type == "text") txt += n.text.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+        else if (n.type == "br") txt += '\n';
         else {
           // 块级标签前后加换行
-          var block = node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" || (node.name[0] == 'h' && node.name[1] > '0' && node.name[1] < '7');
-          if (block && text && text[text.length - 1] != '\n') text += '\n';
-          if (node.children) text += this.getText(node.children);
-          if (block && text[text.length - 1] != '\n') text += '\n';
-          else if (node.name == "td" || node.name == "th") text += '\t';
+          var br = n.name == 'p' || n.name == "div" || n.name == "tr" || n.name == "li" || (n.name[0] == 'h' && n.name[1] > '0' && n.name[1] < '7');
+          if (br && txt && txt[txt.length - 1] != '\n') txt += '\n';
+          if (n.children) txt += this.getText(n.children);
+          if (br && txt[txt.length - 1] != '\n') txt += '\n';
+          else if (n.name == "td" || n.name == "th") txt += '\t';
         }
       }
-      return text;
+      return txt;
     },
     // 获取视频 context
     getVideoContext(id) {
       if (!id) return this.videoContexts;
       for (var i = this.videoContexts.length; i--;)
         if (this.videoContexts[i].id == id) return this.videoContexts[i];
-      return null;
     },
     // 渲染富文本
-    setContent(html, obversed) {
+    setContent(html, append, _watch) {
       var data = {};
       if (!html) {
-        if (obversed) return;
+        if (_watch || append) return;
         data.html = '';
       } else if (typeof html == "string") {
-        var Parser = new MpHtmlParser(html, this.data);
+        var parser = new Parser(html, this.data);
         // 缓存读取
         if (this.data.useCache) {
-          var hashValue = hash(html);
-          if (cache[hashValue]) data.html = cache[hashValue];
+          var hashVal = hash(html);
+          if (cache[hashVal]) data.html = cache[hashVal];
           else {
-            data.html = Parser.parse();
-            cache[hashValue] = data.html;
+            data.html = parser.parse();
+            cache[hashVal] = data.html;
           }
-        } else data.html = Parser.parse();
+        } else data.html = parser.parse();
+        this._refresh = true;
         this.triggerEvent("parse", data.html);
       } else if (html.constructor == Array) {
-        // 非本插件产生的 array 需要进行一些转换
+        // 转换不符合格式的 array
         if (html.length && html[0].PoweredBy != "Parser") {
-          var Parser = new MpHtmlParser('', this.data);
+          var parser = new Parser('', this.data);
           (function f(ns) {
             for (var i = 0, n; n = ns[i]; i++) {
               if (n.type == "text") continue;
               n.attrs = n.attrs || {};
-              for (var item in n.attrs) {
-                if (!config.trustAttrs[item]) n.attrs[item] = void 0;
-                else if (typeof n.attrs[item] != "string") n.attrs[item] = n.attrs[item].toString();
-              }
-              config.LabelHandler(n, Parser);
-              if (config.ignoreTags[n.name]) {
-                ns.splice(i--, 1);
-                continue;
-              }
-              if (n.children && n.children.length) {
-                Parser._STACK.push(n);
+              for (var key in n.attrs)
+                if (typeof n.attrs[key] != "string") n.attrs[key] = n.attrs[key].toString();
+              parser.matchAttr(n);
+              if (n.children) {
+                parser.STACK.push(n);
                 f(n.children);
-                Parser.popNode(Parser._STACK.pop());
-              } else n.children = void 0;
+                parser.popNode(parser.STACK.pop());
+              }
             }
           })(html);
           data.html = html;
         }
-        if (!obversed) data.html = html;
+        if (!_watch) data.html = html;
       } else if (typeof html == "object" && html.nodes) {
         data.html = html.nodes;
         console.warn("错误的 html 类型：object 类型已废弃");
       } else
         return console.warn("错误的 html 类型：" + typeof html);
-      if (this.data.showWithAnimation) data.showAnimation = "animation: show .5s";
-      if ((this._refresh = !!data.html) || data.showAnimation) this.setData(data);
+      if (append) {
+        this._refresh = true;
+        data.html = (this.data.html || []).concat(data.html);
+      } else if (this.data.showWithAnimation) data.showAm = "animation: show .5s";
+      if (data.html || data.showAm) this.setData(data);
+      // 设置标题
+      if (this.data.html.length && this.data.html[0].title && this.data.autosetTitle)
+        wx.setNavigationBarTitle({
+          title: this.data.html[0].title
+        })
       this.imgList.length = 0;
       this.videoContexts = [];
-      if (document) this.document = new document(data.html || html, "html", this);
-      var nodes = this.selectAllComponents("._top,._top>>>._node");
-      for (var i = nodes.length; i--;) {
-        let node = nodes[i];
-        node._top = this;
-        var observed = !!node._observer;
-        for (var j = node.data.nodes.length, item; item = node.data.nodes[--j];) {
+      if (dom) this.document = new dom(this.data.html, "html", this);
+      var ns = this.selectAllComponents(".top,.top>>>._node");
+      for (let i = 0, n; n = ns[i++];) {
+        n.top = this;
+        for (var j = 0, item; item = n.data.nodes[j++];) {
           if (item.c) continue;
           // 获取图片列表
           if (item.name == "img") {
-            if (item.attrs.i)
-              this.imgList.setItem(item.attrs.i, item.attrs.src);
-            if (!observed && item.attrs.i != "0") {
-              observed = true;
+            this.imgList.setItem(item.attrs.i, item.attrs.src);
+            if (!n.observer && !n.data.imgLoad && item.attrs.i != "0") {
               // 懒加载
-              if (this.data.lazyLoad && node.createIntersectionObserver) {
+              if (this.data.lazyLoad && n.createIntersectionObserver) {
+                n.observer = n.createIntersectionObserver();
                 (wx.nextTick || setTimeout)(() => {
-                  node._observer = node.createIntersectionObserver();
-                  node._observer.relativeToViewport({
+                  n.observer.relativeToViewport({
                     top: 900,
                     bottom: 900
                   }).observe("._img", () => {
-                    node.setData({
+                    n.setData({
                       imgLoad: true
                     })
-                    if (node._observer) {
-                      node._observer.disconnect();
-                      node._observer = void 0;
-                    }
+                    n.observer.disconnect();
                   })
                 }, 50)
               } else
-                node.setData({
+                n.setData({
                   imgLoad: true
                 })
             }
           }
           // 音视频控制
           else if (item.name == "video") {
-            var context = wx.createVideoContext(item.attrs.id, node);
-            context.id = item.attrs.id;
-            this.videoContexts.unshift(context);
+            var ctx = wx.createVideoContext(item.attrs.id, n);
+            ctx.id = item.attrs.id;
+            this.videoContexts.push(ctx);
           } else if (item.name == "audio" && item.attrs.autoplay)
-            wx.createAudioContext(item.attrs.id, node).play();
-          // 设置标题
-          else if (item.name == "title" && this.data.autosetTitle && item.children[0].type == "text")
-            wx.setNavigationBarTitle({
-              title: item.children[0].text
-            })
+            wx.createAudioContext(item.attrs.id, n).play();
         }
       }
       (wx.nextTick || setTimeout)(() => this.triggerEvent("load"), 50);
       var height;
-      this.interval = setInterval(() => {
-        this.createSelectorQuery().select("._top").boundingClientRect(res => {
-          this.width = res.width;
+      clearInterval(this._timer);
+      this._timer = setInterval(() => {
+        this.createSelectorQuery().select(".top").boundingClientRect(res => {
+          this.rect = res;
           if (res.height == height) {
             this.triggerEvent("ready", res)
-            clearInterval(this.interval);
+            clearInterval(this._timer);
           }
           height = res.height;
         }).exec();
@@ -260,7 +250,7 @@ Component({
     preLoad(html, num) {
       if (typeof html == "string") {
         var id = hash(html);
-        html = new MpHtmlParser(html, this.data).parse();
+        html = new Parser(html, this.data).parse();
         cache[id] = html;
       }
       var imgs, wait = [];
@@ -272,63 +262,64 @@ Component({
         }
       })(html);
       if (num) wait = wait.slice(0, num);
-      this.wait = (this.wait || []).concat(wait);
-      if (!this.data.imgs) imgs = this.wait.splice(0, 15);
+      this._wait = (this._wait || []).concat(wait);
+      if (!this.data.imgs) imgs = this._wait.splice(0, 15);
       else if (this.data.imgs.length < 15)
-        imgs = this.data.imgs.concat(this.wait.splice(0, 15 - this.data.imgs.length));
+        imgs = this.data.imgs.concat(this._wait.splice(0, 15 - this.data.imgs.length));
       imgs && this.setData({
         imgs
       });
     },
     _load(e) {
-      if (this.wait.length)
+      if (this._wait.length)
         this.setData({
-          [`imgs[${e.target.id}]`]: this.wait.shift()
+          [`imgs[${e.target.id}]`]: this._wait.shift()
         })
     },
     // 事件处理
     _tap(e) {
-      if (this.data.gestureZoom && e.timeStamp - this.lastTime < 300) {
-        if (this.zoomIn) {
-          this.animation.translateX(0).scale(1).step();
+      if (this.data.gestureZoom && e.timeStamp - this._lastT < 300) {
+        var initY = e.detail.y - e.currentTarget.offsetTop;
+        if (this._zoom) {
+          this._scaleAm.translateX(0).scale(1).step();
           wx.pageScrollTo({
-            scrollTop: (e.detail.y - e.currentTarget.offsetTop + this.initY) / 2 - e.touches[0].clientY,
+            scrollTop: (initY + this._initY) / 2 - e.touches[0].clientY,
             duration: 400
           })
         } else {
           var initX = e.detail.x - e.currentTarget.offsetLeft;
-          this.initY = e.detail.y - e.currentTarget.offsetTop;
-          this.animation = wx.createAnimation({
-            transformOrigin: `${initX}px ${this.initY}px 0`,
+          this._initY = initY;
+          this._scaleAm = wx.createAnimation({
+            transformOrigin: `${initX}px ${this._initY}px 0`,
             timingFunction: "ease-in-out"
           });
-          this.animation.scale(2).step();
-          this.tMax = initX / 2;
-          this.tMin = (initX - this.width) / 2;
-          this.tX = 0;
+          this._scaleAm.scale(2).step();
+          this._tMax = initX / 2;
+          this._tMin = (initX - this.rect.width) / 2;
+          this._tX = 0;
         }
-        this.zoomIn = !this.zoomIn;
+        this._zoom = !this._zoom;
         this.setData({
-          animation: this.animation.export()
+          scaleAm: this._scaleAm.export()
         })
       }
-      this.lastTime = e.timeStamp;
+      this._lastT = e.timeStamp;
     },
     _touchstart(e) {
       if (e.touches.length == 1)
-        this.initX = this.lastX = e.touches[0].pageX;
+        this._initX = this._lastX = e.touches[0].pageX;
     },
     _touchmove(e) {
-      var diff = e.touches[0].pageX - this.lastX;
-      if (this.zoomIn && e.touches.length == 1 && Math.abs(diff) > 20) {
-        this.lastX = e.touches[0].pageX;
-        if ((this.tX <= this.tMin && diff < 0) || (this.tX >= this.tMax && diff > 0)) return;
-        this.tX += (diff * Math.abs(this.lastX - this.initX) * 0.05);
-        if (this.tX < this.tMin) this.tX = this.tMin;
-        if (this.tX > this.tMax) this.tX = this.tMax;
-        this.animation.translateX(this.tX).step();
+      var diff = e.touches[0].pageX - this._lastX;
+      if (this._zoom && e.touches.length == 1 && Math.abs(diff) > 20) {
+        this._lastX = e.touches[0].pageX;
+        if ((this._tX <= this._tMin && diff < 0) || (this._tX >= this._tMax && diff > 0)) return;
+        this._tX += diff * Math.abs(this._lastX - this._initX) * 0.05;
+        if (this._tX < this._tMin) this._tX = this._tMin;
+        if (this._tX > this._tMax) this._tX = this._tMax;
+        this._scaleAm.translateX(this._tX).step();
         this.setData({
-          animation: this.animation.export()
+          scaleAm: this._scaleAm.export()
         })
       }
     }

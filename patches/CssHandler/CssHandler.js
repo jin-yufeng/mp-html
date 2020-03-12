@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
 */
-const config = require("./config.js");
+const cfg = require("./config.js");
 // 匹配 class
 function matchClass(match, selector) {
   if (!match || !match.length || !selector || !selector.length) return false;
@@ -38,15 +38,20 @@ function matchStyle(match_name, match_class, match_id, selector) {
   return -1;
 }
 class CssHandler {
-  constructor(tagStyle = {}) {
-    this.styles = Object.assign({}, tagStyle);
-  };
-  getStyle(data) {
-    var style = '';
-    data = data.replace(/<[sS][tT][yY][lL][eE][\s\S]*?>([\s\S]*?)<\/[sS][tT][yY][lL][eE][\s\S]*?>/g, ($, $1) => (style += $1, ''));
-    this.styles = parseCss(style, this.styles);
-    return data;
-  };
+  constructor(tagStyle = {}, screenWidth) {
+    this.screenWidth = screenWidth;
+    this.styles = [];
+    var styles = Object.assign({}, cfg.userAgentStyles);
+    for (var item in tagStyle)
+      styles[item] = (styles[item] ? styles[item] + ';' : '') + tagStyle[item];
+    for (var key in styles) {
+      this.styles.push({
+        key,
+        content: styles[key]
+      })
+    }
+  }
+  getStyle = data => parseCss(data, this.styles, this.screenWidth);
   match(name, attrs, element) {
     var match_class = [];
     if (attrs.class) {
@@ -101,13 +106,13 @@ class CssHandler {
       }
     }
     if (!element.i.length) {
-      element.i = undefined;
-      element.index = undefined;
+      element.i = void 0;
+      element.index = void 0;
     }
     if (!element.pseudo.length)
-      element.pseudo = undefined;
+      element.pseudo = void 0;
     return matchedName + ';' + matchedClass + ";" + matchedId + ";";
-  };
+  }
   pop(element) {
     // 多层class匹配标记
     if (element.i) {
@@ -116,8 +121,8 @@ class CssHandler {
         this.styles[j].key = this.styles[j].list[element.index[i]];
         this.styles[j].index = element.index[i];
       }
-      element.i = undefined;
-      element.index = undefined;
+      element.i = void 0;
+      element.index = void 0;
     }
     // 伪类
     if (element.pseudo) {
@@ -149,18 +154,7 @@ class CssHandler {
   }
 }
 
-function parseCss(data, tagStyle) {
-  var keys = [];
-  for (var item in config.userAgentStyles) {
-    if (tagStyle[item]) tagStyle[item] = config.userAgentStyles[item] + ';' + tagStyle[item];
-    else tagStyle[item] = config.userAgentStyles[item];
-  }
-  for (var key in tagStyle) {
-    keys.push({
-      key,
-      content: tagStyle[key]
-    })
-  }
+function parseCss(data, keys, screenWidth) {
   var j, i = 0;
 
   function ignore() {
@@ -183,7 +177,7 @@ function parseCss(data, tagStyle) {
         var info = name.match(/\((.+?):(.+?)\)/);
         if (info && info[2].includes("px")) {
           var value = parseInt(info[2]);
-          if ((info[1] == "min-width" && config.screenWidth > value) || (info[1] == "max-width" && config.screenWidth < value)) {
+          if ((info[1] == "min-width" && screenWidth > value) || (info[1] == "max-width" && screenWidth < value)) {
             i = j + 1;
             continue;
           }
@@ -247,6 +241,5 @@ function parseCss(data, tagStyle) {
       keys.push(item)
     }
   }
-  return keys;
 }
 module.exports = CssHandler;

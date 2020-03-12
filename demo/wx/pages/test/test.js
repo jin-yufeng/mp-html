@@ -181,7 +181,7 @@ Page({
   <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>
 </div>`;
         else
-          template = "[GitHub链接](https://github.com/jin-yufeng/Parser)";
+          template = "[GitHub 链接](https://github.com/jin-yufeng/Parser)";
         break;
       case "code":
         if (this.data.index == "0")

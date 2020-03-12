@@ -47,11 +47,13 @@
     <source src="demo2.webm" />
   </video>
   ```
-  支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接
+  支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接；若设置 `webp` 图片将只有 `android` 端采用，可用于兼容  
   ```html
   <picture>
     <source media="(min-width:400px)" src="high-quality.jpg">
     <source media="(min-width:250px)" src="middle-quality.jpg">
+    <!--webp 图片将只有 android 端采用-->
+    <source src="xxx.webp">
     <img src="low-quality.jpg" />
   </picture>
   ```
@@ -62,9 +64,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 45.9KB | 微信小程序插件包 |
-| parser.min | 30.6KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 59.1KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 43.8KB | 微信小程序插件包 |
+| parser.min | 29.7KB | 微信小程序插件包压缩版（功能相同） |
+| parser.uni | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -93,7 +95,7 @@
    ```
 - `demo/wx` 文件夹下的是微信小程序 `富文本插件` 示例程序的源码，可供参考  
 
-### 在uni-app中使用 ###
+### 在 uni-app 中使用 ###
 1. 复制 `parser.uni` 包到 `components` 目录下（更名为 `jyf-parser`）  
 2. 在需要使用页面的 `vue` 文件中添加  
    
@@ -129,6 +131,7 @@
 | html | String/Array | | 是 | 要显示的富文本数据，格式同 rich-text |
 | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
 | autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题 |
+| compress | Number | 0 | 否 | 压缩等级，可以选择是否移除 id 和 class |
 | domain | String |  | 否 | 主域名，设置后将给链接自动拼接主域名或协议名 |
 | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
 | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
@@ -190,18 +193,26 @@
 
 
 ## 更新日志 ##
+- 2020.3.12  
+  1. `A` 增加了 `compress` 属性，可以设置压缩等级 [详细](https://jin-yufeng.github.io/Parser/#/instructions#compress)  
+  2. `A` 配置项中增加了 `filter` 和 `onText` 方法，可以在解析过程中进行自定义处理 [详细](https://jin-yufeng.github.io/Parser/#/instructions#配置项)  
+  3. `A` 增加了 `rect` 的 `api`，可以获取内容的大小和位置 [详细](https://jin-yufeng.github.io/Parser/#/instructions#rect)  
+  4. `U` `picture` 标签中若设置 `webp` 的 `source`，将只有 `android` 端采用，可用于兼容 [详细](https://jin-yufeng.github.io/Parser/#/#多媒体多资源加载)  
+  5. `U` `setContent` 的 `api` 支持传入 `append` 参数表示是否在尾部追加（用于加载更多）[详细](https://jin-yufeng.github.io/Parser/#/instructions#setcontent)  
+  6. `U` 支持通过 `base` 标签设置主域名（同 `domain` 属性，但优先级更低）  
+  7. `F` 修复了在 `ready` 事件触发前再次设置数据会导致 `ready` 事件不停触发的问题  
+
 - 2020.3.7
   1. `A` 增加了 `preLoad` 的 `api`，可以预加载富文本中的图片 [详细](https://jin-yufeng.github.io/Parser/#/instructions#preload)
   2. `A` 增加了 `bindload` 事件（`dom` 加载完成时触发，即原 `ready` 事件，`ready` 事件更改为所有图片(除懒加载)加载完毕时触发，可以获取准确大小）[详细](https://jin-yufeng.github.io/Parser/#/instructions#事件)  
   3. `U` 优化了不开启 `lazy-load` 属性时的加载速度；另外开启懒加载时，首图（较大概率直接进入视野）也将不经过判断直接加载，避免因懒加载判断拖慢加载速度  
 
 - 2020.3.1  
-  1. `A` `uni-app` 包 `H5` 端增加 `editable` 属性，可以编辑内容  
-  2. `U` 支持 `picture` 标签，可以在不同大小的屏幕上显示不同链接的图片 [详细](https://jin-yufeng.github.io/Parser/#/#多媒体多资源加载)  
-  3. `U` 支持在 `sub`、`sup` 标签中使用 `a` 标签  
-  4. `U` 给 `document` 补丁包添加和修改了一些方法 [详细](https://jin-yufeng.github.io/Parser/#/instructions#document)  
-  5. `F` 修复了由于自动压缩带来的一些问题（主要是 `background-image`）  
-  6. `F` 修复了使用 `show-with-animation` 属性时个别情况下会白屏的问题 [详细](https://github.com/jin-yufeng/Parser/issues/82)
+  1. `U` 支持 `picture` 标签，可以在不同大小的屏幕上显示不同链接的图片 [详细](https://jin-yufeng.github.io/Parser/#/#多媒体多资源加载)  
+  2. `U` 支持在 `sub`、`sup` 标签中使用 `a` 标签  
+  3. `U` 给 `document` 补丁包添加和修改了一些方法 [详细](https://jin-yufeng.github.io/Parser/#/instructions#document)  
+  4. `F` 修复了由于自动压缩带来的一些问题（主要是 `background-image`）  
+  5. `F` 修复了使用 `show-with-animation` 属性时个别情况下会白屏的问题 [详细](https://github.com/jin-yufeng/Parser/issues/82)
 
 - 2020.2.26
   1. `A` 添加了 `parser-group` 补丁包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#parser-group)  

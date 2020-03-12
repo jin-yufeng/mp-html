@@ -1,17 +1,25 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.03.12 ####
+1. `A` 增加了 `compress` 属性，可以设置压缩等级 [详细](/instructions#compress)  
+2. `A` 配置项中增加了 `filter` 和 `onText` 方法，可以在解析过程中进行自定义处理 [详细](/instructions#配置项)  
+3. `A` 增加了 `rect` 的 `api`，可以获取内容的大小和位置 [详细](/instructions#rect)  
+4. `U` `picture` 标签中若设置 `webp` 的 `source`，将只有 `android` 端采用，可用于兼容 [详细](/features#多媒体多资源加载)  
+5. `U` `setContent` 的 `api` 支持传入 `append` 参数表示是否在尾部追加（用于加载更多）[详细](/instructions#setContent)  
+6. `U` 支持通过 `base` 标签设置主域名（同 `domain` 属性，但优先级更低）  
+7. `F` 修复了在 `ready` 事件触发前再次设置数据会导致 `ready` 事件不停触发的问题  
+
 #### 2020.03.07 ####
 1. `A` 增加了 `preLoad` 的 `api`，可以预加载富文本中的图片 [详细](/instructions#preLoad)
 2. `A` 增加了 `bindload` 事件（`dom` 加载完成时触发，即原 `ready` 事件，`ready` 事件更改为所有图片(除懒加载)加载完毕时触发，可以获取准确大小）[详细](/instructions#事件)  
 3. `U` 优化了不开启 `lazy-load` 属性时的加载速度；另外开启懒加载时，首图（较大概率直接进入视野）也将不经过判断直接加载，避免因懒加载判断拖慢加载速度
 
 #### 2020.03.01 ####
-1. `A` `uni-app` 包 `H5` 端增加 `editable` 属性，可以编辑内容  
-2. `U` 支持 `picture` 标签，可以在不同大小的屏幕上显示不同链接的图片 [详细](/features#多媒体多资源加载)  
-3. `U` 支持在 `sub`、`sup` 标签中使用 `a` 标签  
-4. `U` 给 `document` 补丁包添加和修改了一些方法 [详细](/instructions#document)  
-5. `F` 修复了由于自动压缩带来的一些问题（主要是 `background-image`）  
-6. `F` 修复了使用 `show-with-animation` 属性时个别情况下会白屏的问题 [详细](https://github.com/jin-yufeng/Parser/issues/82)  
+1. `U` 支持 `picture` 标签，可以在不同大小的屏幕上显示不同链接的图片 [详细](/features#多媒体多资源加载)  
+2. `U` 支持在 `sub`、`sup` 标签中使用 `a` 标签  
+3. `U` 给 `document` 补丁包添加和修改了一些方法 [详细](/instructions#document)  
+4. `F` 修复了由于自动压缩带来的一些问题（主要是 `background-image`）  
+5. `F` 修复了使用 `show-with-animation` 属性时个别情况下会白屏的问题 [详细](https://github.com/jin-yufeng/Parser/issues/82)  
 
 #### 2020.02.26 ####
 1. `A` 添加了 `parser-group` 补丁包 [详细](/instructions#parser-group)  
@@ -161,7 +169,7 @@
 4. `F` 修复了 `autopause` 属性在某些情况下会失效的问题  
 
 #### 2019.09.18 #### 
-1. `A` 增加了在 `wepy` 中的使用方法 [详细](/instructions#在wepy中使用)  
+1. `A` 增加了在 `wepy` 中的使用方法 [详细](/instructions#在-wepy-中使用)  
 2. `F` 修复了部分情况下 `style` 标签解析时由于缺少 `;` 导致错误样式匹配失败的问题
 3. `F` 修复了 `0917` 版本中 `a` 标签失效的问题 [详细](https://github.com/jin-yufeng/Parser/issues/28)  
 

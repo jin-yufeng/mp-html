@@ -4,6 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
+  update：2020/03/12
 -->
 <template>
 	<view class="interlayer">
@@ -132,41 +133,41 @@
 		},
 		mounted() {
 			// 获取顶层组件
-			this._top = this.$parent;
-			while (this._top.$options.name != "parser") {
-				if (this._top._top) {
-					this._top = this._top._top;
+			this.top = this.$parent;
+			while (this.top.$options.name != "parser") {
+				if (this.top.top) {
+					this.top = this.top.top;
 					break;
 				}
-				this._top = this._top.$parent;
+				this.top = this.top.$parent;
 			}
 		},
 		// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
 		beforeDestroy() {
-			if (this._observer)
-				this._observer.disconnect();
+			if (this.observer)
+				this.observer.disconnect();
 		},
 		// #endif
 		methods: {
 			// #ifndef MP-ALIPAY
 			play(e) {
-				if (this._top.videoContexts.length > 1 && this._top.autopause)
-					for (var i = this._top.videoContexts.length; i--;)
-						if (this._top.videoContexts[i].id != e.currentTarget.id)
-							this._top.videoContexts[i].pause();
+				if (this.top.videoContexts.length > 1 && this.top.autopause)
+					for (var i = this.top.videoContexts.length; i--;)
+						if (this.top.videoContexts[i].id != e.currentTarget.id)
+							this.top.videoContexts[i].pause();
 			},
 			// #endif
 			imgtap(e) {
 				var attrs = e.currentTarget.dataset.attrs;
 				if (!attrs.ignore) {
 					var preview = true;
-					this._top.$emit("imgtap", {
-						id: e.currentTarget.id,
+					this.top.$emit("imgtap", {
+						id: e.target.id,
 						src: attrs.src,
 						ignore: () => preview = false
 					})
 					if (preview) {
-						var urls = this._top.imgList,
+						var urls = this.top.imgList,
 							current = urls[attrs.i] ? parseInt(attrs.i) : (urls = [attrs.src], 0);
 						uni.previewImage({
 							current,
@@ -176,10 +177,10 @@
 				}
 			},
 			imglongtap(e) {
-				var attrs = e.currentTarget.dataset.attrs;
+				var attrs = e.item.dataset.attrs;
 				if (!attrs.ignore)
-					this._top.$emit("imglongtap", {
-						id: e.currentTarget.id,
+					this.top.$emit("imglongtap", {
+						id: e.target.id,
 						src: attrs.src
 					})
 			},
@@ -187,7 +188,7 @@
 				var jump = true,
 					attrs = e.currentTarget.dataset.attrs;
 				attrs.ignore = () => jump = false;
-				this._top.$emit("linkpress", attrs);
+				this.top.$emit("linkpress", attrs);
 				if (jump) {
 					// #ifdef MP
 					if (attrs["app-id"]) {
@@ -199,8 +200,8 @@
 					// #endif
 					if (attrs.href) {
 						if (attrs.href[0] == '#') {
-							if (this._top.useAnchor)
-								this._top.navigateTo({
+							if (this.top.useAnchor)
+								this.top.navigateTo({
 									id: attrs.href.substring(1)
 								})
 						} else if (attrs.href.indexOf("http") == 0 || attrs.href.indexOf("//") == 0) {
@@ -223,11 +224,10 @@
 								// #endif
 								uni.setClipboardData({
 									data: attrs.href,
-									success() {
+									success: () =>
 										uni.showToast({
 											title: "链接已复制"
-										});
-									}
+										})
 								});
 						} else
 							uni.navigateTo({
@@ -237,7 +237,7 @@
 				}
 			},
 			error(e) {
-				var context, target = e.currentTarget;
+				var context,target = e.currentTarget;
 				if (target.dataset.from == "video" || target.dataset.from == "audio") {
 					// 加载其他 source
 					var index = this.controls[target.id] ? this.controls[target.id].index + 1 : 1;
@@ -245,7 +245,7 @@
 						this.$set(this.controls[target.id], "index", index);
 					if (target.dataset.from == "video") context = uni.createVideoContext(target.id, this)
 				}
-				this._top && this._top.$emit("error", {
+				this.top && this.top.$emit("error", {
 					source: target.dataset.from,
 					target,
 					errMsg: e.detail.errMsg,

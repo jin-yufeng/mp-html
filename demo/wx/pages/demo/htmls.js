@@ -1,4 +1,5 @@
-var article1 = `<style>
+var article1 = `<head>
+<style>
   body {
     margin-left:3%;
     margin-right:3%;
@@ -7,6 +8,7 @@ var article1 = `<style>
   }
 </style>
 <title>功能示例</title>
+</head>
 <body>
   <section style="border:0px none;">
     <section style="padding:10px;">

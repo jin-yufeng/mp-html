@@ -4,7 +4,7 @@
   display: inline;
 }
 ._blockquote, ._div, ._p, ._ul, ._ol, ._li {
-  display:block;
+  display: block;
 }
 ._b, ._strong {
   font-weight: bold;

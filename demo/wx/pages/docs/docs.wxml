@@ -64,7 +64,9 @@
         <parser html="{{sourceCode}}" tag-style="{{tagStyle}}" /> 在
         <code>picture</code>标签中设置多个
         <code>source</code>，可以在不同大小的屏幕上显示不同的图片（通过
-        <code>media</code>查询），对于较大的图片可以进行优化，示例：
+        <code>media</code>查询），对于较大的图片可以进行优化；若设置
+        <code>webp</code>图片将只有
+        <code>android</code>采用，可用于兼容，示例：
         <parser html="{{sourceCode2}}" tag-style="{{tagStyle}}" />
       </view>
       <!--内容可复制-->
@@ -164,9 +166,9 @@
       <view class="weui-article__h2">性能指标</view>
       <view class="weui-article__section">
         本插件解析和渲染效率高；轻量化（
-        <code>45.9KB</code>，
+        <code>43.8KB</code>，
         <code>min</code>版本
-        <code>30.6KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+        <code>29.7KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
         <parser html="{{errorCode}}" tag-style="{{tagStyle}}" />
       </view>
       <view class="link" hover-class="link-hover" style="display:block;text-align:center" bindtap="nextSection">下一章：使用方法</view>
@@ -222,6 +224,13 @@
         本插件实例中提供了一些
         <code>api</code>函数，获取实例的方法：
         <parser html="{{apiCode}}" tag-style="{{tagStyle}}" />
+      </view>
+      <!--配置项-->
+      <view class="weui-article__h2">配置项</view>
+      <view class="weui-article__section">
+        支持在
+        <code>config.js</code>中配置一些解析过程中的自定义处理器
+        <parser html="{{configCode}}" tag-style="{{tagStyle}}" />
       </view>
       <!--使用外部样式-->
       <view class="weui-article__h2">使用外部样式</view>

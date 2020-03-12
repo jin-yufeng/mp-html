@@ -20,7 +20,7 @@ export default {
 			var i, j, res = '';
 			if ((i = style.indexOf("display")) != -1)
 				res = style.substring(i, (j = style.indexOf(';', i)) == -1 ? style.length : j);
-			if (style.indexOf("flex") != -1) res += ';' + style.match(getRegExp("flex[:-][^;]+/g")).join(';');
+			if (style.indexOf("flex") != -1) res += ';' + (style.match(getRegExp("flex[:-][^;]+/g")) || []).join(';');
 			return res;
 		} else return '';
 	},

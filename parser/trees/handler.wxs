@@ -20,7 +20,8 @@ module.exports = {
       var i, j, res = '';
       if ((i = style.indexOf("display")) != -1)
         res = style.substring(i, (j = style.indexOf(';', i)) == -1 ? style.length : j);
-      if (style.indexOf("flex") != -1) res += ';' + style.match(getRegExp("flex[:-][^;]+/g")).join(';');
+      if (style.indexOf("flex") != -1)
+        res += ';' + (style.match(getRegExp("flex[:-][^;]+/g")) || []).join(';');
       return res;
     } else return '';
   },
@@ -28,7 +29,7 @@ module.exports = {
   getNode: function(item, imgLoad) {
     if (!imgLoad && item.attrs.i != "0") {
       delete item.attrs.src;
-      item.attrs.style += ";width:20px !important;height:20px !important";
+      item.attrs.style += ";width:20px;height:20px";
     }
     return [item];
   },

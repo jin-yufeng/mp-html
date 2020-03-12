@@ -3,114 +3,100 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
+  update：2020/03/12
 */
-const config = require("./config.js");
+var cfg = require("./config.js");
 class CssHandler {
-  constructor(tagStyle = {}) {
-    this.styles = Object.assign({}, tagStyle);
-  };
-  getStyle(data) {
-    var style = '';
-    data = data.replace(/<[sS][tT][yY][lL][eE][\s\S]*?>([\s\S]*?)<\/[sS][tT][yY][lL][eE][\s\S]*?>/g, ($, $1) => (style += $1, ''));
-    this.styles = new CssParser(style, this.styles).parse();
-    return data;
-  };
+  constructor(tagStyle) {
+    var styles = Object.assign({}, cfg.userAgentStyles);
+    for (var item in tagStyle)
+      styles[item] = (styles[item] ? styles[item] + ';' : '') + tagStyle[item];
+    this.styles = styles;
+  }
+  getStyle = data => this.styles = new CssParser(data, this.styles).parse();
   match(name, attrs) {
     var tmp, matched = (tmp = this.styles[name]) ? tmp + ';' : '';
     if (attrs.class) {
-      var classes = attrs.class.split(' ');
-      for (var i = 0; i < classes.length; i++)
-        if (tmp = this.styles['.' + classes[i]])
+      var items = attrs.class.split(' ');
+      for (var i = 0, item; item = items[i]; i++)
+        if (tmp = this.styles['.' + item])
           matched += tmp + ';';
     }
     if (tmp = this.styles['#' + attrs.id])
       matched += tmp + ';';
     return matched;
-  };
+  }
 }
 module.exports = CssHandler;
 class CssParser {
-  constructor(data, tagStyle) {
+  constructor(data, init) {
     this.data = data;
-    this.res = tagStyle;
-    for (var item in config.userAgentStyles) {
-      if (tagStyle[item]) tagStyle[item] = config.userAgentStyles[item] + ';' + tagStyle[item];
-      else tagStyle[item] = config.userAgentStyles[item];
-    }
-    this._comma = false;
-    this._floor = 0;
-    this._i = 0;
-    this._list = [];
-    this._start = 0;
-    this._state = this.Space;
-  };
+    this.floor = 0;
+    this.i = 0;
+    this.list = [];
+    this.res = init;
+    this.state = this.Space;
+  }
   parse() {
-    for (var len = this.data.length; this._i < len; this._i++)
-      this._state(this.data[this._i]);
+    for (var c; c = this.data[this.i]; this.i++)
+      this.state(c);
     return this.res;
-  };
+  }
+  section = () => this.data.substring(this.start, this.i);
+  isLetter = c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
   // 状态机
   Space(c) {
-    if (c == '.' || c == '#' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-      this._start = this._i;
-      this._state = this.StyleName;
-    } else if (c == '/' && this.data[this._i + 1] == '*')
+    if (c == '.' || c == '#' || this.isLetter(c)) {
+      this.start = this.i;
+      this.state = this.Name;
+    } else if (c == '/' && this.data[this.i + 1] == '*')
       this.Comment();
-    else if (!config.blankChar[c] && c != ';')
-      this._state = this.Ignore;
-  };
+    else if (!cfg.blankChar[c] && c != ';')
+      this.state = this.Ignore;
+  }
   Comment() {
-    this._i = this.data.indexOf("*/", this._i) + 1;
-    if (!this._i) this._i = this.data.length;
-    this._state = this.Space;
-  };
+    this.i = this.data.indexOf("*/", this.i) + 1;
+    if (!this.i) this.i = this.data.length;
+    this.state = this.Space;
+  }
   Ignore(c) {
-    if (c == '{') this._floor++;
-    else if (c == '}' && !--this._floor) {
-      this._list = [];
-      this._state = this.Space;
-    }
-  };
-  StyleName(c) {
-    if (config.blankChar[c]) {
-      if (this._start != this._i)
-        this._list.push(this.data.substring(this._start, this._i));
-      this._state = this.NameSpace;
+    if (c == '{') this.floor++;
+    else if (c == '}' && !--this.floor) this.state = this.Space;
+  }
+  Name(c) {
+    if (cfg.blankChar[c]) {
+      this.list.push(this.section());
+      this.state = this.NameSpace;
     } else if (c == '{') {
-      this._list.push(this.data.substring(this._start, this._i));
-      this._start = this._i + 1;
+      this.list.push(this.section());
       this.Content();
     } else if (c == ',') {
-      this._list.push(this.data.substring(this._start, this._i));
-      this._start = this._i + 1;
-      this._comma = true;
-    } else if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < '0' || c > '9') && c != '.' && c != '#' && c != '-' && c != '_')
-      this._state = this.Ignore;
-  };
+      this.list.push(this.section());
+      this.Comma();
+    } else if (!this.isLetter(c) && (c < '0' || c > '9') && c != '-' && c != '_')
+      this.state = this.Ignore;
+  }
   NameSpace(c) {
-    if (c == '{') {
-      this._start = this._i + 1;
-      this.Content();
-    } else if (c == ',') {
-      this._comma = true;
-      this._start = this._i + 1;
-      this._state = this.StyleName;
-    } else if (!config.blankChar[c]) {
-      if (this._comma) {
-        this._state = this.StyleName;
-        this._start = this._i--;
-        this._comma = false;
-      } else this._state = this.Ignore;
+    if (c == '{') this.Content();
+    else if (c == ',') this.Comma();
+    else if (!cfg.blankChar[c]) this.state = this.Ignore;
+  }
+  Comma() {
+    while (cfg.blankChar[this.data[++this.i]]);
+    if (this.data[this.i] == '{') this.Content();
+    else {
+      this.start = this.i--;
+      this.state = this.Name;
     }
-  };
+  }
   Content() {
-    this._i = this.data.indexOf('}', this._i);
-    if (this._i == -1) this._i = this.data.length;
-    var content = this.data.substring(this._start, this._i);
-    for (var i = this._list.length, item; item = this._list[--i];)
+    this.start = ++this.i;
+    if ((this.i = this.data.indexOf('}', this.i)) == -1) this.i = this.data.length;
+    var content = this.section();
+    for (var i = 0, item; item = this.list[i++];)
       if (this.res[item]) this.res[item] += ';' + content;
       else this.res[item] = content;
-    this._list = [];
-    this._state = this.Space;
+    this.list = [];
+    this.state = this.Space;
   }
 }

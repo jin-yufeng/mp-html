@@ -32,8 +32,8 @@
     </view>
     <trees class="_node _li" lazy-load="{{lazyLoad}}" nodes="{{item.children}}" />
   </view>
-  <!--添加自定义标签-->
-  <rich-text wx:elif="{{item.name=='pre'}}" id="{{item.attrs.id}}" style="display:block" nodes="{{[item]}}" bindlongpress="copyCode" />
+  <!--自定义标签-->
+  <rich-text wx:elif="{{item.name=='pre'}}" class="_p" nodes="{{[item]}}" data-content="{{item.attrs['data-content']}}" bindlongpress="copyCode" />
   <!--富文本-->
   <rich-text wx:elif="{{handler.useRichText(item)}}" id="{{item.attrs.id}}" class="_p __{{item.name}}" style="{{handler.getStyle(item.attrs.style)}}" nodes="{{[item]}}" />
   <!--继续递归-->

@@ -188,13 +188,11 @@ module.exports = {
   parseEmoji: (text) => text.replace(reg, ($, $1) => {
     if (data[$1]) {
       if (data[$1].includes("http"))
-        return "<img src=\"" + data[$1] + "\" style=\"width:16px;height:16px;display:inline-block\" ignore >"
-      else
-        return data[$1];
-    } else
-      return $;
+        return `<img src="${data[$1]}" style="width:16px;height:16px;display:inline-block" ignore>`;
+      else return data[$1];
+    } else return $;
   }),
   getEmoji: (key) => data[key],
   setEmoji: (key, emoji) => data[key] = emoji,
-  removeEmoji: (key) => data[key] = undefined
+  removeEmoji: (key) => data[key] = void 0
 }

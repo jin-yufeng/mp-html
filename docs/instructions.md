@@ -3,11 +3,11 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 45.9KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.6KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.1KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 43.8KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.7KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
-各平台差异（主要指 `uni-app` 包）：
+各平台差异（`uni-app` 包）：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
 3. 百度、支付宝小程序和 `APP` 不支持 `gesture-zoom` 属性  
@@ -50,7 +50,7 @@
 
 >[demo/wx](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) 文件夹下的是微信小程序 [富文本插件](#立即体验) 示例程序的源码，可供参考  
 
-### 在uni-app中使用 ###
+### 在 uni-app 中使用 ###
 - 使用 `uni-app` 包（可以编译到所有小程序平台）  
   1. 复制 [parser](#插件包说明) 文件夹到 `components` 目录下（更名为 `jyf-parser`）  
   2. 在需要使用页面的`vue`文件中添加  
@@ -85,7 +85,7 @@
 ### 在其他框架中使用 ###
 在 `mpVue`、`wepy` 等框架中**没有专用包**，但也可以引入原生包使用  
 
-#### 在mpVue中使用 ####
+#### 在 mpVue 中使用 ####
 1. 下载 [parser](#插件包说明) 文件夹至 `static` 目录下
 2. 在 `src` 目录下需要使用本插件的页面文件夹下添加 `json` 文件
    ```json
@@ -111,7 +111,7 @@
    </script>
    ```
  
-#### 在wepy中使用 ####
+#### 在 wepy 中使用 ####
 测试版本：`V1.7.3`
 1. 将 [parser](插件包说明) 文件夹复制到 `/src/components` 目录下  
    （也可以直接复制到 `/dist/components` 目录下，这样 `wepy` 不会对插件包进行编译和压缩）    
@@ -140,7 +140,7 @@
 
 !>如果出现 `Components not found` 错误，则用 `wepy build --no-cache --watch` 命令清理缓存，重新编译  
 
-#### 在taro中使用 ####
+#### 在 taro 中使用 ####
 由 [@xPixv](https://github.com/xPixv) 提供，请参考：  
 [Github链接](https://github.com/xPixv/Taro-ParserRichText)  
 [Taro物料市场](https://taro-ext.jd.com/plugin/view/5d35903e9b6a1d4027780154)
@@ -149,9 +149,10 @@
 
 | 属性 | 类型 | 默认值 | 必填 | 说明 | 添加日期 |
 |:----:|:----:|:----:|:----:|----|:---:|
-| html | String/Array | | 是 | 要显示的富文本数据，格式同 [rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html) | - |
+| html | String/Array |  | 是 | 要显示的富文本数据，格式同 [rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html) | - |
 | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 | [20190510](/changelog#_20190510) |
 | autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题 | [20190724](/changelog#_20190724) |
+| compress | Number | 0 | 否 | 压缩等级，可以选择是否移除 id 和 class | [20200312](/changelog#_20200312) |
 | domain | String |  | 否 | 主域名，设置后将给链接自动拼接上主域名或协议名 | [20191202](/changelog#_20191202) |
 | gesture-zoom | Boolean | false | 否 | 是否开启双击缩放 | [20200212](/changelog#_20200212) |
 | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 | [20190928](/changelog#_20190928) |
@@ -161,37 +162,31 @@
 | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 | [20191202](/changelog#_20191202) |
 | use-cache | Boolean | false | 否 | 是否使用缓存，设置后多次打开不用重复解析 | [20191215](/changelog#_20191215) |
   
-说明：  
-- 关于 `html`  
-  - 推荐通过 [setContent](#setContent) 方法传入，可以提高性能  
-  - 传入的格式为 `array` 时，不需要进行解析，可以一定程度上提高性能  
-  - 本插件在解析的过程中会进行一些转换和设置一些标识，使得能够正确的渲染和使用；若传入非本插件产生的数组（区分方式是查看 `html[0].PoweredBy` 是否等于 `Parser`），插件会自动进行设置，并同时处理 `tag-style`、`domain`、`use-anchor` 等一些属性的效果，但会产生额外的性能开销   
+##### html #####
+- 推荐通过 [setContent](#setContent) 方法传入，可以提高性能  
+- 传入的格式为 `array` 时，不需要进行解析，理论上可以提高性能，但是解析时间一般很短（约 `10~20` ms），且通常数组的大小比字符串大（传输时间更长），部分在解析过程中进行的处理也无法生效，不一定有明显的优化  
+- 本插件在解析的过程中会进行一些转换和设置一些标识，使得能够正确的渲染和使用；若传入非本插件产生的数组（区分方式是查看 `html[0].PoweredBy` 是否等于 `Parser`），插件会自动进行设置，并同时处理 `tag-style`、`domain`、`use-anchor` 等一些属性的效果，但会产生额外的性能开销   
 
-- 关于 `tag-style`  
-  可以设置标签的默认样式，形如 `{标签名：样式}` 的结构体，例如 `{ img: "display:block" }` 表示给 `img` 标签设置默认的块级标签效果  
+##### compress #####
+可以按需选择压缩等级，减小解析结果的大小，提高性能（若需进行更复杂的自定义压缩，可以通过 [filter](#配置项) 函数）  
 
-- 关于 `use-anchor`  
-  设置为 `true` 后将把所有设置了 `id` 的标签都通过节点递归的方式显示（否则无法知晓锚点位置），会一定程度上减慢渲染速度，非必要不建议开启  
+| 等级 | 效果 |
+|:---:|:---:|
+| 0 | 仅进行一些不影响功能的压缩（默认）|
+| 1 | 移除所有 `id` 属性（将无法使用锚点）|
+| 2 | 移除所有 `class` 属性（将无法匹配 `wxss` 中的样式）|
+| 3 | 移除所有 `id` 和 `class` 属性 |
+
+附：移除 `id` 和 `class` 都不影响匹配 `style` 标签中的样式（将在匹配完成后再移除）  
+
+##### tag-style #####
+可以设置标签的默认样式，形如 `{标签名：样式}` 的结构体，例如 `{ img: "display:block" }` 表示给 `img` 标签设置默认的块级标签效果  
+
+##### use-anchor #####
+设置为 `true` 后将把所有设置了 `id` 的标签都通过节点递归的方式显示（否则无法知晓锚点位置），会一定程度上减慢渲染速度，非必要不建议开启  
   
-- 关于 `use-cache`  
-  设置为 `true` 时将对解析结果进行缓存，在一个应用生命周期内多次打开，不需要重复解析，可以节省时间，建议对较长的内容且可能多次打开的内容设置缓存  
-
-- 关于 `editable`  
-  仅 `uni-app` 的 `H5` 端支持，设置后可以对富文本内容进行编辑，编辑完成后可以通过 `document` 获取内容  
-  ```vue
-  <template>
-    <jyf-parser ref="article" editable />
-  </template>
-  <script>
-  export default {
-    methods: {
-      getContent() {
-        console.log(this.$refs.article.innerHtml);
-      }
-    }
-  }
-  </script>
-  ```
+##### use-cache #####
+设置为 `true` 时将对解析结果进行缓存，在一个应用生命周期内多次打开，不需要重复解析，可以节省时间，建议对较长的内容且可能多次打开的内容设置缓存  
 
 ### 事件 ###
 
@@ -205,7 +200,8 @@
 | bindimglongtap | 图片被长按时触发 | 返回一个 object，其中 src 是图片链接，可用于显示自定义菜单 |
 | bindlinkpress | 在链接被点击时触发 | 返回一个 object，其中包含了被点击的 a 标签的所有属性，ignore 是一个函数，在事件中调用后将不自动跳转/复制；可在该事件中进行下载文档等进一步操作 |  
   
->关于图片和链接被点击返回的 `ignore` 函数的解释：类似于 `a` 标签 `onclick` 事件返回 `false` 将不跳转一样，由于 `event` 无法获取返回值，故增加此函数，若在事件函数中执行，则不自动进行预览/跳转/复制链接操作，可执行自定义操作（这两个事件函数应尽量简短）  
+关于图片和链接被点击返回的 `ignore` 函数的解释：  
+类似于 `a` 标签 `onclick` 事件返回 `false` 将不跳转一样，由于 `event` 无法获取返回值，故增加此函数，若在事件函数中执行，则不自动进行预览/跳转/复制链接操作，可执行自定义操作（这两个事件函数应尽量简短）  
 
 ```javascript
 linkpress(e){
@@ -242,19 +238,50 @@ linkpress(e){
 
 | 配置项 | 作用 |
 |:---:|:---:|
-| trustTags | 信任的标签列表 |
 | blockTags | 块级标签列表 |
 | ignoreTags | 移除的标签列表 |
 | selfClosingTags | 自闭合的标签列表 |
-| userAgentStyles | 默认的样式 |
-| highlight | [高亮处理函数](#处理代码高亮) |
-| LabelHandler | 标签属性处理函数 |
+| trustTags | 信任的标签列表 |
 | trustAttrs | 信任的属性 |
+| userAgentStyles | 默认的样式 |
+| filter | 过滤器 |
+| highlight | 代码高亮处理器 |
+| onText | 文本处理器 |
 
 ?>配置项在 `/libs/config.js` 中配置，对所有 `parser` 标签生效
 
 !>不在信任的属性列表中的属性将被移除  
 不在信任的标签列表中的标签，除被移除的标签外，块级标签列表中的标签将被转为 `div` 标签，其他被转为 `span` 标签
+
+关于几个自定义处理器：  
+- filter  
+  自定义过滤器，解析到一个标签时触发  
+  输入值：`node` 为节点结构体（`name` 为标签名，`attrs` 为属性值，`children` 为子节点），对其进行修改将在渲染时生效；`context` 是解析器示例，可以使用一些解析设置（如 `domain` 等）和方法（主要是 `bubble`，若该节点不能被 `rich-text` 包含则需要调用，将给其所有祖先节点冒泡设置标记，一般用于自定义标签）  
+  返回值：若返回 `false`，将移除此节点（及其所有子节点）  
+  示例：  
+  ```javascript
+  filter(node, cxt) {
+    if(node.name == "xxx") return false; // 移除某个标签
+    if(node.name == "yyy") cxt.bubble(); // 使这个标签不被 rich-text 包含，一般用于自定义标签
+    node.attrs.zzz = "aaa"; // 给标签添加某个属性
+  }
+  ```
+- onText  
+  文本处理器，可以替换文本中的一些内容  
+  输入值：`text` 为解析到的文本内容，`hasTag` 是一个函数，若设置的值中有 `html` 标签（如替换为图片）需要调用，将重新解析这段文本（若替换值中仍有关键词可能引发 **死循环** ）  
+  返回值：若返回值不为空，将把这段文本设置成返回值的内容  
+  示例：  
+  ```javascript
+  onText(text, hasTag) {
+    if(text.includes("$xxx$")) {
+      // 将某公式符号替换为图片
+      hasTag();
+      return text.replace("$xxx$", "<img src='xxxx'>");
+    }
+  }
+  ```
+- highlight  
+  代码高亮处理函数，详见 [处理代码高亮](#处理代码高亮)
 
 ### 基础库要求 ###
 微信小程序：
@@ -339,7 +366,7 @@ var videos = context.getVideoContext(); // 返回所有视频的数组
 ```
 
 #### imgList ####
-功能：获取所有图片数组，可用于转发图的封面等（注意：这是一个**属性**，不是一个函数）  
+功能：获取所有图片数组，可用于转发图的封面等（这是一个 **属性** ）  
 另外，该数组提供了一个 `each` 方法，功能与数组的 `forEach` 基本相同，但可以通过 `return` 改变数组中的值  
 该数组用于图片的预览，因此可以在 `img` 的 `src` 中使用缩略图，再将此数组中的地址改为原图，即可实现预览时查看大图的效果  
 设置时若与数组中已存在的元素重复，将自动通过改变域名大小写的方式去重，避免在预览时出现定位错误；若设置 `base64` 图片，将自动暂存到本地，避免无法预览（若需要修改单个图片，可以通过 `setItem(i, src)` 的方法，也可以进行同样处理）  
@@ -357,12 +384,22 @@ imgList.each((src, i, arr)=>{
 })
 ```
 
+#### rect ####
+功能：获取富文本内容的大小和位置（这是一个 **属性** ）  
+应在 `ready` 事件后获取，否则可能无法获取或不准确  
+使用方法：  
+```javascript
+var text = context.rect;
+console.log(rect.width); // 宽度
+console.log(rect.height); // 高度
+```
+
 > 以下 `api` 可以立即执行  
 
 #### setContent ####
 功能：解析并渲染 `html` 内容（功能上同 `html` 属性）  
 说明：当 `html` 为字符串类型时，该字符串并不能直接在视图层进行渲染，而是在插件内部完成解析后再次 `setData` 并进行渲染的，因此，对字符串类型的 `html` 进行 `setData` 是没有必要的，会带来不必要的性能开销  
-输入值：`html` 为富文本字符串  
+输入值：`html` 为富文本字符串，`append` 表示是否在尾部追加（可用于加载更多）  
 
 使用方法：
 ```wxml
@@ -377,6 +414,8 @@ this.setData({
 但通过 setData 会带来不必要的性能开销 */
 this.selectComponent("#article").setContent(html);
 ```
+
+!> 在 `load` 或 `ready` 事件中调用可能陷入死循环
 
 #### preLoad ####
 功能：预加载富文本中的图片  
@@ -407,11 +446,11 @@ this.selectComponent("#preLoad").preLoad(html);
 - 功能  
   将形如 `[笑脸]` 的文本解析为 `emoji` 小表情  
 - 大小  
-  `4.28KB`（`min` 版本 `3.16KB`）  
+  `4.25KB`（`min` 版本 `3.16KB`）  
 - 使用方法  
   将 `emoji.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `emoji.js`）  
   
-  !>在 uni-app 中使用时需要将 libs/MpHtmlParser.js 第 10 行改为 const emoji = require('./emoji.js');  
+  !>在 uni-app 中使用时需要将 libs/MpHtmlParser.js 第 15 行改为 const emoji = require('./emoji.js');  
   
   默认配置中支持 `177` 个常用的 `emoji` 小表情  
   支持两种形式的 `emoji`，一是 `emoji` 字符（不同设备上显示的样子可能不同），或者是网络图片（将按照 `16px` × `16px` 的大小显示，且不可放大预览），默认配置中都是 `emoji` 字符，可使用以下 `api` 获取或修改：  
@@ -430,7 +469,7 @@ this.selectComponent("#preLoad").preLoad(html);
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
-  !>在 uni-app 中使用时需要将 jyf-parser.vue 中的 28 行修改为 const document = require('./libs/document.js');  
+  !>在 uni-app 中使用时需要将 jyf-parser.vue 中的 34 行修改为 const document = require('./libs/document.js');  
   
 - `document` 类：  
   获取方式：可通过 `this.selectComponent("#id").document` 获取  
@@ -516,7 +555,7 @@ error(e){
 4. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
   
 - 大小（与原大小相比增加）  
-  `4.39KB`（`min` 版本：`1.35KB`）  
+  `4.84KB`（`min` 版本：`1.61KB`）  
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
@@ -602,11 +641,10 @@ a = 3;</pre>
    module.exports = {
      // 高亮处理函数
      highlight(content, attrs) {
-       var lan = attrs.match(/lan\s*=\s*["'](.*?)["']/);
-       if (!lan)
+       attrs["data-content"] = content; // 记录原始文本，用于长按复制等操作
+       if (!attrs[lan])
          return content; // 没有设置语言
-       lan = lan[1];
-       switch (lan) {
+       switch (attrs[lan]) {
          case "javascript":
          case "js":
            return Prism.highlight(content, Prism.languages.javascript, "javascript");
@@ -630,9 +668,35 @@ a = 3;</pre>
    @import '../libs/prism.wxss';
    ```
 5. 其中部分不支持的选择器（标签名选择器）可以通过 [tag-style](/features#设置默认的标签样式) 属性引入  
-  
+
 最终效果：  
 ![高亮效果](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md8.png?sign=e613714b597ceb1fa6d5b802a54fd246&t=1581226152)  
+
+按以下操作还可以实现长按复制：  
+1. 在 `config.js` 的 `filter` 函数中添加：
+   ```javascript
+   filter(node, ctx) {
+     if(node.name == "pre")
+       ctx.bubble(); // 使其不被 rich-text 包含
+   }
+   ```
+2. 在 `trees.wxml` 中添加  
+   ```wxml
+   <rich-text wx:elif="{{item.name=='pre'}}" style="display:block" nodes="{{[item]}}" data-content="{{item.attrs['data-content']}}" bindlongpress="copyCode" />
+   ```
+3. 在 `trees.js` 中添加  
+   ```javascript
+   copyCode(e) {
+    wx.showActionSheet({
+      itemList: ["复制代码"],
+      success: () =>
+        wx.setClipboardData({
+          data: e.target.dataset.content
+        })
+    })
+   }
+   ```
+  
 可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)  
 还可以进一步实现一个高亮的代码编辑框（可以参考示例小程序的 *自定义测试* 页面）  
 *相关 issue：*[#83](https://github.com/jin-yufeng/Parser/issues/83)

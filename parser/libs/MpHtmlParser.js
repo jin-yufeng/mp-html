@@ -3,72 +3,75 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
+  update：2020/03/12
 */
-const config = require("./config.js");
-const blankChar = config.blankChar;
-const CssHandler = require("./CssHandler.js");
-var emoji; // 引入补丁包
+var cfg = require("./config.js"),
+  blankChar = cfg.blankChar,
+  CssHandler = require("./CssHandler.js"),
+  {
+    screenWidth,
+    system
+  } = wx.getSystemInfoSync();
 try {
-  emoji = require("./emoji.js");
+  var emoji = require("./emoji.js");
 } catch (e) {};
 class MpHtmlParser {
   constructor(data, options = {}) {
-    this.CssHandler = new CssHandler(options.tagStyle);
+    this.attrs = {};
+    this.compress = options.compress;
+    this.CssHandler = new CssHandler(options.tagStyle, screenWidth);
     this.data = data;
+    this.domain = options.domain;
     this.DOM = [];
-    this._attrName = '';
-    this._attrValue = '';
-    this._attrs = {};
-    this._domain = options.domain;
-    this._i = 0;
-    this._protocol = this._domain && this._domain.includes("://") ? this._domain.split("://")[0] : "http";
-    this._start = 0;
-    this._state = this.Text;
-    this._STACK = [];
-    this._tagName = '';
-    this._audioNum = 0;
-    this._imgNum = 0;
-    this._videoNum = 0;
-    this._useAnchor = options.useAnchor;
-    this._pre = false;
-  };
+    this.i = 0;
+    this.protocol = this.domain && this.domain.includes("://") ? this.domain.split("://")[0] : '';
+    this.start = 0;
+    this.state = this.Text;
+    this.STACK = [];
+    this.audioNum = 0;
+    this.imgNum = 0;
+    this.videoNum = 0;
+    this.useAnchor = options.useAnchor;
+  }
   parse() {
     if (emoji) this.data = emoji.parseEmoji(this.data);
-    // 高亮处理
-    if (config.highlight)
-      this.data = this.data.replace(/<[pP][rR][eE]([\s\S]*?)>([\s\S]+?)<\/[pP][rR][eE][\s\S]*?>/g, ($, $1, $2) => `<pre${$1}>${config.highlight($2, $1)}</pre>`);
-    this.data = this.CssHandler.getStyle(this.data);
-    for (var len = this.data.length; this._i < len; this._i++)
-      this._state(this.data[this._i]);
-    if (this._state == this.Text) this.setText();
-    while (this._STACK.length) this.popNode(this._STACK.pop());
-    if (this.DOM.length) this.DOM[0].PoweredBy = "Parser";
+    for (var c; c = this.data[this.i]; this.i++)
+      this.state(c);
+    if (this.state == this.Text) this.setText();
+    while (this.STACK.length) this.popNode(this.STACK.pop());
+    if (this.DOM.length) {
+      this.DOM[0].PoweredBy = "Parser";
+      if (this.title) this.DOM[0].title = this.title;
+    }
     return this.DOM;
-  };
+  }
   // 设置属性
   setAttr() {
-    if (config.trustAttrs[this._attrName]) {
-      if (this._attrName == "src" && this._attrValue[0] == '/') {
-        if (this._attrValue[1] == '/') this._attrValue = this._protocol + ':' + this._attrValue;
-        else if (this._domain) this._attrValue = this._domain + this._attrValue;
-      }
-      this._attrs[this._attrName] = this._attrValue ? this._attrValue : (this._attrName == "src" || this._attrName == "alt" ? '' : 'T');
+    var name = this.attrName.toLowerCase();
+    if (cfg.trustAttrs[name]) {
+      if (!this.attrVal) {
+        if (cfg.boolAttrs[name]) this.attrs[name] = 'T';
+      } else if (name == "src") this.attrs[name] = this.getUrl(this.attrVal);
+      else this.attrs[name] = this.attrVal;
     }
-    this._attrValue = '';
-    while (blankChar[this.data[this._i]]) this._i++;
-    if (this.checkClose()) this.setNode();
-    else this._state = this.AttrName;
-  };
+    this.attrVal = '';
+    while (blankChar[this.data[this.i]]) this.i++;
+    if (this.isClose()) this.setNode();
+    else {
+      this.start = this.i;
+      this.state = this.AttrName;
+    }
+  }
   // 设置文本节点
   setText() {
-    var text = this.getSelection();
+    var text = this.section();
     if (!text) return;
-    if (!this._pre) {
-      // 移除空白符
-      for (var tmp = [], i = text.length, has = false, c; c = text[--i];)
-        if ((!blankChar[c] && (has = true)) || (!blankChar[tmp[0]] && (c = ' '))) tmp.unshift(c);
-      if (!has) return;
+    if (!this.pre) {
+      // 合并空白符
+      for (var tmp = [], i = text.length, c; c = text[--i];)
+        if (!blankChar[c] || (!blankChar[tmp[0]] && (c = ' '))) tmp.unshift(c);
       text = tmp.join('');
+      if (text == ' ') return;
     }
     // 处理实体
     var i = text.indexOf('&'),
@@ -82,127 +85,253 @@ class MpHtmlParser {
       } else {
         u = text.substring(i + 1, j);
         if (u == "nbsp")
-          text = text.substring(0, i) + '\u00A0' + text.substring(j + 1); // 解决连续 &nbsp; 失效的问题
+          text = text.substring(0, i) + '\xA0' + text.substring(j + 1); // 解决连续 &nbsp; 失效的问题
         else if (u != "lt" && u != "gt" && u != "amp" && u != "ensp" && u != "emsp") decode = true;
       }
       i = text.indexOf('&', i + 1);
     }
-    var slibings = this._STACK.length ? this._STACK[this._STACK.length - 1].children : this.DOM;
-    if (slibings.length && slibings[slibings.length - 1].type == "text") {
-      slibings[slibings.length - 1].text += text;
-      if (decode) slibings[slibings.length - 1].decode = true;
-    } else
-      slibings.push({
-        type: "text",
-        text,
-        decode
-      });
-  };
+    var back, n = {
+      type: "text",
+      text: (cfg.onText && cfg.onText(text, () => back = true)) || text
+    }
+    if (decode) n.decode = true;
+    if (back) {
+      this.data = this.data.substr(0, this.start) + n.text + this.data.substr(this.i);
+      var j = this.start + n.text.length;
+      for (this.i = this.start; this.i < j; this.i++) this.state(this.data[this.i]);
+    } else this.siblings().push(n);
+  }
   // 设置元素节点
   setNode() {
-    var slibings = this._STACK.length ? this._STACK[this._STACK.length - 1].children : this.DOM;
     var node = {
-      name: this._tagName.toLowerCase(),
-      attrs: this._attrs
+      name: this.tagName.toLowerCase(),
+      attrs: this.attrs
     }
-    config.LabelHandler(node, this);
-    this._attrs = {};
-    if (!config.selfClosingTags[node.name]) {
-      if (config.ignoreTags[node.name]) {
-        var j = this._i;
-        // 处理要被移除的标签
-        while (this._i < this.data.length) {
-          (this._i = this.data.indexOf("</", this._i + 1)) == -1 ? this._i = this.data.length : null;
-          this._i += 2;
-          this._start = this._i;
-          while (!blankChar[this.data[this._i]] && this.data[this._i] != '>' && this.data[this._i] != '/') this._i++;
-          if (this.data.substring(this._start, this._i).toLowerCase() == node.name) {
-            this._i = this.data.indexOf('>', this._i);
-            if (this._i == -1) this._i = this.data.length;
-            else this._start = this._i + 1;
-            this._state = this.Text;
-            // 处理 svg
-            if (node.name == "svg") {
-              var src = this.data.substring(j, this._i + 1);
-              if (!node.attrs.xmlns) src = " xmlns=\"http://www.w3.org/2000/svg\"" + src;
-              this._i = j;
-              while (this.data[j] != '<') j--;
-              src = this.data.substring(j, this._i) + src;
-              this._i = this._start - 1;
-              node.name = "img";
-              node.attrs = {
-                src: "data:image/svg+xml;utf8," + src.replace(/#/g, "%23"),
-                ignore: 'T'
-              }
-              slibings.push(node);
-            }
-            break;
+    this.attrs = {};
+    if (!cfg.ignoreTags[node.name]) {
+      this.matchAttr(node);
+      if (!cfg.selfClosingTags[node.name]) {
+        node.children = [];
+        if (node.name == "pre" && cfg.highlight) {
+          this.remove(node);
+          this.pre = node.pre = true;
+        }
+        this.siblings().push(node);
+        this.STACK.push(node);
+      } else if (!cfg.filter || cfg.filter(node, this) != false)
+        this.siblings().push(node);
+    } else {
+      if (!cfg.selfClosingTags[node.name]) this.remove(node);
+      else if (node.name == "source") {
+        var parent = this.STACK[this.STACK.length - 1],
+          attrs = node.attrs;
+        if (parent && attrs.src)
+          if (parent.name == "video" || parent.name == "audio")
+            parent.attrs.source.push(attrs.src);
+          else {
+            var i, media = attrs.media;
+            if (parent.name == "picture" && !parent.attrs.src && !(attrs.src.indexOf(".webp") && system.includes("iOS")) && (!media || (media.includes("px") &&
+                (((i = media.indexOf("min-width")) != -1 && (i = media.indexOf(':', i + 8)) != -1 && screenWidth > parseInt(media.substring(i + 1))) ||
+                  ((i = media.indexOf("max-width")) != -1 && (i = media.indexOf(':', i + 8)) != -1 && screenWidth < parseInt(media.substring(i + 1)))))))
+              parent.attrs.src = attrs.src;
           }
+      } else if (node.name == "base" && !this.domain) this.domain = node.attrs.href;
+    }
+    if (this.data[this.i] == '/') this.i++;
+    this.start = this.i + 1;
+    this.state = this.Text;
+  }
+  // 移除标签
+  remove(node) {
+    var j = this.i;
+    while (this.i < this.data.length) {
+      if ((this.i = this.data.indexOf("</", this.i + 1)) == -1) this.i = this.data.length;
+      this.start = (this.i += 2);
+      while (!blankChar[this.data[this.i]] && !this.isClose()) this.i++;
+      if (this.section().toLowerCase() == node.name) {
+        // 代码块高亮
+        if (node.name == "pre") {
+          this.data = this.data.substring(0, j + 1) + cfg.highlight(this.data.substring(j + 1, this.i - 5), node.attrs) + this.data.substring(this.i - 5);
+          return this.i = j;
+        } else if (node.name == "style")
+          this.CssHandler.getStyle(this.data.substring(j + 1, this.i - 7));
+        else if (node.name == "title")
+          this.title = this.data.substring(j + 1, this.i - 7);
+        if ((this.i = this.data.indexOf('>', this.i)) == -1) this.i = this.data.length;
+        // 处理 svg
+        if (node.name == "svg") {
+          var src = this.data.substring(j, this.i + 1);
+          if (!node.attrs.xmlns) src = ' xmlns="http://www.w3.org/2000/svg"' + src;
+          var i = j;
+          while (this.data[j] != '<') j--;
+          src = this.data.substring(j, i) + src;
+          this.siblings().push({
+            name: "img",
+            attrs: {
+              src: "data:image/svg+xml;utf8," + src.replace(/#/g, "%23"),
+              ignore: 'T'
+            }
+          })
         }
         return;
-      } else this._STACK.push(node);
-      node.children = [];
-    }
-    if (this.data[this._i] == '/') this._i++;
-    this._start = this._i + 1;
-    this._state = this.Text;
-    if (!config.ignoreTags[node.name]) {
-      // 检查空白符是否有效
-      if (node.name == "pre" || (node.attrs.style && node.attrs.style.includes("white-space") && node.attrs.style.includes("pre"))) {
-        this._pre = true;
-        node.pre = true;
       }
-      slibings.push(node);
     }
-  };
+  }
+  // 处理属性
+  matchAttr(node) {
+    var attrs = node.attrs,
+      style = this.CssHandler.match(node.name, attrs, node) + (attrs.style || '');
+    switch (node.name) {
+      case "div":
+      case 'p':
+        if (attrs.align) {
+          style = `text-align:${attrs.align};${style}`;
+          attrs.align = void 0;
+        }
+        break;
+      case "img":
+        if (attrs["data-src"]) {
+          attrs.src = attrs.src || attrs["data-src"];
+          attrs["data-src"] = void 0;
+        }
+        if (attrs.width && parseInt(attrs.width) > screenWidth)
+          style += ";height:auto !important";
+        if (attrs.src && !attrs.ignore) {
+          if (this.bubble()) attrs.i = (this.imgNum++).toString();
+          else attrs.ignore = 'T';
+        }
+        break;
+      case 'a':
+      case "ad":
+        this.bubble();
+        break;
+      case "font":
+        if (attrs.color) {
+          style = `color:${attrs.color};${style}`;
+          attrs.color = void 0;
+        }
+        if (attrs.face) {
+          style = `font-family:${attrs.face};${style}`;
+          attrs.face = void 0;
+        }
+        if (attrs.size) {
+          var size = parseInt(attrs.size);
+          if (size < 1) size = 1;
+          else if (size > 7) size = 7;
+          var map = ["xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"];
+          style = `font-size:${map[size - 1]};${style}`;
+          attrs.size = void 0;
+        }
+        break;
+      case "video":
+      case "audio":
+        if (!attrs.id) attrs.id = node.name + (++this[`${node.name}Num`]);
+        else this[`${node.name}Num`]++;
+        if (node.name == "video") {
+          if (attrs.width) {
+            style = `width:${parseFloat(attrs.width) + attrs.width.includes('%') ? '%' : "px"};${style}`;
+            attrs.width = void 0;
+          }
+          if (attrs.height) {
+            style = `height:${parseFloat(attrs.height) + attrs.height.includes('%') ? '%' : "px"};${style}`;
+            attrs.height = void 0;
+          }
+          if (this.videoNum > 3) node.lazyLoad = true;
+        }
+        attrs.source = [];
+        if (attrs.src) attrs.source.push(attrs.src);
+        if (!attrs.controls && !attrs.autoplay)
+          console.warn(`存在没有 controls 属性的 ${node.name} 标签，可能导致无法播放`, node);
+        this.bubble();
+    }
+    // 压缩 style
+    var styles = style.split(';'),
+      styleObj = {};
+    for (var i = 0, len = styles.length, style = ''; i < len; i++) {
+      var info = styles[i].split(':');
+      if (info.length < 2) continue;
+      var key = info[0].trim().toLowerCase(),
+        value = info.slice(1).join(':').trim();
+      if (value.includes("-webkit") || value.includes("-moz") || value.includes("-ms") || value.includes("-o") || value.includes("safe"))
+        style += `;${key}:${value}`;
+      else if (!styleObj[key] || value.includes("import") || !styleObj[key].includes("import"))
+        styleObj[key] = value;
+    }
+    if (node.name == "img" && styleObj.width && parseInt(styleObj.width) > screenWidth)
+      styleObj.height = "auto !important";
+    for (var key in styleObj) {
+      var value = styleObj[key];
+      // 填充链接
+      if (value.includes("url")) {
+        var j = value.indexOf('(');
+        if (j++ != -1) {
+          while (value[j] == '"' || value[j] == "'" || blankChar[value[j]]) j++;
+          value = value.substr(0, j) + this.getUrl(value.substr(j, 2)) + value.substr(j + 2);
+        }
+      }
+      // 转换 rpx
+      else if (value.includes("rpx"))
+        value = value.replace(/[0-9.\s]*rpx/g, $ => parseFloat($) * screenWidth / 750 + "px");
+      else if (key == "white-space" && value.includes("pre"))
+        this.pre = node.pre = true;
+      style += `;${key}:${value}`;
+    }
+    style = style.substr(1);
+    if (style) attrs.style = style;
+    if (attrs.id) {
+      if (this.compress & 1) attrs.id = void 0;
+      else if (this.useAnchor) this.bubble();
+    }
+    if ((this.compress & 2) && attrs.class) attrs.class = void 0;
+  }
   // 节点出栈处理
   popNode(node) {
+    // 空白符处理
+    if (node.pre) {
+      node.pre = this.pre = void 0;
+      for (var i = this.STACK.length; i--;)
+        if (this.STACK[i].pre)
+          this.pre = true;
+    }
+    if (node.name == "head" || (cfg.filter && cfg.filter(node, this) == false))
+      return this.siblings().pop();
     // 替换一些标签名
     if (node.name == "picture") {
       node.name = "img";
       if (!node.attrs.src && node.children.length && node.children[0].name == "img")
         node.attrs.src = node.children[0].attrs.src;
       if (node.attrs.src && !node.attrs.ignore)
-        node.attrs.i = (this._imgNum++).toString();
+        node.attrs.i = (this.imgNum++).toString();
       return node.children = void 0;
     }
-    if (config.blockTags[node.name]) node.name = "div";
-    else if (!config.trustTags[node.name]) node.name = "span";
-    // 空白符处理
-    if (node.pre) {
-      this._pre = false;
-      node.pre = void 0;
-      for (var i = this._STACK.length; i--;)
-        if (this._STACK[i].pre)
-          this._pre = true;
-    }
+    if (cfg.blockTags[node.name]) node.name = "div";
+    else if (!cfg.trustTags[node.name]) node.name = "span";
     // 处理列表
     if (node.c) {
       if (node.name == "ul") {
         var floor = 1;
-        for (var i = this._STACK.length; i--;)
-          if (this._STACK[i].name == "ul") floor++;
+        for (var i = this.STACK.length; i--;)
+          if (this.STACK[i].name == "ul") floor++;
         if (floor != 1)
           for (i = node.children.length; i--;)
             node.children[i].floor = floor;
       } else if (node.name == "ol") {
-        function convert(num, type) {
-          if (type == 'a') return String.fromCharCode(97 + (num - 1) % 26);
-          if (type == 'A') return String.fromCharCode(65 + (num - 1) % 26);
-          if (type == 'i' || type == 'I') {
-            num = (num - 1) % 99 + 1;
-            var one = ['I', "II", "III", "IV", 'V', "VI", "VII", "VIII", "IX"],
-              ten = ['X', "XX", "XXX", "XL", 'L', "LX", "LXX", "LXXX", "XC"],
-              res = (ten[Math.floor(num / 10) - 1] || '') + (one[num % 10 - 1] || '');
-            if (type == 'i') return res.toLowerCase();
-            return res;
-          }
-          return num;
-        }
         for (var i = 0, num = 1, child; child = node.children[i++];)
           if (child.name == "li") {
             child.type = "ol";
-            child.num = convert(num++, node.attrs.type) + '.';
+            child.num = ((num, type) => {
+              if (type == 'a') return String.fromCharCode(97 + (num - 1) % 26);
+              if (type == 'A') return String.fromCharCode(65 + (num - 1) % 26);
+              if (type == 'i' || type == 'I') {
+                num = (num - 1) % 99 + 1;
+                var one = ['I', "II", "III", "IV", 'V', "VI", "VII", "VIII", "IX"],
+                  ten = ['X', "XX", "XXX", "XL", 'L', "LX", "LXX", "LXXX", "XC"],
+                  res = (ten[Math.floor(num / 10) - 1] || '') + (one[num % 10 - 1] || '');
+                if (type == 'i') return res.toLowerCase();
+                return res;
+              }
+              return num;
+            })(num++, node.attrs.type) + '.';
           }
       }
     }
@@ -210,137 +339,144 @@ class MpHtmlParser {
     if (node.name == "table") {
       if (node.attrs.border)
         node.attrs.style = `border:${node.attrs.border}px solid gray;${node.attrs.style || ''}`;
-      if (node.attrs.hasOwnProperty("cellspacing"))
+      if (node.attrs.cellspacing)
         node.attrs.style = `border-spacing:${node.attrs.cellspacing}px;${node.attrs.style || ''}`;
-
-      function setBorder(elem) {
-        if (elem.name == "th" || elem.name == "td") {
-          if (node.attrs.border)
-            elem.attrs.style = `border:${node.attrs.border}px solid gray;${elem.attrs.style || ''}`;
-          if (node.attrs.hasOwnProperty("cellpadding"))
-            elem.attrs.style = `padding:${node.attrs.cellpadding}px;${elem.attrs.style || ''}`;
-          return;
-        }
-        if (elem.type == "text") return;
-        for (var i = (elem.children || []).length; i--;)
-          setBorder(elem.children[i]);
-      }
-      if (node.attrs.border || node.attrs.hasOwnProperty("cellpadding"))
-        for (var i = node.children.length; i--;)
-          setBorder(node.children[i]);
+      if (node.attrs.border || node.attrs.cellpadding)
+        (function f(ns) {
+          for (var i = 0, n; n = ns[i]; i++) {
+            if (n.name == "th" || n.name == "td") {
+              if (node.attrs.border)
+                n.attrs.style = `border:${node.attrs.border}px solid gray;${n.attrs.style || ''}`;
+              if (node.attrs.cellpadding)
+                n.attrs.style = `padding:${node.attrs.cellpadding}px;${n.attrs.style || ''}`;
+            } else f(n.children || []);
+          }
+        })(node.children)
     }
-    // 后代选择器处理
     this.CssHandler.pop && this.CssHandler.pop(node);
-  };
+    // 自动压缩
+    if (node.name == "div" && !Object.keys(node.attrs).length) {
+      var siblings = this.siblings();
+      if (!(node.children || []).length) siblings.pop();
+      else if (node.children.length == 1 && node.children[0].name == "div")
+        siblings[siblings.length - 1] = node.children[0];
+    }
+  }
   // 工具函数
-  checkClose() {
-    if (this.data[this._i] == '>' || (this.data[this._i] == '/' && this.data[this._i + 1] == '>'))
-      return true;
-    return false;
-  };
-  getSelection(trim) {
-    var str = (this._start == this._i ? '' : this.data.substring(this._start, this._i));
-    while (trim && (blankChar[this.data[++this._i]] || (this._i--, false)));
-    this._start = this._i + 1;
-    return str;
-  };
+  bubble() {
+    for (var i = this.STACK.length; i--;) {
+      if (cfg.richOnlyTags[this.STACK[i].name]) break;
+      this.STACK[i].c = 1;
+    }
+    return i == -1;
+  }
+  getUrl(url) {
+    if (this.domain) {
+      if (url[0] == '/') {
+        if (url[1] == '/') url = this.protocol + ':' + url;
+        else url = this.domain + url;
+      } else if (!url.includes("://"))
+        url = this.domain + '/' + url;
+    }
+    return url;
+  }
+  isClose = () => this.data[this.i] == '>' || (this.data[this.i] == '/' && this.data[this.i + 1] == '>');
+  section = () => this.data.substring(this.start, this.i);
+  siblings = () => this.STACK.length ? this.STACK[this.STACK.length - 1].children : this.DOM;
   // 状态机
   Text(c) {
     if (c == '<') {
-      var next = this.data[this._i + 1];
-      if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z')) {
+      var next = this.data[this.i + 1],
+        isLetter = c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+      if (isLetter(next)) {
         this.setText();
-        this._state = this.TagName;
+        this.start = this.i + 1;
+        this.state = this.TagName;
       } else if (next == '/') {
         this.setText();
-        this._i++;
-        next = this.data[this._i + 1];
-        if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z')) {
-          this._start = this._i + 1;
-          this._state = this.EndTag;
-        } else
-          this._state = this.Comment;
+        if (isLetter(this.data[++this.i + 1])) {
+          this.start = this.i + 1;
+          this.state = this.EndTag;
+        } else this.Comment();
       } else if (next == '!') {
         this.setText();
-        this._state = this.Comment;
+        this.Comment();
       }
     }
-  };
+  }
   Comment() {
-    if (this.data.substring(this._i + 1, this._i + 3) == "--" || this.data.substring(this._i + 1, this._i + 7) == "[CDATA[") {
-      this._i = this.data.indexOf("-->", this._i + 1);
-      if (this._i == -1) return this._i = this.data.length;
-      else this._i = this._i + 2;
-    } else
-      (this._i = this.data.indexOf('>', this._i + 1)) == -1 ? this._i = this.data.length : null;
-    this._start = this._i + 1;
-    this._state = this.Text;
-  };
+    var key;
+    if (this.data.substring(this.i + 2, this.i + 4) == "--") key = "-->";
+    else if (this.data.substring(this.i + 2, this.i + 9) == "[CDATA[") key = "]]>";
+    else key = '>';
+    if ((this.i = this.data.indexOf(key, this.i + 2)) == -1) this.i = this.data.length;
+    else this.i += key.length - 1;
+    this.start = this.i + 1;
+    this.state = this.Text;
+  }
   TagName(c) {
     if (blankChar[c]) {
-      this._tagName = this.getSelection(true);
-      if (this.checkClose()) this.setNode();
-      else this._state = this.AttrName;
-    } else if (this.checkClose()) {
-      this._tagName = this.getSelection();
+      this.tagName = this.section();
+      while (blankChar[this.data[this.i]]) this.i++;
+      if (this.isClose()) this.setNode();
+      else {
+        this.start = this.i;
+        this.state = this.AttrName;
+      }
+    } else if (this.isClose()) {
+      this.tagName = this.section();
       this.setNode();
     }
-  };
+  }
   AttrName(c) {
-    if (blankChar[c]) {
-      this._attrName = this.getSelection(true).toLowerCase();
-      if (this.data[this._i] == '=') {
-        while (blankChar[this.data[++this._i]]);
-        this._start = this._i--;
-        this._state = this.AttrValue;
-      } else this.setAttr();
-    } else if (c == '=') {
-      this._attrName = this.getSelection().toLowerCase();
-      while (blankChar[this.data[++this._i]]);
-      this._start = this._i--;
-      this._state = this.AttrValue;
-    } else if (this.checkClose()) {
-      this._attrName = this.getSelection().toLowerCase();
+    var blank = blankChar[c];
+    if (blank) {
+      this.attrName = this.section();
+      c = this.data[this.i];
+    }
+    if (c == '=') {
+      if (!blank) this.attrName = this.section();
+      while (blankChar[this.data[++this.i]]);
+      this.start = this.i--;
+      this.state = this.AttrValue;
+    } else if (blank) this.setAttr();
+    else if (this.isClose()) {
+      this.attrName = this.section();
       this.setAttr();
     }
-  };
+  }
   AttrValue(c) {
     if (c == '"' || c == "'") {
-      this._start++;
-      if ((this._i = this.data.indexOf(c, this._i + 1)) == -1) return this._i = this.data.length;
-    } else
-      for (; !blankChar[this.data[this._i]] && this.data[this._i] != '>'; this._i++);
-    this._attrValue = this.getSelection();
-    while (this._attrValue.includes("&quot;")) this._attrValue = this._attrValue.replace("&quot;", '"');
+      this.start++;
+      if ((this.i = this.data.indexOf(c, this.i + 1)) == -1) return this.i = this.data.length;
+      this.attrVal = this.section();
+      this.i++;
+    } else {
+      for (; !blankChar[this.data[this.i]] && !this.isClose(); this.i++);
+      this.attrVal = this.section();
+    }
+    while (this.attrVal.includes("&quot;")) this.attrVal = this.attrVal.replace("&quot;", '"');
     this.setAttr();
-  };
+  }
   EndTag(c) {
     if (blankChar[c] || c == '>' || c == '/') {
-      var name = this.getSelection().toLowerCase();
-      var flag = false;
-      for (var i = this._STACK.length; i--;)
-        if (this._STACK[i].name == name) {
-          flag = true;
-          break;
-        }
-      if (flag) {
+      var name = this.section().toLowerCase();
+      for (var i = this.STACK.length; i--;)
+        if (this.STACK[i].name == name) break;
+      if (i != -1) {
         var node;
-        while (flag) {
-          node = this._STACK.pop();
-          if (node.name == name) flag = false;
-          this.popNode(node);
-        }
-      } else if (name == 'p' || name == "br") {
-        var slibings = this._STACK.length ? this._STACK[this._STACK.length - 1].children : this.DOM;
-        slibings.push({
+        while ((node = this.STACK.pop()).name != name);
+        this.popNode(node);
+      } else if (name == 'p' || name == "br")
+        this.siblings().push({
           name,
           attrs: {}
         });
-      }
-      this._i = this.data.indexOf('>', this._i);
-      if (this._i == -1) this._i = this.data.length;
-      else this._state = this.Text;
+      this.i = this.data.indexOf('>', this.i);
+      this.start = this.i + 1;
+      if (this.i == -1) this.i = this.data.length;
+      else this.state = this.Text;
     }
-  };
-};
+  }
+}
 module.exports = MpHtmlParser;

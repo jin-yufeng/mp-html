@@ -4,14 +4,15 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
+  update：2020/03/12
 -->
 <template>
 	<view style="display:inherit;">
 		<slot v-if="!nodes.length"></slot>
-		<view class="_top" :style="showAnimation+(selectable?';user-select:text;-webkit-user-select:text':'')" :animation="scaleAnimation"
+		<view class="top" :style="showAm+(selectable?';user-select:text;-webkit-user-select:text':'')" :animation="scaleAm"
 		 @tap="_tap" @touchstart="_touchstart" @touchmove="_touchmove">
 			<!--#ifdef H5-->
-			<div :id="'rtf'+uid" :contentEditable="editable"></div>
+			<div :id="'rtf'+uid"></div>
 			<!--#endif-->
 			<!--#ifndef H5-->
 			<trees :nodes="nodes" :lazy-load="lazyLoad" :loadVideo="loadVideo" />
@@ -24,21 +25,21 @@
 <script>
 	// #ifndef H5
 	import trees from "./libs/trees";
-	const cache = {};
-	const CssHandler = require("./libs/CssHandler.js");
+	var cache = {},
+		CssHandler = require("./libs/CssHandler.js"),
+		// #ifdef MP-WEIXIN || MP-TOUTIAO
+		fs = uni.getFileSystemManager ? uni.getFileSystemManager() : null,
+		// #endif
+		Parser = require("./libs/MpHtmlParser.js");
 	var document; // document 补丁包 https://jin-yufeng.github.io/Parser/#/instructions?id=document
-	// #ifdef MP-WEIXIN || MP-TOUTIAO
-	const fs = uni.getFileSystemManager ? uni.getFileSystemManager() : null;
-	// #endif
-	const MpHtmlParser = require("./libs/MpHtmlParser.js");
 	// 计算 cache 的 key
 	function hash(str) {
-		for (var i = str.length, hash = 5381; i--;)
-			hash += (hash << 5) + str.charCodeAt(i);
-		return hash;
+		for (var i = str.length, val = 5381; i--;)
+			val += (val << 5) + str.charCodeAt(i);
+		return val;
 	};
 	// #endif
-	const config = require('./libs/config.js');
+	const cfg = require('./libs/config.js');
 	export default {
 		name: 'parser',
 		data() {
@@ -49,8 +50,8 @@
 				// #ifdef H5
 				uid: this._uid,
 				// #endif
-				scaleAnimation: '',
-				showAnimation: '',
+				scaleAm: '',
+				showAm: '',
 				nodes: [],
 				imgs: []
 			}
@@ -72,10 +73,8 @@
 				type: Boolean,
 				default: true
 			},
+			"compress": Number,
 			"domain": String,
-			// #ifdef H5
-			"editable": Boolean,
-			// #endif
 			// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
 			"gestureZoom": Boolean,
 			// #endif
@@ -90,48 +89,49 @@
 		},
 		watch: {
 			html(html) {
-				this.setContent(html, true);
+				this.setContent(html);
 			}
 		},
 		mounted() {
+			// #ifdef APP-NVUE
+			console.error("本组件暂不支持 NVUE");
+			// #endif
 			// 图片数组
 			this.imgList = [];
 			this.imgList.each = function(f) {
-				for (var i = 0; i < this.length; i++) {
-					var newSrc = f(this[i], i, this);
-					if (newSrc) this.setItem(i, newSrc);
-				}
+				for (var i = 0, len = this.length; i < len; i++)
+					this.setItem(i, f(this[i], i, this));
 			}
 			this.imgList.setItem = function(i, src) {
-				if (!src) return;
+				if (!i || !src) return;
 				// #ifndef MP-ALIPAY || APP-PLUS
 				// 去重
-				if (src.includes("http") && this.includes(src)) {
+				if (src.indexOf("http") == 0 && this.includes(src)) {
 					var newSrc = '';
 					for (var j = 0, c; c = src[j]; j++) {
-						newSrc += Math.random() > 0.5 ? c.toUpperCase() : c;
 						if (c == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
+						newSrc += Math.random() > 0.5 ? c.toUpperCase() : c;
 					}
-					newSrc += src.substring(j + 1);
+					newSrc += src.substring(j);
 					return this[i] = newSrc;
 				}
 				// #endif
 				this[i] = src;
 				// 暂存 data src
 				if (src.includes("data:image")) {
-					var fileInfo = src.match(/data:image\/(\S+?);(\S+?),(.+)/);
-					if (!fileInfo) return;
+					var info = src.match(/data:image\/(\S+?);(\S+?),(.+)/);
+					if (!info) return;
 					// #ifdef MP-WEIXIN || MP-TOUTIAO
-					var filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${fileInfo[1]}`;
+					var filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${info[1]}`;
 					fs && fs.writeFile({
 						filePath,
-						data: fileInfo[3],
-						encoding: fileInfo[2],
-						success: (res) => this[i] = filePath
+						data: info[3],
+						encoding: info[2],
+						success: () => this[i] = filePath
 					})
 					// #endif
 					// #ifdef APP-PLUS
-					var filePath = `_doc/parser_tmp/${Date.now()}.${fileInfo[1]}`;
+					var filePath = `_doc/parser_tmp/${Date.now()}.${info[1]}`;
 					var bitmap = new plus.nativeObj.Bitmap();
 					bitmap.loadBase64Data(src, () => {
 						bitmap.save(filePath, {}, () => {
@@ -148,26 +148,26 @@
 			// #ifdef H5
 			if (this._observer) this._observer.disconnect();
 			// #endif
-			this.imgList.each(item => {
+			this.imgList.each(src => {
 				// #ifdef APP-PLUS
-				if (item && item.includes("_doc")) {
-					plus.io.resolveLocalFileSystemURL(item, entry => {
+				if (src && src.includes("_doc")) {
+					plus.io.resolveLocalFileSystemURL(src, entry => {
 						entry.remove();
 					});
 				}
 				// #endif
 				// #ifdef MP-WEIXIN || MP-TOUTIAO
-				if (item && item.includes(uni.env.USER_DATA_PATH))
+				if (src && src.includes(uni.env.USER_DATA_PATH))
 					fs && fs.unlink({
-						filePath: item
+						filePath: src
 					})
 				// #endif
 			})
-			clearInterval(this.interval);
+			clearInterval(this._timer);
 		},
 		methods: {
 			// #ifdef H5
-			Dom2Str(nodes) {
+			_Dom2Str(nodes) {
 				var str = "";
 				for (var node of nodes) {
 					if (node.type == "text")
@@ -176,54 +176,59 @@
 						str += ('<' + node.name);
 						for (var attr in node.attrs || {})
 							str += (' ' + attr + '="' + node.attrs[attr] + '"');
-						if (!node.children || !node.children.length) str += "/>";
-						else str += ('>' + this.Dom2Str(node.children) + "</" + node.name + '>');
+						if (!node.children || !node.children.length) str += '>';
+						else str += ('>' + this._Dom2Str(node.children) + "</" + node.name + '>');
 					}
 				}
 				return str;
 			},
 			// #endif
-			setContent(html, observed) {
+			setContent(html, append) {
 				// #ifdef H5
 				if (!html) {
-					if (this.rtf) this.rtf.parentNode.removeChild(this.rtf);
+					if (this.rtf && !append) this.rtf.parentNode.removeChild(this.rtf);
 					return;
 				}
-				if (typeof html != "string") html = this.Dom2Str(html.nodes || html);
+				if (typeof html != "string") html = this._Dom2Str(html.nodes || html);
 				// 处理 rpx
 				if (html.includes("rpx"))
-					html = html.replace(/[0-9.]*rpx/g, $ => parseFloat($) * config.screenWidth / 750 + "px");
-				// 处理 tag-style 和 userAgentStyles
-				var style = "<style>@keyframes show{0%{opacity:0}100%{opacity:1}}";
-				for (var item in config.userAgentStyles)
-					style += (item + '{' + config.userAgentStyles[item] + '}');
-				for (var item in this.tagStyle)
-					style += (item + '{' + this.tagStyle[item] + '}');
-				style += "</style>";
-				html = style + html;
-				if (this.rtf) this.rtf.parentNode.removeChild(this.rtf);
-				this.rtf = document.createElement('div');
-				this.rtf.innerHTML = html;
-				for (var style of this.rtf.getElementsByTagName("style")) {
+					html = html.replace(/[0-9.]*rpx/g, $ => parseFloat($) * cfg.screenWidth / 750 + "px");
+				var div = document.createElement("div");
+				if (!append) {
+					// 处理 tag-style 和 userAgentStyles
+					var style = "<style>@keyframes show{0%{opacity:0}100%{opacity:1}}";
+					for (var item in cfg.userAgentStyles)
+						style += (item + '{' + cfg.userAgentStyles[item] + '}');
+					for (var item in this.tagStyle)
+						style += (item + '{' + this.tagStyle[item] + '}');
+					style += "</style>";
+					html = style + html;
+					if (this.rtf) this.rtf.parentNode.removeChild(this.rtf);
+					this.rtf = div;
+				} else {
+					if (!this.rtf) this.rtf = div;
+					else this.rtf.appendChild(div);
+				}
+				div.innerHTML = html;
+				for (var styles = this.rtf.getElementsByTagName("style"), i = 0, style; style = styles[i++];) {
 					style.innerHTML = style.innerHTML.replace(/\s*body/g, "#rtf" + this._uid);
 					style.setAttribute("scoped", "true");
 				}
 				// 懒加载
-				if (this.lazyLoad && IntersectionObserver) {
-					if (this._observer) this._observer.disconnect();
+				if (!this._observer && this.lazyLoad && IntersectionObserver) {
 					this._observer = new IntersectionObserver(changes => {
-						for (var change of changes) {
-							if (change.isIntersecting) {
-								change.target.src = change.target.getAttribute("data-src");
-								change.target.removeAttribute("data-src");
-								this._observer.unobserve(change.target);
+						for (var item, i = 0; item = changes[i++];) {
+							if (item.isIntersecting) {
+								item.target.src = item.target.getAttribute("data-src");
+								item.target.removeAttribute("data-src");
+								this._observer.unobserve(item.target);
 							}
 						}
 					}, {
 						rootMargin: "900px 0px 900px 0px"
 					})
 				}
-				var component = this;
+				var _ts = this;
 				// 获取标题
 				var title = this.rtf.getElementsByTagName("title");
 				if (title.length && this.autosetTitle)
@@ -235,33 +240,36 @@
 				var imgs = this.rtf.getElementsByTagName("img");
 				for (var i = 0, j = 0, img; img = imgs[i]; i++) {
 					img.style.maxWidth = "100%";
-					if (this.domain && img.getAttribute("src")[0] == "/") {
-						if (img.getAttribute("src")[1] == "/")
-							img.src = (this.domain.includes("://") ? this.domain.split("://")[0] : "http") + ':' + img.getAttribute("src");
-						else img.src = this.domain + img.getAttribute("src");
+					var src = img.getAttribute("src");
+					if (this.domain && src) {
+						if (src[0] == "/") {
+							if (src[1] == "/")
+								img.src = (this.domain.includes("://") ? this.domain.split("://")[0] : '') + ':' + src;
+							else img.src = this.domain + src;
+						} else if (!src.includes("://")) img.src = this.domain + '/' + src;
 					}
 					if (!img.hasAttribute("ignore") && img.parentElement.nodeName != 'A') {
 						img.i = j++;
-						component.imgList.push(img.src);
+						_ts.imgList.push(img.src || img.getAttribute("data-src"));
 						img.onclick = function() {
 							var preview = true;
 							this.ignore = () => preview = false;
-							component.$emit("imgtap", this);
+							_ts.$emit("imgtap", this);
 							if (preview) {
 								uni.previewImage({
 									current: this.i,
-									urls: component.imgList
+									urls: _ts.imgList
 								});
 							}
 						}
 					}
 					img.onerror = function() {
-						component.$emit('error', {
+						_ts.$emit('error', {
 							source: "img",
 							target: this
 						});
 					}
-					if (component.lazyLoad && this._observer && img.i != 0) {
+					if (_ts.lazyLoad && this._observer && img.src && img.i != 0) {
 						img.setAttribute("data-src", img.src);
 						img.removeAttribute("src");
 						this._observer.observe(img);
@@ -273,14 +281,14 @@
 					link.onclick = function(e) {
 						var jump = true,
 							href = this.getAttribute("href");
-						component.$emit("linkpress", {
+						_ts.$emit("linkpress", {
 							href,
 							ignore: () => jump = false
 						});
 						if (jump && href) {
 							if (href[0] == '#') {
-								if (component.useAnchor) {
-									component.navigateTo({
+								if (_ts.useAnchor) {
+									_ts.navigateTo({
 										id: href.substring(1)
 									})
 								}
@@ -297,86 +305,77 @@
 				}
 				// 视频处理
 				var videos = this.rtf.getElementsByTagName("video");
-				component.videoContexts = videos;
-				for (var video of videos) {
+				_ts.videoContexts = videos;
+				for (var video, i = 0; video = videos[i++];) {
 					video.style.maxWidth = "100%";
 					video.onerror = function() {
-						component.$emit('error', {
+						_ts.$emit('error', {
 							source: "video",
 							target: this
 						});
 					}
 					video.onplay = function() {
-						if (component.autopause) {
-							for (var video of component.videoContexts) {
-								if (video != this)
-									video.pause();
-							}
-						}
+						if (_ts.autopause)
+							for (var item, i = 0; item = ts.videoContexts[i++];)
+								if (item != this) item.pause();
 					}
 				}
 				// 音频处理
 				var audios = this.rtf.getElementsByTagName("audios");
-				for (var audio of audios) {
+				for (var audio of audios)
 					audio.onerror = function(e) {
-						component.$emit("error", {
+						_ts.$emit("error", {
 							source: "audio",
 							target: this
 						});
 					}
-				}
-				document.getElementById("rtf" + this._uid).appendChild(this.rtf);
 				this.document = this.rtf;
+				if (!append) document.getElementById("rtf" + this._uid).appendChild(this.rtf);
 				this.$nextTick(() => {
 					this.nodes = [1];
 					this.$emit("load");
 				})
-				setTimeout(() => this.showAnimation = '', 500);
+				setTimeout(() => this.showAm = '', 500);
 				// #endif
 				// #ifndef H5
+				var nodes;
 				if (!html)
 					return this.nodes = [];
 				else if (typeof html == "string") {
-					var Parser = new MpHtmlParser(html, this);
+					var parser = new Parser(html, this);
 					// 缓存读取
 					if (this.useCache) {
-						var hashValue = hash(html);
-						if (cache[hashValue])
-							this.nodes = cache[hashValue];
+						var hashVal = hash(html);
+						if (cache[hashVal])
+							nodes = cache[hashVal];
 						else {
-							this.nodes = Parser.parse();
-							cache[hashValue] = this.nodes;
+							nodes = parser.parse();
+							cache[hashVal] = nodes;
 						}
-					} else this.nodes = Parser.parse();
-					this.$emit("parse", this.nodes);
+					} else nodes = parser.parse();
+					this.$emit("parse", nodes);
 				} else if (Object.prototype.toString.call(html) == "[object Array]") {
 					// 非本插件产生的 array 需要进行一些转换
 					if (html.length && html[0].PoweredBy != "Parser") {
-						var Parser = new MpHtmlParser(html, this);
+						var parser = new Parser(html, this);
 						(function f(ns) {
 							for (var i = 0, n; n = ns[i]; i++) {
 								if (n.type == "text") continue;
 								n.attrs = n.attrs || {};
-								for (var item in n.attrs) {
-									if (!config.trustAttrs[item]) n.attrs[item] = void 0;
-									else if (typeof n.attrs[item] != "string") n.attrs[item] = n.attrs[item].toString();
-								}
-								config.LabelHandler(n, Parser);
-								if (config.ignoreTags[n.name]) {
-									ns.splice(i--, 1);
-									continue;
-								}
+								for (var item in n.attrs)
+									if (typeof n.attrs[item] != "string") n.attrs[item] = n.attrs[item].toString();
+								parser.matchAttr(n, parser);
 								if (n.children && n.children.length) {
-									Parser._STACK.push(n);
+									parser.STACK.push(n);
 									f(n.children);
-									Parser.popNode(Parser._STACK.pop());
+									parser.popNode(parser.STACK.pop());
 								} else n.children = void 0;
 							}
 						})(html);
 					}
-					this.nodes = html;
+					nodes = html;
 				} else if (typeof html == "object" && html.nodes) {
-					this.nodes = html.nodes;
+					nodes = html.nodes;
 					console.warn("错误的 html 类型：object 类型已废弃");
 				} else
 					return console.warn("错误的 html 类型：" + typeof html);
@@ -384,6 +383,12 @@
 				this.loadVideo = false;
 				// #endif
 				if (document) this.document = new document(this.nodes, "nodes", this);
+				if (append) this.nodes = this.nodes.concat(nodes);
+				else this.nodes = nodes;
+				if (nodes.length && nodes[0].title && this.autosetTitle)
+					uni.setNavigationBarTitle({
+						title: nodes[0].title
+					})
 				this.$nextTick(() => {
 					this.imgList.length = 0;
 					this.videoContexts = [];
@@ -391,30 +396,23 @@
 					setTimeout(() => {
 						// #endif
 						var f = (cs) => {
-							for (var i = cs.length; i--;) {
-								let c = cs[i];
+							for (let i = 0, c; c = cs[i++];) {
 								if (c.$options.name == "trees") {
 									var observered = false;
 									for (var j = c.nodes.length, item; item = c.nodes[--j];) {
 										if (item.c) continue;
 										if (item.name == "img") {
-											if (item.attrs.i)
-												this.imgList.setItem(item.attrs.i, item.attrs.src);
+											this.imgList.setItem(item.attrs.i, item.attrs.src);
 											// #ifndef MP-ALIPAY
-											if (!observered && item.attrs.i != "0") {
-												observered = true;
+											if (!c.observer && !c.imgLoad && item.attrs.i != "0") {
 												if (this.lazyLoad && uni.createIntersectionObserver) {
-													if (c._observer) c._observer.disconnect();
-													c._observer = uni.createIntersectionObserver(c);
-													c._observer.relativeToViewport({
+													c.observer = uni.createIntersectionObserver(c);
+													c.observer.relativeToViewport({
 														top: 900,
 														bottom: 900
 													}).observe("._img", res => {
 														c.imgLoad = true;
-														if (c._observer) {
-															c._observer.disconnect();
-															c._observer = null;
-														}
+														c.observer.disconnect();
 													})
 												} else
 													c.imgLoad = true;
@@ -423,20 +421,15 @@
 										}
 										// #ifndef MP-ALIPAY
 										else if (item.name == "video") {
-											var context = uni.createVideoContext(item.attrs.id, c);
-											context.id = item.attrs.id;
-											this.videoContexts.unshift(context);
+											var ctx = uni.createVideoContext(item.attrs.id, c);
+											ctx.id = item.attrs.id;
+											this.videoContexts.push(ctx);
 										}
 										// #endif
 										// #ifdef MP-WEIXIN
 										else if (item.name == "audio" && item.attrs.autoplay)
 											wx.createAudioContext(item.attrs.id, c).play();
 										// #endif
-										// 设置标题
-										else if (item.name == "title" && this.autosetTitle && item.children[0].type == "text")
-											uni.setNavigationBarTitle({
-												title: item.children[0].text
-											})
 										// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
 										if (item.attrs && item.attrs.id) {
 											this.anchors = this.anchors || [];
@@ -465,7 +458,8 @@
 				})
 				// #endif
 				var height;
-				this.interval = setInterval(() => {
+				clearInterval(this._timer);
+				this._timer = setInterval(() => {
 					// #ifdef H5
 					var res = [this.rtf.getBoundingClientRect()];
 					// #endif
@@ -476,41 +470,41 @@
 					uni.createSelectorQuery().in(this)
 						// #endif
 						// #ifndef H5
-						.select("._top").boundingClientRect().exec(res => {
+						.select(".top").boundingClientRect().exec(res => {
 							// #endif
 							this.width = res[0].width;
 							if (res[0].height == height) {
 								this.$emit("ready", res[0])
-								clearInterval(this.interval);
+								clearInterval(this._timer);
 							}
 							height = res[0].height;
 							// #ifndef H5
 						});
 					// #endif
 				}, 350)
-				if (this.showWithAnimation) this.showAnimation = "animation:show .5s";
+				if (this.showWithAnimation && !append) this.showAm = "animation:show .5s";
 			},
-			getText(nodes = this.html || this.nodes) {
+			getText(ns = this.html || this.nodes) {
 				// #ifdef H5
 				return this.rtf.innerText;
 				// #endif
 				// #ifndef H5
-				var text = '';
-				for (var i = 0, node; node = nodes[i++];) {
-					if (node.type == "text") text += node.text.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+				var txt = '';
+				for (var i = 0, n; n = ns[i++];) {
+					if (n.type == "text") txt += n.txt.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
 						.replace(/&amp;/g, '&');
-					else if (node.type == "br") text += '\n';
+					else if (n.type == "br") txt += '\n';
 					else {
 						// 块级标签前后加换行
-						var block = node.name == 'p' || node.name == "div" || node.name == "tr" || node.name == "li" || (node.name[0] ==
-							'h' && node.name[1] > '0' && node.name[1] < '7');
-						if (block && text && text[text.length - 1] != '\n') text += '\n';
-						if (node.children) text += this.getText(node.children);
-						if (block && text[text.length - 1] != '\n') text += '\n';
-						else if (node.name == "td" || node.name == "th") text += '\t';
+						var block = n.name == 'p' || n.name == "div" || n.name == "tr" || n.name == "li" || (n.name[0] == 'h' && n.name[1] >
+							'0' && n.name[1] < '7');
+						if (block && txt && txt[txt.length - 1] != '\n') txt += '\n';
+						if (n.children) txt += this.getText(n.children);
+						if (block && txt[txt.length - 1] != '\n') txt += '\n';
+						else if (n.name == "td" || n.name == "th") txt += '\t';
 					}
 				}
-				return text;
+				return txt;
 				// #endif
 			},
 			navigateTo(obj) {
@@ -545,10 +539,10 @@
 							uni.pageScrollTo(obj);
 						})
 				}
-				if (!obj.id) Scroll("._top");
+				if (!obj.id) Scroll(".top");
 				else {
 					// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-					Scroll("._top >>> #" + obj.id + ', ._top >>> .' + obj.id);
+					Scroll(".top >>> #" + obj.id + ', .top >>> .' + obj.id);
 					// #endif
 					// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
 					for (var anchor of this.anchors)
@@ -563,13 +557,12 @@
 				else
 					for (var i = this.videoContexts.length; i--;)
 						if (this.videoContexts[i].id == id) return this.videoContexts[i];
-				return null;
 			},
 			// 预加载
 			preLoad(html, num) {
 				// #ifdef H5
 				if (html.constructor == Array)
-					html = this.Dom2Str(html);
+					html = this._Dom2Str(html);
 				var contain = document.createElement('div');
 				contain.innerHTML = html;
 				var imgs = contain.querySelectorAll("img");
@@ -579,7 +572,7 @@
 				// #ifndef H5
 				if (typeof html == "string") {
 					var id = hash(html);
-					html = new MpHtmlParser(html, this).parse();
+					html = new Parser(html, this).parse();
 					cache[id] = html;
 				}
 				var wait = [];
@@ -591,66 +584,67 @@
 					}
 				})(html);
 				if (num) wait = wait.slice(0, num);
-				this.wait = (this.wait || []).concat(wait);
-				if (!this.imgs) this.imgs = this.wait.splice(0, 15);
+				this._wait = (this._wait || []).concat(wait);
+				if (!this.imgs) this.imgs = this._wait.splice(0, 15);
 				else if (this.imgs.length < 15)
-					this.imgs = this.imgs.concat(this.wait.splice(0, 15 - this.imgs.length));
+					this.imgs = this.imgs.concat(this._wait.splice(0, 15 - this.imgs.length));
 				// #endif
 			},
 			_load(e) {
 				// #ifndef H5
-				if (this.wait.length)
-					this.$set(this.imgs, e.target.id, this.wait.shift());
+				if (this._wait.length)
+					this.$set(this.imgs, e.target.id, this._wait.shift());
 				// #endif
 			},
 			_tap(e) {
 				// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-				if (this.gestureZoom && e.timeStamp - this.lastTime < 300) {
-					if (this.zoomIn) {
-						this.animation.translateX(0).scale(1).step();
+				if (this.gestureZoom && e.timeStamp - this._lastT < 300) {
+					var initY = e.touches[0].pageY - e.currentTarget.offsetTop;
+					if (this._zoom) {
+						this._scaleAm.translateX(0).scale(1).step();
 						uni.pageScrollTo({
-							scrollTop: (e.touches[0].pageY - e.currentTarget.offsetTop + this.initY) / 2 - e.touches[0].clientY,
+							scrollTop: (initY + this._initY) / 2 - e.touches[0].clientY,
 							duration: 400
 						})
 					} else {
 						var initX = e.touches[0].pageX - e.currentTarget.offsetLeft;
-						this.initY = e.touches[0].pageY - e.currentTarget.offsetTop;
-						this.animation = uni.createAnimation({
-							transformOrigin: `${initX}px ${this.initY}px 0`,
+						this._initY = initY;
+						this._scaleAm = uni.createAnimation({
+							transformOrigin: `${initX}px ${this._initY}px 0`,
 							timingFunction: "ease-in-out"
 						});
 						// #ifdef MP-TOUTIAO
-						this.animation.opacity(1);
+						this._scaleAm.opacity(1);
 						// #endif
-						this.animation.scale(2).step();
-						this.tMax = initX / 2;
-						this.tMin = (initX - this.width) / 2;
-						this.tX = 0;
+						this._scaleAm.scale(2).step();
+						this._tMax = initX / 2;
+						this._tMin = (initX - this.width) / 2;
+						this._tX = 0;
 					}
-					this.zoomIn = !this.zoomIn;
-					this.scaleAnimation = this.animation.export();
+					this._zoom = !this._zoom;
+					this.scaleAm = this._scaleAm.export();
 				}
-				this.lastTime = e.timeStamp;
+				this._lastT = e.timeStamp;
 				// #endif
 			},
 			_touchstart(e) {
 				// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
 				if (e.touches.length == 1)
-					this.initX = this.lastX = e.touches[0].pageX;
+					this._initX = this._lastX = e.touches[0].pageX;
 				// #endif
 			},
 			_touchmove(e) {
 				// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-				var diff = e.touches[0].pageX - this.lastX;
-				if (this.zoomIn && e.touches.length == 1 && Math.abs(diff) > 20) {
-					this.lastX = e.touches[0].pageX;
-					if ((this.tX <= this.tMin && diff < 0) || (this.tX >= this.tMax && diff > 0))
+				var diff = e.touches[0].pageX - this._lastX;
+				if (this._zoom && e.touches.length == 1 && Math.abs(diff) > 20) {
+					this._lastX = e.touches[0].pageX;
+					if ((this._tX <= this._tMin && diff < 0) || (this._tX >= this._tMax && diff > 0))
 						return;
-					this.tX += (diff * Math.abs(this.lastX - this.initX) * 0.05);
-					if (this.tX < this.tMin) this.tX = this.tMin;
-					if (this.tX > this.tMax) this.tX = this.tMax;
-					this.animation.translateX(this.tX).step();
-					this.scaleAnimation = this.animation.export();
+					this._tX += (diff * Math.abs(this._lastX - this._initX) * 0.05);
+					if (this._tX < this._tMin) this._tX = this._tMin;
+					if (this._tX > this._tMax) this._tX = this._tMax;
+					this._scaleAm.translateX(this._tX).step();
+					this.scaleAm = this._scaleAm.export();
 				}
 				// #endif
 			}
@@ -676,7 +670,7 @@
 		-webkit-overflow-scrolling: touch;
 	}
 
-	._top {
+	.top {
 		display: inherit;
 	}
 
