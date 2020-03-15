@@ -4,7 +4,7 @@ Page({
   // 页面加载
   onLoad(e) {
     this.index = e.index;
-    this.context = this.selectComponent("#article");
+    this.context = this.selectComponent('#article');
     this.context.setContent(htmls[e.index]);
     this.anchor = e.anchor;
   },
@@ -18,13 +18,13 @@ Page({
   // 富文本出错事件
   error(e) {
     console.error(e);
-    if (e.detail.source == "ad")
-      this.context.document.getElementById("adContainer").setStyle("display", "none");
+    if (e.detail.source == 'ad')
+      this.context.document.getElementById('adContainer').setStyle('display', 'none');
   },
   // 链接点击事件
   linkpress(e) {
     if (e.detail.href) {
-      if (e.detail.href.includes(".doc")) {
+      if (e.detail.href.includes('.doc')) {
         e.detail.ignore(); // 禁用自动复制
         wx.showLoading({
           title: '附件下载中',
@@ -50,16 +50,16 @@ Page({
     this.setData({
       showActionsheet: true,
       groups: [{
-        text: "保存到手机",
+        text: '保存到手机',
         value: 0
       }, {
-        text: "复制图片地址",
+        text: '复制图片地址',
         value: 1
       }]
     })
     // 云调用 img.scanQRCode
     wx.cloud.callFunction({
-      name: "scanImg",
+      name: 'scanImg',
       data: {
         src: this.url
       },
@@ -68,13 +68,13 @@ Page({
           this.scanRes = res.result.codeResults[0].data;
           this.setData({
             groups: [{
-              text: "保存到手机",
+              text: '保存到手机',
               value: 0
             }, {
-              text: "复制图片地址",
+              text: '复制图片地址',
               value: 1
             }, {
-              text: "复制识别结果",
+              text: '复制识别结果',
               value: 2
             }]
           })
@@ -97,7 +97,7 @@ Page({
       }
       wx.getSetting({
         success(res) {
-          if (!res.authSetting["scope.writePhotosAlbum"]) {
+          if (!res.authSetting['scope.writePhotosAlbum']) {
             wx.authorize({
               scope: 'scope.writePhotosAlbum',
               success: saveToAlbum
@@ -121,9 +121,9 @@ Page({
   // 页面分享
   onShareAppMessage() {
     return {
-      title: "富文本插件示例",
-      imageUrl: "https://6874-html-foe72-1259071903.tcb.qcloud.la/share.png?sign=1d1c1938f23a3b1d8b34818599f9f0b4&t=1560250134",
-      path: "/pages/demo/demo?index=" + this.index
+      title: '富文本插件示例',
+      imageUrl: 'https://6874-html-foe72-1259071903.tcb.qcloud.la/share.png?sign=1d1c1938f23a3b1d8b34818599f9f0b4&t=1560250134',
+      path: '/pages/demo/demo?index=' + this.index
     }
   }
 })

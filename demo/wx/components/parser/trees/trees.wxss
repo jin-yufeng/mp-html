@@ -94,7 +94,7 @@
   font-size: smaller;
   vertical-align: super;
 }
-.__bdi, .__bdo, .__ruby, .__rt {
+.__bdi, .__bdo, .__ruby, .__rt, ._entity {
   display: inline-block;
 }
 ._video {

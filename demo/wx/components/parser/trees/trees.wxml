@@ -4,7 +4,7 @@
   <!--图片-->
   <rich-text wx:if="{{item.name=='img'}}" id="{{item.attrs.id}}" class="_img" style="{{handler.getStyle(item.attrs.style)}}" nodes="{{handler.getNode(item,!lazyLoad||imgLoad)}}" data-attrs="{{item.attrs}}" bindtap="imgtap" bindlongpress="imglongtap" />
   <!--文本-->
-  <rich-text wx:elif="{{item.decode}}" style="display:inline-block" nodes="{{[item]}}" />
+  <rich-text wx:elif="{{item.decode}}" class="_entity" nodes="{{[item]}}" />
   <text wx:elif="{{item.type=='text'}}" decode>{{item.text}}</text>
   <text wx:elif="{{item.name=='br'}}">\n</text>
   <!--链接-->

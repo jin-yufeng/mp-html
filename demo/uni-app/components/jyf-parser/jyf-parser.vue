@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/12
+  update：2020/03/15
 -->
 <template>
 	<view style="display:inherit;">
@@ -24,13 +24,13 @@
 
 <script>
 	// #ifndef H5
-	import trees from "./libs/trees";
+	import trees from './libs/trees';
 	var cache = {},
-		CssHandler = require("./libs/CssHandler.js"),
+		CssHandler = require('./libs/CssHandler.js'),
 		// #ifdef MP-WEIXIN || MP-TOUTIAO
 		fs = uni.getFileSystemManager ? uni.getFileSystemManager() : null,
 		// #endif
-		Parser = require("./libs/MpHtmlParser.js");
+		Parser = require('./libs/MpHtmlParser.js');
 	var document; // document 补丁包 https://jin-yufeng.github.io/Parser/#/instructions?id=document
 	// 计算 cache 的 key
 	function hash(str) {
@@ -62,30 +62,30 @@
 		},
 		// #endif
 		props: {
-			"html": null,
+			'html': null,
 			// #ifndef MP-ALIPAY
-			"autopause": {
+			'autopause': {
 				type: Boolean,
 				default: true
 			},
 			// #endif
-			"autosetTitle": {
+			'autosetTitle': {
 				type: Boolean,
 				default: true
 			},
-			"compress": Number,
-			"domain": String,
+			'compress': Number,
+			'domain': String,
 			// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-			"gestureZoom": Boolean,
+			'gestureZoom': Boolean,
 			// #endif
 			// #ifdef MP-WEIXIN || MP-QQ || H5 || APP-PLUS
-			"lazyLoad": Boolean,
+			'lazyLoad': Boolean,
 			// #endif
-			"selectable": Boolean,
-			"tagStyle": Object,
-			"showWithAnimation": Boolean,
-			"useAnchor": Boolean,
-			"useCache": Boolean
+			'selectable': Boolean,
+			'tagStyle': Object,
+			'showWithAnimation': Boolean,
+			'useAnchor': Boolean,
+			'useCache': Boolean
 		},
 		watch: {
 			html(html) {
@@ -94,7 +94,7 @@
 		},
 		mounted() {
 			// #ifdef APP-NVUE
-			console.error("本组件暂不支持 NVUE");
+			console.error('本组件暂不支持 NVUE');
 			// #endif
 			// 图片数组
 			this.imgList = [];
@@ -106,19 +106,19 @@
 				if (!i || !src) return;
 				// #ifndef MP-ALIPAY || APP-PLUS
 				// 去重
-				if (src.indexOf("http") == 0 && this.includes(src)) {
+				if (src.indexOf('http') == 0 && this.includes(src)) {
 					var newSrc = '';
 					for (var j = 0, c; c = src[j]; j++) {
 						if (c == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
 						newSrc += Math.random() > 0.5 ? c.toUpperCase() : c;
 					}
-					newSrc += src.substring(j);
+					newSrc += src.substr(j);
 					return this[i] = newSrc;
 				}
 				// #endif
 				this[i] = src;
 				// 暂存 data src
-				if (src.includes("data:image")) {
+				if (src.includes('data:image')) {
 					var info = src.match(/data:image\/(\S+?);(\S+?),(.+)/);
 					if (!info) return;
 					// #ifdef MP-WEIXIN || MP-TOUTIAO
@@ -150,7 +150,7 @@
 			// #endif
 			this.imgList.each(src => {
 				// #ifdef APP-PLUS
-				if (src && src.includes("_doc")) {
+				if (src && src.includes('_doc')) {
 					plus.io.resolveLocalFileSystemURL(src, entry => {
 						entry.remove();
 					});
@@ -168,16 +168,16 @@
 		methods: {
 			// #ifdef H5
 			_Dom2Str(nodes) {
-				var str = "";
+				var str = '';
 				for (var node of nodes) {
-					if (node.type == "text")
+					if (node.type == 'text')
 						str += node.text;
 					else {
 						str += ('<' + node.name);
 						for (var attr in node.attrs || {})
 							str += (' ' + attr + '="' + node.attrs[attr] + '"');
 						if (!node.children || !node.children.length) str += '>';
-						else str += ('>' + this._Dom2Str(node.children) + "</" + node.name + '>');
+						else str += ('>' + this._Dom2Str(node.children) + '</' + node.name + '>');
 					}
 				}
 				return str;
@@ -189,19 +189,19 @@
 					if (this.rtf && !append) this.rtf.parentNode.removeChild(this.rtf);
 					return;
 				}
-				if (typeof html != "string") html = this._Dom2Str(html.nodes || html);
+				if (typeof html != 'string') html = this._Dom2Str(html.nodes || html);
 				// 处理 rpx
-				if (html.includes("rpx"))
-					html = html.replace(/[0-9.]*rpx/g, $ => parseFloat($) * cfg.screenWidth / 750 + "px");
-				var div = document.createElement("div");
+				if (html.includes('rpx'))
+					html = html.replace(/[0-9.]*rpx/g, $ => parseFloat($) * cfg.screenWidth / 750 + 'px');
+				var div = document.createElement('div');
 				if (!append) {
 					// 处理 tag-style 和 userAgentStyles
-					var style = "<style>@keyframes show{0%{opacity:0}100%{opacity:1}}";
+					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}';
 					for (var item in cfg.userAgentStyles)
 						style += (item + '{' + cfg.userAgentStyles[item] + '}');
 					for (var item in this.tagStyle)
 						style += (item + '{' + this.tagStyle[item] + '}');
-					style += "</style>";
+					style += '</style>';
 					html = style + html;
 					if (this.rtf) this.rtf.parentNode.removeChild(this.rtf);
 					this.rtf = div;
@@ -210,51 +210,51 @@
 					else this.rtf.appendChild(div);
 				}
 				div.innerHTML = html;
-				for (var styles = this.rtf.getElementsByTagName("style"), i = 0, style; style = styles[i++];) {
-					style.innerHTML = style.innerHTML.replace(/\s*body/g, "#rtf" + this._uid);
-					style.setAttribute("scoped", "true");
+				for (var styles = this.rtf.getElementsByTagName('style'), i = 0, style; style = styles[i++];) {
+					style.innerHTML = style.innerHTML.replace(/\s*body/g, '#rtf' + this._uid);
+					style.setAttribute('scoped', 'true');
 				}
 				// 懒加载
 				if (!this._observer && this.lazyLoad && IntersectionObserver) {
 					this._observer = new IntersectionObserver(changes => {
 						for (var item, i = 0; item = changes[i++];) {
 							if (item.isIntersecting) {
-								item.target.src = item.target.getAttribute("data-src");
-								item.target.removeAttribute("data-src");
+								item.target.src = item.target.getAttribute('data-src');
+								item.target.removeAttribute('data-src');
 								this._observer.unobserve(item.target);
 							}
 						}
 					}, {
-						rootMargin: "900px 0px 900px 0px"
+						rootMargin: '900px 0px 900px 0px'
 					})
 				}
 				var _ts = this;
 				// 获取标题
-				var title = this.rtf.getElementsByTagName("title");
+				var title = this.rtf.getElementsByTagName('title');
 				if (title.length && this.autosetTitle)
 					uni.setNavigationBarTitle({
 						title: title[0].innerText
 					})
 				// 图片处理
 				this.imgList.length = 0;
-				var imgs = this.rtf.getElementsByTagName("img");
+				var imgs = this.rtf.getElementsByTagName('img');
 				for (var i = 0, j = 0, img; img = imgs[i]; i++) {
-					img.style.maxWidth = "100%";
-					var src = img.getAttribute("src");
+					img.style.maxWidth = '100%';
+					var src = img.getAttribute('src');
 					if (this.domain && src) {
-						if (src[0] == "/") {
-							if (src[1] == "/")
-								img.src = (this.domain.includes("://") ? this.domain.split("://")[0] : '') + ':' + src;
+						if (src[0] == '/') {
+							if (src[1] == '/')
+								img.src = (this.domain.includes('://') ? this.domain.split('://')[0] : '') + ':' + src;
 							else img.src = this.domain + src;
-						} else if (!src.includes("://")) img.src = this.domain + '/' + src;
+						} else if (!src.includes('://')) img.src = this.domain + '/' + src;
 					}
-					if (!img.hasAttribute("ignore") && img.parentElement.nodeName != 'A') {
+					if (!img.hasAttribute('ignore') && img.parentElement.nodeName != 'A') {
 						img.i = j++;
-						_ts.imgList.push(img.src || img.getAttribute("data-src"));
+						_ts.imgList.push(img.src || img.getAttribute('data-src'));
 						img.onclick = function() {
 							var preview = true;
 							this.ignore = () => preview = false;
-							_ts.$emit("imgtap", this);
+							_ts.$emit('imgtap', this);
 							if (preview) {
 								uni.previewImage({
 									current: this.i,
@@ -265,13 +265,13 @@
 					}
 					img.onerror = function() {
 						_ts.$emit('error', {
-							source: "img",
+							source: 'img',
 							target: this
 						});
 					}
 					if (_ts.lazyLoad && this._observer && img.src && img.i != 0) {
-						img.setAttribute("data-src", img.src);
-						img.removeAttribute("src");
+						img.setAttribute('data-src', img.src);
+						img.removeAttribute('src');
 						this._observer.observe(img);
 					}
 				}
@@ -280,8 +280,8 @@
 				for (var link of links) {
 					link.onclick = function(e) {
 						var jump = true,
-							href = this.getAttribute("href");
-						_ts.$emit("linkpress", {
+							href = this.getAttribute('href');
+						_ts.$emit('linkpress', {
 							href,
 							ignore: () => jump = false
 						});
@@ -289,10 +289,10 @@
 							if (href[0] == '#') {
 								if (_ts.useAnchor) {
 									_ts.navigateTo({
-										id: href.substring(1)
+										id: href.substr(1)
 									})
 								}
-							} else if (href.indexOf("http") == 0 || href.indexOf("//") == 0)
+							} else if (href.indexOf('http') == 0 || href.indexOf('//') == 0)
 								return true;
 							else {
 								uni.navigateTo({
@@ -304,13 +304,13 @@
 					}
 				}
 				// 视频处理
-				var videos = this.rtf.getElementsByTagName("video");
+				var videos = this.rtf.getElementsByTagName('video');
 				_ts.videoContexts = videos;
 				for (var video, i = 0; video = videos[i++];) {
-					video.style.maxWidth = "100%";
+					video.style.maxWidth = '100%';
 					video.onerror = function() {
 						_ts.$emit('error', {
-							source: "video",
+							source: 'video',
 							target: this
 						});
 					}
@@ -321,19 +321,19 @@
 					}
 				}
 				// 音频处理
-				var audios = this.rtf.getElementsByTagName("audios");
+				var audios = this.rtf.getElementsByTagName('audios');
 				for (var audio of audios)
 					audio.onerror = function(e) {
-						_ts.$emit("error", {
-							source: "audio",
+						_ts.$emit('error', {
+							source: 'audio',
 							target: this
 						});
 					}
 				this.document = this.rtf;
-				if (!append) document.getElementById("rtf" + this._uid).appendChild(this.rtf);
+				if (!append) document.getElementById('rtf' + this._uid).appendChild(this.rtf);
 				this.$nextTick(() => {
 					this.nodes = [1];
-					this.$emit("load");
+					this.$emit('load');
 				})
 				setTimeout(() => this.showAm = '', 500);
 				// #endif
@@ -341,7 +341,7 @@
 				var nodes;
 				if (!html)
 					return this.nodes = [];
-				else if (typeof html == "string") {
+				else if (typeof html == 'string') {
 					var parser = new Parser(html, this);
 					// 缓存读取
 					if (this.useCache) {
@@ -353,17 +353,17 @@
 							cache[hashVal] = nodes;
 						}
 					} else nodes = parser.parse();
-					this.$emit("parse", nodes);
-				} else if (Object.prototype.toString.call(html) == "[object Array]") {
+					this.$emit('parse', nodes);
+				} else if (Object.prototype.toString.call(html) == '[object Array]') {
 					// 非本插件产生的 array 需要进行一些转换
-					if (html.length && html[0].PoweredBy != "Parser") {
+					if (html.length && html[0].PoweredBy != 'Parser') {
 						var parser = new Parser(html, this);
 						(function f(ns) {
 							for (var i = 0, n; n = ns[i]; i++) {
-								if (n.type == "text") continue;
+								if (n.type == 'text') continue;
 								n.attrs = n.attrs || {};
 								for (var item in n.attrs)
-									if (typeof n.attrs[item] != "string") n.attrs[item] = n.attrs[item].toString();
+									if (typeof n.attrs[item] != 'string') n.attrs[item] = n.attrs[item].toString();
 								parser.matchAttr(n, parser);
 								if (n.children && n.children.length) {
 									parser.STACK.push(n);
@@ -374,15 +374,15 @@
 						})(html);
 					}
 					nodes = html;
-				} else if (typeof html == "object" && html.nodes) {
+				} else if (typeof html == 'object' && html.nodes) {
 					nodes = html.nodes;
-					console.warn("错误的 html 类型：object 类型已废弃");
+					console.warn('错误的 html 类型：object 类型已废弃');
 				} else
-					return console.warn("错误的 html 类型：" + typeof html);
+					return console.warn('错误的 html 类型：' + typeof html);
 				// #ifdef APP-PLUS
 				this.loadVideo = false;
 				// #endif
-				if (document) this.document = new document(this.nodes, "nodes", this);
+				if (document) this.document = new document(this.nodes, 'nodes', this);
 				if (append) this.nodes = this.nodes.concat(nodes);
 				else this.nodes = nodes;
 				if (nodes.length && nodes[0].title && this.autosetTitle)
@@ -397,20 +397,20 @@
 						// #endif
 						var f = (cs) => {
 							for (let i = 0, c; c = cs[i++];) {
-								if (c.$options.name == "trees") {
+								if (c.$options.name == 'trees') {
 									var observered = false;
 									for (var j = c.nodes.length, item; item = c.nodes[--j];) {
 										if (item.c) continue;
-										if (item.name == "img") {
+										if (item.name == 'img') {
 											this.imgList.setItem(item.attrs.i, item.attrs.src);
 											// #ifndef MP-ALIPAY
-											if (!c.observer && !c.imgLoad && item.attrs.i != "0") {
+											if (!c.observer && !c.imgLoad && item.attrs.i != '0') {
 												if (this.lazyLoad && uni.createIntersectionObserver) {
 													c.observer = uni.createIntersectionObserver(c);
 													c.observer.relativeToViewport({
 														top: 900,
 														bottom: 900
-													}).observe("._img", res => {
+													}).observe('._img', res => {
 														c.imgLoad = true;
 														c.observer.disconnect();
 													})
@@ -420,14 +420,14 @@
 											// #endif
 										}
 										// #ifndef MP-ALIPAY
-										else if (item.name == "video") {
+										else if (item.name == 'video') {
 											var ctx = uni.createVideoContext(item.attrs.id, c);
 											ctx.id = item.attrs.id;
 											this.videoContexts.push(ctx);
 										}
 										// #endif
 										// #ifdef MP-WEIXIN
-										else if (item.name == "audio" && item.attrs.autoplay)
+										else if (item.name == 'audio' && item.attrs.autoplay)
 											wx.createAudioContext(item.attrs.id, c).play();
 										// #endif
 										// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
@@ -448,7 +448,7 @@
 						f(this.$children);
 						// #ifdef MP-TOUTIAO
 					}, 200)
-					this.$emit("load");
+					this.$emit('load');
 					// #endif
 					// #ifdef APP-PLUS
 					setTimeout(() => {
@@ -470,11 +470,11 @@
 					uni.createSelectorQuery().in(this)
 						// #endif
 						// #ifndef H5
-						.select(".top").boundingClientRect().exec(res => {
+						.select('.top').boundingClientRect().exec(res => {
 							// #endif
 							this.width = res[0].width;
 							if (res[0].height == height) {
-								this.$emit("ready", res[0])
+								this.$emit('ready', res[0])
 								clearInterval(this._timer);
 							}
 							height = res[0].height;
@@ -482,7 +482,7 @@
 						});
 					// #endif
 				}, 350)
-				if (this.showWithAnimation && !append) this.showAm = "animation:show .5s";
+				if (this.showWithAnimation && !append) this.showAm = 'animation:show .5s';
 			},
 			getText(ns = this.html || this.nodes) {
 				// #ifdef H5
@@ -491,17 +491,17 @@
 				// #ifndef H5
 				var txt = '';
 				for (var i = 0, n; n = ns[i++];) {
-					if (n.type == "text") txt += n.txt.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+					if (n.type == 'text') txt += n.txt.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
 						.replace(/&amp;/g, '&');
-					else if (n.type == "br") txt += '\n';
+					else if (n.type == 'br') txt += '\n';
 					else {
 						// 块级标签前后加换行
-						var block = n.name == 'p' || n.name == "div" || n.name == "tr" || n.name == "li" || (n.name[0] == 'h' && n.name[1] >
+						var block = n.name == 'p' || n.name == 'div' || n.name == 'tr' || n.name == 'li' || (n.name[0] == 'h' && n.name[1] >
 							'0' && n.name[1] < '7');
 						if (block && txt && txt[txt.length - 1] != '\n') txt += '\n';
 						if (n.children) txt += this.getText(n.children);
 						if (block && txt[txt.length - 1] != '\n') txt += '\n';
-						else if (n.name == "td" || n.name == "th") txt += '\t';
+						else if (n.name == 'td' || n.name == 'th') txt += '\t';
 					}
 				}
 				return txt;
@@ -510,18 +510,18 @@
 			navigateTo(obj) {
 				if (!this.useAnchor)
 					return obj.fail && obj.fail({
-						errMsg: "Anchor is disabled"
+						errMsg: 'Anchor is disabled'
 					})
 				// #ifdef H5
 				if (!obj.id) {
 					window.scrollTo(0, this.rtf.offsetTop);
 					return obj.success && obj.success({
-						errMsg: "pageScrollTo:ok"
+						errMsg: 'pageScrollTo:ok'
 					});
 				}
 				var target = document.getElementById(obj.id);
 				if (!target) return obj.fail && obj.fail({
-					errMsg: "Label not found"
+					errMsg: 'Label not found'
 				});
 				obj.scrollTop = this.rtf.offsetTop + target.offsetTop;
 				uni.pageScrollTo(obj);
@@ -533,21 +533,21 @@
 						.exec(res => {
 							if (!res || !res[0])
 								return obj.fail && obj.fail({
-									errMsg: "Label not found"
+									errMsg: 'Label not found'
 								});
 							obj.scrollTop = res[1].scrollTop + res[0].top;
 							uni.pageScrollTo(obj);
 						})
 				}
-				if (!obj.id) Scroll(".top");
+				if (!obj.id) Scroll('.top');
 				else {
 					// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-					Scroll(".top >>> #" + obj.id + ', .top >>> .' + obj.id);
+					Scroll('.top >>> #' + obj.id + ', .top >>> .' + obj.id);
 					// #endif
 					// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
 					for (var anchor of this.anchors)
 						if (anchor.id == obj.id)
-							Scroll('#' + obj.id + ", ." + obj.id, anchor.node);
+							Scroll('#' + obj.id + ', .' + obj.id, anchor.node);
 					// #endif
 				}
 				// #endif
@@ -565,12 +565,12 @@
 					html = this._Dom2Str(html);
 				var contain = document.createElement('div');
 				contain.innerHTML = html;
-				var imgs = contain.querySelectorAll("img");
+				var imgs = contain.querySelectorAll('img');
 				for (var i = imgs.length - 1; i >= num; i--)
-					imgs[i].removeAttribute("src");
+					imgs[i].removeAttribute('src');
 				// #endif
 				// #ifndef H5
-				if (typeof html == "string") {
+				if (typeof html == 'string') {
 					var id = hash(html);
 					html = new Parser(html, this).parse();
 					cache[id] = html;
@@ -578,7 +578,7 @@
 				var wait = [];
 				(function f(ns) {
 					for (var i = 0, n; n = ns[i++];) {
-						if (n.name == "img" && n.attrs.src && !wait.includes(n.attrs.src))
+						if (n.name == 'img' && n.attrs.src && !wait.includes(n.attrs.src))
 							wait.push(n.attrs.src);
 						f(n.children || []);
 					}
@@ -611,7 +611,7 @@
 						this._initY = initY;
 						this._scaleAm = uni.createAnimation({
 							transformOrigin: `${initX}px ${this._initY}px 0`,
-							timingFunction: "ease-in-out"
+							timingFunction: 'ease-in-out'
 						});
 						// #ifdef MP-TOUTIAO
 						this._scaleAm.opacity(1);

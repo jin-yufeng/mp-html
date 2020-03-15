@@ -1,6 +1,6 @@
 // test.js
-const MpHtmlParser = require("../../components/parser/libs/MpHtmlParser.js");
-const marked = require("./marked.min.js");
+const MpHtmlParser = require('../../components/parser/libs/MpHtmlParser.js');
+const marked = require('./marked.min.js');
 var videoAd = null;
 // 计算可用次数
 const today = new Date().toLocaleDateString();
@@ -17,25 +17,25 @@ Page({
   },
   // 页面加载
   onLoad(e) {
-    if (!wx.canIUse("editor")) {
+    if (!wx.canIUse('editor')) {
       wx.showModal({
-        title: "失败",
-        content: "微信版本过低，暂时无法使用此功能",
+        title: '失败',
+        content: '微信版本过低，暂时无法使用此功能',
         showCancel: false
       })
       return wx.redirectTo({
         url: '/pages/index/index',
       });
     }
-    wx.createSelectorQuery().select("#editor").context((res) => {
+    wx.createSelectorQuery().select('#editor').context((res) => {
       this.editor = res.context;
     }).exec();
     var tagStyle = {
-      pre: "padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#272822;color:#f8f8f2;line-height: 1.5;text-shadow:0 1px rgba(0,0,0,0.3);font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;position:relative;user-select:text",
-      code: "background-color:#f0f0f0;font-size:85%;margin:0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace"
+      pre: 'padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#272822;color:#f8f8f2;line-height: 1.5;text-shadow:0 1px rgba(0,0,0,0.3);font-family:Consolas,Monaco,"Andale Mono","Ubuntu Mono",monospace;position:relative;user-select:text',
+      code: 'background-color:#f0f0f0;font-size:85%;margin:0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace'
     }
     // markdown 表格样式
-    if (e.index == "1") {
+    if (e.index == '1') {
       tagStyle.table = 'border-collapse:collapse;border-top:1px solid gray;border-left:1px solid gray';
       tagStyle.th = 'border-right:1px solid gray;border-bottom:1px solid gray;padding:5px';
       tagStyle.td = 'border-right:1px solid gray;border-bottom:1px solid gray;padding:5px';
@@ -85,8 +85,8 @@ Page({
   addTemplate(e) {
     var template;
     switch (e.target.dataset.type) {
-      case "table":
-        if (this.data.index == "0")
+      case 'table':
+        if (this.data.index == '0')
           template =
           `<table border="1">
   <tr>
@@ -109,8 +109,8 @@ Page({
 |:---:|:---:|
 | 内容1 | 内容2 |`;
         break;
-      case "list":
-        if (this.data.index == "0")
+      case 'list':
+        if (this.data.index == '0')
           template =
           `<ol>
   <li>类型1-1</li>
@@ -142,8 +142,8 @@ Page({
 1. 有序列表1
 2. 有序列表2`;
         break;
-      case "img":
-        if (this.data.index == "0")
+      case 'img':
+        if (this.data.index == '0')
           template =
           `<style>.desc{color:gray;font-size:12px;}</style>
 <div style="text-align:center;">
@@ -166,7 +166,7 @@ Page({
   <p class="desc">装饰图片不能预览</p>
 </div>`;
         else
-          template = "![示例图片](https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174)"
+          template = '![示例图片](https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174)'
         break;
       case 'a':
         if (this.data.index == '0')
@@ -181,13 +181,13 @@ Page({
   <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>
 </div>`;
         else
-          template = "[GitHub 链接](https://github.com/jin-yufeng/Parser)";
+          template = '[GitHub 链接](https://github.com/jin-yufeng/Parser)';
         break;
-      case "code":
-        if (this.data.index == "0")
-          template = "<pre><code class=\"language-javascript\">var i = 0;</code></pre>";
+      case 'code':
+        if (this.data.index == '0')
+          template = '<pre><code class="language-javascript">var i = 0;</code></pre>';
         else
-          template = "```javascript\nvar i = 0;\n```";
+          template = '```javascript\nvar i = 0;\n```';
         break;
     }
     this.editor.insertText({
@@ -196,9 +196,9 @@ Page({
   },
   input(e) {
     var text = e.detail.text;
-    if (text.includes('\t')) text = text.replace(/\t/g, "    ");
-    if (text.includes('&')) text = text.replace(/&/g, "&amp;");
-    if (text.includes("pre")) text = text.replace(/</g, "&lt;");
+    if (text.includes('\t')) text = text.replace(/\t/g, '    ');
+    if (text.includes('&')) text = text.replace(/&/g, '&amp;');
+    if (text.includes('pre')) text = text.replace(/</g, '&lt;');
     // 过长内容不再高亮
     if (e.detail.text.length > 10000) {
       this.setData({
@@ -207,7 +207,7 @@ Page({
     } else
       this.setData({
         tooLong: false,
-        code: new MpHtmlParser("<pre style='white-space:pre-wrap;word-break:break-all'><code class='language-" + (this.data.index == "0" ? "html" : "md") + "-editor'>" + text + "</code></pre>").parse()
+        code: new MpHtmlParser('<pre style="white-space:pre-wrap;word-break:break-all"><code class="language-' + (this.data.index == '0' ? 'html' : 'md') + '-editor">' + text + '</code></pre>').parse()
       })
   },
   // 清空内容
@@ -224,8 +224,8 @@ Page({
         var html = res.text;
         if (!html)
           return wx.showModal({
-            title: "失败",
-            content: "内容不能为空！",
+            title: '失败',
+            content: '内容不能为空！',
             showCancel: false
           })
         if (this.data.index == '1')
@@ -235,7 +235,7 @@ Page({
           times: (--times)
         })
         wx.pageScrollTo({
-          selector: "#result"
+          selector: '#result'
         })
       }
     })
@@ -246,13 +246,13 @@ Page({
     this.setData({
       showActionsheet: true,
       groups: [{
-        text: "复制图片地址",
+        text: '复制图片地址',
         value: 0
       }]
     })
     // 云调用 img.scanQRCode
     wx.cloud.callFunction({
-      name: "scanImg",
+      name: 'scanImg',
       data: {
         src: this.url
       },
@@ -261,10 +261,10 @@ Page({
           this.scanRes = res.result.codeResults[0].data;
           this.setData({
             groups: [{
-              text: "复制图片地址",
+              text: '复制图片地址',
               value: 0
             }, {
-              text: "复制识别结果",
+              text: '复制识别结果',
               value: 1
             }]
           })
@@ -294,7 +294,7 @@ Page({
           .then(() => videoAd.show())
           .catch(err => {
             wx.showToast({
-              title: "加载失败",
+              title: '加载失败',
             })
           })
       })
@@ -304,8 +304,8 @@ Page({
   onShareAppMessage() {
     return {
       title: this.data.modes[this.data.index],
-      imageUrl: "https://6874-html-foe72-1259071903.tcb.qcloud.la/share.png?sign=1d1c1938f23a3b1d8b34818599f9f0b4&t=1560250134",
-      path: "/pages/test/test?index=" + this.data.index
+      imageUrl: 'https://6874-html-foe72-1259071903.tcb.qcloud.la/share.png?sign=1d1c1938f23a3b1d8b34818599f9f0b4&t=1560250134',
+      path: '/pages/test/test?index=' + this.data.index
     }
   }
 })

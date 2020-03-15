@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/12
+  update：2020/03/15
 -->
 <template>
 	<view class="interlayer">
@@ -20,7 +20,7 @@
 			<!--#endif-->
 			<!--文本-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || APP-PLUS-->
-			<rich-text v-else-if="item.decode" style="display:inline-block" :nodes="[item]"></rich-text>
+			<rich-text v-else-if="item.decode" class="_entity" :nodes="[item]"></rich-text>
 			<!--#endif-->
 			<text v-else-if="item.type=='text'" decode>{{item.text}}</text>
 			<text v-else-if="item.name=='br'">\n</text>
@@ -108,12 +108,12 @@
 <script module="handler" lang="wxs" src="./handler.wxs"></script>
 <script module="handler" lang="sjs" src="./handler.sjs"></script>
 <script>
-	import trees from "./trees"
+	import trees from './trees'
 	export default {
 		components: {
 			trees
 		},
-		name: "trees",
+		name: 'trees',
 		data() {
 			return {
 				controls: {},
@@ -134,7 +134,7 @@
 		mounted() {
 			// 获取顶层组件
 			this.top = this.$parent;
-			while (this.top.$options.name != "parser") {
+			while (this.top.$options.name != 'parser') {
 				if (this.top.top) {
 					this.top = this.top.top;
 					break;
@@ -161,7 +161,7 @@
 				var attrs = e.currentTarget.dataset.attrs;
 				if (!attrs.ignore) {
 					var preview = true;
-					this.top.$emit("imgtap", {
+					this.top.$emit('imgtap', {
 						id: e.target.id,
 						src: attrs.src,
 						ignore: () => preview = false
@@ -179,7 +179,7 @@
 			imglongtap(e) {
 				var attrs = e.item.dataset.attrs;
 				if (!attrs.ignore)
-					this.top.$emit("imglongtap", {
+					this.top.$emit('imglongtap', {
 						id: e.target.id,
 						src: attrs.src
 					})
@@ -188,12 +188,12 @@
 				var jump = true,
 					attrs = e.currentTarget.dataset.attrs;
 				attrs.ignore = () => jump = false;
-				this.top.$emit("linkpress", attrs);
+				this.top.$emit('linkpress', attrs);
 				if (jump) {
 					// #ifdef MP
-					if (attrs["app-id"]) {
+					if (attrs['app-id']) {
 						return uni.navigateToMiniProgram({
-							appId: attrs["app-id"],
+							appId: attrs['app-id'],
 							path: attrs.path
 						})
 					}
@@ -204,12 +204,12 @@
 								this.top.navigateTo({
 									id: attrs.href.substring(1)
 								})
-						} else if (attrs.href.indexOf("http") == 0 || attrs.href.indexOf("//") == 0) {
+						} else if (attrs.href.indexOf('http') == 0 || attrs.href.indexOf('//') == 0) {
 							// #ifdef APP-PLUS
-							if (attrs.href.includes(".doc") || attrs.href.includes(".xls") || attrs.href.includes(".ppt") || attrs.href.includes(
-									".pdf")) {
+							if (attrs.href.includes('.doc') || attrs.href.includes('.xls') || attrs.href.includes('.ppt') || attrs.href.includes(
+									'.pdf')) {
 								uni.showLoading({
-									title: "文件下载中"
+									title: '文件下载中'
 								})
 								uni.downloadFile({
 									url: attrs.href,
@@ -226,7 +226,7 @@
 									data: attrs.href,
 									success: () =>
 										uni.showToast({
-											title: "链接已复制"
+											title: '链接已复制'
 										})
 								});
 						} else
@@ -238,14 +238,14 @@
 			},
 			error(e) {
 				var context,target = e.currentTarget;
-				if (target.dataset.from == "video" || target.dataset.from == "audio") {
+				if (target.dataset.from == 'video' || target.dataset.from == 'audio') {
 					// 加载其他 source
 					var index = this.controls[target.id] ? this.controls[target.id].index + 1 : 1;
 					if (index < target.dataset.source.length)
-						this.$set(this.controls[target.id], "index", index);
-					if (target.dataset.from == "video") context = uni.createVideoContext(target.id, this)
+						this.$set(this.controls[target.id], 'index', index);
+					if (target.dataset.from == 'video') context = uni.createVideoContext(target.id, this)
 				}
-				this.top && this.top.$emit("error", {
+				this.top && this.top.$emit('error', {
 					source: target.dataset.from,
 					target,
 					errMsg: e.detail.errMsg,
@@ -436,7 +436,8 @@
 	.__bdo,
 	.__bdi,
 	.__ruby,
-	.__rt {
+	.__rt,
+	._entity {
 		display: inline-block;
 	}
 

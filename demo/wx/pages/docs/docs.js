@@ -3,25 +3,25 @@ Page({
   // 数据
   data: {
     // 标题
-    titles: ["功能介绍", "使用方法", "更新日志"],
+    titles: ['功能介绍', '使用方法', '更新日志'],
     // 标签的默认样式
     tagStyle: {
-      pre: "padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#2d2d2d;color:#ccc;line-height: 1.5;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;position:relative",
-      code: "background-color:#f0f0f0;font-size:85%;margin:0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace"
+      pre: 'padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#2d2d2d;color:#ccc;line-height: 1.5;font-family:Consolas,Monaco,"Andale Mono","Ubuntu Mono",monospace;position:relative',
+      code: 'background-color:#f0f0f0;font-size:85%;margin:0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace'
     },
     // 支持的选择器
     selectors: [{
-      name: "class 选择器",
-      example: ".the-class"
+      name: 'class 选择器',
+      example: '.the-class'
     }, {
-      name: "id 选择器",
-      example: "#the-id"
+      name: 'id 选择器',
+      example: '#the-id'
     }, {
-      name: "标签名选择器",
-      example: "img"
+      name: '标签名选择器',
+      example: 'img'
     }, {
-      name: "多选择器的并集",
-      example: ".the-class, #the-id"
+      name: '多选择器的并集',
+      example: '.the-class, #the-id'
     }],
     // 选择器示例代码
     selectorCode: `<pre><code class="language-html"><style>
@@ -106,54 +106,54 @@ p {
 <pre style="margin-top:15px"><code class="language-wxml"><parser html="{{html}}" domain="https://example.com" /></code></pre>`,
     // 与 rich-text 相比增加的标签
     tags: [{
-      name: "a",
-      attrs: "href, app-id, path"
+      name: 'a',
+      attrs: 'href, app-id, path'
     }, {
-      name: "ad",
-      attrs: "unit-id"
+      name: 'ad',
+      attrs: 'unit-id'
     }, {
-      name: "audio",
-      attrs: "author, autoplay, controls,\nloop, name, poster, src"
+      name: 'audio',
+      attrs: 'author, autoplay, controls,\nloop, name, poster, src'
     }, {
-      name: "base",
-      attrs: "href"
+      name: 'base',
+      attrs: 'href'
     }, {
-      name: "div, p",
-      attrs: "align"
+      name: 'div, p',
+      attrs: 'align'
     }, {
-      name: "font",
-      attrs: "color, face, size"
+      name: 'font',
+      attrs: 'color, face, size'
     }, {
-      name: "picture",
-      attrs: "alt, height, width, src"
+      name: 'picture',
+      attrs: 'alt, height, width, src'
     }, {
-      name: "source",
-      attrs: "media, src"
+      name: 'source',
+      attrs: 'media, src'
     }, {
-      name: "svg",
-      attrs: "svg 系列所有标签"
+      name: 'svg',
+      attrs: 'svg 系列所有标签'
     }, {
-      name: "table",
-      attrs: "border, cellpadding,\ncellspacing, width"
+      name: 'table',
+      attrs: 'border, cellpadding,\ncellspacing, width'
     }, {
-      name: "video",
-      attrs: "autoplay, controls, height, loop,\nmuted, poster, src, unit-id, width"
+      name: 'video',
+      attrs: 'autoplay, controls, height, loop,\nmuted, poster, src, unit-id, width'
     }],
     // 2.7.1 基础库以上才支持的标签
     newTags: [{
-      name: "bdi"
+      name: 'bdi'
     }, {
-      name: "bdo",
-      attrs: "dir"
+      name: 'bdo',
+      attrs: 'dir'
     }, {
-      name: "caption"
+      name: 'caption'
     }, {
-      name: "rp",
-      attrs: "高版本不显示，可用于兼容"
+      name: 'rp',
+      attrs: '高版本不显示，可用于兼容'
     }, {
-      name: "rt"
+      name: 'rt'
     }, {
-      name: "ruby"
+      name: 'ruby'
     }],
     // 事件
     eventsIntro: `<ol style="margin:10px 0 0 -15px">
@@ -232,86 +232,86 @@ export default {
 <div style="margin-top:10px">在其他框架中使用可见：<a href="https://jin-yufeng.github.io/Parser/#/instructions?id=在其他框架中使用">在其他框架中使用</a></div>`,
     // 组件属性
     attrs: [{
-      name: "html",
-      type: "String\nArray",
-      notice: "要显示的 html 数据，格式同 rich-text"
+      name: 'html',
+      type: 'String\nArray',
+      notice: '要显示的 html 数据，格式同 rich-text'
     }, {
-      name: "autopause",
-      type: "Boolean",
-      default: "true",
-      notice: "是否允许在播放视频时自动暂停其他视频"
+      name: 'autopause',
+      type: 'Boolean',
+      default: 'true',
+      notice: '是否允许在播放视频时自动暂停其他视频'
     }, {
-      name: "autosetTitle",
-      type: "Boolean",
-      default: "true",
-      notice: "是否自动将 title 标签的内容设置到页面标题"
+      name: 'autosetTitle',
+      type: 'Boolean',
+      default: 'true',
+      notice: '是否自动将 title 标签的内容设置到页面标题'
     }, {
-      name: "compress",
-      type: "Number",
-      default: "0",
-      notice: "压缩等级，可以选择是否移除 id 和 class"
+      name: 'compress',
+      type: 'Number',
+      default: '0',
+      notice: '压缩等级，可以选择是否移除 id 和 class'
     }, {
-      name: "domain",
-      type: "String",
+      name: 'domain',
+      type: 'String',
       default: '',
-      notice: "主域名，设置后将给链接拼接上主域名或协议名"
+      notice: '主域名，设置后将给链接拼接上主域名或协议名'
     }, {
-      name: "gesture-zoom",
-      type: "Boolean",
-      default: "false",
-      notice: "是否开启双击缩放"
+      name: 'gesture-zoom',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否开启双击缩放'
     }, {
-      name: "lazy-load",
-      type: "Boolean",
-      default: "false",
-      notice: "是否开启图片懒加载"
+      name: 'lazy-load',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否开启图片懒加载'
     }, {
-      name: "selectable",
-      type: "Boolean",
-      default: "false",
-      notice: "是否允许长按复制内容"
+      name: 'selectable',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否允许长按复制内容'
     }, {
-      name: "show-with-\nanimation",
-      type: "Boolean",
-      default: "false",
-      notice: "是否使用渐显动画效果"
+      name: 'show-with-\nanimation',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否使用渐显动画效果'
     }, {
-      name: "tag-style",
-      type: "Object",
-      notice: "标签的默认样式"
+      name: 'tag-style',
+      type: 'Object',
+      notice: '标签的默认样式'
     }, {
-      name: "use-anchor",
-      type: "Boolean",
-      default: "false",
-      notice: "是否使用页面内锚点"
+      name: 'use-anchor',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否使用页面内锚点'
     }, {
-      name: "use-cache",
-      type: "Boolean",
-      default: "false",
-      notice: "是否使用缓存，设置后多次打开不用重复解析"
+      name: 'use-cache',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否使用缓存，设置后多次打开不用重复解析'
     }],
     // 事件
     events: [{
-      name: "bindparse",
-      notice: "解析完成时触发，返回解析结果，对这个结果进行修改，将在渲染时生效"
+      name: 'bindparse',
+      notice: '解析完成时触发，返回解析结果，对这个结果进行修改，将在渲染时生效'
     }, {
-      name: "bindload",
-      notice: "dom 结构加载完成时触发，无返回值，可以调用 api"
+      name: 'bindload',
+      notice: 'dom 结构加载完成时触发，无返回值，可以调用 api'
     }, {
-      name: "bindready",
-      notice: "渲染完成时触发，返回组件框的位置大小信息（将等待所有图片加载完毕，延时较长）"
+      name: 'bindready',
+      notice: '渲染完成时触发，返回组件框的位置大小信息（将等待所有图片加载完毕，延时较长）'
     }, {
-      name: "binderror",
-      notice: "出错时触发，返回错误来源和信息，音视频出错时还会返回 context 对象"
+      name: 'binderror',
+      notice: '出错时触发，返回错误来源和信息，音视频出错时还会返回 context 对象'
     }, {
-      name: "bindlinkpress",
-      notice: "链接受到点击时触发，返回链接地址和 ignore 函数，调用将不自动跳转"
+      name: 'bindlinkpress',
+      notice: '链接受到点击时触发，返回链接地址和 ignore 函数，调用将不自动跳转'
     }, {
-      name: "bindimgtap",
-      notice: "图片被点击时触发，返回图片地址和 ignore 函数，调用将不自动预览"
+      name: 'bindimgtap',
+      notice: '图片被点击时触发，返回图片地址和 ignore 函数，调用将不自动预览'
     }, {
-      name: "bindimglongtap",
-      notice: "图片被长按时触发，返回图片地址"
+      name: 'bindimglongtap',
+      notice: '图片被长按时触发，返回图片地址'
     }],
     // api
     apiCode: `<pre><code class="language-wxml"><parser id="article" html="{{html}}" bindload="load" /></code></pre>
@@ -451,26 +451,26 @@ console.log(rect.height); // 高度</code></pre>
 })</code></pre>`,
     // cssHandler 补丁包
     moreSelectors: [{
-      name: "通配符",
-      example: "*"
+      name: '通配符',
+      example: '*'
     }, {
-      name: "后代选择器",
-      example: ".the-class1 .the-class2"
+      name: '后代选择器',
+      example: '.the-class1 .the-class2'
     }, {
-      name: "子选择器",
-      example: ".the-class1>.the-class2"
+      name: '子选择器',
+      example: '.the-class1>.the-class2'
     }, {
-      name: "属性选择器",
-      example: "[name=\"123\"]"
+      name: '属性选择器',
+      example: '[name="123"]'
     }, {
-      name: "before 伪类",
-      example: ".the-class::before"
+      name: 'before 伪类',
+      example: '.the-class::before'
     }, {
-      name: "after 伪类",
-      example: ".the-class::after"
+      name: 'after 伪类',
+      example: '.the-class::after'
     }, {
-      name: "@media 查询",
-      example: "@media(min-width:300px)"
+      name: '@media 查询',
+      example: '@media(min-width:300px)'
     }],
     // parser-group 补丁包
     parserGroup: `<ol style="margin-left:-15px">
@@ -480,17 +480,17 @@ console.log(rect.height); // 高度</code></pre>
 </ol>`,
     // 基础库要求
     versions: [{
-      version: ">=2.2.5",
-      features: "完全正常",
-      percent: "99.8%"
+      version: '>=2.2.5',
+      features: '完全正常',
+      percent: '99.8%'
     }, {
-      version: "1.6.3-2.2.4",
-      features: "不支持 lazy-load 属性",
-      percent: "0.2%"
+      version: '1.6.3-2.2.4',
+      features: '不支持 lazy-load 属性',
+      percent: '0.2%'
     }, {
-      version: "<1.6.3",
-      features: "无法使用",
-      percent: "<0.01%"
+      version: '<1.6.3',
+      features: '无法使用',
+      percent: '<0.01%'
     }],
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
@@ -654,9 +654,9 @@ console.log(rect.height); // 高度</code></pre>
   // 页面分享
   onShareAppMessage() {
     return {
-      title: "富文本插件" + this.data.titles[this.data.index],
-      imageUrl: "https://6874-html-foe72-1259071903.tcb.qcloud.la/share.png?sign=1d1c1938f23a3b1d8b34818599f9f0b4&t=1560250134",
-      path: "/pages/docs/docs?index=" + this.data.index
+      title: '富文本插件' + this.data.titles[this.data.index],
+      imageUrl: 'https://6874-html-foe72-1259071903.tcb.qcloud.la/share.png?sign=1d1c1938f23a3b1d8b34818599f9f0b4&t=1560250134',
+      path: '/pages/docs/docs?index=' + this.data.index
     }
   }
 })

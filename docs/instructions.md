@@ -3,9 +3,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 43.8KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.7KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 43.7KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.6KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.2KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（`uni-app` 包）：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
@@ -19,9 +19,7 @@
 !>百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
 
 !>`uni-app` 包为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
-需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式
-
-!>表格由于较难通过模板循环的方式显示，将直接通过 `rich-text` 进行渲染，因此请尽量避免在表格中加入图片或链接，否则将无法预览或点击（但可以正常显示）  
+需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式（或 `v3`）
 
 以下统称为 `parser`  
 
@@ -972,7 +970,7 @@ getLink(0);
 ### 反馈问题 ###
 在反馈问题前，请先通过以下方式尝试解决：  
 1. 检查是否使用的是最新版的插件包  
-2. 在 [常见问题](#常见问题) 中查找是否有此问题  
+2. 在 [常见问题](#常见问题) 和 [已知问题](https://github.com/jin-yufeng/Parser/issues/88) 中查找是否有此问题  
 3. 在 [issues](https://github.com/jin-yufeng/Parser/issues) 中查找是否有相同问题  
 4. 使用 [示例项目](https://github.com/jin-yufeng/Parser/tree/master/demo) 或微信小程序 [富文本插件](/features#案例体验) 中的自定义测试尝试是否也会出现相同的问题  
 5. 在下框中输入 `html` 字符串进行测试（即直接用浏览器进行渲染，若也存在问题，请检查样式）  

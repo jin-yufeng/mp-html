@@ -64,9 +64,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 43.8KB | 微信小程序插件包 |
-| parser.min | 29.7KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 43.7KB | 微信小程序插件包 |
+| parser.min | 29.6KB | 微信小程序插件包压缩版（功能相同） |
+| parser.uni | 57.2KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -236,9 +236,5 @@
   7. `D` 废弃了后端加强包  
 
   *此版本移除了部分冗余功能，与之前版本存在部分不兼容情况，请注意*
-
-- 2020.2.12
-  1. `A` 增加了 `gesture-zoom` 属性，可以设置双击缩放（默认 `false`）  
-  2. `U` `uni-app` 包修改命名使得符合 `easycom` 规则（`HBuilder X 2.5.5` 以上可以直接使用，无需引入；**之前版本的引入路径有变化**）[详细](https://github.com/jin-yufeng/Parser/issues/79)  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

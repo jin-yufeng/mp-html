@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
 */
-const MpHtmlParser = require("./MpHtmlParser.js");
+const MpHtmlParser = require('./MpHtmlParser.js');
 class element {
   constructor(node, path, context) {
     node.attrs = node.attrs || {};
@@ -34,7 +34,7 @@ class element {
   }
   set innerText(text) {
     this._node.children = [{
-      type: "text",
+      type: 'text',
       text
     }];
     this.childNodes = [];
@@ -44,19 +44,19 @@ class element {
   get innerHtml() {
     return (function f(node) {
       var html = '';
-      if (node.type == "text")
+      if (node.type == 'text')
         html += node.text;
       else {
         html += '<' + node.name;
         for (var attr in node.attrs)
           if (node.attrs[attr])
             html += ` ${attr}="${node.attrs[attr]}"`;
-        if (!node.children || !node.children.length) html += "/>";
+        if (!node.children || !node.children.length) html += '/>';
         else {
           html += '>';
           for (var i = 0; i < node.children.length; i++)
             html += f(node.children[i]);
-          html += "</" + node.name + '>';
+          html += '</' + node.name + '>';
         }
       }
       return html;
@@ -109,13 +109,13 @@ class element {
   }
   // 获取某个样式
   getStyle(key) {
-    key = key.replace(/(A-Z)/g, "-$1").toLowerCase();
+    key = key.replace(/(A-Z)/g, '-$1').toLowerCase();
     if (this.style.hasOwnProperty(key)) return this.style[key];
     else return null;
   }
   // 设置某个样式
   setStyle(key, value) {
-    key = key.replace(/(A-Z)/g, "-$1").toLowerCase();
+    key = key.replace(/(A-Z)/g, '-$1').toLowerCase();
     if (this.style.hasOwnProperty(key)) {
       this.style[key] = value;
       var style = '';
@@ -128,10 +128,10 @@ class element {
   }
   // 查找节点
   _search(node, path, search, type) {
-    if (node.type == "text") return;
-    if (type == "id" && node.attrs && node.attrs.id == search)
+    if (node.type == 'text') return;
+    if (type == 'id' && node.attrs && node.attrs.id == search)
       return this._nodeList.push(new element(node, path, this._context));
-    if ((type == "name" && node.name == search) || (type == "class" && node.attrs && node.attrs.class == search))
+    if ((type == 'name' && node.name == search) || (type == 'class' && node.attrs && node.attrs.class == search))
       this._nodeList.push(new element(node, path, this._context));
     if (node.children && node.children.length)
       for (var i = node.children.length; i--;)
@@ -139,17 +139,17 @@ class element {
   }
   getElementById(id) {
     this._nodeList = [];
-    this._search(this._node, this._path, id, "id");
+    this._search(this._node, this._path, id, 'id');
     return this._nodeList[0];
   }
   getElementsByClassName(className) {
     this._nodeList = [];
-    this._search(this._node, this._path, className, "class");
+    this._search(this._node, this._path, className, 'class');
     return this._nodeList;
   }
   getElementsByTagName(name) {
     this._nodeList = [];
-    this._search(this._node, this._path, name, "name");
+    this._search(this._node, this._path, name, 'name');
     return this._nodeList;
   }
   // 更新视图
@@ -174,27 +174,27 @@ class dom {
   }
   _search(nodes, path, search, type) {
     for (var i = 0, node; node = (nodes || [])[i]; i++) {
-      if (node.type == "text") continue;
-      if (type == "id" && node.attrs && node.attrs.id == search)
+      if (node.type == 'text') continue;
+      if (type == 'id' && node.attrs && node.attrs.id == search)
         return this._nodeList.push(new element(node, `${path}[${i}]`, this._context));
-      if ((type == "name" && node.name == search) || (type == "class" && node.attrs && node.attrs.class == search))
+      if ((type == 'name' && node.name == search) || (type == 'class' && node.attrs && node.attrs.class == search))
         this._nodeList.push(new element(node, `${path}[${i}]`, this._context));
       this._search(node.children, `${path}[${i}].children`, search, type);
     }
   }
   getElementById(id) {
     this._nodeList = [];
-    this._search(this._nodes, this._path, id, "id");
+    this._search(this._nodes, this._path, id, 'id');
     return this._nodeList[0];
   }
   getElementsByClassName(className) {
     this._nodeList = [];
-    this._search(this._nodes, this._path, className, "class");
+    this._search(this._nodes, this._path, className, 'class');
     return this._nodeList;
   }
   getElementsByTagName(name) {
     this._nodeList = [];
-    this._search(this._nodes, this._path, name, "name");
+    this._search(this._nodes, this._path, name, 'name');
     return this._nodeList;
   }
   createElement(name) {

@@ -18,9 +18,9 @@ export default {
 	getStyle: function(style) {
 		if (style) {
 			var i, j, res = '';
-			if ((i = style.indexOf("display")) != -1)
+			if ((i = style.indexOf('display')) != -1)
 				res = style.substring(i, (j = style.indexOf(';', i)) == -1 ? style.length : j);
-			if (style.indexOf("flex") != -1) res += ';' + (style.match(getRegExp("flex[:-][^;]+/g")) || []).join(';');
+			if (style.indexOf('flex') != -1) res += ';' + (style.match(getRegExp('flex[:-][^;]+/g')) || []).join(';');
 			return res;
 		} else return '';
 	},
@@ -30,7 +30,7 @@ export default {
 	// 是否通过 rich-text 显示
 	useRichText: function(item) {
 		// rich-text 不支持 inline
-		if (item.c || inlineTags[item.name] || (item.attrs.style && item.attrs.style.indexOf("display:inline") != -1))
+		if (item.c || inlineTags[item.name] || (item.attrs.style && item.attrs.style.indexOf('display:inline') != -1))
 			return false;
 		return true;
 	}

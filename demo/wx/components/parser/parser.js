@@ -3,14 +3,13 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/12
+  update：2020/03/15
 */
 var cache = {},
-  cfg = require("./libs/config.js"),
-  Parser = require("./libs/MpHtmlParser.js"),
+  Parser = require('./libs/MpHtmlParser.js'),
   fs = wx.getFileSystemManager && wx.getFileSystemManager();
 try {
-  var dom = require("./libs/document.js");
+  var dom = require('./libs/document.js');
 } catch (e) {}
 // 计算 cache 的 key
 function hash(str) {
@@ -20,34 +19,34 @@ function hash(str) {
 }
 Component({
   properties: {
-    "html": {
+    'html': {
       type: null,
       observer(html) {
         if (this._refresh) this._refresh = false;
         else this.setContent(html, false, true);
       }
     },
-    "autosetTitle": {
+    'autosetTitle': {
       type: Boolean,
       value: true
     },
-    "autopause": {
+    'autopause': {
       type: Boolean,
       value: true
     },
-    "compress": Number,
-    "domain": String,
-    "gestureZoom": Boolean,
-    "lazyLoad": Boolean,
-    "selectable": Boolean,
-    "tagStyle": Object,
-    "showWithAnimation": Boolean,
-    "useAnchor": Boolean,
-    "useCache": Boolean
+    'compress': Number,
+    'domain': String,
+    'gestureZoom': Boolean,
+    'lazyLoad': Boolean,
+    'selectable': Boolean,
+    'tagStyle': Object,
+    'showWithAnimation': Boolean,
+    'useAnchor': Boolean,
+    'useCache': Boolean
   },
   relations: {
-    "../parser-group/parser-group": {
-      type: "ancestor"
+    '../parser-group/parser-group': {
+      type: 'ancestor'
     }
   },
   created() {
@@ -56,18 +55,18 @@ Component({
     this.imgList.setItem = function(i, src) {
       if (!i || !src) return;
       // 去重
-      if (src.indexOf("http") == 0 && this.includes(src)) {
+      if (src.indexOf('http') == 0 && this.includes(src)) {
         var newSrc = '';
         for (var j = 0, c; c = src[j]; j++) {
           if (c == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
           newSrc += Math.random() > 0.5 ? c.toUpperCase() : c;
         }
-        newSrc += src.substring(j);
+        newSrc += src.substr(j);
         return this[i] = newSrc;
       }
       this[i] = src;
       // 暂存 data src
-      if (src.includes("data:image")) {
+      if (src.includes('data:image')) {
         var info = src.match(/data:image\/(\S+?);(\S+?),(.+)/);
         if (!info) return;
         var filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${info[1]}`;
@@ -99,15 +98,15 @@ Component({
     navigateTo(obj) {
       if (!this.data.useAnchor)
         return obj.fail && obj.fail({
-          errMsg: "Anchor is disabled"
+          errMsg: 'Anchor is disabled'
         })
       this.createSelectorQuery()
-        .select(".top" + (obj.id ? ">>>#" + obj.id : '')).boundingClientRect()
+        .select('.top' + (obj.id ? '>>>#' + obj.id : '')).boundingClientRect()
         .selectViewport().scrollOffset().exec(res => {
           if (!res[0])
             return this.group ? this.group.navigateTo(this.i, obj) :
               obj.fail && obj.fail({
-                errMsg: "Label not found"
+                errMsg: 'Label not found'
               });
           obj.scrollTop = res[1].scrollTop + res[0].top;
           wx.pageScrollTo(obj);
@@ -117,15 +116,15 @@ Component({
     getText(ns = this.data.html) {
       var txt = '';
       for (var i = 0, n; n = ns[i++];) {
-        if (n.type == "text") txt += n.text.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-        else if (n.type == "br") txt += '\n';
+        if (n.type == 'text') txt += n.text.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+        else if (n.type == 'br') txt += '\n';
         else {
           // 块级标签前后加换行
-          var br = n.name == 'p' || n.name == "div" || n.name == "tr" || n.name == "li" || (n.name[0] == 'h' && n.name[1] > '0' && n.name[1] < '7');
+          var br = n.name == 'p' || n.name == 'div' || n.name == 'tr' || n.name == 'li' || (n.name[0] == 'h' && n.name[1] > '0' && n.name[1] < '7');
           if (br && txt && txt[txt.length - 1] != '\n') txt += '\n';
           if (n.children) txt += this.getText(n.children);
           if (br && txt[txt.length - 1] != '\n') txt += '\n';
-          else if (n.name == "td" || n.name == "th") txt += '\t';
+          else if (n.name == 'td' || n.name == 'th') txt += '\t';
         }
       }
       return txt;
@@ -142,7 +141,7 @@ Component({
       if (!html) {
         if (_watch || append) return;
         data.html = '';
-      } else if (typeof html == "string") {
+      } else if (typeof html == 'string') {
         var parser = new Parser(html, this.data);
         // 缓存读取
         if (this.data.useCache) {
@@ -154,17 +153,17 @@ Component({
           }
         } else data.html = parser.parse();
         this._refresh = true;
-        this.triggerEvent("parse", data.html);
+        this.triggerEvent('parse', data.html);
       } else if (html.constructor == Array) {
         // 转换不符合格式的 array
-        if (html.length && html[0].PoweredBy != "Parser") {
+        if (html.length && html[0].PoweredBy != 'Parser') {
           var parser = new Parser('', this.data);
           (function f(ns) {
             for (var i = 0, n; n = ns[i]; i++) {
-              if (n.type == "text") continue;
+              if (n.type == 'text') continue;
               n.attrs = n.attrs || {};
               for (var key in n.attrs)
-                if (typeof n.attrs[key] != "string") n.attrs[key] = n.attrs[key].toString();
+                if (typeof n.attrs[key] != 'string') n.attrs[key] = n.attrs[key].toString();
               parser.matchAttr(n);
               if (n.children) {
                 parser.STACK.push(n);
@@ -176,15 +175,15 @@ Component({
           data.html = html;
         }
         if (!_watch) data.html = html;
-      } else if (typeof html == "object" && html.nodes) {
+      } else if (typeof html == 'object' && html.nodes) {
         data.html = html.nodes;
-        console.warn("错误的 html 类型：object 类型已废弃");
+        console.warn('错误的 html 类型：object 类型已废弃');
       } else
-        return console.warn("错误的 html 类型：" + typeof html);
+        return console.warn('错误的 html 类型：' + typeof html);
       if (append) {
         this._refresh = true;
         data.html = (this.data.html || []).concat(data.html);
-      } else if (this.data.showWithAnimation) data.showAm = "animation: show .5s";
+      } else if (this.data.showWithAnimation) data.showAm = 'animation: show .5s';
       if (data.html || data.showAm) this.setData(data);
       // 设置标题
       if (this.data.html.length && this.data.html[0].title && this.data.autosetTitle)
@@ -193,16 +192,16 @@ Component({
         })
       this.imgList.length = 0;
       this.videoContexts = [];
-      if (dom) this.document = new dom(this.data.html, "html", this);
-      var ns = this.selectAllComponents(".top,.top>>>._node");
+      if (dom) this.document = new dom(this.data.html, 'html', this);
+      var ns = this.selectAllComponents('.top,.top>>>._node');
       for (let i = 0, n; n = ns[i++];) {
         n.top = this;
         for (var j = 0, item; item = n.data.nodes[j++];) {
           if (item.c) continue;
           // 获取图片列表
-          if (item.name == "img") {
+          if (item.name == 'img') {
             this.imgList.setItem(item.attrs.i, item.attrs.src);
-            if (!n.observer && !n.data.imgLoad && item.attrs.i != "0") {
+            if (!n.observer && !n.data.imgLoad && item.attrs.i != '0') {
               // 懒加载
               if (this.data.lazyLoad && n.createIntersectionObserver) {
                 n.observer = n.createIntersectionObserver();
@@ -210,7 +209,7 @@ Component({
                   n.observer.relativeToViewport({
                     top: 900,
                     bottom: 900
-                  }).observe("._img", () => {
+                  }).observe('._img', () => {
                     n.setData({
                       imgLoad: true
                     })
@@ -224,22 +223,22 @@ Component({
             }
           }
           // 音视频控制
-          else if (item.name == "video") {
+          else if (item.name == 'video') {
             var ctx = wx.createVideoContext(item.attrs.id, n);
             ctx.id = item.attrs.id;
             this.videoContexts.push(ctx);
-          } else if (item.name == "audio" && item.attrs.autoplay)
+          } else if (item.name == 'audio' && item.attrs.autoplay)
             wx.createAudioContext(item.attrs.id, n).play();
         }
       }
-      (wx.nextTick || setTimeout)(() => this.triggerEvent("load"), 50);
+      (wx.nextTick || setTimeout)(() => this.triggerEvent('load'), 50);
       var height;
       clearInterval(this._timer);
       this._timer = setInterval(() => {
-        this.createSelectorQuery().select(".top").boundingClientRect(res => {
+        this.createSelectorQuery().select('.top').boundingClientRect(res => {
           this.rect = res;
           if (res.height == height) {
-            this.triggerEvent("ready", res)
+            this.triggerEvent('ready', res)
             clearInterval(this._timer);
           }
           height = res.height;
@@ -248,7 +247,7 @@ Component({
     },
     // 预加载
     preLoad(html, num) {
-      if (typeof html == "string") {
+      if (typeof html == 'string') {
         var id = hash(html);
         html = new Parser(html, this.data).parse();
         cache[id] = html;
@@ -256,7 +255,7 @@ Component({
       var imgs, wait = [];
       (function f(ns) {
         for (var i = 0, n; n = ns[i++];) {
-          if (n.name == "img" && n.attrs.src && !wait.includes(n.attrs.src))
+          if (n.name == 'img' && n.attrs.src && !wait.includes(n.attrs.src))
             wait.push(n.attrs.src);
           f(n.children || []);
         }
@@ -291,7 +290,7 @@ Component({
           this._initY = initY;
           this._scaleAm = wx.createAnimation({
             transformOrigin: `${initX}px ${this._initY}px 0`,
-            timingFunction: "ease-in-out"
+            timingFunction: 'ease-in-out'
           });
           this._scaleAm.scale(2).step();
           this._tMax = initX / 2;

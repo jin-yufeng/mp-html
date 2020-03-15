@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/12
+  update：2020/03/15
 */
 Component({
   data: {
@@ -30,7 +30,7 @@ Component({
       var attrs = e.target.dataset.attrs;
       if (!attrs.ignore) {
         var preview = true;
-        this.top.triggerEvent("imgtap", {
+        this.top.triggerEvent('imgtap', {
           id: e.target.id,
           src: attrs.src,
           ignore: () => preview = false
@@ -49,7 +49,7 @@ Component({
     imglongtap(e) {
       var attrs = e.target.dataset.attrs;
       if (!attrs.ignore)
-        this.top.triggerEvent("imglongtap", {
+        this.top.triggerEvent('imglongtap', {
           id: e.target.id,
           src: attrs.src
         })
@@ -59,11 +59,11 @@ Component({
       var jump = true,
         attrs = e.currentTarget.dataset.attrs;
       attrs.ignore = () => jump = false;
-      this.top.triggerEvent("linkpress", attrs);
+      this.top.triggerEvent('linkpress', attrs);
       if (jump) {
-        if (attrs["app-id"])
+        if (attrs['app-id'])
           wx.navigateToMiniProgram({
-            appId: attrs["app-id"],
+            appId: attrs['app-id'],
             path: attrs.path
           })
         else if (attrs.href) {
@@ -71,12 +71,12 @@ Component({
             this.top.navigateTo({
               id: attrs.href.substring(1)
             })
-          else if (attrs.href.indexOf("http") == 0 || attrs.href.indexOf("//") == 0)
+          else if (attrs.href.indexOf('http') == 0 || attrs.href.indexOf('//') == 0)
             wx.setClipboardData({
               data: attrs.href,
               success: () =>
                 wx.showToast({
-                  title: "链接已复制",
+                  title: '链接已复制',
                 })
             })
           else
@@ -89,16 +89,16 @@ Component({
     // 错误事件
     error(e) {
       var context;
-      if (e.target.dataset.from == "Video" || e.target.dataset.from == "Audio") {
+      if (e.target.dataset.from == 'Video' || e.target.dataset.from == 'Audio') {
         // 加载其他 source
-        var index = this.data.controls[e.target.id] ? this.data.controls[e.target.id].index + 1 : 1;
+        var index = this.data.controls[e.target.id] ? this.data.controls[e.target.id] + 1 : 1;
         if (index < e.target.dataset.source.length)
           return this.setData({
             [`controls.${e.target.id}`]: index
           });
         context = wx[`create${e.target.dataset.from}Context`](e.target.id, this);
       }
-      this.top && this.top.triggerEvent("error", {
+      this.top && this.top.triggerEvent('error', {
         source: e.target.dataset.from.toLowerCase(),
         target: e.target,
         errMsg: e.detail.errMsg,

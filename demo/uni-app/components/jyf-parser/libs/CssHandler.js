@@ -3,9 +3,9 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/12
+  update：2020/03/15
 */
-var cfg = require("./config.js");
+var cfg = require('./config.js');
 class CssHandler {
 	constructor(tagStyle) {
 		var styles = Object.assign({}, cfg.userAgentStyles);
@@ -55,7 +55,7 @@ class CssParser {
 			this.state = this.Ignore;
 	}
 	Comment() {
-		this.i = this.data.indexOf("*/", this.i) + 1;
+		this.i = this.data.indexOf('*/', this.i) + 1;
 		if (!this.i) this.i = this.data.length;
 		this.state = this.Space;
 	}

@@ -6,8 +6,8 @@
 */
 Component({
   relations: {
-    "../parser/parser": {
-      type: "descendant",
+    '../parser/parser': {
+      type: 'descendant',
       linked(target) {
         target.i = this.groups.length;
         this.groups.push(target);
@@ -30,7 +30,7 @@ Component({
         if (this.groups[i]) {
           var cImgList = this.groups[i].imgList;
           for (var j = 0, src; src = cImgList[j]; j++) {
-            if (!imgList.includes(src) || src.substring(0, 4) != "http") imgList.push(src);
+            if (!imgList.includes(src) || src.substring(0, 4) != 'http') imgList.push(src);
             else {
 				var newSrc = '';
 				for (var j = 0; j < src.length; j++) {
@@ -77,7 +77,7 @@ Component({
       navigate();
       if (i == this.groups.length)
         obj.fail && obj.fail({
-          errMsg: "Label not found"
+          errMsg: 'Label not found'
         })
     }
   }

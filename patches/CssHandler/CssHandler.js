@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
 */
-const cfg = require("./config.js");
+const cfg = require('./config.js');
 // 匹配 class
 function matchClass(match, selector) {
   if (!match || !match.length || !selector || !selector.length) return false;
@@ -80,7 +80,7 @@ class CssHandler {
           var matchAttr = true;
           if (item.attr) {
             for (var j = 0; j < item.attr.length; j++) {
-              if (!item.attr[j].hasOwnProperty("value")) {
+              if (!item.attr[j].hasOwnProperty('value')) {
                 if (!attrs.hasOwnProperty(item.attr[j].name)) matchAttr = false;
               } else if (attrs[item.attr[j].name] != item.attr[j].value) matchAttr = false;
             }
@@ -111,7 +111,7 @@ class CssHandler {
     }
     if (!element.pseudo.length)
       element.pseudo = void 0;
-    return matchedName + ';' + matchedClass + ";" + matchedId + ";";
+    return matchedName + ';' + matchedClass + ';' + matchedId + ';';
   }
   pop(element) {
     // 多层class匹配标记
@@ -130,22 +130,22 @@ class CssHandler {
         var content;
         var style = item.content.replace(/content:([^;\n]*)/, ($, $1) => {
           // 转换 attr
-          content = $1.replace(/attr\((.+?)\)/, ($, $1) => element.attrs[$1.trim()] || '').replace(/\s*['"](.*?)['"]\s*/g, "$1")
+          content = $1.replace(/attr\((.+?)\)/, ($, $1) => element.attrs[$1.trim()] || '').replace(/\s*['"](.*?)['"]\s*/g, '$1')
             // 转换 \xxx
             .replace(/\\(\w{4})/, ($, $1) => String.fromCharCode(parseInt($1, 16)));
           return '';
         })
         var child = {
-          name: "span",
+          name: 'span',
           attrs: {
             style
           },
           children: [{
-            type: "text",
+            type: 'text',
             text: content
           }]
         }
-        if (item.pseudo == "before")
+        if (item.pseudo == 'before')
           element.children.unshift(child);
         else
           element.children.push(child);
@@ -173,11 +173,11 @@ function parseCss(data, keys, screenWidth) {
     var name = data.substring(i, j);
     if (name[0] == '@') {
       // @media 查询
-      if (name.substring(0, 6) == "@media") {
+      if (name.substring(0, 6) == '@media') {
         var info = name.match(/\((.+?):(.+?)\)/);
-        if (info && info[2].includes("px")) {
+        if (info && info[2].includes('px')) {
           var value = parseInt(info[2]);
-          if ((info[1] == "min-width" && screenWidth > value) || (info[1] == "max-width" && screenWidth < value)) {
+          if ((info[1] == 'min-width' && screenWidth > value) || (info[1] == 'max-width' && screenWidth < value)) {
             i = j + 1;
             continue;
           }
@@ -209,7 +209,7 @@ function parseCss(data, keys, screenWidth) {
         var info = item.key.split(':');
         item.key = info[0].trim();
         item.pseudo = info.pop();
-        if (item.pseudo != "before" && item.pseudo != "after") continue;
+        if (item.pseudo != 'before' && item.pseudo != 'after') continue;
       }
       // 属性选择器
       if (item.key.includes('[')) {

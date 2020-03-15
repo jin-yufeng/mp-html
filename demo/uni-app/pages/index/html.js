@@ -1,12 +1,14 @@
-module.exports = `<style>
-  body {
-    margin-left:3%;
-    margin-right:3%;
-    margin-top:30rpx;
-    margin-bottom:30rpx;
-  }
-</style>
-<title>功能示例</title>
+module.exports = `<head>
+	<style>
+		body {
+			margin-left:3%;
+			margin-right:3%;
+			margin-top:30rpx;
+			margin-bottom:30rpx;
+		}
+	</style>
+	<title>功能示例</title>
+</head>
 <body>
 	<section style="border: 0px none;">
     <section style="padding: 10px;">

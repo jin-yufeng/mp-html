@@ -1,4 +1,4 @@
-var article1 = `<head>
+module.exports = [`<head>
 <style>
   body {
     margin-left:3%;
@@ -439,8 +439,7 @@ var article1 = `<head>
       <td>[老妇人]</td><td>[王子]</td><td>[公主]</td><td>[家庭]</td>
     </tr>
   </table>
-</body>`;
-var article2 = `<title>整体示例</title>
+</body>`, `<title>整体示例</title>
 <section>
   <section style="width:100%;">
     <section style="width:100%;background:#ecfef1;color:#27bc71;">
@@ -797,5 +796,4 @@ var article2 = `<title>整体示例</title>
       </section>
     </section>
   </section>
-</section>`;
-module.exports = [article1, article2];
+</section>`];
