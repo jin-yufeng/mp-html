@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/15
+  update：2020/03/17
 */
 var cache = {},
   Parser = require('./libs/MpHtmlParser.js'),
@@ -199,29 +199,8 @@ Component({
         for (var j = 0, item; item = n.data.nodes[j++];) {
           if (item.c) continue;
           // 获取图片列表
-          if (item.name == 'img') {
+          if (item.name == 'img')
             this.imgList.setItem(item.attrs.i, item.attrs.src);
-            if (!n.observer && !n.data.imgLoad && item.attrs.i != '0') {
-              // 懒加载
-              if (this.data.lazyLoad && n.createIntersectionObserver) {
-                n.observer = n.createIntersectionObserver();
-                (wx.nextTick || setTimeout)(() => {
-                  n.observer.relativeToViewport({
-                    top: 900,
-                    bottom: 900
-                  }).observe('._img', () => {
-                    n.setData({
-                      imgLoad: true
-                    })
-                    n.observer.disconnect();
-                  })
-                }, 50)
-              } else
-                n.setData({
-                  imgLoad: true
-                })
-            }
-          }
           // 音视频控制
           else if (item.name == 'video') {
             var ctx = wx.createVideoContext(item.attrs.id, n);

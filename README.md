@@ -47,13 +47,11 @@
     <source src="demo2.webm" />
   </video>
   ```
-  支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接；若设置 `webp` 图片将只有 `android` 端采用，可用于兼容  
+  支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接
   ```html
   <picture>
     <source media="(min-width:400px)" src="high-quality.jpg">
     <source media="(min-width:250px)" src="middle-quality.jpg">
-    <!--webp 图片将只有 android 端采用-->
-    <source src="xxx.webp">
     <img src="low-quality.jpg" />
   </picture>
   ```
@@ -65,8 +63,8 @@
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
 | parser | 43.7KB | 微信小程序插件包 |
-| parser.min | 29.6KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 57.2KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.min | 29.7KB | 微信小程序插件包压缩版（功能相同） |
+| parser.uni | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -151,7 +149,6 @@
 | bindready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息），所有图片（除懒加载）加载完成时才会触发，图片较大时可能 **延时较长** |
 | binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息，context 是视频的 context 对象 |
 | bindimgtap | 图片被点击时触发 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览 |
-| bindimglongtap | 图片被长按时触发 | 返回一个 object，其中 src 是图片链接 |
 | bindlinkpress | 链接被点击时触发 | 返回一个 object，其中 href 是链接地址，ignore 是一个函数，在回调中调用将不自动跳转/复制 |  
 
 详细可见：[回调函数](https://jin-yufeng.github.io/Parser/#/instructions?id=回调函数)
@@ -193,14 +190,27 @@
 
 
 ## 更新日志 ##
+- 2020.3.17 beta
+  1. `U` 通过 `image`（经过一些处理后）来显示图片（替代 `rich-text`），可以实现以下优化（仅微信包）：  
+     1. `2.3.0` 起支持云文件 `ID`  
+     2. `2.7.0` 起支持长按弹出菜单（可以识别小程序码，同时去除了 `imglongtap` 事件）  
+     3. `2.9.0` 起支持 `webp` 图片  
+     4. 使用 `image` 原生的 `lazy-load`，可能具有更好的性能  
+     5. 加载错误时能够触发 `error` 事件，且可以重设 `src` [详细](https://jin-yufeng.github.io/Parser/#/instructions#事件)  
+  
+     可能存在的问题：  
+     若没有设置大小图片会在加载完成后突然从默认大小（300 × 100）变为原大小（图片较大，加载较慢时较明显），可以在 `trees.wxss` 的 `._img` 中调整默认大小  
+  2. `U` `a` 标签支持 `:visited` 效果（默认变为紫色，可在 `trees.wxss` 中调整）  
+  3. `F` 修复了 `a` 标签所在段落使用一些特殊实体编码时可能导致错误换行的问题 [详细](https://github.com/jin-yufeng/Parser/issues/87)  
+  4. `F` 修复了 `uni-app` 包 `H5` 端在创建时设置数据无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/89)  
+
 - 2020.3.12  
   1. `A` 增加了 `compress` 属性，可以设置压缩等级 [详细](https://jin-yufeng.github.io/Parser/#/instructions#compress)  
   2. `A` 配置项中增加了 `filter` 和 `onText` 方法，可以在解析过程中进行自定义处理 [详细](https://jin-yufeng.github.io/Parser/#/instructions#配置项)  
   3. `A` 增加了 `rect` 的 `api`，可以获取内容的大小和位置 [详细](https://jin-yufeng.github.io/Parser/#/instructions#rect)  
-  4. `U` `picture` 标签中若设置 `webp` 的 `source`，将只有 `android` 端采用，可用于兼容 [详细](https://jin-yufeng.github.io/Parser/#/#多媒体多资源加载)  
-  5. `U` `setContent` 的 `api` 支持传入 `append` 参数表示是否在尾部追加（用于加载更多）[详细](https://jin-yufeng.github.io/Parser/#/instructions#setcontent)  
-  6. `U` 支持通过 `base` 标签设置主域名（同 `domain` 属性，但优先级更低）  
-  7. `F` 修复了在 `ready` 事件触发前再次设置数据会导致 `ready` 事件不停触发的问题  
+  4. `U` `setContent` 的 `api` 支持传入 `append` 参数表示是否在尾部追加（用于加载更多）[详细](https://jin-yufeng.github.io/Parser/#/instructions#setcontent)  
+  5. `U` 支持通过 `base` 标签设置主域名（同 `domain` 属性，但优先级更低）  
+  6. `F` 修复了在 `ready` 事件触发前再次设置数据会导致 `ready` 事件不停触发的问题  
 
 - 2020.3.7
   1. `A` 增加了 `preLoad` 的 `api`，可以预加载富文本中的图片 [详细](https://jin-yufeng.github.io/Parser/#/instructions#preload)
@@ -225,16 +235,5 @@
   3. `U` `CssHandler` 补丁包支持属性选择器和 `@media`，伪类中的 `content` 支持 `attr()` [详细](https://jin-yufeng.github.io/Parser/#/instructions?id=csshandler)  
   4. `U` 精简了部分代码  
   5. `U` `uni-app` 包 `APP` 端支持 `iframe` 标签  
-
-- 2020.2.17
-  1. `A` 增加了 `imglongtap` 事件，图片被长按时触发，可用于显示自定义菜单 [详细](https://jin-yufeng.github.io/Parser/#/instructions#事件)  
-  2. `U` 优化了双击缩放的效果  
-  3. `U` 图片设置的宽度超出屏幕宽度时自动将高度设置为 `auto`，避免变形（同时移除了 `img-mode` 属性）  
-  4. `U` 修改了部分文件和文件夹的命名（**引入路径有变化**）[详细](https://jin-yufeng.github.io/Parser/#/instructions#在原生框架中使用)  
-  5. `D` 移除了 `autocopy` 和 `autopreview` 属性，如果需要禁用自动预览/复制链接，请使用  `linkpress` 和 `imgtap` 事件中的 `ignore` 函数  
-  6. `D` 移除了 `versionHigherThan`、`parseHtml`、`parseCss` 的 `api`  
-  7. `D` 废弃了后端加强包  
-
-  *此版本移除了部分冗余功能，与之前版本存在部分不兼容情况，请注意*
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

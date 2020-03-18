@@ -276,7 +276,7 @@ module.exports = [`<head>
   </br>
   <section style="text-align:center">
     <div>
-      <img width="200" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-7.png?sign=8f8d76e641ab2c9aa5ac93dab36f8422&t=1581751574" />
+      <img width="200" src="/md/md5.jpg?sign=9e6729ea9ccb15da6f3d301cd31a4f08&t=1572768042" />
     </div>
     <div style="font-size:12px;color:#A5A5A5;">长按扫描</div>
   </section>

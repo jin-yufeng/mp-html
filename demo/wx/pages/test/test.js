@@ -150,9 +150,6 @@ Page({
   <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-1.jpg?sign=4ac0a0441f2c0e3c80909c11fcc278e2&t=1560246174" />
   <p class="desc">点击图片预览</p>
   </br>
-  <img width="200" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-7.png?sign=8f8d76e641ab2c9aa5ac93dab36f8422&t=1581751574" />
-  <p class="desc">长按扫描</p>
-  </br>
   <svg width="200" height="100">
     <circle cx="100" cy="50" r="40" stroke="#3b5b81" stroke-width="2" fill="#5aa0b3" />
   </svg>
@@ -238,52 +235,6 @@ Page({
           selector: '#result'
         })
       }
-    })
-  },
-  // 图片长按
-  imglongtap(e) {
-    this.url = e.detail.src;
-    this.setData({
-      showActionsheet: true,
-      groups: [{
-        text: '复制图片地址',
-        value: 0
-      }]
-    })
-    // 云调用 img.scanQRCode
-    wx.cloud.callFunction({
-      name: 'scanImg',
-      data: {
-        src: this.url
-      },
-      success: (res) => {
-        if (res.result.codeResults.length) {
-          this.scanRes = res.result.codeResults[0].data;
-          this.setData({
-            groups: [{
-              text: '复制图片地址',
-              value: 0
-            }, {
-              text: '复制识别结果',
-              value: 1
-            }]
-          })
-        }
-      }
-    })
-  },
-  // 图片菜单点击
-  actiontap(e) {
-    if (!e.detail.value)
-      wx.setClipboardData({
-        data: this.url
-      })
-    else
-      wx.setClipboardData({
-        data: this.scanRes
-      })
-    this.setData({
-      showActionsheet: false
     })
   },
   // 显示激励视频广告

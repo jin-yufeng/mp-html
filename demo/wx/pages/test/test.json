@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "parser": "/components/parser/parser",
-    "actionsheet": "/components/actionsheet/actionsheet"
+    "parser": "/components/parser/parser"
   }
 }

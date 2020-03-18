@@ -125,13 +125,11 @@ Page({
   <source src="demo2.webm" />
 </video>
 ```
-支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接；若设置 `webp` 图片将只有 `android` 端采用，可用于兼容  
+支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接
 ```html
 <picture>
   <source media="(min-width:400px)" src="high-quality.jpg">
   <source media="(min-width:250px)" src="middle-quality.jpg">
-  <!--webp 图片将只有 android 端采用-->
-  <source src="xxx.webp">
   <img src="low-quality.jpg" />
 </picture>
 ```
@@ -159,7 +157,7 @@ Page({
 
 ### 懒加载 ###
 - 图片  
-  通过设置 `lazy-load` 属性，可以实现图片懒加载，在图片进入当前可视范围上下 `900px` 范围内时再进行加载  
+  通过设置 `lazy-load` 属性，可以实现图片懒加载  
 
 - 视频  
   当视频数量超过三个时，将仅加载前三个视频，其他的用图片代替，避免一次加载过多视频导致卡死  

@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/15
+  update：2020/03/17
 -->
 <template>
 	<view class="interlayer">
@@ -15,7 +15,7 @@
 			 :nodes="handler.getNode(item,!lazyLoad||imgLoad)" :data-attrs="item.attrs" @tap="imgtap" @longpress="imglongtap" />
 			<!--#endif-->
 			<!--#ifdef MP-BAIDU || MP-TOUTIAO-->
-			<rich-text v-if="item.name=='img'" :id="item.attrs.id" class="_img" :style="item.attrs.containStyle" :nodes='[item]'
+			<rich-text v-if="item.name=='img'" :id="item.attrs.id" class="_img" :style="item.attrs.contain" :nodes='[item]'
 			 :data-attrs="item.attrs" @tap="imgtap" @longpress="imglongtap" />
 			<!--#endif-->
 			<!--文本-->
@@ -86,11 +86,10 @@
 			<!--#endif-->
 			<!--富文本-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY || APP-PLUS-->
-			<rich-text v-else-if="handler.useRichText(item)" :id="item.attrs.id" :class="'_p __'+item.name" :style="''+handler.getStyle(item.attrs.style)"
-			 :nodes="[item]" />
+			<rich-text v-else-if="handler.useRichText(item)" :id="item.attrs.id" :class="'_p __'+item.name" :nodes="[item]" />
 			<!--#endif-->
 			<!--#ifdef MP-BAIDU || MP-TOUTIAO-->
-			<rich-text v-else-if="!(item.c||item.continue)" :id="item.attrs.id" :class="_p" :style="item.attrs.containStyle"
+			<rich-text v-else-if="!(item.c||item.continue)" :id="item.attrs.id" :class="_p" :style="item.attrs.contain"
 			 :nodes="[item]" />
 			<!--#endif-->
 			<!--#ifdef MP-ALIPAY-->
@@ -237,7 +236,7 @@
 				}
 			},
 			error(e) {
-				var context,target = e.currentTarget;
+				var context, target = e.currentTarget;
 				if (target.dataset.from == 'video' || target.dataset.from == 'audio') {
 					// 加载其他 source
 					var index = this.controls[target.id] ? this.controls[target.id].index + 1 : 1;
@@ -264,11 +263,28 @@
 </script>
 
 <style>
-	/* 在这里引入自定义的外部样式 */
+	/* 在这里引入自定义样式 */
+
+	/* 链接和图片效果 */
+	._a {
+		display: inline;
+		color: #366092;
+		word-break: break-all;
+		padding: 1.5px 0 1.5px 0;
+	}
+
+	._hover {
+		opacity: 0.7;
+		text-decoration: underline;
+	}
+
+	._img {
+		display: inline-block;
+		text-indent: 0;
+	}
 
 	/* #ifdef MP-WEIXIN || APP-PLUS */
-	:host,
-	._a {
+	:host {
 		display: inline;
 	}
 
@@ -340,16 +356,6 @@
 	._h6 {
 		display: block;
 		font-weight: bold;
-	}
-
-	._hover {
-		opacity: 0.7;
-		text-decoration: underline;
-	}
-
-	._img {
-		display: inline-block;
-		text-indent: 0;
 	}
 
 	._ins {

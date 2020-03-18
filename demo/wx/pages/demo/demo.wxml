@@ -6,7 +6,6 @@
   use-anchor
   use-cache
   binderror="error"
-  bindimglongtap="imglongtap"
   bindlinkpress="linkpress"
   bindready="ready">
   <!--loading-->
@@ -20,4 +19,3 @@
     </view>
   </view>
 </parser>
-<actionsheet show="{{showActionsheet}}" actions="{{groups}}" bindactiontap="actiontap" />

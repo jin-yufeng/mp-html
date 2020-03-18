@@ -4,8 +4,8 @@
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
 | [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 43.7KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.6KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.2KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.7KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（`uni-app` 包）：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
@@ -20,6 +20,8 @@
 
 !>`uni-app` 包为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
 需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式（或 `v3`）
+
+!>表格由于较难通过模板循环的方式显示，将直接通过 rich-text 进行渲染，因此请尽量避免在表格中加入图片或链接，否则将无法预览或点击（但可以正常显示）
 
 以下统称为 `parser`  
 
@@ -193,9 +195,8 @@
 | bindparse | 解析完成时触发 | 返回解析结果（一个 nodes 数组，仅传入的 html 类型为 String 时会触发），可以对该结果进行自定义修改，将在渲染时生效 |
 | bindload | dom 加载完成时触发 | 所有节点被添加到节点树中时触发，无返回值，可以调用 api |
 | bindready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息），所有图片（除懒加载）加载完成时才会触发，图片较大时可能 **延时较长** |
-| binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码，target 包含出错标签的具体信息，context 是视频的 context 对象，可以设置新的源 |
+| binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码，target 包含出错标签的具体信息，context 是多媒体的 context 对象，可以设置新的源 |
 | bindimgtap | 图片被点击时触发 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在事件中调用将不进行预览；可用于阻挡 onShow 的调用 |
-| bindimglongtap | 图片被长按时触发 | 返回一个 object，其中 src 是图片链接，可用于显示自定义菜单 |
 | bindlinkpress | 在链接被点击时触发 | 返回一个 object，其中包含了被点击的 a 标签的所有属性，ignore 是一个函数，在事件中调用后将不自动跳转/复制；可在该事件中进行下载文档等进一步操作 |  
   
 关于图片和链接被点击返回的 `ignore` 函数的解释：  
@@ -208,6 +209,9 @@ linkpress(e){
   // 自定义操作
 }
 ```
+
+关于 `error` 事件：  
+当图片出错时，也会返回 `context`，其中包含一个方法—— `setSrc`，输入值为 `string`，可以重设 `src`（如设置成出错时的占位图）  
 
 !>原生包所有事件的返回值从 `e.detail` 中获取  
 
@@ -284,11 +288,14 @@ linkpress(e){
 ### 基础库要求 ###
 微信小程序：
   
-| 版本 | 功能 | 覆盖率 |
+| 版本 | 功能 | 占比 |
 |:---:|:---:|:---:|
-| >=2.2.5 | 全部正常 | 99.8% |
-| 1.6.3-2.2.4 | 不支持 lazy-load 属性 | 0.2% |
-| <1.6.6 | 无法使用 | <0.01% |
+| < 2.9.0 | 不支持 webp 图片 | 5.51% |
+| < 2.7.1 | 不支持图片长按菜单（识别小程序码）<br>不支持 bdi bdo ruby 标签 | 2.31% |
+| < 2.4.4 | 不支持 a 标签 visited 效果 | 0.42% |
+| < 2.3.0 | 不支持云文件 ID | 0.34% |
+| < 2.2.5 | 不支持部分实体编码（形如 &copy;） | 0.20% |
+| < 1.6.3 | 无法使用 | < 0.01% |
 
 !>使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
 
@@ -762,7 +769,7 @@ Page({
 ### 常见问题 ###
 
 #### 图片间隙问题 ####
-多张图片连续排列时，由于 `img` 的默认 `display` 是 `inline-block`，每张图片的底部会有空隙，如果不需要，可以对该 `img` 设置 `display:block` 或者 `float:left`  
+多张图片连续排列时，由于 `img` 的默认 `display` 是 `inline-block`，每张图片的底部会有空隙，如果不需要，可以对该 `img` 设置 `display:block`  
   
 *解决方案：*  
 1. 直接设置行内样式  
@@ -793,10 +800,10 @@ Page({
    }
    ```
 4. 通过 `wxss` 设置  
-   将 `trees.wxss` 中的 `._img` 修改为以下内容（其他写法可能均不能生效）  
+   将 `trees.wxss` 中的 `._img` 增加
    ```css
    ._img {
-     text-indent: 0;
+     ...
      font-size: 0;
      display: block;
    }
@@ -970,7 +977,7 @@ getLink(0);
 ### 反馈问题 ###
 在反馈问题前，请先通过以下方式尝试解决：  
 1. 检查是否使用的是最新版的插件包  
-2. 在 [常见问题](#常见问题) 和 [已知问题](https://github.com/jin-yufeng/Parser/issues/88) 中查找是否有此问题  
+2. 在 [常见问题](#常见问题) 中查找是否有此问题  
 3. 在 [issues](https://github.com/jin-yufeng/Parser/issues) 中查找是否有相同问题  
 4. 使用 [示例项目](https://github.com/jin-yufeng/Parser/tree/master/demo) 或微信小程序 [富文本插件](/features#案例体验) 中的自定义测试尝试是否也会出现相同的问题  
 5. 在下框中输入 `html` 字符串进行测试（即直接用浏览器进行渲染，若也存在问题，请检查样式）  

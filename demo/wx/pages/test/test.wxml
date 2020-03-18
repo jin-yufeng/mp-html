@@ -28,4 +28,3 @@
     </view>
   </view>
 </view>
-<actionsheet show="{{showActionsheet}}" actions="{{groups}}" bindactiontap="actiontap" />

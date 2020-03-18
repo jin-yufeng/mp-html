@@ -3,18 +3,15 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/15
+  update：2020/03/17
 */
 Component({
   data: {
-    controls: {}
+    canIUse: !!wx.chooseMessageFile
   },
   properties: {
     nodes: Array,
     lazyLoad: Boolean
-  },
-  detached() {
-    this.observer && this.observer.disconnect();
   },
   methods: {
     // 自定义事件
@@ -56,14 +53,6 @@ Component({
         }
       }
     },
-    imglongtap(e) {
-      var attrs = e.target.dataset.attrs;
-      if (!attrs.ignore)
-        this.top.triggerEvent('imglongtap', {
-          id: e.target.id,
-          src: attrs.src
-        })
-    },
     // 链接点击事件
     linkpress(e) {
       var jump = true,
@@ -86,7 +75,7 @@ Component({
               data: attrs.href,
               success: () =>
                 wx.showToast({
-                  title: '链接已复制',
+                  title: '链接已复制'
                 })
             })
           else
@@ -98,32 +87,55 @@ Component({
     },
     // 错误事件
     error(e) {
-      var context;
-      if (e.target.dataset.from == 'Video' || e.target.dataset.from == 'Audio') {
+      var context, src,
+        source = e.target.dataset.source,
+        i = e.target.dataset.i,
+        node = this.data.nodes[i];
+      if (source == 'video' || source == 'audio') {
         // 加载其他 source
-        var index = this.data.controls[e.target.id] ? this.data.controls[e.target.id] + 1 : 1;
-        if (index < e.target.dataset.source.length)
+        var index = (node.i || 0) + 1;
+        if (index < node.attrs.source.length)
           return this.setData({
-            [`controls.${e.target.id}`]: index
-          });
-        context = wx[`create${e.target.dataset.from}Context`](e.target.id, this);
-      }
+            [`nodes[${i}].i`]: index
+          })
+        context = wx[`create${source[0].toUpperCase() + source.subtr(1)}Context`](e.target.id, this);
+      } else if (source == 'img')
+        context = {
+          setSrc: (newSrc) => src = newSrc
+        }
       this.top && this.top.triggerEvent('error', {
-        source: e.target.dataset.from.toLowerCase(),
+        source,
         target: e.target,
-        errMsg: e.detail.errMsg,
-        errCode: e.detail.errCode,
-        context
-      });
+        context,
+        ...e.detail
+      })
+      if (source == 'img') {
+        if (src)
+          this.setData({
+            [`nodes[${i}].attrs.src`]: src
+          })
+        else if (node.attrs.alt)
+          this.setData({
+            [`nodes[${i}].err`]: 1,
+            [`nodes[${i}].attrs.src`]: ''
+          })
+      }
     },
     // 加载视频
     loadVideo(e) {
-      for (var i = this.data.nodes.length; i--;)
-        if (this.data.nodes[i].attrs.id == e.currentTarget.id)
-          return this.setData({
-            [`nodes[${i}].lazyLoad`]: false,
-            [`nodes[${i}].attrs.autoplay`]: true
-          })
+      var i = e.target.dataset.i;
+      this.setData({
+        [`nodes[${i}].lazyLoad`]: false,
+        [`nodes[${i}].attrs.autoplay`]: true
+      })
+    },
+    // 加载图片
+    loadImg(e) {
+      var data = e.target.dataset;
+      if (data.auto)
+        this.setData({
+          [`nodes[${data.i}].attrs.style`]: `${this.data.nodes[data.i].attrs.style};width:${e.detail.width}px`
+        })
     }
   }
 })

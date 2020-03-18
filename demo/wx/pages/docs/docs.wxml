@@ -52,7 +52,7 @@
       <view class="weui-article__section">
         可以通过设置
         <code>gesture-zoom</code>属性实现双击缩放，放大局部区域进行查看。
-        <navigator class="link" hover-class="link-hover" style="display:block" url="../demo/demo?index=0">立即体验</navigator>
+        <parser html="<a style='display:block' href='../demo/demo?index=0'>立即体验</a>" />
       </view>
       <!--多资源加载-->
       <view class="weui-article__h2">多资源加载</view>
@@ -64,9 +64,7 @@
         <parser html="{{sourceCode}}" tag-style="{{tagStyle}}" /> 在
         <code>picture</code>标签中设置多个
         <code>source</code>，可以在不同大小的屏幕上显示不同的图片（通过
-        <code>media</code>查询），对于较大的图片可以进行优化；若设置
-        <code>webp</code>图片将只有
-        <code>android</code>采用，可用于兼容，示例：
+        <code>media</code>查询），对于较大的图片可以进行优化，示例：
         <parser html="{{sourceCode2}}" tag-style="{{tagStyle}}" />
       </view>
       <!--内容可复制-->
@@ -100,8 +98,7 @@
       <view class="weui-article__h2">懒加载</view>
       <view class="weui-article__section">
         <view class="weui-article__p">图片的懒加载由
-          <code>lazy-load</code>属性控制，开启后将对视图范围以下
-          <code>900px</code>以外的图片进行懒加载</view>
+          <code>lazy-load</code>属性控制</view>
         <view class="weui-article__p">
           <view>视频的懒加载强制开启，当视频数量超过
             <code>3</code>个时，将仅加载前
@@ -168,7 +165,7 @@
         本插件解析和渲染效率高；轻量化（
         <code>43.7KB</code>，
         <code>min</code>版本
-        <code>29.6KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+        <code>29.7KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
         <parser html="{{errorCode}}" tag-style="{{tagStyle}}" />
       </view>
       <view class="link" hover-class="link-hover" style="display:block;text-align:center" bindtap="nextSection">下一章：使用方法</view>
@@ -296,14 +293,16 @@
       <view class="weui-article__section">
         <view class="table">
           <view class="tr">
-            <view class="th" style="width:30%">版本</view>
-            <view class="th" style="width:50%;">功能</view>
-            <view class="th" style="width:20%;">覆盖率</view>
+            <view class="th" style="width:16%">版本</view>
+            <view class="th" style="width:66%;">功能</view>
+            <view class="th" style="width:18%;">占比</view>
           </view>
           <view wx:for="{{versions}}" wx:key="index" class="tr" style="background-color:{{index%2==0?'white':'#f6f8fa'}}">
-            <view class="td" style="width:30%">{{item.version}}</view>
-            <view class="td" style="width:50%;">{{item.features}}</view>
-            <view class="td" style="width:20%;">{{item.percent}}</view>
+            <view class="td" style="width:16%">{{item.version}}</view>
+            <view class="td" style="width:66%;">
+              <text>{{item.features}}</text>
+            </view>
+            <view class="td" style="width:18%">{{item.percent}}</view>
           </view>
         </view>
       </view>

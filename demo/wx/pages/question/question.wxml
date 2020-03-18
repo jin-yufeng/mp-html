@@ -13,8 +13,7 @@
       <code>inline-block</code>，每张图片的底部都会有一个空隙。
       <view>解决方案：可以给对应的图片的
         <code>style</code>属性中加上
-        <code>display:block</code>或
-        <code>float:left</code>（也可以通过
+        <code>display:block</code>（也可以通过
         <code>tag-style</code>属性或
         <code>style</code>标签设置）</view>
     </view>

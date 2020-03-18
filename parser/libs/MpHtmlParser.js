@@ -3,15 +3,12 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/15
+  update：2020/03/17
 */
 var cfg = require('./config.js'),
   blankChar = cfg.blankChar,
   CssHandler = require('./CssHandler.js'),
-  {
-    screenWidth,
-    system
-  } = wx.getSystemInfoSync();
+  screenWidth = wx.getSystemInfoSync().screenWidth;
 try {
   var emoji = require('./emoji.js');
 } catch (e) {};
@@ -51,7 +48,7 @@ class MpHtmlParser {
     if (cfg.trustAttrs[name]) {
       if (!this.attrVal) {
         if (cfg.boolAttrs[name]) this.attrs[name] = 'T';
-      } else if (name == 'src') this.attrs[name] = this.getUrl(this.attrVal);
+      } else if (name == 'src') this.attrs[name] = encodeURI(this.getUrl(this.attrVal));
       else this.attrs[name] = this.attrVal;
     }
     this.attrVal = '';
@@ -82,11 +79,8 @@ class MpHtmlParser {
       if (text == ' ') return;
     }
     // 处理实体
-    var node = {
-        type: 'text'
-      },
-      i = -1,
-      j, en;
+    var i = -1,
+      j, en, siblings = this.siblings();
     while (1) {
       if ((i = text.indexOf('&', i + 1)) == -1) break;
       if ((j = text.indexOf(';', i + 2)) == -1) break;
@@ -97,12 +91,25 @@ class MpHtmlParser {
         en = text.substring(i + 1, j);
         if (en == 'nbsp')
           text = text.substr(0, i) + '\xA0' + text.substr(j + 1); // 解决 &nbsp; 失效
-        else if (en != 'lt' && en != 'gt' && en != 'amp' && en != 'ensp' && en != 'emsp' && en != 'quot' && en != 'apos')
-          node.decode = 1;
+        else if (en != 'lt' && en != 'gt' && en != 'amp' && en != 'ensp' && en != 'emsp' && en != 'quot' && en != 'apos') {
+          i && siblings.push({
+            type: 'text',
+            text: text.substr(0, i)
+          })
+          siblings.push({
+            type: 'text',
+            text: `&${en};`,
+            en: 1
+          })
+          text = text.substr(j + 1);
+          i = -1;
+        }
       }
     }
-    node.text = text;
-    this.siblings().push(node);
+    text && siblings.push({
+      type: 'text',
+      text
+    });
   }
   // 设置元素节点
   setNode() {
@@ -133,7 +140,7 @@ class MpHtmlParser {
             parent.attrs.source.push(attrs.src);
           else {
             var i, media = attrs.media;
-            if (parent.name == 'picture' && !parent.attrs.src && !(attrs.src.indexOf('.webp') && system.includes('iOS')) && (!media || (media.includes('px') &&
+            if (parent.name == 'picture' && !parent.attrs.src && (!media || (media.includes('px') &&
                 (((i = media.indexOf('min-width')) != -1 && (i = media.indexOf(':', i + 8)) != -1 && screenWidth > parseInt(media.substr(i + 1))) ||
                   ((i = media.indexOf('max-width')) != -1 && (i = media.indexOf(':', i + 8)) != -1 && screenWidth < parseInt(media.substr(i + 1)))))))
               parent.attrs.src = attrs.src;
@@ -171,9 +178,9 @@ class MpHtmlParser {
           this.siblings().push({
             name: 'img',
             attrs: {
-              src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
-              ignore: 'T'
-            }
+              src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23')
+            },
+            svg: 1
           })
         }
         return;
@@ -183,23 +190,14 @@ class MpHtmlParser {
   // 处理属性
   matchAttr(node) {
     var attrs = node.attrs,
-      style = this.CssHandler.match(node.name, attrs, node) + (attrs.style || '');
+      style = this.CssHandler.match(node.name, attrs, node) + (attrs.style || ''),
+      styleObj = {};
     switch (node.name) {
       case 'div':
       case 'p':
         if (attrs.align) {
-          style = `text-align:${attrs.align};${style}`;
+          styleObj['text-align'] = attrs.align;
           attrs.align = void 0;
-        }
-        break;
-      case 'img':
-        if (attrs['data-src']) {
-          attrs.src = attrs.src || attrs['data-src'];
-          attrs['data-src'] = void 0;
-        }
-        if (attrs.src && !attrs.ignore) {
-          if (this.bubble()) attrs.i = (this.imgNum++).toString();
-          else attrs.ignore = 'T';
         }
         break;
       case 'a':
@@ -208,11 +206,11 @@ class MpHtmlParser {
         break;
       case 'font':
         if (attrs.color) {
-          style = `color:${attrs.color};${style}`;
+          styleObj['color'] = attrs.color;
           attrs.color = void 0;
         }
         if (attrs.face) {
-          style = `font-family:${attrs.face};${style}`;
+          styleObj['font-family'] = attrs.face;
           attrs.face = void 0;
         }
         if (attrs.size) {
@@ -220,7 +218,7 @@ class MpHtmlParser {
           if (size < 1) size = 1;
           else if (size > 7) size = 7;
           var map = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'];
-          style = `font-size:${map[size - 1]};${style}`;
+          styleObj['font-size'] = map[size - 1];
           attrs.size = void 0;
         }
         break;
@@ -228,26 +226,23 @@ class MpHtmlParser {
       case 'audio':
         if (!attrs.id) attrs.id = node.name + (++this[`${node.name}Num`]);
         else this[`${node.name}Num`]++;
-        if (node.name == 'video') {
-          if (attrs.width) {
-            style = `width:${parseFloat(attrs.width) + attrs.width.includes('%') ? '%' : 'px'};${style}`;
-            attrs.width = void 0;
-          }
-          if (attrs.height) {
-            style = `height:${parseFloat(attrs.height) + attrs.height.includes('%') ? '%' : 'px'};${style}`;
-            attrs.height = void 0;
-          }
-          if (this.videoNum > 3) node.lazyLoad = true;
-        }
+        if (node.name == 'video' && this.videoNum > 3) node.lazyLoad = 1;
         attrs.source = [];
         if (attrs.src) attrs.source.push(attrs.src);
         if (!attrs.controls && !attrs.autoplay)
           console.warn(`存在没有 controls 属性的 ${node.name} 标签，可能导致无法播放`, node);
         this.bubble();
     }
+    if (attrs.width) {
+      styleObj.width = parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : 'px');
+      attrs.width = void 0;
+    }
+    if (attrs.height) {
+      styleObj.height = parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : 'px');
+      attrs.height = void 0;
+    }
     // 压缩 style
-    var styles = style.split(';'),
-      styleObj = {};
+    var styles = style.split(';');
     for (var i = 0, len = styles.length, style = ''; i < len; i++) {
       var info = styles[i].split(':');
       if (info.length < 2) continue;
@@ -258,10 +253,34 @@ class MpHtmlParser {
       else if (!styleObj[key] || value.includes('import') || !styleObj[key].includes('import'))
         styleObj[key] = value;
     }
-    if (node.name == 'img' && parseInt(styleObj.width || attrs.width) > screenWidth)
-      styleObj.height = 'auto';
+    if (node.name == 'img' || node.name == 'picture') {
+      if (attrs['data-src']) {
+        attrs.src = attrs.src || attrs['data-src'];
+        attrs['data-src'] = void 0;
+      }
+      if ((attrs.src || node.name == 'picture') && !attrs.ignore) {
+        if (this.bubble()) {
+          if ((attrs.src || '').includes('.webp')) node.webp = 1;
+          attrs.i = (this.imgNum++).toString();
+        } else attrs.ignore = 'T';
+      }
+      if (attrs.ignore) styleObj['max-width'] = '100%';
+      var check = item => styleObj[item] && !styleObj[item].includes('auto');
+      if (check('width')) {
+        var parent = this.STACK[this.STACK.length - 1];
+        if (styleObj.width.includes('%') && parent && (parent.attrs.style || '').includes('display:inline')) {
+          parent.attrs.style += ';max-width:100%'
+          node.auto = 1;
+        }
+        if (parseInt(styleObj.width) > screenWidth)
+          styleObj.height = 'auto';
+        if (check('height')) node.mode = 'scaleToFill';
+      } else if (check('height')) node.mode = 'heightFix';
+      else node.auto = 1;
+    }
     for (var key in styleObj) {
       var value = styleObj[key];
+      if (key.includes('flex') || key == 'order' || key == 'self-align') node.c = 1;
       // 填充链接
       if (value.includes('url')) {
         var j = value.indexOf('(');
@@ -299,10 +318,8 @@ class MpHtmlParser {
     // 替换一些标签名
     if (node.name == 'picture') {
       node.name = 'img';
-      if (!node.attrs.src && node.children.length && node.children[0].name == 'img')
+      if (!node.attrs.src && (node.children[0] || '').name == 'img')
         node.attrs.src = node.children[0].attrs.src;
-      if (node.attrs.src && !node.attrs.ignore)
-        node.attrs.i = (this.imgNum++).toString();
       return node.children = void 0;
     }
     if (cfg.blockTags[node.name]) node.name = 'div';

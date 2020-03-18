@@ -54,7 +54,6 @@ module.exports = {
 	),
 	// 默认的标签样式
 	userAgentStyles: {
-		a: 'color:#366092;word-break:break-all;padding:1.5px 0 1.5px 0',
 		address: 'font-style:italic',
 		big: 'display:inline;font-size:1.2em',
 		blockquote: 'background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px',

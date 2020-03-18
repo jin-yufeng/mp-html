@@ -73,8 +73,6 @@ p {
     sourceCode2: `<pre><code class="language-html"><picture>
   <source media="(min-width:500px)" src="high-quality.jpg" />
   <source media="(min-width:400px)" src="middle-quality.jpg" />
-  <!--webp 图片将只有 android 端采用-->
-  <source src="xxx.webp" />
   <img src="low-quality.jpg" />
 </picture></code></pre>`,
     // 加载提示示例代码
@@ -162,9 +160,6 @@ p {
   </li>
   <li>图片点击事件
     <div>图片受到点击时，将自动进行预览（支持<code>base64</code>），同时触发<code>imgtap</code>事件，可进行自定义处理（对于装饰性图片，可以设置<code>ignore</code>属性，将无法预览）</div>
-  </li>
-  <li>图片长按事件
-    <div>将触发<code>imglongtap</code>事件，可进行自定义处理（如显示菜单等，可在 <a href="../demo/demo?index=0">功能示例</a> 中长按图片体验）</div>
   </li>
 </ol>`,
     // 错误示例代码
@@ -309,9 +304,6 @@ export default {
     }, {
       name: 'bindimgtap',
       notice: '图片被点击时触发，返回图片地址和 ignore 函数，调用将不自动预览'
-    }, {
-      name: 'bindimglongtap',
-      notice: '图片被长按时触发，返回图片地址'
     }],
     // api
     apiCode: `<pre><code class="language-wxml"><parser id="article" html="{{html}}" bindload="load" /></code></pre>
@@ -480,13 +472,25 @@ console.log(rect.height); // 高度</code></pre>
 </ol>`,
     // 基础库要求
     versions: [{
-      version: '>=2.2.5',
-      features: '完全正常',
-      percent: '99.8%'
+      version: '<2.9.0',
+      features: '不支持 webp 图片',
+      percent: '5.51%'
     }, {
-      version: '1.6.3-2.2.4',
-      features: '不支持 lazy-load 属性',
-      percent: '0.2%'
+      version: '<2.7.1',
+      features: '不支持图片长按菜单\n不支持 bdi bdo ruby 标签',
+      percent: '2.31%'
+    }, {
+      version: '<2.4.4',
+      features: '不支持 a 标签的 visited 效果',
+      percent: '0.42%'
+    }, {
+      version: '<2.3.0',
+      features: '不支持云文件 ID',
+      percent: '0.34%'
+    }, {
+      version: '<2.2.5',
+      features: '不支持部分实体编码',
+      percent: '0.20%'
     }, {
       version: '<1.6.3',
       features: '无法使用',
@@ -495,12 +499,27 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.3.17 beta
+    <ol>
+      <li><code>U</code> 通过<code>image</code>（经过一些处理后）来显示图片（替代<code>rich-text</code>），可以实现以下优化：
+        <ul style="margin-left:-20px">
+          <li><code>2.3.0</code>起支持云文件<code>ID</code></li>
+          <li><code>2.7.0</code>起支持长按弹出菜单（可以识别小程序码，同时去除了<code>imglongtap</code>事件）</li>
+          <li><code>2.9.0</code>起支持<code>webp</code>图片</li>
+          <li>使用<code>image</code>原生的<code>lazy-load</code>，可能具有更好的性能</li>
+          <li>加载错误时能够触发<code>error</code>事件，且可以重设<code>src</code></li>
+        </ul>
+      </li>
+      <li><code>U</code> <code>a</code>标签支持<code>:visited</code>效果（默认变为紫色）</li>
+      <li><code>F</code> 修复了<code>a</code>标签所在段落若使用一些特殊实体编码可能被错误换行的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.3.12
     <ol>
       <li><code>A</code> 增加了<code>compress</code>属性，可以设置压缩等级</li>
       <li><code>A</code> 配置项中增加了<code>filter</code>和<code>onText</code>方法，可以在解析过程中进行一些自定义的处理</li>
       <li><code>A</code> 增加了<code>rect</code>的<code>api</code>，可以获取富文本内容大小和位置</li>
-      <li><code>U</code> <code>picture</code>标签中若设置<code>webp</code>的<code>source</code>，将只有<code>android</code>端采用，可用于兼容</li>
       <li><code>U</code> <code>setContent</code>的<code>api</code>支持传入<code>append</code>参数表示是否在尾部追加（用于加载更多）</li>
       <li><code>U</code> 支持通过<code>base</code>标签设置主域名（同<code>domain</code>属性，但优先级更低）</li>
       <li><code>F</code> 修复了在<code>ready</code>事件触发前再次设置数据会导致<code>ready</code>事件不停触发的问题</li>

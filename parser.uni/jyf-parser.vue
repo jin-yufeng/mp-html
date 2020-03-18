@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/15
+  update：2020/03/17
 -->
 <template>
 	<view style="display:inherit;">
@@ -142,7 +142,7 @@
 					// #endif
 				}
 			}
-			if (!this.nodes.length) this.setContent(this.html, true);
+			if (!this.nodes.length) this.setContent(this.html);
 		},
 		beforeDestroy() {
 			// #ifdef H5
@@ -196,9 +196,7 @@
 				var div = document.createElement('div');
 				if (!append) {
 					// 处理 tag-style 和 userAgentStyles
-					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}';
-					for (var item in cfg.userAgentStyles)
-						style += (item + '{' + cfg.userAgentStyles[item] + '}');
+					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}img{max-width:100%}';
 					for (var item in this.tagStyle)
 						style += (item + '{' + this.tagStyle[item] + '}');
 					style += '</style>';

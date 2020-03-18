@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/15
+  update：2020/03/17
 */
 var cfg = require('./config.js'),
 	blankChar = cfg.blankChar,
@@ -71,19 +71,20 @@ class MpHtmlParser {
 		while (this.STACK.length) this.popNode(this.STACK.pop());
 		// #ifdef MP-BAIDU || MP-TOUTIAO
 		// 将顶层标签的一些样式提取出来给 rich-text
-		(function setContain(ns) {
+		(function f(ns) {
 			for (var i = ns.length, n; n = ns[--i];) {
 				if (n.type == 'text') continue;
 				if (!n.c) {
 					var style = n.attrs.style;
 					if (style) {
-						var j, k, res = '';
+						var j, k, res;
 						if ((j = style.indexOf('display')) != -1)
 							res = style.substring(j, (k = style.indexOf(';', j)) == -1 ? style.length : k);
-						if (style.indexOf('flex') != -1) res += ';' + style.match(getRegExp('flex[:-][^;]+/g')).join(';');
-						n.attrs.containStyle = res;
+						if ((j = style.indexOf('float')) != -1)
+							res += ';' + style.substring(j, (k = style.indexOf(';', j)) == -1 ? style.length : k);
+						n.attrs.contain = res;
 					}
-				} else setContain(n.children);
+				} else f(n.children);
 			}
 		})(this.DOM);
 		// #endif
@@ -130,31 +131,42 @@ class MpHtmlParser {
 			if (text == ' ') return;
 		}
 		// 处理实体
-		var node = {
-				type: 'text'
-			},
+		var siblings = this.siblings(),
 			i = -1,
-			j, u;
+			j, en;
 		while (1) {
 			if ((i = text.indexOf('&', i + 1)) == -1) break;
 			if ((j = text.indexOf(';', i + 2)) == -1) break;
 			if (text[i + 1] == '#') {
-				u = parseInt((text[i + 2] == 'x' ? '0' : '') + text.substring(i + 2, j));
-				if (!isNaN(u)) text = text.substr(0, i) + String.fromCharCode(u) + text.substring(j + 1);
+				en = parseInt((text[i + 2] == 'x' ? '0' : '') + text.substring(i + 2, j));
+				if (!isNaN(en)) text = text.substr(0, i) + String.fromCharCode(en) + text.substring(j + 1);
 			} else {
-				u = text.substring(i + 1, j);
+				en = text.substring(i + 1, j);
 				// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
-				if (u == 'nbsp') text = text.substr(0, i) + '\xA0' + text.substr(j + 1); // 解决 &nbsp; 失效
-				else if (u != 'lt' && u != 'gt' && u != 'amp' && u != 'ensp' && u != 'emsp' && u != 'quot' && u != 'apos')
-					node.decode = true;
+				if (en == 'nbsp') text = text.substr(0, i) + '\xA0' + text.substr(j + 1); // 解决 &nbsp; 失效
+				else if (en != 'lt' && en != 'gt' && en != 'amp' && en != 'ensp' && en != 'emsp' && en != 'quot' && en != 'apos') {
+					i && siblings.push({
+						type: 'text',
+						text: text.substr(0, i)
+					})
+					siblings.push({
+						type: 'text',
+						text: `&${en};`,
+						en: 1
+					})
+					text = text.substr(j + 1);
+					i = -1;
+				}
 				// #endif
 				// #ifdef MP-BAIDU || MP-ALIPAY || MP-TOUTIAO
-				if (entities[u]) text = text.substr(0, i) + entities[u] + text.substr(j + 1);
+				if (entities[en]) text = text.substr(0, i) + entities[en] + text.substr(j + 1);
 				// #endif
 			}
 		}
-		node.text = text;
-		this.siblings().push(node);
+		text && siblings.push({
+			type: 'text',
+			text
+		})
 	}
 	// 设置元素节点
 	setNode() {
@@ -239,12 +251,13 @@ class MpHtmlParser {
 	// 处理属性
 	matchAttr(node) {
 		var attrs = node.attrs,
-			style = this.CssHandler.match(node.name, attrs, node) + (attrs.style || '');
+			style = this.CssHandler.match(node.name, attrs, node) + (attrs.style || ''),
+			styleObj = {};
 		switch (node.name) {
 			case 'div':
 			case 'p':
 				if (attrs.align) {
-					style = `text-align:${attrs.align};${style}`;
+					styleObj['text-align'] = attrs.align;
 					attrs.align = void 0;
 				}
 				break;
@@ -264,11 +277,11 @@ class MpHtmlParser {
 				break;
 			case 'font':
 				if (attrs.color) {
-					style = `color:${attrs.color};${style}`;
+					styleObj['color'] = attrs.color;
 					attrs.color = void 0;
 				}
 				if (attrs.face) {
-					style = `font-family:${attrs.face};${style}`;
+					styleObj['font-family'] = attrs.face;
 					attrs.face = void 0;
 				}
 				if (attrs.size) {
@@ -276,7 +289,7 @@ class MpHtmlParser {
 					if (size < 1) size = 1;
 					else if (size > 7) size = 7;
 					var map = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'];
-					style = `font-size:${map[size - 1]};${style}`;
+					styleObj['font-size'] = map[size - 1];
 					attrs.size = void 0;
 				}
 				break;
@@ -302,14 +315,14 @@ class MpHtmlParser {
 				this.bubble();
 		}
 		// 压缩 style
-		var styles = style.split(';'),
-			styleObj = {};
+		var styles = style.split(';');
 		for (var i = 0, len = styles.length, style = ''; i < len; i++) {
 			var info = styles[i].split(':');
 			if (info.length < 2) continue;
 			var key = info[0].trim().toLowerCase(),
 				value = info.slice(1).join(':').trim();
-			if (value.includes('-webkit') || value.includes('-moz') || value.includes('-ms') || value.includes('-o') || value.includes(
+			if (value.includes('-webkit') || value.includes('-moz') || value.includes('-ms') || value.includes('-o') || value
+				.includes(
 					'safe'))
 				style += `;${key}:${value}`;
 			else if (!styleObj[key] || value.includes('import') || !styleObj[key].includes('import'))
@@ -319,6 +332,7 @@ class MpHtmlParser {
 			styleObj.height = 'auto';
 		for (var key in styleObj) {
 			var value = styleObj[key];
+			if (key.includes('flex') || key == 'order' || key == 'self-align') node.c = 1;
 			// 填充链接
 			if (value.includes('url')) {
 				var j = value.indexOf('(');
@@ -356,7 +370,7 @@ class MpHtmlParser {
 		// 替换一些标签名
 		if (node.name == 'picture') {
 			node.name = 'img';
-			if (!node.attrs.src && node.children.length && node.children[0].name == 'img')
+			if (!node.attrs.src && (node.children[0] || '').name == 'img')
 				node.attrs.src = node.children[0].attrs.src;
 			if (node.attrs.src && !node.attrs.ignore)
 				node.attrs.i = (this.imgNum++).toString();
