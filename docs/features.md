@@ -199,11 +199,12 @@ Page({
 | blockquote |  |
 | body |  |
 | br |  |
+| caption |   |
 | center |  |
 | cite |  |
 | code |  |
-| col | span, width |
-| colgroup | span, width |
+| col | span |
+| colgroup | span |
 | dd |  |
 | del |  |
 | div | align |
@@ -223,7 +224,7 @@ Page({
 | hr |  |
 | html |  |
 | i |  |
-| img | alt, src, height, ignore, width |
+| img | alt, src, ignore |
 | ins |  |
 | label |  |
 | legend |  |
@@ -232,7 +233,7 @@ Page({
 | nav |  |
 | ol | start, type |
 | p | align |
-| picture | alt, height, width, src |
+| picture | alt, src |
 | pre |  |
 | q |  |
 | s |  |
@@ -244,17 +245,17 @@ Page({
 | style |  |
 | sub |  |
 | sup |  |
-| table | border, cellpadding, cellspacing, width |
+| table | border, cellpadding, cellspacing |
 | tbody |  |
-| td | colspan, height, rowspan, width |
+| td | colspan, rowspan |
 | tfoot |   |
-| th | colspan, height, rowspan, width |
+| th | colspan, rowspan |
 | thead |  |
-| tr | colspan, height, rowspan, width |
+| tr | colspan, rowspan |
 | tt |  |
 | u |  |
 | ul |  |
-| video | autoplay, controls, height, loop, muted, poster, src, unit-id, width |
+| video | autoplay, controls, loop, muted, poster, src, unit-id |
 
 以下标签仅微信小程序基础库 `2.7.1` 以上可用：  
 
@@ -262,7 +263,6 @@ Page({
 |:---:|:---:|
 | bdi |   |
 | bdo | dir |
-| caption |   |
 | rp | 高版本不显示，可用于兼容 |
 | rt |   |
 | ruby |   |
@@ -271,7 +271,7 @@ Page({
 
 >支持图片点击（可自动预览，支持 `base64`）、长按事件和链接点击事件（可自动复制链接），不支持其他事件（如 `onclick` 等）  
 
->全局支持 `id`、`style`、`class` 属性，`class` 可以匹配 `style` 标签中的样式和 `trees.wxss` 中的样式；其他不支持的属性将被移除  
+>全局支持 `id`、`style`、`class`、`width`、`height`、`align` 属性，`class` 可以匹配 `style` 标签中的样式和 `trees.wxss` 中的样式；其他不支持的属性将被移除  
 
 >不在此列表中的标签，除个别将被直接移除（如 `script` 等），都会被转为一个行内标签，因此可以使用更多语义化标签  
 

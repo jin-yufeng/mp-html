@@ -63,8 +63,8 @@
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
 | parser | 43.7KB | 微信小程序插件包 |
-| parser.min | 29.7KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.min | 29.9KB | 微信小程序插件包压缩版（功能相同） |
+| parser.uni | 57.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -190,6 +190,13 @@
 
 
 ## 更新日志 ##
+- 2020.3.20
+  1. `U` 所有标签支持 `align` 属性  
+  2. `U` 微信包将不用于渲染的属性声明为 [纯数据字段](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/pure-data.html)，可以提升性能  
+  3. `F` 修复了设置 `domain` 时背景图片的链接会被错误填充的问题  
+  4. `F` `uni-app` 包修复了一个样式错误 [详细](https://github.com/jin-yufeng/Parser/issues/92)  
+  5. `F` `uni-app` 包修复了 `video` 中使用 `source` 可能无法播放的问题 [详细](https://github.com/jin-yufeng/Parser/issues/93)  
+
 - 2020.3.17 beta
   1. `U` 通过 `image`（经过一些处理后）来显示图片（替代 `rich-text`），可以实现以下优化（仅微信包）：  
      1. `2.3.0` 起支持云文件 `ID`  

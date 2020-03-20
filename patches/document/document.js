@@ -41,7 +41,7 @@ class element {
     this._setData();
   }
   // 获取 / 设置 html
-  get innerHtml() {
+  get innerHTML() {
     return (function f(node) {
       var html = '';
       if (node.type == 'text')
@@ -62,7 +62,7 @@ class element {
       return html;
     })(this._node);
   }
-  set innerHtml(value) {
+  set innerHTML(value) {
     this._node.children = new MpHtmlParser(value, this._context.data).parse();
     for (var i = 0; i < this._node.children.length; i++)
       if (this._node.children[i].name)

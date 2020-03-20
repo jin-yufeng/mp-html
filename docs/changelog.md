@@ -1,5 +1,12 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.03.20 ####
+1. `U` 所有标签支持 `align` 属性  
+2. `U` 微信包将不用于渲染的属性声明为 [纯数据字段](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/pure-data.html)，可以提升性能  
+3. `F` 修复了设置 `domain` 时背景图片的链接会被错误填充的问题  
+4. `F` `uni-app` 包修复了一个样式错误 [详细](https://github.com/jin-yufeng/Parser/issues/92)  
+5. `F` `uni-app` 包修复了 `video` 中使用 `source` 可能无法播放的问题 [详细](https://github.com/jin-yufeng/Parser/issues/93)  
+
 #### 2020.03.17 beta ####
 1. `U` 通过 `image`（经过一些处理后）来显示图片（替代 `rich-text`），可以实现以下优化（仅微信包）：  
    1. `2.3.0` 起支持云文件 `ID`  

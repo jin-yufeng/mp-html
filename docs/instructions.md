@@ -4,13 +4,13 @@
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
 | [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 43.7KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.7KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.9KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（`uni-app` 包）：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
-3. 百度、支付宝小程序和 `APP` 不支持 `gesture-zoom` 属性  
+3. 仅 `H5`、微信、头条小程序支持 `gesture-zoom` 属性  
 4. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
 5. 支付宝小程序不支持 `autopause` 属性  
 6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
@@ -499,7 +499,7 @@ this.selectComponent("#preLoad").preLoad(html);
   | style | 该属性的样式列表，修改需要调用 setStyle |
   | childNodes | 该节点下的子节点，修改需要调用 child 相关 api |
   | innerText | 该节点下的文本内容，支持获取和 **设置** |
-  | innerHtml | 该节点下的 html 内容，支持获取和 **设置** |
+  | innerHTML | 该节点下的 html 内容，支持获取和 **设置** |
   
   `Api` 列表：
 
@@ -704,6 +704,7 @@ a = 3;</pre>
   
 可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)  
 还可以进一步实现一个高亮的代码编辑框（可以参考示例小程序的 *自定义测试* 页面）  
+`uni-app` 中使用可以参考此示例项目：[highlight](https://6874-html-foe72-1259071903.tcb.qcloud.la/highlight.zip?sign=c15980dfa79aaf1688db7059b23d05a7&t=1584685357)  
 *相关 issue：*[#83](https://github.com/jin-yufeng/Parser/issues/83)
 
 ### 长内容处理 ###
@@ -811,25 +812,6 @@ Page({
   
 *相关 issue：*[#25](https://github.com/jin-yufeng/Parser/issues/25)、[#65](https://github.com/jin-yufeng/Parser/issues/65)、[#74](https://github.com/jin-yufeng/Parser/issues/74)
 
-#### 图片懒加载问题 ####  
-部分情况下，可能出现懒加载无效的问题，可以检查是否存在以下问题  
-1. 懒加载的属性名是 `lazy-load` 或 `lazyLoad` 而不是 `lazyload`  
-2. 图片懒加载仅对当前视图以下 `900px` 以外的图片才有效（即图片顶部的位置要在屏幕高度 + `900px` 以外的才会被懒加载），请确认文章是否有这么长  
-3. 文章全是图片或有很多图片  
-   图片开始加载的时候，高度会变为 0，然后逐步增加到原大小，这时后面的图片就会进入懒加载的范围而被加载，直到前面图片加载完的部分高度超过懒加载的阈值范围后才会停止加载，因此如果图片很多或全是图片可能一次加载过多图片。这时可以给 `img` 设置一个 `min-height`（可以设置为所有图片高度的最小值），可以一定程度上解决这个问题。
-   ```css
-   /* trees.wxss
-      也可以通过 style 标签或 tag-style 属性设置
-   */
-   ._img {
-     min-height: 225px;
-   }
-   ```  
-4. 所有图片或很多图片都在一个 `div` 内  
-   为节省 `setData` 的次数，懒加载以一个 `div` 为单位，即一个 `div` 内所有图片一次性加载，而不是每张图片都需要进行一次 `setData`，因此如果一个 `div` 里有过多 `img` 也会一次性加载，如果需要单独加载需要给 `img` 套上一个 `div`  
-5. 第一张图片没有被控制  
-   为优化体验，避免首图（较大概率直接进入视野）因懒加载判断减慢加载速度，将不进行判断直接加载，因此懒加载的控制对于第一张图是无效的
-
 #### 显示公众号网页 ####
 如需显示公众号的文章，可参考以下步骤  
 1. 使用 [CssHandler](#CssHandler) 补丁包（网页中有后代选择器等复杂的选择器）  
@@ -862,35 +844,6 @@ Page({
    }
    ```
 3. 如遇样式异常可进行微调  
-
-#### 云文件 ID 问题 ####  
-默认情况下不支持云文件 ID 链接（`cloud://`）
-    
-*解决方案：*  
-如果需要使用，可以通过以下代码进行转换（会一定程度上增加解析时间）
-```javascript
-// 假设 html 为需要进行解析的字符串
-var cloudUrls = html.match(/cloud:\/\/[^'">\)\s]*/g);
-wx.cloud.getTempFileURL({
-  fileList: cloudUrls,
-  success: (res) => {
-    for(var i = 0; i < cloudUrls.length; i++) {
-      if (res.fileList[i].tempFileURL)
-        html = html.replace(cloudUrls[i], res.fileList[i].tempFileURL);
-    }
-    // 将 html 传给本插件
-    this.setData({
-      html
-    })
-  },
-  fail: (err) => {
-    console.error(err)
-    this.setData({
-      html
-    })
-  }
-})
-```
 
 #### 获取 link 标签内容 ####
 默认不支持 `link` 标签的样式（小程序端发起网络请求有限制），如果需要可通过以下代码获取 `link` 的内容后再传入给组件进行解析（需配置域名）  

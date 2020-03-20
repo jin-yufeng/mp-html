@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/17
+  update：2020/03/20
 */
 var cfg = require('./config.js'),
 	blankChar = cfg.blankChar,
@@ -254,13 +254,6 @@ class MpHtmlParser {
 			style = this.CssHandler.match(node.name, attrs, node) + (attrs.style || ''),
 			styleObj = {};
 		switch (node.name) {
-			case 'div':
-			case 'p':
-				if (attrs.align) {
-					styleObj['text-align'] = attrs.align;
-					attrs.align = void 0;
-				}
-				break;
 			case 'img':
 				if (attrs['data-src']) {
 					attrs.src = attrs.src || attrs['data-src'];
@@ -299,11 +292,11 @@ class MpHtmlParser {
 				else this[`${node.name}Num`]++;
 				if (node.name == 'video') {
 					if (attrs.width) {
-						style = `width:${parseFloat(attrs.width) + attrs.width.includes('%') ? '%' : 'px'};${style}`;
+						style = `width:${parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : 'px')};${style}`;
 						attrs.width = void 0;
 					}
 					if (attrs.height) {
-						style = `height:${parseFloat(attrs.height) + attrs.height.includes('%') ? '%' : 'px'};${style}`;
+						style = `height:${parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : 'px')};${style}`;
 						attrs.height = void 0;
 					}
 					if (this.videoNum > 3) node.lazyLoad = true;
@@ -313,6 +306,10 @@ class MpHtmlParser {
 				if (!attrs.controls && !attrs.autoplay)
 					console.warn(`存在没有 controls 属性的 ${node.name} 标签，可能导致无法播放`, node);
 				this.bubble();
+		}
+		if (attrs.align) {
+			styleObj['text-align'] = attrs.align;
+			attrs.align = void 0;
 		}
 		// 压缩 style
 		var styles = style.split(';');
@@ -338,7 +335,7 @@ class MpHtmlParser {
 				var j = value.indexOf('(');
 				if (j++ != -1) {
 					while (value[j] == '"' || value[j] == "'" || blankChar[value[j]]) j++;
-					value = value.substr(0, j) + this.getUrl(value.substr(j, 2)) + value.substr(j + 2);
+					value = value.substr(0, j) + this.getUrl(value.substr(j, 4)) + value.substr(j + 4);
 				}
 			}
 			// 转换 rpx
@@ -447,7 +444,7 @@ class MpHtmlParser {
 			if (url[0] == '/') {
 				if (url[1] == '/') url = this.protocol + ':' + url;
 				else url = this.domain + url;
-			} else if (!url.includes('://'))
+			} else if (url.indexOf('http') != 0)
 				url = this.domain + '/' + url;
 		}
 		return url;

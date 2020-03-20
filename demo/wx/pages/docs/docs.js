@@ -144,8 +144,6 @@ p {
       name: 'bdo',
       attrs: 'dir'
     }, {
-      name: 'caption'
-    }, {
       name: 'rp',
       attrs: '高版本不显示，可用于兼容'
     }, {
@@ -392,8 +390,7 @@ console.log(rect.height); // 高度</code></pre>
   </li>
 </ol>`,
     // 配置项示例代码
-    configCode:
-`<ol style="margin-left:-15px">
+    configCode: `<ol style="margin-left:-15px">
   <li><code>filter</code>
     <div>功能：过滤器函数，可以对解析到的标签进行自定义处理，将在渲染时生效</div>
     <div>输入值：<code>node</code>为解析到的节点的结构体，<code>context</code>是解析器实例（可以获取一些解析选项和方法）</div>
@@ -499,6 +496,14 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.3.20
+    <ol>
+      <li><code>U</code> 将不用于渲染的属性声明为纯数据字段，可以提升性能</li>
+      <li><code>U</code> 所有标签支持<code>align</code>属性</li>
+      <li><code>F</code> 修复了设置<code>domain</code>时背景图片链接被错误填充的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.3.17 beta
     <ol>
       <li><code>U</code> 通过<code>image</code>（经过一些处理后）来显示图片（替代<code>rich-text</code>），可以实现以下优化：
@@ -629,18 +634,6 @@ console.log(rect.height); // 高度</code></pre>
       <li><code>F</code> 修复了使用<code>font</code>标签的<code>size</code>属性时出错的问题</li>
     </ol>
   </li>
-  </br>
-  <li>2019.12.15
-    <ol>
-      <li><code>A</code> 增加<code>setContent</code>的<code>api</code>，用于设置<code>string</code>类型的数据，可以减少一次<code>setData</code></li>
-      <li><code>A</code> 增加<code>imgList</code>的<code>api</code>，可以获取封面、设置缩略图等</li>
-      <li><code>U</code> <code>a</code>标签支持了<code>app-id</code>和<code>path</code>属性，可以跳转其他小程序</li>
-      <li><code>U</code> <code>domain</code>属性支持自动补全<code>css</code>中<code>url</code>的路径</li>
-      <li><code>U</code> <code>cache-id</code>属性更名为<code>use-cache</code>，只用选择是否使用缓存即可，缓存 <code>id</code>会自动通过<code>hash</code>函数获取</li>
-      <li><code>D</code> 废弃了<code>html</code>属性的<code>object</code>类型，直接设置<code>array</code>即可（<code>imgList</code>等其他信息可以从<code>nodes</code>中获取）</li>
-      <li><code>D</code> 删除了<code>animation-duration</code>属性</code>
-    </ol>
-  </li>
 </ul>
 <div style="margin-top:20px">更多信息可见：<a href="https://jin-yufeng.github.io/Parser/#/changelog">更新日志</a></div>`
   },
@@ -650,20 +643,10 @@ console.log(rect.height); // 高度</code></pre>
       index: e.index
     })
   },
-  // 上一章
-  prevSection(e) {
+  // 切换章节
+  changeSection(e) {
     this.setData({
-      index: --this.data.index
-    })
-    wx.pageScrollTo({
-      scrollTop: 0,
-      duration: 500
-    })
-  },
-  // 下一章
-  nextSection(e) {
-    this.setData({
-      index: ++this.data.index
+      index: e.target.dataset.index
     })
     wx.pageScrollTo({
       scrollTop: 0,

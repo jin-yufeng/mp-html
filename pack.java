@@ -50,8 +50,8 @@ class core {
 
 	// 包大小
 	final float wxSize = 43.7f;
-	final float wxMinSize = 29.7f;
-	final float uniAppSize = 57.4f;
+	final float wxMinSize = 29.9f;
+	final float uniAppSize = 57.6f;
 	final float emojiSize = 4.25f;
 	final float emojiMinSize = 3.16f;
 	final float domSize = 6.79f;

@@ -140,7 +140,7 @@ module.exports = [`<head>
     </br>
   </p>
   <div id="adContainer">
-    <ad unit-id="adunit-bb2f664ec0e5875c"></ad>
+    <ad unit-id="xxxxx"></ad>
     <div style="font-size:12px;color:gray;text-align:center;">文中广告</div>
   </div>
   <p>

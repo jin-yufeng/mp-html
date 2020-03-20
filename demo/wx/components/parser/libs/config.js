@@ -64,6 +64,7 @@ module.exports = {
     address: 'font-style:italic',
     big: 'display:inline;font-size:1.2em',
     blockquote: 'background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px',
+    caption: canIUse ? '' : 'display:table-caption;text-align:center',
     center: 'text-align:center',
     cite: 'font-style:italic',
     dd: 'margin-left:40px',

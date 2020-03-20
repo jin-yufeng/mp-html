@@ -11,11 +11,11 @@ module.exports = {
 	onText: null,
 	blankChar: makeMap(' ,\xA0,\t,\r,\n,\f'),
 	// 块级标签，将被转为 div
-	blockTags: makeMap('address,article,aside,body,center,cite,footer,header,html,nav,section'
+	blockTags: makeMap('address,article,aside,body,center,cite,footer,header,html,nav,section' + (
 		// #ifdef MP-WEIXIN
-		+ (canIUse ? '' : ',caption,pre')
+		canIUse ? '' :
 		// #endif
-	),
+		',caption,pre')),
 	// 将被移除的标签
 	ignoreTags: makeMap(
 		'area,base,basefont,canvas,command,embed,frame,iframe,input,isindex,keygen,link,map,meta,param,script,source,style,svg,textarea,title,track,use,wbr'
@@ -57,6 +57,11 @@ module.exports = {
 		address: 'font-style:italic',
 		big: 'display:inline;font-size:1.2em',
 		blockquote: 'background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px',
+		caption:
+			// #ifdef MP-WEIXIN
+			canIUse ? '' :
+			// #endif
+			'display:table-caption;text-align:center',
 		center: 'text-align:center',
 		cite: 'font-style:italic',
 		dd: 'margin-left:40px',

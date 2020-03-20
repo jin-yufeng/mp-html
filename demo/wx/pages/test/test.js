@@ -1,19 +1,10 @@
 // test.js
 const MpHtmlParser = require('../../components/parser/libs/MpHtmlParser.js');
 const marked = require('./marked.min.js');
-var videoAd = null;
-// 计算可用次数
-const today = new Date().toLocaleDateString();
-var times = 3;
-wx.getStorage({
-  key: today,
-  success: (res) => times = res.data
-})
 Page({
   // 数据
   data: {
-    modes: ['html 解析', 'markdown 解析'],
-    ad: false
+    modes: ['html 解析', 'markdown 解析']
   },
   // 页面加载
   onLoad(e) {
@@ -42,44 +33,8 @@ Page({
     }
     this.setData({
       index: e.index,
-      tagStyle,
-      times
+      tagStyle
     })
-    // 激励视频广告
-    if (wx.createRewardedVideoAd) {
-      videoAd = wx.createRewardedVideoAd({
-        adUnitId: 'adunit-06b11586227f9e9b'
-      })
-      videoAd.onLoad(() => {
-        this.setData({
-          ad: true
-        })
-      })
-      videoAd.onError((err) => {
-        if (this.data.ad)
-          this.setData({
-            ad: false
-          })
-      })
-      videoAd.onClose((res) => {
-        if (res && res.isEnded) {
-          this.setData({
-            times: (times += 3)
-          })
-          wx.showToast({
-            title: '成功获取',
-          })
-        } else {
-          wx.showToast({
-            title: '获取失败',
-          })
-        }
-      })
-    }
-  },
-  // 保存剩余次数
-  onUnload() {
-    wx.setStorageSync(today, times);
   },
   // 增加模板
   addTemplate(e) {
@@ -228,28 +183,13 @@ Page({
         if (this.data.index == '1')
           html = marked(html);
         this.setData({
-          html,
-          times: (--times)
+          html
         })
         wx.pageScrollTo({
           selector: '#result'
         })
       }
     })
-  },
-  // 显示激励视频广告
-  showAd() {
-    if (videoAd) {
-      videoAd.show().catch(() => {
-        videoAd.load()
-          .then(() => videoAd.show())
-          .catch(err => {
-            wx.showToast({
-              title: '加载失败',
-            })
-          })
-      })
-    }
   },
   // 页面分享
   onShareAppMessage() {

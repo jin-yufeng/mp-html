@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/17
+  update：2020/03/20
 -->
 <template>
 	<view class="interlayer">
@@ -35,7 +35,7 @@
 				 :style="item.attrs.style" @tap="_loadVideo" />
 				<!--#endif-->
 				<video v-else :id="item.attrs.id" :class="item.attrs.class" :style="item.attrs.style" :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
-				 :controls="item.attrs.controls" :loop="item.attrs.loop" :muted="item.attrs.muted" :poster="item.attrs.poster" :src="controls[item.attrs.id] ? item.attrs.source[controls[item.attrs.id].index] : item.attrs.src"
+				 :controls="item.attrs.controls" :loop="item.attrs.loop" :muted="item.attrs.muted" :poster="item.attrs.poster" :src="item.attrs.source[(controls[item.attrs.id]&&controls[item.attrs.id].index)||0]"
 				 :unit-id="item.attrs['unit-id']" :data-source="item.attrs.source" data-from="video" @play="play" @error="error" />
 			</view>
 			<!--音频-->
@@ -89,8 +89,7 @@
 			<rich-text v-else-if="handler.useRichText(item)" :id="item.attrs.id" :class="'_p __'+item.name" :nodes="[item]" />
 			<!--#endif-->
 			<!--#ifdef MP-BAIDU || MP-TOUTIAO-->
-			<rich-text v-else-if="!(item.c||item.continue)" :id="item.attrs.id" :class="_p" :style="item.attrs.contain"
-			 :nodes="[item]" />
+			<rich-text v-else-if="!(item.c||item.continue)" :id="item.attrs.id" :class="_p" :style="item.attrs.contain" :nodes="[item]" />
 			<!--#endif-->
 			<!--#ifdef MP-ALIPAY-->
 			<view v-else :id="item.attrs.id" :class="'_'+item.name+' '+(item.attrs.class||'')" :style="item.attrs.style">
@@ -241,7 +240,7 @@
 					// 加载其他 source
 					var index = this.controls[target.id] ? this.controls[target.id].index + 1 : 1;
 					if (index < target.dataset.source.length)
-						this.$set(this.controls[target.id], 'index', index);
+						this.$set(this.controls, target.id + '.index', index);
 					if (target.dataset.from == 'video') context = uni.createVideoContext(target.id, this)
 				}
 				this.top && this.top.$emit('error', {
@@ -283,13 +282,14 @@
 		text-indent: 0;
 	}
 
-	/* #ifdef MP-WEIXIN || APP-PLUS */
+	/* #ifdef MP-WEIXIN */
 	:host {
 		display: inline;
 	}
 
 	/* #endif */
 
+	/* #ifdef MP */
 	.interlayer {
 		align-content: inherit;
 		align-items: inherit;
@@ -297,9 +297,11 @@
 		flex-direction: inherit;
 		flex-wrap: inherit;
 		justify-content: inherit;
-		max-width: 100%;
+		width: 100%;
 		white-space: inherit;
 	}
+
+	/* #endif */
 
 	._b,
 	._strong {
@@ -418,7 +420,7 @@
 		vertical-align: super;
 	}
 
-	/* #ifndef MP-WEIXIN || APP-PLUS */
+	/* #ifndef MP-WEIXIN */
 	._a,
 	._abbr,
 	._b,

@@ -165,10 +165,10 @@
         本插件解析和渲染效率高；轻量化（
         <code>43.7KB</code>，
         <code>min</code>版本
-        <code>29.7KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+        <code>29.9KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
         <parser html="{{errorCode}}" tag-style="{{tagStyle}}" />
       </view>
-      <view class="link" hover-class="link-hover" style="display:block;text-align:center" bindtap="nextSection">下一章：使用方法</view>
+      <view class="link" hover-class="link-hover" style="display:block;text-align:center" data-index="1" bindtap="changeSection">下一章：使用方法</view>
     </block>
     <!--使用方法-->
     <block wx:elif="{{index==1}}">
@@ -312,9 +312,9 @@
         <parser html="获取：<a href='https://github.com/jin-yufeng/Parser'>https://github.com/jin-yufeng/Parser</a>" />
       </view>
       <view class="link" style="display:flex;justify-content:center;margin:0 5%">
-        <view hover-class="link-hover" bindtap="prevSection">上一章：功能介绍</view>
+        <view hover-class="link-hover" data-index="0" bindtap="changeSection">上一章：功能介绍</view>
         <view style="flex:1"></view>
-        <view hover-class="link-hover" bindtap="nextSection">下一章：更新日志</view>
+        <view hover-class="link-hover" data-index="2" bindtap="changeSection">下一章：更新日志</view>
       </view>
     </block>
     <!--更新日志-->
@@ -322,7 +322,7 @@
       <view class="weui-article__section">
         <parser html="{{changelog}}" tag-style="{{tagStyle}}" />
       </view>
-      <view class="link" hover-class="link-hover" style="display:block;text-align:center" bindtap="prevSection">上一章：使用方法</view>
+      <view class="link" hover-class="link-hover" style="display:block;text-align:center" data-index="1" bindtap="changeSection">上一章：使用方法</view>
     </block>
   </view>
 </view>
