@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/20
+  update：2020/03/21
 -->
 <template>
 	<view style="display:inherit;">
@@ -39,7 +39,10 @@
 		return val;
 	};
 	// #endif
-	const cfg = require('./libs/config.js');
+	// #ifdef H5
+	var rpx = uni.getSystemInfoSync().screenWidth / 750,
+		cfg = require('./libs/config.js');
+	// #endif
 	export default {
 		name: 'parser',
 		data() {
@@ -192,13 +195,15 @@
 				if (typeof html != 'string') html = this._Dom2Str(html.nodes || html);
 				// 处理 rpx
 				if (html.includes('rpx'))
-					html = html.replace(/[0-9.]*rpx/g, $ => parseFloat($) * cfg.screenWidth / 750 + 'px');
+					html = html.replace(/[0-9.]*rpx/g, $ => parseFloat($) * rpx + 'px');
 				var div = document.createElement('div');
 				if (!append) {
 					// 处理 tag-style 和 userAgentStyles
-					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}img{max-width:100%}blockquote{background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px}';
-					for (var item in this.tagStyle)
-						style += (item + '{' + this.tagStyle[item] + '}');
+					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}';
+					for (var item in cfg.userAgentStyles)
+						style += `${item}{${cfg.userAgentStyles[item]}}`;
+					for (item in this.tagStyle)
+						style += `${item}{${this.tagStyle[item]}}`;
 					style += '</style>';
 					html = style + html;
 					if (this.rtf) this.rtf.parentNode.removeChild(this.rtf);

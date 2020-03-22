@@ -62,9 +62,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 43.7KB | 微信小程序插件包 |
-| parser.min | 29.9KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 57.6KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 44.3KB | 微信小程序插件包 |
+| parser.min | 30.0KB | 微信小程序插件包压缩版（功能相同） |
+| parser.uni | 58.8KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -190,6 +190,9 @@
 
 
 ## 更新日志 ##
+- 2020.3.21  
+  1. `U` 没有使用 `colspan` 和 `rowspan` 的表格里的链接可以点击  
+
 - 2020.3.20
   1. `U` 所有标签支持 `align` 属性  
   2. `U` 微信包将不用于渲染的属性声明为 [纯数据字段](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/pure-data.html)，可以提升性能  

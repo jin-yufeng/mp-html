@@ -496,6 +496,12 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.3.21
+    <ol>
+      <li><code>U</code> 没有使用<code>colspan</code>和<code>rowspan</code>的表格里的链接可以点击</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.3.20
     <ol>
       <li><code>U</code> 将不用于渲染的属性声明为纯数据字段，可以提升性能</li>
@@ -626,12 +632,6 @@ console.log(rect.height); // 高度</code></pre>
       <li><code>U</code> <code>h1-6</code>标签支持通过组件递归显示（即可以在其中使用图片、链接等）</li>
       <li><code>U</code> 解决了<code>Audits</code>测评中<code>a</code>标签可点击元素的响应区域过小的问题</li>
       <li><code>F</code> 修复了一个样式优先级的错误</li>
-    </ol>
-  </li>
-  </br>
-  <li>2019.12.21
-    <ol>
-      <li><code>F</code> 修复了使用<code>font</code>标签的<code>size</code>属性时出错的问题</li>
     </ol>
   </li>
 </ul>

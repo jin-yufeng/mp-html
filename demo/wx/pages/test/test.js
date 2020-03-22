@@ -22,13 +22,13 @@ Page({
       this.editor = res.context;
     }).exec();
     var tagStyle = {
-      pre: 'padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#272822;color:#f8f8f2;line-height: 1.5;text-shadow:0 1px rgba(0,0,0,0.3);font-family:Consolas,Monaco,"Andale Mono","Ubuntu Mono",monospace;position:relative;user-select:text',
+      pre: 'padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#272822;color:#f8f8f2;line-height: 1.5;text-shadow:0 1px rgba(0,0,0,0.3);font-family:Consolas,Monaco,"Andale Mono","Ubuntu Mono",monospace;position:relative',
       code: 'background-color:#f0f0f0;font-size:85%;margin:0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace'
     }
     // markdown 表格样式
     if (e.index == '1') {
       tagStyle.table = 'border-collapse:collapse;border-top:1px solid gray;border-left:1px solid gray';
-      tagStyle.th = 'border-right:1px solid gray;border-bottom:1px solid gray;padding:5px';
+      tagStyle.th = 'border-right:1px solid gray;border-bottom:1px solid gray;padding:5px;font-weight:bold';
       tagStyle.td = 'border-right:1px solid gray;border-bottom:1px solid gray;padding:5px';
     }
     this.setData({
@@ -62,7 +62,7 @@ Page({
           template =
           `| 标题1 | 标题2 |
 |:---:|:---:|
-| 内容1 | 内容2 |`;
+| 内容1 | [链接](https://github.com/jin-yufeng/Parser) |`;
         break;
       case 'list':
         if (this.data.index == '0')
@@ -130,7 +130,7 @@ Page({
   <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>
   <br />
   <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>
-  <p style="color:gray;font-size:12px">外部链接，长按可以复制</p>
+  <p style="color:gray;font-size:12px">外部链接，点击可以复制</p>
 </div>`;
         else
           template = '[GitHub 链接](https://github.com/jin-yufeng/Parser)';

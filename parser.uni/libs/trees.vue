@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/20
+  update：2020/03/21
 -->
 <template>
 	<view class="interlayer">
@@ -26,27 +26,22 @@
 			<text v-else-if="item.name=='br'">\n</text>
 			<!--视频-->
 			<view v-else-if="item.name=='video'">
-				<!--#ifdef APP-PLUS-->
-				<view v-if="(!loadVideo||item.lazyLoad)&&(!controls[item.attrs.id]||!controls[item.attrs.id].play)" :id="item.attrs.id"
-				 :class="'_video '+(item.attrs.class||'')" :style="item.attrs.style" @tap="_loadVideo" />
-				<!--#endif-->
-				<!--#ifndef APP-PLUS-->
-				<view v-if="item.lazyLoad&&!controls[item.attrs.id].play" :id="item.attrs.id" :class="'_video '+(item.attrs.class||'')"
+				<view v-if="(!loadVideo||item.lazyLoad)&&!(controls[item.attrs.id]&&controls[item.attrs.id].play)" :id="item.attrs.id" :class="'_video '+(item.attrs.class||'')"
 				 :style="item.attrs.style" @tap="_loadVideo" />
-				<!--#endif-->
 				<video v-else :id="item.attrs.id" :class="item.attrs.class" :style="item.attrs.style" :autoplay="item.attrs.autoplay||(controls[item.attrs.id]&&controls[item.attrs.id].play)"
 				 :controls="item.attrs.controls" :loop="item.attrs.loop" :muted="item.attrs.muted" :poster="item.attrs.poster" :src="item.attrs.source[(controls[item.attrs.id]&&controls[item.attrs.id].index)||0]"
-				 :unit-id="item.attrs['unit-id']" :data-source="item.attrs.source" data-from="video" @play="play" @error="error" />
+				 :unit-id="item.attrs['unit-id']" :data-id="item.attrs.id" :data-source="item.attrs.source" data-from="video" @play="play"
+				 @error="error" />
 			</view>
 			<!--音频-->
 			<audio v-else-if="item.name=='audio'" :id="item.attrs.id" :class="item.attrs.class" :style="item.attrs.style"
 			 :author="item.attrs.author" :controls="item.attrs.controls" :loop="item.attrs.loop" :name="item.attrs.name" :poster="item.attrs.poster"
-			 :src="controls[item.attrs.id] ? item.attrs.source[controls[item.attrs.id].index] : item.attrs.src" :data-source="item.attrs.source"
+			 :src="item.attrs.source[(controls[item.attrs.id]&&controls[item.attrs.id].index)||0]" :data-id="item.attrs.id" :data-source="item.attrs.source"
 			 data-audio="audio" @error="error" />
 			<!--链接-->
 			<view v-else-if="item.name=='a'" :class="'_a '+(item.attrs.class||'')" hover-class="_hover" :style="item.attrs.style"
 			 :data-attrs="item.attrs" @tap="linkpress">
-				<trees :nodes="item.children" />
+				<trees class="_span" :nodes="item.children" />
 			</view>
 			<!--广告（按需打开注释）-->
 			<!--#ifdef MP-WEIXIN || MP-QQ || MP-TOUTIAO-->
@@ -62,7 +57,7 @@
 			 data-from="ad" @error="error" />-->
 			<!--#endif-->
 			<!--列表-->
-			<view v-else-if="item.name=='li'" :class="item.attrs.class" :style="(item.attrs.style||'')+';display:flex'">
+			<view v-else-if="item.name=='li'" :id="item.attrs.id" :class="item.attrs.class" :style="(item.attrs.style||'')+';display:flex'">
 				<view v-if="item.type=='ol'" class="_ol-bef">{{item.num}}</view>
 				<view v-else class="_ul-bef">
 					<view v-if="item.floor%3==0" class="_ul-p1">█</view>
@@ -75,8 +70,27 @@
 				</view>
 				<!--#endif-->
 				<!--#ifndef MP-ALIPAY-->
-				<trees class="_node _li" :nodes="item.children" :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
+				<trees class="_li" :nodes="item.children" :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
 				<!--#endif-->
+			</view>
+			<!--表格-->
+			<view v-else-if="item.name=='table'&&item.c" :id="item.attrs.id" :class="item.attrs.class" :style="(item.attrs.style||'')+';display:table'">
+				<view v-for="(tbody, i) in item.children" v-bind:key="i" :class="tbody.attrs.class" :style="(tbody.attrs.style||'')+(tbody.name[0]=='t'?';display:table-'+(tbody.name=='tr'?'row':'row-group'):'')">
+					<view v-for="(tr, j) in tbody.children" v-bind:key="j" :class="tr.attrs.class" :style="(tr.attrs.style||'')+(tr.name[0]=='t'?';display:table-'+(tr.name=='tr'?'row':'cell'):'')">
+						<trees v-if="tr.name=='td'" :nodes="tr.children" :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
+						<block v-else>
+							<!--#ifdef MP-ALIPAY-->
+							<view v-for="(td, k) in tr.children" v-bind:key="k" :class="td.attrs.class" :style="(td.attrs.style||'')+(td.name[0]=='t'?';display:table-'+(td.name=='tr'?'row':'cell'):'')">
+								<trees :nodes="td.children" />
+							</view>
+							<!--#endif-->
+							<!--#ifndef MP-ALIPAY-->
+							<trees v-for="(td, k) in tr.children" v-bind:key="k" :class="td.attrs.class" :style="(td.attrs.style||'')+(td.name[0]=='t'?';display:table-'+(td.name=='tr'?'row':'cell'):'')"
+							 :nodes="td.children" :lazyLoad="lazyLoad" :loadVideo="loadVideo" />
+							<!--#endif-->
+						</block>
+					</view>
+				</view>
 			</view>
 			<!--#ifdef APP-PLUS-->
 			<iframe v-else-if="item.name=='iframe'" :style="item.attrs.style" :allowfullscreen="item.attrs.allowfullscreen"
@@ -116,7 +130,10 @@
 			return {
 				controls: {},
 				// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
-				imgLoad: false
+				imgLoad: false,
+				// #endif
+				// #ifndef APP-PLUS
+				loadVideo: true
 				// #endif
 			}
 		},
@@ -151,7 +168,7 @@
 			play(e) {
 				if (this.top.videoContexts.length > 1 && this.top.autopause)
 					for (var i = this.top.videoContexts.length; i--;)
-						if (this.top.videoContexts[i].id != e.currentTarget.id)
+						if (this.top.videoContexts[i].id != e.currentTarget.dataset.id)
 							this.top.videoContexts[i].pause();
 			},
 			// #endif
@@ -421,7 +438,6 @@
 	}
 
 	/* #ifndef MP-WEIXIN */
-	._a,
 	._abbr,
 	._b,
 	._code,

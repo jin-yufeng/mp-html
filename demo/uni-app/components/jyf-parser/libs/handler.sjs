@@ -14,7 +14,7 @@ var inlineTags = {
 	strong: 1
 }
 export default {
-	// 从 rich-text 顶层标签的样式中取出一些给 rich-text
+	// 从顶层标签的样式中取出一些给 rich-text
 	getStyle: function(style) {
 		if (style) {
 			var i, j, res = '';
@@ -30,9 +30,6 @@ export default {
 	},
 	// 是否通过 rich-text 显示
 	useRichText: function(item) {
-		// rich-text 不支持 inline
-		if (item.c || inlineTags[item.name] || (item.attrs.style && item.attrs.style.indexOf('display:inline') != -1))
-			return false;
-		return true;
+		return !item.c && !inlineTags[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1;
 	}
 }

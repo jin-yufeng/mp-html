@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/20
+  update：2020/03/21
 */
 var cfg = require('./config.js'),
 	blankChar = cfg.blankChar,
@@ -19,7 +19,7 @@ var entities = {
 	amp: '&',
 	quot: '"',
 	apos: "'",
-	nbsp: '\u00A0',
+	nbsp: '\xA0',
 	ensp: '\u2002',
 	emsp: '\u2003',
 	ndash: '–',
@@ -53,14 +53,10 @@ class MpHtmlParser {
 		this.data = data;
 		this.domain = options.domain;
 		this.DOM = [];
-		this.i = 0;
+		this.i = this.start = this.audioNum = this.imgNum = this.videoNum = 0;
 		this.protocol = this.domain && this.domain.includes('://') ? this.domain.split('://')[0] : '';
-		this.start = 0;
 		this.state = this.Text;
 		this.STACK = [];
-		this.audioNum = 0;
-		this.imgNum = 0;
-		this.videoNum = 0;
 		this.useAnchor = options.useAnchor;
 	}
 	parse() {
@@ -253,6 +249,11 @@ class MpHtmlParser {
 		var attrs = node.attrs,
 			style = this.CssHandler.match(node.name, attrs, node) + (attrs.style || ''),
 			styleObj = {};
+		if (attrs.id) {
+			if (this.compress & 1) attrs.id = void 0;
+			else if (this.useAnchor) this.bubble();
+		}
+		if ((this.compress & 2) && attrs.class) attrs.class = void 0;
 		switch (node.name) {
 			case 'img':
 				if (attrs['data-src']) {
@@ -306,6 +307,15 @@ class MpHtmlParser {
 				if (!attrs.controls && !attrs.autoplay)
 					console.warn(`存在没有 controls 属性的 ${node.name} 标签，可能导致无法播放`, node);
 				this.bubble();
+				break;
+			case 'td':
+			case 'th':
+				if (attrs.colspan || attrs.rowspan)
+					for (var k = this.STACK.length, item; item = this.STACK[--k];)
+						if (item.name == 'table') {
+							item.c = void 0;
+							break;
+						}
 		}
 		if (attrs.align) {
 			styleObj['text-align'] = attrs.align;
@@ -347,11 +357,6 @@ class MpHtmlParser {
 		}
 		style = style.substr(1);
 		if (style) attrs.style = style;
-		if (attrs.id) {
-			if (this.compress & 1) attrs.id = void 0;
-			else if (this.useAnchor) this.bubble();
-		}
-		if ((this.compress & 2) && attrs.class) attrs.class = void 0;
 	}
 	// 节点出栈处理
 	popNode(node) {
@@ -364,13 +369,14 @@ class MpHtmlParser {
 		}
 		if (node.name == 'head' || (cfg.filter && cfg.filter(node, this) == false))
 			return this.siblings().pop();
+		var attrs = node.attrs;
 		// 替换一些标签名
 		if (node.name == 'picture') {
 			node.name = 'img';
-			if (!node.attrs.src && (node.children[0] || '').name == 'img')
-				node.attrs.src = node.children[0].attrs.src;
-			if (node.attrs.src && !node.attrs.ignore)
-				node.attrs.i = (this.imgNum++).toString();
+			if (!attrs.src && (node.children[0] || '').name == 'img')
+				attrs.src = node.children[0].attrs.src;
+			if (attrs.src && !attrs.ignore)
+				attrs.i = (this.imgNum++).toString();
 			return node.children = void 0;
 		}
 		if (cfg.blockTags[node.name]) node.name = 'div';
@@ -400,31 +406,35 @@ class MpHtmlParser {
 								return res;
 							}
 							return num;
-						})(num++, node.attrs.type) + '.';
+						})(num++, attrs.type) + '.';
 					}
 			}
 		}
 		// 处理表格的边框
 		if (node.name == 'table') {
-			if (node.attrs.border)
-				node.attrs.style = `border:${node.attrs.border}px solid gray;${node.attrs.style || ''}`;
-			if (node.attrs.cellspacing)
-				node.attrs.style = `border-spacing:${node.attrs.cellspacing}px;${node.attrs.style || ''}`;
-			if (node.attrs.border || node.attrs.cellpadding)
+			var padding = attrs.cellpadding,
+				spacing = attrs.cellspacing,
+				border = attrs.border;
+			if (node.c) {
+				this.bubble();
+				if (!padding) padding = 2;
+				if (!spacing) spacing = 2;
+			}
+			if (border) attrs.style = `border:${border}px solid gray;${attrs.style || ''}`;
+			if (spacing) attrs.style = `border-spacing:${spacing}px;${attrs.style || ''}`;
+			if (border || padding)
 				(function f(ns) {
 					for (var i = 0, n; n = ns[i]; i++) {
 						if (n.name == 'th' || n.name == 'td') {
-							if (node.attrs.border)
-								n.attrs.style = `border:${node.attrs.border}px solid gray;${n.attrs.style || ''}`;
-							if (node.attrs.cellpadding)
-								n.attrs.style = `padding:${node.attrs.cellpadding}px;${n.attrs.style || ''}`;
+							if (border) n.attrs.style = `border:${border}px solid gray;${n.attrs.style}`;
+							if (padding) n.attrs.style = `padding:${padding}px;${n.attrs.style}`;
 						} else f(n.children || []);
 					}
 				})(node.children)
 		}
 		this.CssHandler.pop && this.CssHandler.pop(node);
 		// 自动压缩
-		if (node.name == 'div' && !Object.keys(node.attrs).length) {
+		if (node.name == 'div' && !Object.keys(attrs).length) {
 			var siblings = this.siblings();
 			if (!(node.children || []).length) siblings.pop();
 			else if (node.children.length == 1 && node.children[0].name == 'div')
@@ -433,11 +443,14 @@ class MpHtmlParser {
 	}
 	// 工具函数
 	bubble() {
-		for (var i = this.STACK.length; i--;) {
-			if (cfg.richOnlyTags[this.STACK[i].name]) break;
-			this.STACK[i].c = 1;
+		for (var i = this.STACK.length, item; item = this.STACK[--i];) {
+			if (cfg.richOnlyTags[item.name]) {
+				if (item.name == 'table' && !item.hasOwnProperty('c')) item.c = 1;
+				return false;
+			}
+			item.c = 1;
 		}
-		return i == -1;
+		return true;
 	}
 	getUrl(url) {
 		if (this.domain) {

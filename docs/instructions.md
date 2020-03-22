@@ -3,9 +3,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 43.7KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.9KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.6KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.3KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.0KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.8KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（`uni-app` 包）：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
@@ -21,7 +21,7 @@
 !>`uni-app` 包为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
 需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式（或 `v3`）
 
-!>表格由于较难通过模板循环的方式显示，将直接通过 rich-text 进行渲染，因此请尽量避免在表格中加入图片或链接，否则将无法预览或点击（但可以正常显示）
+!>使用了 `colspan` 和 `rowspan` 的表格由于无法通过 `css` 模拟，将直接通过 `rich-text` 进行渲染，其中的图片和链接将无法预览或点击（但可以正常显示）
 
 以下统称为 `parser`  
 
@@ -455,7 +455,7 @@ this.selectComponent("#preLoad").preLoad(html);
 - 使用方法  
   将 `emoji.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `emoji.js`）  
   
-  !>在 uni-app 中使用时需要将 libs/MpHtmlParser.js 第 15 行改为 const emoji = require('./emoji.js');  
+  !>在 uni-app 中使用时需要将 libs/MpHtmlParser.js 第 47 行改为 const emoji = require('./emoji.js');  
   
   默认配置中支持 `177` 个常用的 `emoji` 小表情  
   支持两种形式的 `emoji`，一是 `emoji` 字符（不同设备上显示的样子可能不同），或者是网络图片（将按照 `16px` × `16px` 的大小显示，且不可放大预览），默认配置中都是 `emoji` 字符，可使用以下 `api` 获取或修改：  

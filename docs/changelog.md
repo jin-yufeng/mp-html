@@ -1,5 +1,8 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.03.21 ####
+1. `U` 没有使用 `colspan` 和 `rowspan` 的表格里的链接可以点击  
+
 #### 2020.03.20 ####
 1. `U` 所有标签支持 `align` 属性  
 2. `U` 微信包将不用于渲染的属性声明为 [纯数据字段](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/pure-data.html)，可以提升性能  
