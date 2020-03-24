@@ -33,11 +33,11 @@ Component({
             if (!imgList.includes(src) || src.substring(0, 4) != 'http') imgList.push(src);
             else {
 				var newSrc = '';
-				for (var j = 0; j < src.length; j++) {
-					newSrc += Math.random() >= 0.5 ? src[j].toUpperCase() : src[j].toLowerCase();
-					if (src[j] == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
+				for (var k = 0; k < src.length; k++) {
+					newSrc += Math.random() >= 0.5 ? src[k].toUpperCase() : src[k].toLowerCase();
+					if (src[k] == '/' && src[k - 1] != '/' && src[k + 1] != '/') break;
 				}
-				newSrc += src.substring(j + 1);
+				newSrc += src.substring(k + 1);
 				imgList.push(newSrc);
 			}
           }

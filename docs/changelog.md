@@ -1,5 +1,9 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.03.23 ####
+1. `A` 增加了 `audio` 的补丁包（替代被废弃的原生 `audio`）[详细](/instructions#audio)  
+2. `U` 通过 `eslint` 检查规范和修复了一些问题  
+
 #### 2020.03.21 ####
 1. `U` 没有使用 `colspan` 和 `rowspan` 的表格里的链接可以点击  
 

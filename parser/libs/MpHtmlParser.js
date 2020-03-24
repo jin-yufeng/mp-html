@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/21
+  update：2020/03/23
 */
 var cfg = require('./config.js'),
   blankChar = cfg.blankChar,
@@ -11,7 +11,7 @@ var cfg = require('./config.js'),
   screenWidth = wx.getSystemInfoSync().screenWidth;
 try {
   var emoji = require('./emoji.js');
-} catch (e) {};
+} catch (e) {}
 class MpHtmlParser {
   constructor(data, options = {}) {
     this.attrs = {};
@@ -250,10 +250,11 @@ class MpHtmlParser {
     }
     // 压缩 style
     var styles = style.split(';');
-    for (var i = 0, len = styles.length, style = ''; i < len; i++) {
+    style = '';
+    for (var i = 0, len = styles.length; i < len; i++) {
       var info = styles[i].split(':');
       if (info.length < 2) continue;
-      var key = info[0].trim().toLowerCase(),
+      let key = info[0].trim().toLowerCase(),
         value = info.slice(1).join(':').trim();
       if (value.includes('-webkit') || value.includes('-moz') || value.includes('-ms') || value.includes('-o') || value.includes('safe'))
         style += `;${key}:${value}`;
@@ -398,7 +399,7 @@ class MpHtmlParser {
   bubble() {
     for (var i = this.STACK.length, item; item = this.STACK[--i];) {
       if (cfg.richOnlyTags[item.name]) {
-        if (item.name == 'table' && !item.hasOwnProperty('c')) item.c = 1;
+        if (item.name == 'table' && !Object.hasOwnProperty.call(item, 'c')) item.c = 1;
         return false;
       }
       item.c = 1;

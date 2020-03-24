@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/17
+  update：2020/03/23
 */
 Component({
   data: {
@@ -98,7 +98,7 @@ Component({
           return this.setData({
             [`nodes[${i}].i`]: index
           })
-        context = wx[`create${source[0].toUpperCase() + source.subtr(1)}Context`](e.target.id, this);
+        if (this.top) context = this.top.getVideoContext(e.target.id);
       } else if (source == 'img')
         context = {
           setSrc: (newSrc) => src = newSrc

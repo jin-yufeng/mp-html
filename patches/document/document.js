@@ -13,13 +13,13 @@ class element {
     this.id = node.attrs.id;
     this._node = node;
     this.childNodes = [];
-    for (var i = 0; i < node.children.length; i++)
+    for (let i = 0; i < node.children.length; i++)
       if (node.children[i].name)
         this.childNodes.push(new element(node.children[i], `${path}.children[${i}]`, this._context));
     this.attributes = this._node.attrs;
     this.style = {};
     var styleArr = (node.attrs.style || '').split(';');
-    for (var i = 0; i < styleArr.length; i++)
+    for (let i = 0; i < styleArr.length; i++)
       if (styleArr[i].includes(':')) {
         var info = styleArr[i].split(':');
         this.style[info[0]] = info[1];
@@ -66,7 +66,7 @@ class element {
     this._node.children = new MpHtmlParser(value, this._context.data).parse();
     for (var i = 0; i < this._node.children.length; i++)
       if (this._node.children[i].name)
-        this.childNodes.push(new element(this._node.children[i], `${path}.children[${i}]`, this._context));
+        this.childNodes.push(new element(this._node.children[i], `${this._path}.children[${i}]`, this._context));
   }
   // 添加 / 删除 / 替换 节点
   appendChild(child) {
@@ -89,7 +89,7 @@ class element {
   replaceChild(oldVal, newVal) {
     if (oldVal.constructor != element) return false;
     if (newVal.constructor != element) return false;
-    var i = this.childNodes.indexOf(child);
+    var i = this.childNodes.indexOf(oldVal);
     if (i == -1) return false;
     this.childNodes[i] = newVal;
     this._node.children[i] = newVal._node;
@@ -98,7 +98,7 @@ class element {
   }
   // 获取 / 设置 某个属性
   getAttribute(key) {
-    if (this._node.attrs.hasOwnProperty(key))
+    if (Object.hasOwnProperty.call(this._node.attrs, key))
       return this._node.attrs[key];
     else return null;
   }
@@ -110,13 +110,13 @@ class element {
   // 获取某个样式
   getStyle(key) {
     key = key.replace(/(A-Z)/g, '-$1').toLowerCase();
-    if (this.style.hasOwnProperty(key)) return this.style[key];
+    if (Object.hasOwnProperty.call(this.style, key)) return this.style[key];
     else return null;
   }
   // 设置某个样式
   setStyle(key, value) {
     key = key.replace(/(A-Z)/g, '-$1').toLowerCase();
-    if (this.style.hasOwnProperty(key)) {
+    if (Object.hasOwnProperty.call(this.style, key)) {
       this.style[key] = value;
       var style = '';
       for (var item in this.style)

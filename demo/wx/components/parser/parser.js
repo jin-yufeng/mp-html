@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/20
+  update：2020/03/23
 */
 var cache = {},
   Parser = require('./libs/MpHtmlParser.js'),
@@ -55,7 +55,7 @@ Component({
   created() {
     // 图片数组
     this.imgList = [];
-    this.imgList.setItem = function(i, src) {
+    this.imgList.setItem = function (i, src) {
       if (!i || !src) return;
       // 去重
       if (src.indexOf('http') == 0 && this.includes(src)) {
@@ -81,7 +81,7 @@ Component({
         })
       }
     }
-    this.imgList.each = function(f) {
+    this.imgList.each = function (f) {
       for (var i = 0, len = this.length; i < len; i++)
         this.setItem(i, f(this[i], i, this));
     }
@@ -145,7 +145,7 @@ Component({
         if (_watch || append) return;
         data.html = '';
       } else if (typeof html == 'string') {
-        var parser = new Parser(html, this.data);
+        let parser = new Parser(html, this.data);
         // 缓存读取
         if (this.data.useCache) {
           var hashVal = hash(html);
@@ -160,7 +160,7 @@ Component({
       } else if (html.constructor == Array) {
         // 转换不符合格式的 array
         if (html.length && html[0].PoweredBy != 'Parser') {
-          var parser = new Parser('', this.data);
+          let parser = new Parser('', this.data);
           (function f(ns) {
             for (var i = 0, n; n = ns[i]; i++) {
               if (n.type == 'text') continue;
@@ -205,12 +205,15 @@ Component({
           if (item.name == 'img')
             this.imgList.setItem(item.attrs.i, item.attrs.src);
           // 音视频控制
-          else if (item.name == 'video') {
-            var ctx = wx.createVideoContext(item.attrs.id, n);
-            ctx.id = item.attrs.id;
-            this.videoContexts.push(ctx);
-          } else if (item.name == 'audio' && item.attrs.autoplay)
-            wx.createAudioContext(item.attrs.id, n).play();
+          else if (item.name == 'video' || item.name == 'audio') {
+            var ctx;
+            if (item.name == 'video') ctx = wx.createVideoContext(item.attrs.id, n);
+            else ctx = n.selectComponent('#' + item.attrs.id);
+            if (ctx) {
+              ctx.id = item.attrs.id;
+              this.videoContexts.push(ctx);
+            }
+          }
         }
       }
       (wx.nextTick || setTimeout)(() => this.triggerEvent('load'), 50);

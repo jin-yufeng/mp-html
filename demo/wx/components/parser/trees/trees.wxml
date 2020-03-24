@@ -1,39 +1,39 @@
 <!--trees 递归子组件-->
 <wxs module="handler" src="./handler.wxs" />
-<block wx:for="{{nodes}}" wx:key="index">
-  <rich-text wx:if="{{item.en||item.svg||item.err}}" class="_svg" nodes="{{[item]}}" />
+<block wx:for="{{nodes}}" wx:key="index" wx:for-item="n">
+  <rich-text wx:if="{{n.en||n.svg||n.err}}" class="_svg" nodes="{{[n]}}" />
   <!--图片-->
-  <image wx:elif="{{item.name=='img'}}" class="_img" style="{{item.attrs.style}}" src="{{item.attrs.src}}" lazy-load="{{lazyLoad}}" mode="{{item.mode||'widthFix'}}" show-menu-by-longpress="{{!item.attrs.ignore}}" webp="{{item.webp}}" data-attrs="{{item.attrs}}" data-i="{{index}}" data-auto="{{item.auto}}" data-source="img" bindtap="imgtap" bindload="{{canIUse?handler.load:'loadImg'}}" binderror="error" />
+  <image wx:elif="{{n.name=='img'}}" class="_img" style="{{n.attrs.style}}" src="{{n.attrs.src}}" lazy-load="{{lazyLoad}}" mode="{{n.mode||'widthFix'}}" show-menu-by-longpress="{{!n.attrs.ignore}}" webp="{{n.webp}}" data-attrs="{{n.attrs}}" data-i="{{index}}" data-auto="{{n.auto}}" data-source="img" bindtap="imgtap" bindload="{{canIUse?handler.load:'loadImg'}}" binderror="error" />
   <!--文本-->
-  <text wx:elif="{{item.type=='text'}}" decode>{{item.text}}</text>
-  <text wx:elif="{{item.name=='br'}}">\n</text>
+  <text wx:elif="{{n.type=='text'}}" decode>{{n.text}}</text>
+  <text wx:elif="{{n.name=='br'}}">\n</text>
   <!--链接-->
-  <view wx:elif="{{item.name=='a'}}" class="_a {{item.attrs.class}}" hover-class="_hover" style="{{item.attrs.style}}" data-attrs="{{item.attrs}}" bindtap="{{canIUse?handler.visited:'linkpress'}}">
-    <trees nodes="{{item.children}}" />
+  <view wx:elif="{{n.name=='a'}}" class="_a {{n.attrs.class}}" hover-class="_hover" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="{{canIUse?handler.visited:'linkpress'}}">
+    <trees nodes="{{n.children}}" />
   </view>
   <!--视频-->
-  <block wx:elif="{{item.name=='video'}}">
-    <view wx:if="{{item.lazyLoad}}" id="{{item.attrs.id}}" class="_video {{item.attrs.class}}" style="{{item.attrs.style}}" data-i="{{index}}" bindtap="loadVideo" />
-    <video wx:else id="{{item.attrs.id}}" class="{{item.attrs.class}}" style="{{item.attrs.style}}" autoplay="{{item.attrs.autoplay}}" controls="{{item.attrs.controls}}" loop="{{item.attrs.loop}}" muted="{{item.attrs.muted}}" poster="{{item.attrs.poster}}" src="{{item.attrs.source[item.i||0]}}" unit-id="{{item.attrs['unit-id']}}" data-i="{{index}}"  bindplay="play" data-source="video" binderror="error" />
+  <block wx:elif="{{n.name=='video'}}">
+    <view wx:if="{{n.lazyLoad}}" id="{{n.attrs.id}}" class="_video {{n.attrs.class}}" style="{{n.attrs.style}}" data-i="{{index}}" bindtap="loadVideo" />
+    <video wx:else id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" unit-id="{{n.attrs['unit-id']}}" data-i="{{index}}" data-source="video" binderror="error" bindplay="play" />
   </block>
   <!--音频-->
-  <audio wx:elif="{{item.name=='audio'}}" id="{{item.attrs.id}}" class="{{item.attrs.class}}" style="{{item.attrs.style}}" author="{{item.attrs.author}}" controls="{{item.attrs.controls}}" loop="{{item.attrs.loop}}" name="{{item.attrs.name}}" poster="{{item.attrs.poster}}" src="{{item.attrs.source[item.i||0]}}" data-i="{{index}}" data-source="audio" binderror="error" />
+  <myAudio wx:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" data-i="{{index}}" data-source="audio"  binderror="error" bindplay="play" />
   <!--广告-->
-  <ad wx:elif="{{item.name=='ad'}}" class="{{item.attrs.class}}" style="{{item.attrs.style}}" unit-id="{{item.attrs['unit-id']}}" data-source="ad" binderror="error" />
+  <ad wx:elif="{{n.name=='ad'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" unit-id="{{n.attrs['unit-id']}}" data-source="ad" binderror="error" />
   <!--列表-->
-  <view wx:elif="{{item.name=='li'}}" class="{{item.attrs.class}}" style="{{item.attrs.style}};display:flex">
-    <view wx:if="{{item.type=='ol'}}" class="_ol-bef">{{item.num}}</view>
+  <view wx:elif="{{n.name=='li'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}};display:flex">
+    <view wx:if="{{n.type=='ol'}}" class="_ol-bef">{{n.num}}</view>
     <view wx:else class="_ul-bef">
-      <view wx:if="{{item.floor%3==0}}" class="_ul-p1">█</view>
-      <view wx:elif="{{item.floor%3==2}}" class="_ul-p2" />
+      <view wx:if="{{n.floor%3==0}}" class="_ul-p1">█</view>
+      <view wx:elif="{{n.floor%3==2}}" class="_ul-p2" />
       <view wx:else class="_ul-p1" style="border-radius:50%">█</view>
     </view>
-    <trees class="_node _li" lazy-load="{{lazyLoad}}" nodes="{{item.children}}" />
+    <trees class="_node _li" lazy-load="{{lazyLoad}}" nodes="{{n.children}}" />
   </view>
   <!--自定义标签-->
-  <rich-text wx:elif="{{item.name=='pre'}}" class="_p" nodes="{{[item]}}" data-content="{{item.attrs['data-content']}}" bindlongpress="copyCode" />
+  <rich-text wx:elif="{{n.name=='pre'}}" class="_p" nodes="{{[n]}}" data-content="{{n.attrs['data-content']}}" bindlongpress="copyCode" />
   <!--富文本-->
-  <rich-text wx:elif="{{handler.useRichText(item)}}" id="{{item.attrs.id}}" class="_p __{{item.name}}" nodes="{{[item]}}" />
+  <rich-text wx:elif="{{handler.useRichText(n)}}" id="{{n.attrs.id}}" class="_p __{{n.name}}" nodes="{{[n]}}" />
   <!--继续递归-->
-  <trees wx:else id="{{item.attrs.id}}" class="_node _{{item.name}} {{item.attrs.class}}" style="{{item.attrs.style}}" lazy-load="{{lazyLoad}}" nodes="{{item.children}}" />
+  <trees wx:else id="{{n.attrs.id}}" class="_node _{{n.name}} {{n.attrs.class}}" style="{{n.attrs.style}}" lazy-load="{{lazyLoad}}" nodes="{{n.children}}" />
 </block>

@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/21
+  update：2020/03/23
 */
 var cfg = require('./config.js'),
 	blankChar = cfg.blankChar,
@@ -113,8 +113,8 @@ class MpHtmlParser {
 		if (!text) return;
 		text = (cfg.onText && cfg.onText(text, () => back = true)) || text;
 		if (back) {
-			this.data = this.data.substr(0, this.start) + n.text + this.data.substr(this.i);
-			let j = this.start + n.text.length;
+			this.data = this.data.substr(0, this.start) + text + this.data.substr(this.i);
+			let j = this.start + text.length;
 			for (this.i = this.start; this.i < j; this.i++) this.state(this.data[this.i]);
 			return;
 		}
@@ -323,10 +323,11 @@ class MpHtmlParser {
 		}
 		// 压缩 style
 		var styles = style.split(';');
-		for (var i = 0, len = styles.length, style = ''; i < len; i++) {
+		style = '';
+		for (var i = 0, len = styles.length; i < len; i++) {
 			var info = styles[i].split(':');
 			if (info.length < 2) continue;
-			var key = info[0].trim().toLowerCase(),
+			let key = info[0].trim().toLowerCase(),
 				value = info.slice(1).join(':').trim();
 			if (value.includes('-webkit') || value.includes('-moz') || value.includes('-ms') || value.includes('-o') || value
 				.includes(
@@ -363,7 +364,7 @@ class MpHtmlParser {
 		// 空白符处理
 		if (node.pre) {
 			node.pre = this.pre = void 0;
-			for (var i = this.STACK.length; i--;)
+			for (let i = this.STACK.length; i--;)
 				if (this.STACK[i].pre)
 					this.pre = true;
 		}
@@ -385,13 +386,13 @@ class MpHtmlParser {
 		if (node.c) {
 			if (node.name == 'ul') {
 				var floor = 1;
-				for (var i = this.STACK.length; i--;)
+				for (let i = this.STACK.length; i--;)
 					if (this.STACK[i].name == 'ul') floor++;
 				if (floor != 1)
-					for (i = node.children.length; i--;)
+					for (let i = node.children.length; i--;)
 						node.children[i].floor = floor;
 			} else if (node.name == 'ol') {
-				for (var i = 0, num = 1, child; child = node.children[i++];)
+				for (let i = 0, num = 1, child; child = node.children[i++];)
 					if (child.name == 'li') {
 						child.type = 'ol';
 						child.num = ((num, type) => {
@@ -445,7 +446,7 @@ class MpHtmlParser {
 	bubble() {
 		for (var i = this.STACK.length, item; item = this.STACK[--i];) {
 			if (cfg.richOnlyTags[item.name]) {
-				if (item.name == 'table' && !item.hasOwnProperty('c')) item.c = 1;
+				if (item.name == 'table' && !Object.hasOwnProperty.call(item, 'c')) item.c = 1;
 				return false;
 			}
 			item.c = 1;

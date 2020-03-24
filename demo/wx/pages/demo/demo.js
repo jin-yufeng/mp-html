@@ -9,7 +9,7 @@ Page({
     this.anchor = e.anchor;
   },
   // 富文本渲染完成
-  ready(e) {
+  ready() {
     if (this.anchor)
       this.context.navigateTo({
         id: this.anchor
@@ -34,10 +34,7 @@ Page({
           success(res) {
             wx.hideLoading();
             wx.openDocument({
-              filePath: res.tempFilePath,
-              success(res) {
-                console.log('打开文档成功')
-              }
+              filePath: res.tempFilePath
             })
           }
         })

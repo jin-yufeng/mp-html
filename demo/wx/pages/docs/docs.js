@@ -364,7 +364,7 @@ console.log(rect.height); // 高度</code></pre>
     <div>输入值：<code>html</code>是富文本字符串，<code>append</code>表示是否在尾部追加</div>
     <pre><code class="language-wxml"><parser id="article" /></code></pre>
     <pre style="margin-top:15px"><code class="language-javascript">Page({
-  onLoad(){
+  onLoad() {
     var html = "<div>Hello World!</div>";
     var context = this.selectComponent("#article");
     context.setContent(html);
@@ -382,7 +382,7 @@ console.log(rect.height); // 高度</code></pre>
     <div>输入值：<code>html</code>（<code>String</code>/<code>Array</code>），<code>num</code>（最大图片数量，不输入将预加载全部图片）</div>
     <pre><code class="language-wxml"><parser id="preLoad" /></code></pre>
     <pre><code class="language-javascript">Page({
-  onLoad(){
+  onLoad() {
     // 预加载完毕后在其他页面或当前页面使用这段富文本时就可以不用加载图片
     this.selectComponent("#preLoad").preLoad(html);
   }
@@ -467,6 +467,16 @@ console.log(rect.height); // 高度</code></pre>
   <li>一个<code>parser</code>标签中的<code>a</code>标签可以跳转另一个<code>parser</code>中的锚点（需开启<code>use-anchor</code>属性）</li>
   <li>播放一个视频时可以自动暂停该<code>group</code>下所有视频（需开启<code>antopause</code>属性）</li>
 </ol>`,
+    // audio 补丁包
+    audio: `<ol style="margin-left:-15px">
+  <li>其大小会根据屏幕宽度自动调整（原生<code>audio</code>大小不可变）</li>
+  <li>支持<code>autoplay</code>属性</li>
+  <li>增加了一个可以拖动的进度条</li>
+  <li><code>autopause</code>属性可以控制到音频（即播放一个音频时，若再播放一个视频或音频，将自动暂停此音频）</li>
+</ol>
+<div style="text-align:center;margin-top:0.8em">
+  <audio poster="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.jpg?sign=fcc5ef3dc42d606ea54064f0291eb4b6&t=1584979825" name="致爱丽丝" author="暂无" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.mp3?sign=ee1a9895e9421d296cda186b17f0de22&t=1584979840" controls loop></audio>
+</div>`,
     // 基础库要求
     versions: [{
       version: '<2.9.0',
@@ -496,6 +506,13 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.3.23
+    <ol>
+      <li><code>A</code> 增加了<code>audio</code> 补丁包，用于解决原生<code>audio</code>被废弃的问题</li>
+      <li><code>U</code> 通过<code>eslint</code>检查规范和修复了一些问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.3.21
     <ol>
       <li><code>U</code> 没有使用<code>colspan</code>和<code>rowspan</code>的表格里的链接可以点击</li>

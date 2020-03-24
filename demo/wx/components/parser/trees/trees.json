@@ -1,6 +1,7 @@
 {
   "component": true,
   "usingComponents": {
-    "trees": "./trees"
+    "trees": "./trees",
+    "myAudio": "../audio/audio"
   }
 }

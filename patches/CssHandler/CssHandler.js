@@ -21,9 +21,9 @@ function matchClass(match, selector) {
 // 匹配样式
 function matchStyle(match_name, match_class, match_id, selector) {
   if (selector == '*') return 0;
-  var selector_name = selector.match(/^[^\.#\s]+/);
-  var selector_class = selector.match(/\.[^\.#\s]+/g);
-  var selector_id = selector.match(/#[^\.#\s]+/);
+  var selector_name = selector.match(/^[^.#\s]+/);
+  var selector_class = selector.match(/\.[^.#\s]+/g);
+  var selector_id = selector.match(/#[^.#\s]+/);
   if (selector_id) {
     if (match_id == selector_id) {
       if ((selector_class && !matchClass(match_class, selector_class)) || (selector_name && match_name != selector_name[0])) return -1;
@@ -52,21 +52,21 @@ class CssHandler {
     }
   }
   getStyle = data => parseCss(data, this.styles, this.screenWidth);
-  match(name, attrs, element) {
+  match(name, attrs, ele) {
     var match_class = [];
     if (attrs.class) {
       var match = attrs.class.split(/\s+/);
-      for (var i = match.length; i--;)
+      for (let i = match.length; i--;)
         match_class.unshift('.' + match[i]);
     }
     var matchedName = '',
       matchedClass = '',
       matchedId = '',
       key, flag = false; // 子选择器标识
-    element.i = [];
-    element.index = [];
-    element.pseudo = [];
-    for (var i = 0, item; item = this.styles[i]; i++) {
+    ele.i = [];
+    ele.index = [];
+    ele.pseudo = [];
+    for (let i = 0, item; item = this.styles[i]; i++) {
       if (item.key[0] == '>') {
         key = item.key.substring(1);
         flag = true;
@@ -76,61 +76,61 @@ class CssHandler {
       }
       var matchRes = matchStyle(name, match_class, attrs.id ? '#' + attrs.id : '', key);
       if (matchRes != -1) {
-        if (!item.hasOwnProperty('index') || item.index == item.list.length - 1) {
+        if (!Object.hasOwnProperty.call(item, 'index') || item.index == item.list.length - 1) {
           var matchAttr = true;
           if (item.attr) {
             for (var j = 0; j < item.attr.length; j++) {
-              if (!item.attr[j].hasOwnProperty('value')) {
-                if (!attrs.hasOwnProperty(item.attr[j].name)) matchAttr = false;
+              if (!Object.hasOwnProperty.call(item.attr[j], 'value')) {
+                if (!Object.hasOwnProperty.call(attrs, item.attr[j].name)) matchAttr = false;
               } else if (attrs[item.attr[j].name] != item.attr[j].value) matchAttr = false;
             }
           }
           if (matchAttr) {
-            if (item.pseudo) element.pseudo.push(item);
+            if (item.pseudo) ele.pseudo.push(item);
             else if (matchRes == 0) matchedName += ';' + item.content;
             else if (matchRes == 1) matchedClass += ';' + item.content;
             else matchedId += ';' + item.content;
           }
         } else {
-          element.i.push(i);
-          element.index.push(item.index);
+          ele.i.push(i);
+          ele.index.push(item.index);
           item.index++;
           item.key = item.list[item.index];
         }
       }
       if (flag) {
-        element.i.push(i);
-        element.index.push(item.index);
+        ele.i.push(i);
+        ele.index.push(item.index);
         item.index--;
         item.key = item.list[item.index];
       }
     }
-    if (!element.i.length) {
-      element.i = void 0;
-      element.index = void 0;
+    if (!ele.i.length) {
+      ele.i = void 0;
+      ele.index = void 0;
     }
-    if (!element.pseudo.length)
-      element.pseudo = void 0;
+    if (!ele.pseudo.length)
+      ele.pseudo = void 0;
     return matchedName + ';' + matchedClass + ';' + matchedId + ';';
   }
-  pop(element) {
+  pop(ele) {
     // 多层class匹配标记
-    if (element.i) {
-      for (var i = 0; i < element.i.length; i++) {
-        var j = element.i[i];
-        this.styles[j].key = this.styles[j].list[element.index[i]];
-        this.styles[j].index = element.index[i];
+    if (ele.i) {
+      for (let i = 0; i < ele.i.length; i++) {
+        var j = ele.i[i];
+        this.styles[j].key = this.styles[j].list[ele.index[i]];
+        this.styles[j].index = ele.index[i];
       }
-      element.i = void 0;
-      element.index = void 0;
+      ele.i = void 0;
+      ele.index = void 0;
     }
     // 伪类
-    if (element.pseudo) {
-      for (var item of element.pseudo) {
+    if (ele.pseudo) {
+      for (let i = 0; i < ele.pseudo.length; i++) {
         var content;
-        var style = item.content.replace(/content:([^;\n]*)/, ($, $1) => {
+        var style = ele.pseudo[i].content.replace(/content:([^;\n]*)/, ($, $1) => {
           // 转换 attr
-          content = $1.replace(/attr\((.+?)\)/, ($, $1) => element.attrs[$1.trim()] || '').replace(/\s*['"](.*?)['"]\s*/g, '$1')
+          content = $1.replace(/attr\((.+?)\)/, ($, $1) => ele.attrs[$1.trim()] || '').replace(/\s*['"](.*?)['"]\s*/g, '$1')
             // 转换 \xxx
             .replace(/\\(\w{4})/, ($, $1) => String.fromCharCode(parseInt($1, 16)));
           return '';
@@ -145,17 +145,17 @@ class CssHandler {
             text: content
           }]
         }
-        if (item.pseudo == 'before')
-          element.children.unshift(child);
+        if (ele.pseudo[i].pseudo == 'before')
+          ele.children.unshift(child);
         else
-          element.children.push(child);
+          ele.children.push(child);
       }
     }
   }
 }
 
 function parseCss(data, keys, screenWidth) {
-  var j, i = 0;
+  var info, j, i = 0;
 
   function ignore() {
     var floor = 1;
@@ -174,7 +174,7 @@ function parseCss(data, keys, screenWidth) {
     if (name[0] == '@') {
       // @media 查询
       if (name.substring(0, 6) == '@media') {
-        var info = name.match(/\((.+?):(.+?)\)/);
+        info = name.match(/\((.+?):(.+?)\)/);
         if (info && info[2].includes('px')) {
           var value = parseInt(info[2]);
           if ((info[1] == 'min-width' && screenWidth > value) || (info[1] == 'max-width' && screenWidth < value)) {
@@ -206,7 +206,7 @@ function parseCss(data, keys, screenWidth) {
       }
       // 伪类
       if (item.key.includes(':')) {
-        var info = item.key.split(':');
+        info = item.key.split(':');
         item.key = info[0].trim();
         item.pseudo = info.pop();
         if (item.pseudo != 'before' && item.pseudo != 'after') continue;
@@ -216,7 +216,7 @@ function parseCss(data, keys, screenWidth) {
         item.attr = [];
         item.key = item.key.replace(/\[(.+?)\]/g, ($, $1) => {
           if ($1.includes('=')) {
-            var info = $1.split('=');
+            info = $1.split('=');
             var value = info[1].trim();
             if ((value[0] == '"' && value[value.length - 1] == '"') || (value[0] == "'" && value[value.length - 1] == "'")) value = value.substring(1, value.length - 1);
             item.attr.push({

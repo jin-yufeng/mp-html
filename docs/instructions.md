@@ -3,14 +3,14 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.3KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.0KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.8KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.2KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.8KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.7KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（`uni-app` 包）：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
-3. 仅 `H5`、微信、头条小程序支持 `gesture-zoom` 属性  
+3. 仅 `H5`、微信、`QQ`、头条小程序支持 `gesture-zoom` 属性  
 4. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
 5. 支付宝小程序不支持 `autopause` 属性  
 6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
@@ -470,7 +470,7 @@ this.selectComponent("#preLoad").preLoad(html);
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `6.79KB`（`min` 版本 `5.16KB`）  
+  `6.84KB`（`min` 版本 `5.20KB`）  
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
@@ -560,7 +560,7 @@ error(e){
 4. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
   
 - 大小（与原大小相比增加）  
-  `4.84KB`（`min` 版本：`1.61KB`）  
+  `4.80KB`（`min` 版本：`1.50KB`）  
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
@@ -568,6 +568,7 @@ error(e){
 
 ### parser-group ###
 > 该包仅支持 微信端 使用，暂不支持通过 [打包工具](#打包工具) 打包  
+
 - 功能  
   有时一个页面会用到多个 `parser` 标签，默认情况下，不同的 `parser` 标签之间是相互独立的，用 `parser-group` 标签包裹起来可以组合成一个整体，实现：  
   1. 图片预览时可以通过左右滑动查看该 `group` 内所有图片  
@@ -595,6 +596,35 @@ error(e){
      </parser-group>
      ```
 
+### audio ###
+> 该包仅支持 微信端 使用  
+
+- 功能  
+  音乐播放器  
+  功能上同原生的 `audio` 组件，由于微信原生的 `audio` 和 `wx.createAudioContext` 均已被废弃，因此设置这样一个组件代替，与原生的 `audio` 相比，所做的改进有：  
+  1. 其大小会根据屏幕宽度自动调整（原生 `audio` 大小不可变）  
+  2. 支持 `autoplay` 属性  
+  3. 增加了一个可以拖动的进度条  
+  4. `autopause` 属性可以控制到音频（即播放一个音频时，若再播放一个视频或音频，将自动暂停此音频）
+  
+  `error` 事件中会返回 `context` 对象（也可以通过 [getVideoContext](#getVideoContext) 方法获取），包含 `setSrc`、`play`、`pause`、`seek` 方法  
+  封装成自定义组件，可以直接在页面上使用（属性和事件基本同 `audio`）  
+- 大小  
+  `3.95KB`  
+- 使用方法  
+  1. 将 `audio` 文件夹拷贝到 `parser` 文件夹下  
+  2. 在 `trees/trees.json` 文件修改为  
+     ```json
+     {
+       "component": true,
+       "usingComponents": {
+         "trees": "./trees",
+         "myAudio": "../audio/audio"
+       }
+     }
+     ```
+  3. 将 `trees/trees.wxml` 中的 `audio` 修改为 `myAudio`  
+
 ## 原理和二次开发 ##
 
 ### 原理简介 ###  
@@ -603,17 +633,19 @@ error(e){
 
 ### 添加一个自定义标签 ###  
 1. 在 `config.js` 中的 `trustAttrs` 中添加需要用到的属性（否则将被移除）  
-2. 在 `config.js` 中的 `trustTags` 中添加该标签名（否则将被转为 `span`）  
-3. 在 `config.js` 中的 `LabelHandler` 中添加  
+2. 在 `config.js` 中的 `trustTags` 中添加该标签名（否则将被转为 `span`，如果是自闭合标签还需要添加到 `selfClosingTags` 中）  
+3. 在 `config.js` 中的 `filter` 中添加  
    ```javascript
-   case "element":     // 标签名
-     bubbling(Parser); // 对该标签所有祖先节点添加一个标记，使得该标签不被 rich-text 包含，而是通过 trees 组件递归显示其祖先节点
-     // 如果还需要自定义处理某些属性也可以在这里添加
-     break;
+   filter(node, cxt) {
+     if (node.name == 'element') {
+       cxt.bubble(); // 对该标签所有祖先节点添加一个标记，使得该标签不被 rich-text 包含，而是通过 trees 组件递归显示其祖先节点  
+       // 如果还需要自定义处理某些属性也可以在这里添加
+     }
+   }
    ```  
 4. 在 `trees.wxml` 中添加该组件  
    ```wxml
-   <element wx:elif="{{item.name=='element'}}" xxx="{{item.attrs.xxx}}">
+   <element wx:elif="{{n.name=='element'}}" xxx="{{n.attrs.xxx}}">
      <!--如果该标签内部还有其他节点还需要在这里添加一个 trees 标签-->
    </element>
    ```
@@ -622,11 +654,13 @@ error(e){
 ### 添加自定义事件 ### 
 为节省大小，默认情况下仅支持 `img` 和 `a` 标签的点击事件，如果还需要其他事件，可以自行在 `trees.wxml` 中绑定和处理  
 
-!> 如果给除 `img`、`a`、`video`、`audio` 外的标签添加事件，还需要在 `config.js` 中的 `LabelHandler` 中添加  
+!> 如果给除 `img`、`a`、`video`、`audio` 外的标签添加事件，还需要在 `config.js` 中的 `filter` 中添加  
 ```javascript
-case "element":     // 标签名
-  bubbling(Parser); // 对该标签所有祖先节点添加一个标记，使得该标签不被 rich-text 包含，而是通过 trees 组件递归显示其祖先节点
-  break;
+filter(node, cxt) {
+  if (node.name == 'element') {
+    cxt.bubble(); // 使其不被 rich-text 包含  
+  }
+}
 ```
 
 ### 处理代码高亮 ###  

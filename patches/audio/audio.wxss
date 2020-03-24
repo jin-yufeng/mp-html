@@ -1,0 +1,72 @@
+:host {
+  display: inline-block;
+}
+.author {
+  color: #888;
+  font-size: 28rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 140rpx;
+  white-space: nowrap;
+}
+.button {
+  align-items: center;
+  background-color: rgb(0, 0, 0, 0.2);
+  border: 3.5rpx solid white;
+  border-radius: 50%;
+  display: flex;
+  height: 47rpx;
+  justify-content: center;
+  opacity: 0.9;
+  overflow: hidden;
+  width: 47rpx;
+}
+.contain {
+  background-color: #fcfcfc;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  display: flex;
+  position: relative;
+  width: 650rpx;
+}
+.name {
+  font-size: 33rpx;
+  line-height: 80rpx;
+}
+.pause {
+  width: 16.5rpx;
+  height: 16.5rpx;
+  background-color: white;
+}
+.play {
+  border-bottom: 10rpx solid transparent;
+  border-left: 18rpx solid white;
+  border-top: 10rpx solid transparent;
+  margin-left: 5rpx;
+}
+.poster {
+  align-items: center;
+  background-color: #e6e6e6;
+  background-size: contain;
+  display: flex;
+  height: 152.35rpx;
+  justify-content: center;
+  width: 152.35rpx;
+}
+.slider {
+  position: absolute;
+  bottom: 18.75rpx;
+  margin: 0;
+  right: 35.15rpx;
+  width: 316.4rpx;
+}
+.title {
+  flex: 1;
+  margin: 10rpx 0 0 35.15rpx;
+  text-align: left;
+}
+.time {
+  color: #888;
+  font-size: 28rpx;
+  margin: 16.4rpx 35.15rpx 0 0;
+}

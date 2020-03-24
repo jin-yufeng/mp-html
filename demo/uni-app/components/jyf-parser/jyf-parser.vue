@@ -4,11 +4,11 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/21
+  update：2020/03/23
 -->
 <template>
 	<view style="display:inherit;">
-		<slot v-if="!nodes.length"></slot>
+		<slot v-if="!nodes.length" />
 		<view class="top" :style="showAm+(selectable?';user-select:text;-webkit-user-select:text':'')" :animation="scaleAm"
 		 @tap="_tap" @touchstart="_touchstart" @touchmove="_touchmove">
 			<!--#ifdef H5-->
@@ -26,7 +26,6 @@
 	// #ifndef H5
 	import trees from './libs/trees';
 	var cache = {},
-		CssHandler = require('./libs/CssHandler.js'),
 		// #ifdef MP-WEIXIN || MP-TOUTIAO
 		fs = uni.getFileSystemManager ? uni.getFileSystemManager() : null,
 		// #endif
@@ -37,7 +36,7 @@
 		for (var i = str.length, val = 5381; i--;)
 			val += (val << 5) + str.charCodeAt(i);
 		return val;
-	};
+	}
 	// #endif
 	// #ifdef H5
 	var rpx = uni.getSystemInfoSync().screenWidth / 750,
@@ -122,10 +121,10 @@
 				this[i] = src;
 				// 暂存 data src
 				if (src.includes('data:image')) {
-					var info = src.match(/data:image\/(\S+?);(\S+?),(.+)/);
+					var filePath, info = src.match(/data:image\/(\S+?);(\S+?),(.+)/);
 					if (!info) return;
 					// #ifdef MP-WEIXIN || MP-TOUTIAO
-					var filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${info[1]}`;
+					filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${info[1]}`;
 					fs && fs.writeFile({
 						filePath,
 						data: info[3],
@@ -134,7 +133,7 @@
 					})
 					// #endif
 					// #ifdef APP-PLUS
-					var filePath = `_doc/parser_tmp/${Date.now()}.${info[1]}`;
+					filePath = `_doc/parser_tmp/${Date.now()}.${info[1]}`;
 					var bitmap = new plus.nativeObj.Bitmap();
 					bitmap.loadBase64Data(src, () => {
 						bitmap.save(filePath, {}, () => {
@@ -199,7 +198,7 @@
 				var div = document.createElement('div');
 				if (!append) {
 					// 处理 tag-style 和 userAgentStyles
-					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}';
+					let style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}';
 					for (var item in cfg.userAgentStyles)
 						style += `${item}{${cfg.userAgentStyles[item]}}`;
 					for (item in this.tagStyle)
@@ -220,7 +219,7 @@
 				// 懒加载
 				if (!this._observer && this.lazyLoad && IntersectionObserver) {
 					this._observer = new IntersectionObserver(changes => {
-						for (var item, i = 0; item = changes[i++];) {
+						for (let item, i = 0; item = changes[i++];) {
 							if (item.isIntersecting) {
 								item.target.src = item.target.getAttribute('data-src');
 								item.target.removeAttribute('data-src');
@@ -241,7 +240,7 @@
 				// 图片处理
 				this.imgList.length = 0;
 				var imgs = this.rtf.getElementsByTagName('img');
-				for (var i = 0, j = 0, img; img = imgs[i]; i++) {
+				for (let i = 0, j = 0, img; img = imgs[i]; i++) {
 					img.style.maxWidth = '100%';
 					var src = img.getAttribute('src');
 					if (this.domain && src) {
@@ -281,7 +280,7 @@
 				// 链接处理
 				var links = this.rtf.getElementsByTagName('a');
 				for (var link of links) {
-					link.onclick = function(e) {
+					link.onclick = function() {
 						var jump = true,
 							href = this.getAttribute('href');
 						_ts.$emit('linkpress', {
@@ -309,7 +308,7 @@
 				// 视频处理
 				var videos = this.rtf.getElementsByTagName('video');
 				_ts.videoContexts = videos;
-				for (var video, i = 0; video = videos[i++];) {
+				for (let video, i = 0; video = videos[i++];) {
 					video.style.maxWidth = '100%';
 					video.onerror = function() {
 						_ts.$emit('error', {
@@ -319,14 +318,14 @@
 					}
 					video.onplay = function() {
 						if (_ts.autopause)
-							for (var item, i = 0; item = ts.videoContexts[i++];)
+							for (let item, i = 0; item = _ts.videoContexts[i++];)
 								if (item != this) item.pause();
 					}
 				}
 				// 音频处理
 				var audios = this.rtf.getElementsByTagName('audios');
 				for (var audio of audios)
-					audio.onerror = function(e) {
+					audio.onerror = function() {
 						_ts.$emit('error', {
 							source: 'audio',
 							target: this
@@ -345,7 +344,7 @@
 				if (!html)
 					return this.nodes = [];
 				else if (typeof html == 'string') {
-					var parser = new Parser(html, this);
+					let parser = new Parser(html, this);
 					// 缓存读取
 					if (this.useCache) {
 						var hashVal = hash(html);
@@ -360,7 +359,7 @@
 				} else if (Object.prototype.toString.call(html) == '[object Array]') {
 					// 非本插件产生的 array 需要进行一些转换
 					if (html.length && html[0].PoweredBy != 'Parser') {
-						var parser = new Parser(html, this);
+						let parser = new Parser(html, this);
 						(function f(ns) {
 							for (var i = 0, n; n = ns[i]; i++) {
 								if (n.type == 'text') continue;
@@ -401,7 +400,6 @@
 						var f = (cs) => {
 							for (let i = 0, c; c = cs[i++];) {
 								if (c.$options.name == 'trees') {
-									var observered = false;
 									for (var j = c.nodes.length, item; item = c.nodes[--j];) {
 										if (item.c) continue;
 										if (item.name == 'img') {
@@ -413,7 +411,7 @@
 													c.observer.relativeToViewport({
 														top: 900,
 														bottom: 900
-													}).observe('._img', res => {
+													}).observe('._img', () => {
 														c.imgLoad = true;
 														c.observer.disconnect();
 													})
@@ -428,10 +426,6 @@
 											ctx.id = item.attrs.id;
 											this.videoContexts.push(ctx);
 										}
-										// #endif
-										// #ifdef MP-WEIXIN
-										else if (item.name == 'audio' && item.attrs.autoplay)
-											wx.createAudioContext(item.attrs.id, c).play();
 										// #endif
 										// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
 										if (item.attrs && item.attrs.id) {

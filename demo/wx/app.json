@@ -11,6 +11,5 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "富文本插件",
     "navigationBarTextStyle": "black"
-  },
-  "sitemapLocation": "sitemap.json"
+  }
 }

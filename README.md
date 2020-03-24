@@ -62,9 +62,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 44.3KB | 微信小程序插件包 |
-| parser.min | 30.0KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 58.8KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 44.2KB | 微信小程序插件包 |
+| parser.min | 29.8KB | 微信小程序插件包压缩版（功能相同） |
+| parser.uni | 57.7KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -190,6 +190,10 @@
 
 
 ## 更新日志 ##
+- 2020.3.23  
+  1. `A` 增加了 `audio` 的补丁包（替代被废弃的原生 `audio`）[详细](https://jin-yufeng.github.io/Parser/#/instructions#audio)  
+  2. `U` 通过 `eslint` 检查规范和修复了一些问题  
+  
 - 2020.3.21  
   1. `U` 没有使用 `colspan` 和 `rowspan` 的表格里的链接可以点击  
 
@@ -238,12 +242,5 @@
   1. `A` 添加了 `parser-group` 补丁包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#parser-group)  
   2. `U` `uni-app` 包 `App` 端支持 `a` 标签链接为文档时自动下载和打开，`v3` 支持 `embed` 标签  
   3. `F` 修复了部分情况下连续实体编码失效的问题  
-
-- 2020.2.23
-  1. `U` 支持自动压缩 `style` 属性，移除重复的样式，可以减少解析结果大小  
-  2. `U` 支持预览 `base64` 图片（通过暂存到本地实现）  
-  3. `U` `CssHandler` 补丁包支持属性选择器和 `@media`，伪类中的 `content` 支持 `attr()` [详细](https://jin-yufeng.github.io/Parser/#/instructions?id=csshandler)  
-  4. `U` 精简了部分代码  
-  5. `U` `uni-app` 包 `APP` 端支持 `iframe` 标签  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

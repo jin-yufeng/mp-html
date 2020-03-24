@@ -126,8 +126,8 @@ export default{
 平台差异：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
-3. 仅 `H5`、微信、头条小程序支持 `gesture-zoom` 属性  
+3. 仅 `H5`、微信、`QQ`、头条小程序支持 `gesture-zoom` 属性  
 4. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
 5. 支付宝小程序不支持 `autopause` 属性  
-6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
+6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及  
 7. `H5` 端支持所有浏览器支持的标签，`APP(v3)` 支持 `iframe` 和 `embed` 标签  

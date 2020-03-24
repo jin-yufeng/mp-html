@@ -9,7 +9,7 @@ module.exports = {
   },
   // 代码高亮函数
   highlight(content, attrs) {
-    var info = content.match(/<code.*?language-([a-z\-]+).*?>([\s\S]+)<\/code.*?>/m);
+    var info = content.match(/<code.*?language-([a-z-]+).*?>([\s\S]+)<\/code.*?>/m);
     if (!info) return content;
     var lan = info[1];
     content = info[2].replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
