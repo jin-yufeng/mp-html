@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/23
+  update：2020/03/26
 */
 var cache = {},
   Parser = require('./libs/MpHtmlParser.js'),
@@ -19,7 +19,7 @@ function hash(str) {
 }
 Component({
   options: {
-    pureDataPattern: /^[acdgtu]|W/
+    pureDataPattern: /^[acdgtux]|W/
   },
   properties: {
     'html': {
@@ -45,7 +45,8 @@ Component({
     'tagStyle': Object,
     'showWithAnimation': Boolean,
     'useAnchor': Boolean,
-    'useCache': Boolean
+    'useCache': Boolean,
+	'xml': Boolean
   },
   relations: {
     '../parser-group/parser-group': {

@@ -282,6 +282,11 @@ export default {
       type: 'Boolean',
       default: 'false',
       notice: '是否使用缓存，设置后多次打开不用重复解析'
+    }, {
+      name: 'xml',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否使用 xml 方式解析'
     }],
     // 事件
     events: [{
@@ -474,9 +479,10 @@ console.log(rect.height); // 高度</code></pre>
   <li>增加了一个可以拖动的进度条</li>
   <li><code>autopause</code>属性可以控制到音频（即播放一个音频时，若再播放一个视频或音频，将自动暂停此音频）</li>
 </ol>
-<div style="text-align:center;margin-top:0.8em">
+<div style="text-align:center;margin:0.8em 0">
   <audio poster="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.jpg?sign=fcc5ef3dc42d606ea54064f0291eb4b6&t=1584979825" name="致爱丽丝" author="暂无" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.mp3?sign=ee1a9895e9421d296cda186b17f0de22&t=1584979840" controls loop></audio>
-</div>`,
+</div>
+<div>详细可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions?id=补丁包'>补丁包</a></div>`,
     // 基础库要求
     versions: [{
       version: '<2.9.0',
@@ -506,6 +512,14 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.3.26
+    <ol>
+      <li><code>A</code> 增加了<code>xml</code>属性，可以以<code>xml</code>方式解析</li>
+      <li><code>F</code> 修复了使用自闭合 <code>svg</code> 标签会导致死循环的问题</li>
+      <li><code>F</code> 修复了设置<code>domain</code>属性时<code>data:image</code>和<code>cloud://</code>的链接会被错误填充的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.3.23
     <ol>
       <li><code>A</code> 增加了<code>audio</code> 补丁包，用于解决原生<code>audio</code>被废弃的问题</li>

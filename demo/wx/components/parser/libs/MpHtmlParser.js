@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/23
+  update：2020/03/26
 */
 var cfg = require('./config.js'),
   blankChar = cfg.blankChar,
@@ -25,6 +25,7 @@ class MpHtmlParser {
     this.state = this.Text;
     this.STACK = [];
     this.useAnchor = options.useAnchor;
+    this.xml = options.xml;
   }
   parse() {
     if (emoji) this.data = emoji.parseEmoji(this.data);
@@ -40,11 +41,11 @@ class MpHtmlParser {
   }
   // 设置属性
   setAttr() {
-    var name = this.attrName.toLowerCase();
+    var name = this.getName(this.attrName);
     if (cfg.trustAttrs[name]) {
       if (!this.attrVal) {
         if (cfg.boolAttrs[name]) this.attrs[name] = 'T';
-      } else if (name == 'src') this.attrs[name] = encodeURI(this.getUrl(this.attrVal));
+      } else if (name == 'src') this.attrs[name] = this.getUrl(this.attrVal.replace(/&amp;/g, '&'));
       else this.attrs[name] = this.attrVal;
     }
     this.attrVal = '';
@@ -110,13 +111,14 @@ class MpHtmlParser {
   // 设置元素节点
   setNode() {
     var node = {
-      name: this.tagName.toLowerCase(),
-      attrs: this.attrs
-    }
+        name: this.getName(this.tagName),
+        attrs: this.attrs
+      },
+      close = cfg.selfClosingTags[node.name] || (this.xml && this.data[this.i] == '/');
     this.attrs = {};
     if (!cfg.ignoreTags[node.name]) {
       this.matchAttr(node);
-      if (!cfg.selfClosingTags[node.name]) {
+      if (!close) {
         node.children = [];
         if (node.name == 'pre' && cfg.highlight) {
           this.remove(node);
@@ -127,9 +129,9 @@ class MpHtmlParser {
       } else if (!cfg.filter || cfg.filter(node, this) != false)
         this.siblings().push(node);
     } else {
-      if (!cfg.selfClosingTags[node.name]) this.remove(node);
+      if (!close) this.remove(node);
       else if (node.name == 'source') {
-        var parent = this.STACK[this.STACK.length - 1],
+        var parent = this.parent(),
           attrs = node.attrs;
         if (parent && attrs.src)
           if (parent.name == 'video' || parent.name == 'audio')
@@ -149,28 +151,36 @@ class MpHtmlParser {
   }
   // 移除标签
   remove(node) {
-    var j = this.i;
-    while (this.i < this.data.length) {
-      if ((this.i = this.data.indexOf('</', this.i + 1)) == -1) this.i = this.data.length;
+    var name = node.name,
+      j = this.i;
+    while (1) {
+      if ((this.i = this.data.indexOf('</', this.i + 1)) == -1) {
+        if (name == 'pre' || name == 'svg') this.i = j;
+        else this.i = this.data.length;
+        return;
+      }
       this.start = (this.i += 2);
       while (!blankChar[this.data[this.i]] && !this.isClose()) this.i++;
-      if (this.section().toLowerCase() == node.name) {
+      if (this.getName(this.section()) == name) {
         // 代码块高亮
-        if (node.name == 'pre') {
+        if (name == 'pre') {
           this.data = this.data.substr(0, j + 1) + cfg.highlight(this.data.substring(j + 1, this.i - 5), node.attrs) + this.data.substr(this.i - 5);
           return this.i = j;
-        } else if (node.name == 'style')
+        } else if (name == 'style')
           this.CssHandler.getStyle(this.data.substring(j + 1, this.i - 7));
-        else if (node.name == 'title')
+        else if (name == 'title')
           this.title = this.data.substring(j + 1, this.i - 7);
         if ((this.i = this.data.indexOf('>', this.i)) == -1) this.i = this.data.length;
         // 处理 svg
-        if (node.name == 'svg') {
+        if (name == 'svg') {
           var src = this.data.substring(j, this.i + 1);
           if (!node.attrs.xmlns) src = ' xmlns="http://www.w3.org/2000/svg"' + src;
           var i = j;
           while (this.data[j] != '<') j--;
           src = this.data.substring(j, i) + src;
+          var parent = this.parent();
+          if (node.attrs.width == '100%' && parent && (parent.attrs.style || '').includes('inline'))
+            parent.attrs.style = 'width:300px;max-width:100%;' + parent.attrs.style;
           this.siblings().push({
             name: 'img',
             attrs: {
@@ -249,7 +259,7 @@ class MpHtmlParser {
       attrs.height = void 0;
     }
     // 压缩 style
-    var styles = style.split(';');
+    var styles = style.replace(/&quot;/g, '"').replace(/&amp;/g, '&').split(';');
     style = '';
     for (var i = 0, len = styles.length; i < len; i++) {
       var info = styles[i].split(':');
@@ -275,8 +285,8 @@ class MpHtmlParser {
       if (attrs.ignore) styleObj['max-width'] = '100%';
       var check = item => styleObj[item] && !styleObj[item].includes('auto');
       if (check('width')) {
-        var parent = this.STACK[this.STACK.length - 1];
-        if (styleObj.width.includes('%') && parent && (parent.attrs.style || '').includes('display:inline')) {
+        var parent = this.parent();
+        if (styleObj.width.includes('%') && parent && (parent.attrs.style || '').includes('inline')) {
           parent.attrs.style += ';max-width:100%'
           node.auto = 1;
         }
@@ -294,7 +304,7 @@ class MpHtmlParser {
         var j = value.indexOf('(');
         if (j++ != -1) {
           while (value[j] == '"' || value[j] == "'" || blankChar[value[j]]) j++;
-          value = value.substr(0, j) + this.getUrl(value.substr(j, 4)) + value.substr(j + 4);
+          value = value.substr(0, j) + this.getUrl(value.substr(j));
         }
       }
       // 转换 rpx
@@ -407,18 +417,18 @@ class MpHtmlParser {
     return true;
   }
   getUrl(url) {
-    if (this.domain) {
-      if (url[0] == '/') {
-        if (url[1] == '/') url = this.protocol + ':' + url;
-        else url = this.domain + url;
-      } else if (url.indexOf('http') != 0)
-        url = this.domain + '/' + url;
-    }
+    if (url[0] == '/') {
+      if (url[1] == '/') url = this.protocol + ':' + url;
+      else if (this.domain) url = this.domain + url;
+    } else if (this.domain && url.indexOf('data:') != 0 && !url.includes('://'))
+      url = this.domain + '/' + url;
     return url;
   }
+  getName = val => this.xml ? val : val.toLowerCase();
   isClose = () => this.data[this.i] == '>' || (this.data[this.i] == '/' && this.data[this.i + 1] == '>');
   section = () => this.data.substring(this.start, this.i);
-  siblings = () => this.STACK.length ? this.STACK[this.STACK.length - 1].children : this.DOM;
+  parent = () => this.STACK[this.STACK.length - 1];
+  siblings = () => this.STACK.length ? this.parent().children : this.DOM;
   // 状态机
   Text(c) {
     if (c == '<') {
@@ -491,12 +501,11 @@ class MpHtmlParser {
       for (; !blankChar[this.data[this.i]] && !this.isClose(); this.i++);
       this.attrVal = this.section();
     }
-    while (this.attrVal.includes('&quot;')) this.attrVal = this.attrVal.replace('&quot;', '"');
     this.setAttr();
   }
   EndTag(c) {
     if (blankChar[c] || c == '>' || c == '/') {
-      var name = this.section().toLowerCase();
+      var name = this.getName(this.section());
       for (var i = this.STACK.length; i--;)
         if (this.STACK[i].name == name) break;
       if (i != -1) {

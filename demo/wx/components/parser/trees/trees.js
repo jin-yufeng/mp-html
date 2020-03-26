@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/23
+  update：2020/03/26
 */
 Component({
   data: {
@@ -87,7 +87,7 @@ Component({
     },
     // 错误事件
     error(e) {
-      var context, src,
+      var context, src = '',
         source = e.target.dataset.source,
         i = e.target.dataset.i,
         node = this.data.nodes[i];
@@ -110,15 +110,11 @@ Component({
         ...e.detail
       })
       if (source == 'img') {
-        if (src)
-          this.setData({
-            [`nodes[${i}].attrs.src`]: src
-          })
-        else if (node.attrs.alt)
-          this.setData({
-            [`nodes[${i}].err`]: 1,
-            [`nodes[${i}].attrs.src`]: ''
-          })
+        var data = {
+          [`nodes[${i}].attrs.src`]: src
+        }
+        if (!src) data[`nodes[${i}].err`] = 1;
+        this.setData(data);
       }
     },
     // 加载视频

@@ -15,7 +15,7 @@
   color: #551a8b;
 }
 ._img {
-  height: 100px;
+  height: 50px;
   max-width: 100%;
 }
 /* 内部样式 */

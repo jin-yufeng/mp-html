@@ -3,9 +3,9 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.2KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.8KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.7KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.5KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.0KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 各平台差异（`uni-app` 包）：
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
@@ -161,6 +161,7 @@
 | tag-style | Object | {} | 否 | 设置标签的默认样式 | [20190421](/changelog#_20190421) |
 | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 | [20191202](/changelog#_20191202) |
 | use-cache | Boolean | false | 否 | 是否使用缓存，设置后多次打开不用重复解析 | [20191215](/changelog#_20191215) |
+| xml | Boolean | false | 否 | 是否使用 xml 方式解析 | [20200326](/changelog#_20200326) |
   
 ##### html #####
 - 推荐通过 [setContent](#setContent) 方法传入，可以提高性能  
@@ -188,6 +189,13 @@
 ##### use-cache #####
 设置为 `true` 时将对解析结果进行缓存，在一个应用生命周期内多次打开，不需要重复解析，可以节省时间，建议对较长的内容且可能多次打开的内容设置缓存  
 
+##### xml #####
+开启后，解析方式将发生以下变化：  
+1. 标签名和属性名区分大小写（如 `style` 和 `Style` 是不同的属性）  
+2. 可以通过 `/` 结束任何标签（如 `<div />`，`html` 中非自闭合标签无法被这样关闭）  
+
+但存在未闭合的标签也不会报错（为保证容错性）
+
 ### 事件 ###
 
 | 名称 | 触发 | 说明 |
@@ -211,7 +219,7 @@ linkpress(e){
 ```
 
 关于 `error` 事件：  
-当图片出错时，也会返回 `context`，其中包含一个方法—— `setSrc`，输入值为 `string`，可以重设 `src`（如设置成出错时的占位图）  
+当图片出错时，也会返回 `context`，其中包含一个方法—— `setSrc`，输入值为 `string`，可以重设 `src`（如设置成出错时的占位图，必须在 `error` 事件处理函数中调用，否则无效）  
 
 !>原生包所有事件的返回值从 `e.detail` 中获取  
 
@@ -428,6 +436,7 @@ this.selectComponent("#article").setContent(html);
 1. 预加载主要针对图片；同时若传入的字符串，还将缓存解析结果（使用时通过 `use-cache` 属性即可读取）  
 2. 为避免短时间内发起过多图片请求，最多同时加载 `15` 张图片  
 3. 可以同时预加载多段内容，也可以在显示内容的同时预加载其他内容  
+4. 在解析过程中使用的属性必须加在预加载的标签上，加在显示的标签上无效  
 
 输入值：`html`（`String` / `Array`），`num`（最大图片数量，不输入将预加载所有图片）  
 使用方法：

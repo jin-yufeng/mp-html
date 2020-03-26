@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/23
+  update：2020/03/26
 -->
 <template>
 	<view style="display:inherit;">
@@ -87,7 +87,8 @@
 			'tagStyle': Object,
 			'showWithAnimation': Boolean,
 			'useAnchor': Boolean,
-			'useCache': Boolean
+			'useCache': Boolean,
+			'xml': Boolean
 		},
 		watch: {
 			html(html) {
@@ -460,7 +461,7 @@
 					// #ifdef H5
 					var res = [this.rtf.getBoundingClientRect()];
 					// #endif
-					// #ifndef APP-PLUS
+					// #ifndef APP-PLUS || H5
 					this.createSelectorQuery()
 					// #endif
 					// #ifdef APP-PLUS

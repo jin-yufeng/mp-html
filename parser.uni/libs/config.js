@@ -38,7 +38,7 @@ module.exports = {
 	),
 	// 信任的属性
 	trustAttrs: makeMap(
-		'align,alt,app-id,author,autoplay,border,cellpadding,cellspacing,class,color,colspan,controls,data-src,dir,face,height,href,id,ignore,loop,media,muted,name,path,poster,rowspan,size,span,src,start,style,type,unit-id,unitId,width,xmlns'
+		'align,alt,app-id,author,autoplay,border,cellpadding,cellspacing,class,color,colspan,controls,data-src,dir,face,height,href,id,ignore,loop,media,muted,name,path,poster,rowspan,size,span,src,start,style,type,unit-id,width,xmlns'
 	),
 	// bool 型的属性
 	boolAttrs: makeMap('autoplay,controls,ignore,loop,muted'),

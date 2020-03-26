@@ -163,9 +163,9 @@
       <view class="weui-article__h2">性能指标</view>
       <view class="weui-article__section">
         本插件解析和渲染效率高；轻量化（
-        <code>44.2KB</code>，
+        <code>44.5KB</code>，
         <code>min</code>版本
-        <code>29.8KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+        <code>30.0KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
         <parser html="{{errorCode}}" tag-style="{{tagStyle}}" />
       </view>
       <view class="link" hover-class="link-hover" style="display:block;text-align:center" data-index="1" bindtap="changeSection">下一章：使用方法</view>
@@ -286,7 +286,7 @@
             <parser html="{{parserGroup}}" tag-style="{{tagStyle}}" />
           </view>
         </view>
-        <view class="weui-article__p">
+        <view>
           5.
           <code>audio</code>
           <view>功能：音乐播放器，功能上同原生
@@ -295,7 +295,6 @@
             <parser html="{{audio}}" tag-style="{{tagStyle}}" />
           </view>
         </view>
-        <parser html="详细可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions?id=补丁包'>补丁包</a>" />
       </view>
       <!--基础库要求-->
       <view class="weui-article__h2">基础库要求</view>

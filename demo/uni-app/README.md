@@ -95,6 +95,7 @@ export default{
   | tag-style | Object | | 否 | 设置标签的默认样式 |
   | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 |
   | use-cache | Boolean | false | 否 | 是否使用缓存，设置后将会把解析结果进行缓存，下次打开不用重复解析 |
+  | xml | Boolean | false | 否 | 是否使用 xml 方式解析 |
 
 - 事件  
 

@@ -1,5 +1,10 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.03.26 ####
+1. `A` 增加了 `xml` 属性，可以以 `xml` 方式解析 [详细](/instructions#xml)  
+2. `F` 修复了使用自闭合 `svg` 标签会导致死循环的问题 [详细](https://github.com/jin-yufeng/Parser/issues/94)  
+3. `F` 修复了设置 `domain` 属性时 `data:image` 和 `cloud://` 的链接会被错误填充的问题  
+
 #### 2020.03.23 ####
 1. `A` 增加了 `audio` 的补丁包（替代被废弃的原生 `audio`）[详细](/instructions#audio)  
 2. `U` 通过 `eslint` 检查规范和修复了一些问题  
@@ -23,7 +28,7 @@
    5. 加载错误时能够触发 `error` 事件，且可以重设 `src` [详细](/instructions#事件)  
    
    可能存在的问题：  
-   若没有设置大小图片会在加载完成后突然从默认大小（300 × 100）变为原大小（图片较大，加载较慢时较明显），可以在 `trees.wxss` 的 `._img` 中调整默认大小  
+   若没有设置大小图片会在加载完成后突然从默认大小（300 × 50）变为原大小（图片较大，加载较慢时较明显），可以在 `trees.wxss` 的 `._img` 中调整默认大小  
 2. `U` `a` 标签支持 `:visited` 效果（默认变为紫色，可在 `trees.wxss` 中调整）  
 3. `F` 修复了 `a` 标签所在段落使用一些特殊实体编码时可能导致错误换行的问题 [详细](https://github.com/jin-yufeng/Parser/issues/87)  
 4. `F` 修复了 `uni-app` 包 `H5` 端在创建时设置数据无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/89)  
