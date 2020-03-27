@@ -1,5 +1,6 @@
 # Parser
 > 小程序富文本插件，详见 [文档](https://jin-yufeng.github.io/Parser)  
+> 功能使用调查问卷：[填写](https://www.wjx.cn/jq/67585702.aspx)  
 
 ![star](https://badgen.net/github/stars/jin-yufeng/Parser)
 ![forks](https://badgen.net/github/forks/jin-yufeng/Parser)
