@@ -18,7 +18,7 @@ module.exports = {
 		',pre')),
 	// 将被移除的标签
 	ignoreTags: makeMap(
-		'area,base,basefont,canvas,command,embed,frame,iframe,input,isindex,keygen,link,map,meta,param,script,source,style,svg,textarea,title,track,use,wbr'
+		'area,base,basefont,canvas,command,frame,input,isindex,keygen,link,map,meta,param,script,source,style,svg,textarea,title,track,use,wbr'
 		// #ifdef MP-WEIXIN
 		+ (canIUse ? ',rp' : '')
 		// #endif

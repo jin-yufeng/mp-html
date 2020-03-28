@@ -65,7 +65,7 @@
 |:---:|:---:|:---:|
 | parser | 44.5KB | 微信小程序插件包 |
 | parser.min | 30.0KB | 微信小程序插件包压缩版（功能相同） |
-| parser.uni | 58.6KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.uni | 58.7KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -192,6 +192,9 @@
 
 
 ## 更新日志 ##
+- 2020.3.28
+  1. `F` 修复了 `uni-app` 包 `App(v3)` 端 `iframe` 标签无法使用的问题  
+
 - 2020.3.26  
   1. `A` 增加了 `xml` 属性，可以以 `xml` 方式解析 [详细](https://jin-yufeng.github.io/Parser/#/instructions#xml)  
   2. `F` 修复了使用自闭合 `svg` 标签会导致死循环的问题 [详细](https://github.com/jin-yufeng/Parser/issues/94)  

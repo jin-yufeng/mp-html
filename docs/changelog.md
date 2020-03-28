@@ -1,5 +1,8 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.03.28 ####
+1. `F` 修复了 `uni-app` 包 `App(v3)` 端 `iframe` 标签无法使用的问题  
+
 #### 2020.03.26 ####
 1. `A` 增加了 `xml` 属性，可以以 `xml` 方式解析 [详细](/instructions#xml)  
 2. `F` 修复了使用自闭合 `svg` 标签会导致死循环的问题 [详细](https://github.com/jin-yufeng/Parser/issues/94)  

@@ -277,6 +277,10 @@ class MpHtmlParser {
 				break;
 			case 'a':
 			case 'ad':
+			// #ifdef APP-PLUS
+			case 'iframe':
+			case 'embed':
+			// #endif
 				this.bubble();
 				break;
 			case 'font':
