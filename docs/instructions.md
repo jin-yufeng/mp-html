@@ -11,10 +11,9 @@
 1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
 2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
 3. 仅 `H5`、微信、`QQ`、头条小程序支持 `gesture-zoom` 属性  
-4. `ad` 标签的 `id` 属性在 `app` 中是 `adpid`，微信、头条、`QQ` 小程序中是 `unit-id`，百度小程序中是 `apid`    
-5. 支付宝小程序不支持 `autopause` 属性  
-6. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
-7. `H5` 端支持所有浏览器支持的标签，`APP(v3)` 支持 `iframe` 和 `embed` 标签  
+4. 支付宝小程序不支持 `autopause` 属性  
+5. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
+6. `H5` 端支持所有浏览器支持的标签，`APP(v3)` 支持 `iframe` 和 `embed` 标签  
 
 !>百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
 
@@ -62,7 +61,7 @@
      </template>
      <script>
      import parser from "@/components/jyf-parser/jyf-parser"; // HbuilderX 2.5.5 及以上可以不需要
-     export default{
+     export default {
        // HbuilderX 2.5.5 及以上可以不需要
        components: {
          "jyf-parser": parser
@@ -72,6 +71,7 @@
            html: '<div>Hello World!</div>'
          }
        }
+     }
      </script>
      ```
   
@@ -169,7 +169,7 @@
 - 本插件在解析的过程中会进行一些转换和设置一些标识，使得能够正确的渲染和使用；若传入非本插件产生的数组（区分方式是查看 `html[0].PoweredBy` 是否等于 `Parser`），插件会自动进行设置，并同时处理 `tag-style`、`domain`、`use-anchor` 等一些属性的效果，但会产生额外的性能开销   
 
 ##### compress #####
-可以按需选择压缩等级，减小解析结果的大小，提高性能（若需进行更复杂的自定义压缩，可以通过 [filter](#配置项) 函数）  
+可以按需选择压缩等级，减小解析结果的大小，提高性能（若需进行更复杂的自定义压缩，可以通过 [filter](#filter) 函数）  
 
 | 等级 | 效果 |
 |:---:|:---:|
@@ -179,6 +179,11 @@
 | 3 | 移除所有 `id` 和 `class` 属性 |
 
 附：移除 `id` 和 `class` 都不影响匹配 `style` 标签中的样式（将在匹配完成后再移除）  
+
+##### gesture-zoom #####
+目前仅支持双击缩放不支持双指缩放  
+若限定了 `parser` 标签的宽高度可能表现的不正常  
+放大后在竖直方向可能无法滑到底部  
 
 ##### tag-style #####
 可以设置标签的默认样式，形如 `{标签名：样式}` 的结构体，例如 `{ img: "display:block" }` 表示给 `img` 标签设置默认的块级标签效果  
@@ -264,34 +269,34 @@ linkpress(e){
 不在信任的标签列表中的标签，除被移除的标签外，块级标签列表中的标签将被转为 `div` 标签，其他被转为 `span` 标签
 
 关于几个自定义处理器：  
-- filter  
-  自定义过滤器，解析到一个标签时触发  
-  输入值：`node` 为节点结构体（`name` 为标签名，`attrs` 为属性值，`children` 为子节点），对其进行修改将在渲染时生效；`context` 是解析器示例，可以使用一些解析设置（如 `domain` 等）和方法（主要是 `bubble`，若该节点不能被 `rich-text` 包含则需要调用，将给其所有祖先节点冒泡设置标记，一般用于自定义标签）  
-  返回值：若返回 `false`，将移除此节点（及其所有子节点）  
-  示例：  
-  ```javascript
-  filter(node, cxt) {
-    if(node.name == "xxx") return false; // 移除某个标签
-    if(node.name == "yyy") cxt.bubble(); // 使这个标签不被 rich-text 包含，一般用于自定义标签
-    node.attrs.zzz = "aaa"; // 给标签添加某个属性
+##### filter #####  
+自定义过滤器，解析到一个标签时触发  
+输入值：`node` 为节点结构体（`name` 为标签名，`attrs` 为属性值，`children` 为子节点），对其进行修改将在渲染时生效；`context` 是解析器示例，可以使用一些解析设置（如 `domain` 等）和方法（主要是 `bubble`，若该节点不能被 `rich-text` 包含则需要调用，将给其所有祖先节点冒泡设置标记，一般用于自定义标签）  
+返回值：若返回 `false`，将移除此节点（及其所有子节点）  
+示例：  
+```javascript
+filter(node, cxt) {
+  if(node.name == "xxx") return false; // 移除某个标签
+  if(node.name == "yyy") cxt.bubble(); // 使这个标签不被 rich-text 包含，一般用于自定义标签
+  node.attrs.zzz = "aaa"; // 给标签添加某个属性
+}
+```
+##### onText #####  
+文本处理器，可以替换文本中的一些内容  
+输入值：`text` 为解析到的文本内容，`hasTag` 是一个函数，若设置的值中有 `html` 标签（如替换为图片）需要调用，将重新解析这段文本（若替换值中仍有关键词可能引发 **死循环** ）  
+返回值：若返回值不为空，将把这段文本设置成返回值的内容  
+示例：  
+```javascript
+onText(text, hasTag) {
+  if(text.includes("$xxx$")) {
+    // 将某公式符号替换为图片
+    hasTag();
+    return text.replace("$xxx$", "<img src='xxxx'>");
   }
-  ```
-- onText  
-  文本处理器，可以替换文本中的一些内容  
-  输入值：`text` 为解析到的文本内容，`hasTag` 是一个函数，若设置的值中有 `html` 标签（如替换为图片）需要调用，将重新解析这段文本（若替换值中仍有关键词可能引发 **死循环** ）  
-  返回值：若返回值不为空，将把这段文本设置成返回值的内容  
-  示例：  
-  ```javascript
-  onText(text, hasTag) {
-    if(text.includes("$xxx$")) {
-      // 将某公式符号替换为图片
-      hasTag();
-      return text.replace("$xxx$", "<img src='xxxx'>");
-    }
-  }
-  ```
-- highlight  
-  代码高亮处理函数，详见 [处理代码高亮](#处理代码高亮)
+}
+```
+##### highlight #####  
+代码高亮处理函数，详见 [处理代码高亮](#处理代码高亮)
 
 ### 基础库要求 ###
 微信小程序：
@@ -302,7 +307,7 @@ linkpress(e){
 | < 2.7.1 | 不支持图片长按菜单（识别小程序码）<br>不支持 bdi bdo ruby 标签 | 2.31% |
 | < 2.4.4 | 不支持 a 标签 visited 效果 | 0.42% |
 | < 2.3.0 | 不支持云文件 ID | 0.34% |
-| < 2.2.5 | 不支持部分实体编码（形如 &copy;） | 0.20% |
+| < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.20% |
 | < 1.6.3 | 无法使用 | < 0.01% |
 
 !>使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
@@ -402,7 +407,7 @@ imgList.each((src, i, arr)=>{
 应在 `ready` 事件后获取，否则可能无法获取或不准确  
 使用方法：  
 ```javascript
-var text = context.rect;
+var rect = context.rect;
 console.log(rect.width); // 宽度
 console.log(rect.height); // 高度
 ```
@@ -858,8 +863,8 @@ Page({
   
 *相关 issue：*[#25](https://github.com/jin-yufeng/Parser/issues/25)、[#65](https://github.com/jin-yufeng/Parser/issues/65)、[#74](https://github.com/jin-yufeng/Parser/issues/74)
 
-#### 显示公众号网页 ####
-如需显示公众号的文章，可参考以下步骤  
+#### 显示公众号网页 ####  
+如需显示公众号的文章，可参考以下步骤（*仅供交流学习，请勿显示侵权内容* ）  
 1. 使用 [CssHandler](#CssHandler) 补丁包（网页中有后代选择器等复杂的选择器）  
 2. 获取网页的源代码（以 `node.js` 为例）  
    ```javascript
@@ -891,8 +896,78 @@ Page({
    ```
 3. 如遇样式异常可进行微调  
 
-#### 获取 link 标签内容 ####
-默认不支持 `link` 标签的样式（小程序端发起网络请求有限制），如果需要可通过以下代码获取 `link` 的内容后再传入给组件进行解析（需配置域名）  
+#### 显示 editor 编辑的内容 ####
+通过 `editor` 组件编辑的 `html`，要正确显示，理论上需要维护 `<ql-container><ql-editor></ql-editor></ql-container>` 的结构，并引入对应的 `css`，另外，由于组件中仅支持 `class` 选择器，还需要将标签名选择器等转为 `class` 选择器，详见 [官网说明](https://developers.weixin.qq.com/miniprogram/dev/component/editor.html)  
+不过大部分情况下，只需要在 `config.js` 的 `filter` 函数中添加以下内容即可（个别情况自行调整）：
+```javascript
+filter(node) {
+  if ((node.attrs.class || '').includes('ql')) {
+    node.attrs.class = node.attrs.class.replace(/ql-align-(\S+)/, ($, $1) => {
+      node.attrs.style += ';text-align:' + $1;
+    }).replace(/ql-indent-([1-9])/, ($, $1) => {
+      node.attrs.style += ';padding-left:' + (parseInt($1) * 2) + 'em';
+    })
+  }
+}
+```
+
+#### 横向滚动的问题 ####  
+从其他网站或编辑器中移植富文本时可能因为手机屏幕宽度小而导致内容超出宽度出现滚动条  
+  
+*解决方案：*  
+1. 禁用滚动  
+   在 `parser` 标签的 `style` 属性中加上 `overflow: hidden`（如果通过 `class` 设置还要加上 `!important`）即可禁用横向滚动  
+   ```wxml
+   <parser style="overflow:hidden" html="{{html}}"></parser>
+   ```  
+2. 通过 `tag-style` 设置 `max-width:100%`  
+   ```wxml
+   <parser html="{{html}}" tag-style="{{tagStyle}}"></parser>
+   ```
+   ```javascript
+   data: {
+     tagStyle: {
+       p: "max-width:100%",
+       div: "max-width:100%",
+       section: "max-width:100%"
+     }
+   }
+   ```  
+3. 通过 [filter](#filter) 方法个别调整样式  
+  
+*相关 issue：*[#6](https://github.com/jin-yufeng/Parser/issues/6)、[#44](https://github.com/jin-yufeng/Parser/issues/44)、[#50](https://github.com/jin-yufeng/Parser/issues/50)、[#66](https://github.com/jin-yufeng/Parser/issues/66)
+
+#### 其他问题 ####
+##### 关于换行符 #####  
+`html` 中换行只能使用 `br` 标签，其他的包括 `↵`, `\n` 等都是无效的，只会原样显示  
+*解决方案：*可自行通过正则替换  
+```javascript
+// 以↵为例
+html = html.replace(/↵/g,""); // 移除所有↵
+html = html.replace(/↵/g,"<br />") // 全部替换为 br 标签
+```
+
+##### 使用 embed 标签 #####  
+插件默认不支持 `embed` 标签（因为 `embed` 支持多种文件类型，有时不能通过链接确定类型，有些类型也无法支持），若仅使用 `embed` 视频，可参考以下方法：  
+1. 将 `embed` 从 `config.js` 的 `ignoreTags` 中移除  
+2. 将 `config.js` 中的 `filter` 修改为  
+
+   ```javascript
+   filter(node, cxt) {
+     if (node.name == 'embed') {
+       node.name = 'video'; // 改名为 video
+       node.attrs.id = 'video' + (++cxt.videoNum); // 内部需要，必须有不重复的 id
+       node.attrs.source = [node.attrs.src]; // 内部需要
+       node.attrs.controls = 'controls'; // 设置 controls
+       cxt.bubble(); // 使其不被 rich-text 包含
+     }
+   }
+   ```
+
+   *相关 issue：*[#99](https://github.com/jin-yufeng/Parser/issues/99)
+
+##### 使用 link 标签 #####  
+插件默认不支持 `link` 标签的样式（小程序端发起网络请求有限制），如果需要可通过以下代码获取 `link` 的内容后再传入给组件进行解析（需配置域名且较耗时，不推荐）  
 ```javascript
 // html 为包含 link 标签的富文本内容
 var links = [];
@@ -918,60 +993,19 @@ function getLink(i) {
 getLink(0);
 ```
 
-#### 横向滚动的问题 ####  
-从其他网站或编辑器中移植富文本时可能因为手机屏幕宽度小而导致内容超出宽度出现滚动条  
-  
-*解决方案：*  
-1. 禁用滚动  
-   在 `parser` 标签的 `style` 属性中加上 `overflow: hidden`（如果通过 `class` 设置还要加上 `!important`）即可禁用横向滚动  
-   ```wxml
-   <parser style="overflow:hidden" html="{{html}}"></parser>
-   ```  
-2. 通过 `tag-style` 设置 `max-width:100%`  
-   ```wxml
-   <parser html="{{html}}" tag-style="{{tagStyle}}"></parser>
-   ```
-   ```javascript
-   data: {
-     tagStyle: {
-       p: "max-width:100%",
-       div: "max-width:100%",
-       section: "max-width:100%"
-     }
-   }
-   ```  
-  
-*相关 issue：*[#6](https://github.com/jin-yufeng/Parser/issues/6)、[#44](https://github.com/jin-yufeng/Parser/issues/44)、[#50](https://github.com/jin-yufeng/Parser/issues/50)、[#66](https://github.com/jin-yufeng/Parser/issues/66)
+##### 关于 markdown #####  
+插件本身不支持 `markdown`，如果需要可先自行通过 `markdown` 库转为 `html` 后再进行解析和显示，其中一些标签的默认样式可以放在 `tag-style` 属性中  
+可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)
 
-#### 其他问题 ####
-1. 关于换行符  
-   `html` 中换行只能使用 `br` 标签，其他的包括 `↵`, `\n` 等都是无效的，只会原样显示  
-   *解决方案：*可自行通过正则替换  
-   ```javascript
-   // 以↵为例
-   html = html.replace(/↵/g,""); // 移除所有↵
-   html = html.replace(/↵/g,"<br />") // 全部替换为 br 标签
-   ```
-2. 表格的图片/链接无法点击  
-   表格由于 `colspan` 和 `rowspan` 无法模拟，目前只有 `rich-text` 能够有最佳的显示效果；请尽量避免在其中使用图片或链接，否则将无法点击  
-
-3. 关于 `img`  
-   本插件用 `rich-text` 中的 `img` 显示图片而不是用 `image` 组件，原因在于 `img` 更贴近于 `html` 中图片的显示模式：在没有设置宽高时，自动按原大小显示；设置了宽或高时，按比例进行缩放；同时设置了宽高时，按设置的值显示。若用 `image` 组件实现这样的效果需要较为复杂的处理，且需要多次 `setData`，影响性能。  
-   但也因此会存在一些问题，如 `img` 加载失败时没有 `error` 事件、无法使用 `lazy-load`（目前已通过其他方式实现）、无法使用微信小程序中的 `show-menu-by-longpress`（长按识别小程序码，但在预览时可以）等
-
-4. 关于 `markdown`  
-   插件本身不支持 `markdown`，如果需要可先自行通过 `markdown` 库转为 `html` 后再进行解析和显示，其中一些标签的默认样式可以放在 `tag-style` 属性中  
-   可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)
-
-5. 关于编辑器  
-   本插件没有专门配套的富文本编辑器，一般来说，能够导出 `html` 的富文本编辑器都是支持的；另外本插件仅支持显示富文本，没有编辑功能  
-   *相关 issue：*[#10](https://github.com/jin-yufeng/Parser/issues/10)
+##### 关于编辑器 #####    
+本插件没有专门配套的富文本编辑器，一般来说，能够导出 `html` 的富文本编辑器都是支持的；另外本插件仅支持显示富文本，没有编辑功能  
+*相关 issue：*[#10](https://github.com/jin-yufeng/Parser/issues/10)
   
-6. 部分 `style` 标签中的样式无法被匹配  
-   本插件并不是支持所有的选择器，请留意支持的选择器类型，如果用了不支持的选择器，该样式将被忽略  
+##### 部分 style 标签中的样式无法被匹配 #####  
+本插件并不是支持所有的选择器，请留意支持的选择器类型，如果用了不支持的选择器，该样式将被忽略  
   
-7. 不能正确显示一些网站的问题  
-   很多网站的内容是在 `js` 脚本中动态加载的，这些内容在本插件解析中将被直接忽略（包括 `iframe` 视频）；本插件并不能替代 `web-view` 的功能，仅建议用于富文本编辑器编辑的富文本或简单的静态网页  
+##### 不能正确显示一些网站的问题 #####  
+很多网站的内容是在 `js` 脚本中动态加载的，这些内容在本插件解析中将被直接忽略（包括 `iframe` 视频）；本插件并不能替代 `web-view` 的功能，仅建议用于富文本编辑器编辑的富文本或简单的静态网页  
 
 ### 反馈问题 ###
 在反馈问题前，请先通过以下方式尝试解决：  

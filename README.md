@@ -116,6 +116,7 @@
          html: '<div>Hello World!</div>'
        }
      }
+   }
    </script>
    ```
 - 可以直接通过 [插件市场](https://ext.dcloud.net.cn/plugin?id=805) 引入
