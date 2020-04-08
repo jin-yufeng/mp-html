@@ -33,9 +33,9 @@ Page({
 ```
 <p style="text-align:center"><span style="font-style:italic;">Hello </span><span style="font-weight:bold;">World!</span></p>  
 
->`uni-app` 包编译到 `H5` 平台时支持所有浏览器支持的选择器  
+> `uni-app` 包编译到 `H5` 平台时支持所有浏览器支持的选择器  
 
-!>不支持的选择器将被忽略，包括伪类、后代选择器、通配符等<br>如需支持更多选择器，请使用 [CssHandler](/instructions#CssHandler) 补丁包  
+!> 不支持的选择器将被忽略，包括伪类、后代选择器、通配符等<br>如需支持更多选择器，请使用 [CssHandler](/instructions#CssHandler) 补丁包  
 
 各类样式的优先级和作用域：
 
@@ -292,9 +292,9 @@ Page({
 
 ### 案例体验 ###
 
-| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | 多么生活 | [SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program) | 飞马港 |
+| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | 多么生活 | [SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program) | 典典博客 |
 |:---:|:---:|:---:|:---:|
-| ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374 ':size=200') | ![多么生活](https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg ':size=200') | ![SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg ':size=200') | ![飞马港](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E9%A3%9E%E9%A9%AC%E6%B8%AF.jpg?sign=56fe7d5a1244e72e6925468f87d4aecf&t=1579423657 ':size=200') |
+| ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374 ':size=200') | ![多么生活](https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg ':size=200') | ![SteamCN 蒸汽动力论坛](https://github.com/xPixv/SteamCN-Mini-Program/raw/master/resources/qrcode.jpg ':size=200') | ![典典博客](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=5b2d371a4bd840c14c8d3740c35ee07f&t=1586360436 ':size=200') |
 
 | 恋爱宝典xcx | 恋爱宝典（QQ） | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 古典文学名著阅读 |
 |:---:|:---:|:---:|:---:|

@@ -15,12 +15,14 @@
 5. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及 `audio` 标签的 `autoplay` 属性  
 6. `H5` 端支持所有浏览器支持的标签，`APP(v3)` 支持 `iframe` 和 `embed` 标签  
 
-!>百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
+!> 百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
 
-!>`uni-app` 包为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
+!> 理论上微信原生包也可以直接用于 `QQ` 小程序，个别不兼容的地方可以自行调整  
+
+!> `uni-app` 包为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
 需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式（或 `v3`）
 
-!>使用了 `colspan` 和 `rowspan` 的表格由于无法通过 `css` 模拟，将直接通过 `rich-text` 进行渲染，其中的图片和链接将无法预览或点击（但可以正常显示）
+!> 使用了 `colspan` 和 `rowspan` 的表格由于无法通过 `css` 模拟，将直接通过 `rich-text` 进行渲染，其中的图片和链接将无法预览或点击（但可以正常显示）
 
 以下统称为 `parser`  
 
@@ -83,7 +85,7 @@
   参考 [官网-小程序组件支持](https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81)
 
 ### 在其他框架中使用 ###
-在 `mpVue`、`wepy` 等框架中**没有专用包**，但也可以引入原生包使用  
+在其他框架中 **没有专用包**，但也可以引入原生包使用  
 
 #### 在 mpVue 中使用 ####
 1. 下载 [parser](#插件包说明) 文件夹至 `static` 目录下
@@ -113,7 +115,7 @@
  
 #### 在 wepy 中使用 ####
 测试版本：`V1.7.3`
-1. 将 [parser](插件包说明) 文件夹复制到 `/src/components` 目录下  
+1. 将 [parser](#插件包说明) 文件夹复制到 `/src/components` 目录下  
    （也可以直接复制到 `/dist/components` 目录下，这样 `wepy` 不会对插件包进行编译和压缩）    
 2. 在需要使用的页面的 `wpy` 文件中添加
    ```wpy
@@ -138,12 +140,59 @@
    ```
 3. 通过 `wepy build --watch` 命令进行编译  
 
-!>如果出现 `Components not found` 错误，则用 `wepy build --no-cache --watch` 命令清理缓存，重新编译  
+!> 如果出现 `Components not found` 错误，则用 `wepy build --no-cache --watch` 命令清理缓存，重新编译  
 
 #### 在 taro 中使用 ####
 由 [@xPixv](https://github.com/xPixv) 提供，请参考：  
 [Github链接](https://github.com/xPixv/Taro-ParserRichText)  
 [Taro物料市场](https://taro-ext.jd.com/plugin/view/5d35903e9b6a1d4027780154)
+
+#### 在 kbone 中使用 ####
+以 [vue 模板](https://github.com/wechat-miniprogram/kbone-template-vue) 开发为例
+1. 将 [parser](#插件包说明) 文件夹复制到 `/src/components` 目录下  
+2. 在 `/build/miniprogram.config.js` 中的 `generate` 字段中添加  
+   ```javascript
+   generate: {
+     wxCustomComponent: {
+       root: path.join(__dirname, '../src/components'), // 需要 var path = require('path') 引入
+       usingComponents: {
+         'parser': {
+           path: 'parser/parser',
+           props: ['html', 'autopause', 'autosetTitle', 'compress', 'domain', 'gesture-zoom', 'lazy-load', 'selectable', 'show-with-animation', 'tag-style', 'use-anchor', 'use-cache', 'xml'],
+           events: ['parse', 'load', 'ready', 'error', 'imgtap', 'linkpress']
+         }
+       }
+     }
+   }
+   ```
+3. 直接在页面上使用即可  
+   ```vue
+   <parser :html="html"></parser>
+   ```
+
+!> 编辑完 `webpack` 配置后需要重新构建，否则可能不生效  
+更多信息参考：[官网说明](https://wechat-miniprogram.github.io/kbone/docs/guide/advanced.html#%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6)
+
+#### 在 chameleon 中使用 ####
+1. 将 [parser](#插件包说明) 文件夹复制到 `components` 目录下  
+2. 在需要使用页面的 `wx.cml` 文件中添加  
+   ```vue
+   <template>
+     <parser html="{{html}}"></parser>
+   </template>
+   ...
+   <script cml-type="json">
+   {
+     "base": {
+       "usingComponents": {
+         "parser": "/components/parser/parser"
+       }
+     }
+   }
+   </script>
+   ```
+
+更多信息可见：[官网说明](https://cml.js.org/docs/io.html#%E6%80%8E%E4%B9%88%E5%BC%95%E5%85%A5%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%BB%84%E4%BB%B6)  
 
 ### 组件属性 ###  
 
@@ -182,8 +231,11 @@
 
 ##### gesture-zoom #####
 目前仅支持双击缩放不支持双指缩放  
-若限定了 `parser` 标签的宽高度可能表现的不正常  
-放大后在竖直方向可能无法滑到底部  
+已知问题：  
+1. 若限定了 `parser` 标签的宽高度可能表现的不正常  
+2. 放大后在竖直方向可能无法滑到底部  
+
+若需要解决这些问题可以参考 [链接](https://ask.dcloud.net.cn/question/93080?item_id=119920&rf=false)（感谢 [leno.zhou@qq.com](https://ask.dcloud.net.cn/people/leno.zhou%40qq.com)）
 
 ##### tag-style #####
 可以设置标签的默认样式，形如 `{标签名：样式}` 的结构体，例如 `{ img: "display:block" }` 表示给 `img` 标签设置默认的块级标签效果  
@@ -226,9 +278,9 @@ linkpress(e){
 关于 `error` 事件：  
 当图片出错时，也会返回 `context`，其中包含一个方法—— `setSrc`，输入值为 `string`，可以重设 `src`（如设置成出错时的占位图，必须在 `error` 事件处理函数中调用，否则无效）  
 
-!>原生包所有事件的返回值从 `e.detail` 中获取  
+!> 原生包所有事件的返回值从 `e.detail` 中获取  
 
-!>原生包的事件以 `bind` 或 `catch` 开头，如 `bindready`；`uni-app` 包的事件以 `@` 开头，如 `@ready`  
+!> 原生包的事件以 `bind` 或 `catch` 开头，如 `bindready`；`uni-app` 包的事件以 `@` 开头，如 `@ready`  
 
 ### 使用外部样式 ###
 如果需要使用一些固定的样式，可以通过 `wxss` / `css` 文件引入  
@@ -241,13 +293,13 @@ linkpress(e){
 @import "external.wxss(css)";
 ```
 
-!>由于只有自定义组件内的样式在组件内能生效且 `rich-text` 在组件内使用时也只能匹配组件内的样式，所以必须在 `trees` 组件的 `wxss`/`css` 文件中引入需要的样式，在页面中写的样式无效  
+!> 由于只有自定义组件内的样式在组件内能生效且 `rich-text` 在组件内使用时也只能匹配组件内的样式，所以必须在 `trees` 组件的 `wxss`/`css` 文件中引入需要的样式，在页面中写的样式无效  
 
-!>组件内只能使用 `class` 选择器（支持后代选择器），不支持 `id` 选择器、属性选择器、标签名选择器等（更多可见 [官网说明](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html)）  
+!> 组件内只能使用 `class` 选择器（支持后代选择器），不支持 `id` 选择器、属性选择器、标签名选择器等（更多可见 [官网说明](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html)）  
 
-!>通过这种方式引入的样式会对所有 `parser` 标签生效，如果是对单个 `parser` 使用的样式，请使用 `style` 标签；另外，这种方式引入的样式优先级最低  
+!> 通过这种方式引入的样式会对所有 `parser` 标签生效，如果是对单个 `parser` 使用的样式，请使用 `style` 标签；另外，这种方式引入的样式优先级最低  
 
-!>`uni-app` 包编译到 `H5` 时这种样式无效，请使用 `style` 标签  
+!> `uni-app` 包编译到 `H5` 时这种样式无效，请使用 `style` 标签  
 
 ### 配置项 ###
 
@@ -265,7 +317,7 @@ linkpress(e){
 
 ?>配置项在 `/libs/config.js` 中配置，对所有 `parser` 标签生效
 
-!>不在信任的属性列表中的属性将被移除  
+!> 不在信任的属性列表中的属性将被移除  
 不在信任的标签列表中的标签，除被移除的标签外，块级标签列表中的标签将被转为 `div` 标签，其他被转为 `span` 标签
 
 关于几个自定义处理器：  
@@ -310,9 +362,9 @@ onText(text, hasTag) {
 | < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.20% |
 | < 1.6.3 | 无法使用 | < 0.01% |
 
-!>使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
+!> 使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
 
-!>百度小程序基础库版本 `3.60`（客户端版本 `11.9`）以下的可能无法正常显示  
+!> 百度小程序基础库版本 `3.60`（客户端版本 `11.9`）以下的可能无法正常显示  
 
 ### Api ### 
 
@@ -469,7 +521,7 @@ this.selectComponent("#preLoad").preLoad(html);
 - 使用方法  
   将 `emoji.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `emoji.js`）  
   
-  !>在 uni-app 中使用时需要将 libs/MpHtmlParser.js 第 47 行改为 const emoji = require('./emoji.js');  
+  !> 在 uni-app 中使用时需要将 libs/MpHtmlParser.js 第 47 行改为 const emoji = require('./emoji.js');  
   
   默认配置中支持 `177` 个常用的 `emoji` 小表情  
   支持两种形式的 `emoji`，一是 `emoji` 字符（不同设备上显示的样子可能不同），或者是网络图片（将按照 `16px` × `16px` 的大小显示，且不可放大预览），默认配置中都是 `emoji` 字符，可使用以下 `api` 获取或修改：  
@@ -488,7 +540,7 @@ this.selectComponent("#preLoad").preLoad(html);
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
-  !>在 uni-app 中使用时需要将 jyf-parser.vue 中的 34 行修改为 const document = require('./libs/document.js');  
+  !> 在 uni-app 中使用时需要将 jyf-parser.vue 中的 34 行修改为 const document = require('./libs/document.js');  
   
 - `document` 类：  
   获取方式：可通过 `this.selectComponent("#id").document` 获取  
@@ -578,7 +630,7 @@ error(e){
 - 使用方法  
   用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
-!>使用该补丁包后会一定程度上减慢解析速度，如非必要不建议使用  
+!> 使用该补丁包后会一定程度上减慢解析速度，如非必要不建议使用  
 
 ### parser-group ###
 > 该包仅支持 微信端 使用，暂不支持通过 [打包工具](#打包工具) 打包  
@@ -1023,5 +1075,5 @@ getLink(0);
 1. 在 `Github` 上 [提出 issue](https://github.com/jin-yufeng/Parser/issues/new/choose)，请注意按照模板要求详细描述问题  
 2. 在微信小程序 [富文本插件](#立即体验) 中的疑问解答 - 联系客服中联系我，请**直接发送相关问题**，发送无意义内容将不会回复  
 
-!>由于客服平台不能发送文件，可将有问题的 `html` 代码贴到 [链接](https://paste.ubuntu.com/)  
+!> 由于客服平台不能发送文件，可将有问题的 `html` 代码贴到 [链接](https://paste.ubuntu.com/)  
 
