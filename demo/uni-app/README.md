@@ -23,7 +23,7 @@
   <parser :html="html" :tag-style="tagStyle" />
   ```
   ```javascript
-  data(){
+  data() {
     return {
       tagStyle:{
         table: 'border-collapse:collapse;border-top:1px solid gray;border-left:1px solid gray;',
@@ -74,7 +74,7 @@ export default{
   onReady() {
     // 方式 1
     this.html = '<div>Hello World!</div>';
-    // 方式 2，一般来说性能更好
+    // 方式 2
     this.$refs.article.setContent('<div>Hello World!</div>');
   }
 }
@@ -115,20 +115,24 @@ export default{
 
 更多信息可见：  
 [文档地址](https://jin-yufeng.github.io/Parser)  
-[Github链接](https://github.com/jin-yufeng/Parser)  
+[Github 链接](https://github.com/jin-yufeng/Parser)  
 
 ## 注意事项 ##
 1. 本插件需要使用 `HBuilderX 2.2.5` 及以上版本进行编译  
 2. 本插件通过组件递归的方式显示节点树，因此必须使用自定义组件模式编译（或 `v3`）  
-3. 由于 `ad` 标签的特殊性，若需要使用文中广告，请自行到 `trees.vue` 中打开对应的注释    
-4. 本插件支持小程序、`H5`、`APP`（不支持 `nvue`）端使用   
-5. 百度小程序基础库版本 `3.60`（客户端版本 `11.9`）以下的可能无法正常显示  
-6. 使用了 `colspan` 和 `rowspan` 的表格由于无法通过 `css` 模拟，将直接使用 `rich-text` 显示，其中的图片链接无法点击  
+3. 由于 `ad` 标签的特殊性，若需要使用文中广告，需自行到 `trees.vue` 中打开对应的注释  
+4. 使用了 `colspan` 和 `rowspan` 的表格由于无法通过 `css` 模拟，将直接使用 `rich-text` 显示，其中的图片链接无法点击  
 
 平台差异：
-1. `a` 标签的效果：内部页面路径统一直接跳转；外链 `H5` 端直接打开；小程序端设置了 `app-id` 的可以跳转其他小程序，其余自动复制链接；`App` 端自动复制链接（建议跳转到 `webview` 页面，可参考示例项目），其中文档链接支持自动下载和打开  
-2. 仅微信小程序、`QQ` 小程序、`APP`、`H5` 支持 `lazy-load` 属性  
-3. 仅 `H5`、微信、`QQ`、头条小程序支持 `gesture-zoom` 属性  
-4. 支付宝小程序不支持 `autopause` 属性  
-5. 仅微信小程序支持 `ruby`、`bdi`、`bdo` 标签及  
-6. `H5` 端支持所有浏览器支持的标签，`APP(v3)` 支持 `iframe` 和 `embed` 标签  
+
+| 平台 | 差异 |
+|:---:|---|
+| 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签 |
+| 百度小程序 | 不支持 gesture-zoom、lazy-load 属性 |
+| 支付宝小程序 | 不支持 autopause、gesture-zoom、lazy-load 属性 |
+| 头条小程序 | 不支持 lazy-load 属性<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法 |
+| H5 | 支持所有浏览器支持的标签<br>a 标签可以直接跳转到对应网页<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
+| App | a 标签链接若是文档将自动下载和打开<br>v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
+| 钉钉小程序<br>App-NVUE | 不支持使用 |
+
+小程序端 `a` 标签设置 `app-id` 后可以跳转到其他小程序  

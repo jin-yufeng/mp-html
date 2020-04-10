@@ -33,8 +33,6 @@ Page({
 ```
 <p style="text-align:center"><span style="font-style:italic;">Hello </span><span style="font-weight:bold;">World!</span></p>  
 
-> `uni-app` 包编译到 `H5` 平台时支持所有浏览器支持的选择器  
-
 !> 不支持的选择器将被忽略，包括伪类、后代选择器、通配符等<br>如需支持更多选择器，请使用 [CssHandler](/instructions#CssHandler) 补丁包  
 
 各类样式的优先级和作用域：
@@ -81,10 +79,12 @@ Page({
 ```
 <svg><circle cx="100" cy="50" r="40" stroke="#3b5b81" stroke-width="2" fill="#5aa0b3" /></svg>
 
-!> 该功能将 `svg` 标签进行一定转换后通过 `img` 显示，但不可预览，且除 `uni-app` 的 `H5` 端外不能响应点击事件  
+!> 该功能将 `svg` 标签转换为图片显示，已知存在以下问题：  
+不能进行交互（即无法响应点击开始动画等）  
+若 `svg` 中使用了 `image`，且 `href` 不是 `base64`，将无法显示该图片  
 
 ### 设置锚点 ###
-支持设置页面内锚点（设置 `id` 即可），可通过 `a` 标签跳转，也可以通过获取组件实例手动跳转
+支持设置页面内锚点（设置 `id` 即可），可通过 `a` 标签跳转，也可以通过获取组件实例手动跳转（需要配合 `use-anchor` 属性使用）  
 
 ```wxml
 <parser id="article" html="{{html}}" use-anchor bindready="ready"></parser>
@@ -108,7 +108,8 @@ Page({
 ```
 
 ### 手势缩放 ###
-通过设置 `gesture-zoom` 属性，可以实现双击缩放，放大局部的内容进行查看。
+通过设置 `gesture-zoom` 属性，可以实现双击缩放，放大局部的内容进行查看。  
+更多信息可见：[gesture-zoom](/instructions#gesture-zoom)
 
 ### 长按复制 ###
 通过设置 `selectable` 属性可以实现长按复制任意内容  
@@ -131,7 +132,7 @@ Page({
   <img src="low-quality.jpg" />
 </picture>
 ```
-> media 仅支持 min-width 或 max-width，单位仅支持 px，首个 source 匹配成功后就不再进行匹配
+?> `media` 仅支持 `min-width` 或 `max-width`，单位仅支持 `px`，首个 `source` 匹配成功后就不再进行匹配
 
 ### 自动设置标题 ###
 若存在 `title` 标签，将自动把其内容设置到页面标题上（可通过 `autosetTitle` 属性控制）  
@@ -266,15 +267,13 @@ Page({
 | rt |   |
 | ruby |   |
 
->除列举的标签外，还支持所有 `svg` 系列的标签（必须包裹在 `svg` 标签内，否则无效）  
+说明：  
+1. 除列举的标签外，还支持所有 `svg` 系列的标签（必须包裹在 `svg` 标签内，否则无效）  
+2. 不在此列表中的标签，除个别将被直接移除（如 `script` 等），都会被转为一个行内标签，因此可以使用更多语义化标签  
+3. 全局支持 `id`、`style`、`class`、`width`、`height`、`align` 属性，`class` 可以匹配 `style` 标签中的样式和 `trees.wxss` 中的样式；其他不支持的属性将被移除  
+4. 支持图片点击（可自动预览，支持 `base64`）、长按事件和链接点击事件（可自动复制链接），不支持其他事件（如 `onclick` 等）  
 
->支持图片点击（可自动预览，支持 `base64`）、长按事件和链接点击事件（可自动复制链接），不支持其他事件（如 `onclick` 等）  
-
->全局支持 `id`、`style`、`class`、`width`、`height`、`align` 属性，`class` 可以匹配 `style` 标签中的样式和 `trees.wxss` 中的样式；其他不支持的属性将被移除  
-
->不在此列表中的标签，除个别将被直接移除（如 `script` 等），都会被转为一个行内标签，因此可以使用更多语义化标签  
-
->`uni-app` 包编译到 `H5` 平台时支持所有浏览器支持的标签  
+!> 使用了 `colspan` 和 `rowspan` 的表格，由于无法通过 `css` 模拟，将直接通过 `rich-text` 显示，其中的图片、链接无法点击（但可以正常显示）  
 
 ### 性能指标 ###
 没有层数限制，解析速度快，轻量化，容错性强，稳定性高，不需要网络请求  
