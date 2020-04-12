@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/26
+  update：2020/04/12
 */
 var cache = {},
   Parser = require('./libs/MpHtmlParser.js'),
@@ -57,7 +57,7 @@ Component({
     // 图片数组
     this.imgList = [];
     this.imgList.setItem = function (i, src) {
-      if (!i || !src) return;
+      if (i == void 0 || !src) return;
       // 去重
       if (src.indexOf('http') == 0 && this.includes(src)) {
         var newSrc = '';

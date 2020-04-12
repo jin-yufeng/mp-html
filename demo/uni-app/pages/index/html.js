@@ -316,7 +316,7 @@ module.exports = `<head>
       </a>
       <p style="font-size:12px;color:gray">图片链接，点击可以跳转</p>
       <br />
-      <a href="https://github.com/jin-yufeng/Parser">https://github.com/jin-yufeng/Parser</a>
+      <a href="https://github.com/jin-yufeng/Parser" target="_blank">https://github.com/jin-yufeng/Parser</a>
       <p style="font-size:12px;color:gray">外部链接，点击可以复制/跳转</p>
 			<br />
 			<a href="#anchor">锚点</a>

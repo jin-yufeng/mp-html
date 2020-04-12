@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/23
+  update：2020/04/12
 -->
 <template>
 	<view class="interlayer">
@@ -218,29 +218,17 @@
 								})
 						} else if (attrs.href.indexOf('http') == 0 || attrs.href.indexOf('//') == 0) {
 							// #ifdef APP-PLUS
-							if (attrs.href.includes('.doc') || attrs.href.includes('.xls') || attrs.href.includes('.ppt') || attrs.href.includes(
-									'.pdf')) {
-								uni.showLoading({
-									title: '文件下载中'
-								})
-								uni.downloadFile({
-									url: attrs.href,
-									success(res) {
-										wx.openDocument({
-											filePath: res.tempFilePath
-										})
-									},
-									complete: uni.hideLoading
-								})
-							} else
-								// #endif
-								uni.setClipboardData({
-									data: attrs.href,
-									success: () =>
-										uni.showToast({
-											title: '链接已复制'
-										})
-								});
+							plus.runtime.openWeb(attrs.href);
+							// #endif
+							// #ifndef APP-PLUS
+							uni.setClipboardData({
+								data: attrs.href,
+								success: () =>
+									uni.showToast({
+										title: '链接已复制'
+									})
+							})
+							// #endif
 						} else
 							uni.navigateTo({
 								url: attrs.href
@@ -473,7 +461,7 @@
 	}
 
 	._video::after {
-		border-left-color: white;
+		border-color: transparent transparent transparent white;
 		border-style: solid;
 		border-width: 15px 0 15px 30px;
 		content: '';

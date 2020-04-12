@@ -30,14 +30,6 @@
 			},
 			linkpress(res) {
 				console.log('linkpress', res);
-				// #ifdef APP-PLUS
-				if (res.href && res.href.includes('http')) {
-					res.ignore();
-					uni.navigateTo({
-						url: '../web/web?src=' + res.href
-					})
-				}
-				// #endif
 			},
 			error(res) {
 				console.error(res);

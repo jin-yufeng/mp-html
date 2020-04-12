@@ -107,6 +107,8 @@ Page({
 })
 ```
 
+!> 锚点跳转依赖于控制页面的滚动位置（`pageScrollTo`），如果限定了 `parser` 组件的高度，可能导致锚点失效（无法控制内部滚动位置）  
+
 ### 手势缩放 ###
 通过设置 `gesture-zoom` 属性，可以实现双击缩放，放大局部的内容进行查看。  
 更多信息可见：[gesture-zoom](/instructions#gesture-zoom)

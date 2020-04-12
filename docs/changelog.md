@@ -1,5 +1,33 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.04.12 ####
+一周年撒花 🎉🎉  
+1. `U` `uni-app` 包支持 `NVUE` 端  
+   说明：  
+   1. 实现方式  
+      通过 `web-view` 实现，因为 `nvue` 不支持很多 `css`，无法直接实现和 `html` 相同的效果（最多只能和 `nvue` 中的 `rich-text` 一样），因此只能通过 `web-view` 渲染，但其渲染性能显然也不如 `nvue` 原生组件，仅应在个别场景使用，如果整个页面使用，可能性能与 `vue` 近似  
+
+   2. 功能限制  
+      - 不支持懒加载  
+        `nvue` 中的 `web-view` 必须指定高度，目前在加载完毕后将总高度设置成 `web-view` 的高度（使得使用时可以不用设置），若使用图片懒加载，总高度会动态变化，会导致一些不正确的情况  
+      - 不支持 `navigateTo`  
+        因为 `PostMessage` 是单向的，只能 `web-view` 向应用发送数据，因此不能主动向 `web-view` 要求跳转锚点（不过内部 `a` 标签点击还是可以跳转锚点的）
+      - 不支持 `context`  
+        通过 `PostMessage` 传送的数据会被 `json` 化，`context` 对象无法传送，因此不支持 `getVideoContext`，也无法在 `error` 事件中通过 `context` 重设源  
+      - 其他  
+        因为通过 `web-view` 实现，在表现上和 `H5` 端比较类似（支持所有浏览器支持的标签，但是在解析过程中处理的一些方法无法生效（因为不进行解析））  
+
+   3. 注意事项  
+      如果要限制富文本的高度，需要在 `parser` 标签外加一个 `scroller`，并限定 `scroller` 的高度，直接限定 `parser` 标签的高度会导致无法滚动  
+   
+   ps：如果要用 `rich-text`，因为 `nvue` 中仅支持 `Array`，可以通过本组件的解析脚本解析：  
+   ```javascript
+   var parser = require('@components/jyf-parser/libs/MpHtmlParser.js');
+   new parser(html, options).parse(); // 同步方法即可获得结果
+   ```
+
+2. `U` `uni-app` 包 `App` 端支持直接通过 `plus` 打开外链  
+
 #### 2020.03.28 ####
 1. `F` 修复了 `uni-app` 包 `App(v3)` 端 `iframe` 标签无法使用的问题  
 

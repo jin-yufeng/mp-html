@@ -4,26 +4,31 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/03/26
+  update：2020/04/12
 -->
 <template>
-	<view style="display:inherit;">
+	<view>
 		<slot v-if="!nodes.length" />
-		<view class="top" :style="showAm+(selectable?';user-select:text;-webkit-user-select:text':'')" :animation="scaleAm"
-		 @tap="_tap" @touchstart="_touchstart" @touchmove="_touchmove">
+		<!--#ifdef APP-PLUS-NVUE-->
+		<web-view id="top" ref="web" :src="src" :style="'margin-top:-2px;height:'+height+'px'" @onPostMessage="_message" />
+		<!--#endif-->
+		<!--#ifndef APP-PLUS-NVUE-->
+		<view id="top" :style="showAm+(selectable?';user-select:text;-webkit-user-select:text':'')" :animation="scaleAm" @tap="_tap"
+		 @touchstart="_touchstart" @touchmove="_touchmove">
 			<!--#ifdef H5-->
 			<div :id="'rtf'+uid"></div>
 			<!--#endif-->
 			<!--#ifndef H5-->
 			<trees :nodes="nodes" :lazy-load="lazyLoad" :loadVideo="loadVideo" />
+			<image v-for="(item, index) in imgs" v-bind:key="index" :id="index" :src="item" hidden @load="_load" />
 			<!--#endif-->
 		</view>
-		<image v-for="(item, index) in imgs" v-bind:key="index" :id="index" :src="item" hidden @load="_load" />
+		<!--#endif-->
 	</view>
 </template>
 
 <script>
-	// #ifndef H5
+	// #ifndef H5 || APP-PLUS-NVUE
 	import trees from './libs/trees';
 	var cache = {},
 		// #ifdef MP-WEIXIN || MP-TOUTIAO
@@ -38,9 +43,12 @@
 		return val;
 	}
 	// #endif
-	// #ifdef H5
+	// #ifdef H5 || APP-PLUS-NVUE
 	var rpx = uni.getSystemInfoSync().screenWidth / 750,
 		cfg = require('./libs/config.js');
+	// #endif
+	// #ifdef APP-PLUS-NVUE
+	var dom = weex.requireModule('dom');
 	// #endif
 	export default {
 		name: 'parser',
@@ -52,13 +60,19 @@
 				// #ifdef H5
 				uid: this._uid,
 				// #endif
+				// #ifdef APP-PLUS-NVUE
+				src: '',
+				height: 1,
+				// #endif
+				// #ifndef APP-PLUS-NVUE
 				scaleAm: '',
 				showAm: '',
-				nodes: [],
-				imgs: []
+				imgs: [],
+				// #endif
+				nodes: []
 			}
 		},
-		// #ifndef H5
+		// #ifndef H5 || APP-PLUS-NVUE
 		components: {
 			trees
 		},
@@ -75,7 +89,11 @@
 				type: Boolean,
 				default: true
 			},
+			// #ifndef H5 || APP-PLUS-NVUE
 			'compress': Number,
+			'useCache': Boolean,
+			'xml': Boolean,
+			// #endif
 			'domain': String,
 			// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
 			'gestureZoom': Boolean,
@@ -86,9 +104,7 @@
 			'selectable': Boolean,
 			'tagStyle': Object,
 			'showWithAnimation': Boolean,
-			'useAnchor': Boolean,
-			'useCache': Boolean,
-			'xml': Boolean
+			'useAnchor': Boolean
 		},
 		watch: {
 			html(html) {
@@ -96,9 +112,6 @@
 			}
 		},
 		mounted() {
-			// #ifdef APP-NVUE
-			console.error('本组件暂不支持 NVUE');
-			// #endif
 			// 图片数组
 			this.imgList = [];
 			this.imgList.each = function(f) {
@@ -106,7 +119,7 @@
 					this.setItem(i, f(this[i], i, this));
 			}
 			this.imgList.setItem = function(i, src) {
-				if (!i || !src) return;
+				if (i == void 0 || !src) return;
 				// #ifndef MP-ALIPAY || APP-PLUS
 				// 去重
 				if (src.indexOf('http') == 0 && this.includes(src)) {
@@ -145,7 +158,7 @@
 					// #endif
 				}
 			}
-			if (!this.nodes.length) this.setContent(this.html);
+			if (this.html) this.setContent(this.html);
 		},
 		beforeDestroy() {
 			// #ifdef H5
@@ -169,7 +182,7 @@
 			clearInterval(this._timer);
 		},
 		methods: {
-			// #ifdef H5
+			// #ifdef H5 || APP-PLUS-NVUE
 			_Dom2Str(nodes) {
 				var str = '';
 				for (var node of nodes) {
@@ -185,36 +198,81 @@
 				}
 				return str;
 			},
-			// #endif
-			setContent(html, append) {
-				// #ifdef H5
-				if (!html) {
-					if (this.rtf && !append) this.rtf.parentNode.removeChild(this.rtf);
-					return;
-				}
+			_handleHtml(html, append) {
 				if (typeof html != 'string') html = this._Dom2Str(html.nodes || html);
 				// 处理 rpx
 				if (html.includes('rpx'))
 					html = html.replace(/[0-9.]*rpx/g, $ => parseFloat($) * rpx + 'px');
-				var div = document.createElement('div');
 				if (!append) {
 					// 处理 tag-style 和 userAgentStyles
-					let style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}';
+					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}';
 					for (var item in cfg.userAgentStyles)
 						style += `${item}{${cfg.userAgentStyles[item]}}`;
 					for (item in this.tagStyle)
 						style += `${item}{${this.tagStyle[item]}}`;
 					style += '</style>';
 					html = style + html;
+				}
+				return html;
+			},
+			// #endif
+			setContent(html, append) {
+				// #ifdef APP-PLUS-NVUE
+				if (!html) {
+					this.src = '';
+					this.height = 1;
+					return;
+				}
+				if (append) return;
+				plus.io.resolveLocalFileSystemURL('_doc', entry => {
+					entry.getDirectory('parser_tmp', {
+						create: true
+					}, entry => {
+						var fileName = Date.now() + '.html';
+						entry.getFile(fileName, {
+							create: true
+						}, entry => {
+							entry.createWriter(writer => {
+								writer.onwriteend = () => {
+									this.nodes = [1];
+									this.src = '_doc/parser_tmp/' + fileName;
+									this.$nextTick(function() {
+										entry.remove();
+									})
+								}
+								html =
+									'<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1' +
+									(this.selectable ? '' : ',user-scalable=no') +
+									'"><script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></' +
+									'script><base href="' + this.domain + '">' + this._handleHtml(html) +
+									'<script>"use strict";function post(t){uni.postMessage({data:t})}' +
+									(this.showWithAnimation ? 'document.body.style.animation="show .5s",' : '') +
+									'document.addEventListener("UniAppJSBridgeReady",function(){post({action:"load",text:document.body.innerText});var t=document.getElementsByTagName("title");t.length&&post({action:"getTitle",title:t[0].innerText});for(var e,o=document.getElementsByTagName("img"),n=[],i=0,r=0;e=o[i];i++)e.onerror=function(){post({action:"error",source:"img",target:this})},e.hasAttribute("ignore")||"A"==e.parentElement.nodeName||(e.i=r++,n.push(e.src),e.onclick=function(){post({action:"preview",img:{i:this.i,src:this.src}})});post({action:"getImgList",imgList:n});for(var a,s=document.getElementsByTagName("a"),c=0;a=s[c];c++)a.onclick=function(){var t,e=this.getAttribute("href");if("#"==e[0]){var r=document.getElementById(e.substr(1));r&&(t=r.offsetTop)}return post({action:"linkpress",href:e,offset:t}),!1};;for(var u,m=document.getElementsByTagName("video"),d=0;u=m[d];d++)u.style.maxWidth="100%",u.onerror=function(){post({action:"error",source:"video",target:this})}' +
+									(this.autopause ? ',u.onplay=function(){for(var t,e=0;t=m[e];e++)t!=this&&t.pause()}' : '') +
+									';for(var g,l=document.getElementsByTagName("audio"),p=0;g=l[p];p++)g.onerror=function(){post({action:"error",source:"audio",target:this})};window.onload=function(){post({action:"ready",height:document.body.scrollHeight})}});</' +
+									'script>';
+								writer.write(html);
+							});
+						})
+					})
+				})
+				// #endif
+				// #ifdef H5
+				if (!html) {
+					if (this.rtf && !append) this.rtf.parentNode.removeChild(this.rtf);
+					return;
+				}
+				var div = document.createElement('div');
+				if (!append) {
 					if (this.rtf) this.rtf.parentNode.removeChild(this.rtf);
 					this.rtf = div;
 				} else {
 					if (!this.rtf) this.rtf = div;
 					else this.rtf.appendChild(div);
 				}
-				div.innerHTML = html;
+				div.innerHTML = this._handleHtml(html, append);
 				for (var styles = this.rtf.getElementsByTagName('style'), i = 0, style; style = styles[i++];) {
-					style.innerHTML = style.innerHTML.replace(/\s*body/g, '#rtf' + this._uid);
+					style.innerHTML = style.innerHTML.replace(/body/g, '#rtf' + this._uid);
 					style.setAttribute('scoped', 'true');
 				}
 				// 懒加载
@@ -340,7 +398,7 @@
 				})
 				setTimeout(() => this.showAm = '', 500);
 				// #endif
-				// #ifndef H5
+				// #ifndef H5 || APP-PLUS-NVUE
 				var nodes;
 				if (!html)
 					return this.nodes = [];
@@ -455,20 +513,21 @@
 					// #endif
 				})
 				// #endif
+				// #ifndef APP-PLUS-NVUE
 				var height;
 				clearInterval(this._timer);
 				this._timer = setInterval(() => {
 					// #ifdef H5
 					var res = [this.rtf.getBoundingClientRect()];
 					// #endif
-					// #ifndef APP-PLUS || H5
-					this.createSelectorQuery()
-					// #endif
+					// #ifndef H5
 					// #ifdef APP-PLUS
 					uni.createSelectorQuery().in(this)
+					// #endif
+					// #ifndef APP-PLUS
+					this.createSelectorQuery()
 						// #endif
-						// #ifndef H5
-						.select('.top').boundingClientRect().exec(res => {
+						.select('#top').boundingClientRect().exec(res => {
 							// #endif
 							this.width = res[0].width;
 							if (res[0].height == height) {
@@ -481,12 +540,16 @@
 					// #endif
 				}, 350)
 				if (this.showWithAnimation && !append) this.showAm = 'animation:show .5s';
+				// #endif
 			},
-			getText(ns = this.html || this.nodes) {
+			getText(ns = this.nodes) {
+				// #ifdef APP-PLUS-NVUE
+				return this._text;
+				// #endif
 				// #ifdef H5
 				return this.rtf.innerText;
 				// #endif
-				// #ifndef H5
+				// #ifndef H5 || APP-PLUS-NVUE
 				var txt = '';
 				for (var i = 0, n; n = ns[i++];) {
 					if (n.type == 'text') txt += n.txt.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
@@ -506,6 +569,7 @@
 				// #endif
 			},
 			navigateTo(obj) {
+				// #ifndef APP-PLUS-NVUE
 				if (!this.useAnchor)
 					return obj.fail && obj.fail({
 						errMsg: 'Anchor is disabled'
@@ -537,10 +601,10 @@
 							uni.pageScrollTo(obj);
 						})
 				}
-				if (!obj.id) Scroll('.top');
+				if (!obj.id) Scroll('#top');
 				else {
 					// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-					Scroll('.top >>> #' + obj.id + ', .top >>> .' + obj.id);
+					Scroll('#top >>> #' + obj.id + ', #top >>> .' + obj.id);
 					// #endif
 					// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
 					for (var anchor of this.anchors)
@@ -549,15 +613,19 @@
 					// #endif
 				}
 				// #endif
+				// #endif
 			},
 			getVideoContext(id) {
+				// #ifndef APP-PLUS-NVUE
 				if (!id) return this.videoContexts;
 				else
 					for (var i = this.videoContexts.length; i--;)
 						if (this.videoContexts[i].id == id) return this.videoContexts[i];
+				// #endif
 			},
 			// 预加载
 			preLoad(html, num) {
+				// #ifndef APP-PLUS-NVUE
 				// #ifdef H5
 				if (html.constructor == Array)
 					html = this._Dom2Str(html);
@@ -587,13 +655,76 @@
 				else if (this.imgs.length < 15)
 					this.imgs = this.imgs.concat(this._wait.splice(0, 15 - this.imgs.length));
 				// #endif
-			},
-			_load(e) {
-				// #ifndef H5
-				if (this._wait.length)
-					this.$set(this.imgs, e.target.id, this._wait.shift());
 				// #endif
 			},
+			// #ifdef APP-PLUS-NVUE
+			_message(e) {
+				// 接收 web-view 消息
+				var data = e.detail.data[0];
+				if (data.action == 'load') {
+					this.$emit('load');
+					this._text = data.text;
+				} else if (data.action == 'getTitle') {
+					if (this.autosetTitle)
+						uni.setNavigationBarTitle({
+							title: data.title
+						})
+				} else if (data.action == 'getImgList') {
+					this.imgList.length = 0;
+					for (var i = data.imgList.length; i--;)
+						this.imgList.setItem(i, data.imgList[i]);
+				} else if (data.action == 'preview') {
+					var preview = true;
+					data.img.ignore = () => preview = false;
+					this.$emit('imgtap', data.img);
+					if (preview)
+						uni.previewImage({
+							current: data.img.i,
+							urls: this.imgList
+						})
+				} else if (data.action == 'linkpress') {
+					var jump = true,
+						href = data.href;
+					this.$emit('linkpress', {
+						href,
+						ignore: () => jump = false
+					})
+					if (jump && href) {
+						if (href[0] == '#') {
+							if (this.useAnchor)
+								dom.scrollToElement(this.$refs.web, {
+									offset: data.offset
+								})
+						} else if (href.includes('://'))
+							plus.runtime.openWeb(href);
+						else
+							uni.navigateTo({
+								url: href
+							})
+					}
+				} else if (data.action == 'error')
+					this.$emit('error', {
+						source: data.source,
+						target: data.target
+					})
+				else if (data.action == 'ready') {
+					this.height = data.height;
+					this.$nextTick(() => {
+						uni.createSelectorQuery().in(this).select('#top').boundingClientRect().exec(res => {
+							this.rect = res[0];
+							this.$emit('ready', res[0]);
+						})
+					})
+				}
+			},
+			// #endif
+			// #ifndef APP-PLUS-NVUE
+			// #ifndef H5
+			_load(e) {
+				if (this._wait.length)
+					this.$set(this.imgs, e.target.id, this._wait.shift());
+			},
+			// #endif
 			_tap(e) {
 				// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
 				if (this.gestureZoom && e.timeStamp - this._lastT < 300) {
@@ -646,6 +777,7 @@
 				}
 				// #endif
 			}
+			// #endif
 		}
 	}
 </script>
@@ -666,10 +798,6 @@
 		display: block;
 		overflow: scroll;
 		-webkit-overflow-scrolling: touch;
-	}
-
-	.top {
-		display: inherit;
 	}
 
 	/* #endif */

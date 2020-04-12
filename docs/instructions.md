@@ -5,7 +5,7 @@
 |:---:|:---:|:---:|
 | [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.5KB | 微信小程序插件包 |
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.0KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.7KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 63.3KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 1. 百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
@@ -25,10 +25,12 @@
 | 百度小程序 | 不支持 gesture-zoom、lazy-load 属性 |
 | 支付宝小程序 | 不支持 autopause、gesture-zoom、lazy-load 属性 |
 | 头条小程序 | 不支持 lazy-load 属性<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法 |
-| H5 | 支持所有浏览器支持的标签<br>a 标签可以直接跳转到对应网页<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
-| App | a 标签链接若是文档将自动下载和打开<br>v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
-| 钉钉小程序<br>App-NVUE | 不支持使用 |
+| H5 | 支持所有浏览器支持的标签<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
+| App | v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
+| NVUE | 支持所有浏览器支持的标签<br>不支持 gesture-zoom、lazy-load 属性<br>不支持 navigateTo、getVideoContext、preLoad 的 api<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
 
+关于 `a` 标签：  
+`H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  
 小程序端 `a` 标签设置 `app-id` 后可以跳转到其他小程序  
 
 以下统称为 `parser`  
@@ -610,7 +612,7 @@ this.selectComponent("#preLoad").preLoad(html);
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
-  !> 在 `uni-app` 中使用时需要将 `jyf-parser.vue` 中的 33 行修改为 `const document = require('./libs/document.js');`  
+  !> 在 `uni-app` 中使用时需要将 `jyf-parser.vue` 中的 40 行修改为 `const document = require('./libs/document.js');`  
   
 - `document` 类：  
   获取方式：可通过 `this.selectComponent("#id").document` 获取  

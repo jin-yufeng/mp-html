@@ -7,6 +7,7 @@ module.exports = {
     },
     "extends": ["eslint:recommended"],
     "globals": {
+		"weex": "readonly",
 		"uni": "readonly",
 		"plus": "readonly",
 		"wx": "readonly",
