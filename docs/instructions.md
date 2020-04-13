@@ -5,7 +5,8 @@
 |:---:|:---:|:---:|
 | [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.5KB | 微信小程序插件包 |
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.0KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 63.3KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 42.9KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 63.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 1. 百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
@@ -284,6 +285,20 @@
   }
   ```
 
+  针对头条小程序事件中无法传递函数的问题，可以用以下方式接收  
+
+  ```javascript
+  // 全局唯一的监听器
+  global.Parser.onImgtap = function(e) {
+    console.log(e);
+  }
+  global.Parser.onLinkpress = function(e) {
+    if(e.href == "xxx")
+      e.ignore();
+  }
+  // 用完需要设置为 null
+  ```
+
 - 关于 `error` 事件  
   当图片出错时，也会返回 `context`，其中包含一个方法—— `setSrc`，输入值为 `string`，可以重设 `src`（如设置成出错时的占位图，必须在 `error` 事件处理函数中调用，否则无效）  
 
@@ -308,7 +323,7 @@
 
 !> 通过这种方式引入的样式会对所有 `parser` 标签生效，如果是对单个 `parser` 使用的样式，请使用 `style` 标签；另外，这种方式引入的样式优先级最低  
 
-!> `uni-app` 包编译到 `H5` 时这种样式无效，请使用 `style` 标签  
+!> `uni-app` 包编译到 `H5` 和 `NVUE` 时这种样式无效，请使用 `style` 标签  
 
 ### 配置项 ###
 
@@ -705,7 +720,7 @@ error(e){
 !> 使用该补丁包后会一定程度上减慢解析速度，如非必要不建议使用  
 
 ### parser-group ###
-!> 该包仅支持 微信端 使用，暂不支持通过 [打包工具](#打包工具) 打包  
+!> 该包仅支持 原生包 使用，暂不支持通过 [打包工具](#打包工具) 打包  
 
 - 功能  
   有时一个页面会用到多个 `parser` 标签，默认情况下，不同的 `parser` 标签之间是相互独立的，用 `parser-group` 标签包裹起来可以组合成一个整体，实现：  
@@ -735,7 +750,7 @@ error(e){
      ```
 
 ### audio ###
-!> 该包仅支持 微信端 使用  
+!> 该包仅支持 原生包 使用  
 
 - 功能  
   音乐播放器  

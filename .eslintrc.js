@@ -10,6 +10,7 @@ module.exports = {
 		"weex": "readonly",
 		"uni": "readonly",
 		"plus": "readonly",
+		"tt": "readonly",
 		"wx": "readonly",
 		"Component": "readonly",
 		"Page": "readonly",

@@ -8,7 +8,7 @@
 var cfg = require('./config.js'),
   blankChar = cfg.blankChar,
   CssHandler = require('./CssHandler.js'),
-  screenWidth = wx.getSystemInfoSync().screenWidth;
+  screenWidth = tt.getSystemInfoSync().screenWidth;
 try {
   var emoji = require('./emoji.js');
 } catch (e) {}
@@ -293,8 +293,7 @@ class MpHtmlParser {
         if (parseInt(styleObj.width) > screenWidth)
           styleObj.height = 'auto';
         if (check('height')) node.mode = 'scaleToFill';
-      } else if (check('height')) node.mode = 'heightFix';
-      else node.auto = 1;
+      } else node.auto = 1;
     }
     for (var key in styleObj) {
       var value = styleObj[key];

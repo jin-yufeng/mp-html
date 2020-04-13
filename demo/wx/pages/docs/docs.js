@@ -81,7 +81,7 @@ p {
 </parser></code></pre>`,
     // 智能压缩
     compress: `<ul style="margin:10px 0 0 -15px">
-  <li>移除空标签并自动合并一些不必要的层级</li>
+  <li>自动合并一些不必要的层级</li>
   <li>在非<code>pre</code>标签且没有<code>white-space:pre</code>时自动去除空白符</li>
   <li>压缩<code>style</code>属性的值，去除重复的属性和多余的空格</li>
   <li>移除不支持的属性和一些不支持的标签</li>
@@ -512,6 +512,14 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.4.13
+    <ol>
+      <li><code>F</code> 修复了自动移除空<code>div</code>导致换行失效的问题</li>
+      <li><code>F</code> 修复了使用多个并列<code>rpx</code>时可能失效的问题</li>
+      <li><code>F</code> 修复了<code>audio</code>补丁包音乐名太长会导致样式错乱的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.3.26
     <ol>
       <li><code>A</code> 增加了<code>xml</code>属性，可以以<code>xml</code>方式解析</li>
@@ -639,30 +647,6 @@ console.log(rect.height); // 高度</code></pre>
       <li><code>U</code> <code>domain</code>属性支持自动填充所有<code>src</code>属性的值（包括视频、音频、图片；协议名默认<code>http</code>）</li>
       <li><code>U</code> 优化了实体的处理（支持所有形如<code>&amp;#123;</code>的实体编码）</li>
       <li><code>F</code> 修复了图片一开始裂开之后又好了的问题</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.1.7
-    <ol>
-      <li><code>U</code> 支持模拟显示<code>li</code>, <code>ol</code>, <code>ul</code>标签（即可以在其中放图片、链接、视频等，支持<code>ol</code>的<code>type</code>属性，支持多层<code>ul</code>）</li>
-      <li><code>D</code> 删除了<code>List</code>补丁包（已在主包中实现）</li>
-      <li><code>F</code> 修复了传入的<code>html</code>为数组时预览会出现顺序颠倒的问题</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.1.5
-    <ol>
-      <li><code>U</code> 精简和优化了一些代码</li>
-    </ol>
-  </li>
-  </br>
-  <li>2019.12.30
-    <ol>
-      <li><code>A</code> 增加支持<code>svg</code>系列标签</li>
-      <li><code>U</code> 减小了解析结果的大小（约<code>3%</code>），减小了插件包的大小</li>
-      <li><code>U</code> <code>h1-6</code>标签支持通过组件递归显示（即可以在其中使用图片、链接等）</li>
-      <li><code>U</code> 解决了<code>Audits</code>测评中<code>a</code>标签可点击元素的响应区域过小的问题</li>
-      <li><code>F</code> 修复了一个样式优先级的错误</li>
     </ol>
   </li>
 </ul>

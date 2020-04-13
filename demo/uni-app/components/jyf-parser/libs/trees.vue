@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/04/12
+  update：2020/04/13
 -->
 <template>
 	<view class="interlayer">
@@ -117,6 +117,7 @@
 <script module="handler" lang="wxs" src="./handler.wxs"></script>
 <script module="handler" lang="sjs" src="./handler.sjs"></script>
 <script>
+	global.Parser = {};
 	import trees from './trees'
 	export default {
 		components: {
@@ -172,12 +173,13 @@
 			imgtap(e) {
 				var attrs = e.currentTarget.dataset.attrs;
 				if (!attrs.ignore) {
-					var preview = true;
-					this.top.$emit('imgtap', {
+					var preview = true, data = {
 						id: e.target.id,
 						src: attrs.src,
 						ignore: () => preview = false
-					})
+					};
+					global.Parser.onImgtap && global.Parser.onImgtap(data);
+					this.top.$emit('imgtap', data);
 					if (preview) {
 						var urls = this.top.imgList,
 							current = urls[attrs.i] ? parseInt(attrs.i) : (urls = [attrs.src], 0);
@@ -200,6 +202,7 @@
 				var jump = true,
 					attrs = e.currentTarget.dataset.attrs;
 				attrs.ignore = () => jump = false;
+				global.Parser.onLinkpress && global.Parser.onLinkpress(attrs);
 				this.top.$emit('linkpress', attrs);
 				if (jump) {
 					// #ifdef MP

@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/04/12
+  update：2020/04/13
 -->
 <template>
 	<view>
@@ -202,7 +202,7 @@
 				if (typeof html != 'string') html = this._Dom2Str(html.nodes || html);
 				// 处理 rpx
 				if (html.includes('rpx'))
-					html = html.replace(/[0-9.]*rpx/g, $ => parseFloat($) * rpx + 'px');
+					html = html.replace(/[0-9.]+\s*rpx/g, $ => parseFloat($) * rpx + 'px');
 				if (!append) {
 					// 处理 tag-style 和 userAgentStyles
 					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}';
@@ -552,7 +552,7 @@
 				// #ifndef H5 || APP-PLUS-NVUE
 				var txt = '';
 				for (var i = 0, n; n = ns[i++];) {
-					if (n.type == 'text') txt += n.txt.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+					if (n.type == 'text') txt += n.text.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
 						.replace(/&amp;/g, '&');
 					else if (n.type == 'br') txt += '\n';
 					else {

@@ -1,0 +1,35 @@
+<!--trees 递归子组件-->
+<block tt:for="{{nodes}}" tt:key="index" tt:for-item="n">
+  <rich-text tt:if="{{n.en||n.svg||n.err}}" class="_svg" nodes="{{[n]}}" />
+  <!--图片-->
+  <image tt:elif="{{n.name=='img'}}" class="_img" style="{{n.attrs.style}}" src="{{n.attrs.src}}" lazy-load="{{lazyLoad}}" mode="{{n.mode||'widthFix'}}" data-attrs="{{n.attrs}}" data-i="{{index}}" data-auto="{{n.auto}}" data-source="img" bindtap="imgtap" bindload="loadImg" binderror="error" />
+  <!--文本-->
+  <text tt:elif="{{n.type=='text'}}" decode>{{n.text}}</text>
+  <text tt:elif="{{n.name=='br'}}">\n</text>
+  <!--链接-->
+  <view tt:elif="{{n.name=='a'}}" class="_a {{n.attrs.class}}" hover-class="_hover" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="linkpress">
+    <trees nodes="{{n.children}}" />
+  </view>
+  <!--视频-->
+  <block tt:elif="{{n.name=='video'}}">
+    <view tt:if="{{n.lazyLoad}}" id="{{n.attrs.id}}" class="_video {{n.attrs.class}}" style="{{n.attrs.style}}" data-i="{{index}}" bindtap="loadVideo" />
+    <video tt:else id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" unit-id="{{n.attrs['unit-id']}}" data-i="{{index}}" data-source="video" binderror="error" bindplay="play" />
+  </block>
+  <!--音频-->
+  <!--广告-->
+  <!--<ad tt:elif="{{n.name=='ad'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" unit-id="{{n.attrs['unit-id']}}" data-source="ad" binderror="error" />-->
+  <!--列表-->
+  <view tt:elif="{{n.name=='li'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}};display:flex">
+    <view tt:if="{{n.type=='ol'}}" class="_ol-bef">{{n.num}}</view>
+    <view tt:else class="_ul-bef">
+      <view tt:if="{{n.floor%3==0}}" class="_ul-p1">█</view>
+      <view tt:elif="{{n.floor%3==2}}" class="_ul-p2" />
+      <view tt:else class="_ul-p1" style="border-radius:50%">█</view>
+    </view>
+    <trees class="_node _li" lazy-load="{{lazyLoad}}" nodes="{{n.children}}" />
+  </view>
+  <!--富文本-->
+  <rich-text tt:elif="{{!n.c}}" id="{{n.attrs.id}}" nodes="{{[n]}}" />
+  <!--继续递归-->
+  <trees tt:else id="{{n.attrs.id}}" class="_node _{{n.name}} {{n.attrs.class}}" style="{{n.attrs.style}}" lazy-load="{{lazyLoad}}" nodes="{{n.children}}" />
+</block>

@@ -38,6 +38,7 @@ public class pack {
 class core {
 	// 使用平台
 	JRadioButton typeWx;
+	JRadioButton typeTt;
 	JRadioButton typeUniApp;
 	// 补丁包
 	JCheckBox emoji;
@@ -50,6 +51,7 @@ class core {
 	// 包大小
 	final float wxSize = 44.5f;
 	final float wxMinSize = 30.0f;
+	final float ttSize = 42.9f;
 	final float uniAppSize = 63.3f;
 	final float emojiSize = 4.25f;
 	final float emojiMinSize = 3.16f;
@@ -62,7 +64,7 @@ class core {
 	// 构造函数
 	core() {
 		JFrame frame = new JFrame("Parser 插件包选择");
-		frame.setSize(480, 370);
+		frame.setSize(480, 420);
 		frame.setLocationRelativeTo(null);
 		frame.setLayout(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,39 +75,43 @@ class core {
 		typeWx.setBounds(100, 20, 150, 20);
 		typeWx.setSelected(true);
 		frame.add(typeWx);
+		typeTt = new JRadioButton("头条（" + ttSize + "KB）");
+		typeTt.setBounds(100, 45, 150, 20);
+		frame.add(typeTt);
 		typeUniApp = new JRadioButton("uni-app（" + uniAppSize + "KB）");
-		typeUniApp.setBounds(250, 20, 150, 20);
+		typeUniApp.setBounds(100, 70, 150, 20);
+		frame.add(typeUniApp);
 		ButtonGroup typeGroup = new ButtonGroup();
 		typeGroup.add(typeWx);
+		typeGroup.add(typeTt);
 		typeGroup.add(typeUniApp);
-		frame.add(typeUniApp);
 		frame.add(typeLabel);
 		// 补丁包
 		JLabel patchLabel = new JLabel("补\u2002丁\u2002包：");
-		patchLabel.setBounds(20, 50, 80, 20);
+		patchLabel.setBounds(20, 100, 80, 20);
 		frame.add(patchLabel);
 		emoji = new JCheckBox("emoji（解析 emoji 小表情，" + emojiSize + "KB）");
-		emoji.setBounds(100, 50, 250, 20);
+		emoji.setBounds(100, 100, 250, 20);
 		frame.add(emoji);
 		document = new JCheckBox("document（动态操作 dom，" + domSize + "KB）");
-		document.setBounds(100, 75, 250, 20);
+		document.setBounds(100, 125, 250, 20);
 		frame.add(document);
 		CssHandler = new JCheckBox("CssHandler（支持更多 css 选择器，" + cssSize + "KB）");
-		CssHandler.setBounds(100, 100, 300, 20);
+		CssHandler.setBounds(100, 150, 300, 20);
 		frame.add(CssHandler);
 		audio = new JCheckBox("audio（音乐播放器，" + audioSize + "KB）");
-		audio.setBounds(100, 125, 300, 20);
+		audio.setBounds(100, 175, 300, 20);
 		frame.add(audio);
 		// 版本
 		JLabel versionLabel = new JLabel("版\u2003\u2003本：");
-		versionLabel.setBounds(20, 155, 80, 20);
+		versionLabel.setBounds(20, 205, 80, 20);
 		frame.add(versionLabel);
 		JRadioButton normal = new JRadioButton("正常");
-		normal.setBounds(100, 155, 80, 20);
+		normal.setBounds(100, 205, 80, 20);
 		normal.setSelected(true);
 		frame.add(normal);
 		JRadioButton min = new JRadioButton("min");
-		min.setBounds(180, 155, 80, 20);
+		min.setBounds(180, 205, 80, 20);
 		ButtonGroup versionGroup = new ButtonGroup();
 		versionGroup.add(normal);
 		versionGroup.add(min);
@@ -113,21 +119,21 @@ class core {
 		frame.add(min);
 		// 总大小
 		JLabel sizeLabel = new JLabel("总\u2002大\u2002小：");
-		sizeLabel.setBounds(20, 185, 80, 20);
+		sizeLabel.setBounds(20, 235, 80, 20);
 		frame.add(sizeLabel);
 		JLabel size = new JLabel(wxSize + " KB");
-		size.setBounds(100, 185, 80, 20);
+		size.setBounds(100, 235, 80, 20);
 		frame.add(size);
 		// 生成目录
 		final File desktop = FileSystemView.getFileSystemView().getHomeDirectory();
 		JLabel dirLabel = new JLabel("生成目录：");
-		dirLabel.setBounds(20, 215, 80, 20);
+		dirLabel.setBounds(20, 265, 80, 20);
 		JTextField dir = new JTextField(desktop.getAbsolutePath() + File.separator + "parser");
-		dir.setBounds(100, 215, 230, 20);
+		dir.setBounds(100, 265, 230, 20);
 		frame.add(dir);
 		frame.add(dirLabel);
 		JButton dirBut = new JButton("...");
-		dirBut.setBounds(340, 215, 30, 20);
+		dirBut.setBounds(340, 265, 30, 20);
 		frame.add(dirBut);
 		dirBut.addActionListener(new ActionListener() {
 
@@ -150,28 +156,43 @@ class core {
 		});
 		// 生成按钮
 		JButton createBut = new JButton("生成");
-		createBut.setBounds(200, 260, 80, 30);
+		createBut.setBounds(200, 310, 80, 30);
 		frame.add(createBut);
 		// 生成平台选择
 		typeWx.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent item) {
+				if (item.getStateChange() == ItemEvent.SELECTED)
+					size.setText(calcSize());
+			}
+		});
+		typeTt.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent item) {
+				if (item.getStateChange() == ItemEvent.SELECTED)
+					size.setText(calcSize());
+			}
+		});
+		typeUniApp.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent item) {
-				if (item.getStateChange() != ItemEvent.SELECTED) {
+				if (item.getStateChange() != ItemEvent.SELECTED)
+					audio.setEnabled(true);
+				else {
+					size.setText(calcSize()); // 重新计算大小
 					audio.setSelected(false);
 					audio.setEnabled(false);
-				} else
-					audio.setEnabled(true);
-				size.setText(calcSize()); // 重新计算大小
+				}
 				String[] path = dir.getText().split(Matcher.quoteReplacement(File.separator));
 				if (path.length > 1) {
 					if (item.getStateChange() == ItemEvent.SELECTED) {
-						if (path[path.length - 1].equals("jyf-parser")) {
-							path[path.length - 1] = "parser";
+						if (path[path.length - 1].equals("parser")) {
+							path[path.length - 1] = "jyf-parser";
 							dir.setText(String.join(File.separator, path));
 						}
-					} else if (path[path.length - 1].equals("parser")) {
-						path[path.length - 1] = "jyf-parser";
+					} else if (path[path.length - 1].equals("jyf-parser")) {
+						path[path.length - 1] = "parser";
 						dir.setText(String.join(File.separator, path));
 					}
 				}
@@ -229,12 +250,13 @@ class core {
 							copyDir("./parser.min", newPath);
 						else
 							copyDir("./parser", newPath);
-						if (audio.isSelected()) {
-							copyDir("./patches/audio", newPath + "/audio");
-							modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
-									"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
+						if (audio.isSelected())
 							modifyFile(newPath + "/trees/trees.wxml", "<audio", "<myAudio");
-						}
+					} else if (typeTt.isSelected()) {
+						copyDir("./parser.tt", newPath);
+						if (audio.isSelected())
+							modifyFile(newPath + "/trees/trees.ttml", "<!--音频-->",
+									"<myAudio wx:elif=\"{{n.name=='audio'}}\" id=\"{{n.attrs.id}}\" class=\"{{n.attrs.class}}\" style=\"{{n.attrs.style}}\" author=\"{{n.attrs.author}}\" autoplay=\"{{n.attrs.autoplay}}\" controls=\"{{n.attrs.controls}}\" loop=\"{{n.attrs.loop}}\" name=\"{{n.attrs.name}}\" poster=\"{{n.attrs.poster}}\" src=\"{{n.attrs.source[n.i||0]}}\" data-i=\"{{index}}\" data-source=\"audio\" binderror=\"error\" bindplay=\"play\" />");
 					} else {
 						copyDir("./parser.uni", newPath);
 						if (emoji.isSelected())
@@ -253,6 +275,11 @@ class core {
 					if (CssHandler.isSelected())
 						Files.copy(Paths.get("./patches/CssHandler/CssHandler" + (isMin ? ".min" : "") + ".js"),
 								new FileOutputStream(newPath + "/libs/CssHandler.js"));
+					if (audio.isSelected()) {
+						copyDir("./patches/audio", newPath + "/audio");
+						modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
+								"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
+					}
 					String cmdDir[] = { "explorer.exe", newPath };
 					Runtime.getRuntime().exec(cmdDir);
 					JOptionPane.showMessageDialog(null, "生成成功", "成功", JOptionPane.PLAIN_MESSAGE);
@@ -284,6 +311,8 @@ class core {
 		float size;
 		if (typeWx.isSelected())
 			size = isMin ? wxMinSize : wxSize;
+		else if (typeTt.isSelected())
+			size = ttSize;
 		else
 			size = uniAppSize;
 		if (emoji.isSelected())

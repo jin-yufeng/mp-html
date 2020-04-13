@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/26
+  update：2020/04/13
 */
 var cfg = require('./config.js'),
   blankChar = cfg.blankChar,
@@ -309,7 +309,7 @@ class MpHtmlParser {
       }
       // 转换 rpx
       else if (value.includes('rpx'))
-        value = value.replace(/[0-9.\s]*rpx/g, $ => parseFloat($) * screenWidth / 750 + 'px');
+        value = value.replace(/[0-9.]+\s*rpx/g, $ => parseFloat($) * screenWidth / 750 + 'px');
       else if (key == 'white-space' && value.includes('pre'))
         this.pre = node.pre = true;
       style += `;${key}:${value}`;
@@ -400,8 +400,7 @@ class MpHtmlParser {
     // 自动压缩
     if (node.name == 'div' && !Object.keys(attrs).length) {
       var siblings = this.siblings();
-      if (!(node.children || []).length) siblings.pop();
-      else if (node.children.length == 1 && node.children[0].name == 'div')
+      if (node.children.length == 1 && node.children[0].name == 'div')
         siblings[siblings.length - 1] = node.children[0];
     }
   }

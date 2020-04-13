@@ -4,9 +4,11 @@
 .author {
   color: #888;
   font-size: 28rpx;
+  width: 140rpx;
+}
+.author, .name {
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 140rpx;
   white-space: nowrap;
 }
 .button {
@@ -32,6 +34,7 @@
 .name {
   font-size: 33rpx;
   line-height: 80rpx;
+  width: 320rpx;
 }
 .pause {
   width: 16.5rpx;
