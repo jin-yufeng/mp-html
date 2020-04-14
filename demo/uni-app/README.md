@@ -133,7 +133,7 @@ export default{
 | 头条小程序 | 不支持 lazy-load 属性<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法 |
 | H5 | 支持所有浏览器支持的标签<br>a 标签可以直接跳转到对应网页<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
 | App | a 标签链接若是文档将自动下载和打开<br>v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
-| NVUE | 支持所有浏览器支持的标签<br>不支持 gesture-zoom、lazy-load 属性<br>不支持 navigateTo、getVideoContext、preLoad 的 api<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
+| NVUE | 支持所有浏览器支持的标签<br>不支持 gesture-zoom、lazy-load 属性<br>不支持  getVideoContext 的 api<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
 
 关于 `a` 标签：  
 `H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  

@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/04/13
+  update：2020/04/14
 -->
 <template>
 	<view>
@@ -569,11 +569,20 @@
 				// #endif
 			},
 			navigateTo(obj) {
-				// #ifndef APP-PLUS-NVUE
 				if (!this.useAnchor)
 					return obj.fail && obj.fail({
 						errMsg: 'Anchor is disabled'
 					})
+				// #ifdef APP-PLUS-NVUE
+				if (!obj.id)
+					dom.scrollToElement(this.$refs.web);
+				else
+					this.$refs.web.evalJs('var pos=document.getElementById("' + obj.id +
+						'");if(pos)post({action:"linkpress",href:"#",offset:pos.offsetTop})');
+				return obj.success && obj.success({
+					errMsg: 'pageScrollTo:ok'
+				});
+				// #endif
 				// #ifdef H5
 				if (!obj.id) {
 					window.scrollTo(0, this.rtf.offsetTop);
@@ -613,7 +622,6 @@
 					// #endif
 				}
 				// #endif
-				// #endif
 			},
 			getVideoContext(id) {
 				// #ifndef APP-PLUS-NVUE
@@ -625,17 +633,20 @@
 			},
 			// 预加载
 			preLoad(html, num) {
-				// #ifndef APP-PLUS-NVUE
-				// #ifdef H5
+				// #ifdef H5 || APP-PLUS-NVUE
 				if (html.constructor == Array)
 					html = this._Dom2Str(html);
-				var contain = document.createElement('div');
-				contain.innerHTML = html;
-				var imgs = contain.querySelectorAll('img');
-				for (var i = imgs.length - 1; i >= num; i--)
-					imgs[i].removeAttribute('src');
+				var script = "var contain=document.createElement('div');contain.innerHTML='" + html.replace(/'/g, "\\'") +
+					"';for(var imgs=contain.querySelectorAll('img'),i=imgs.length-1;i>=" + num +
+					";i--)imgs[i].removeAttribute('src');";
 				// #endif
-				// #ifndef H5
+				// #ifdef APP-PLUS-NVUE
+				this.$refs.web.evalJs(script);
+				// #endif
+				// #ifdef H5
+				eval(script);
+				// #endif
+				// #ifndef H5 || APP-PLUS-NVUE
 				if (typeof html == 'string') {
 					var id = hash(html);
 					html = new Parser(html, this).parse();
@@ -654,7 +665,6 @@
 				if (!this.imgs) this.imgs = this._wait.splice(0, 15);
 				else if (this.imgs.length < 15)
 					this.imgs = this.imgs.concat(this._wait.splice(0, 15 - this.imgs.length));
-				// #endif
 				// #endif
 			},
 			// #ifdef APP-PLUS-NVUE

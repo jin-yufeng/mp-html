@@ -1,6 +1,6 @@
 <!--trees 递归子组件-->
 <block tt:for="{{nodes}}" tt:key="index" tt:for-item="n">
-  <rich-text tt:if="{{n.en||n.svg||n.err}}" class="_svg" nodes="{{[n]}}" />
+  <rich-text tt:if="{{n.svg||n.err}}" class="_svg" nodes="{{[n]}}" />
   <!--图片-->
   <image tt:elif="{{n.name=='img'}}" class="_img" style="{{n.attrs.style}}" src="{{n.attrs.src}}" lazy-load="{{lazyLoad}}" mode="{{n.mode||'widthFix'}}" data-attrs="{{n.attrs}}" data-i="{{index}}" data-auto="{{n.auto}}" data-source="img" bindtap="imgtap" bindload="loadImg" binderror="error" />
   <!--文本-->

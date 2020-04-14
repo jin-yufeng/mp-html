@@ -11,6 +11,7 @@ module.exports = {
 		"uni": "readonly",
 		"plus": "readonly",
 		"tt": "readonly",
+		"qq": "readonly",
 		"wx": "readonly",
 		"Component": "readonly",
 		"Page": "readonly",

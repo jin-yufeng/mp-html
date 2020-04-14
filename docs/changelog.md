@@ -1,5 +1,10 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.04.14 ####
+1. `A` 增加 `QQ` 小程序原生包 [详细](/instructions#插件包说明)  
+2. `U` 头条小程序包优化实体编码处理  
+3. `U` `uni-app` 包 `nvue` 端实现了 `navigateTo` 和 `preLoad` 的 `api`  
+
 #### 2020.04.13 ####
 1. `A` 增加头条小程序原生包 [详细](/instructions#插件包说明)  
 2. `U` 针对头条小程序事件无法传递函数的问题，提供一种新的接收方式（`global.Parser.onxxx`）[详细](/instructions#事件)  
@@ -18,8 +23,6 @@
    2. 功能限制  
       - 不支持懒加载  
         `nvue` 中的 `web-view` 必须指定高度，目前在加载完毕后将总高度设置成 `web-view` 的高度（使得使用时可以不用设置），若使用图片懒加载，总高度会动态变化，会导致一些不正确的情况  
-      - 不支持 `navigateTo`  
-        因为 `PostMessage` 是单向的，只能 `web-view` 向应用发送数据，因此不能主动向 `web-view` 要求跳转锚点（不过内部 `a` 标签点击还是可以跳转锚点的）
       - 不支持 `context`  
         通过 `PostMessage` 传送的数据会被 `json` 化，`context` 对象无法传送，因此不支持 `getVideoContext`，也无法在 `error` 事件中通过 `context` 重设源  
       - 其他  

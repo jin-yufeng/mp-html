@@ -3,42 +3,12 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/04/13
+  update：2020/04/14
 */
 var cfg = require('./config.js'),
   blankChar = cfg.blankChar,
   CssHandler = require('./CssHandler.js'),
-  screenWidth = tt.getSystemInfoSync().screenWidth,
-  entities = {
-    lt: '<',
-    gt: '>',
-    amp: '&',
-    quot: '"',
-    apos: "'",
-    nbsp: '\xA0',
-    ensp: '\u2002',
-    emsp: '\u2003',
-    ndash: '–',
-    mdash: '—',
-    middot: '·',
-    lsquo: '‘',
-    rsquo: '’',
-    ldquo: '“',
-    rdquo: '”',
-    bull: '•',
-    hellip: '…',
-    permil: '‰',
-    copy: '©',
-    reg: '®',
-    trade: '™',
-    times: '×',
-    divide: '÷',
-    cent: '￠',
-    pound: '£',
-    yen: '¥',
-    euro: '€',
-    sect: '§'
-  };
+  screenWidth = qq.getSystemInfoSync().screenWidth;
 try {
   var emoji = require('./emoji.js');
 } catch (e) {}
@@ -116,7 +86,21 @@ class MpHtmlParser {
         if (!isNaN(en)) text = text.substr(0, i) + String.fromCharCode(en) + text.substr(j + 1);
       } else {
         en = text.substring(i + 1, j);
-        if (entities[en]) text = text.substr(0, i) + entities[en] + text.substr(j + 1);
+        if (en == 'nbsp')
+          text = text.substr(0, i) + '\xA0' + text.substr(j + 1); // 解决 &nbsp; 失效
+        else if (en != 'lt' && en != 'gt' && en != 'amp' && en != 'ensp' && en != 'emsp' && en != 'quot' && en != 'apos') {
+          i && siblings.push({
+            type: 'text',
+            text: text.substr(0, i)
+          })
+          siblings.push({
+            type: 'text',
+            text: `&${en};`,
+            en: 1
+          })
+          text = text.substr(j + 1);
+          i = -1;
+        }
       }
     }
     text && siblings.push({
