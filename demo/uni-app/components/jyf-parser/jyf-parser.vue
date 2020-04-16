@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/04/14
+  update：2020/04/16
 -->
 <template>
 	<view>
@@ -19,7 +19,7 @@
 			<div :id="'rtf'+uid"></div>
 			<!--#endif-->
 			<!--#ifndef H5-->
-			<trees :nodes="nodes" :lazy-load="lazyLoad" :loadVideo="loadVideo" />
+			<trees :nodes="nodes" :lazy-load="lazyLoad" />
 			<image v-for="(item, index) in imgs" v-bind:key="index" :id="index" :src="item" hidden @load="_load" />
 			<!--#endif-->
 		</view>
@@ -54,9 +54,6 @@
 		name: 'parser',
 		data() {
 			return {
-				// #ifdef APP-PLUS
-				loadVideo: false,
-				// #endif
 				// #ifdef H5
 				uid: this._uid,
 				// #endif
@@ -98,9 +95,7 @@
 			// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
 			'gestureZoom': Boolean,
 			// #endif
-			// #ifdef MP-WEIXIN || MP-QQ || H5 || APP-PLUS
 			'lazyLoad': Boolean,
-			// #endif
 			'selectable': Boolean,
 			'tagStyle': Object,
 			'showWithAnimation': Boolean,
@@ -236,18 +231,17 @@
 								writer.onwriteend = () => {
 									this.nodes = [1];
 									this.src = '_doc/parser_tmp/' + fileName;
-									this.$nextTick(function() {
+									setTimeout(() => {
 										entry.remove();
-									})
+									}, 500);
 								}
 								html =
-									'<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1' +
+									'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1' +
 									(this.selectable ? '' : ',user-scalable=no') +
-									'"><script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></' +
-									'script><base href="' + this.domain + '">' + this._handleHtml(html) +
-									'<script>"use strict";function post(t){uni.postMessage({data:t})}' +
+									'"><base href="' + this.domain + '">' + this._handleHtml(html) +
+									'<script>"use strict";function post(n){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[n]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}' +
 									(this.showWithAnimation ? 'document.body.style.animation="show .5s",' : '') +
-									'document.addEventListener("UniAppJSBridgeReady",function(){post({action:"load",text:document.body.innerText});var t=document.getElementsByTagName("title");t.length&&post({action:"getTitle",title:t[0].innerText});for(var e,o=document.getElementsByTagName("img"),n=[],i=0,r=0;e=o[i];i++)e.onerror=function(){post({action:"error",source:"img",target:this})},e.hasAttribute("ignore")||"A"==e.parentElement.nodeName||(e.i=r++,n.push(e.src),e.onclick=function(){post({action:"preview",img:{i:this.i,src:this.src}})});post({action:"getImgList",imgList:n});for(var a,s=document.getElementsByTagName("a"),c=0;a=s[c];c++)a.onclick=function(){var t,e=this.getAttribute("href");if("#"==e[0]){var r=document.getElementById(e.substr(1));r&&(t=r.offsetTop)}return post({action:"linkpress",href:e,offset:t}),!1};;for(var u,m=document.getElementsByTagName("video"),d=0;u=m[d];d++)u.style.maxWidth="100%",u.onerror=function(){post({action:"error",source:"video",target:this})}' +
+									'document.addEventListener("DOMContentLoaded",function(){post({action:"load",text:document.body.innerText,height:document.body.scrollHeight});var t=document.getElementsByTagName("title");t.length&&post({action:"getTitle",title:t[0].innerText});for(var e,o=document.getElementsByTagName("img"),n=[],i=0,r=0;e=o[i];i++)e.onerror=function(){post({action:"error",source:"img",target:this})},e.hasAttribute("ignore")||"A"==e.parentElement.nodeName||(e.i=r++,n.push(e.src),e.onclick=function(){post({action:"preview",img:{i:this.i,src:this.src}})});post({action:"getImgList",imgList:n});for(var a,s=document.getElementsByTagName("a"),c=0;a=s[c];c++)a.onclick=function(){var t,e=this.getAttribute("href");if("#"==e[0]){var r=document.getElementById(e.substr(1));r&&(t=r.offsetTop)}return post({action:"linkpress",href:e,offset:t}),!1};;for(var u,m=document.getElementsByTagName("video"),d=0;u=m[d];d++)u.style.maxWidth="100%",u.onerror=function(){post({action:"error",source:"video",target:this})}' +
 									(this.autopause ? ',u.onplay=function(){for(var t,e=0;t=m[e];e++)t!=this&&t.pause()}' : '') +
 									';for(var g,l=document.getElementsByTagName("audio"),p=0;g=l[p];p++)g.onerror=function(){post({action:"error",source:"audio",target:this})};window.onload=function(){post({action:"ready",height:document.body.scrollHeight})}});</' +
 									'script>';
@@ -327,7 +321,10 @@
 					img.onerror = function() {
 						_ts.$emit('error', {
 							source: 'img',
-							target: this
+							target: this,
+							context: {
+								setSrc: src => this.src = src
+							}
 						});
 					}
 					if (_ts.lazyLoad && this._observer && img.src && img.i != 0) {
@@ -372,7 +369,8 @@
 					video.onerror = function() {
 						_ts.$emit('error', {
 							source: 'video',
-							target: this
+							target: this,
+							context: this
 						});
 					}
 					video.onplay = function() {
@@ -387,7 +385,8 @@
 					audio.onerror = function() {
 						_ts.$emit('error', {
 							source: 'audio',
-							target: this
+							target: this,
+							context: this
 						});
 					}
 				this.document = this.rtf;
@@ -395,7 +394,7 @@
 				this.$nextTick(() => {
 					this.nodes = [1];
 					this.$emit('load');
-				})
+				});
 				setTimeout(() => this.showAm = '', 500);
 				// #endif
 				// #ifndef H5 || APP-PLUS-NVUE
@@ -440,9 +439,6 @@
 					console.warn('错误的 html 类型：object 类型已废弃');
 				} else
 					return console.warn('错误的 html 类型：' + typeof html);
-				// #ifdef APP-PLUS
-				this.loadVideo = false;
-				// #endif
 				if (document) this.document = new document(this.nodes, 'nodes', this);
 				if (append) this.nodes = this.nodes.concat(nodes);
 				else this.nodes = nodes;
@@ -453,7 +449,7 @@
 				this.$nextTick(() => {
 					this.imgList.length = 0;
 					this.videoContexts = [];
-					// #ifdef MP-TOUTIAO
+					// #ifdef MP-TOUTIAO || MP-BAIDU || MP-ALIPAY
 					setTimeout(() => {
 						// #endif
 						var f = (cs) => {
@@ -461,24 +457,8 @@
 								if (c.$options.name == 'trees') {
 									for (var j = c.nodes.length, item; item = c.nodes[--j];) {
 										if (item.c) continue;
-										if (item.name == 'img') {
+										if (item.name == 'img')
 											this.imgList.setItem(item.attrs.i, item.attrs.src);
-											// #ifndef MP-ALIPAY
-											if (!c.observer && !c.imgLoad && item.attrs.i != '0') {
-												if (this.lazyLoad && uni.createIntersectionObserver) {
-													c.observer = uni.createIntersectionObserver(c);
-													c.observer.relativeToViewport({
-														top: 900,
-														bottom: 900
-													}).observe('._img', () => {
-														c.imgLoad = true;
-														c.observer.disconnect();
-													})
-												} else
-													c.imgLoad = true;
-											}
-											// #endif
-										}
 										// #ifndef MP-ALIPAY
 										else if (item.name == 'video') {
 											var ctx = uni.createVideoContext(item.attrs.id, c);
@@ -502,14 +482,9 @@
 							}
 						}
 						f(this.$children);
-						// #ifdef MP-TOUTIAO
-					}, 200)
-					this.$emit('load');
-					// #endif
-					// #ifdef APP-PLUS
-					setTimeout(() => {
-						this.loadVideo = true;
-					}, 3000);
+						this.$emit('load');
+						// #ifdef MP-TOUTIAO || MP-BAIDU || MP-ALIPAY
+					}, 500)
 					// #endif
 				})
 				// #endif
@@ -538,7 +513,7 @@
 							// #ifndef H5
 						});
 					// #endif
-				}, 350)
+				}, 350);
 				if (this.showWithAnimation && !append) this.showAm = 'animation:show .5s';
 				// #endif
 			},
@@ -673,6 +648,7 @@
 				var data = e.detail.data[0];
 				if (data.action == 'load') {
 					this.$emit('load');
+					this.height = data.height;
 					this._text = data.text;
 				} else if (data.action == 'getTitle') {
 					if (this.autosetTitle)

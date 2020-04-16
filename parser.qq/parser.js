@@ -18,9 +18,6 @@ function hash(str) {
   return val;
 }
 Component({
-  options: {
-    pureDataPattern: /^[acdgtux]|W/
-  },
   properties: {
     'html': {
       type: null,

@@ -7,7 +7,7 @@
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.0KB | 微信小程序插件包压缩版（功能相同） |
 | [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 43.7KB | QQ 小程序插件包 |
 | [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 43.0KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 63.9KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 61.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 1. 百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
@@ -22,13 +22,13 @@
 
 | 平台 | 差异 |
 |:---:|---|
-| 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签 |
-| 百度小程序 | 不支持 gesture-zoom、lazy-load 属性 |
-| 支付宝小程序 | 不支持 autopause、gesture-zoom、lazy-load 属性 |
-| 头条小程序 | 不支持 lazy-load 属性<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法 |
+| 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单<br>基础库 2.9.0 及以上支持 webp 图片 |
+| 百度小程序 | 不支持 gesture-zoom 属性 |
+| 支付宝小程序 | 不支持 autopause、gesture-zoom 属性 |
+| 头条小程序 | imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
 | H5 | 支持所有浏览器支持的标签<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
 | App | v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
-| NVUE | 支持所有浏览器支持的标签<br>不支持 gesture-zoom、lazy-load 属性<br>不支持 getVideoContext 的 api<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
+| NVUE | 支持所有浏览器支持的标签<br>不支持 gesture-zoom、lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
 
 关于 `a` 标签：  
 `H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  
@@ -273,38 +273,44 @@
 | bindimgtap | 图片被点击时触发 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在事件中调用将不进行预览；可用于阻挡 onShow 的调用 |
 | bindlinkpress | 在链接被点击时触发 | 返回一个 object，其中包含了被点击的 a 标签的所有属性，ignore 是一个函数，在事件中调用后将不自动跳转/复制；可在该事件中进行下载文档等进一步操作 |  
 
-说明：  
-- 关于 `ignore` 方法  
-  类似于 `a` 标签 `onclick` 事件返回 `false` 将不跳转一样，由于 `event` 无法获取返回值，故增加此函数，若在事件函数中执行，则不自动进行预览/跳转/复制链接操作，可执行自定义操作（这两个事件函数应尽量简短）  
+##### 关于 ignore 方法 #####  
+类似于 `a` 标签 `onclick` 事件返回 `false` 将不跳转一样，由于 `event` 无法获取返回值，故增加此函数，若在事件函数中执行，则不自动进行预览/跳转/复制链接操作，可执行自定义操作（这两个事件函数应尽量简短）  
 
-  ```javascript
-  linkpress(e) {
-   if(e.detail.href == "xxx")
-      e.detail.ignore(); // 此链接不进行自动跳转/复制
-    // 自定义操作
-  }
-  ```
+```javascript
+linkpress(e) {
+ if(e.detail.href == "xxx")
+    e.detail.ignore(); // 此链接不进行自动跳转/复制
+  // 自定义操作
+}
+```
 
-  针对头条小程序事件中无法传递函数的问题，可以用以下方式接收  
+针对头条小程序事件中无法传递函数的问题，可以用以下方式接收  
 
-  ```javascript
-  // 全局唯一的监听器
-  global.Parser.onImgtap = function(e) {
-    console.log(e);
-  }
-  global.Parser.onLinkpress = function(e) {
-    if(e.href == "xxx")
-      e.ignore();
-  }
-  // 用完需要设置为 null
-  ```
+```javascript
+// 全局唯一的监听器
+global.Parser.onImgtap = function(e) {
+  console.log(e);
+}
+global.Parser.onLinkpress = function(e) {
+  if(e.href == "xxx")
+    e.ignore();
+}
+// 用完需要设置为 null
+```
 
-- 关于 `error` 事件  
-  当图片出错时，也会返回 `context`，其中包含一个方法—— `setSrc`，输入值为 `string`，可以重设 `src`（如设置成出错时的占位图，必须在 `error` 事件处理函数中调用，否则无效）  
+##### 关于 error 事件 #####  
+当图片出错时，也会返回 `context`，其中包含一个方法—— `setSrc`，输入值为 `string`，可以重设 `src`（如设置成出错时的占位图，必须在 `error` 事件处理函数中调用，否则无效）  
 
-- 关于写法  
-  原生包事件以 `bind` 或 `catch` 开头，返回值从 `e.detail` 中获取  
-  `uni-app` 包的事件以 `@` 开头，返回值直接从 `e` 获取  
+```javascript
+error(e) {
+  if(e.detail.source=='img')
+    e.detail.context.setSrc('https://xxx.com/xxx.png')
+}
+```
+
+##### 关于写法 #####  
+原生包事件以 `bind` 或 `catch` 开头，返回值从 `e.detail` 中获取  
+`uni-app` 包的事件以 `@` 开头，返回值直接从 `e` 获取  
 
 ### 使用外部样式 ###
 如果需要使用一些固定的样式，可以通过 `wxss` / `css` 文件引入  
@@ -865,14 +871,15 @@ filter(node, cxt) {
    }
    ```
 4. 通过 `wxss` 设置  
-   将 `trees.wxss` 中的 `._img` 增加
+   将 `trees.wxss` 中的 `._img` 增加（将对所有 `parser` 标签生效）  
    ```css
    ._img {
      ...
-     font-size: 0;
      display: block;
    }
    ```  
+
+如果加了还不生效可能是优先级的问题，可以尝试再加一个 `!important`  
   
 *相关 issue：*[#25](https://github.com/jin-yufeng/Parser/issues/25)、[#65](https://github.com/jin-yufeng/Parser/issues/65)、[#74](https://github.com/jin-yufeng/Parser/issues/74)
 
@@ -947,8 +954,32 @@ filter(node) {
    }
    ```  
 3. 通过 [filter](#filter) 方法个别调整样式  
+
+针对表格宽度比较容易超出屏幕宽度的问题，如果希望表格单独滚动，可以采取以下方法：  
+```javascript
+// config.js
+filter(node, cxt) {
+  if (node.name == 'table') {
+    var table = Object.assign({}, node); // 拷贝一个 table 节点
+    node.name = 'div'; // 将原 table 改为一个滚动层
+    node.attrs = {
+      style: 'overflow: scroll'
+    }
+    node.children = [table];
+  }
+}
+```
   
 *相关 issue：*[#6](https://github.com/jin-yufeng/Parser/issues/6)、[#44](https://github.com/jin-yufeng/Parser/issues/44)、[#50](https://github.com/jin-yufeng/Parser/issues/50)、[#66](https://github.com/jin-yufeng/Parser/issues/66)
+
+#### 关于 iframe 视频 ####
+目前只有 `uni-app` 包编译到 `H5` 和 `App` 端时支持 `iframe` 标签，小程序端无法支持（只能用 `video`）  
+
+因为 `iframe` 视频的地址并不是真实的视频地址，其内容是 `js` 动态加载出来的，小程序上既无法操作 `dom` 也无法执行动态的 `js`（`eval`），因此无法实现  
+
+微信小程序中可以考虑使用 [腾讯视频插件](https://developers.weixin.qq.com/community/develop/doc/000ece3c044210190ef61a4a954c09?highLine=%25E8%2585%25BE%25E8%25AE%25AF%25E8%25A7%2586%25E9%25A2%2591) 代替（参考 [添加自定义标签](#添加一个自定义标签)、[#103](https://github.com/jin-yufeng/Parser/issues/103)）  
+
+*相关 issue：*[#96](https://github.com/jin-yufeng/Parser/issues/96)
 
 #### 禁用自动预览 / 跳转 ####
 默认情况下，图片受到点击时会自动禁用预览，链接受到点击时会自动进行跳转/复制链接，若需要禁用这些功能，可参考以下方法：  

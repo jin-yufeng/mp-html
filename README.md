@@ -67,7 +67,7 @@
 | parser.min | 30.0KB | 微信小程序插件包压缩版（功能相同） |
 | parser.qq | 43.7KB | QQ 小程序插件包 |
 | parser.tt | 43.0KB | 头条小程序插件包 |
-| parser.uni | 63.9KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.uni | 61.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -195,8 +195,15 @@
 
 
 ## 更新日志 ##
+- 2020.4.16  
+  1. `U` `uni-app` 包用通过 `image`（经过一些处理后）来显示图片（替代 `rich-text`），可以实现以下优化：
+     1. 百度、支付宝（1.9.0）、头条小程序支持 `lazy-load`，微信和 `App` 也采用 `image` 自带的 `lazy-load`，可能性能更好  
+     2. `img` 出错时也会触发 `error` 事件，且可以通过 `context` 重设 `src` [详细](https://jin-yufeng.github.io/Parser/#/instructions#关于-error-事件)  
+     3. 微信端还可以支持云文件 `ID`（2.3.0），长按弹出菜单（2.7.0），支持 `webp` 图片（2.9.0）  
+  2. `F` `uni-app` 包修复了 `NVUE` 中使用可能空白的问题  
+
 - 2020.4.14  
-  1. `A` 增加 `QQ` 小程序原生包 [详细](/instructions#插件包说明)  
+  1. `A` 增加 `QQ` 小程序原生包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#插件包说明)  
   2. `U` 头条小程序包优化实体编码处理  
   3. `U` `uni-app` 包 `nvue` 端实现了 `navigateTo` 和 `preLoad` 的 `api`  
 

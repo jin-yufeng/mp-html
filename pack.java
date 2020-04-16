@@ -54,7 +54,7 @@ class core {
 	final float wxMinSize = 30.0f;
 	final float qqSize = 43.7f;
 	final float ttSize = 43.0f;
-	final float uniAppSize = 63.9f;
+	final float uniAppSize = 61.6f;
 	final float emojiSize = 4.25f;
 	final float emojiMinSize = 3.16f;
 	final float domSize = 6.84f;

@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/04/13
+  update：2020/04/16
 */
 var cfg = require('./config.js'),
 	blankChar = cfg.blankChar,
@@ -66,25 +66,6 @@ class MpHtmlParser {
 			this.state(c);
 		if (this.state == this.Text) this.setText();
 		while (this.STACK.length) this.popNode(this.STACK.pop());
-		// #ifdef MP-BAIDU || MP-TOUTIAO
-		// 将顶层标签的一些样式提取出来给 rich-text
-		(function f(ns) {
-			for (var i = ns.length, n; n = ns[--i];) {
-				if (n.type == 'text') continue;
-				if (!n.c) {
-					var style = n.attrs.style;
-					if (style) {
-						var j, k, res;
-						if ((j = style.indexOf('display')) != -1)
-							res = style.substring(j, (k = style.indexOf(';', j)) == -1 ? style.length : k);
-						if ((j = style.indexOf('float')) != -1)
-							res += ';' + style.substring(j, (k = style.indexOf(';', j)) == -1 ? style.length : k);
-						n.attrs.contain = res;
-					}
-				} else f(n.children);
-			}
-		})(this.DOM);
-		// #endif
 		if (this.DOM.length) {
 			this.DOM[0].PoweredBy = 'Parser';
 			if (this.title) this.DOM[0].title = this.title;
@@ -245,9 +226,9 @@ class MpHtmlParser {
 					this.siblings().push({
 						name: 'img',
 						attrs: {
-							src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
-							ignore: 'T'
-						}
+							src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23')
+						},
+						svg: 1
 					})
 				}
 				return;
@@ -265,22 +246,12 @@ class MpHtmlParser {
 		}
 		if ((this.compress & 2) && attrs.class) attrs.class = void 0;
 		switch (node.name) {
-			case 'img':
-				if (attrs['data-src']) {
-					attrs.src = attrs.src || attrs['data-src'];
-					attrs['data-src'] = void 0;
-				}
-				if (attrs.src && !attrs.ignore) {
-					if (this.bubble()) attrs.i = (this.imgNum++).toString();
-					else attrs.ignore = 'T';
-				}
-				break;
 			case 'a':
 			case 'ad':
-			// #ifdef APP-PLUS
+				// #ifdef APP-PLUS
 			case 'iframe':
 			case 'embed':
-			// #endif
+				// #endif
 				this.bubble();
 				break;
 			case 'font':
@@ -305,17 +276,8 @@ class MpHtmlParser {
 			case 'audio':
 				if (!attrs.id) attrs.id = node.name + (++this[`${node.name}Num`]);
 				else this[`${node.name}Num`]++;
-				if (node.name == 'video') {
-					if (attrs.width) {
-						style = `width:${parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : 'px')};${style}`;
-						attrs.width = void 0;
-					}
-					if (attrs.height) {
-						style = `height:${parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : 'px')};${style}`;
-						attrs.height = void 0;
-					}
-					if (this.videoNum > 3) node.lazyLoad = true;
-				}
+				if (node.name == 'video' && this.videoNum > 3)
+					node.lazyLoad = true;
 				attrs.source = [];
 				if (attrs.src) attrs.source.push(attrs.src);
 				if (!attrs.controls && !attrs.autoplay)
@@ -335,6 +297,14 @@ class MpHtmlParser {
 			styleObj['text-align'] = attrs.align;
 			attrs.align = void 0;
 		}
+		if (attrs.width) {
+			styleObj.width = parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : 'px');
+			attrs.width = void 0;
+		}
+		if (attrs.height) {
+			styleObj.height = parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : 'px');
+			attrs.height = void 0;
+		}
 		// 压缩 style
 		var styles = style.replace(/&quot;/g, '"').replace(/&amp;/g, '&').split(';');
 		style = '';
@@ -350,8 +320,35 @@ class MpHtmlParser {
 			else if (!styleObj[key] || value.includes('import') || !styleObj[key].includes('import'))
 				styleObj[key] = value;
 		}
-		if (node.name == 'img' && parseInt(styleObj.width || attrs.width) > screenWidth)
-			styleObj.height = 'auto';
+		if (node.name == 'img' || node.name == 'picture') {
+			if (attrs['data-src']) {
+				attrs.src = attrs.src || attrs['data-src'];
+				attrs['data-src'] = void 0;
+			}
+			if ((attrs.src || node.name == 'picture') && !attrs.ignore) {
+				if (this.bubble()) {
+					// #ifdef MP-WEIXIN
+					if ((attrs.src || '').includes('.webp')) node.webp = 1;
+					// #endif
+					attrs.i = (this.imgNum++).toString();
+				} else attrs.ignore = 'T';
+			}
+			var check = item => styleObj[item] && !styleObj[item].includes('auto');
+			if (check('width')) {
+				var parent = this.STACK[this.STACK.length - 1];
+				if (styleObj.width.includes('%') && parent && (parent.attrs.style || '').includes('display:inline')) {
+					parent.attrs.style += ';max-width:100%'
+					node.auto = 1;
+				}
+				if (parseInt(styleObj.width) > screenWidth)
+					styleObj.height = 'auto';
+				if (check('height')) node.mode = 'scaleToFill';
+			}
+			// #ifdef MP-WEIXIN
+			else if (check('height')) node.mode = 'heightFix';
+			// #endif
+			else node.auto = 1;
+		}
 		for (var key in styleObj) {
 			var value = styleObj[key];
 			if (key.includes('flex') || key == 'order' || key == 'self-align') node.c = 1;
@@ -390,8 +387,6 @@ class MpHtmlParser {
 			node.name = 'img';
 			if (!attrs.src && (node.children[0] || '').name == 'img')
 				attrs.src = node.children[0].attrs.src;
-			if (attrs.src && !attrs.ignore)
-				attrs.i = (this.imgNum++).toString();
 			return node.children = void 0;
 		}
 		if (cfg.blockTags[node.name]) node.name = 'div';
