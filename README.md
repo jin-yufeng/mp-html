@@ -190,11 +190,17 @@
 ## 许可与支持 ##
 - 许可  
   您可以随意的使用和分享本插件 [MIT License](https://github.com/jin-yufeng/Parser/blob/master/LICENSE)  
+  不可用于任何违法用途  
+  在用于生产环境前务必经过充分测试，由插件 `bug` 带来的损失概不负责（可以自行修改源码）  
+
 - 支持  
   ![支持](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md6.png?sign=24395ad7572c19464db67d8997e3b2d2&t=1574502139)   
 
 
 ## 更新日志 ##
+- 2020.4.17  
+  1. `F` 修复了 `uni-app` 包 `NVUE` 端打包到安卓后可能白屏的问题（另外由于不再通过本地文件中转，显示速度应该更快）  
+
 - 2020.4.16  
   1. `U` `uni-app` 包用通过 `image`（经过一些处理后）来显示图片（替代 `rich-text`），可以实现以下优化：
      1. 百度、支付宝（1.9.0）、头条小程序支持 `lazy-load`，微信和 `App` 也采用 `image` 自带的 `lazy-load`，可能性能更好  
@@ -241,19 +247,5 @@
   3. `F` 修复了设置 `domain` 时背景图片的链接会被错误填充的问题  
   4. `F` `uni-app` 包修复了一个样式错误 [详细](https://github.com/jin-yufeng/Parser/issues/92)  
   5. `F` `uni-app` 包修复了 `video` 中使用 `source` 可能无法播放的问题 [详细](https://github.com/jin-yufeng/Parser/issues/93)  
-
-- 2020.3.17 beta
-  1. `U` 通过 `image`（经过一些处理后）来显示图片（替代 `rich-text`），可以实现以下优化（仅微信包）：  
-     1. `2.3.0` 起支持云文件 `ID`  
-     2. `2.7.0` 起支持长按弹出菜单（可以识别小程序码，同时去除了 `imglongtap` 事件）  
-     3. `2.9.0` 起支持 `webp` 图片  
-     4. 使用 `image` 原生的 `lazy-load`，可能具有更好的性能  
-     5. 加载错误时能够触发 `error` 事件，且可以重设 `src` [详细](https://jin-yufeng.github.io/Parser/#/instructions#事件)  
-  
-     可能存在的问题：  
-     若没有设置大小图片会在加载完成后突然从默认大小（300 × 50）变为原大小（图片较大，加载较慢时较明显），可以在 `trees.wxss` 的 `._img` 中调整默认大小  
-  2. `U` `a` 标签支持 `:visited` 效果（默认变为紫色，可在 `trees.wxss` 中调整）  
-  3. `F` 修复了 `a` 标签所在段落使用一些特殊实体编码时可能导致错误换行的问题 [详细](https://github.com/jin-yufeng/Parser/issues/87)  
-  4. `F` 修复了 `uni-app` 包 `H5` 端在创建时设置数据无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/89)  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

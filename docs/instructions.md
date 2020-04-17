@@ -27,7 +27,7 @@
 | 支付宝小程序 | 不支持 autopause、gesture-zoom 属性 |
 | 头条小程序 | imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
 | H5 | 支持所有浏览器支持的标签<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
-| App | v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
+| App | 在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
 | NVUE | 支持所有浏览器支持的标签<br>不支持 gesture-zoom、lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
 
 关于 `a` 标签：  
@@ -223,7 +223,7 @@
   
 ##### html #####
 - 推荐通过 [setContent](#setContent) 方法传入，可以提高性能  
-- 传入的格式为 `array` 时，不需要进行解析，理论上可以提高性能，但是解析时间一般很短（约 `10~20` ms），且通常数组的大小比字符串大（传输时间更长），部分在解析过程中进行的处理也无法生效，不一定有明显的优化  
+- 传入的格式为 `array` 时，不需要进行解析，理论上可以提高性能，但是解析时间一般很短，且通常数组的大小比字符串大（传输时间更长），部分在解析过程中进行的处理也无法生效，不一定有明显的优化  
 - 本插件在解析的过程中会进行一些转换和设置一些标识，使得能够正确的渲染和使用；若传入非本插件产生的数组（区分方式是查看 `html[0].PoweredBy` 是否等于 `Parser`），插件会自动进行设置，并同时处理 `tag-style`、`domain`、`use-anchor` 等一些属性的效果，但会产生额外的性能开销   
 
 ##### compress #####
@@ -260,7 +260,8 @@
 1. 标签名和属性名区分大小写（如 `style` 和 `Style` 是不同的属性）  
 2. 可以通过 `/` 结束任何标签（如 `<div />`，`html` 中非自闭合标签无法被这样关闭）  
 
-但存在未闭合的标签也不会报错（为保证容错性）
+但存在未闭合的标签也不会报错（为保证容错性）  
+如果使用了 `svg`，建议开启，因为 `svg` 标签是按照 `xml` 标准写的  
 
 ### 事件 ###
 
@@ -619,7 +620,7 @@ this.selectComponent("#preLoad").preLoad(html);
   默认配置中支持 `177` 个常用的 `emoji` 小表情  
   支持两种形式的 `emoji`，一是 `emoji` 字符（不同设备上显示的样子可能不同），或者是网络图片（将按照 `16px` × `16px` 的大小显示，且不可放大预览），默认配置中都是 `emoji` 字符，可使用以下 `api` 获取或修改：  
   ```javascript
-  const parserEmoji = require("path/Parser/emoji.js");
+  const parserEmoji = require("components/parser/libs/emoji.js");
   console.log(parserEmoji.getEmoji("笑脸")); //笑脸的emoji字符
   parserEmoji.removeEmoji("笑脸"); //移除笑脸emoji
   parserEmoji.setEmoji("哈哈","https://example.png"); //设置emoji，支持emoji字符或网络图片
@@ -633,7 +634,7 @@ this.selectComponent("#preLoad").preLoad(html);
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
-  !> 在 `uni-app` 中使用时需要将 `jyf-parser.vue` 中的 40 行修改为 `const document = require('./libs/document.js');`  
+  !> 在 `uni-app` 中使用时需要将 `jyf-parser.vue` 中的 38 行修改为 `const document = require('./libs/document.js');`  
   
 - `document` 类：  
   获取方式：可通过 `this.selectComponent("#id").document` 获取  
@@ -645,7 +646,7 @@ this.selectComponent("#preLoad").preLoad(html);
   | getElementsByClassName | className | element [] | 按照 class 查找 element |
   | getElementsByTagName | name | element [] | 按照 标签名 查找 element |
   | createElement | name | element | 创建标签名为 name 的标签 |
-  | write | html（String / Array） |  | 写入 html 内容 |
+  | write | html（String / Array） |  | 写入 html 内容，将覆盖原内容 |
    
 - `element` 类：  
   属性名：
@@ -700,7 +701,7 @@ error(e){
 - 功能  
   支持更多的 `css` 选择器  
   
-使用本补丁包后**增加**支持的选择器（原包支持的选择器可见 [链接](#匹配style标签)）：
+使用本补丁包后 **增加** 支持的选择器（原包支持的选择器可见 [链接](/features#匹配-style-标签)）：
 
 | 名称 | 示例 |
 |:---:|:---:|
@@ -830,241 +831,12 @@ filter(node, cxt) {
 ## 许可与支持 ##
 - 许可  
   您可以随意的使用和分享本插件 [MIT License](https://github.com/jin-yufeng/Parser/blob/master/LICENSE)  
+
+  !> 不可用于任何违法用途  
+在用于生产环境前务必经过充分测试，由插件 `bug` 带来的损失概不负责（可以自行修改源码）  
+
 - 支持  
   ![支持](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md6.png?sign=24395ad7572c19464db67d8997e3b2d2&t=1574502139)  
 
-## 问题反馈 ##
-### 问卷调查 ###
+## 使用调查 ##
 <iframe src='https://www.wjx.cn/jq/67585702,i,t.aspx?width=760&source=iframe' width='799' height='800' frameborder='0' style='overflow:auto'></iframe>
-
-### 常见问题 ###
-
-#### 图片间隙问题 ####
-多张图片连续排列时，由于 `img` 的默认 `display` 是 `inline-block`，每张图片的底部会有空隙，如果不需要，可以对该 `img` 设置 `display:block`  
-  
-*解决方案：*  
-1. 直接设置行内样式  
-   在需要的 `img` 的 `style` 属性中添加  
-2. 通过 `style` 标签添加
-   ```html
-   <style>
-   /* 对所有图片生效 */
-   img {
-     display:block;
-   }
-   /* 对特定 class 的图片生效 */
-   .xximg {
-     display:block;
-   }
-   </style>
-   <img class="xximg" src="xxxx" />
-   ```
-3. 通过 `tag-style` 属性添加（将对所有图片生效）  
-   ```wxml
-   <parser html="{{html}}" tag-style="{{tagStyle}}"></parser>
-   ```
-   ```javascript
-   data: {
-     tagStyle: {
-       img: "display:block"
-     }
-   }
-   ```
-4. 通过 `wxss` 设置  
-   将 `trees.wxss` 中的 `._img` 增加（将对所有 `parser` 标签生效）  
-   ```css
-   ._img {
-     ...
-     display: block;
-   }
-   ```  
-
-如果加了还不生效可能是优先级的问题，可以尝试再加一个 `!important`  
-  
-*相关 issue：*[#25](https://github.com/jin-yufeng/Parser/issues/25)、[#65](https://github.com/jin-yufeng/Parser/issues/65)、[#74](https://github.com/jin-yufeng/Parser/issues/74)
-
-#### 显示公众号网页 ####  
-如需显示公众号的文章，可参考以下步骤（*仅供交流学习，请勿显示侵权内容* ）  
-1. 使用 [CssHandler](#CssHandler) 补丁包（网页中有后代选择器等复杂的选择器）  
-2. 获取网页的源代码（以 `node.js` 为例）  
-   ```javascript
-   const https = require("https");
-   function getContent(url){
-     return new Promise(function(reslove,reject) {
-       var html = "";
-       https.get(url, (res) => {
-         if(res.statusCode != 200)
-           reject("请求失败，状态码：" + res.statusCode);
-         res.on('data', (d) => {
-           html += d.toString();
-         });
-         res.on('end', () => {
-           html = "<style>#js_content{visibility:visible !important}</style>" + html; // 原网页的内容是隐藏的，设置显示
-           html = html.replace(/<script[\s\S]+?<\/script>/g, ""); // 移除 script 标签，减小大小
-           reslove(html);
-         })
-       }).on('error', (e) => {
-         reject("请求失败，" + e.message);
-       })
-     })
-   }
-   // 云函数
-   exports.main = async(event, context) => {
-     // 将这个结果送给 parser 组件的 html 属性即可
-     return await getContent(event.url);
-   }
-   ```
-3. 如遇样式异常可进行微调  
-
-#### 显示 editor 编辑的内容 ####
-通过 `editor` 组件编辑的 `html`，要正确显示，理论上需要维护 `<ql-container><ql-editor></ql-editor></ql-container>` 的结构，并引入对应的 `css`，另外，由于组件中仅支持 `class` 选择器，还需要将标签名选择器等转为 `class` 选择器，详见 [官网说明](https://developers.weixin.qq.com/miniprogram/dev/component/editor.html)  
-不过大部分情况下，只需要在 `config.js` 的 `filter` 函数中添加以下内容即可（个别情况自行调整）：
-```javascript
-filter(node) {
-  if ((node.attrs.class || '').includes('ql')) {
-    node.attrs.class = node.attrs.class.replace(/ql-align-(\S+)/, ($, $1) => {
-      node.attrs.style += ';text-align:' + $1;
-    }).replace(/ql-indent-([1-9])/, ($, $1) => {
-      node.attrs.style += ';padding-left:' + (parseInt($1) * 2) + 'em';
-    })
-  }
-}
-```
-
-#### 横向滚动的问题 ####  
-从其他网站或编辑器中移植富文本时可能因为手机屏幕宽度小而导致内容超出宽度出现滚动条  
-  
-*解决方案：*  
-1. 禁用滚动  
-   在 `parser` 标签的 `style` 属性中加上 `overflow: hidden`（如果通过 `class` 设置还要加上 `!important`）即可禁用横向滚动  
-   ```wxml
-   <parser style="overflow:hidden" html="{{html}}"></parser>
-   ```  
-2. 通过 `tag-style` 设置 `max-width:100%`  
-   ```wxml
-   <parser html="{{html}}" tag-style="{{tagStyle}}"></parser>
-   ```
-   ```javascript
-   data: {
-     tagStyle: {
-       p: "max-width:100%",
-       div: "max-width:100%",
-       section: "max-width:100%"
-     }
-   }
-   ```  
-3. 通过 [filter](#filter) 方法个别调整样式  
-
-针对表格宽度比较容易超出屏幕宽度的问题，如果希望表格单独滚动，可以采取以下方法：  
-```javascript
-// config.js
-filter(node, cxt) {
-  if (node.name == 'table') {
-    var table = Object.assign({}, node); // 拷贝一个 table 节点
-    node.name = 'div'; // 将原 table 改为一个滚动层
-    node.attrs = {
-      style: 'overflow: scroll'
-    }
-    node.children = [table];
-  }
-}
-```
-  
-*相关 issue：*[#6](https://github.com/jin-yufeng/Parser/issues/6)、[#44](https://github.com/jin-yufeng/Parser/issues/44)、[#50](https://github.com/jin-yufeng/Parser/issues/50)、[#66](https://github.com/jin-yufeng/Parser/issues/66)
-
-#### 关于 iframe 视频 ####
-目前只有 `uni-app` 包编译到 `H5` 和 `App` 端时支持 `iframe` 标签，小程序端无法支持（只能用 `video`）  
-
-因为 `iframe` 视频的地址并不是真实的视频地址，其内容是 `js` 动态加载出来的，小程序上既无法操作 `dom` 也无法执行动态的 `js`（`eval`），因此无法实现  
-
-微信小程序中可以考虑使用 [腾讯视频插件](https://developers.weixin.qq.com/community/develop/doc/000ece3c044210190ef61a4a954c09?highLine=%25E8%2585%25BE%25E8%25AE%25AF%25E8%25A7%2586%25E9%25A2%2591) 代替（参考 [添加自定义标签](#添加一个自定义标签)、[#103](https://github.com/jin-yufeng/Parser/issues/103)）  
-
-*相关 issue：*[#96](https://github.com/jin-yufeng/Parser/issues/96)
-
-#### 禁用自动预览 / 跳转 ####
-默认情况下，图片受到点击时会自动禁用预览，链接受到点击时会自动进行跳转/复制链接，若需要禁用这些功能，可参考以下方法：  
-禁用自动预览：  
-1. 给 `img` 标签增加 `ignore` 属性（如 `<img src="xxx" ignore>`），通过这种方法，点击无法预览，且其他图片预览时 **无法通过左右滑动** 看到这张图片（也无法从 [imgList](#imgList) 中获取）  
-2. 在 `imgtap` 事件中调用 `ignore` 函数，通过这种方法将不会自动预览，但其他图片预览时 **仍可以** 通过左右滑动看到这张图片  
-
-禁用自动跳转/复制链接：  
-在 `linkpress` 事件中调用 `ignore` 函数，即可禁用自动跳转  
-
-关于事件返回值中的 `ignore` 函数的更多信息可见 [事件](#事件) 中的相关说明；目前已知的问题是 `uni-app` 包编译到头条小程序时事件的返回值中没有这个 `ignore` 函数，需要另行处理  
-
-#### 长内容处理 ####
-有些时候富文本内容特别长，会导致节点数过多渲染缓慢甚至卡死，可考虑以下方案：
-1. 分页处理  
-   自行进行分页，每页显示适当长度的内容  
-2. 通过 [recycle-view](https://developers.weixin.qq.com/miniprogram/dev/extended/component-plus/recycle-view.html)  
-   将内容拆分成多个章节（需要提供每个章节的高度），每个章节用一个 `parser` 标签显示，还可以通过 [parser-group](#parser-group) 将所有章节的 `parser` 组合在一起  
-   ```wxml
-   <parser-group>
-     <recycle-view batch="{{batchSetRecycleData}}" id="recycleId">
-       <recycle-item wx:for="{{recycleList}}" wx:key="id">
-         <parser html="{{item.content}}" />
-       </recycle-item>
-     </recycle-view>
-   </parser-group>
-   ```
-
-为什么没有采用异步渲染：  
-如果只是在初始时分批次 `setData` 设置数据（不加延时）：
-1. 可能导致短时间内发起过多的 `setData`  
-2. 这样虽然可以先显示一部分出来，但此时由于仍在进行 `setData`，可能导致卡顿，影响体验  
-
-如果先显示一部分，剩余的延迟渲染（如根据滑动位置）：
-1. 难以确定初次渲染的范围（未渲染前无法知晓元素的高度，若渲染过多则没有意义，若渲染过少则可能影响体验）  
-2. 滑动的时候难以直观看到整体高度（因为只渲染了一部分，也无法知晓总高度）  
-
-另外，异步渲染还存在增加处理难度、无法解决过长内容节点数过多等问题  
-
-#### 关于换行符 ####  
-`html` 中换行只能使用 `br` 标签，其他的包括 `↵`, `\n` 等都是无效的，只会原样显示  
-*解决方案：*
-1. 通过正则替换（传入前）  
-   ```javascript
-   // 以 ↵ 为例
-   html = html.replace(/↵/g,''); // 移除所有 ↵
-   html = html.replace(/↵/g,'<br>'); // 全部替换为 br 标签
-   ```
-2. 通过 [onText](#onText) 方法处理  
-   ```javascript
-   onText(text) {
-     if(text.includes('↵'))
-       return text.replace(/↵/g,''); // 移除所有 ↵
-   }
-   ```
-
-#### 其他问题 ####
-
-##### 关于 markdown #####  
-插件默认不支持 `markdown`（因为 `markdown` 库较大，且用到的人不多），如果需要可先自行通过 `markdown` 库转为 `html` 后再进行解析和显示，其中一些标签的默认样式可以放在 `tag-style` 属性中  
-可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)
-
-##### 关于编辑器 #####    
-本插件没有专门配套的富文本编辑器，一般来说，能够导出 `html` 的富文本编辑器都是支持的；另外本插件仅支持显示富文本，没有编辑功能  
-*相关 issue：*[#10](https://github.com/jin-yufeng/Parser/issues/10)
-  
-##### 部分 style 标签中的样式无法被匹配 #####  
-本插件并不是支持所有的选择器，请留意支持的选择器类型，如果用了不支持的选择器，该样式将被忽略  
-  
-##### 不能正确显示一些网站的问题 #####  
-很多网站的内容是在 `js` 脚本中动态加载的，这些内容在本插件解析中将被直接忽略（包括 `iframe` 视频）；本插件并不能替代 `web-view` 的功能，仅建议用于富文本编辑器编辑的富文本或简单的静态网页  
-
-### 反馈问题 ###
-在反馈问题前，请先通过以下方式尝试解决：  
-1. 检查是否使用的是最新版的插件包  
-2. 在 [常见问题](#常见问题) 中查找是否有此问题  
-3. 在 [issues](https://github.com/jin-yufeng/Parser/issues) 中查找是否有相同问题  
-4. 使用 [示例项目](https://github.com/jin-yufeng/Parser/tree/master/demo) 或微信小程序 [富文本插件](/features#案例体验) 中的自定义测试尝试是否也会出现相同的问题  
-5. 在下框中输入 `html` 字符串进行测试（即直接用浏览器进行渲染，若也存在问题，请检查样式） 
- 
-  <textarea id="input" style="font-family:Consolas;height:200px;margin-bottom:.8em;padding:5px;width:100%" placeholder="请输入字符串"></textarea>
-  <button onclick="parse()">解析</button>
-  <button onclick="reset()" style="margin-left:10px">清空</button>
-  <iframe id="frame" style="height:200px;margin-top:0"></iframe>  
-
-如果以上方式无法解决问题，可通过以下方式反馈  
-1. 在 `Github` 上 [提出 issue](https://github.com/jin-yufeng/Parser/issues/new/choose)，请注意按照模板要求详细描述问题  
-2. 在微信小程序 [富文本插件](#立即体验) 中的疑问解答 - 联系客服中联系我，请 **直接发送相关问题**，发送无意义内容将不会回复  

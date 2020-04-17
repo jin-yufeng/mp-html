@@ -1,5 +1,8 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.04.17 ####
+1. `F` 修复了 `uni-app` 包 `NVUE` 端打包到安卓后可能白屏的问题（另外由于不再通过本地文件中转，显示速度应该更快）  
+
 #### 2020.04.16 ####
 1. `U` `uni-app` 包用通过 `image`（经过一些处理后）来显示图片（替代 `rich-text`），可以实现以下优化：
    1. 百度、支付宝（1.9.0）、头条小程序支持 `lazy-load`，微信和 `App` 也采用 `image` 自带的 `lazy-load`，可能性能更好  
@@ -29,7 +32,7 @@
 
    2. 功能限制  
       - 不支持懒加载  
-        `nvue` 中的 `web-view` 必须指定高度，目前在加载完毕后将总高度设置成 `web-view` 的高度（使得使用时可以不用设置），若使用图片懒加载，总高度会动态变化，会导致一些不正确的情况  
+        `nvue` 中的 `web-view` 必须指定高度，目前在加载完毕后将总高度设置成 `web-view` 的高度（使得使用时可以不用设置），若使用图片懒加载，总高度会动态变化，会导致一些不正确的情况（另外，`nvue` 上使用的富文本应该比较短小，如果很长可能性能与 `vue` 接近，原因见上，因此懒加载必要性也不大）  
       - 不支持 `context`  
         通过 `PostMessage` 传送的数据会被 `json` 化，`context` 对象无法传送，因此不支持 `getVideoContext`，也无法在 `error` 事件中通过 `context` 重设源  
       - 其他  
@@ -37,9 +40,10 @@
 
    3. 注意事项  
       如果要限制富文本的高度，需要在 `parser` 标签外加一个 `scroller`，并限定 `scroller` 的高度，直接限定 `parser` 标签的高度会导致无法滚动  
+      **必须** 在页面 `onReady` 周期中或之后设置 `html` 数据，否则可能无法显示  
       若开启 `fast` 启动模式，首页上可能无法显示  
    
-   ps：如果要用 `rich-text`，因为 `nvue` 中仅支持 `Array`，可以通过本组件的解析脚本解析：  
+   ps：如果要用 `rich-text`（若 `rich-text` 就可以实现的效果应直接使用 `rich-text`），因为 `nvue` 中仅支持 `Array`，可以通过本组件的解析脚本解析：  
    ```javascript
    var parser = require('@components/jyf-parser/libs/MpHtmlParser.js');
    new parser(html, options).parse(); // 同步方法即可获得结果

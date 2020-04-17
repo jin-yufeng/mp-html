@@ -17,22 +17,22 @@
 			this.$refs.article.setContent(testHtml);
 		},
 		methods: {
-			parse(res) {
-				console.log('parse finish', res);
+			parse(e) {
+				console.log('parse finish', e);
 			},
-			ready(res) {
-				console.log('ready', res);
+			ready(e) {
+				console.log('ready', e);
 				// console.log('api: getText', this.$refs.article.getText());
 				console.log('imgList', this.$refs.article.imgList);
 			},
-			imgtap(res) {
-				console.log('imgtap', res);
+			imgtap(e) {
+				console.log('imgtap', e);
 			},
-			linkpress(res) {
-				console.log('linkpress', res);
+			linkpress(e) {
+				console.log('linkpress', e);
 			},
-			error(res) {
-				console.error(res);
+			error(e) {
+				console.error(e);
 			}
 		}
 	}

@@ -4,13 +4,13 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/04/16
+  update：2020/04/17
 -->
 <template>
 	<view>
 		<slot v-if="!nodes.length" />
 		<!--#ifdef APP-PLUS-NVUE-->
-		<web-view id="top" ref="web" :src="src" :style="'margin-top:-2px;height:'+height+'px'" @onPostMessage="_message" />
+		<web-view id="top" ref="web" :style="'margin-top:-2px;height:'+height+'px'" @onPostMessage="_message" />
 		<!--#endif-->
 		<!--#ifndef APP-PLUS-NVUE-->
 		<view id="top" :style="showAm+(selectable?';user-select:text;-webkit-user-select:text':'')" :animation="scaleAm" @tap="_tap"
@@ -58,7 +58,6 @@
 				uid: this._uid,
 				// #endif
 				// #ifdef APP-PLUS-NVUE
-				src: '',
 				height: 1,
 				// #endif
 				// #ifndef APP-PLUS-NVUE
@@ -213,43 +212,26 @@
 			// #endif
 			setContent(html, append) {
 				// #ifdef APP-PLUS-NVUE
-				if (!html) {
-					this.src = '';
-					this.height = 1;
-					return;
+				if (!html)
+					return this.height = 1;
+				if (append)
+					this.$refs.web.evalJs("var d=document.createElement('div');d.innerHTML='" + html.replace(/'/g, "\\'") +
+						"';document.getElementById('parser').appendChild(d)");
+				else {
+					html =
+						'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1' +
+						(this.selectable ? '' : ',user-scalable=no') + '"><base href="' + this.domain + '"><div id="parser">' + this._handleHtml(html) +
+						'</div><script>"use strict";function post(n){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[n]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}function waitReady(){return new Promise(function(e){var t=document.getElementById("parser"),r=t.scrollHeight,n=setInterval(function(){r==t.scrollHeight?(clearInterval(n),e(r)):r=t.scrollHeight},350)})}' +
+						(this.showWithAnimation ? 'document.body.style.animation="show .5s",' : '') +
+						'setTimeout(function(){post({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight+16})},50);</' + 'script>';
+					this.$refs.web.evalJs("document.write('" + html.replace(/'/g, "\\'") + "');document.close()");
 				}
-				if (append) return;
-				plus.io.resolveLocalFileSystemURL('_doc', entry => {
-					entry.getDirectory('parser_tmp', {
-						create: true
-					}, entry => {
-						var fileName = Date.now() + '.html';
-						entry.getFile(fileName, {
-							create: true
-						}, entry => {
-							entry.createWriter(writer => {
-								writer.onwriteend = () => {
-									this.nodes = [1];
-									this.src = '_doc/parser_tmp/' + fileName;
-									setTimeout(() => {
-										entry.remove();
-									}, 500);
-								}
-								html =
-									'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1' +
-									(this.selectable ? '' : ',user-scalable=no') +
-									'"><base href="' + this.domain + '">' + this._handleHtml(html) +
-									'<script>"use strict";function post(n){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[n]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}' +
-									(this.showWithAnimation ? 'document.body.style.animation="show .5s",' : '') +
-									'document.addEventListener("DOMContentLoaded",function(){post({action:"load",text:document.body.innerText,height:document.body.scrollHeight});var t=document.getElementsByTagName("title");t.length&&post({action:"getTitle",title:t[0].innerText});for(var e,o=document.getElementsByTagName("img"),n=[],i=0,r=0;e=o[i];i++)e.onerror=function(){post({action:"error",source:"img",target:this})},e.hasAttribute("ignore")||"A"==e.parentElement.nodeName||(e.i=r++,n.push(e.src),e.onclick=function(){post({action:"preview",img:{i:this.i,src:this.src}})});post({action:"getImgList",imgList:n});for(var a,s=document.getElementsByTagName("a"),c=0;a=s[c];c++)a.onclick=function(){var t,e=this.getAttribute("href");if("#"==e[0]){var r=document.getElementById(e.substr(1));r&&(t=r.offsetTop)}return post({action:"linkpress",href:e,offset:t}),!1};;for(var u,m=document.getElementsByTagName("video"),d=0;u=m[d];d++)u.style.maxWidth="100%",u.onerror=function(){post({action:"error",source:"video",target:this})}' +
-									(this.autopause ? ',u.onplay=function(){for(var t,e=0;t=m[e];e++)t!=this&&t.pause()}' : '') +
-									';for(var g,l=document.getElementsByTagName("audio"),p=0;g=l[p];p++)g.onerror=function(){post({action:"error",source:"audio",target:this})};window.onload=function(){post({action:"ready",height:document.body.scrollHeight})}});</' +
-									'script>';
-								writer.write(html);
-							});
-						})
-					})
-				})
+				this.$refs.web.evalJs(
+					'var t=document.getElementsByTagName("title");t.length&&post({action:"getTitle",title:t[0].innerText});for(var a=document.getElementsByTagName("style"),i=0,b;b=a[i++];)b.innerHTML=b.innerHTML.replace(/body/g,"#parser");for(var e,o=document.getElementsByTagName("img"),n=[],i=0,r=0;e=o[i];i++)e.onerror=function(){post({action:"error",source:"img",target:this})},e.hasAttribute("ignore")||"A"==e.parentElement.nodeName||(e.i=r++,n.push(e.src),e.onclick=function(){post({action:"preview",img:{i:this.i,src:this.src}})});post({action:"getImgList",imgList:n});for(var a,s=document.getElementsByTagName("a"),c=0;a=s[c];c++)a.onclick=function(){var t,e=this.getAttribute("href");if("#"==e[0]){var r=document.getElementById(e.substr(1));r&&(t=r.offsetTop)}return post({action:"linkpress",href:e,offset:t}),!1};;for(var u,m=document.getElementsByTagName("video"),d=0;u=m[d];d++)u.style.maxWidth="100%",u.onerror=function(){post({action:"error",source:"video",target:this})}' +
+					(this.autopause ? ',u.onplay=function(){for(var t,e=0;t=m[e];e++)t!=this&&t.pause()}' : '') +
+					';for(var g,l=document.getElementsByTagName("audio"),p=0;g=l[p];p++)g.onerror=function(){post({action:"error",source:"audio",target:this})};waitReady().then(function(e){post({action:"ready",height:e+16})})'
+				)
+				this.nodes = [1];
 				// #endif
 				// #ifdef H5
 				if (!html) {
@@ -280,7 +262,7 @@
 							}
 						}
 					}, {
-						rootMargin: '900px 0px 900px 0px'
+						rootMargin: '500px 0px 500px 0px'
 					})
 				}
 				var _ts = this;

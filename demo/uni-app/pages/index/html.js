@@ -1,10 +1,7 @@
 module.exports = `<head>
 	<style>
 		body {
-			margin-left:3%;
-			margin-right:3%;
-			margin-top:30rpx;
-			margin-bottom:30rpx;
+			padding: 30rpx 3%;
 		}
 	</style>
 	<title>功能示例</title>
