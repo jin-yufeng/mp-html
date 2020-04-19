@@ -54,11 +54,12 @@ class core {
 	final float wxMinSize = 30.0f;
 	final float qqSize = 43.7f;
 	final float ttSize = 43.0f;
-	final float uniAppSize = 61.6f;
+	final float uniAppSize = 61.7f;
 	final float emojiSize = 4.25f;
 	final float emojiMinSize = 3.16f;
-	final float domSize = 6.84f;
-	final float domMinSize = 5.20f;
+	final float domSize = 7.17f;
+	final float domUniSize = 6.21f;
+	final float domMinSize = 5.45f;
 	final float cssSize = 4.80f;
 	final float cssMinSize = 1.50f;
 	final float audioSize = 3.95f;
@@ -190,11 +191,13 @@ class core {
 
 			@Override
 			public void itemStateChanged(ItemEvent item) {
-				if (item.getStateChange() != ItemEvent.SELECTED)
+				if (item.getStateChange() != ItemEvent.SELECTED) {
 					audio.setEnabled(true);
-				else {
+					document.setText("document（动态操作 dom，" + (isMin ? domMinSize : domSize) + "KB）");
+				} else {
 					audio.setSelected(false);
 					audio.setEnabled(false);
+					document.setText("document（动态操作 dom，" + domUniSize + "KB）");
 					size.setText(calcSize()); // 重新计算大小
 				}
 				String[] path = dir.getText().split(Matcher.quoteReplacement(File.separator));
@@ -234,13 +237,15 @@ class core {
 					isMin = true;
 					typeWx.setText("微信（" + wxMinSize + "KB）");
 					emoji.setText("emoji（解析 emoji 小表情，" + emojiMinSize + "KB）");
-					document.setText("document（动态操作 dom，" + domMinSize + "KB）");
+					if (!typeUniApp.isSelected())
+						document.setText("document（动态操作 dom，" + domMinSize + "KB）");
 					CssHandler.setText("CssHandler（支持更多 css 选择器，" + cssMinSize + "KB）");
 				} else {
 					isMin = false;
 					typeWx.setText("微信（" + wxSize + "KB）");
 					emoji.setText("emoji（解析 emoji 小表情，" + emojiSize + "KB）");
-					document.setText("document（动态操作 dom，" + domSize + "KB）");
+					if (!typeUniApp.isSelected())
+						document.setText("document（动态操作 dom，" + domSize + "KB）");
 					CssHandler.setText("CssHandler（支持更多 css 选择器，" + cssSize + "KB）");
 				}
 				size.setText(calcSize());
@@ -257,38 +262,54 @@ class core {
 					File file = new File(newPath);
 					if (!file.exists())
 						file.mkdir(); // 创建目标目录
-					// 拷贝主包
+					// 生成微信包
 					if (typeWx.isSelected()) {
-						if (min.isSelected())
+						if (isMin)
 							copyDir("./parser.min", newPath);
 						else
 							copyDir("./parser", newPath);
 						if (audio.isSelected())
 							modifyFile(newPath + "/trees/trees.wxml", "<audio", "<myAudio");
-					} else if (typeQq.isSelected()) {
+						if (document.isSelected())
+							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
+									new FileOutputStream(newPath + "/libs/document.js"));
+					}
+					// 生成 QQ 包
+					else if (typeQq.isSelected()) {
 						copyDir("./parser.qq", newPath);
 						if (audio.isSelected())
 							modifyFile(newPath + "/trees/trees.qml", "<audio", "<myAudio");
-					} else if (typeTt.isSelected()) {
+						if (document.isSelected())
+							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
+									new FileOutputStream(newPath + "/libs/document.js"));
+					}
+					// 生成头条包
+					else if (typeTt.isSelected()) {
 						copyDir("./parser.tt", newPath);
 						if (audio.isSelected())
 							modifyFile(newPath + "/trees/trees.ttml", "<!--音频-->",
 									"<myAudio wx:elif=\"{{n.name=='audio'}}\" id=\"{{n.attrs.id}}\" class=\"{{n.attrs.class}}\" style=\"{{n.attrs.style}}\" author=\"{{n.attrs.author}}\" autoplay=\"{{n.attrs.autoplay}}\" controls=\"{{n.attrs.controls}}\" loop=\"{{n.attrs.loop}}\" name=\"{{n.attrs.name}}\" poster=\"{{n.attrs.poster}}\" src=\"{{n.attrs.source[n.i||0]}}\" data-i=\"{{index}}\" data-source=\"audio\" binderror=\"error\" bindplay=\"play\" />");
-					} else {
+						if (document.isSelected())
+							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
+									new FileOutputStream(newPath + "/libs/document.js"));
+					}
+					// 生成 uni-app 包
+					else {
 						copyDir("./parser.uni", newPath);
 						if (emoji.isSelected())
 							modifyFile(newPath + "/libs/MpHtmlParser.js", "var emoji",
 									"const emoji = require(\"./emoji.js\")");
-						if (document.isSelected())
+						if (document.isSelected()) {
+							Files.copy(Paths.get("./patches/document/document.uni.js"),
+									new FileOutputStream(newPath + "/libs/document.js"));
 							modifyFile(newPath + "/jyf-parser.vue", "var document",
 									"const document = require(\"./libs/document.js\")");
+						}
 					}
+					// 处理公共补丁包
 					if (emoji.isSelected())
 						Files.copy(Paths.get("./patches/emoji/emoji" + (isMin ? ".min" : "") + ".js"),
 								new FileOutputStream(newPath + "/libs/emoji.js"));
-					if (document.isSelected())
-						Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
-								new FileOutputStream(newPath + "/libs/document.js"));
 					if (CssHandler.isSelected())
 						Files.copy(Paths.get("./patches/CssHandler/CssHandler" + (isMin ? ".min" : "") + ".js"),
 								new FileOutputStream(newPath + "/libs/CssHandler.js"));
@@ -337,7 +358,7 @@ class core {
 		if (emoji.isSelected())
 			size += isMin ? emojiMinSize : emojiSize;
 		if (document.isSelected())
-			size += isMin ? domMinSize : domSize;
+			size += typeUniApp.isSelected() ? domUniSize : (isMin ? domMinSize : domSize);
 		if (CssHandler.isSelected())
 			size += isMin ? cssMinSize : cssSize;
 		if (audio.isSelected())

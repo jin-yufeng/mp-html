@@ -41,7 +41,7 @@ class element {
     this._setData();
   }
   // 获取 / 设置 html
-  get innerHTML() {
+  get outerHTML() {
     return (function f(node) {
       var html = '';
       if (node.type == 'text')
@@ -62,11 +62,16 @@ class element {
       return html;
     })(this._node);
   }
+  get innerHTML() {
+    var outerHTML = this.outerHTML;
+    return outerHTML.substring(outerHTML.indexOf('>') + 1, outerHTML.lastIndexOf('<'));
+  }
   set innerHTML(value) {
     this._node.children = new MpHtmlParser(value, this._context.data).parse();
     for (var i = 0; i < this._node.children.length; i++)
       if (this._node.children[i].name)
         this.childNodes.push(new element(this._node.children[i], `${this._path}.children[${i}]`, this._context));
+    this._setData();
   }
   // 添加 / 删除 / 替换 节点
   appendChild(child) {
@@ -86,7 +91,7 @@ class element {
     this._setData();
     return true;
   }
-  replaceChild(oldVal, newVal) {
+  replaceChild(newVal, oldVal) {
     if (oldVal.constructor != element) return false;
     if (newVal.constructor != element) return false;
     var i = this.childNodes.indexOf(oldVal);
@@ -94,6 +99,7 @@ class element {
     this.childNodes[i] = newVal;
     this._node.children[i] = newVal._node;
     newVal.path = `${this._path}.children[${i}]`;
+    this._setData();
     return true;
   }
   // 获取 / 设置 某个属性
@@ -154,6 +160,7 @@ class element {
   }
   // 更新视图
   _setData() {
+    if (!this._path) return;
     this._dirty = true;
     setTimeout(() => {
       if (this._dirty) {
@@ -167,9 +174,8 @@ class element {
   }
 }
 class dom {
-  constructor(nodes, path, context) {
-    this._nodes = nodes;
-    this._path = path;
+  constructor(context) {
+    this._path = 'html';
     this._context = context;
   }
   _search(nodes, path, search, type) {
@@ -182,19 +188,25 @@ class dom {
       this._search(node.children, `${path}[${i}].children`, search, type);
     }
   }
+  get body() {
+    return new element({
+      name: 'body',
+      children: this._context.data.html
+    }, 'html', this._context)
+  }
   getElementById(id) {
     this._nodeList = [];
-    this._search(this._nodes, this._path, id, 'id');
+    this._search(this._context.data.html, 'html', id, 'id');
     return this._nodeList[0];
   }
   getElementsByClassName(className) {
     this._nodeList = [];
-    this._search(this._nodes, this._path, className, 'class');
+    this._search(this._context.data.html, 'html', className, 'class');
     return this._nodeList;
   }
   getElementsByTagName(name) {
     this._nodeList = [];
-    this._search(this._nodes, this._path, name, 'name');
+    this._search(this._context.data.html, 'html', name, 'name');
     return this._nodeList;
   }
   createElement(name) {
@@ -204,7 +216,7 @@ class dom {
   }
   write(value) {
     this._context.setData({
-      [this._path]: value.constructor == Array ? value : new MpHtmlParser(value, this._context.data).parse()
+      html: value.constructor == Array ? value : new MpHtmlParser(value, this._context.data).parse()
     })
     return true;
   }

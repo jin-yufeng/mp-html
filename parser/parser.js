@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/03/26
+  update：2020/04/19
 */
 var cache = {},
   Parser = require('./libs/MpHtmlParser.js'),
@@ -86,6 +86,7 @@ Component({
       for (var i = 0, len = this.length; i < len; i++)
         this.setItem(i, f(this[i], i, this));
     }
+    if (dom) this.document = new dom(this);
   },
   detached() {
     // 删除暂存
@@ -196,7 +197,6 @@ Component({
         })
       this.imgList.length = 0;
       this.videoContexts = [];
-      if (dom) this.document = new dom(this.data.html, 'html', this);
       var ns = this.selectAllComponents('.top,.top>>>._node');
       for (let i = 0, n; n = ns[i++];) {
         n.top = this;

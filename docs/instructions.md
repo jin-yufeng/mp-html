@@ -7,7 +7,7 @@
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.0KB | 微信小程序插件包压缩版（功能相同） |
 | [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 43.7KB | QQ 小程序插件包 |
 | [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 43.0KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 61.6KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 61.7KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 1. 百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
@@ -33,6 +33,15 @@
 关于 `a` 标签：  
 `H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  
 小程序端 `a` 标签设置 `app-id` 后可以跳转到其他小程序  
+
+关于 `document` 对象：  
+[组件实例](#获取实例的方法) 中提供了一个 `document` 对象，可以更加灵活的操作和调整富文本内容，不同平台的表现如下：  
+- `H5`  
+  `document` 为富文本所在 `div` 的实例，可以直接调用 `dom` 的各类方法  
+- 小程序和 `App`  
+  若使用了 [document](#document) 补丁包，则指向一个虚拟的 `dom` 对象（否则为 `undefined`），具体方法见文档  
+- `NVUE`  
+  `document` 为所在 `webview` 的实例，可以通过 `evalJs` （注意不是 `evalJS`）方法修改 `dom`  
 
 以下统称为 `parser`  
 
@@ -460,8 +469,11 @@ onText(text, hasTag) {
 
 ### Api ### 
 
-本插件的组件实例中提供了一些 `api` 函数，获取实例的方法：  
-- 微信原生框架  
+本插件的组件实例中提供了一些 `api` 函数  
+
+#### 获取实例的方法 ####
+  
+- 原生框架  
   ```wxml
   <parser id="article" html="{{html}}" bindload="load"></parser>
   ```
@@ -630,11 +642,11 @@ this.selectComponent("#preLoad").preLoad(html);
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `6.84KB`（`min` 版本 `5.20KB`）  
+  `7.17KB`（`min` 版本 `5.45KB`，`uni-app` 版本 `6.21KB`）  
 - 使用方法  
   将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
   
-  !> 在 `uni-app` 中使用时需要将 `jyf-parser.vue` 中的 38 行修改为 `const document = require('./libs/document.js');`  
+  !> 在 `uni-app` 中使用时需用 `document.uni.js`；并将 `jyf-parser.vue` 中的 38 行修改为 `const document = require('./libs/document.js');`  
   
 - `document` 类：  
   获取方式：可通过 `this.selectComponent("#id").document` 获取  
@@ -642,6 +654,7 @@ this.selectComponent("#preLoad").preLoad(html);
 
   | 名称 | 输入值 | 返回值 | 功能 |
   |:---:|:---:|:---:|:---:|
+  | body |  | element | 返回根 body 节点 |
   | getElementById | id | element | 按照 id 查找 element |
   | getElementsByClassName | className | element [] | 按照 class 查找 element |
   | getElementsByTagName | name | element [] | 按照 标签名 查找 element |
@@ -660,6 +673,7 @@ this.selectComponent("#preLoad").preLoad(html);
   | childNodes | 该节点下的子节点，修改需要调用 child 相关 api |
   | innerText | 该节点下的文本内容，支持获取和 **设置** |
   | innerHTML | 该节点下的 html 内容，支持获取和 **设置** |
+  | outerHTML | 包含该节点的 html 内容，**仅支持** 获取 |
   
   `Api` 列表：
 
@@ -667,7 +681,7 @@ this.selectComponent("#preLoad").preLoad(html);
   |:---:|:---:|:---:|:---:|
   | appendChild | element |  | 在子节点的末尾添加节点 |
   | removeChild | element |  | 移除某个子节点 |
-  | replaceChild | oldVal, newVal（element） |  | 替换某个子节点 |
+  | replaceChild | newVal, oldVal（element） |  | 替换某个子节点 |
   | getAttribute | key | value | 获取某个属性值 |
   | setAttribute | key, value |  | 设置某个属性的值 |
   | getStyle | key | value | 获取某个样式的值 |
@@ -677,8 +691,8 @@ this.selectComponent("#preLoad").preLoad(html);
   | getElementsByTagName | name | element [] | 按照 标签名 查找 element |
 
 1. 对于没有标注返回值的方法，设置成功则返回 `true`，否则返回 `false`  
-2. 所有方法需要在 `html` 被 `setData` 完成后调用
-3. 所有 `set` 类的方法，在一个同步流结束后刷新到 `ui`，请不要过于频繁的调用
+2. 所有 `set` 类的方法，在一个同步流结束后刷新到视图，请不要过于频繁的调用
+3. 部分标签名在解析过程中会被转换（具体见 [配置项](#配置项)），通过标签名可能无法获取
 
 综合示例：  
 ```wxml

@@ -1,5 +1,9 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.04.19 ####
+1. `F` 修复了 原生包 部分情况下 `table` 中在 `td` 外有文本节点会导致解析错误的问题  
+2. `F` 修复了 `uni-app` 包无法使用 [document 补丁包](/instructions#document) 的问题（并增加了一些方法） [详细](https://github.com/jin-yufeng/Parser/issues/119)  
+
 #### 2020.04.17 ####
 1. `F` 修复了 `uni-app` 包 `NVUE` 端打包到安卓后可能白屏的问题（另外由于不再通过本地文件中转，显示速度应该更快）  
 

@@ -2,57 +2,20 @@
 > 功能使用调查问卷：[填写](https://www.wjx.cn/jq/67585702.aspx)  
 
 ## 功能简介 ##
-- 支持解析 `style` 标签中的全局样式  
-  支持解析和匹配 `style` 标签中的样式 
-  ``` html
-  <parser :html="html" />
-  ```
-  ``` javascript
-  data() {
-    return {
-      html: '<style>.a{font-style:italic}#b{font-weight:bold}p{text-align:center}</style>'
-  	    +'<p><span class="a">Hello </span><span id="b">World!</span></p>'
-    }
-  }
-  ```
+- 支持匹配 `style` 标签中的样式  
+- 支持 `svg`  
+- 支持锚点跳转  
+- 支持双击缩放  
+- 支持长按复制内容  
+- 支持实体编码  
+- 支持给多媒体标签设置多个源  
+- 支持自动给链接填充主域名  
+- 支持几乎所有的 `html` 标签  
+- 支持丰富的事件和效果  
+- 轻量化、效率高、容错性强  
+- 全端支持（含 `v3、NVUE`）  
+...
 
-- 支持自定义默认的标签样式  
-  支持给各个标签设置默认的效果  
-  示例（给表格设置默认的边框）：
-  ```html
-  <parser :html="html" :tag-style="tagStyle" />
-  ```
-  ```javascript
-  data() {
-    return {
-      tagStyle:{
-        table: 'border-collapse:collapse;border-top:1px solid gray;border-left:1px solid gray;',
-        th: 'border-right:1px solid gray;border-bottom:1px solid gray;',
-        td: 'border-right:1px solid gray;border-bottom:1px solid gray;'
-      }
-    }
-  }
-  ```
-
-- 支持多资源加载  
-  支持在 `video` 和 `audio` 标签中设置多个 `source` 标签，本插件将按顺序进行加载，若前面的链接无法播放，将自动切换下一个链接进行加载和播放，直到最后一个链接；可用于解决平台差异，最大程度避免无法播放
-  ```html
-  <video controls>
-    <source src="demo1.mov" />
-    <source src="demo2.webm" />
-  </video>
-  ```
-  支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接；若设置 `webp` 图片将只有 `android` 端采用，可用于兼容
-  ```html
-  <picture>
-    <source media="(min-width:400px)" src="high-quality.jpg">
-    <source media="(min-width:250px)" src="middle-quality.jpg">
-    <!--webp 图片将只有 android 端采用-->
-    <source src="xxx.webp">
-    <img src="low-quality.jpg" />
-  </picture>
-  ```
- 
 更多功能可见：[功能介绍](https://jin-yufeng.github.io/Parser/#/)
 
 ## 使用方法 ##
@@ -137,3 +100,12 @@ export default{
 关于 `a` 标签：  
 `H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  
 小程序端 `a` 标签设置 `app-id` 后可以跳转到其他小程序  
+
+关于 `document` 对象：  
+[组件实例](https://jin-yufeng.github.io/Parser/#/instructions?id=获取实例的方法) 中提供了一个 `document` 对象，可以更加灵活的操作和调整富文本内容，不同平台的表现如下：  
+- `H5`  
+  `document` 为富文本所在 `div` 的实例，可以直接调用 `dom` 的各类方法  
+- 小程序和 `App`  
+  若使用了 [document](https://jin-yufeng.github.io/Parser/#/instructions?id=document) 补丁包，则指向一个虚拟的 `dom` 对象（否则为 `undefined`），具体方法见文档  
+- `NVUE`  
+  `document` 为所在 `webview` 的实例，可以通过 `evalJs` （注意不是 `evalJS`）方法修改 `dom`  

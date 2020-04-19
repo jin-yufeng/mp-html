@@ -8,54 +8,19 @@
 ![license](https://badgen.net/github/license/jin-yufeng/Parser)  
 
 ## 功能简介 ##
-- 支持解析 `style` 标签中的全局样式  
-  支持解析和匹配 `style` 标签中的样式 
-  ``` html
-  <parser html="{{html}}" />
-  ```
-  ``` javascript
-  Page({
-    data:{
-      html:'<style>.a{font-style:italic}#b{font-weight:bold}p{text-align:center}</style>'
-  	    +'<p><span class="a">Hello </span><span id="b">World!</span></p>'
-    }
-  })
-  ```
+- 支持匹配 `style` 中的样式  
+- 支持 `svg`  
+- 支持锚点跳转  
+- 支持双击缩放  
+- 支持长按复制内容  
+- 支持给多媒体标签设置多个源  
+- 支持自动给链接填充主域名  
+- 支持几乎所有的 `html` 标签  
+- 支持丰富的事件和效果  
+- 轻量化、效率高、容错性强  
+- 支持多平台（微信、QQ、头条、uni-app 等）  
+...
 
-- 支持自定义默认的标签样式  
-  支持给各个标签设置默认的效果  
-  示例（给表格设置默认的边框）：
-  ```html
-  <parser html="{{html}}" tag-style="{{tagStyle}}" />
-  ```
-  ```javascript
-  Page({
-    data:{
-      tagStyle:{
-        table: 'border-collapse:collapse;border-top:1px solid gray;border-left:1px solid gray;',
-        th: 'border-right:1px solid gray;border-bottom:1px solid gray;',
-        td: 'border-right:1px solid gray;border-bottom:1px solid gray;'
-      }
-    }
-  })
-  ```
-
-- 支持多资源加载  
-  支持在 `video` 和 `audio` 标签中设置多个 `source` 标签，本插件将按顺序进行加载，若前面的链接无法播放，将自动切换下一个链接进行加载和播放，直到最后一个链接；可用于解决平台差异，最大程度避免无法播放
-  ```html
-  <video controls>
-    <source src="demo1.mov" />
-    <source src="demo2.webm" />
-  </video>
-  ```
-  支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接
-  ```html
-  <picture>
-    <source media="(min-width:400px)" src="high-quality.jpg">
-    <source media="(min-width:250px)" src="middle-quality.jpg">
-    <img src="low-quality.jpg" />
-  </picture>
-  ```
 更多功能可见：[功能介绍](https://jin-yufeng.github.io/Parser/#/)
 
 ## 使用方法 ##
@@ -67,7 +32,7 @@
 | parser.min | 30.0KB | 微信小程序插件包压缩版（功能相同） |
 | parser.qq | 43.7KB | QQ 小程序插件包 |
 | parser.tt | 43.0KB | 头条小程序插件包 |
-| parser.uni | 61.6KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.uni | 61.7KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -198,6 +163,10 @@
 
 
 ## 更新日志 ##
+- 2020.4.19  
+  1. `F` 修复了 原生包 部分情况下 `table` 中在 `td` 外有文本节点会导致解析错误的问题  
+  2. `F` 修复了 `uni-app` 包无法使用 [document 补丁包](https://jin-yufeng.github.io/Parser/#/instructions#document) 的问题（并增加了一些方法） [详细](https://github.com/jin-yufeng/Parser/issues/119)  
+
 - 2020.4.17  
   1. `F` 修复了 `uni-app` 包 `NVUE` 端打包到安卓后可能白屏的问题（另外由于不再通过本地文件中转，显示速度应该更快）  
 

@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/04/17
+  update：2020/04/19
 -->
 <template>
 	<view>
@@ -152,6 +152,15 @@
 					// #endif
 				}
 			}
+			// #ifdef H5
+			this.document = document.getElementById('rtf' + this._uid);
+			// #endif
+			// #ifndef H5 || APP-PLUS-NVUE
+			if (document) this.document = new document(this);
+			// #endif
+			// #ifdef APP-PLUS-NVUE
+			this.document = this.$refs.web;
+			// #endif
 			if (this.html) this.setContent(this.html);
 		},
 		beforeDestroy() {
@@ -371,8 +380,7 @@
 							context: this
 						});
 					}
-				this.document = this.rtf;
-				if (!append) document.getElementById('rtf' + this._uid).appendChild(this.rtf);
+				if (!append) this.document.appendChild(this.rtf);
 				this.$nextTick(() => {
 					this.nodes = [1];
 					this.$emit('load');
@@ -421,7 +429,6 @@
 					console.warn('错误的 html 类型：object 类型已废弃');
 				} else
 					return console.warn('错误的 html 类型：' + typeof html);
-				if (document) this.document = new document(this.nodes, 'nodes', this);
 				if (append) this.nodes = this.nodes.concat(nodes);
 				else this.nodes = nodes;
 				if (nodes.length && nodes[0].title && this.autosetTitle)

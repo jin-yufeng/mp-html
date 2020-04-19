@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/04/14
+  update：2020/04/19
 */
 var cfg = require('./config.js'),
   blankChar = cfg.blankChar,
@@ -382,6 +382,7 @@ class MpHtmlParser {
       if (border || padding || node.c)
         (function f(ns) {
           for (var i = 0, n; n = ns[i]; i++) {
+            if(n.type == 'text') continue;
             var style = n.attrs.style || '';
             if (node.c && n.name[0] == 't') {
               n.c = 1;
