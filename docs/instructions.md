@@ -361,7 +361,11 @@ error(e) {
 不在信任的标签列表中的标签，除被移除的标签外，块级标签列表中的标签将被转为 `div` 标签，其他被转为 `span` 标签
 
 关于几个自定义处理器：  
+
 #### filter ####  
+
+!> 该方法在 [20200312](/changelog#_20200312) 版本中添加  
+
 自定义过滤器，解析到一个标签时触发  
 输入值：`node` 为节点结构体（`name` 为标签名，`attrs` 为属性值，`children` 为子节点），对其进行修改将在渲染时生效；`context` 是解析器示例，可以使用一些解析设置（如 `domain` 等）和方法（主要是 `bubble`，若该节点不能被 `rich-text` 包含则需要调用，将给其所有祖先节点冒泡设置标记，一般用于自定义标签）  
 返回值：若返回 `false`，将移除此节点（及其所有子节点）  
@@ -373,6 +377,13 @@ filter(node, cxt) {
   node.attrs.zzz = "aaa"; // 给标签添加某个属性
 }
 ```
+
+!> 若通过此方法设置 `node.attrs` 中的值，必须设置成 **字符串** 类型，否则在渲染时可能报错  
+
+应用举例：  
+1. 处理自定义标签：[链接](#添加一个自定义标签)  
+2. 让表格能够单独横向滚动：[链接](/question#表格无法单独滚动)  
+3. 给表格添加默认边框：[链接](/question#表格没有边框)
 
 #### highlight ####  
 代码高亮处理器  
@@ -436,6 +447,9 @@ filter(node, cxt) {
 *相关 issue：*[#83](https://github.com/jin-yufeng/Parser/issues/83)
 
 #### onText ####  
+
+!> 该方法在 [20200312](/changelog#_20200312) 版本中添加  
+
 文本处理器，可以替换文本中的一些内容  
 输入值：`text` 为解析到的文本内容，`hasTag` 是一个函数，若设置的值中有 `html` 标签（如替换为图片）需要调用，将重新解析这段文本（若替换值中仍有关键词可能引发 **死循环** ）  
 返回值：若返回值不为空，将把这段文本设置成返回值的内容  
@@ -449,7 +463,10 @@ onText(text, hasTag) {
   }
 }
 ```
-*相关 issue：*[#90](https://github.com/jin-yufeng/Parser/issues/90)
+
+应用举例：  
+1. 替换无效的换行符：[链接](/question#换行符无效)  
+2. 显示数学公式：[链接](https://github.com/jin-yufeng/Parser/issues/90)  
 
 ### 基础库要求 ###
 微信小程序：
@@ -808,7 +825,7 @@ error(e){
 ### 添加一个自定义标签 ###  
 1. 在 `config.js` 中的 `trustAttrs` 中添加需要用到的属性（否则将被移除）  
 2. 在 `config.js` 中的 `trustTags` 中添加该标签名（否则将被转为 `span`，如果是自闭合标签还需要添加到 `selfClosingTags` 中）  
-3. 在 `config.js` 中的 `filter` 中添加  
+3. 在 `config.js` 中的 [filter](#filter) 中添加  
    ```javascript
    filter(node, cxt) {
      if (node.name == 'element') {
@@ -833,7 +850,7 @@ error(e){
 ### 添加自定义事件 ### 
 为节省大小，默认情况下仅支持 `img` 和 `a` 标签的点击事件，如果还需要其他事件，可以自行在 `trees.wxml` 中绑定和处理  
 
-!> 如果给除 `img`、`a`、`video`、`audio` 外的标签添加事件，还需要在 `config.js` 中的 `filter` 中添加  
+!> 如果给除 `img`、`a`、`video`、`audio` 外的标签添加事件，还需要在 `config.js` 中的 [filter](#filter) 中添加  
 ```javascript
 filter(node, cxt) {
   if (node.name == 'element') {
