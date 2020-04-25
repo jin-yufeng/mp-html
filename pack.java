@@ -50,19 +50,20 @@ class core {
 	boolean isMin = false;
 
 	// 包大小
-	final float wxSize = 44.5f;
-	final float wxMinSize = 30.0f;
-	final float qqSize = 43.7f;
-	final float ttSize = 43.0f;
-	final float uniAppSize = 61.7f;
+	final float wxSize = 44.3f;
+	final float wxMinSize = 30.1f;
+	final float qqSize = 43.8f;
+	final float ttSize = 43.1f;
+	final float uniAppSize = 60.7f;
 	final float emojiSize = 4.25f;
 	final float emojiMinSize = 3.16f;
 	final float domSize = 7.17f;
-	final float domUniSize = 6.21f;
+	final float domUniSize = 5.85f;
 	final float domMinSize = 5.45f;
 	final float cssSize = 4.80f;
 	final float cssMinSize = 1.50f;
-	final float audioSize = 3.95f;
+	final float audioSize = 4.13f;
+	final float audioUniSize = 4.66f;
 
 	// 构造函数
 	core() {
@@ -192,11 +193,10 @@ class core {
 			@Override
 			public void itemStateChanged(ItemEvent item) {
 				if (item.getStateChange() != ItemEvent.SELECTED) {
-					audio.setEnabled(true);
+					audio.setText("audio（音乐播放器，" + audioSize + "KB）");
 					document.setText("document（动态操作 dom，" + (isMin ? domMinSize : domSize) + "KB）");
 				} else {
-					audio.setSelected(false);
-					audio.setEnabled(false);
+					audio.setText("audio（音乐播放器，" + audioUniSize + "KB）");
 					document.setText("document（动态操作 dom，" + domUniSize + "KB）");
 					size.setText(calcSize()); // 重新计算大小
 				}
@@ -268,8 +268,12 @@ class core {
 							copyDir("./parser.min", newPath);
 						else
 							copyDir("./parser", newPath);
-						if (audio.isSelected())
+						if (audio.isSelected()) {
+							copyDir("./patches/audio/audio", newPath + "/audio");
+							modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
+									"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
 							modifyFile(newPath + "/trees/trees.wxml", "<audio", "<myAudio");
+						}
 						if (document.isSelected())
 							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
 									new FileOutputStream(newPath + "/libs/document.js"));
@@ -277,8 +281,12 @@ class core {
 					// 生成 QQ 包
 					else if (typeQq.isSelected()) {
 						copyDir("./parser.qq", newPath);
-						if (audio.isSelected())
+						if (audio.isSelected()) {
+							copyDir("./patches/audio/audio", newPath + "/audio");
+							modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
+									"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
 							modifyFile(newPath + "/trees/trees.qml", "<audio", "<myAudio");
+						}
 						if (document.isSelected())
 							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
 									new FileOutputStream(newPath + "/libs/document.js"));
@@ -286,9 +294,13 @@ class core {
 					// 生成头条包
 					else if (typeTt.isSelected()) {
 						copyDir("./parser.tt", newPath);
-						if (audio.isSelected())
+						if (audio.isSelected()) {
+							copyDir("./patches/audio/audio", newPath + "/audio");
+							modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
+									"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
 							modifyFile(newPath + "/trees/trees.ttml", "<!--音频-->",
 									"<myAudio wx:elif=\"{{n.name=='audio'}}\" id=\"{{n.attrs.id}}\" class=\"{{n.attrs.class}}\" style=\"{{n.attrs.style}}\" author=\"{{n.attrs.author}}\" autoplay=\"{{n.attrs.autoplay}}\" controls=\"{{n.attrs.controls}}\" loop=\"{{n.attrs.loop}}\" name=\"{{n.attrs.name}}\" poster=\"{{n.attrs.poster}}\" src=\"{{n.attrs.source[n.i||0]}}\" data-i=\"{{index}}\" data-source=\"audio\" binderror=\"error\" bindplay=\"play\" />");
+						}
 						if (document.isSelected())
 							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
 									new FileOutputStream(newPath + "/libs/document.js"));
@@ -299,6 +311,13 @@ class core {
 						if (emoji.isSelected())
 							modifyFile(newPath + "/libs/MpHtmlParser.js", "var emoji",
 									"const emoji = require(\"./emoji.js\")");
+						if (audio.isSelected()) {
+							Files.copy(Paths.get("./patches/audio/audio.vue"),
+									new FileOutputStream(newPath + "/libs/audio.vue"));
+							modifyFile(newPath + "/libs/trees.vue", "<audio", "<myAudio");
+							modifyFile(newPath + "/libs/trees.vue", "export default {\r\n		components: {",
+									"import myAudio from './audio'\r\n	export default {\r\n		components: {\r\n			myAudio,");
+						}
 						if (document.isSelected()) {
 							Files.copy(Paths.get("./patches/document/document.uni.js"),
 									new FileOutputStream(newPath + "/libs/document.js"));
@@ -313,11 +332,6 @@ class core {
 					if (CssHandler.isSelected())
 						Files.copy(Paths.get("./patches/CssHandler/CssHandler" + (isMin ? ".min" : "") + ".js"),
 								new FileOutputStream(newPath + "/libs/CssHandler.js"));
-					if (audio.isSelected()) {
-						copyDir("./patches/audio", newPath + "/audio");
-						modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
-								"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
-					}
 					String cmdDir[] = { "explorer.exe", newPath };
 					Runtime.getRuntime().exec(cmdDir);
 					JOptionPane.showMessageDialog(null, "生成成功", "成功", JOptionPane.PLAIN_MESSAGE);
@@ -362,7 +376,7 @@ class core {
 		if (CssHandler.isSelected())
 			size += isMin ? cssMinSize : cssSize;
 		if (audio.isSelected())
-			size += audioSize;
+			size += typeUniApp.isSelected() ? audioUniSize : audioSize;
 		return new DecimalFormat(".00").format(size) + " KB";
 	}
 

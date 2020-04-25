@@ -89,12 +89,12 @@ export default{
 
 | 平台 | 差异 |
 |:---:|---|
-| 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单<br>基础库 2.9.0 及以上支持 webp 图片 |
+| 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单 |
 | 百度小程序 | 不支持 gesture-zoom 属性 |
-| 支付宝小程序 | 不支持 autopause、gesture-zoom 属性 |
-| 头条小程序 | imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](https://jin-yufeng.github.io/Parser/#/instructions?id=关于-ignore-方法)） |
+| 支付宝小程序 | 不支持 audio 标签<br>不支持 autopause、gesture-zoom 属性 |
+| 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](https://jin-yufeng.github.io/Parser/#/instructions?id=关于-ignore-方法)） |
 | H5 | 支持所有浏览器支持的标签<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](https://jin-yufeng.github.io/Parser/#/instructions?id=配置项) 中除 userAgentStyles 外均无效 |
-| App | 在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
+| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
 | NVUE | 支持所有浏览器支持的标签<br>不支持 gesture-zoom、lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](https://jin-yufeng.github.io/Parser/#/instructions?id=配置项) 中除 userAgentStyles 外均无效 |
 
 关于 `a` 标签：  
@@ -109,3 +109,6 @@ export default{
   若使用了 [document](https://jin-yufeng.github.io/Parser/#/instructions?id=document) 补丁包，则指向一个虚拟的 `dom` 对象（否则为 `undefined`），具体方法见文档  
 - `NVUE`  
   `document` 为所在 `webview` 的实例，可以通过 `evalJs` （注意不是 `evalJS`）方法修改 `dom`  
+
+关于 `audio` 标签：  
+针对一些平台不支持 `audio` 标签的问题，可以引入 [audio](https://jin-yufeng.github.io/Parser/#/instructions?id=audio) 扩展包解决  

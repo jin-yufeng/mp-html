@@ -1,5 +1,5 @@
 /*
-  emoji 补丁包
+  emoji 扩展包
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng

@@ -326,7 +326,7 @@ console.log(text)</code></pre>
   </li>
   <li><code>navigateTo</code>
     <div>功能：跳转锚点</div>
-    <div>输入值：一个<code>object</code>，<code>id</code>是锚点的<code>id</code>（为空时将跳转到组件开头），<code>success</code>和<code>fail</code>是成功和失败回调（需要配合<code>use-anchor</code>属性使用）</div>
+    <div>输入值：一个<code>object</code>，<code>id</code>是锚点的<code>id</code>（为空时将跳转到组件开头），<code>offset</code>是偏移量，<code>success</code>和<code>fail</code>是成功和失败回调（需要配合<code>use-anchor</code>属性使用）</div>
     <div>为确保跳转位置准确，建议在<code>ready</code>事件中或之后使用</div>
     <pre><code class="language-javascript">// context 为组件实例
 context.navigateTo({
@@ -429,7 +429,7 @@ console.log(rect.height); // 高度</code></pre>
 }</code></pre>
   </li>
 </ol>`,
-    // document 补丁包示例代码
+    // document 扩展包示例代码
     documentCode: `<pre><code class="language-wxml"><parser id="article" html="{{html}}" binderror="error" /></code></pre>
 <pre style="margin-top:15px"><code class="language-javascript">Page({
   data: {
@@ -443,7 +443,7 @@ console.log(rect.height); // 高度</code></pre>
     }
   }
 })</code></pre>`,
-    // cssHandler 补丁包
+    // cssHandler 扩展包
     moreSelectors: [{
       name: '通配符',
       example: '*'
@@ -466,13 +466,13 @@ console.log(rect.height); // 高度</code></pre>
       name: '@media 查询',
       example: '@media(min-width:300px)'
     }],
-    // parser-group 补丁包
+    // parser-group 扩展包
     parserGroup: `<ol style="margin-left:-15px">
   <li>图片预览时可以通过左右滑动查看该<code>group</code>下所有图片</li>
   <li>一个<code>parser</code>标签中的<code>a</code>标签可以跳转另一个<code>parser</code>中的锚点（需开启<code>use-anchor</code>属性）</li>
   <li>播放一个视频时可以自动暂停该<code>group</code>下所有视频（需开启<code>antopause</code>属性）</li>
 </ol>`,
-    // audio 补丁包
+    // audio 扩展包
     audio: `<ol style="margin-left:-15px">
   <li>其大小会根据屏幕宽度自动调整（原生<code>audio</code>大小不可变）</li>
   <li>支持<code>autoplay</code>属性</li>
@@ -482,28 +482,20 @@ console.log(rect.height); // 高度</code></pre>
 <div style="text-align:center;margin:0.8em 0">
   <audio poster="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.jpg?sign=fcc5ef3dc42d606ea54064f0291eb4b6&t=1584979825" name="致爱丽丝" author="暂无" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.mp3?sign=ee1a9895e9421d296cda186b17f0de22&t=1584979840" controls loop></audio>
 </div>
-<div>详细可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions?id=补丁包'>补丁包</a></div>`,
+<div>详细可见：<a href='https://jin-yufeng.github.io/Parser/#/instructions?id=扩展包'>扩展包</a></div>`,
     // 基础库要求
     versions: [{
-      version: '<2.9.0',
-      features: '不支持 webp 图片',
-      percent: '5.51%'
-    }, {
       version: '<2.7.1',
       features: '不支持图片长按菜单\n不支持 bdi bdo ruby 标签',
-      percent: '2.31%'
+      percent: '1.73%'
     }, {
       version: '<2.4.4',
       features: '不支持 a 标签的 visited 效果',
-      percent: '0.42%'
-    }, {
-      version: '<2.3.0',
-      features: '不支持云文件 ID',
-      percent: '0.34%'
+      percent: '0.29%'
     }, {
       version: '<2.2.5',
       features: '不支持部分实体编码',
-      percent: '0.20%'
+      percent: '0.13%'
     }, {
       version: '<1.6.3',
       features: '无法使用',
@@ -512,11 +504,22 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.4.25
+    <ol>
+      <li><code>U</code> 优化了图片的显示方式（可解决加载完毕时大小突变的问题，但不再支持云文件<code>ID</code>和<code>webp</code>图片）</li>
+      <li><code>U</code> 支持在链接中使用实体编码</li>
+      <li><code>U</code> 模拟实现的列表（内含图片链接）支持<code>list-style:none</code></li>
+      <li><code>U</code> <code>navigateTo</code>的<code>api</code>增加一个<code>offset</code>参数，可设置偏移量</li>
+      <li><code>F</code> 修复了个别情况下图片宽度过宽的问题</li>
+      <li><code>F</code> 修复了<code>CssHandler</code>扩展包<code>class</code>匹配错误的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.4.13
     <ol>
       <li><code>F</code> 修复了自动移除空<code>div</code>导致换行失效的问题</li>
       <li><code>F</code> 修复了使用多个并列<code>rpx</code>时可能失效的问题</li>
-      <li><code>F</code> 修复了<code>audio</code>补丁包音乐名太长会导致样式错乱的问题</li>
+      <li><code>F</code> 修复了<code>audio</code>扩展包音乐名太长会导致样式错乱的问题</li>
     </ol>
   </li>
   </br>
@@ -530,7 +533,7 @@ console.log(rect.height); // 高度</code></pre>
   </br>
   <li>2020.3.23
     <ol>
-      <li><code>A</code> 增加了<code>audio</code> 补丁包，用于解决原生<code>audio</code>被废弃的问题</li>
+      <li><code>A</code> 增加了<code>audio</code>扩展包，用于解决原生<code>audio</code>被废弃的问题</li>
       <li><code>U</code> 通过<code>eslint</code>检查规范和修复了一些问题</li>
     </ol>
   </li>
@@ -588,7 +591,7 @@ console.log(rect.height); // 高度</code></pre>
     <ol>
       <li><code>U</code> 支持<code>picture</code>标签，可以在不同大小的屏幕上显示不同链接的图片</li>
       <li><code>U</code> 支持在<code>sub</code>、<code>sup</code>标签中使用<code>a</code>标签</li>
-      <li><code>U</code> 给<code>document</code>补丁包增加和修改了一些方法</li>
+      <li><code>U</code> 给<code>document</code>扩展包增加和修改了一些方法</li>
       <li><code>F</code> 修复了由于自动压缩产生的一些问题（主要是<code>background-image</code>）</li>
       <li><code>F</code> 修复了使用<code>show-with-animation</code>属性时个别情况下可能出现白屏的问题</li>
     </ol>
@@ -596,7 +599,7 @@ console.log(rect.height); // 高度</code></pre>
   </br>
   <li>2020.2.26
     <ol>
-      <li><code>A</code> 添加了<code>parser-group</code>的补丁包</li>
+      <li><code>A</code> 添加了<code>parser-group</code>的扩展包</li>
       <li><code>F</code> 修复了部分情况下连续实体编码失效的问题</li>
     </ol>
   </li>
@@ -605,7 +608,7 @@ console.log(rect.height); // 高度</code></pre>
     <ol>
       <li><code>U</code> 支持自动压缩<code>style</code>属性，移除重复的样式，可以减少解析结果大小</li>
       <li><code>U</code> 支持预览<code>base64</code>图片（通过暂存到本地实现）</li>
-      <li><code>U</code> <code>CssHandler</code>补丁包支持属性选择器和<code>@media</code>，伪类中的<code>content</code>支持<code>attr()</code></li>
+      <li><code>U</code> <code>CssHandler</code>扩展包支持属性选择器和<code>@media</code>，伪类中的<code>content</code>支持<code>attr()</code></li>
       <li><code>U</code> 精简了部分代码</li>
     </ol>
   </li>
@@ -625,28 +628,6 @@ console.log(rect.height); // 高度</code></pre>
   <li>2020.2.12
     <ol>
       <li><code>A</code> 增加了<code>gesture-zoom</code> 属性，可以设置双击缩放（默认<code>false</code>）</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.1.23
-    <ol>
-      <li><code>U</code> 支持<code>rpx</code>单位</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.1.20
-    <ol>
-      <li><code>U</code> <code>video</code>增加支持<code>poster</code>属性</li>
-      <li><code>F</code> 修复了部分情况下表格处理出错的问题</li>
-      <li><code>F</code> 修复了使用单独的<code>&lt;/p></code>出错的问题</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.1.18
-    <ol>
-      <li><code>U</code> <code>domain</code>属性支持自动填充所有<code>src</code>属性的值（包括视频、音频、图片；协议名默认<code>http</code>）</li>
-      <li><code>U</code> 优化了实体的处理（支持所有形如<code>&amp;#123;</code>的实体编码）</li>
-      <li><code>F</code> 修复了图片一开始裂开之后又好了的问题</li>
     </ol>
   </li>
 </ul>

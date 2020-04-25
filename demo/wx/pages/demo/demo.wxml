@@ -1,6 +1,8 @@
 <!-- demo.wxml -->
 <parser id="article"
+  domain="https://6874-html-foe72-1259071903.tcb.qcloud.la"
   gesture-zoom
+  lazy-load
   selectable
   show-with-animation
   use-anchor

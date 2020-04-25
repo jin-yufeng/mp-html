@@ -44,9 +44,6 @@ Page({
       name: '疑问解答',
       open: false,
       pages: [{
-        name: '常见问题',
-        url: '../question/question'
-      }, {
         name: '联系客服',
         url: ''
       }]
@@ -54,9 +51,7 @@ Page({
   },
   onReady() {
     // 预加载富文本图片
-    var context = this.selectComponent('#preLoad');
-    context.preLoad(htmls[0], 5);
-    context.preLoad(htmls[1], 5);
+    this.selectComponent('#preLoad').preLoad(htmls[1], 1);
   },
   // 切换 tab
   kindToggle(e) {

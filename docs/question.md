@@ -1,62 +1,5 @@
 ## 疑问解答 {docsify-ignore} ##
 
-### 已知问题 ###
-!> 下述问题还没有完美的解决方案，若有解决方法或更优方案欢迎提出  
-
-#### 图片加载完时大小突变 ####
-*问题描述：*  
-部分情况下，图片加载完后会大小突变（从预设大小变成原大小，可能会闪一下）  
-
-*问题原因：*  
-由于小程序中的 `image` 与 `html` 中的 `img` 的表现有较大差异，`html` 中的 `img` 在没有设置宽高时按原大小显示，若设置了宽或高时按比例缩放，若同时设置了宽高则按设置的大小显示；而小程序中的 `image` 必须设置宽高，否则将按默认大小（`300×225`）显示  
-
-如果直接使用小程序中的 `image` 显示 `html` 中 `img`，会导致很多不正确的情况；如果都要求使用 `image`，则需要对原有的 `html` 进行较多的调整  
-
-因此在比较旧的版本（`20200317` 以前），一直是用 `rich-text` 中的 `img` 来显示图片（其与 `html` 中的 `img` 表现相同），但也存在一些问题，一个是不支持 `image` 的一些原生能力，如懒加载（之前通过自行实现，但常有人遇到失效的问题，且比较麻烦），长按菜单，支持 `webp` 等；另外由于 `img` 外套上了一层 `rich-text`，在某些情况下样式可能出现错误，也增加了处理难度  
-
-为解决这些问题，充分利用 `image` 的原生能力，后来还是采用 `image` 来显示图片，处理大致如下：  
-1. 若只设置了宽度，则设置 `mode` 为 `widthFix`  
-2. 若只设置了高度，则设置 `mode` 为 `heightFix`（`2.10.3` 以上支持，低基础库可能存在问题）  
-3. 若同时设置了宽高度，则设置 `mode` 为 `scaleToFill`  
-4. 若既没有设置宽度，也没有设置高度，则设置 `mode` 为 `widthFix`，并给这张图设置一个标记，在 `load` 事件中，将宽度设置为原大小（高基础库通过 `wxs` 设置，低基础库通过 `js` 设置）；高度由 `image` 自动计算（由于 `max-width:100%` 的限制，设置的宽度不一定是实际宽度，直接设置为原高度可能变形）  
-
-这样基本上实现了 `img` 的效果  
-
-不过这样也不是解决了所有问题，主要出在第四种情况，在 `load` 事件前，需要一个预设的大小，在加载完毕后再变为原大小（如果是 `img`，是不会在加载完毕后才突变的，会逐渐变到原大小），这个预设的大小如果过小，那么大图、长图会长时间空白，然后突然膨胀；如果设置的过大，则一些小图会一开始大，加载完又突然变小；这两种情况都会一定程度上影响体验，目前，组件采取的预设大小是 `300×50`  
-
-*临时解决方案：*  
-如果使用的图片都很小，建议把这个预设的大小改小（为 `0` 也可以），如果用到的大多是长图，则可以把预设的高度调大，以减小上述问题的影响；修改方法是修改 `trees.wxss` 里的 `._img`（因为 `image` 默认宽度已经是 `300`，这里只设置了 `height`）  
-
-另外，应尽量避免在渲染完成后再次 `setData` 整个 `html` 数据，否则会导致重绘，可能再次闪一下  
-
-*相关 issue：*[#116](https://github.com/jin-yufeng/Parser/issues/116)
-
-#### 表格中的链接无法点击 ####
-*问题描述：*  
-使用了 `colspan` 或 `rowspan` 的表格，其中的链接和图片无法点击  
-
-*问题原因：*  
-小程序中不支持使用 `table` 标签，这使得显示 `table` 成为一个难题，目前的处理如下：  
-对于没有使用 `colspan` 和 `rowspan` 的 `table`，将被转为如下结构，可以实现和 `table` 相同的效果：  
-```wxml
-<view style="display:table">
-  <view style="display:table-row">
-    <view style="display:table-cell">
-      单元格
-    </view>
-    <view style="display:table-cell">
-      单元格
-    </view>
-  </view>
-</view>
-```
-
-但这无法实现 `colspan` 和 `rowspan` 的效果（没有 `css` 可以实现），因此只能通过 `rich-text` 显示，其中的图片、链接无法点击，也无法使用音视频  
-
-*临时解决方案：*  
-1. 不在使用了 `colspan` 和 `rowspan` 的表格中使用图片、链接等  
-2. 自行将其用其他标签实现（就个例而言，还是可以通过 `flex` 布局实现的，但很难有一个通用的模板）  
-
 ### 常见问题 ###
 
 #### 连续图片间有间隙 ####
@@ -158,6 +101,32 @@
 
 *相关 issue：*[#6](https://github.com/jin-yufeng/Parser/issues/6)、[#44](https://github.com/jin-yufeng/Parser/issues/44)、[#50](https://github.com/jin-yufeng/Parser/issues/50)、[#66](https://github.com/jin-yufeng/Parser/issues/66)
 
+#### 表格中的链接无法点击 ####
+*问题描述：*  
+使用了 `colspan` 或 `rowspan` 的表格，其中的链接和图片无法点击  
+
+*问题原因：*  
+小程序中不支持使用 `table` 标签，这使得显示 `table` 成为一个难题，目前的处理如下：  
+对于没有使用 `colspan` 和 `rowspan` 的 `table`，将被转为如下结构，可以实现和 `table` 相同的效果：  
+```wxml
+<view style="display:table">
+  <view style="display:table-row">
+    <view style="display:table-cell">
+      单元格
+    </view>
+    <view style="display:table-cell">
+      单元格
+    </view>
+  </view>
+</view>
+```
+
+但这无法实现 `colspan` 和 `rowspan` 的效果（没有 `css` 可以实现），因此只能通过 `rich-text` 显示，其中的图片、链接无法点击，也无法使用音视频  
+
+*临时解决方案：*  
+1. 不在使用了 `colspan` 和 `rowspan` 的表格中使用图片、链接等  
+2. 自行将其用其他标签实现（就个例而言，还是可以通过 `flex` 布局实现的，但很难有一个通用的模板）  
+
 #### 表格无法单独滚动 ####  
 *问题描述：*  
 表格的宽度往往较宽，容易超出屏幕宽度，导致其他内容一起滚动或无法滚动  
@@ -170,15 +139,19 @@
   ```javascript
   filter(node) {
     if (node.name == 'table') {
-      var table = Object.assign({}, node); // 拷贝一个 table 节点
-      node.name = 'div'; // 将原 table 改为一个滚动层
-      node.attrs = {
-        style: 'overflow: scroll'
-      }
-      node.children = [table];
+      setTimeout(() => { // 这个延时是为了 table 的 border、cellpadding、cellspacing 属性不失效，与内部处理有关
+        var table = Object.assign({}, node); // 拷贝一个 table 节点
+        node.name = 'div'; // 将原 table 改为一个滚动层
+        node.attrs = {
+          style: 'overflow: scroll'
+        }
+        node.children = [table];
+      }, 0)
     }
   }
   ```
+
+*相关 issue：*[多列表格的适配问题](https://ask.dcloud.net.cn/question/94524)
 
 #### 表格没有边框 ####  
 *问题描述：*  
@@ -202,7 +175,7 @@
 
 #### 无法使用 iframe 视频 ####
 *问题描述：*  
-除 `uni-app` 包编译到 `H5` 和 `App` 端外，均无法使用 `iframe` 标签  
+除 `uni-app` 包编译到 `H5` 和 `App(v3)` 端外，均无法使用 `iframe` 标签  
 
 *问题原因：*  
 因为 `iframe` 视频的地址并不是真实的视频地址，其内容是 `js` 动态加载出来的，小程序上既无法操作 `dom` 也无法执行动态的 `js`（`eval`），因此无法实现  
@@ -316,7 +289,7 @@ html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 处理 `style` 标签并非是动态写入 `css`（小程序中无法动态写入 `css`），而是在程序中将样式匹配到各个标签的 `style` 属性里（因此像 `@keyframes` 这种不能写在行内样式中的还无法实现），因此并非支持所有选择器，需要关注一下支持的选择器类型，不支持的选择器将被忽略  
 
 *解决方案：*  
-使用 [CssHandler](/instructions#CssHandler) 补丁包后可以支持更多选择器（但也不是全部）  
+使用 [CssHandler](/instructions#CssHandler) 扩展包后可以支持更多选择器（但也不是全部）  
 
 #### 不能正确显示一些网页 ####
 *问题描述：*  

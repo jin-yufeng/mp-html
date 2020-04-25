@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/04/16
+  update：2020/04/25
 */
 var cfg = require('./config.js'),
 	blankChar = cfg.blankChar,
@@ -12,38 +12,6 @@ var cfg = require('./config.js'),
 		screenWidth,
 		system
 	} = wx.getSystemInfoSync();
-// #ifdef MP-BAIDU || MP-ALIPAY || MP-TOUTIAO
-var entities = {
-	lt: '<',
-	gt: '>',
-	amp: '&',
-	quot: '"',
-	apos: "'",
-	nbsp: '\xA0',
-	ensp: '\u2002',
-	emsp: '\u2003',
-	ndash: '–',
-	mdash: '—',
-	middot: '·',
-	lsquo: '‘',
-	rsquo: '’',
-	ldquo: '“',
-	rdquo: '”',
-	bull: '•',
-	hellip: '…',
-	permil: '‰',
-	copy: '©',
-	reg: '®',
-	trade: '™',
-	times: '×',
-	divide: '÷',
-	cent: '￠',
-	pound: '£',
-	yen: '¥',
-	euro: '€',
-	sect: '§'
-};
-// #endif
 var emoji; // emoji 补丁包 https://jin-yufeng.github.io/Parser/#/instructions?id=emoji
 class MpHtmlParser {
 	constructor(data, options = {}) {
@@ -76,10 +44,12 @@ class MpHtmlParser {
 	setAttr() {
 		var name = this.getName(this.attrName);
 		if (cfg.trustAttrs[name]) {
-			if (!this.attrVal) {
-				if (cfg.boolAttrs[name]) this.attrs[name] = 'T';
-			} else if (name == 'src') this.attrs[name] = this.getUrl(this.attrVal.replace(/&amp;/g, '&'));
-			else this.attrs[name] = this.attrVal;
+			var val = this.attrVal;
+			if (val) {
+				if (name == 'src') this.attrs[name] = this.getUrl(this.decode(val, 'amp'));
+				else if (name == 'href' || name == 'style') this.attrs[name] = this.decode(val, 'amp');
+				else this.attrs[name] = val;
+			} else if (cfg.boolAttrs[name]) this.attrs[name] = 'T';
 		}
 		this.attrVal = '';
 		while (blankChar[this.data[this.i]]) this.i++;
@@ -108,43 +78,10 @@ class MpHtmlParser {
 			text = tmp.join('');
 			if (text == ' ') return;
 		}
-		// 处理实体
-		var siblings = this.siblings(),
-			i = -1,
-			j, en;
-		while (1) {
-			if ((i = text.indexOf('&', i + 1)) == -1) break;
-			if ((j = text.indexOf(';', i + 2)) == -1) break;
-			if (text[i + 1] == '#') {
-				en = parseInt((text[i + 2] == 'x' ? '0' : '') + text.substring(i + 2, j));
-				if (!isNaN(en)) text = text.substr(0, i) + String.fromCharCode(en) + text.substring(j + 1);
-			} else {
-				en = text.substring(i + 1, j);
-				// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS
-				if (en == 'nbsp') text = text.substr(0, i) + '\xA0' + text.substr(j + 1); // 解决 &nbsp; 失效
-				else if (en != 'lt' && en != 'gt' && en != 'amp' && en != 'ensp' && en != 'emsp' && en != 'quot' && en != 'apos') {
-					i && siblings.push({
-						type: 'text',
-						text: text.substr(0, i)
-					})
-					siblings.push({
-						type: 'text',
-						text: `&${en};`,
-						en: 1
-					})
-					text = text.substr(j + 1);
-					i = -1;
-				}
-				// #endif
-				// #ifdef MP-BAIDU || MP-ALIPAY || MP-TOUTIAO
-				if (entities[en]) text = text.substr(0, i) + entities[en] + text.substr(j + 1);
-				// #endif
-			}
-		}
-		text && siblings.push({
+		this.siblings().push({
 			type: 'text',
-			text
-		})
+			text: this.decode(text)
+		});
 	}
 	// 设置元素节点
 	setNode() {
@@ -227,8 +164,7 @@ class MpHtmlParser {
 						name: 'img',
 						attrs: {
 							src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23')
-						},
-						svg: 1
+						}
 					})
 				}
 				return;
@@ -276,8 +212,18 @@ class MpHtmlParser {
 			case 'audio':
 				if (!attrs.id) attrs.id = node.name + (++this[`${node.name}Num`]);
 				else this[`${node.name}Num`]++;
-				if (node.name == 'video' && this.videoNum > 3)
-					node.lazyLoad = true;
+				if (node.name == 'video') {
+					if (this.videoNum > 3)
+						node.lazyLoad = 1;
+					if (attrs.width) {
+						styleObj.width = parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : 'px');
+						attrs.width = void 0;
+					}
+					if (attrs.height) {
+						styleObj.height = parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : 'px');
+						attrs.height = void 0;
+					}
+				}
 				attrs.source = [];
 				if (attrs.src) attrs.source.push(attrs.src);
 				if (!attrs.controls && !attrs.autoplay)
@@ -297,16 +243,8 @@ class MpHtmlParser {
 			styleObj['text-align'] = attrs.align;
 			attrs.align = void 0;
 		}
-		if (attrs.width) {
-			styleObj.width = parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : 'px');
-			attrs.width = void 0;
-		}
-		if (attrs.height) {
-			styleObj.height = parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : 'px');
-			attrs.height = void 0;
-		}
 		// 压缩 style
-		var styles = style.replace(/&quot;/g, '"').replace(/&amp;/g, '&').split(';');
+		var styles = style.split(';');
 		style = '';
 		for (var i = 0, len = styles.length; i < len; i++) {
 			var info = styles[i].split(':');
@@ -326,28 +264,15 @@ class MpHtmlParser {
 				attrs['data-src'] = void 0;
 			}
 			if ((attrs.src || node.name == 'picture') && !attrs.ignore) {
-				if (this.bubble()) {
-					// #ifdef MP-WEIXIN
-					if ((attrs.src || '').includes('.webp')) node.webp = 1;
-					// #endif
+				if (this.bubble())
 					attrs.i = (this.imgNum++).toString();
-				} else attrs.ignore = 'T';
+				else attrs.ignore = 'T';
 			}
-			var check = item => styleObj[item] && !styleObj[item].includes('auto');
-			if (check('width')) {
-				var parent = this.STACK[this.STACK.length - 1];
-				if (styleObj.width.includes('%') && parent && (parent.attrs.style || '').includes('display:inline')) {
-					parent.attrs.style += ';max-width:100%'
-					node.auto = 1;
-				}
-				if (parseInt(styleObj.width) > screenWidth)
-					styleObj.height = 'auto';
-				if (check('height')) node.mode = 'scaleToFill';
-			}
-			// #ifdef MP-WEIXIN
-			else if (check('height')) node.mode = 'heightFix';
-			// #endif
-			else node.auto = 1;
+			if (styleObj.height) {
+				attrs.height = styleObj.height;
+				styleObj.height = '';
+			} else if (attrs.height && !attrs.height.includes('%'))
+				attrs.height += 'px';
 		}
 		for (var key in styleObj) {
 			var value = styleObj[key];
@@ -392,15 +317,19 @@ class MpHtmlParser {
 		if (cfg.blockTags[node.name]) node.name = 'div';
 		else if (!cfg.trustTags[node.name]) node.name = 'span';
 		// 处理列表
-		if (node.c) {
-			if (node.name == 'ul') {
+		if (node.c && (node.name == 'ul' || node.name == 'ol')) {
+			if ((node.attrs.style || '').includes('list-style:none')) {
+				for (let i = 0, child; child = node.children[i++];)
+					if (child.name == 'li')
+						child.name = 'div';
+			} else if (node.name == 'ul') {
 				var floor = 1;
 				for (let i = this.STACK.length; i--;)
 					if (this.STACK[i].name == 'ul') floor++;
 				if (floor != 1)
 					for (let i = node.children.length; i--;)
 						node.children[i].floor = floor;
-			} else if (node.name == 'ol') {
+			} else {
 				for (let i = 0, num = 1, child; child = node.children[i++];)
 					if (child.name == 'li') {
 						child.type = 'ol';
@@ -460,6 +389,23 @@ class MpHtmlParser {
 			item.c = 1;
 		}
 		return true;
+	}
+	decode(val, amp) {
+		var i = -1,
+			j, en;
+		while (1) {
+			if ((i = val.indexOf('&', i + 1)) == -1) break;
+			if ((j = val.indexOf(';', i + 2)) == -1) break;
+			if (val[i + 1] == '#') {
+				en = parseInt((val[i + 2] == 'x' ? '0' : '') + val.substring(i + 2, j));
+				if (!isNaN(en)) val = val.substr(0, i) + String.fromCharCode(en) + val.substr(j + 1);
+			} else {
+				en = val.substring(i + 1, j);
+				if (cfg.entities[en] || en == amp)
+					val = val.substr(0, i) + (cfg.entities[en] || '&') + val.substr(j + 1);
+			}
+		}
+		return val;
 	}
 	getName = val => this.xml ? val : val.toLowerCase();
 	getUrl(url) {

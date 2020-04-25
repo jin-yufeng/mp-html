@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/04/19
+  update：2020/04/25
 -->
 <template>
 	<view>
@@ -75,12 +75,10 @@
 		// #endif
 		props: {
 			'html': null,
-			// #ifndef MP-ALIPAY
 			'autopause': {
 				type: Boolean,
 				default: true
 			},
-			// #endif
 			'autosetTitle': {
 				type: Boolean,
 				default: true
@@ -160,8 +158,12 @@
 			// #endif
 			// #ifdef APP-PLUS-NVUE
 			this.document = this.$refs.web;
+			this.$nextTick(() => {
+				// #endif
+				if (this.html) this.setContent(this.html);
+				// #ifdef APP-PLUS-NVUE
+			})
 			// #endif
-			if (this.html) this.setContent(this.html);
 		},
 		beforeDestroy() {
 			// #ifdef H5
@@ -203,9 +205,6 @@
 			},
 			_handleHtml(html, append) {
 				if (typeof html != 'string') html = this._Dom2Str(html.nodes || html);
-				// 处理 rpx
-				if (html.includes('rpx'))
-					html = html.replace(/[0-9.]+\s*rpx/g, $ => parseFloat($) * rpx + 'px');
 				if (!append) {
 					// 处理 tag-style 和 userAgentStyles
 					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}';
@@ -216,6 +215,9 @@
 					style += '</style>';
 					html = style + html;
 				}
+				// 处理 rpx
+				if (html.includes('rpx'))
+					html = html.replace(/[0-9.]+\s*rpx/g, $ => parseFloat($) * rpx + 'px');
 				return html;
 			},
 			// #endif
@@ -230,7 +232,7 @@
 					html =
 						'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1' +
 						(this.selectable ? '' : ',user-scalable=no') + '"><base href="' + this.domain + '"><div id="parser">' + this._handleHtml(html) +
-						'</div><script>"use strict";function post(n){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[n]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}function waitReady(){return new Promise(function(e){var t=document.getElementById("parser"),r=t.scrollHeight,n=setInterval(function(){r==t.scrollHeight?(clearInterval(n),e(r)):r=t.scrollHeight},350)})}' +
+						'</div><script>"use strict";function post(n){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[n]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}function waitReady(){return new Promise(function(e){var t=document.getElementById("parser"),r=t.scrollHeight,n=setInterval(function(){r==t.scrollHeight?(clearInterval(n),e(r)):r=t.scrollHeight},500)})}' +
 						(this.showWithAnimation ? 'document.body.style.animation="show .5s",' : '') +
 						'setTimeout(function(){post({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight+16})},50);</' + 'script>';
 					this.$refs.web.evalJs("document.write('" + html.replace(/'/g, "\\'") + "');document.close()");
@@ -438,43 +440,7 @@
 				this.$nextTick(() => {
 					this.imgList.length = 0;
 					this.videoContexts = [];
-					// #ifdef MP-TOUTIAO || MP-BAIDU || MP-ALIPAY
-					setTimeout(() => {
-						// #endif
-						var f = (cs) => {
-							for (let i = 0, c; c = cs[i++];) {
-								if (c.$options.name == 'trees') {
-									for (var j = c.nodes.length, item; item = c.nodes[--j];) {
-										if (item.c) continue;
-										if (item.name == 'img')
-											this.imgList.setItem(item.attrs.i, item.attrs.src);
-										// #ifndef MP-ALIPAY
-										else if (item.name == 'video') {
-											var ctx = uni.createVideoContext(item.attrs.id, c);
-											ctx.id = item.attrs.id;
-											this.videoContexts.push(ctx);
-										}
-										// #endif
-										// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
-										if (item.attrs && item.attrs.id) {
-											this.anchors = this.anchors || [];
-											this.anchors.push({
-												id: item.attrs.id,
-												node: c
-											})
-										}
-										// #endif
-									}
-								}
-								if (c.$children.length)
-									f(c.$children)
-							}
-						}
-						f(this.$children);
-						this.$emit('load');
-						// #ifdef MP-TOUTIAO || MP-BAIDU || MP-ALIPAY
-					}, 500)
-					// #endif
+					this.$emit('load');
 				})
 				// #endif
 				// #ifndef APP-PLUS-NVUE
@@ -542,7 +508,7 @@
 					dom.scrollToElement(this.$refs.web);
 				else
 					this.$refs.web.evalJs('var pos=document.getElementById("' + obj.id +
-						'");if(pos)post({action:"linkpress",href:"#",offset:pos.offsetTop})');
+						'");if(pos)post({action:"linkpress",href:"#",offset:pos.offsetTop+' + (obj.offset || 0) + '})');
 				return obj.success && obj.success({
 					errMsg: 'pageScrollTo:ok'
 				});
@@ -558,7 +524,7 @@
 				if (!target) return obj.fail && obj.fail({
 					errMsg: 'Label not found'
 				});
-				obj.scrollTop = this.rtf.offsetTop + target.offsetTop;
+				obj.scrollTop = this.rtf.offsetTop + target.offsetTop + (obj.offset || 0);
 				uni.pageScrollTo(obj);
 				// #endif
 				// #ifndef H5
@@ -570,7 +536,7 @@
 								return obj.fail && obj.fail({
 									errMsg: 'Label not found'
 								});
-							obj.scrollTop = res[1].scrollTop + res[0].top;
+							obj.scrollTop = res[1].scrollTop + res[0].top + (obj.offset || 0);
 							uni.pageScrollTo(obj);
 						})
 				}

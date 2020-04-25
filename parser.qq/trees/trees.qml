@@ -1,9 +1,22 @@
 <!--trees 递归子组件-->
-<qs module="handler" src="./handler.qs" />
+<qs module="handler">
+module.exports = {
+  visited: function (e, owner) {
+    if (!e.instance.hasClass('_visited'))
+      e.instance.addClass('_visited')
+    owner.callMethod('linkpress', e);
+  },
+  useRichText: function (item, inlineTags) {
+    return !item.c && !inlineTags[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1
+  }
+}
+</qs>
 <block qq:for="{{nodes}}" qq:key="index" qq:for-item="n">
-  <rich-text qq:if="{{n.en||n.svg||n.err}}" class="_svg" nodes="{{[n]}}" />
   <!--图片-->
-  <image qq:elif="{{n.name=='img'}}" class="_img" style="{{n.attrs.style}}" src="{{n.attrs.src}}" lazy-load="{{lazyLoad}}" mode="{{n.mode||'widthFix'}}" data-attrs="{{n.attrs}}" data-i="{{index}}" data-auto="{{n.auto}}" data-source="img" bindtap="imgtap" bindload="{{handler.load}}" binderror="error" />
+  <view qq:if="{{n.name=='img'}}" id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="imgtap">
+    <rich-text nodes="{{[{attrs:{src:lazyLoad&&!n.load?placeholder:n.attrs.src,alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:inherit'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
+    <image class="_image" src="{{lazyLoad&&!n.load?placeholder:n.attrs.src}}" lazy-load="{{lazyLoad}}" data-i="{{index}}" data-source="img" bindload="loadImg" binderror="error" />
+  </view>
   <!--文本-->
   <text qq:elif="{{n.type=='text'}}" decode>{{n.text}}</text>
   <text qq:elif="{{n.name=='br'}}">\n</text>
@@ -31,7 +44,7 @@
     <trees class="_node _li" lazy-load="{{lazyLoad}}" nodes="{{n.children}}" />
   </view>
   <!--富文本-->
-  <rich-text qq:elif="{{handler.useRichText(n)}}" id="{{n.attrs.id}}" class="_p __{{n.name}}" nodes="{{[n]}}" />
+  <rich-text qq:elif="{{handler.useRichText(n, inlineTags)}}" id="{{n.attrs.id}}" class="_p __{{n.name}}" nodes="{{[n]}}" />
   <!--继续递归-->
   <trees qq:else id="{{n.attrs.id}}" class="_node _{{n.name}} {{n.attrs.class}}" style="{{n.attrs.style}}" lazy-load="{{lazyLoad}}" nodes="{{n.children}}" />
 </block>

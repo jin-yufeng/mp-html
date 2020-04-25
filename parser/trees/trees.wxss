@@ -15,8 +15,9 @@
   color: #551a8b;
 }
 ._img {
-  height: 50px;
+  display: inline-block;
   max-width: 100%;
+  position: relative;
 }
 /* 内部样式 */
 :host {
@@ -55,6 +56,14 @@
 ._h1, ._h2, ._h3, ._h4, ._h5, ._h6 {
   display: block;
   font-weight: bold;
+}
+._image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
 }
 ._ins {
   text-decoration: underline;
@@ -104,7 +113,7 @@
   font-size: smaller;
   vertical-align: super;
 }
-.__bdi, .__bdo, .__ruby, .__rt, ._svg {
+.__bdi, .__bdo, .__ruby, .__rt {
   display: inline-block;
 }
 ._video {

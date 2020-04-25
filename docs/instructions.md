@@ -3,11 +3,11 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.5KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.0KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 43.7KB | QQ 小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 43.0KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 61.7KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.3KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.1KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 43.8KB | QQ 小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 43.1KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 60.7KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 1. 百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
@@ -22,12 +22,12 @@
 
 | 平台 | 差异 |
 |:---:|---|
-| 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单<br>基础库 2.9.0 及以上支持 webp 图片 |
+| 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单 |
 | 百度小程序 | 不支持 gesture-zoom 属性 |
-| 支付宝小程序 | 不支持 autopause、gesture-zoom 属性 |
-| 头条小程序 | imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
+| 支付宝小程序 | 不支持 audio 标签<br>不支持 autopause、gesture-zoom 属性 |
+| 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
 | H5 | 支持所有浏览器支持的标签<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
-| App | 在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
+| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
 | NVUE | 支持所有浏览器支持的标签<br>不支持 gesture-zoom、lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
 
 关于 `a` 标签：  
@@ -39,7 +39,7 @@
 - `H5`  
   `document` 为富文本所在 `div` 的实例，可以直接调用 `dom` 的各类方法  
 - 小程序和 `App`  
-  若使用了 [document](#document) 补丁包，则指向一个虚拟的 `dom` 对象（否则为 `undefined`），具体方法见文档  
+  若使用了 [document](#document) 扩展包，则指向一个虚拟的 `dom` 对象（否则为 `undefined`），具体方法见文档  
 - `NVUE`  
   `document` 为所在 `webview` 的实例，可以通过 `evalJs` （注意不是 `evalJS`）方法修改 `dom`  
 
@@ -345,6 +345,7 @@ error(e) {
 
 | 配置项 | 作用 |
 |:---:|:---:|
+| entities | 实体编码列表 |
 | blockTags | 块级标签列表 |
 | ignoreTags | 移除的标签列表 |
 | selfClosingTags | 自闭合的标签列表 |
@@ -355,7 +356,9 @@ error(e) {
 | highlight | 代码高亮处理器 |
 | onText | 文本处理器 |
 
-?> 配置项在 `/libs/config.js` 中配置，对所有 `parser` 标签生效
+?> 配置项在 `/libs/config.js` 中配置，对所有 `parser` 标签生效  
+
+?> 实体列表不代表所有支持的实体编码，但发现有不支持的实体时可以在这里添加  
 
 !> 不在信任的属性列表中的属性将被移除  
 不在信任的标签列表中的标签，除被移除的标签外，块级标签列表中的标签将被转为 `div` 标签，其他被转为 `span` 标签
@@ -473,11 +476,9 @@ onText(text, hasTag) {
   
 | 版本 | 功能 | 占比 |
 |:---:|:---:|:---:|
-| < 2.9.0 | 不支持 webp 图片 | 5.51% |
-| < 2.7.1 | 不支持图片长按菜单（识别小程序码）<br>不支持 bdi bdo ruby 标签 | 2.31% |
-| < 2.4.4 | 不支持 a 标签 visited 效果 | 0.42% |
-| < 2.3.0 | 不支持云文件 ID | 0.34% |
-| < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.20% |
+| < 2.7.1 | 不支持图片长按菜单（识别小程序码）<br>不支持 bdi bdo ruby 标签 | 1.73% |
+| < 2.4.4 | 不支持 a 标签 visited 效果 | 0.29% |
+| < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.13% |
 | < 1.6.3 | 无法使用 | < 0.01% |
 
 !> 使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
@@ -534,7 +535,7 @@ console.log(text);
 
 #### navigateTo ####
 功能：跳转到指定的锚点  
-输入值：一个 `object`，`id` 为锚点的 `id`（为空时将跳转到组件顶部），`success` 和 `fail` 是成功和失败的回调（需要配合 `use-anchor` 属性使用）  
+输入值：一个 `object`，`id` 为锚点的 `id`（为空时将跳转到组件顶部），`offset` 为偏移量，`success` 和 `fail` 是成功和失败的回调（需要配合 `use-anchor` 属性使用）  
 为确保跳转位置准确，建议在 `ready` 事件中或之后使用  
 使用方法：  
 ```javascript
@@ -626,15 +627,15 @@ this.selectComponent("#article").setContent(html);
 this.selectComponent("#preLoad").preLoad(html);
 ```
 
+## 扩展包 ##
+[patches](https://github.com/jin-yufeng/Parser/tree/master/patches) 文件夹中准备了一些扩展包，根据需要选用，可以实现更加丰富的功能  
+
+!> 扩展包需与插件包同步更新，否则可能出现不兼容的情况  
+
 ### 打包工具 ###
-本插件提供了一个打包工具（`pack.jar` 是可执行文件，`pack.java` 是源代码），可以按需生成需要的插件包（便于添加补丁包）  
+本插件提供了一个打包工具（`pack.jar` 是可执行文件，`pack.java` 是源代码），可以按需生成需要的插件包（便于添加扩展包）  
 
 ![打包工具](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md7.png?sign=0e1d048ea91f4154a0a53ab55b45e4ca&t=1579784564)
-
-## 补丁包 ##
-[patches](https://github.com/jin-yufeng/Parser/tree/master/patches) 文件夹中准备了一些补丁包，可根据需要选用，可以实现更加丰富的功能  
-
-?> 可以通过 [打包工具](#打包工具) 打包需要的插件包  
 
 ### emoji ###  
 - 功能  
@@ -642,7 +643,7 @@ this.selectComponent("#preLoad").preLoad(html);
 - 大小  
   `4.25KB`（`min` 版本 `3.16KB`）  
 - 使用方法  
-  将 `emoji.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `emoji.js`）  
+  将 [emoji.js](https://github.com/jin-yufeng/Parser/blob/master/patches/emoji/emoji.js) 复制到 `libs` 文件夹下即可（[emoji.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/emoji/emoji.min.js) 是压缩版本，功能相同，使用时也需要更名为 `emoji.js`）  
   
   !> 在 `uni-app` 中使用时需要将 `libs/MpHtmlParser.js` 第 47 行改为 `const emoji = require('./emoji.js');`  
   
@@ -659,11 +660,11 @@ this.selectComponent("#preLoad").preLoad(html);
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `7.17KB`（`min` 版本 `5.45KB`，`uni-app` 版本 `6.21KB`）  
+  `7.17KB`（`min` 版本 `5.45KB`，`uni-app` 版本 `5.85KB`）  
 - 使用方法  
-  将 `document.js` 复制到 `libs` 文件夹下即可（若使用 `min` 版本也要改名为 `document.js`）  
+  将 [document.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.js) 复制到 `libs` 文件夹下即可（[document.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.min.js) 是压缩版本，功能相同，使用时也需要更名为 `document.js`）  
   
-  !> 在 `uni-app` 中使用时需用 `document.uni.js`；并将 `jyf-parser.vue` 中的 38 行修改为 `const document = require('./libs/document.js');`  
+  !> 在 `uni-app` 中使用时需用 [document.uni.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.uni.js)；并将 `jyf-parser.vue` 中的 38 行修改为 `const document = require('./libs/document.js');`  
   
 - `document` 类：  
   获取方式：可通过 `this.selectComponent("#id").document` 获取  
@@ -730,9 +731,9 @@ error(e){
     
 ### CssHandler ###
 - 功能  
-  支持更多的 `css` 选择器  
+  支持匹配 `style` 标签中更多的 `css` 选择器  
   
-使用本补丁包后 **增加** 支持的选择器（原包支持的选择器可见 [链接](/features#匹配-style-标签)）：
+使用本扩展包后 **增加** 支持的选择器（原包支持的选择器可见 [链接](/features#匹配-style-标签)）：
 
 | 名称 | 示例 |
 |:---:|:---:|
@@ -753,9 +754,9 @@ error(e){
 - 大小（与原大小相比增加）  
   `4.80KB`（`min` 版本：`1.50KB`）  
 - 使用方法  
-  用 `CssHandler` 文件夹下的 `CssHandler.js`（若使用 `min` 版本也要改名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
+  用 [CssHandler.js](https://github.com/jin-yufeng/Parser/blob/master/patches/CssHandler/CssHandler.js)（[CssHandler.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/CssHandler/CssHandler.min.js) 是压缩版本，功能相同，使用时也需要更名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
-!> 使用该补丁包后会一定程度上减慢解析速度，如非必要不建议使用  
+!> 使用该扩展包后会一定程度上减慢解析速度，如非必要不建议使用  
 
 ### parser-group ###
 !> 该包仅支持 原生包 使用，暂不支持通过 [打包工具](#打包工具) 打包  
@@ -768,7 +769,7 @@ error(e){
 - 大小  
   `2.24KB`  
 - 使用方法  
-  1. 将 `parser-group` 文件夹拷贝到 `components` 目录下即可（必须与 `parser` 文件夹同级）  
+  1. 将 [parser-group](https://github.com/jin-yufeng/Parser/tree/master/patches/parser-group) 文件夹拷贝到 `components` 目录下即可（必须与 `parser` 文件夹同级）  
   2. 在需要使用页面的 `json` 文件中添加  
      ```json
      {
@@ -788,11 +789,9 @@ error(e){
      ```
 
 ### audio ###
-!> 该包仅支持 原生包 使用  
-
 - 功能  
   音乐播放器  
-  功能上同原生的 `audio` 组件，由于微信原生的 `audio` 和 `wx.createAudioContext` 均已被废弃，因此设置这样一个组件代替，与原生的 `audio` 相比，所做的改进有：  
+  功能上同原生的 `audio` 组件，由于微信原生的 `audio` 和 `wx.createAudioContext` 均已被废弃，一些平台直接不支持 `audio` 组件，因此设置这样一个组件代替，与原生的 `audio` 相比，所做的改进有：  
   1. 其大小会根据屏幕宽度自动调整（原生 `audio` 大小不可变）  
   2. 支持 `autoplay` 属性  
   3. 增加了一个可以拖动的进度条  
@@ -801,9 +800,13 @@ error(e){
   `error` 事件中会返回 `context` 对象（也可以通过 [getVideoContext](#getVideoContext) 方法获取），包含 `setSrc`、`play`、`pause`、`seek` 方法  
   封装成自定义组件，可以直接在页面上使用（属性和事件基本同 `audio`）  
 - 大小  
-  `3.95KB`  
+  `4.13KB`（`uni-app` 版 `4.66KB`）  
 - 使用方法  
-  1. 将 `audio` 文件夹拷贝到 `parser` 文件夹下  
+
+  ?> 建议通过 [打包工具](#打包工具) 打包  
+
+  原生包：  
+  1. 将 [audio](https://github.com/jin-yufeng/Parser/tree/master/patches/audio/audio) 文件夹拷贝到 `parser` 文件夹下  
   2. 在 `trees/trees.json` 文件修改为  
      ```json
      {
@@ -814,13 +817,65 @@ error(e){
        }
      }
      ```
-  3. 将 `trees/trees.wxml` 中的 `audio` 修改为 `myAudio`  
+  3. 将 `trees/trees.wxml` `template` 中的 `audio` 修改为 `myAudio`  
+  
+  uni-app：  
+  1. 将 [audio.vue](https://github.com/jin-yufeng/Parser/tree/master/patches/audio/audio.vue) 拷贝到 `libs` 文件夹下  
+  2. 在 `trees.vue` 中引入  
+     ```javascript
+    import myAudio from './audio'
+    ...
+    components: {
+      myAudio,
+      trees
+    } 
+    ```
+  3. 将 `trees.vue` 中的 `audio` 修改为 `myAudio`
 
-## 原理和二次开发 ##
+## 插件原理 ##
 
 ### 原理简介 ###  
 本插件对于节点下有 图片 链接 视频 等特殊标签的，通过 `trees` 组件递归显示，否则直接通过 `rich-text` 组件显示，通过这样的方式，既可以充分利用 `rich-text` 渲染效果好，效率高的优点，也解决了 `rich-text` 屏蔽所有事件的问题，同时通过一些特殊处理，可以实现更加丰富的功能。  
 详细可见：[小程序富文本能力的深入研究与应用](https://developers.weixin.qq.com/community/develop/article/doc/0006e05c1e8dd80b78a8d49f356413)  
+
+### 图片处理 ###
+由于小程序中的 `image` 和 `html` 中的 `img` 表现有很大不同（`html` 中的 `img` 在没有设置宽高时按原大小显示，设置了宽或高时按比例缩放，同时设置宽高时按设置值显示；小程序中的 `image` 必须设置宽高，否则将按照默认大小（`300×225`）显示），因此在小程序上模拟实现 `img` 将成为一个难题，插件的处理如下：  
+
+- `20200317` 版本前  
+  通过 `rich-text` 中的 `img` 显示图片  
+  优点：  
+  与 `html` 中的 `img` 表现基本一致  
+  缺陷：  
+  1. 不支持 `image` 的一些原生能力，包括：  
+     1. 懒加载，`20190928` 版本后通过 `IntersectionObserver` 实现，但效果依然不如原生  
+     2. 云文件 `ID`（`2.3.0+`）
+     3. 长按菜单（`2.7.0+`，能够识别小程序码）  
+     4. `webp` 图片（`2.9.0+`）  
+  2. `img` 外套了一层 `rich-text`，会在一些情况下导致样式错误  
+
+- `20200317`版本 - `20200425` 版本  
+  对 `image` 进行如下处理后显示图片：  
+  1. 若只设置了宽度，则设置 `mode` 为 `widthFix`  
+  2. 若只设置了高度，则设置 `mode` 为 `heightFix`（`2.10.3` 以上支持，低基础库可能存在问题）  
+  3. 若同时设置了宽高度，则设置 `mode` 为 `scaleToFill`  
+  4. 若既没有设置宽度，也没有设置高度，则给这张图设置一个标记，在 `load` 事件中，将宽度设置为原大小  
+  
+  优点：  
+  支持所有 `image` 的原生能力  
+  缺点：  
+  1. 对于上述最后一种情况，在图片加载完成时会突然从默认大小变成原大小，一些情况下较影响体验  
+  2. 在 `inline-block` 的容器中，`img` 能够撑开容器，但 `image` 不能，一些情况下会导致错误，需要额外处理  
+  2. 增加了处理复杂度，需要计算各类情况下的 `mode` 和设置宽度等  
+
+- `20200425` 后版本  
+  结合 `rich-text` 和 `image`，`rich-text` 由于控制图片大小，`image` 覆盖其上，设置为透明，用于控制懒加载和长按菜单  
+  优点：  
+  1. 与 `html` 中的 `img` 表现基本一致  
+  2. 部分利用了 `image` 的原生能力（懒加载和长按菜单）  
+  
+  此方案最大程度上结合了上述两种方案的优点（只是还不能支持云文件 `ID` 和 `webp`，因为这两种情况下 `rich-text` 无法显示，要控制 `image` 的大小则又会带来第二种方案中的问题）  
+
+## 二次开发 ##
 
 ### 添加一个自定义标签 ###  
 1. 在 `config.js` 中的 `trustAttrs` 中添加需要用到的属性（否则将被移除）  

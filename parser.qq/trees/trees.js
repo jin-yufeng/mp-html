@@ -3,9 +3,13 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/04/14
+  update：2020/04/25
 */
 Component({
+  data: {
+    placeholder: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='225'/>",
+    inlineTags: require('../libs/config.js').inlineTags  
+  },
   properties: {
     nodes: Array,
     lazyLoad: Boolean
@@ -19,13 +23,13 @@ Component({
           if (this.top.videoContexts[i].id != e.currentTarget.id)
             this.top.videoContexts[i].pause();
     },
-    // 图片点击事件
+    // 图片事件
     imgtap(e) {
-      var attrs = e.target.dataset.attrs;
+      var attrs = e.currentTarget.dataset.attrs;
       if (!attrs.ignore) {
         var preview = true;
         this.top.triggerEvent('imgtap', {
-          id: e.target.id,
+          id: e.currentTarget.id,
           src: attrs.src,
           ignore: () => preview = false
         })
@@ -39,6 +43,13 @@ Component({
           })
         }
       }
+    },
+    loadImg(e) {
+      var i = e.target.dataset.i;
+      if (this.data.lazyLoad && !this.data.nodes[i].load)
+        this.setData({
+          [`nodes[${i}].load`]: true
+        })
     },
     // 链接点击事件
     linkpress(e) {
@@ -74,8 +85,7 @@ Component({
     },
     // 错误事件
     error(e) {
-      var context, src = '',
-        source = e.target.dataset.source,
+      var context, source = e.target.dataset.source,
         i = e.target.dataset.i,
         node = this.data.nodes[i];
       if (source == 'video' || source == 'audio') {
@@ -88,7 +98,11 @@ Component({
         if (this.top) context = this.top.getVideoContext(e.target.id);
       } else if (source == 'img')
         context = {
-          setSrc: (newSrc) => src = newSrc
+          setSrc: src => {
+            this.setData({
+              [`nodes[${i}].attrs.src`]: src
+            })
+          }
         }
       this.top && this.top.triggerEvent('error', {
         source,
@@ -96,13 +110,6 @@ Component({
         context,
         ...e.detail
       })
-      if (source == 'img') {
-        var data = {
-          [`nodes[${i}].attrs.src`]: src
-        }
-        if (!src) data[`nodes[${i}].err`] = 1;
-        this.setData(data);
-      }
     },
     // 加载视频
     loadVideo(e) {

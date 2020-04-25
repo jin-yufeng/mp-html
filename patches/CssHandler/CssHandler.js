@@ -1,5 +1,5 @@
 /*
-  CssHandler 补丁包
+  CssHandler 扩展包
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
@@ -10,7 +10,7 @@ function matchClass(match, selector) {
   if (!match || !match.length || !selector || !selector.length) return false;
   if (match.length == 1 && selector.length == 1) return match[0] == selector[0];
   if (match.length < selector.length) return false;
-  for (var i = selector; i--;) {
+  for (var i = selector.length; i--;) {
     var matched = false;
     for (var j = match.length; j--;)
       if (match[j] == selector[i]) matched = true;

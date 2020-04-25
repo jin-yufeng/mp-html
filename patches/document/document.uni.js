@@ -1,5 +1,5 @@
 /*
-  document 补丁包
+  document 扩展包
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng

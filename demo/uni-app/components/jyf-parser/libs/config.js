@@ -9,6 +9,24 @@ module.exports = {
 	highlight: null,
 	// 文本处理函数
 	onText: null,
+	// 实体编码列表
+	entities: {
+		quot: '"',
+		apos: "'",
+		semi: ';',
+		nbsp: '\xA0',
+		ensp: '\u2002',
+		emsp: '\u2003',
+		ndash: '–',
+		mdash: '—',
+		middot: '·',
+		lsquo: '‘',
+		rsquo: '’',
+		ldquo: '“',
+		rdquo: '”',
+		bull: '•',
+		hellip: '…'
+	},
 	blankChar: makeMap(' ,\xA0,\t,\r,\n,\f'),
 	// 块级标签，将被转为 div
 	blockTags: makeMap('address,article,aside,body,caption,center,cite,footer,header,html,nav,section' + (

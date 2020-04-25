@@ -1,8 +1,20 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.04.25 ####
+1. `U` 优化了图片的显示方式（可解决加载完毕时大小突变的问题，但不再支持云文件 `ID` 和 `webp` 图片）[详细](/instructions#图片处理)  
+2. `U` 支持在链接中使用实体编码  
+3. `U` 模拟实现的列表（内含图片链接）支持 `list-style:none`  
+4. `U` `navigateTo` 的 `api` 增加一个 `offset` 参数，可设置偏移量  
+5. `U` `uni-app` 包支持使用 `audio` 扩展包  
+6. `F` 修复了个别情况下图片宽度过宽的问题  
+7. `F` 修复了 [CssHandler](/instructions#CssHandler) 扩展包 `class` 匹配错误的问题 [详细](https://github.com/jin-yufeng/Parser/issues/122)  
+8. `F` 修复了 `uni-app` 包编译到 `NVUE` 时在 `ready` 前设置数据可能无法显示的问题  
+9. `F` 修复了 `uni-app` 包编译到 `App` 时视频可能无法显示的问题  
+10. `F` 修复了 `uni-app` 包编译到 `H5` 时 `tag-style` 中的 `rpx` 失效的问题  
+
 #### 2020.04.19 ####
 1. `F` 修复了 原生包 部分情况下 `table` 中在 `td` 外有文本节点会导致解析错误的问题  
-2. `F` 修复了 `uni-app` 包无法使用 [document 补丁包](/instructions#document) 的问题（并增加了一些方法） [详细](https://github.com/jin-yufeng/Parser/issues/119)  
+2. `F` 修复了 `uni-app` 包无法使用 [document 扩展包](/instructions#document) 的问题（并增加了一些方法） [详细](https://github.com/jin-yufeng/Parser/issues/119)  
 
 #### 2020.04.17 ####
 1. `F` 修复了 `uni-app` 包 `NVUE` 端打包到安卓后可能白屏的问题（另外由于不再通过本地文件中转，显示速度应该更快）  
@@ -25,7 +37,7 @@
 3. `F` 修复了自动移除空 `div` 导致换行失效的问题 [详细](https://github.com/jin-yufeng/Parser/issues/111)  
 4. `F` 修复了使用多个并列 `rpx` 时可能失效的问题 [详细](https://github.com/jin-yufeng/Parser/issues/112)  
 5. `F` 修复了 `uni-app` 包 `getText` 方法出错的问题 [详细](https://github.com/jin-yufeng/Parser/issues/110)  
-6. `F` 修复了 `audio` 补丁包音乐名太长会导致样式错乱的问题  
+6. `F` 修复了 `audio` 扩展包音乐名太长会导致样式错乱的问题  
 
 #### 2020.04.12 ####
 一周年撒花 🎉🎉  
@@ -44,7 +56,6 @@
 
    3. 注意事项  
       如果要限制富文本的高度，需要在 `parser` 标签外加一个 `scroller`，并限定 `scroller` 的高度，直接限定 `parser` 标签的高度会导致无法滚动  
-      **必须** 在页面 `onReady` 周期中或之后设置 `html` 数据，否则可能无法显示  
       若开启 `fast` 启动模式，首页上可能无法显示  
    
    ps：如果要用 `rich-text`（若 `rich-text` 就可以实现的效果应直接使用 `rich-text`），因为 `nvue` 中仅支持 `Array`，可以通过本组件的解析脚本解析：  
@@ -64,7 +75,7 @@
 3. `F` 修复了设置 `domain` 属性时 `data:image` 和 `cloud://` 的链接会被错误填充的问题  
 
 #### 2020.03.23 ####
-1. `A` 增加了 `audio` 的补丁包（替代被废弃的原生 `audio`）[详细](/instructions#audio)  
+1. `A` 增加了 `audio` 的扩展包（替代被废弃的原生 `audio`）[详细](/instructions#audio)  
 2. `U` 通过 `eslint` 检查规范和修复了一些问题  
 
 #### 2020.03.21 ####
@@ -108,19 +119,19 @@
 #### 2020.03.01 ####
 1. `U` 支持 `picture` 标签，可以在不同大小的屏幕上显示不同链接的图片 [详细](/features#多媒体多资源加载)  
 2. `U` 支持在 `sub`、`sup` 标签中使用 `a` 标签  
-3. `U` 给 `document` 补丁包添加和修改了一些方法 [详细](/instructions#document)  
+3. `U` 给 `document` 扩展包添加和修改了一些方法 [详细](/instructions#document)  
 4. `F` 修复了由于自动压缩带来的一些问题（主要是 `background-image`）  
 5. `F` 修复了使用 `show-with-animation` 属性时个别情况下会白屏的问题 [详细](https://github.com/jin-yufeng/Parser/issues/82)  
 
 #### 2020.02.26 ####
-1. `A` 添加了 `parser-group` 补丁包 [详细](/instructions#parser-group)  
+1. `A` 添加了 `parser-group` 扩展包 [详细](/instructions#parser-group)  
 2. `U` `uni-app` 包 `App` 端支持 `a` 标签链接为文档时自动下载和打开，`v3` 支持 `embed` 标签  
 3. `F` 修复了部分情况下连续实体编码失效的问题  
 
 #### 2020.02.23 ####
 1. `U` 支持自动压缩 `style` 属性，移除重复的样式，可以减少解析结果大小  
 2. `U` 支持预览 `base64` 图片（通过暂存到本地实现）  
-3. `U` `CssHandler` 补丁包支持属性选择器和 `@media`，伪类中的 `content` 支持 `attr()` [详细](/instructions#CssHandler)  
+3. `U` `CssHandler` 扩展包支持属性选择器和 `@media`，伪类中的 `content` 支持 `attr()` [详细](/instructions#CssHandler)  
 4. `U` 精简了部分代码  
 5. `U` `uni-app` 包 `APP(v3)` 端支持 `iframe` 标签  
 
@@ -156,7 +167,7 @@
 
 #### 2020.01.07 ####
 1. `U` 支持模拟显示 `li`, `ol`, `ul` 标签（即可以在其中放图片、链接、视频等，支持 `ol` 的 `type` 属性，支持多层 `ul`，暂不支持 `list-style` 的 `css` 样式）
-2. `D` 删除了 `List` 补丁包（在主包中已经默认支持）  
+2. `D` 删除了 `list` 扩展包（在主包中已经默认支持）  
 3. `F` 修复了传入的 `html` 为数组时预览图片会出现预览顺序颠倒的问题
 
 #### 2020.01.05 ####
@@ -181,7 +192,7 @@
 5. `U` `cache-id` 属性更名为 `use-cache`，只用选择是否使用缓存即可，缓存 `id` 会自动通过 `hash` 函数获取  
 6. `U` `html` 属性传入 `array` 类型时即使没有设置 `continue`，组件也会自动进行设置（即可以传入和 `rich-text` 完全相同的格式）[详细](/instructions#组件属性)  
 7. `U` 所有内置样式选择器名改为以下划线开头，避免与自定义样式的选择器冲突  
-8. `U` `document` 补丁包增加 `getStyle` 和 `setStyle` 方法（返回值格式有更改） [详细](/instructions#document)  
+8. `U` `document` 扩展包增加 `getStyle` 和 `setStyle` 方法（返回值格式有更改） [详细](/instructions#document)  
 9. `D` 废弃了 `html` 属性的 `object` 类型，请直接将 `html` 设置成原 `object.nodes`（即 `array` 类型，`imgList` 等其他信息可直接从 `nodes` 中获取） [详细](/instructions#组件属性)  
 10. `D` 删除了 `animation-duration` 属性，需要修改动画时长的，可直接在 `index.js` 中修改  
 11. `D` 不再对百度版插件包进行维护，如有需要可从过去版本获取  
@@ -197,12 +208,12 @@
 8. `U` `error` 事件将返回该视频的 `context` 对象，可以修改播放源 [详细](/instructions#事件)  
 9. `F` 修复了 `uni-app` 包编译到 `H5` 时在微信内置浏览器中无法显示、存在多个 `parser` 标签时相互覆盖等问题 [详细](https://github.com/jin-yufeng/Parser/issues/59)
 
-*此版本较之前版本在 `api` 和补丁包的引入方式上有不兼容的地方，请注意*
+*此版本较之前版本在 `api` 和扩展包的引入方式上有不兼容的地方，请注意*
 
 #### 2019.12.03 ####
 1. `A` 增加了 `domain` 属性，可以设置主域名，设置后对于图片链接将自动拼接上主域名或协议名 [详细](https://github.com/jin-yufeng/Parser/issues/56)
 2. `A` 增加了 `use-anchor` 属性，可以设置页面内锚点 [详细](https://github.com/jin-yufeng/Parser/issues/55)
-3. `U` `CssHandler` 补丁包增加支持 `before` 和 `after` 伪类选择器 [详细](/instructions#CssHandler)
+3. `U` `CssHandler` 扩展包增加支持 `before` 和 `after` 伪类选择器 [详细](/instructions#CssHandler)
 
 #### 2019.11.29 ####
 1. `U` `linkpress`, `imgtap` 事件中增加一个 `ignore` 函数，在事件中调用此函数将不自动进行链接跳转/图片预览操作，可以屏蔽指定的链接/图片或进行自定义操作 [详细](https://github.com/jin-yufeng/Parser/issues/51)  
@@ -240,7 +251,7 @@
 1. `U` `uni-app` 包支持在 `APP` 端使用  
 
 #### 2019.10.17 #### 
-1. `A` 增加了 `CssHandler` 补丁包（可支持多层的 `css` 选择器）[详细](/instructions#CssHandler)  
+1. `A` 增加了 `CssHandler` 扩展包（可支持多层的 `css` 选择器）[详细](/instructions#CssHandler)  
 2. `U` `uni-app` 包支持在 `H5` 端使用  
 
 #### 2019.09.28 #### 
@@ -256,7 +267,7 @@
 #### 2019.09.21 #### 
 1. `A` 增加了百度小程序插件包 [详细](/instructions#插件包说明)
 2. `U` 为与百度小程序包统一，所有事件的返回值改为 `object` 类型（影响 `bindimgtap` 和 `bindlinkpress`）[详细](/instructions#事件)
-3. `U` 优化了补丁包的引入方式
+3. `U` 优化了扩展包的引入方式
 4. `F` 修复了 `autopause` 属性在某些情况下会失效的问题  
 
 #### 2019.09.18 #### 
@@ -265,16 +276,16 @@
 3. `F` 修复了 `0917` 版本中 `a` 标签失效的问题 [详细](https://github.com/jin-yufeng/Parser/issues/28)  
 
 #### 2019.09.17 #### 
-1. `A` 增加了 `list` 补丁包（可用于模拟列表） *附：20200107版本中被删除，改为插件包默认支持 *  
+1. `A` 增加了 `list` 扩展包（可用于模拟列表） *附：20200107版本中被删除，改为插件包默认支持 *  
 2. `A` `video` 组件增加支持 `unit-id` 属性（前插视频广告）  
 3. `F` 修复了部分情况下图片会被 `text-indent` 错误缩进的问题  
 
 #### 2019.09.15 #### 
-1. `A` 增加了 `document` 补丁包（可用于动态操作 `DOM`）[详细](/instructions#document)  
+1. `A` 增加了 `document` 扩展包（可用于动态操作 `DOM`）[详细](/instructions#document)  
 2. `A` 增加支持小程序广告 `ad` 组件（可显示文中广告）  
 
 #### 2019.09.13 #### 
-1. `A` 增加了 `emoji` 补丁包（可用于解析小表情）[详细](/instructions#emoji)
+1. `A` 增加了 `emoji` 扩展包（可用于解析小表情）[详细](/instructions#emoji)
 2. `A` 增加了 `autopreview` 属性（可用于控制点击图片时是否自动预览，默认 `true`）和 `imgtap` 事件（图片被点击时触发）[详细](https://github.com/jin-yufeng/Parser/issues/23)
 3. `U` 缩小了节点深度（约 `15%~35%`，主要是通过合并一些只有一个子节点的标签以及优化排版方式），优化了性能 [详细](#智能压缩)
 4. `U` 缩小了解析结果的大小（约 `3%~5%`）[详细](/features#智能压缩)

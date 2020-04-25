@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/04/19
+  update：2020/04/25
 */
 var cache = {},
   Parser = require('./libs/MpHtmlParser.js'),
@@ -57,7 +57,7 @@ Component({
     // 图片数组
     this.imgList = [];
     this.imgList.setItem = function (i, src) {
-      if (i == void 0 || !src) return;
+      if (!i || !src) return;
       // 去重
       if (src.indexOf('http') == 0 && this.includes(src)) {
         var newSrc = '';
@@ -113,7 +113,7 @@ Component({
               obj.fail && obj.fail({
                 errMsg: 'Label not found'
               });
-          obj.scrollTop = res[1].scrollTop + res[0].top;
+          obj.scrollTop = res[1].scrollTop + res[0].top + (obj.offset || 0);
           wx.pageScrollTo(obj);
         })
     },
