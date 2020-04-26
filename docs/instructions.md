@@ -3,11 +3,11 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.3KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.1KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 43.8KB | QQ 小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 43.1KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 60.7KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.7KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.2KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 44.2KB | QQ 小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 43.5KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 61.1KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 1. 百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
@@ -106,9 +106,38 @@
 在其他框架中 **没有专用包**，但也可以引入原生包使用  
 
 #### 在 taro 中使用 ####
-由 [@xPixv](https://github.com/xPixv) 提供，请参考：  
-[Github链接](https://github.com/xPixv/Taro-ParserRichText)  
-[Taro物料市场](https://taro-ext.jd.com/plugin/view/5d35903e9b6a1d4027780154)
+1. 将 [parser](#插件包说明) 文件夹复制到 `/src/components` 目录下  
+2. 使用的页面中参考此配置  
+   ```javascript
+   import Taro, { Component } from '@tarojs/taro'
+   import { View } from '@tarojs/components'
+
+   export default class Index extends Component {
+     config = {
+       usingComponents: {
+         'parser': '../../components/parser/parser' // 引入插件包
+       }
+     }
+
+     constructor (props) {
+       super(props)
+       this.state = {
+         html: '<div>Hello World!</div>'
+       }
+     }
+
+     render () {
+       return (
+         <View>
+           <parser html={html} />
+         </View>
+       )
+     }
+   }
+   ```
+
+更多信息参考：[官网说明](https://nervjs.github.io/taro/docs/mini-third-party.html)  
+组件方式引入可参考 [Taro-ParserRichText](https://github.com/xPixv/Taro-ParserRichText)（由 [@xPixv](https://github.com/xPixv) 提供）  
 
 #### 在 kbone 中使用 ####
 以 [vue 模板](https://github.com/wechat-miniprogram/kbone-template-vue) 开发为例

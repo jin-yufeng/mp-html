@@ -182,6 +182,8 @@ Page({
    ```
 2. 对于只有 `data-src` 没有 `src` 属性的图片，将自动把 `data-src` 的值设置成 `src`，避免无法显示
 
+?> `domain` 也可以通过 `base` 标签设置，但优先级低于 `domain` 属性  
+
 ### 实体编码支持 ###
 支持所有形如 `&#123;` 的实体编码和大部分常用的形如 `&nbsp;` 的实体编码  
 
@@ -198,6 +200,7 @@ Page({
 | aside |  |
 | audio | author, autoplay, controls, loop, name, poster, src |
 | b |  |
+| base | href |
 | big |  |
 | blockquote |  |
 | body |  |
@@ -223,6 +226,7 @@ Page({
 | h4 |  |
 | h5 |  |
 | h6 |  |
+| head |  |
 | header |  |
 | hr |  |
 | html |  |

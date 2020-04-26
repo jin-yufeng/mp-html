@@ -286,7 +286,7 @@
 					target,
 					errMsg: e.detail.errMsg,
 					errCode: e.detail.errCode,
-					context: context
+					context
 				});
 			},
 			_loadVideo(e) {

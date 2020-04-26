@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/04/25
+  update：2020/04/26
 */
 var cfg = require('./config.js'),
 	blankChar = cfg.blankChar,
@@ -163,7 +163,8 @@ class MpHtmlParser {
 					this.siblings().push({
 						name: 'img',
 						attrs: {
-							src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23')
+							src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
+							ignore: 'T'
 						}
 					})
 				}
@@ -267,6 +268,18 @@ class MpHtmlParser {
 				if (this.bubble())
 					attrs.i = (this.imgNum++).toString();
 				else attrs.ignore = 'T';
+			}
+			if (attrs.ignore) styleObj['max-width'] = '100%';
+			var width;
+			if (styleObj.width) width = styleObj.width;
+			else if (attrs.width) width = attrs.width.includes('%') ? attrs.width : attrs.width + 'px';
+			if (width) {
+				styleObj.width = width;
+				attrs.width = '100%';
+				if (parseInt(width) > screenWidth) {
+					styleObj.height = '';
+					if (attrs.height) attrs.height = void 0;
+				}
 			}
 			if (styleObj.height) {
 				attrs.height = styleObj.height;

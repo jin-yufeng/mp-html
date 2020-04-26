@@ -504,6 +504,12 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.4.26
+    <ol>
+      <li><code>F</code> 修复了个别情况下图片表现不正常的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.4.25
     <ol>
       <li><code>U</code> 优化了图片的显示方式（可解决加载完毕时大小突变的问题，但不再支持云文件<code>ID</code>和<code>webp</code>图片）</li>

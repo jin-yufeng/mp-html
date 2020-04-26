@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/04/25
+  update：2020/04/26
 -->
 <template>
 	<view>
@@ -207,7 +207,7 @@
 				if (typeof html != 'string') html = this._Dom2Str(html.nodes || html);
 				if (!append) {
 					// 处理 tag-style 和 userAgentStyles
-					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}';
+					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}img{max-width:100%}';
 					for (var item in cfg.userAgentStyles)
 						style += `${item}{${cfg.userAgentStyles[item]}}`;
 					for (item in this.tagStyle)
@@ -287,7 +287,6 @@
 				this.imgList.length = 0;
 				var imgs = this.rtf.getElementsByTagName('img');
 				for (let i = 0, j = 0, img; img = imgs[i]; i++) {
-					img.style.maxWidth = '100%';
 					var src = img.getAttribute('src');
 					if (this.domain && src) {
 						if (src[0] == '/') {

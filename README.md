@@ -28,11 +28,11 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 44.3KB | 微信小程序插件包 |
-| parser.min | 30.1KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 43.8KB | QQ 小程序插件包 |
-| parser.tt | 43.1KB | 头条小程序插件包 |
-| parser.uni | 60.7KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 44.7KB | 微信小程序插件包 |
+| parser.min | 30.2KB | 微信小程序插件包压缩版（功能相同） |
+| parser.qq | 44.2KB | QQ 小程序插件包 |
+| parser.tt | 43.5KB | 头条小程序插件包 |
+| parser.uni | 61.1KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -121,7 +121,7 @@
 | bindimgtap | 图片被点击时触发 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览 |
 | bindlinkpress | 链接被点击时触发 | 返回一个 object，其中 href 是链接地址，ignore 是一个函数，在回调中调用将不自动跳转/复制 |  
 
-详细可见：[回调函数](https://jin-yufeng.github.io/Parser/#/instructions?id=回调函数)
+详细可见：[事件](https://jin-yufeng.github.io/Parser/#/instructions?id=事件)
   
 ### 使用外部样式 ###
 如果需要使用一些固定的样式，可以通过 `wxss` / `css` 文件引入  
@@ -163,6 +163,9 @@
 
 
 ## 更新日志 ##
+- 2020.4.26  
+  1. `F` 修复了个别情况下图片表现不正常的问题  
+
 - 2020.4.25  
   1. `U` 优化了图片的显示方式（可解决加载完毕时大小突变的问题，但不再支持云文件 `ID` 和 `webp` 图片）[详细](https://jin-yufeng.github.io/Parser/#/instructions#图片处理)  
   2. `U` 支持在链接中使用实体编码  
