@@ -1,5 +1,9 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.05.06 ####
+1. `F` 修复了头条小程序真机图片可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/133)  
+2. `F` 修复了 [CssHandler 扩展包](/instructions#CssHandler) 后代选择器优先级低于 `id` 选择器的问题 [详细](https://github.com/jin-yufeng/Parser/issues/125)  
+
 #### 2020.04.26 ####
 1. `F` 修复了个别情况下图片表现不正常的问题  
 

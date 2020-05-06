@@ -59,9 +59,7 @@ class CssHandler {
       for (let i = match.length; i--;)
         match_class.unshift('.' + match[i]);
     }
-    var matchedName = '',
-      matchedClass = '',
-      matchedId = '',
+    var matched = [],
       key, flag = false; // 子选择器标识
     ele.i = [];
     ele.index = [];
@@ -87,9 +85,8 @@ class CssHandler {
           }
           if (matchAttr) {
             if (item.pseudo) ele.pseudo.push(item);
-            else if (matchRes == 0) matchedName += ';' + item.content;
-            else if (matchRes == 1) matchedClass += ';' + item.content;
-            else matchedId += ';' + item.content;
+            if (item.list) matched[3] += ';' + item.content;
+            else matched[matchRes] += ';' + item.content;
           }
         } else {
           ele.i.push(i);
@@ -111,7 +108,7 @@ class CssHandler {
     }
     if (!ele.pseudo.length)
       ele.pseudo = void 0;
-    return matchedName + ';' + matchedClass + ';' + matchedId + ';';
+    return matched.join(';') + ';';
   }
   pop(ele) {
     // 多层class匹配标记

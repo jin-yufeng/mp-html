@@ -7,7 +7,7 @@
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.2KB | 微信小程序插件包压缩版（功能相同） |
 | [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 44.2KB | QQ 小程序插件包 |
 | [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 43.5KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 61.1KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 61.0KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 1. 百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
@@ -781,7 +781,7 @@ error(e){
 4. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
   
 - 大小（与原大小相比增加）  
-  `4.80KB`（`min` 版本：`1.50KB`）  
+  `4.65KB`（`min` 版本：`1.50KB`）  
 - 使用方法  
   用 [CssHandler.js](https://github.com/jin-yufeng/Parser/blob/master/patches/CssHandler/CssHandler.js)（[CssHandler.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/CssHandler/CssHandler.min.js) 是压缩版本，功能相同，使用时也需要更名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 

@@ -4,15 +4,14 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/04/25
+  update：2020/05/06
 -->
 <template>
 	<view class="interlayer">
 		<block v-for="(n, index) in ns" v-bind:key="index">
 			<!--图片-->
 			<view v-if="n.name=='img'" :class="'_img '+n.attrs.class" :style="n.attrs.style" :data-attrs="n.attrs" @tap="imgtap">
-				<rich-text :nodes="[{attrs:{src:lazyLoad&&!n.load?placeholder:n.attrs.src,alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:inherit'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]"
-				 style="display:inherit" />
+				<rich-text :nodes="[{attrs:{src:lazyLoad&&!n.load?placeholder:n.attrs.src,alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]" />
 				<image class="_image" :src="lazyLoad&&!n.load?placeholder:n.attrs.src" :lazy-load="lazyLoad"
 				 :show-menu-by-longpress="!n.attrs.ignore" :data-i="index" data-source="img" @load="loadImg" @error="error" />
 			</view>
