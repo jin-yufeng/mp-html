@@ -70,11 +70,6 @@ p {
   <source src="demo1.mov" />
   <source src="demo2.webm" />
 </video></code></pre>`,
-    sourceCode2: `<pre><code class="language-html"><picture>
-  <source media="(min-width:500px)" src="high-quality.jpg" />
-  <source media="(min-width:400px)" src="middle-quality.jpg" />
-  <img src="low-quality.jpg" />
-</picture></code></pre>`,
     // 加载提示示例代码
     loadingCode: `<pre><code class="language-wxml"><parser html="{{html}}" show-with-animation>
   加载中...
@@ -122,11 +117,8 @@ p {
       name: 'font',
       attrs: 'color, face, size'
     }, {
-      name: 'picture',
-      attrs: 'alt, height, width, src'
-    }, {
       name: 'source',
-      attrs: 'media, src'
+      attrs: 'src'
     }, {
       name: 'svg',
       attrs: 'svg 系列所有标签'
@@ -205,12 +197,11 @@ p {
   </view>
 </template>
 <script>
-// HbuilderX 2.5.5 及以上可以不需要引入
-import parser from "@/components/jyf-parser/jyf-parser";
+import jyfParser from "@/components/jyf-parser/jyf-parser";
 export default {
-  // HbuilderX 2.5.5 及以上可以不需要引入
+  // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
   components: {
-    "jyf-parser": parser
+    jyfParser
   },
   data() {
     return {
@@ -282,11 +273,6 @@ export default {
       type: 'Boolean',
       default: 'false',
       notice: '是否使用缓存，设置后多次打开不用重复解析'
-    }, {
-      name: 'xml',
-      type: 'Boolean',
-      default: 'false',
-      notice: '是否使用 xml 方式解析'
     }],
     // 事件
     events: [{
@@ -504,6 +490,20 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.5.8
+    <ol>
+      <li><code>F</code> 修复了个别情况下空格被错误过滤的问题</li>
+      <li><code>D</code> 移除了<code>xml</code>属性（<code>svg</code>标签默认按<code>xml</code>方式解析，可以以<code>&lt;svg /></code>方式结束）</li>
+      <li><code>D</code> 取消对<code>picture</code>标签的支持</li>
+    </ol>
+  </li>
+  </br>
+  <li>2020.5.6
+    <ol>
+      <li><code>F</code> 修复了<code>CssHandler</code>扩展包后代选择器优先级低于<code>id</code>选择器的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.4.26
     <ol>
       <li><code>F</code> 修复了个别情况下图片表现不正常的问题</li>

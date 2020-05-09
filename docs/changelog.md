@@ -1,5 +1,10 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.05.08 ####
+1. `F` 修复了个别情况下空格被错误过滤的问题 [详细](https://github.com/jin-yufeng/Parser/issues/135)  
+2. `D` 移除了 `xml` 属性（`svg` 标签默认按 `xml` 方式解析，可以以 `<svg />` 方式结束）  
+3. `D` 取消对 `picture` 标签的支持  
+
 #### 2020.05.06 ####
 1. `F` 修复了头条小程序真机图片可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/133)  
 2. `F` 修复了 [CssHandler 扩展包](/instructions#CssHandler) 后代选择器优先级低于 `id` 选择器的问题 [详细](https://github.com/jin-yufeng/Parser/issues/125)  
@@ -77,7 +82,7 @@
 1. `F` 修复了 `uni-app` 包 `App(v3)` 端 `iframe` 标签无法使用的问题  
 
 #### 2020.03.26 ####
-1. `A` 增加了 `xml` 属性，可以以 `xml` 方式解析 [详细](/instructions#xml)  
+1. `A` 增加了 `xml` 属性，可以以 `xml` 方式解析 *附：20200508版本中被删除*  
 2. `F` 修复了使用自闭合 `svg` 标签会导致死循环的问题 [详细](https://github.com/jin-yufeng/Parser/issues/94)  
 3. `F` 修复了设置 `domain` 属性时 `data:image` 和 `cloud://` 的链接会被错误填充的问题  
 
@@ -124,7 +129,7 @@
 3. `U` 优化了不开启 `lazy-load` 属性时的加载速度；另外开启懒加载时，首图（较大概率直接进入视野）也将不经过判断直接加载，避免因懒加载判断拖慢加载速度
 
 #### 2020.03.01 ####
-1. `U` 支持 `picture` 标签，可以在不同大小的屏幕上显示不同链接的图片 [详细](/features#多媒体多资源加载)  
+1. `U` 支持 `picture` 标签，可以在不同大小的屏幕上显示不同链接的图片 *附：20200508版本中被删除*  
 2. `U` 支持在 `sub`、`sup` 标签中使用 `a` 标签  
 3. `U` 给 `document` 扩展包添加和修改了一些方法 [详细](/instructions#document)  
 4. `F` 修复了由于自动压缩带来的一些问题（主要是 `background-image`）  

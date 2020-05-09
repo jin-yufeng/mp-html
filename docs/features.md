@@ -126,15 +126,6 @@ Page({
   <source src="demo2.webm" />
 </video>
 ```
-支持在 `picture` 标签中使用 `source` 标签，通过设置 `media` 属性可以给不同大小屏幕的设备设置不同的图片链接
-```html
-<picture>
-  <source media="(min-width:400px)" src="high-quality.jpg">
-  <source media="(min-width:250px)" src="middle-quality.jpg">
-  <img src="low-quality.jpg" />
-</picture>
-```
-?> `media` 仅支持 `min-width` 或 `max-width`，单位仅支持 `px`，首个 `source` 匹配成功后就不再进行匹配
 
 ### 自动设置标题 ###
 若存在 `title` 标签，将自动把其内容设置到页面标题上（可通过 `autosetTitle` 属性控制）  
@@ -240,13 +231,12 @@ Page({
 | nav |  |
 | ol | start, type |
 | p | align |
-| picture | alt, src |
 | pre |  |
 | q |  |
 | s |  |
 | section |  |
 | small |  |
-| source | media, src |
+| source | src |
 | span |  |
 | strong |  |
 | style |  |

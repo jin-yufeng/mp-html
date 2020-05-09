@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/04/26
+  update：2020/05/08
 -->
 <template>
 	<view>
@@ -86,7 +86,6 @@
 			// #ifndef H5 || APP-PLUS-NVUE
 			'compress': Number,
 			'useCache': Boolean,
-			'xml': Boolean,
 			// #endif
 			'domain': String,
 			// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS

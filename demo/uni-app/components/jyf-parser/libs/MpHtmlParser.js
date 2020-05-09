@@ -3,15 +3,12 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/04/26
+  update：2020/05/08
 */
 var cfg = require('./config.js'),
 	blankChar = cfg.blankChar,
 	CssHandler = require('./CssHandler.js'),
-	{
-		screenWidth,
-		system
-	} = wx.getSystemInfoSync();
+	screenWidth = wx.getSystemInfoSync().screenWidth;
 var emoji; // emoji 补丁包 https://jin-yufeng.github.io/Parser/#/instructions?id=emoji
 class MpHtmlParser {
 	constructor(data, options = {}) {
@@ -26,7 +23,6 @@ class MpHtmlParser {
 		this.state = this.Text;
 		this.STACK = [];
 		this.useAnchor = options.useAnchor;
-		this.xml = options.xml;
 	}
 	parse() {
 		if (emoji) this.data = emoji.parseEmoji(this.data);
@@ -42,7 +38,7 @@ class MpHtmlParser {
 	}
 	// 设置属性
 	setAttr() {
-		var name = this.getName(this.attrName);
+		var name = this.attrName.toLowerCase();
 		if (cfg.trustAttrs[name]) {
 			var val = this.attrVal;
 			if (val) {
@@ -76,7 +72,6 @@ class MpHtmlParser {
 			for (let i = text.length, c; c = text[--i];)
 				if (!blankChar[c] || (!blankChar[tmp[0]] && (c = ' '))) tmp.unshift(c);
 			text = tmp.join('');
-			if (text == ' ') return;
 		}
 		this.siblings().push({
 			type: 'text',
@@ -89,7 +84,7 @@ class MpHtmlParser {
 				name: this.tagName.toLowerCase(),
 				attrs: this.attrs
 			},
-			close = cfg.selfClosingTags[node.name] || (this.xml && this.data[this.i] == '/');
+			close = cfg.selfClosingTags[node.name];
 		this.attrs = {};
 		if (!cfg.ignoreTags[node.name]) {
 			this.matchAttr(node);
@@ -106,21 +101,9 @@ class MpHtmlParser {
 		} else {
 			if (!close) this.remove(node);
 			else if (node.name == 'source') {
-				var parent = this.STACK[this.STACK.length - 1],
-					attrs = node.attrs;
-				if (parent && attrs.src)
-					if (parent.name == 'video' || parent.name == 'audio')
-						parent.attrs.source.push(attrs.src);
-					else {
-						var i, media = attrs.media;
-						if (parent.name == 'picture' && !parent.attrs.src && !(attrs.src.indexOf('.webp') && system.includes('iOS')) &&
-							(!media || (media.includes('px') &&
-								(((i = media.indexOf('min-width')) != -1 && (i = media.indexOf(':', i + 8)) != -1 && screenWidth > parseInt(
-										media.substr(i + 1))) ||
-									((i = media.indexOf('max-width')) != -1 && (i = media.indexOf(':', i + 8)) != -1 && screenWidth < parseInt(
-										media.substr(i + 1)))))))
-							parent.attrs.src = attrs.src;
-					}
+				var parent = this.parent();
+				if (parent && (parent.name == 'video' || parent.name == 'audio') && node.attrs.src)
+					parent.attrs.source.push(node.attrs.src);
 			} else if (node.name == 'base' && !this.domain) this.domain = node.attrs.href;
 		}
 		if (this.data[this.i] == '/') this.i++;
@@ -131,6 +114,25 @@ class MpHtmlParser {
 	remove(node) {
 		var name = node.name,
 			j = this.i;
+		// 处理 svg
+		var handleSvg = () => {
+			var src = this.data.substring(j, this.i + 1);
+			if (!node.attrs.xmlns) src = ' xmlns="http://www.w3.org/2000/svg"' + src;
+			var i = j;
+			while (this.data[j] != '<') j--;
+			src = this.data.substring(j, i) + src;
+			var parent = this.parent();
+			if (node.attrs.width == '100%' && parent && (parent.attrs.style || '').includes('inline'))
+				parent.attrs.style = 'width:300px;max-width:100%;' + parent.attrs.style;
+			this.siblings().push({
+				name: 'img',
+				attrs: {
+					src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
+					ignore: 'T'
+				}
+			})
+		}
+		if (node.name == 'svg' && this.data[j] == '/') return handleSvg(this.i++);
 		while (1) {
 			if ((this.i = this.data.indexOf('</', this.i + 1)) == -1) {
 				if (name == 'pre' || name == 'svg') this.i = j;
@@ -139,7 +141,7 @@ class MpHtmlParser {
 			}
 			this.start = (this.i += 2);
 			while (!blankChar[this.data[this.i]] && !this.isClose()) this.i++;
-			if (this.getName(this.section()) == name) {
+			if (this.section().toLowerCase() == name) {
 				// 代码块高亮
 				if (name == 'pre') {
 					this.data = this.data.substr(0, j + 1) + cfg.highlight(this.data.substring(j + 1, this.i - 5), node.attrs) +
@@ -150,24 +152,7 @@ class MpHtmlParser {
 				else if (name == 'title')
 					this.title = this.data.substring(j + 1, this.i - 7);
 				if ((this.i = this.data.indexOf('>', this.i)) == -1) this.i = this.data.length;
-				// 处理 svg
-				if (name == 'svg') {
-					var src = this.data.substring(j, this.i + 1);
-					if (!node.attrs.xmlns) src = ' xmlns="http://www.w3.org/2000/svg"' + src;
-					var i = j;
-					while (this.data[j] != '<') j--;
-					src = this.data.substring(j, i) + src;
-					var parent = this.STACK[this.STACK.length - 1];
-					if (node.attrs.width == '100%' && parent && (parent.attrs.style || '').includes('inline'))
-						parent.attrs.style = 'width:300px;max-width:100%;' + parent.attrs.style;
-					this.siblings().push({
-						name: 'img',
-						attrs: {
-							src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
-							ignore: 'T'
-						}
-					})
-				}
+				if (name == 'svg') handleSvg();
 				return;
 			}
 		}
@@ -259,12 +244,12 @@ class MpHtmlParser {
 			else if (!styleObj[key] || value.includes('import') || !styleObj[key].includes('import'))
 				styleObj[key] = value;
 		}
-		if (node.name == 'img' || node.name == 'picture') {
+		if (node.name == 'img') {
 			if (attrs['data-src']) {
 				attrs.src = attrs.src || attrs['data-src'];
 				attrs['data-src'] = void 0;
 			}
-			if ((attrs.src || node.name == 'picture') && !attrs.ignore) {
+			if (attrs.src && !attrs.ignore) {
 				if (this.bubble())
 					attrs.i = (this.imgNum++).toString();
 				else attrs.ignore = 'T';
@@ -317,18 +302,22 @@ class MpHtmlParser {
 				if (this.STACK[i].pre)
 					this.pre = true;
 		}
+		var siblings = this.siblings(),
+			len = siblings.length,
+			childs = node.children.length;
 		if (node.name == 'head' || (cfg.filter && cfg.filter(node, this) == false))
-			return this.siblings().pop();
+			return siblings.pop();
 		var attrs = node.attrs;
 		// 替换一些标签名
-		if (node.name == 'picture') {
-			node.name = 'img';
-			if (!attrs.src && (node.children[0] || '').name == 'img')
-				attrs.src = node.children[0].attrs.src;
-			return node.children = void 0;
-		}
 		if (cfg.blockTags[node.name]) node.name = 'div';
 		else if (!cfg.trustTags[node.name]) node.name = 'span';
+		// 去除块标签前后空串
+		if (node.name == 'div' || node.name == 'p' || node.name[0] == 't') {
+			if (len > 1 && siblings[len - 2].text == ' ')
+				siblings.splice(--len - 1, 1);
+			if (childs && node.children[childs - 1].text == ' ')
+				node.children.pop();
+		}
 		// 处理列表
 		if (node.c && (node.name == 'ul' || node.name == 'ol')) {
 			if ((node.attrs.style || '').includes('list-style:none')) {
@@ -340,7 +329,7 @@ class MpHtmlParser {
 				for (let i = this.STACK.length; i--;)
 					if (this.STACK[i].name == 'ul') floor++;
 				if (floor != 1)
-					for (let i = node.children.length; i--;)
+					for (let i = childs; i--;)
 						node.children[i].floor = floor;
 			} else {
 				for (let i = 0, num = 1, child; child = node.children[i++];)
@@ -386,11 +375,8 @@ class MpHtmlParser {
 		}
 		this.CssHandler.pop && this.CssHandler.pop(node);
 		// 自动压缩
-		if (node.name == 'div' && !Object.keys(attrs).length) {
-			var siblings = this.siblings();
-			if (node.children.length == 1 && node.children[0].name == 'div')
-				siblings[siblings.length - 1] = node.children[0];
-		}
+		if (node.name == 'div' && !Object.keys(attrs).length && childs == 1 && node.children[0].name == 'div')
+			siblings[len - 1] = node.children[0];
 	}
 	// 工具函数
 	bubble() {
@@ -420,7 +406,6 @@ class MpHtmlParser {
 		}
 		return val;
 	}
-	getName = val => this.xml ? val : val.toLowerCase();
 	getUrl(url) {
 		if (url[0] == '/') {
 			if (url[1] == '/') url = this.protocol + ':' + url;
@@ -431,7 +416,8 @@ class MpHtmlParser {
 	}
 	isClose = () => this.data[this.i] == '>' || (this.data[this.i] == '/' && this.data[this.i + 1] == '>');
 	section = () => this.data.substring(this.start, this.i);
-	siblings = () => this.STACK.length ? this.STACK[this.STACK.length - 1].children : this.DOM;
+	parent = () => this.STACK[this.STACK.length - 1];
+	siblings = () => this.STACK.length ? this.parent().children : this.DOM;
 	// 状态机
 	Text(c) {
 		if (c == '<') {
@@ -509,7 +495,7 @@ class MpHtmlParser {
 	}
 	EndTag(c) {
 		if (blankChar[c] || c == '>' || c == '/') {
-			var name = this.getName(this.section());
+			var name = this.section().toLowerCase();
 			for (var i = this.STACK.length; i--;)
 				if (this.STACK[i].name == name) break;
 			if (i != -1) {

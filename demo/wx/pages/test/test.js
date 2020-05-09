@@ -110,11 +110,7 @@ Page({
   </svg>
   <p class="desc">svg 图片</p>
   </br>
-  <!--响应式布局-->
-  <picture width="50%" ignore>
-    <source media="(min-width:420px)" src="/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351">
-    <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-3-thumb.gif?sign=22dc3b4bb766e6ec77923d1b086ba6a0&t=1582804673" />
-  </picture>
+  <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-3.gif?sign=22dc3b4bb766e6ec77923d1b086ba6a0&t=1582804673" width="50%" ignore />
   <p class="desc">装饰图片不能预览</p>
 </div>`;
         else

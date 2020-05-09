@@ -6,12 +6,12 @@
 </template>
 
 <script>
-	import parser from '@/components/jyf-parser/jyf-parser'; // HBuilderX 2.5.5 及以上可以不需要
+	import jyfParser from '@/components/jyf-parser/jyf-parser';
 	const testHtml = require('./html.js');
 	export default {
-		// HBuilderX 2.5.5 及以上可以不需要
+		// HBuilderX 2.5.5+ 可以通过 easycom 自动引入
 		components: {
-			'jyf-parser': parser
+			jyfParser
 		},
 		onReady() {
 			this.$refs.article.setContent(testHtml);

@@ -28,11 +28,11 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 44.7KB | 微信小程序插件包 |
-| parser.min | 30.2KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 44.2KB | QQ 小程序插件包 |
-| parser.tt | 43.5KB | 头条小程序插件包 |
-| parser.uni | 61.0KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 44.1KB | 微信小程序插件包 |
+| parser.min | 29.8KB | 微信小程序插件包压缩版（功能相同） |
+| parser.qq | 43.6KB | QQ 小程序插件包 |
+| parser.tt | 42.9KB | 头条小程序插件包 |
+| parser.uni | 60.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
@@ -106,7 +106,6 @@
 | tag-style | Object | | 否 | 设置标签的默认样式 |
 | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 |
 | use-cache | Boolean | false | 否 | 是否使用缓存，设置后多次打开不用重复解析 |
-| xml | Boolean | false | 否 | 是否使用 xml 方式解析 |
   
 详细可见：[组件属性](https://jin-yufeng.github.io/Parser/#/instructions?id=组件属性)
 
@@ -163,6 +162,11 @@
 
 
 ## 更新日志 ##
+- 2020.5.8  
+  1. `F` 修复了个别情况下空格被错误过滤的问题 [详细](https://github.com/jin-yufeng/Parser/issues/135)  
+  2. `D` 移除了 `xml` 属性（`svg` 标签默认按 `xml` 方式解析，可以以 `<svg />` 方式结束）  
+  3. `D` 取消对 `picture` 标签的支持  
+
 - 2020.5.6
   1. `F` 修复了头条小程序真机图片可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/133)  
   2. `F` 修复了 [CssHandler 扩展包](https://jin-yufeng.github.io/Parser/#/instructions#csshandler) 后代选择器优先级低于 `id` 选择器的问题 [详细](https://github.com/jin-yufeng/Parser/issues/125)  

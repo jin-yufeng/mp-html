@@ -247,10 +247,7 @@ module.exports = [`<head>
   </section>
   <section style="border:0px none;">
     <section style="width:60%;margin:0px auto;">
-      <picture style="width:100%;display:block;" ignore>
-        <source media="(min-width:420px)" src="/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351">
-        <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo1-3-thumb.gif?sign=22dc3b4bb766e6ec77923d1b086ba6a0&t=1582804673" />
-      </picture>
+      <img src="/demo1-3.gif?sign=4dd623d040aba5e2ca781e9e975800bd&t=1560247351" ignore />
     </section>
   </section>
   <p style="text-align:center;">
@@ -438,10 +435,7 @@ module.exports = [`<head>
     <section style="width:100%;background:#ecfef1;color:#27bc71;">
       <section style="border:0px none;">
         <section style="width:100%;">
-          <picture style="width:100%;display:block;" ignore>
-            <source media="(min-width:420px)" src="/demo2-1.gif?sign=315839e7417ea8d156d56983eddf5e29&t=1560248635x" />
-            <img src="/demo2-1-thumb.gif?sign=6ea6ac169d03cba8a82933046de464d9&t=1582802964" />
-          </picture>
+          <img src="/demo2-1.gif?sign=6ea6ac169d03cba8a82933046de464d9&t=1582802964" ignore />
         </section>
       </section>
       <section style="border:0px none;">

@@ -3,7 +3,7 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/04/25
+  update：2020/05/08
 */
 var cache = {},
   Parser = require('./libs/MpHtmlParser.js'),
@@ -42,8 +42,7 @@ Component({
     'tagStyle': Object,
     'showWithAnimation': Boolean,
     'useAnchor': Boolean,
-    'useCache': Boolean,
-	'xml': Boolean
+    'useCache': Boolean
   },
   relations: {
     '../parser-group/parser-group': {

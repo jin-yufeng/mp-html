@@ -3,11 +3,11 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.7KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 30.2KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 44.2KB | QQ 小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 43.5KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 61.0KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.1KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.8KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 43.6KB | QQ 小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 42.9KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 60.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 1. 百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
@@ -81,11 +81,11 @@
        </view>
      </template>
      <script>
-     import parser from "@/components/jyf-parser/jyf-parser"; // HbuilderX 2.5.5 及以上可以不需要
+     import jyfParser from "@/components/jyf-parser/jyf-parser";
      export default {
-       // HbuilderX 2.5.5 及以上可以不需要
+       // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
        components: {
-         "jyf-parser": parser
+         jyfParser
        },
        data() {
          return {
@@ -257,7 +257,6 @@
 | tag-style | Object | {} | 否 | 设置标签的默认样式 | [20190421](/changelog#_20190421) |
 | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 | [20191202](/changelog#_20191202) |
 | use-cache | Boolean | false | 否 | 是否使用缓存，设置后多次打开不用重复解析 | [20191215](/changelog#_20191215) |
-| xml | Boolean | false | 否 | 是否使用 xml 方式解析 | [20200326](/changelog#_20200326) |
   
 ##### html #####
 - 推荐通过 [setContent](#setContent) 方法传入，可以提高性能  
@@ -292,14 +291,6 @@
   
 ##### use-cache #####
 设置为 `true` 时将对解析结果进行缓存，在一个应用生命周期内多次打开，不需要重复解析，可以节省时间，建议对较长的内容且可能多次打开的内容设置缓存  
-
-##### xml #####
-开启后，解析方式将发生以下变化：  
-1. 标签名和属性名区分大小写（如 `style` 和 `Style` 是不同的属性）  
-2. 可以通过 `/` 结束任何标签（如 `<div />`，`html` 中非自闭合标签无法被这样关闭）  
-
-但存在未闭合的标签也不会报错（为保证容错性）  
-如果使用了 `svg`，建议开启，因为 `svg` 标签是按照 `xml` 标准写的  
 
 ### 事件 ###
 
@@ -399,8 +390,13 @@ error(e) {
 !> 该方法在 [20200312](/changelog#_20200312) 版本中添加  
 
 自定义过滤器，解析到一个标签时触发  
-输入值：`node` 为节点结构体（`name` 为标签名，`attrs` 为属性值，`children` 为子节点），对其进行修改将在渲染时生效；`context` 是解析器示例，可以使用一些解析设置（如 `domain` 等）和方法（主要是 `bubble`，若该节点不能被 `rich-text` 包含则需要调用，将给其所有祖先节点冒泡设置标记，一般用于自定义标签）  
+输入值：`node` 为节点结构体（`name` 为标签名，`attrs` 为属性值，`children` 为子节点），对其进行修改将在渲染时生效；`context` 是解析器实例  
 返回值：若返回 `false`，将移除此节点（及其所有子节点）  
+解析器实例常用方法：  
+`bubble()`：若该节点不能被 `rich-text` 包含则需要调用，将给其所有祖先节点冒泡设置标记，一般用于自定义标签  
+`parent()`：获取该标签的父节点  
+`siblings()`：获取该标签的兄弟节点（自闭合标签（如 `img`）不包含本身，非自闭合标签（如 `div`）包含本身）  
+`domain`：设置的主域名  
 示例：  
 ```javascript
 filter(node, cxt) {

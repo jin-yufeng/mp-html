@@ -23,11 +23,11 @@
 <jyf-parser :html="html" ref="article"></jyf-parser>
 ```
 ```javascript
-import parser from "@/components/jyf-parser/jyf-parser"; // HBuilderX 2.5.5 及以上可以不需要
+import jyfParser from "@/components/jyf-parser/jyf-parser";
 export default{
-  // HBuilderX 2.5.5 及以上可以不需要
+  // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
   components: {
-    "jyf-parser": parser
+    jyfParser
   },
   data() {
     return {
@@ -59,7 +59,6 @@ export default{
   | tag-style | Object | | 否 | 设置标签的默认样式 |
   | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 |
   | use-cache | Boolean | false | 否 | 是否使用缓存，设置后将会把解析结果进行缓存，下次打开不用重复解析 |
-  | xml | Boolean | false | 否 | 是否使用 xml 方式解析 |
 
 - 事件  
 
