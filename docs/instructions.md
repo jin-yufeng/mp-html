@@ -3,7 +3,7 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.1KB | 微信小程序插件包 |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.0KB | 微信小程序插件包 |
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.8KB | 微信小程序插件包压缩版（功能相同） |
 | [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 43.6KB | QQ 小程序插件包 |
 | [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 42.9KB | 头条小程序插件包 |
@@ -927,6 +927,11 @@ error(e){
 2. 使用 腾讯视频 插件：[#103](https://github.com/jin-yufeng/Parser/issues/103)  
 3. 使用 `details` 和 `summary` 标签：[#104](https://github.com/jin-yufeng/Parser/issues/104)  
      
+### 添加自定义属性 ###
+像 `video`、`ad` 等标签有非常多属性，全写在模板里会增加一定的大小，因此默认只添加了一些常用属性，如果需要使用更多属性，可参考以下方法：  
+1. 在 `trees.wxml` 中的该标签中加上 `xxx="{{n.attrs['xxx']}}"`  
+2. 将 `xxx` 添加到 `config.js` 的 `trustAttrs` 中  
+
 ### 添加自定义事件 ### 
 为节省大小，默认情况下仅支持 `img` 和 `a` 标签的点击事件，如果还需要其他事件，可以自行在 `trees.wxml` 中绑定和处理  
 
@@ -938,6 +943,9 @@ filter(node, cxt) {
   }
 }
 ```
+
+一些例子：  
+`div` 点击事件：[#113](https://github.com/jin-yufeng/Parser/issues/113)  
 
 ## 许可与支持 ##
 - 许可  

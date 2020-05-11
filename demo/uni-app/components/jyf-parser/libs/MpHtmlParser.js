@@ -3,18 +3,18 @@
   github：https://github.com/jin-yufeng/Parser
   docs：https://jin-yufeng.github.io/Parser
   author：JinYufeng
-  update：2020/05/08
+  update：2020/05/11
 */
 var cfg = require('./config.js'),
 	blankChar = cfg.blankChar,
 	CssHandler = require('./CssHandler.js'),
-	screenWidth = wx.getSystemInfoSync().screenWidth;
+	windowWidth = uni.getSystemInfoSync().windowWidth;
 var emoji; // emoji 补丁包 https://jin-yufeng.github.io/Parser/#/instructions?id=emoji
 class MpHtmlParser {
 	constructor(data, options = {}) {
 		this.attrs = {};
 		this.compress = options.compress;
-		this.CssHandler = new CssHandler(options.tagStyle, screenWidth);
+		this.CssHandler = new CssHandler(options.tagStyle, windowWidth);
 		this.data = data;
 		this.domain = options.domain;
 		this.DOM = [];
@@ -261,7 +261,7 @@ class MpHtmlParser {
 			if (width) {
 				styleObj.width = width;
 				attrs.width = '100%';
-				if (parseInt(width) > screenWidth) {
+				if (parseInt(width) > windowWidth) {
 					styleObj.height = '';
 					if (attrs.height) attrs.height = void 0;
 				}
@@ -285,7 +285,7 @@ class MpHtmlParser {
 			}
 			// 转换 rpx
 			else if (value.includes('rpx'))
-				value = value.replace(/[0-9.]+\s*rpx/g, $ => parseFloat($) * screenWidth / 750 + 'px');
+				value = value.replace(/[0-9.]+\s*rpx/g, $ => parseFloat($) * windowWidth / 750 + 'px');
 			else if (key == 'white-space' && value.includes('pre'))
 				this.pre = node.pre = true;
 			style += `;${key}:${value}`;
@@ -304,7 +304,7 @@ class MpHtmlParser {
 		}
 		var siblings = this.siblings(),
 			len = siblings.length,
-			childs = node.children.length;
+			childs = node.children;
 		if (node.name == 'head' || (cfg.filter && cfg.filter(node, this) == false))
 			return siblings.pop();
 		var attrs = node.attrs;
@@ -315,13 +315,13 @@ class MpHtmlParser {
 		if (node.name == 'div' || node.name == 'p' || node.name[0] == 't') {
 			if (len > 1 && siblings[len - 2].text == ' ')
 				siblings.splice(--len - 1, 1);
-			if (childs && node.children[childs - 1].text == ' ')
-				node.children.pop();
+			if (childs.length && childs[childs.length - 1].text == ' ')
+				childs.pop();
 		}
 		// 处理列表
 		if (node.c && (node.name == 'ul' || node.name == 'ol')) {
 			if ((node.attrs.style || '').includes('list-style:none')) {
-				for (let i = 0, child; child = node.children[i++];)
+				for (let i = 0, child; child = childs[i++];)
 					if (child.name == 'li')
 						child.name = 'div';
 			} else if (node.name == 'ul') {
@@ -329,10 +329,10 @@ class MpHtmlParser {
 				for (let i = this.STACK.length; i--;)
 					if (this.STACK[i].name == 'ul') floor++;
 				if (floor != 1)
-					for (let i = childs; i--;)
-						node.children[i].floor = floor;
+					for (let i = childs.length; i--;)
+						childs[i].floor = floor;
 			} else {
-				for (let i = 0, num = 1, child; child = node.children[i++];)
+				for (let i = 0, num = 1, child; child = childs[i++];)
 					if (child.name == 'li') {
 						child.type = 'ol';
 						child.num = ((num, type) => {
@@ -371,12 +371,12 @@ class MpHtmlParser {
 							if (padding) n.attrs.style = `padding:${padding}px;${n.attrs.style}`;
 						} else f(n.children || []);
 					}
-				})(node.children)
+				})(childs)
 		}
 		this.CssHandler.pop && this.CssHandler.pop(node);
 		// 自动压缩
-		if (node.name == 'div' && !Object.keys(attrs).length && childs == 1 && node.children[0].name == 'div')
-			siblings[len - 1] = node.children[0];
+		if (node.name == 'div' && !Object.keys(attrs).length && childs.length == 1 && childs[0].name == 'div')
+			siblings[len - 1] = childs[0];
 	}
 	// 工具函数
 	bubble() {

@@ -4,7 +4,7 @@
   docs：https://jin-yufeng.github.io/Parser
   插件市场：https://ext.dcloud.net.cn/plugin?id=805
   author：JinYufeng
-  update：2020/05/06
+  update：2020/05/11
 -->
 <template>
 	<view class="interlayer">
@@ -17,7 +17,9 @@
 			</view>
 			<!--文本-->
 			<text v-else-if="n.type=='text'" decode>{{n.text}}</text>
+			<!--#ifndef MP-BAIDU-->
 			<text v-else-if="n.name=='br'">\n</text>
+			<!--#endif-->
 			<!--视频-->
 			<view v-else-if="n.lazyLoad||(n.name=='video'&&!loadVideo)" :id="n.attrs.id" :class="'_video '+(n.attrs.class||'')"
 			 :style="n.attrs.style" :data-i="index" @tap="_loadVideo" />

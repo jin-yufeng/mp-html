@@ -50,7 +50,7 @@ class core {
 	boolean isMin = false;
 
 	// 包大小
-	final float wxSize = 44.1f;
+	final float wxSize = 44.0f;
 	final float wxMinSize = 29.8f;
 	final float qqSize = 43.6f;
 	final float ttSize = 42.9f;
@@ -299,7 +299,7 @@ class core {
 							modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
 									"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
 							modifyFile(newPath + "/trees/trees.ttml", "<!--音频-->",
-									"<myAudio wx:elif=\"{{n.name=='audio'}}\" id=\"{{n.attrs.id}}\" class=\"{{n.attrs.class}}\" style=\"{{n.attrs.style}}\" author=\"{{n.attrs.author}}\" autoplay=\"{{n.attrs.autoplay}}\" controls=\"{{n.attrs.controls}}\" loop=\"{{n.attrs.loop}}\" name=\"{{n.attrs.name}}\" poster=\"{{n.attrs.poster}}\" src=\"{{n.attrs.source[n.i||0]}}\" data-i=\"{{index}}\" data-source=\"audio\" binderror=\"error\" bindplay=\"play\" />");
+									"<myAudio tt:elif=\"{{n.name=='audio'}}\" id=\"{{n.attrs.id}}\" class=\"{{n.attrs.class}}\" style=\"{{n.attrs.style}}\" author=\"{{n.attrs.author}}\" autoplay=\"{{n.attrs.autoplay}}\" controls=\"{{n.attrs.controls}}\" loop=\"{{n.attrs.loop}}\" name=\"{{n.attrs.name}}\" poster=\"{{n.attrs.poster}}\" src=\"{{n.attrs.source[n.i||0]}}\" data-i=\"{{index}}\" data-source=\"audio\" binderror=\"error\" bindplay=\"play\" />");
 						}
 						if (document.isSelected())
 							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),

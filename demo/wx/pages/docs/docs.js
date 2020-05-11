@@ -490,6 +490,13 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.5.11
+    <ol>
+      <li><code>F</code> 修复了电脑端<code>rpx</code>可能换算不正确的问题</li>
+      <li><code>F</code> 修复了上一版本个别情况下可能出现<code>Cannot read property 'name' of undefined</code>的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.5.8
     <ol>
       <li><code>F</code> 修复了个别情况下空格被错误过滤的问题</li>
@@ -633,7 +640,7 @@ console.log(rect.height); // 高度</code></pre>
   </br>
   <li>2020.2.12
     <ol>
-      <li><code>A</code> 增加了<code>gesture-zoom</code> 属性，可以设置双击缩放（默认<code>false</code>）</li>
+      <li><code>A</code> 增加了<code>gesture-zoom</code>属性，可以设置双击缩放（默认<code>false</code>）</li>
     </ol>
   </li>
 </ul>

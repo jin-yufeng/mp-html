@@ -1,5 +1,10 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.05.11 ####
+1. `F` 修复了微信小程序电脑端 `rpx` 可能换算不正确的问题  
+2. `F` 修复了上一版本个别情况下可能出现 `Cannot read property 'name' of undefined` 的问题  
+3. `F` 修复了 `uni-app` 包编译到百度小程序时 `br` 标签可能不生效的问题  
+
 #### 2020.05.08 ####
 1. `F` 修复了个别情况下空格被错误过滤的问题 [详细](https://github.com/jin-yufeng/Parser/issues/135)  
 2. `D` 移除了 `xml` 属性（`svg` 标签默认按 `xml` 方式解析，可以以 `<svg />` 方式结束）  
