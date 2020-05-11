@@ -39,6 +39,7 @@ class core {
 	// 使用平台
 	JRadioButton typeWx;
 	JRadioButton typeQq;
+	JRadioButton typeBd;
 	JRadioButton typeTt;
 	JRadioButton typeUniApp;
 	// 补丁包
@@ -53,6 +54,7 @@ class core {
 	final float wxSize = 44.0f;
 	final float wxMinSize = 29.8f;
 	final float qqSize = 43.6f;
+	final float bdSize = 42.3f;
 	final float ttSize = 42.9f;
 	final float uniAppSize = 60.4f;
 	final float emojiSize = 4.25f;
@@ -68,7 +70,7 @@ class core {
 	// 构造函数
 	core() {
 		JFrame frame = new JFrame("Parser 插件包选择");
-		frame.setSize(480, 445);
+		frame.setSize(480, 470);
 		frame.setLocationRelativeTo(null);
 		frame.setLayout(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,44 +84,48 @@ class core {
 		typeQq = new JRadioButton("QQ（" + qqSize + "KB）");
 		typeQq.setBounds(100, 45, 150, 20);
 		frame.add(typeQq);
+		typeBd = new JRadioButton("百度（" + bdSize + "KB）");
+		typeBd.setBounds(100, 70, 150, 20);
+		frame.add(typeBd);
 		typeTt = new JRadioButton("头条（" + ttSize + "KB）");
-		typeTt.setBounds(100, 70, 150, 20);
+		typeTt.setBounds(100, 95, 150, 20);
 		frame.add(typeTt);
 		typeUniApp = new JRadioButton("uni-app（" + uniAppSize + "KB）");
-		typeUniApp.setBounds(100, 95, 150, 20);
+		typeUniApp.setBounds(100, 120, 150, 20);
 		frame.add(typeUniApp);
 		ButtonGroup typeGroup = new ButtonGroup();
 		typeGroup.add(typeWx);
 		typeGroup.add(typeQq);
+		typeGroup.add(typeBd);
 		typeGroup.add(typeTt);
 		typeGroup.add(typeUniApp);
 		frame.add(typeLabel);
 		// 补丁包
 		JLabel patchLabel = new JLabel("补\u2002丁\u2002包：");
-		patchLabel.setBounds(20, 125, 80, 20);
+		patchLabel.setBounds(20, 150, 80, 20);
 		frame.add(patchLabel);
 		emoji = new JCheckBox("emoji（解析 emoji 小表情，" + emojiSize + "KB）");
-		emoji.setBounds(100, 125, 250, 20);
+		emoji.setBounds(100, 150, 250, 20);
 		frame.add(emoji);
 		document = new JCheckBox("document（动态操作 dom，" + domSize + "KB）");
-		document.setBounds(100, 150, 250, 20);
+		document.setBounds(100, 175, 250, 20);
 		frame.add(document);
 		CssHandler = new JCheckBox("CssHandler（支持更多 css 选择器，" + cssSize + "KB）");
-		CssHandler.setBounds(100, 175, 300, 20);
+		CssHandler.setBounds(100, 200, 300, 20);
 		frame.add(CssHandler);
 		audio = new JCheckBox("audio（音乐播放器，" + audioSize + "KB）");
-		audio.setBounds(100, 200, 300, 20);
+		audio.setBounds(100, 225, 300, 20);
 		frame.add(audio);
 		// 版本
 		JLabel versionLabel = new JLabel("版\u2003\u2003本：");
-		versionLabel.setBounds(20, 230, 80, 20);
+		versionLabel.setBounds(20, 255, 80, 20);
 		frame.add(versionLabel);
 		JRadioButton normal = new JRadioButton("正常");
-		normal.setBounds(100, 230, 80, 20);
+		normal.setBounds(100, 255, 80, 20);
 		normal.setSelected(true);
 		frame.add(normal);
 		JRadioButton min = new JRadioButton("min");
-		min.setBounds(180, 230, 80, 20);
+		min.setBounds(180, 255, 80, 20);
 		ButtonGroup versionGroup = new ButtonGroup();
 		versionGroup.add(normal);
 		versionGroup.add(min);
@@ -127,21 +133,21 @@ class core {
 		frame.add(min);
 		// 总大小
 		JLabel sizeLabel = new JLabel("总\u2002大\u2002小：");
-		sizeLabel.setBounds(20, 260, 80, 20);
+		sizeLabel.setBounds(20, 285, 80, 20);
 		frame.add(sizeLabel);
 		JLabel size = new JLabel(wxSize + " KB");
-		size.setBounds(100, 260, 80, 20);
+		size.setBounds(100, 285, 80, 20);
 		frame.add(size);
 		// 生成目录
 		final File desktop = FileSystemView.getFileSystemView().getHomeDirectory();
 		JLabel dirLabel = new JLabel("生成目录：");
-		dirLabel.setBounds(20, 290, 80, 20);
+		dirLabel.setBounds(20, 315, 80, 20);
 		JTextField dir = new JTextField(desktop.getAbsolutePath() + File.separator + "parser");
-		dir.setBounds(100, 290, 230, 20);
+		dir.setBounds(100, 315, 230, 20);
 		frame.add(dir);
 		frame.add(dirLabel);
 		JButton dirBut = new JButton("...");
-		dirBut.setBounds(340, 290, 30, 20);
+		dirBut.setBounds(340, 315, 30, 20);
 		frame.add(dirBut);
 		dirBut.addActionListener(new ActionListener() {
 
@@ -164,7 +170,7 @@ class core {
 		});
 		// 生成按钮
 		JButton createBut = new JButton("生成");
-		createBut.setBounds(200, 335, 80, 30);
+		createBut.setBounds(200, 360, 80, 30);
 		frame.add(createBut);
 		// 生成平台选择
 		typeWx.addItemListener(new ItemListener() {
@@ -179,6 +185,17 @@ class core {
 			public void itemStateChanged(ItemEvent item) {
 				if (item.getStateChange() == ItemEvent.SELECTED)
 					size.setText(calcSize());
+			}
+		});
+		typeBd.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent item) {
+				if (item.getStateChange() == ItemEvent.SELECTED) {
+					size.setText(calcSize());
+					audio.setSelected(false);
+					audio.setEnabled(false);
+				} else
+					audio.setEnabled(true);
 			}
 		});
 		typeTt.addItemListener(new ItemListener() {
@@ -262,51 +279,8 @@ class core {
 					File file = new File(newPath);
 					if (!file.exists())
 						file.mkdir(); // 创建目标目录
-					// 生成微信包
-					if (typeWx.isSelected()) {
-						if (isMin)
-							copyDir("./parser.min", newPath);
-						else
-							copyDir("./parser", newPath);
-						if (audio.isSelected()) {
-							copyDir("./patches/audio/audio", newPath + "/audio");
-							modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
-									"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
-							modifyFile(newPath + "/trees/trees.wxml", "<audio", "<myAudio");
-						}
-						if (document.isSelected())
-							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
-									new FileOutputStream(newPath + "/libs/document.js"));
-					}
-					// 生成 QQ 包
-					else if (typeQq.isSelected()) {
-						copyDir("./parser.qq", newPath);
-						if (audio.isSelected()) {
-							copyDir("./patches/audio/audio", newPath + "/audio");
-							modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
-									"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
-							modifyFile(newPath + "/trees/trees.qml", "<audio", "<myAudio");
-						}
-						if (document.isSelected())
-							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
-									new FileOutputStream(newPath + "/libs/document.js"));
-					}
-					// 生成头条包
-					else if (typeTt.isSelected()) {
-						copyDir("./parser.tt", newPath);
-						if (audio.isSelected()) {
-							copyDir("./patches/audio/audio", newPath + "/audio");
-							modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
-									"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
-							modifyFile(newPath + "/trees/trees.ttml", "<!--音频-->",
-									"<myAudio tt:elif=\"{{n.name=='audio'}}\" id=\"{{n.attrs.id}}\" class=\"{{n.attrs.class}}\" style=\"{{n.attrs.style}}\" author=\"{{n.attrs.author}}\" autoplay=\"{{n.attrs.autoplay}}\" controls=\"{{n.attrs.controls}}\" loop=\"{{n.attrs.loop}}\" name=\"{{n.attrs.name}}\" poster=\"{{n.attrs.poster}}\" src=\"{{n.attrs.source[n.i||0]}}\" data-i=\"{{index}}\" data-source=\"audio\" binderror=\"error\" bindplay=\"play\" />");
-						}
-						if (document.isSelected())
-							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
-									new FileOutputStream(newPath + "/libs/document.js"));
-					}
 					// 生成 uni-app 包
-					else {
+					if (typeUniApp.isSelected()) {
 						copyDir("./parser.uni", newPath);
 						if (emoji.isSelected())
 							modifyFile(newPath + "/libs/MpHtmlParser.js", "var emoji",
@@ -324,6 +298,47 @@ class core {
 							modifyFile(newPath + "/jyf-parser.vue", "var document",
 									"const document = require(\"./libs/document.js\")");
 						}
+					} else {
+						// 生成微信包
+						if (typeWx.isSelected()) {
+							if (isMin)
+								copyDir("./parser.min", newPath);
+							else
+								copyDir("./parser", newPath);
+							if (audio.isSelected()) {
+								copyDir("./patches/audio/audio", newPath + "/audio");
+								modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
+										"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
+								modifyFile(newPath + "/trees/trees.wxml", "<audio", "<myAudio");
+							}
+						}
+						// 生成 QQ 包
+						else if (typeQq.isSelected()) {
+							copyDir("./parser.qq", newPath);
+							if (audio.isSelected()) {
+								copyDir("./patches/audio/audio", newPath + "/audio");
+								modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
+										"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
+								modifyFile(newPath + "/trees/trees.qml", "<audio", "<myAudio");
+							}
+						}
+						// 生成百度包
+						else if (typeBd.isSelected())
+							copyDir("./parser.bd", newPath);
+						// 生成头条包
+						else if (typeTt.isSelected()) {
+							copyDir("./parser.tt", newPath);
+							if (audio.isSelected()) {
+								copyDir("./patches/audio/audio", newPath + "/audio");
+								modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
+										"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
+								modifyFile(newPath + "/trees/trees.ttml", "<!--音频-->",
+										"<myAudio tt:elif=\"{{n.name=='audio'}}\" id=\"{{n.attrs.id}}\" class=\"{{n.attrs.class}}\" style=\"{{n.attrs.style}}\" author=\"{{n.attrs.author}}\" autoplay=\"{{n.attrs.autoplay}}\" controls=\"{{n.attrs.controls}}\" loop=\"{{n.attrs.loop}}\" name=\"{{n.attrs.name}}\" poster=\"{{n.attrs.poster}}\" src=\"{{n.attrs.source[n.i||0]}}\" data-i=\"{{index}}\" data-source=\"audio\" binderror=\"error\" bindplay=\"play\" />");
+							}
+						}
+						if (document.isSelected())
+							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
+									new FileOutputStream(newPath + "/libs/document.js"));
 					}
 					// 处理公共补丁包
 					if (emoji.isSelected())
@@ -365,6 +380,8 @@ class core {
 			size = isMin ? wxMinSize : wxSize;
 		else if (typeQq.isSelected())
 			size = qqSize;
+		else if (typeBd.isSelected())
+			size = bdSize;
 		else if (typeTt.isSelected())
 			size = ttSize;
 		else

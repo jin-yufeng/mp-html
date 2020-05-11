@@ -18,7 +18,7 @@
 - 支持几乎所有的 `html` 标签  
 - 支持丰富的事件和效果  
 - 轻量化、效率高、容错性强  
-- 支持多平台（微信、QQ、头条、uni-app 等）  
+- 支持多平台（微信、QQ、百度、头条、uni-app 等）  
 ...
 
 更多功能可见：[功能介绍](https://jin-yufeng.github.io/Parser/#/)
@@ -31,10 +31,9 @@
 | parser | 44.0KB | 微信小程序插件包 |
 | parser.min | 29.8KB | 微信小程序插件包压缩版（功能相同） |
 | parser.qq | 43.6KB | QQ 小程序插件包 |
+| parser.bd | 42.3KB | 百度小程序插件包 |
 | parser.tt | 42.9KB | 头条小程序插件包 |
 | parser.uni | 60.4KB | `uni-app` 插件包（可以编译到所有平台） |
-
-百度版从 `20191215` 起不再维护，可从过去版本中获取（`Parser.bd`）
 
 ### 在原生框架中使用 ###
 1. 复制 `parser` 文件夹至 `components` 目录  
@@ -163,9 +162,10 @@
 
 ## 更新日志 ##
 - 2020.5.11  
-  1. `F` 修复了微信小程序电脑端 `rpx` 可能换算不正确的问题  
-  2. `F` 修复了上一版本个别情况下可能出现 `Cannot read property 'name' of undefined` 的问题  
-  3. `F` 修复了 `uni-app` 包编译到百度小程序时 `br` 标签可能不生效的问题  
+  1. `A` 增加百度小程序原生包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#插件包说明)  
+  2. `F` 修复了微信小程序电脑端 `rpx` 可能换算不正确的问题  
+  3. `F` 修复了上一版本个别情况下可能出现 `Cannot read property 'name' of undefined` 的问题  
+  4. `F` 修复了 `uni-app` 包编译到百度小程序时 `br` 标签可能不生效的问题  
 
 - 2020.5.8  
   1. `F` 修复了个别情况下空格被错误过滤的问题 [详细](https://github.com/jin-yufeng/Parser/issues/135)  

@@ -1,9 +1,10 @@
 ## 更新日志 {docsify-ignore} ##
 
 #### 2020.05.11 ####
-1. `F` 修复了微信小程序电脑端 `rpx` 可能换算不正确的问题  
-2. `F` 修复了上一版本个别情况下可能出现 `Cannot read property 'name' of undefined` 的问题  
-3. `F` 修复了 `uni-app` 包编译到百度小程序时 `br` 标签可能不生效的问题  
+1. `A` 增加百度小程序原生包 [详细](/instructions#插件包说明)  
+2. `F` 修复了微信小程序电脑端 `rpx` 可能换算不正确的问题  
+3. `F` 修复了上一版本个别情况下可能出现 `Cannot read property 'name' of undefined` 的问题  
+4. `F` 修复了 `uni-app` 包编译到百度小程序时 `br` 标签可能不生效的问题  
 
 #### 2020.05.08 ####
 1. `F` 修复了个别情况下空格被错误过滤的问题 [详细](https://github.com/jin-yufeng/Parser/issues/135)  
@@ -212,7 +213,7 @@
 8. `U` `document` 扩展包增加 `getStyle` 和 `setStyle` 方法（返回值格式有更改） [详细](/instructions#document)  
 9. `D` 废弃了 `html` 属性的 `object` 类型，请直接将 `html` 设置成原 `object.nodes`（即 `array` 类型，`imgList` 等其他信息可直接从 `nodes` 中获取） [详细](/instructions#组件属性)  
 10. `D` 删除了 `animation-duration` 属性，需要修改动画时长的，可直接在 `index.js` 中修改  
-11. `D` 不再对百度版插件包进行维护，如有需要可从过去版本获取  
+11. `D` 不再对百度版插件包进行维护，如有需要可从过去版本获取 *附：20200511版本中重新支持*  
 
 #### 2019.12.10 ####
 1. `A` 增加了 `cache-id` 属性，可以将解析结果缓存到 `globalData` 中，多次打开不用重复解析 [详细](/instructions#组件属性) *注：20191215版本中更改为 use-cache*  

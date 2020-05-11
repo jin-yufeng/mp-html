@@ -6,12 +6,12 @@
 | [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.0KB | 微信小程序插件包 |
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.8KB | 微信小程序插件包压缩版（功能相同） |
 | [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 43.6KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 42.3KB | 百度小程序插件包 |
 | [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 42.9KB | 头条小程序插件包 |
 | [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 60.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
-1. 百度原生插件包可以从过去的版本中获取（`20191215` 后不再维护）  
-2. 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
+除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
 
 关于 `uni-app` 包的相关说明：  
 1. 为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
@@ -166,9 +166,8 @@
 更多信息参考：[官网说明](https://wechat-miniprogram.github.io/kbone/docs/guide/advanced.html#%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6)
 
 #### 在 wepy 中使用 ####
-测试版本：`V1.7.3`
+##### v1.x #####
 1. 将 [parser](#插件包说明) 文件夹复制到 `/src/components` 目录下  
-   （也可以直接复制到 `/dist/components` 目录下，这样 `wepy` 不会对插件包进行编译和压缩）    
 2. 在需要使用的页面的 `wpy` 文件中添加
    ```wpy
    <template>
@@ -191,6 +190,39 @@
    </script>
    ```
 3. 通过 `wepy build --watch` 命令进行编译  
+
+##### v2.x #####
+1. 将 [parser](#插件包说明) 文件夹复制到 `/src/components` 目录下  
+2. 在项目目录下安装 `@babel/plugin-proposal-class-properties`（`npm install`）  
+3. 在项目的 `wepy.config.js` 中的 `compilers > babel > plugins` 中添加 `@babel/plugin-proposal-class-properties`  
+4. 在需要使用的页面的 `wpy` 文件中添加  
+   ```wpy
+   <template>
+     <div>
+       <parser html="{{html}}" />
+     </div>
+   </template>
+   <script>
+     import wepy from '@wepy/core'
+     wepy.page({
+       data: {
+         html: '<div>Hello World!</div>'
+       }
+     });
+   </script>
+   <config>
+   {
+       usingComponents: {
+         'parser': '../components/parser/parser'
+       }
+   }
+   </config>
+   ```
+5. 通过 `wepy build --watch` 命令进行编译  
+
+!> 如果没有用 [document 扩展包](#document)，将 `parser.js` 中的 `var dom = require('./libs/document.js')` 改为 `var dom`  
+如果没有用 [emoji 扩展包](#emoji)，将 `libs/MpHtmlParser` 中的 `var emoji = require('./emoji.js')` 改为 `var emoji`  
+否则编译时可能报错（源码中是通过 `try` 方式引入的）  
 
 !> 如果出现 `Components not found` 错误，则用 `wepy build --no-cache --watch` 命令清理缓存，重新编译  
 
@@ -784,7 +816,7 @@ error(e){
 !> 使用该扩展包后会一定程度上减慢解析速度，如非必要不建议使用  
 
 ### parser-group ###
-!> 该包仅支持 原生包 使用，暂不支持通过 [打包工具](#打包工具) 打包  
+!> 该包仅支持 微信、qq、头条 原生包 使用，暂不支持通过 [打包工具](#打包工具) 打包  
 
 - 功能  
   有时一个页面会用到多个 `parser` 标签，默认情况下，不同的 `parser` 标签之间是相互独立的，用 `parser-group` 标签包裹起来可以组合成一个整体，实现：  

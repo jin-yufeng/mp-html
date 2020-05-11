@@ -13,6 +13,7 @@ module.exports = {
 		"tt": "readonly",
 		"qq": "readonly",
 		"wx": "readonly",
+		"swan": "readonly",
 		"Component": "readonly",
 		"Page": "readonly",
 		"App": "readonly"
