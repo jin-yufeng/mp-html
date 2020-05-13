@@ -1,5 +1,4 @@
 <!-- index.wxml -->
-<parser id="preLoad" use-anchor domain="https://6874-html-foe72-1259071903.tcb.qcloud.la" />
 <view class="page__hd">
   <view class="page__title">Parser</view>
   <view class="page__desc">Parser 是一款功能强大的轻量级富文本插件，支持的标签种类丰富，无层数限制，解析效率高，稳定性强。</view>

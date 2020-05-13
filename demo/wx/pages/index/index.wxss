@@ -2,17 +2,20 @@
 page {
   background-color: #f8f8f8;
 }
+
 button {
-  background-color: white;
-  text-align: left;
-  line-height: inherit;
-  font-size: 16px;
-  margin: 0;
   padding: 0;
+  margin: 0;
+  font-size: 16px;
+  line-height: inherit;
+  text-align: left;
+  background-color: white;
 }
+
 button::after {
   border: none;
 }
+
 .weui-flex {
   display: -webkit-box;
   display: -webkit-flex;
@@ -21,78 +24,94 @@ button::after {
   -webkit-align-items: center;
   align-items: center;
 }
+
 .weui-flex__item {
   -webkit-box-flex: 1;
   -webkit-flex: 1;
   flex: 1;
 }
+
 .weui-cells {
   margin-top: 0;
   opacity: 0;
-  -webkit-transform: translateY(-50%);
-  transform: translateY(-50%);
   -webkit-transition: 0.3s;
   transition: 0.3s;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
-.weui-cells:after, .weui-cells:before {
+
+.weui-cells::after,
+.weui-cells::before {
   display: none;
 }
+
 .weui-cells_show {
   opacity: 1;
   -webkit-transform: translateY(0);
   transform: translateY(0);
 }
-.weui-cell:before {
+
+.weui-cell::before {
   right: 15px;
 }
+
 .weui-cell_access {
   color: inherit;
 }
+
 .weui-cell__ft_in-access {
-  padding-right: 13px;
   position: relative;
+  padding-right: 13px;
 }
-.weui-cell__ft_in-access:after {
-  content: " ";
+
+.weui-cell__ft_in-access::after {
+  position: absolute;
+  top: -2px;
+  top: 50%;
+  right: 2px;
   display: inline-block;
-  height: 6px;
   width: 6px;
-  border-width: 2px 2px 0 0;
+  height: 6px;
+  margin-top: -4px;
+  content: " ";
   border-color: #c8c8cd;
   border-style: solid;
-  -webkit-transform: matrix(0.71, 0.71, -.71, 0.71, 0, 0);
-  transform: matrix(0.71, 0.71, -.71, 0.71, 0, 0);
-  top: -2px;
-  position: absolute;
-  top: 50%;
-  margin-top: -4px;
-  right: 2px;
+  border-width: 2px 2px 0 0;
+  -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+  transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
 }
+
 .kind-list__item {
   margin: 10px 0;
+  overflow: hidden;
   background-color: #fff;
   border-radius: 2px;
-  overflow: hidden;
 }
+
 .kind-list__item:first-child {
   margin-top: 0;
 }
+
 .kind-list__img {
   width: 30px;
   height: 30px;
 }
+
 .kind-list__item-hd {
   padding: 20px;
   -webkit-transition: opacity 0.3s;
   transition: opacity 0.3s;
 }
+
 .kind-list__item-hd_show {
   opacity: 0.4;
 }
+
 .kind-list__item-bd {
   height: 0;
   overflow: hidden;
 }
+
 .kind-list__item-bd_show {
   height: auto;
 }

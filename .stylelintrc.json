@@ -1,0 +1,7 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-recess-order"],
+  "rules": {
+    "selector-type-no-unknown": null,
+    "unit-no-unknown": null
+  }
+}

@@ -1,102 +1,121 @@
 /* app.wxss */
 page {
-  font-size: 16px;
   font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 16px;
   line-height: 1.6;
 }
+
 .page__hd {
   padding: 40px;
 }
+
 .page__bd {
   padding-bottom: 40px;
 }
+
 .page__bd_spacing {
-  padding-left: 15px;
   padding-right: 15px;
+  padding-left: 15px;
 }
+
 .page__title {
-  text-align: left;
   font-size: 20px;
   font-weight: 400;
+  text-align: left;
 }
+
 .page__desc {
   margin-top: 5px;
+  font-size: 14px;
   color: #888;
   text-align: left;
-  font-size: 14px;
 }
+
 code {
-  background-color: #f0f0f0;
-  font-size: 85%;
-  margin: 0 3px 0 1px;
   padding: 2px 5px 2px 5px;
-  border-radius: 2px;
+  margin: 0 3px 0 1px;
   font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-size: 85%;
+  background-color: #f0f0f0;
+  border-radius: 2px;
 }
+
 .weui-article {
   padding: 20px 15px;
   font-size: 15px;
 }
+
 .weui-article__section {
   margin-bottom: 1.5em;
 }
+
 .weui-article__h2 {
+  margin-bottom: 0.34em;
   font-size: 16px;
   font-weight: 400;
-  margin-bottom: 0.34em;
 }
+
 .weui-cells {
   position: relative;
   margin-top: 1.17647059em;
-  background-color: #fff;
-  line-height: 1.41176471;
   font-size: 17px;
+  line-height: 1.41176471;
+  background-color: #fff;
 }
-.weui-cells:before {
+
+.weui-cells::before {
   top: 0;
   border-top: 1rpx solid #d9d9d9;
 }
-.weui-cells:after, .weui-cells:before {
-  content: " ";
+
+.weui-cells::after,
+.weui-cells::before {
   position: absolute;
-  left: 0;
   right: 0;
+  left: 0;
   height: 1px;
   color: #d9d9d9;
+  content: " ";
 }
-.weui-cells:after {
+
+.weui-cells::after {
   bottom: 0;
   border-bottom: 1rpx solid #d9d9d9;
 }
+
 .weui-cell {
-  padding: 10px 15px;
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
-  -webkit-box-align: center;
   -webkit-align-items: center;
   align-items: center;
+  padding: 10px 15px;
+  -webkit-box-align: center;
 }
-.weui-cell:before {
-  content: " ";
+
+.weui-cell::before {
   position: absolute;
   top: 0;
   right: 0;
-  height: 1px;
-  border-top: 1rpx solid #d9d9d9;
-  color: #d9d9d9;
   left: 15px;
+  height: 1px;
+  color: #d9d9d9;
+  content: " ";
+  border-top: 1rpx solid #d9d9d9;
 }
-.weui-cell:first-child:before {
+
+.weui-cell:first-child::before {
   display: none;
 }
+
 .weui-cell__bd {
   -webkit-box-flex: 1;
   -webkit-flex: 1;
   flex: 1;
 }
+
 .weui-cell__ft {
-  text-align: right;
   color: #999;
+  text-align: right;
 }

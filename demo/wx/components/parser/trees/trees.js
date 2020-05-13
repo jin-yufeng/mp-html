@@ -1,10 +1,3 @@
-/*
-  trees 递归子组件
-  github：https://github.com/jin-yufeng/Parser
-  docs：https://jin-yufeng.github.io/Parser
-  author：JinYufeng
-  update：2020/04/25
-*/
 Component({
   data: {
     canIUse: !!wx.chooseMessageFile,
@@ -90,6 +83,11 @@ Component({
           else
             wx.navigateTo({
               url: attrs.href,
+              fail() {
+                wx.switchTab({
+                  url: attrs.href,
+                })
+              }
             })
         }
       }

@@ -127,32 +127,6 @@
 1. 不在使用了 `colspan` 和 `rowspan` 的表格中使用图片、链接等  
 2. 自行将其用其他标签实现（就个例而言，还是可以通过 `flex` 布局实现的，但很难有一个通用的模板）  
 
-#### 表格无法单独滚动 ####  
-*问题描述：*  
-表格的宽度往往较宽，容易超出屏幕宽度，导致其他内容一起滚动或无法滚动  
-
-*解决方案：*  
-- 修改 `html`  
-  在 `table` 标签外套一个 `div`，并在 `style` 中设置 `overflow:scroll`  
-- 不修改 `html`  
-  如果不方便修改 `html`，可以在 [filter](/instructions#filter) 方法中添加：  
-  ```javascript
-  filter(node) {
-    if (node.name == 'table') {
-      setTimeout(() => { // 这个延时是为了 table 的 border、cellpadding、cellspacing 属性不失效，与内部处理有关
-        var table = Object.assign({}, node); // 拷贝一个 table 节点
-        node.name = 'div'; // 将原 table 改为一个滚动层
-        node.attrs = {
-          style: 'overflow: scroll'
-        }
-        node.children = [table];
-      }, 0)
-    }
-  }
-  ```
-
-*相关 issue：*[多列表格的适配问题](https://ask.dcloud.net.cn/question/94524)
-
 #### 表格没有边框 ####  
 *问题描述：*  
 表格没有边框  

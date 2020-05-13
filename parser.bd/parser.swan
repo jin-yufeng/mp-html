@@ -1,6 +1,3 @@
 <!--parser 主组件-->
 <slot s-if="!html[0].name&&!html[0].type" />
-<view animation="{{scaleAm}}" bindtap="_tap" bindtouchstart="_touchstart" bindtouchmove="_touchmove">
-  <trees class="top" style="{{selectable?'user-select:text;-webkit-user-select:text;':''}}{{showAm}}" lazy-load="{{lazyLoad}}" nodes="{{html[0].name||html[0].type?html:[]}}" />
-</view>
-<image s-for="imgs" id="{{index}}" src="{{item}}" hidden bindload="_load" />
+<trees class="top" style="{{selectable?'user-select:text;-webkit-user-select:text;':''}}{{showAm}}" lazy-load="{{lazyLoad}}" nodes="{{html[0].name||html[0].type?html:[]}}" />

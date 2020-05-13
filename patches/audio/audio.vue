@@ -1,9 +1,3 @@
-<!--
-  audio 扩展包
-  github：https://github.com/jin-yufeng/Parser 
-  docs：https://jin-yufeng.github.io/Parser
-  author：JinYufeng
--->
 <template>
 	<view v-if="controls" class="contain">
 		<slider class="slider" activeColor="#585959" block-size="12" handle-size="12" :disabled="error" :value="value"
@@ -22,6 +16,11 @@
 </template>
 
 <script>
+	/**
+	 * audio 扩展包
+	 * @tutorial https://github.com/jin-yufeng/Parser
+	 * @author JinYufeng
+	 */
 	export default {
 		data() {
 			return {
@@ -138,9 +137,9 @@
 	/* #endif */
 
 	.author {
-		color: #888;
-		font-size: 28rpx;
 		width: 140rpx;
+		font-size: 28rpx;
+		color: #888;
 	}
 
 	.author,
@@ -151,36 +150,39 @@
 	}
 
 	.button {
+		display: flex;
 		align-items: center;
+		justify-content: center;
+		width: 47rpx;
+		height: 47rpx;
+		overflow: hidden;
 		background-color: rgb(0, 0, 0, 0.2);
 		border: 3.5rpx solid white;
 		border-radius: 50%;
-		display: flex;
-		height: 47rpx;
-		justify-content: center;
 		opacity: 0.9;
-		overflow: hidden;
-		width: 47rpx;
 	}
 
 	.contain {
+		/* #endif */
+		position: relative;
+
+		/* #ifdef MP-WEIXIN */
+		display: flex;
+
+		/* #endif */
+
+		/* #ifndef MP-WEIXIN */
+		display: inline-flex;
+		width: 680rpx;
 		background-color: #fcfcfc;
 		border: 1px solid #e0e0e0;
 		border-radius: 2px;
-		/* #ifdef MP-WEIXIN */
-		display: flex;
-		/* #endif */
-		/* #ifndef MP-WEIXIN */
-		display: inline-flex;
-		/* #endif */
-		position: relative;
-		width: 680rpx;
 	}
 
 	.name {
+		width: 320rpx;
 		font-size: 33rpx;
 		line-height: 80rpx;
-		width: 320rpx;
 	}
 
 	.pause {
@@ -190,28 +192,28 @@
 	}
 
 	.play {
+		margin-left: 5rpx;
+		border-top: 10rpx solid transparent;
 		border-bottom: 10rpx solid transparent;
 		border-left: 18rpx solid white;
-		border-top: 10rpx solid transparent;
-		margin-left: 5rpx;
 	}
 
 	.poster {
-		align-items: center;
-		background-color: #e6e6e6;
-		background-size: contain;
 		display: flex;
-		height: 152.35rpx;
+		align-items: center;
 		justify-content: center;
 		width: 152.35rpx;
+		height: 152.35rpx;
+		background-color: #e6e6e6;
+		background-size: contain;
 	}
 
 	.slider {
 		position: absolute;
-		bottom: 18.75rpx;
-		margin: 0;
 		right: 35.15rpx;
+		bottom: 18.75rpx;
 		width: 316.4rpx;
+		margin: 0;
 	}
 
 	.title {
@@ -221,8 +223,8 @@
 	}
 
 	.time {
-		color: #888;
-		font-size: 28rpx;
 		margin: 16.4rpx 35.15rpx 0 0;
+		font-size: 28rpx;
+		color: #888;
 	}
 </style>

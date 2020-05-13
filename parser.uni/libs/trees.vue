@@ -1,11 +1,3 @@
-<!--
-  trees 递归显示组件
-  github：https://github.com/jin-yufeng/Parser 
-  docs：https://jin-yufeng.github.io/Parser
-  插件市场：https://ext.dcloud.net.cn/plugin?id=805
-  author：JinYufeng
-  update：2020/05/11
--->
 <template>
 	<view class="interlayer">
 		<block v-for="(n, index) in ns" v-bind:key="index">
@@ -25,11 +17,12 @@
 			 :style="n.attrs.style" :data-i="index" @tap="_loadVideo" />
 			<video v-else-if="n.name=='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay"
 			 :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :poster="n.attrs.poster" :src="n.attrs.source[n.i||0]"
-			 :unit-id="n.attrs['unit-id']" :data-id="n.attrs.id" data-source="video" @error="error" @play="play" />
+			 :unit-id="n.attrs['unit-id']" :data-id="n.attrs.id" :data-i="index" data-source="video" @error="error" @play="play" />
 			<!--音频-->
 			<audio v-else-if="n.name=='audio'" :ref="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :author="n.attrs.author"
 			 :autoplay="n.attrs.autoplay" :controls="n.attrs.controls" :loop="n.attrs.loop" :name="n.attrs.name" :poster="n.attrs.poster"
-			 :src="n.attrs.source[n.i||0]" :data-i="index" :data-id="n.attrs.id" data-source="audio" @error.native="error" @play.native="play" />
+			 :src="n.attrs.source[n.i||0]" :data-i="index" :data-id="n.attrs.id" data-source="audio" @error.native="error"
+			 @play.native="play" />
 			<!--链接-->
 			<view v-else-if="n.name=='a'" :class="'_a '+(n.attrs.class||'')" hover-class="_hover" :style="n.attrs.style"
 			 :data-attrs="n.attrs" @tap="linkpress">
@@ -167,7 +160,11 @@
 				else if (item.name == 'video' || item.name == 'audio') {
 					var ctx;
 					if (item.name == 'video')
-						ctx = uni.createVideoContext(item.attrs.id, this);
+						ctx = uni.createVideoContext(item.attrs.id
+							// #ifndef MP-BAIDU
+							, this
+							// #endif
+						);
 					else if (this.$refs[item.attrs.id])
 						ctx = this.$refs[item.attrs.id][0];
 					if (ctx) {
@@ -256,7 +253,12 @@
 							// #endif
 						} else
 							uni.navigateTo({
-								url: attrs.href
+								url: attrs.href,
+								fail() {
+									uni.switchTab({
+										url: attrs.href,
+									})
+								}
 							})
 					}
 				}
@@ -305,20 +307,20 @@
 	/* 链接和图片效果 */
 	._a {
 		display: inline;
+		padding: 1.5px 0 1.5px 0;
 		color: #366092;
 		word-break: break-all;
-		padding: 1.5px 0 1.5px 0;
 	}
 
 	._hover {
-		opacity: 0.7;
 		text-decoration: underline;
+		opacity: 0.7;
 	}
 
 	._img {
+		position: relative;
 		display: inline-block;
 		max-width: 100%;
-		position: relative;
 	}
 
 	/* #ifdef MP-WEIXIN */
@@ -330,11 +332,11 @@
 
 	/* #ifdef MP */
 	.interlayer {
-		align-content: inherit;
-		align-items: inherit;
 		display: inherit;
 		flex-direction: inherit;
 		flex-wrap: inherit;
+		align-content: inherit;
+		align-items: inherit;
 		justify-content: inherit;
 		width: 100%;
 		white-space: inherit;
@@ -418,14 +420,14 @@
 	}
 
 	._ol-bef {
+		width: 36px;
 		margin-right: 5px;
 		text-align: right;
-		width: 36px;
 	}
 
 	._ul-bef {
-		line-height: normal;
 		margin: 0 12px 0 23px;
+		line-height: normal;
 	}
 
 	._ol-bef,
@@ -436,18 +438,18 @@
 
 	._ul-p1 {
 		display: inline-block;
-		height: 0.3em;
-		line-height: 0.3em;
-		overflow: hidden;
 		width: 0.3em;
+		height: 0.3em;
+		overflow: hidden;
+		line-height: 0.3em;
 	}
 
 	._ul-p2 {
+		display: inline-block;
+		width: 0.23em;
+		height: 0.23em;
 		border: 0.05em solid black;
 		border-radius: 50%;
-		display: inline-block;
-		height: 0.23em;
-		width: 0.23em;
 	}
 
 	._q::before {
@@ -486,6 +488,7 @@
 	}
 
 	/* #endif */
+
 	/* #ifdef MP-WEIXIN || MP-QQ */
 	.__bdo,
 	.__bdi,
@@ -496,21 +499,21 @@
 
 	/* #endif */
 	._video {
-		background-color: black;
-		display: inline-block;
-		height: 225px;
 		position: relative;
+		display: inline-block;
 		width: 300px;
+		height: 225px;
+		background-color: black;
 	}
 
 	._video::after {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin: -15px 0 0 -15px;
+		content: '';
 		border-color: transparent transparent transparent white;
 		border-style: solid;
 		border-width: 15px 0 15px 30px;
-		content: '';
-		left: 50%;
-		margin: -15px 0 0 -15px;
-		position: absolute;
-		top: 50%;
 	}
 </style>

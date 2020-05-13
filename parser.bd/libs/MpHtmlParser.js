@@ -1,30 +1,27 @@
-/*
-  将 html 解析为适用于小程序 rich-text 的 DOM 结构
-  github：https://github.com/jin-yufeng/Parser
-  docs：https://jin-yufeng.github.io/Parser
-  author：JinYufeng
-  update：2020/05/11
-*/
+/**
+ * html 解析器
+ * @tutorial https://github.com/jin-yufeng/Parser
+ * @version 20200513
+ * @author JinYufeng
+ * @listens MIT
+ */
 var cfg = require('./config.js'),
   blankChar = cfg.blankChar,
   CssHandler = require('./CssHandler.js'),
   windowWidth = swan.getSystemInfoSync().windowWidth;
-try {
-  var emoji = require('./emoji.js');
-} catch (e) { }
+var emoji;
 class MpHtmlParser {
   constructor(data, options = {}) {
     this.attrs = {};
-    this.compress = options.compress;
     this.CssHandler = new CssHandler(options.tagStyle, windowWidth);
     this.data = data;
     this.domain = options.domain;
     this.DOM = [];
     this.i = this.start = this.audioNum = this.imgNum = this.videoNum = 0;
-    this.protocol = this.domain && this.domain.includes('://') ? this.domain.split('://')[0] : 'http';
+    options.prot = (this.domain || '').includes('://') ? this.domain.split('://')[0] : 'http';
+    this.options = options;
     this.state = this.Text;
     this.STACK = [];
-    this.useAnchor = options.useAnchor;
   }
   parse() {
     if (emoji) this.data = emoji.parseEmoji(this.data);
@@ -164,10 +161,10 @@ class MpHtmlParser {
       style = this.CssHandler.match(node.name, attrs, node) + (attrs.style || ''),
       styleObj = {};
     if (attrs.id) {
-      if (this.compress & 1) attrs.id = void 0;
-      else if (this.useAnchor) this.bubble();
+      if (this.options.compress & 1) attrs.id = void 0;
+      else if (this.options.useAnchor) this.bubble();
     }
-    if ((this.compress & 2) && attrs.class) attrs.class = void 0;
+    if ((this.options.compress & 2) && attrs.class) attrs.class = void 0;
     switch (node.name) {
       case 'a':
       case 'ad':
@@ -375,6 +372,14 @@ class MpHtmlParser {
             if (style) n.attrs.style = style;
           }
         })(childs)
+      if (this.options.autoscroll) {
+        var table = Object.assign({}, node);
+        node.name = 'div';
+        node.attrs = {
+          style: 'overflow:scroll'
+        }
+        node.children = [table];
+      }
     }
     this.CssHandler.pop && this.CssHandler.pop(node);
     // 自动压缩
@@ -411,16 +416,24 @@ class MpHtmlParser {
   }
   getUrl(url) {
     if (url[0] == '/') {
-      if (url[1] == '/') url = this.protocol + ':' + url;
+      if (url[1] == '/') url = this.options.prot + ':' + url;
       else if (this.domain) url = this.domain + url;
     } else if (this.domain && url.indexOf('data:') != 0 && !url.includes('://'))
       url = this.domain + '/' + url;
     return url;
   }
-  isClose = () => this.data[this.i] == '>' || (this.data[this.i] == '/' && this.data[this.i + 1] == '>');
-  section = () => this.data.substring(this.start, this.i);
-  parent = () => this.STACK[this.STACK.length - 1];
-  siblings = () => this.STACK.length ? this.parent().children : this.DOM;
+  isClose() {
+    return this.data[this.i] == '>' || (this.data[this.i] == '/' && this.data[this.i + 1] == '>');
+  }
+  section() {
+    return this.data.substring(this.start, this.i);
+  }
+  parent() {
+    return this.STACK[this.STACK.length - 1];
+  }
+  siblings() {
+    return this.STACK.length ? this.parent().children : this.DOM;
+  }
   // 状态机
   Text(c) {
     if (c == '<') {

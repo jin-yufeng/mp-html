@@ -6,6 +6,7 @@
 </template>
 
 <script>
+	/* eslint-disable */
 	import jyfParser from '@/components/jyf-parser/jyf-parser';
 	const testHtml = require('./html.js');
 	export default {

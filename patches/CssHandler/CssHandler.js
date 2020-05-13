@@ -1,9 +1,8 @@
-/*
-  CssHandler 扩展包
-  github：https://github.com/jin-yufeng/Parser
-  docs：https://jin-yufeng.github.io/Parser
-  author：JinYufeng
-*/
+/**
+ * Csshandler 扩展包
+ * @tutorial https://github.com/jin-yufeng/Parser
+ * @author JinYufeng
+ */
 const cfg = require('./config.js');
 // 匹配 class
 function matchClass(match, selector) {
@@ -51,7 +50,9 @@ class CssHandler {
       })
     }
   }
-  getStyle = data => parseCss(data, this.styles, this.screenWidth);
+  getStyle(data) {
+    parseCss(data, this.styles, this.screenWidth);
+  }
   match(name, attrs, ele) {
     var match_class = [];
     if (attrs.class) {

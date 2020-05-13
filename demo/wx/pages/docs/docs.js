@@ -225,6 +225,11 @@ export default {
       default: 'true',
       notice: '是否允许在播放视频时自动暂停其他视频'
     }, {
+      name: 'autoscroll',
+      type: 'Boolean',
+      default: 'false',
+      notice: '是否自动给 table 加一个滚动层（使表格可以单独滚动）'
+    }, {
       name: 'autosetTitle',
       type: 'Boolean',
       default: 'true',
@@ -239,11 +244,6 @@ export default {
       type: 'String',
       default: '',
       notice: '主域名，设置后将给链接拼接上主域名或协议名'
-    }, {
-      name: 'gesture-zoom',
-      type: 'Boolean',
-      default: 'false',
-      notice: '是否开启双击缩放'
     }, {
       name: 'lazy-load',
       type: 'Boolean',
@@ -367,18 +367,6 @@ console.log(rect.height); // 高度</code></pre>
   }
 })</code></pre>
   </li>
-  <li><code>preLoad</code>
-    <div>功能：预加载富文本中的图片</div>
-    <div>说明：若某段富文本图片较多或内容较长，可以在其他页面或当前页面未进行显示时进行预加载（不会在视图上显示）</div>
-    <div>输入值：<code>html</code>（<code>String</code>/<code>Array</code>），<code>num</code>（最大图片数量，不输入将预加载全部图片）</div>
-    <pre><code class="language-wxml"><parser id="preLoad" /></code></pre>
-    <pre><code class="language-javascript">Page({
-  onLoad() {
-    // 预加载完毕后在其他页面或当前页面使用这段富文本时就可以不用加载图片
-    this.selectComponent("#preLoad").preLoad(html);
-  }
-})</code></pre>
-  </li>
 </ol>`,
     // 配置项示例代码
     configCode: `<ol style="margin-left:-15px">
@@ -490,6 +478,16 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.5.13
+    <ol>
+      <li><code>A</code> 增加了<code>autoscroll</code>属性，可以给所有表格添加一个滚动层</li>
+      <li><code>U</code> <code>a</code>标签可以跳转到<code>tabbar</code>页面</li>
+      <li><code>U</code> 通过<code>stylelint</code>规范<code>css</code>的写法</li>
+      <li><code>D</code> 去除了<code>gesture-zoom</code>属性</li>
+      <li><code>D</code> 去除了<code>preLoad</code>的<code>api</code></li>
+    </ol>
+  </li>
+  </br>
   <li>2020.5.11
     <ol>
       <li><code>F</code> 修复了电脑端<code>rpx</code>可能换算不正确的问题</li>
@@ -635,12 +633,6 @@ console.log(rect.height); // 高度</code></pre>
       <li><code>D</code> 移除了<code>autocopy</code>、<code>autopreview</code>属性，如需禁用自动预览/复制链接，请使用<code>linkpress</code>和<code>imgtap</code>事件中的<code>ignore</code>函数</li>
       <li><code>D</code> 移除了<code>versionHigherThan</code>、<code>parseHtml</code>、<code>parseCss</code>的<code>api</code></li>
       <li><code>D</code> 废弃了后端加强包</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.2.12
-    <ol>
-      <li><code>A</code> 增加了<code>gesture-zoom</code>属性，可以设置双击缩放（默认<code>false</code>）</li>
     </ol>
   </li>
 </ul>

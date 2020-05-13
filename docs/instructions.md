@@ -3,12 +3,12 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 44.0KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 29.8KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 43.6KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 42.3KB | 百度小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 42.9KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 60.4KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 41.1KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 27.7KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 40.7KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 39.4KB | 百度小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 39.9KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.3KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
@@ -23,12 +23,11 @@
 | 平台 | 差异 |
 |:---:|---|
 | 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单 |
-| 百度小程序 | 不支持 gesture-zoom 属性 |
-| 支付宝小程序 | 不支持 audio 标签<br>不支持 autopause、gesture-zoom 属性 |
+| 支付宝小程序 | 不支持 audio 标签 |
 | 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
 | H5 | 支持所有浏览器支持的标签<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
-| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
-| NVUE | 支持所有浏览器支持的标签<br>不支持 gesture-zoom、lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
+| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签 |
+| NVUE | 支持所有浏览器支持的标签<br>不支持 lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
 
 关于 `a` 标签：  
 `H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  
@@ -166,9 +165,9 @@
 更多信息参考：[官网说明](https://wechat-miniprogram.github.io/kbone/docs/guide/advanced.html#%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6)
 
 #### 在 wepy 中使用 ####
-##### v1.x #####
 1. 将 [parser](#插件包说明) 文件夹复制到 `/src/components` 目录下  
-2. 在需要使用的页面的 `wpy` 文件中添加
+2. 在需要使用的页面的 `wpy` 文件中添加  
+   ##### v1.x #####
    ```wpy
    <template>
      <view class="container">
@@ -189,14 +188,8 @@
    }
    </script>
    ```
-3. 通过 `wepy build --watch` 命令进行编译  
-
-##### v2.x #####
-1. 将 [parser](#插件包说明) 文件夹复制到 `/src/components` 目录下  
-2. 在项目目录下安装 `@babel/plugin-proposal-class-properties`（`npm install`）  
-3. 在项目的 `wepy.config.js` 中的 `compilers > babel > plugins` 中添加 `@babel/plugin-proposal-class-properties`  
-4. 在需要使用的页面的 `wpy` 文件中添加  
-   ```wpy
+   ##### v2.x #####
+      ```wpy
    <template>
      <div>
        <parser html="{{html}}" />
@@ -218,11 +211,7 @@
    }
    </config>
    ```
-5. 通过 `wepy build --watch` 命令进行编译  
-
-!> 如果没有用 [document 扩展包](#document)，将 `parser.js` 中的 `var dom = require('./libs/document.js')` 改为 `var dom`  
-如果没有用 [emoji 扩展包](#emoji)，将 `libs/MpHtmlParser` 中的 `var emoji = require('./emoji.js')` 改为 `var emoji`  
-否则编译时可能报错（源码中是通过 `try` 方式引入的）  
+3. 通过 `wepy build --watch` 命令进行编译  
 
 !> 如果出现 `Components not found` 错误，则用 `wepy build --no-cache --watch` 命令清理缓存，重新编译  
 
@@ -279,10 +268,10 @@
 |:----:|:----:|:----:|:----:|----|:---:|
 | html | String/Array |  | 是 | 要显示的富文本数据，格式同 [rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html) | - |
 | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 | [20190510](/changelog#_20190510) |
+| autoscroll | Boolean | false | 否 | 是否自动给 table 加一个滚动层（使表格可以单独滚动） | [20200513](/changelog#_20200513) |
 | autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题 | [20190724](/changelog#_20190724) |
 | compress | Number | 0 | 否 | 压缩等级，可以选择是否移除 id 和 class | [20200312](/changelog#_20200312) |
 | domain | String |  | 否 | 主域名，设置后将给链接自动拼接上主域名或协议名 | [20191202](/changelog#_20191202) |
-| gesture-zoom | Boolean | false | 否 | 是否开启双击缩放 | [20200212](/changelog#_20200212) |
 | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 | [20190928](/changelog#_20190928) |
 | selectable | Boolean | false | 否 | 是否允许长按复制内容 | [20190603](/changelog#_20190603) |
 | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 | [20190519](/changelog#_20190519) |
@@ -295,6 +284,10 @@
 - 传入的格式为 `array` 时，不需要进行解析，理论上可以提高性能，但是解析时间一般很短，且通常数组的大小比字符串大（传输时间更长），部分在解析过程中进行的处理也无法生效，不一定有明显的优化  
 - 本插件在解析的过程中会进行一些转换和设置一些标识，使得能够正确的渲染和使用；若传入非本插件产生的数组（区分方式是查看 `html[0].PoweredBy` 是否等于 `Parser`），插件会自动进行设置，并同时处理 `tag-style`、`domain`、`use-anchor` 等一些属性的效果，但会产生额外的性能开销   
 
+##### autoscroll #####
+表格一般宽度较大，在移动端容易超出屏幕宽度，可能无法显示超出部分或导致所有内容跟随表格一起滚动，设置该属性后，会给所有表格外套一个设置了 `overflow:scroll` 的 `div`，使其可以单独滚动  
+不过在由于套了一个 `div`，个别情况下可能导致样式异常（如果有用到行内表格请勿使用）  
+
 ##### compress #####
 可以按需选择压缩等级，减小解析结果的大小，提高性能（若需进行更复杂的自定义压缩，可以通过 [filter](#filter) 函数）  
 
@@ -306,14 +299,6 @@
 | 3 | 移除所有 `id` 和 `class` 属性 |
 
 附：移除 `id` 和 `class` 都不影响匹配 `style` 标签中的样式（将在匹配完成后再移除）  
-
-##### gesture-zoom #####
-目前仅支持双击缩放不支持双指缩放  
-已知问题：  
-1. 若限定了 `parser` 标签的宽高度可能表现的不正常  
-2. 放大后在竖直方向可能无法滑到底部  
-
-若需要解决这些问题可以参考 [链接](https://ask.dcloud.net.cn/question/93080?item_id=119920&rf=false)（感谢 [leno.zhou@qq.com](https://ask.dcloud.net.cn/people/leno.zhou%40qq.com)）
 
 ##### tag-style #####
 可以设置标签的默认样式，形如 `{标签名：样式}` 的结构体，例如 `{ img: "display:block" }` 表示给 `img` 标签设置默认的块级标签效果  
@@ -666,24 +651,6 @@ this.selectComponent("#article").setContent(html);
 
 !> 在 `load` 或 `ready` 事件中调用可能陷入死循环
 
-#### preLoad ####
-功能：预加载富文本中的图片  
-说明：若某段富文本图片较多或内容较长，可以在其他页面或当前页面未进行显示时进行预加载（不会在视图上显示）  
-1. 预加载主要针对图片；同时若传入的字符串，还将缓存解析结果（使用时通过 `use-cache` 属性即可读取）  
-2. 为避免短时间内发起过多图片请求，最多同时加载 `15` 张图片  
-3. 可以同时预加载多段内容，也可以在显示内容的同时预加载其他内容  
-4. 在解析过程中使用的属性必须加在预加载的标签上，加在显示的标签上无效  
-
-输入值：`html`（`String` / `Array`），`num`（最大图片数量，不输入将预加载所有图片）  
-使用方法：
-```wxml
-<parser id="preLoad" />
-```
-```javascript
-// 预加载完毕后在其他页面或当前页面使用这段富文本时就可以不用加载图片
-this.selectComponent("#preLoad").preLoad(html);
-```
-
 ## 扩展包 ##
 [patches](https://github.com/jin-yufeng/Parser/tree/master/patches) 文件夹中准备了一些扩展包，根据需要选用，可以实现更加丰富的功能  
 
@@ -698,11 +665,10 @@ this.selectComponent("#preLoad").preLoad(html);
 - 功能  
   将形如 `[笑脸]` 的文本解析为 `emoji` 小表情  
 - 大小  
-  `4.25KB`（`min` 版本 `3.16KB`）  
+  `4.21KB`（`min` 版本 `3.15KB`）  
 - 使用方法  
-  将 [emoji.js](https://github.com/jin-yufeng/Parser/blob/master/patches/emoji/emoji.js) 复制到 `libs` 文件夹下即可（[emoji.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/emoji/emoji.min.js) 是压缩版本，功能相同，使用时也需要更名为 `emoji.js`）  
-  
-  !> 在 `uni-app` 中使用时需要将 `libs/MpHtmlParser.js` 第 47 行改为 `const emoji = require('./emoji.js');`  
+  1. 将 [emoji.js](https://github.com/jin-yufeng/Parser/blob/master/patches/emoji/emoji.js) 复制到 `libs` 文件夹下（[emoji.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/emoji/emoji.min.js) 是压缩版本，功能相同，使用时也需要更名为 `emoji.js`）  
+  2. 将 `libs/MpHtmlParser.js` 中的 `var emoji` 修改为 `var emoji = require('./emoji.js')`
   
   默认配置中支持 `177` 个常用的 `emoji` 小表情  
   支持两种形式的 `emoji`，一是 `emoji` 字符（不同设备上显示的样子可能不同），或者是网络图片（将按照 `16px` × `16px` 的大小显示，且不可放大预览），默认配置中都是 `emoji` 字符，可使用以下 `api` 获取或修改：  
@@ -717,11 +683,10 @@ this.selectComponent("#preLoad").preLoad(html);
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `7.17KB`（`min` 版本 `5.45KB`，`uni-app` 版本 `5.85KB`）  
+  `7.13KB`（`min` 版本 `5.44KB`，`uni-app` 版本 `5.81KB`）  
 - 使用方法  
-  将 [document.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.js) 复制到 `libs` 文件夹下即可（[document.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.min.js) 是压缩版本，功能相同，使用时也需要更名为 `document.js`）  
-  
-  !> 在 `uni-app` 中使用时需用 [document.uni.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.uni.js)；并将 `jyf-parser.vue` 中的 38 行修改为 `const document = require('./libs/document.js');`  
+  1. 将 [document.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.js) 复制到 `libs` 文件夹下（[document.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.min.js) 是压缩版本，功能相同；在 `uni-app` 中使用时需用 [document.uni.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.uni.js)；使用时也需要更名为 `document.js`）  
+  2. 将 `parser.js`（`uni-app` 中是 `jyf-parser.vue`）中的 `var dom` 修改为 `var dom = require('./libs/document.js')`
   
 - `document` 类：  
   获取方式：可通过 `this.selectComponent("#id").document` 获取  
@@ -809,7 +774,7 @@ error(e){
 4. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
   
 - 大小（与原大小相比增加）  
-  `4.65KB`（`min` 版本：`1.50KB`）  
+  `4.78KB`（`min` 版本：`1.49KB`）  
 - 使用方法  
   用 [CssHandler.js](https://github.com/jin-yufeng/Parser/blob/master/patches/CssHandler/CssHandler.js)（[CssHandler.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/CssHandler/CssHandler.min.js) 是压缩版本，功能相同，使用时也需要更名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
@@ -824,7 +789,7 @@ error(e){
   2. 一个 `parser` 标签内的 `a` 标签可以跳转到另一个 `parser` 标签内的锚点（优先跳转同一个 `parser` 内的锚点，不存在再按照顺序查找，都需要开启 `use-anchor` 属性）  
   3. 一个 `parser` 标签内的视频播放时，将自动暂停该 `group` 内所有 `parser` 标签内的视频（前提是 `autopause` 属性的值为 `true`）  
 - 大小  
-  `2.24KB`  
+  `2.20KB`  
 - 使用方法  
   1. 将 [parser-group](https://github.com/jin-yufeng/Parser/tree/master/patches/parser-group) 文件夹拷贝到 `components` 目录下即可（必须与 `parser` 文件夹同级）  
   2. 在需要使用页面的 `json` 文件中添加  
@@ -857,7 +822,7 @@ error(e){
   `error` 事件中会返回 `context` 对象（也可以通过 [getVideoContext](#getVideoContext) 方法获取），包含 `setSrc`、`play`、`pause`、`seek` 方法  
   封装成自定义组件，可以直接在页面上使用（属性和事件基本同 `audio`）  
 - 大小  
-  `4.13KB`（`uni-app` 版 `4.66KB`）  
+  `4.11KB`（`uni-app` 版 `4.62KB`）  
 - 使用方法  
 
   ?> 建议通过 [打包工具](#打包工具) 打包  
@@ -988,6 +953,3 @@ filter(node, cxt) {
 
 - 支持  
   ![支持](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md6.png?sign=24395ad7572c19464db67d8997e3b2d2&t=1574502139)  
-
-## 使用调查 ##
-<iframe src='https://www.wjx.cn/jq/67585702,i,t.aspx?width=760&source=iframe' width='799' height='800' frameborder='0' style='overflow:auto'></iframe>

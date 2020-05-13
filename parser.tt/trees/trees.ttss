@@ -2,58 +2,81 @@
 
 /* 链接和图片效果 */
 ._a {
-  color: #366092;
   display: inline;
   padding: 1.5px 0 1.5px 0;
+  color: #366092;
   word-break: break-all;
 }
+
 ._hover {
-  opacity: 0.7;
   text-decoration: underline;
+  opacity: 0.7;
 }
-._visited {
-  color: #551a8b;
-}
+
 ._img {
+  position: relative;
   display: inline-block;
   max-width: 100%;
-  position: relative;
 }
+
 /* 内部样式 */
-._blockquote, ._div, ._p, ._ul, ._ol, ._li {
+._blockquote,
+._div,
+._p,
+._ul,
+._ol,
+._li {
   display: block;
 }
-._b, ._strong {
+
+._b,
+._strong {
   font-weight: bold;
 }
+
 ._code {
   font-family: monospace;
 }
+
 ._del {
   text-decoration: line-through;
 }
-._em, ._i {
+
+._em,
+._i {
   font-style: italic;
 }
+
 ._h1 {
   font-size: 2em;
 }
+
 ._h2 {
   font-size: 1.5em;
 }
+
 ._h3 {
   font-size: 1.17em;
 }
+
 ._h5 {
   font-size: 0.83em;
 }
+
 ._h6 {
   font-size: 0.67em;
 }
-._h1, ._h2, ._h3, ._h4, ._h5, ._h6 {
+
+._h1,
+._h2,
+._h3,
+._h4,
+._h5,
+._h6 {
   display: block;
   font-weight: bold;
 }
+
 ._image {
   position: absolute;
   top: 0;
@@ -62,68 +85,82 @@
   height: 100%;
   opacity: 0;
 }
+
 ._ins {
   text-decoration: underline;
 }
+
 ._li {
   flex: 1;
   width: 0;
 }
+
 ._ol-bef {
+  width: 36px;
   margin-right: 5px;
   text-align: right;
-  width: 36px;
 }
+
 ._ul-bef {
-  line-height: normal;
   margin: 0 12px 0 23px;
+  line-height: normal;
 }
-._ol-bef, ._ul_bef {
+
+._ol-bef,
+._ul_bef {
   flex: none;
   user-select: none;
 }
+
 ._ul-p1 {
   display: inline-block;
-  height: 0.3em;
-  line-height: 0.3em;
-  overflow: hidden;
   width: 0.3em;
+  height: 0.3em;
+  overflow: hidden;
+  line-height: 0.3em;
 }
+
 ._ul-p2 {
+  display: inline-block;
+  width: 0.23em;
+  height: 0.23em;
   border: 0.05em solid black;
   border-radius: 50%;
-  display: inline-block;
-  height: 0.23em;
-  width: 0.23em;
 }
+
 ._q::before {
   content: '"';
 }
+
 ._q::after {
   content: '"';
 }
+
 ._sub {
   font-size: smaller;
   vertical-align: sub;
 }
+
 ._sup {
   font-size: smaller;
   vertical-align: super;
 }
+
 ._video {
-  background-color: black;
-  display: inline-block;
-  height: 225px;
   position: relative;
+  display: inline-block;
   width: 300px;
+  height: 225px;
+  background-color: black;
 }
+
 ._video::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -15px 0 0 -15px;
+  content: '';
   border-color: transparent transparent transparent white;
   border-style: solid;
   border-width: 15px 0 15px 30px;
-  content: '';
-  left: 50%;
-  margin: -15px 0 0 -15px;
-  position: absolute;
-  top: 50%;
 }

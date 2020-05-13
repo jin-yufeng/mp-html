@@ -1,11 +1,5 @@
-/*
-  解析和匹配 Css 的选择器
-  github：https://github.com/jin-yufeng/Parser
-  docs：https://jin-yufeng.github.io/Parser
-  author：JinYufeng
-  update：2020/03/15
-*/
-var cfg = require('./config.js');
+var cfg = require('./config.js'),
+	isLetter = c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 class CssHandler {
 	constructor(tagStyle) {
 		var styles = Object.assign({}, cfg.userAgentStyles);
@@ -13,7 +7,9 @@ class CssHandler {
 			styles[item] = (styles[item] ? styles[item] + ';' : '') + tagStyle[item];
 		this.styles = styles;
 	}
-	getStyle = data => this.styles = new CssParser(data, this.styles).parse();
+	getStyle(data) {
+		this.styles = new CssParser(data, this.styles).parse();
+	}
 	match(name, attrs) {
 		var tmp, matched = (tmp = this.styles[name]) ? tmp + ';' : '';
 		if (attrs.class) {
@@ -42,11 +38,12 @@ class CssParser {
 			this.state(c);
 		return this.res;
 	}
-	section = () => this.data.substring(this.start, this.i);
-	isLetter = c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+	section() {
+		return this.data.substring(this.start, this.i);
+	}
 	// 状态机
 	Space(c) {
-		if (c == '.' || c == '#' || this.isLetter(c)) {
+		if (c == '.' || c == '#' || isLetter(c)) {
 			this.start = this.i;
 			this.state = this.Name;
 		} else if (c == '/' && this.data[this.i + 1] == '*')
@@ -73,7 +70,7 @@ class CssParser {
 		} else if (c == ',') {
 			this.list.push(this.section());
 			this.Comma();
-		} else if (!this.isLetter(c) && (c < '0' || c > '9') && c != '-' && c != '_')
+		} else if (!isLetter(c) && (c < '0' || c > '9') && c != '-' && c != '_')
 			this.state = this.Ignore;
 	}
 	NameSpace(c) {

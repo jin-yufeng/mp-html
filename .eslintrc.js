@@ -5,25 +5,27 @@ module.exports = {
         "commonjs": true,
         "es6": true
     },
-    "extends": ["eslint:recommended"],
+    "extends": ["eslint:recommended", "plugin:vue/essential"],
+    "plugins": [
+    	"vue"
+    ],
     "globals": {
-		"weex": "readonly",
-		"uni": "readonly",
-		"plus": "readonly",
-		"tt": "readonly",
-		"qq": "readonly",
-		"wx": "readonly",
-		"swan": "readonly",
-		"Component": "readonly",
-		"Page": "readonly",
-		"App": "readonly"
+    	"App": "readonly",
+    	"Component": "readonly",
+    	"Page": "readonly",
+    	"wx": "readonly",
+    	"qq": "readonly",
+    	"swan": "readonly",
+    	"tt": "readonly",
+    	"uni": "readonly",
+    	"plus": "readonly",
+		"weex": "readonly"
     },
-    "parser": "babel-eslint",
     "rules": {
 		"no-cond-assign": "off",
-		"no-mixed-spaces-and-tabs": "off",
+		"no-mixed-spaces-and-tabs": "off",  // HBuilderX 格式化就会产生 tab 与空格混合
+		"vue/valid-v-else": "off", 	        // 条件编译会导致多个 v-else
 		"no-console": ["error", { "allow": ["warn", "error"] }],
-		"no-constant-condition": ["error", { "checkLoops": false }],
-		"no-empty": ["error", { "allowEmptyCatch": true }]
+		"no-constant-condition": ["error", { "checkLoops": false }]
     }
 };

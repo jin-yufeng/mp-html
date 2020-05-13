@@ -1,9 +1,8 @@
-/*
-  document 扩展包
-  github：https://github.com/jin-yufeng/Parser
-  docs：https://jin-yufeng.github.io/Parser
-  author：JinYufeng
-*/
+/**
+ * document 扩展包
+ * @tutorial https://github.com/jin-yufeng/Parser
+ * @author JinYufeng
+ */
 const MpHtmlParser = require('./MpHtmlParser.js');
 class element {
   constructor(node, path, context) {

@@ -1,5 +1,4 @@
 > 新版文档链接：[Parser 插件文档](https://jin-yufeng.github.io/Parser)  
-> 功能使用调查问卷：[填写](https://www.wjx.cn/jq/67585702.aspx)  
 
 ## 功能简介 ##
 - 支持匹配 `style` 标签中的样式  
@@ -49,10 +48,10 @@ export default{
   |:----:|:----:|:----:|:----:|----|
   | html | String/Array | | 是 | 要显示的富文本数据，格式同 rich-text |
   | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
+  | autoscroll | Boolean | false | 否 | 是否自动给 table 加一个滚动层（使表格可以单独滚动） |
   | autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题上 |
   | compress | Number | 0 | 否 | 压缩等级，可以选择是否移除 id 和 class |
   | domain | String |  | 否 | 主域名，设置后将对于图片地址将自动拼接主域名或协议名 |
-  | gesture-zoom | Boolean | false | 否 | 是否开启双击缩放 |
   | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
   | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
   | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
@@ -76,7 +75,7 @@ export default{
 
 更多信息可见：  
 [文档地址](https://jin-yufeng.github.io/Parser)  
-[Github 链接](https://github.com/jin-yufeng/Parser)  
+[Github 链接](https://github.com/jin-yufeng/Parser)（好用的话，点个 `star` 吧）  
 
 ## 注意事项 ##
 1. 本插件需要使用 `HBuilderX 2.2.5` 及以上版本进行编译  
@@ -89,12 +88,11 @@ export default{
 | 平台 | 差异 |
 |:---:|---|
 | 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单 |
-| 百度小程序 | 不支持 gesture-zoom 属性 |
-| 支付宝小程序 | 不支持 audio 标签<br>不支持 autopause、gesture-zoom 属性 |
+| 支付宝小程序 | 不支持 audio 标签 |
 | 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](https://jin-yufeng.github.io/Parser/#/instructions?id=关于-ignore-方法)） |
 | H5 | 支持所有浏览器支持的标签<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](https://jin-yufeng.github.io/Parser/#/instructions?id=配置项) 中除 userAgentStyles 外均无效 |
-| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签<br>不支持 gesture-zoom 属性 |
-| NVUE | 支持所有浏览器支持的标签<br>不支持 gesture-zoom、lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](https://jin-yufeng.github.io/Parser/#/instructions?id=配置项) 中除 userAgentStyles 外均无效 |
+| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签 |
+| NVUE | 支持所有浏览器支持的标签<br>不支持 lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](https://jin-yufeng.github.io/Parser/#/instructions?id=配置项) 中除 userAgentStyles 外均无效 |
 
 关于 `a` 标签：  
 `H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  

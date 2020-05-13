@@ -1,9 +1,8 @@
 
-/*
- * Parser 插件包打包工具（按需生成插件包）
- * github地址：https://github.com/jin-yufeng/Parser
- * 文档地址：https://jin-yufeng.github.io/Parser
- * author：JinYufeng
+/**
+ * Parser 插件包打包工具
+ * @tutorial https://github.com/jin-yufeng/Parser
+ * @author JinYufeng
 */
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,21 +50,21 @@ class core {
 	boolean isMin = false;
 
 	// 包大小
-	final float wxSize = 44.0f;
-	final float wxMinSize = 29.8f;
-	final float qqSize = 43.6f;
-	final float bdSize = 42.3f;
-	final float ttSize = 42.9f;
-	final float uniAppSize = 60.4f;
-	final float emojiSize = 4.25f;
-	final float emojiMinSize = 3.16f;
-	final float domSize = 7.17f;
-	final float domUniSize = 5.85f;
-	final float domMinSize = 5.45f;
-	final float cssSize = 4.65f;
-	final float cssMinSize = 1.50f;
-	final float audioSize = 4.13f;
-	final float audioUniSize = 4.66f;
+	final float wxSize = 41.1f;
+	final float wxMinSize = 27.7f;
+	final float qqSize = 40.7f;
+	final float bdSize = 39.4f;
+	final float ttSize = 39.9f;
+	final float uniAppSize = 58.3f;
+	final float emojiSize = 4.21f;
+	final float emojiMinSize = 3.15f;
+	final float domSize = 7.13f;
+	final float domUniSize = 5.81f;
+	final float domMinSize = 5.44f;
+	final float cssSize = 4.78f;
+	final float cssMinSize = 1.49f;
+	final float audioSize = 4.11f;
+	final float audioUniSize = 4.62f;
 
 	// 构造函数
 	core() {
@@ -282,9 +281,6 @@ class core {
 					// 生成 uni-app 包
 					if (typeUniApp.isSelected()) {
 						copyDir("./parser.uni", newPath);
-						if (emoji.isSelected())
-							modifyFile(newPath + "/libs/MpHtmlParser.js", "var emoji",
-									"const emoji = require(\"./emoji.js\")");
 						if (audio.isSelected()) {
 							Files.copy(Paths.get("./patches/audio/audio.vue"),
 									new FileOutputStream(newPath + "/libs/audio.vue"));
@@ -293,10 +289,10 @@ class core {
 									"import myAudio from './audio'\r\n	export default {\r\n		components: {\r\n			myAudio,");
 						}
 						if (document.isSelected()) {
+							modifyFile(newPath + "/jyf-parser.vue", "var dom",
+									"var dom = require(\"./libs/document.js\")");
 							Files.copy(Paths.get("./patches/document/document.uni.js"),
 									new FileOutputStream(newPath + "/libs/document.js"));
-							modifyFile(newPath + "/jyf-parser.vue", "var document",
-									"const document = require(\"./libs/document.js\")");
 						}
 					} else {
 						// 生成微信包
@@ -336,14 +332,19 @@ class core {
 										"<myAudio tt:elif=\"{{n.name=='audio'}}\" id=\"{{n.attrs.id}}\" class=\"{{n.attrs.class}}\" style=\"{{n.attrs.style}}\" author=\"{{n.attrs.author}}\" autoplay=\"{{n.attrs.autoplay}}\" controls=\"{{n.attrs.controls}}\" loop=\"{{n.attrs.loop}}\" name=\"{{n.attrs.name}}\" poster=\"{{n.attrs.poster}}\" src=\"{{n.attrs.source[n.i||0]}}\" data-i=\"{{index}}\" data-source=\"audio\" binderror=\"error\" bindplay=\"play\" />");
 							}
 						}
-						if (document.isSelected())
+						if (document.isSelected()) {
+							modifyFile(newPath + "/parser.js", "var dom", "var dom = require(\"./libs/document.js\")");
 							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
 									new FileOutputStream(newPath + "/libs/document.js"));
+						}
 					}
 					// 处理公共补丁包
-					if (emoji.isSelected())
+					if (emoji.isSelected()) {
+						modifyFile(newPath + "/libs/MpHtmlParser.js", "var emoji",
+								"var emoji = require(\"./emoji.js\")");
 						Files.copy(Paths.get("./patches/emoji/emoji" + (isMin ? ".min" : "") + ".js"),
 								new FileOutputStream(newPath + "/libs/emoji.js"));
+					}
 					if (CssHandler.isSelected())
 						Files.copy(Paths.get("./patches/CssHandler/CssHandler" + (isMin ? ".min" : "") + ".js"),
 								new FileOutputStream(newPath + "/libs/CssHandler.js"));
@@ -367,7 +368,7 @@ class core {
 		reader.read(bytes);
 		reader.close();
 		String content = new String(bytes, "utf-8");
-		content = content.replace(oldVal, newVal);
+		content = content.replaceFirst(oldVal, newVal);
 		FileOutputStream writer = new FileOutputStream(file, false);
 		writer.write(content.getBytes("utf-8"));
 		writer.close();

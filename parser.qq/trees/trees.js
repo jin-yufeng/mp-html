@@ -1,10 +1,3 @@
-/*
-  trees 递归子组件
-  github：https://github.com/jin-yufeng/Parser
-  docs：https://jin-yufeng.github.io/Parser
-  author：JinYufeng
-  update：2020/04/25
-*/
 Component({
   data: {
     placeholder: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='225'/>",
@@ -79,6 +72,11 @@ Component({
           else
             qq.navigateTo({
               url: attrs.href,
+              fail() {
+                qq.switchTab({
+                  url: attrs.href,
+                })
+              }
             })
         }
       }

@@ -1,11 +1,3 @@
-<!--
-  parser 主模块组件
-  github：https://github.com/jin-yufeng/Parser 
-  docs：https://jin-yufeng.github.io/Parser
-  插件市场：https://ext.dcloud.net.cn/plugin?id=805
-  author：JinYufeng
-  update：2020/05/08
--->
 <template>
 	<view>
 		<slot v-if="!nodes.length" />
@@ -13,14 +5,12 @@
 		<web-view id="top" ref="web" :style="'margin-top:-2px;height:'+height+'px'" @onPostMessage="_message" />
 		<!--#endif-->
 		<!--#ifndef APP-PLUS-NVUE-->
-		<view id="top" :style="showAm+(selectable?';user-select:text;-webkit-user-select:text':'')" :animation="scaleAm" @tap="_tap"
-		 @touchstart="_touchstart" @touchmove="_touchmove">
+		<view id="top" :style="showAm+(selectable?';user-select:text;-webkit-user-select:text':'')">
 			<!--#ifdef H5-->
 			<div :id="'rtf'+uid"></div>
 			<!--#endif-->
 			<!--#ifndef H5-->
 			<trees :nodes="nodes" :lazy-load="lazyLoad" />
-			<image v-for="(item, index) in imgs" v-bind:key="index" :id="index" :src="item" hidden @load="_load" />
 			<!--#endif-->
 		</view>
 		<!--#endif-->
@@ -35,7 +25,7 @@
 		fs = uni.getFileSystemManager ? uni.getFileSystemManager() : null,
 		// #endif
 		Parser = require('./libs/MpHtmlParser.js');
-	var document; // document 补丁包 https://jin-yufeng.github.io/Parser/#/instructions?id=document
+	var dom;
 	// 计算 cache 的 key
 	function hash(str) {
 		for (var i = str.length, val = 5381; i--;)
@@ -48,8 +38,34 @@
 		cfg = require('./libs/config.js');
 	// #endif
 	// #ifdef APP-PLUS-NVUE
-	var dom = weex.requireModule('dom');
+	var weexDom = weex.requireModule('dom');
 	// #endif
+	/**
+	 * Parser 富文本组件
+	 * @tutorial https://github.com/jin-yufeng/Parser
+	 * @property {String|Array} html 富文本数据
+	 * @property {Boolean} autopause 是否在播放一个视频时自动暂停其他视频
+	 * @property {Boolean} autoscroll 是否自动给所有表格添加一个滚动层
+	 * @property {Boolean} autosetTitle 是否自动将 title 标签中的内容设置到页面标题
+	 * @property {Number} compress 压缩等级
+	 * @property {String} domain 图片、视频等链接的主域名
+	 * @property {Boolean} lazyLoad 是否开启图片懒加载
+	 * @property {Boolean} selectable 是否开启长按复制
+	 * @property {Object} tagStyle 标签的默认样式
+	 * @property {Boolean} showWithAnimation 是否使用渐显动画
+	 * @property {Boolean} useAnchor 是否使用锚点
+	 * @property {Boolean} useCache 是否缓存解析结果
+	 * @event {Function} parse 解析完成事件
+	 * @event {Function} load dom 加载完成事件
+	 * @event {Function} ready 所有图片加载完毕事件
+	 * @event {Function} error 错误事件
+	 * @event {Function} imgtap 图片点击事件
+	 * @event {Function} linkpress 链接点击事件
+	 * @example <jyf-parser :html="html"></jyf-parser>
+	 * @author JinYufeng
+	 * @version 20200513
+	 * @listens MIT
+	 */
 	export default {
 		name: 'parser',
 		data() {
@@ -61,7 +77,6 @@
 				height: 1,
 				// #endif
 				// #ifndef APP-PLUS-NVUE
-				scaleAm: '',
 				showAm: '',
 				imgs: [],
 				// #endif
@@ -79,6 +94,7 @@
 				type: Boolean,
 				default: true
 			},
+			'autoscroll': Boolean,
 			'autosetTitle': {
 				type: Boolean,
 				default: true
@@ -88,9 +104,6 @@
 			'useCache': Boolean,
 			// #endif
 			'domain': String,
-			// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-			'gestureZoom': Boolean,
-			// #endif
 			'lazyLoad': Boolean,
 			'selectable': Boolean,
 			'tagStyle': Object,
@@ -153,7 +166,7 @@
 			this.document = document.getElementById('rtf' + this._uid);
 			// #endif
 			// #ifndef H5 || APP-PLUS-NVUE
-			if (document) this.document = new document(this);
+			if (dom) this.document = new dom(this);
 			// #endif
 			// #ifdef APP-PLUS-NVUE
 			this.document = this.$refs.web;
@@ -230,16 +243,21 @@
 				else {
 					html =
 						'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1' +
-						(this.selectable ? '' : ',user-scalable=no') + '"><base href="' + this.domain + '"><div id="parser">' + this._handleHtml(html) +
+						(this.selectable ? '' : ',user-scalable=no') + '"><base href="' + this.domain + '"><div id="parser">' + this._handleHtml(
+							html) +
 						'</div><script>"use strict";function post(n){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[n]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}function waitReady(){return new Promise(function(e){var t=document.getElementById("parser"),r=t.scrollHeight,n=setInterval(function(){r==t.scrollHeight?(clearInterval(n),e(r)):r=t.scrollHeight},500)})}' +
 						(this.showWithAnimation ? 'document.body.style.animation="show .5s",' : '') +
-						'setTimeout(function(){post({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight+16})},50);</' + 'script>';
+						'setTimeout(function(){post({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight+16})},50);</' +
+						'script>';
 					this.$refs.web.evalJs("document.write('" + html.replace(/'/g, "\\'") + "');document.close()");
 				}
 				this.$refs.web.evalJs(
-					'var t=document.getElementsByTagName("title");t.length&&post({action:"getTitle",title:t[0].innerText});for(var a=document.getElementsByTagName("style"),i=0,b;b=a[i++];)b.innerHTML=b.innerHTML.replace(/body/g,"#parser");for(var e,o=document.getElementsByTagName("img"),n=[],i=0,r=0;e=o[i];i++)e.onerror=function(){post({action:"error",source:"img",target:this})},e.hasAttribute("ignore")||"A"==e.parentElement.nodeName||(e.i=r++,n.push(e.src),e.onclick=function(){post({action:"preview",img:{i:this.i,src:this.src}})});post({action:"getImgList",imgList:n});for(var a,s=document.getElementsByTagName("a"),c=0;a=s[c];c++)a.onclick=function(){var t,e=this.getAttribute("href");if("#"==e[0]){var r=document.getElementById(e.substr(1));r&&(t=r.offsetTop)}return post({action:"linkpress",href:e,offset:t}),!1};;for(var u,m=document.getElementsByTagName("video"),d=0;u=m[d];d++)u.style.maxWidth="100%",u.onerror=function(){post({action:"error",source:"video",target:this})}' +
-					(this.autopause ? ',u.onplay=function(){for(var t,e=0;t=m[e];e++)t!=this&&t.pause()}' : '') +
-					';for(var g,l=document.getElementsByTagName("audio"),p=0;g=l[p];p++)g.onerror=function(){post({action:"error",source:"audio",target:this})};waitReady().then(function(e){post({action:"ready",height:e+16})})'
+					'var e=document.getElementsByTagName("title");e.length&&post({action:"getTitle",title:e[0].innerText});for(var t,o=document.getElementsByTagName("style"),r=0;t=o[r];r++)t.innerHTML=t.innerHTML.replace(/body/g,"#parser");for(var n,i=document.getElementsByTagName("img"),a=[],s=0,c=0;n=i[s];s++)n.onerror=function(){post({action:"error",source:"img",target:this})},n.hasAttribute("ignore")||"A"==n.parentElement.nodeName||(n.i=c++,a.push(n.src),n.onclick=function(){post({action:"preview",img:{i:this.i,src:this.src}})});post({action:"getImgList",imgList:a});for(var m,g=document.getElementsByTagName("a"),l=0;m=g[l];l++)m.onclick=function(){var e,t=this.getAttribute("href");if("#"==t[0]){var o=document.getElementById(t.substr(1));o&&(e=o.offsetTop)}return post({action:"linkpress",href:t,offset:e}),!1};for(var u,d=document.getElementsByTagName("video"),f=0;u=d[f];f++)u.style.maxWidth="100%",u.onerror=function(){post({action:"error",source:"video",target:this})}' +
+					(this.autopause ? ',u.onplay=function(){for(var e,t=0;e=d[t];t++)e!=this&&e.pause()}' : '') +
+					';for(var p,h=document.getElementsByTagName("audio"),v=0;p=h[v];v++)p.onerror=function(){post({action:"error",source:"audio",target:this})};' +
+					(this.autoscroll ?
+						'for(var y,T=document.getElementsByTagName("table"),E=0;y=T[E];E++){var N=document.createElement("div");N.style.overflow="scroll",y.parentNode.replaceChild(N,y),N.appendChild(y)}' :
+						'') + ';waitReady().then(function(e){post({action:"ready",height:e+16})})'
 				)
 				this.nodes = [1];
 				// #endif
@@ -371,7 +389,7 @@
 					}
 				}
 				// 音频处理
-				var audios = this.rtf.getElementsByTagName('audios');
+				var audios = this.rtf.getElementsByTagName('audio');
 				for (var audio of audios)
 					audio.onerror = function() {
 						_ts.$emit('error', {
@@ -380,6 +398,16 @@
 							context: this
 						});
 					}
+				// 表格处理
+				if (this.autoscroll) {
+					var tables = this.rtf.getElementsByTagName('table');
+					for (var table of tables) {
+						var div = document.createElement('div');
+						div.style.overflow = 'scroll';
+						table.parentNode.replaceChild(div, table);
+						div.appendChild(table);
+					}
+				}
 				if (!append) this.document.appendChild(this.rtf);
 				this.$nextTick(() => {
 					this.nodes = [1];
@@ -387,7 +415,8 @@
 				});
 				setTimeout(() => this.showAm = '', 500);
 				// #endif
-				// #ifndef H5 || APP-PLUS-NVUE
+				// #ifndef APP-PLUS-NVUE
+				// #ifndef H5
 				var nodes;
 				if (!html)
 					return this.nodes = [];
@@ -441,12 +470,11 @@
 					this.$emit('load');
 				})
 				// #endif
-				// #ifndef APP-PLUS-NVUE
 				var height;
 				clearInterval(this._timer);
 				this._timer = setInterval(() => {
 					// #ifdef H5
-					var res = [this.rtf.getBoundingClientRect()];
+					this.rect = this.rtf.getBoundingClientRect();
 					// #endif
 					// #ifndef H5
 					// #ifdef APP-PLUS
@@ -456,13 +484,13 @@
 					this.createSelectorQuery()
 						// #endif
 						.select('#top').boundingClientRect().exec(res => {
+							this.rect = res[0];
 							// #endif
-							this.width = res[0].width;
-							if (res[0].height == height) {
-								this.$emit('ready', res[0])
+							if (this.rect.height == height) {
+								this.$emit('ready', this.rect)
 								clearInterval(this._timer);
 							}
-							height = res[0].height;
+							height = this.rect.height;
 							// #ifndef H5
 						});
 					// #endif
@@ -471,14 +499,14 @@
 				// #endif
 			},
 			getText(ns = this.nodes) {
+				var txt = '';
 				// #ifdef APP-PLUS-NVUE
-				return this._text;
+				txt = this._text;
 				// #endif
 				// #ifdef H5
-				return this.rtf.innerText;
+				txt = this.rtf.innerText;
 				// #endif
 				// #ifndef H5 || APP-PLUS-NVUE
-				var txt = '';
 				for (var i = 0, n; n = ns[i++];) {
 					if (n.type == 'text') txt += n.text.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
 						.replace(/&amp;/g, '&');
@@ -493,8 +521,8 @@
 						else if (n.name == 'td' || n.name == 'th') txt += '\t';
 					}
 				}
-				return txt;
 				// #endif
+				return txt;
 			},
 			navigateTo(obj) {
 				if (!this.useAnchor)
@@ -503,11 +531,11 @@
 					})
 				// #ifdef APP-PLUS-NVUE
 				if (!obj.id)
-					dom.scrollToElement(this.$refs.web);
+					weexDom.scrollToElement(this.$refs.web);
 				else
 					this.$refs.web.evalJs('var pos=document.getElementById("' + obj.id +
 						'");if(pos)post({action:"linkpress",href:"#",offset:pos.offsetTop+' + (obj.offset || 0) + '})');
-				return obj.success && obj.success({
+				obj.success && obj.success({
 					errMsg: 'pageScrollTo:ok'
 				});
 				// #endif
@@ -525,7 +553,7 @@
 				obj.scrollTop = this.rtf.offsetTop + target.offsetTop + (obj.offset || 0);
 				uni.pageScrollTo(obj);
 				// #endif
-				// #ifndef H5
+				// #ifndef H5 || APP-PLUS-NVUE
 				var Scroll = (selector, component) => {
 					uni.createSelectorQuery().in(component ? component : this).select(selector).boundingClientRect().selectViewport()
 						.scrollOffset()
@@ -557,42 +585,6 @@
 				else
 					for (var i = this.videoContexts.length; i--;)
 						if (this.videoContexts[i].id == id) return this.videoContexts[i];
-				// #endif
-			},
-			// 预加载
-			preLoad(html, num) {
-				// #ifdef H5 || APP-PLUS-NVUE
-				if (html.constructor == Array)
-					html = this._Dom2Str(html);
-				var script = "var contain=document.createElement('div');contain.innerHTML='" + html.replace(/'/g, "\\'") +
-					"';for(var imgs=contain.querySelectorAll('img'),i=imgs.length-1;i>=" + num +
-					";i--)imgs[i].removeAttribute('src');";
-				// #endif
-				// #ifdef APP-PLUS-NVUE
-				this.$refs.web.evalJs(script);
-				// #endif
-				// #ifdef H5
-				eval(script);
-				// #endif
-				// #ifndef H5 || APP-PLUS-NVUE
-				if (typeof html == 'string') {
-					var id = hash(html);
-					html = new Parser(html, this).parse();
-					cache[id] = html;
-				}
-				var wait = [];
-				(function f(ns) {
-					for (var i = 0, n; n = ns[i++];) {
-						if (n.name == 'img' && n.attrs.src && !wait.includes(n.attrs.src))
-							wait.push(n.attrs.src);
-						f(n.children || []);
-					}
-				})(html);
-				if (num) wait = wait.slice(0, num);
-				this._wait = (this._wait || []).concat(wait);
-				if (!this.imgs) this.imgs = this._wait.splice(0, 15);
-				else if (this.imgs.length < 15)
-					this.imgs = this.imgs.concat(this._wait.splice(0, 15 - this.imgs.length));
 				// #endif
 			},
 			// #ifdef APP-PLUS-NVUE
@@ -631,7 +623,7 @@
 					if (jump && href) {
 						if (href[0] == '#') {
 							if (this.useAnchor)
-								dom.scrollToElement(this.$refs.web, {
+								weexDom.scrollToElement(this.$refs.web, {
 									offset: data.offset
 								})
 						} else if (href.includes('://'))
@@ -657,66 +649,6 @@
 				}
 			},
 			// #endif
-			// #ifndef APP-PLUS-NVUE
-			// #ifndef H5
-			_load(e) {
-				if (this._wait.length)
-					this.$set(this.imgs, e.target.id, this._wait.shift());
-			},
-			// #endif
-			_tap(e) {
-				// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-				if (this.gestureZoom && e.timeStamp - this._lastT < 300) {
-					var initY = e.touches[0].pageY - e.currentTarget.offsetTop;
-					if (this._zoom) {
-						this._scaleAm.translateX(0).scale(1).step();
-						uni.pageScrollTo({
-							scrollTop: (initY + this._initY) / 2 - e.touches[0].clientY,
-							duration: 400
-						})
-					} else {
-						var initX = e.touches[0].pageX - e.currentTarget.offsetLeft;
-						this._initY = initY;
-						this._scaleAm = uni.createAnimation({
-							transformOrigin: `${initX}px ${this._initY}px 0`,
-							timingFunction: 'ease-in-out'
-						});
-						// #ifdef MP-TOUTIAO
-						this._scaleAm.opacity(1);
-						// #endif
-						this._scaleAm.scale(2).step();
-						this._tMax = initX / 2;
-						this._tMin = (initX - this.width) / 2;
-						this._tX = 0;
-					}
-					this._zoom = !this._zoom;
-					this.scaleAm = this._scaleAm.export();
-				}
-				this._lastT = e.timeStamp;
-				// #endif
-			},
-			_touchstart(e) {
-				// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-				if (e.touches.length == 1)
-					this._initX = this._lastX = e.touches[0].pageX;
-				// #endif
-			},
-			_touchmove(e) {
-				// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-				var diff = e.touches[0].pageX - this._lastX;
-				if (this._zoom && e.touches.length == 1 && Math.abs(diff) > 20) {
-					this._lastX = e.touches[0].pageX;
-					if ((this._tX <= this._tMin && diff < 0) || (this._tX >= this._tMax && diff > 0))
-						return;
-					this._tX += (diff * Math.abs(this._lastX - this._initX) * 0.05);
-					if (this._tX < this._tMin) this._tX = this._tMin;
-					if (this._tX > this._tMax) this._tX = this._tMax;
-					this._scaleAm.translateX(this._tX).step();
-					this.scaleAm = this._scaleAm.export();
-				}
-				// #endif
-			}
-			// #endif
 		}
 	}
 </script>
@@ -724,7 +656,7 @@
 <style>
 	@keyframes show {
 		0% {
-			opacity: 0
+			opacity: 0;
 		}
 
 		100% {

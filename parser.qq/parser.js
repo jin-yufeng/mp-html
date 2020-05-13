@@ -1,16 +1,14 @@
-/*
-  parser 主组件
-  github：https://github.com/jin-yufeng/Parser
-  docs：https://jin-yufeng.github.io/Parser
-  author：JinYufeng
-  update：2020/05/08
-*/
+/**
+ * Parser 富文本组件
+ * @tutorial https://github.com/jin-yufeng/Parser
+ * @version 20200513
+ * @author JinYufeng
+ * @listens MIT
+ */
 var cache = {},
   Parser = require('./libs/MpHtmlParser.js'),
   fs = qq.getFileSystemManager && qq.getFileSystemManager();
-try {
-  var dom = require('./libs/document.js');
-} catch (e) {}
+var dom;
 // 计算 cache 的 key
 function hash(str) {
   for (var i = str.length, val = 5381; i--;)
@@ -26,17 +24,17 @@ Component({
         else this.setContent(html, false, true);
       }
     },
-    'autosetTitle': {
+    'autopause': {
       type: Boolean,
       value: true
     },
-    'autopause': {
+    'autoscroll': Boolean,
+    'autosetTitle': {
       type: Boolean,
       value: true
     },
     'compress': Number,
     'domain': String,
-    'gestureZoom': Boolean,
     'lazyLoad': Boolean,
     'selectable': Boolean,
     'tagStyle': Object,
@@ -226,83 +224,6 @@ Component({
           height = res.height;
         }).exec();
       }, 350)
-    },
-    // 预加载
-    preLoad(html, num) {
-      if (typeof html == 'string') {
-        var id = hash(html);
-        html = new Parser(html, this.data).parse();
-        cache[id] = html;
-      }
-      var imgs, wait = [];
-      (function f(ns) {
-        for (var i = 0, n; n = ns[i++];) {
-          if (n.name == 'img' && n.attrs.src && !wait.includes(n.attrs.src))
-            wait.push(n.attrs.src);
-          f(n.children || []);
-        }
-      })(html);
-      if (num) wait = wait.slice(0, num);
-      this._wait = (this._wait || []).concat(wait);
-      if (!this.data.imgs) imgs = this._wait.splice(0, 15);
-      else if (this.data.imgs.length < 15)
-        imgs = this.data.imgs.concat(this._wait.splice(0, 15 - this.data.imgs.length));
-      imgs && this.setData({
-        imgs
-      });
-    },
-    _load(e) {
-      if (this._wait.length)
-        this.setData({
-          [`imgs[${e.target.id}]`]: this._wait.shift()
-        })
-    },
-    // 事件处理
-    _tap(e) {
-      if (this.data.gestureZoom && e.timeStamp - this._lastT < 300) {
-        var initY = e.detail.y - e.currentTarget.offsetTop;
-        if (this._zoom) {
-          this._scaleAm.translateX(0).scale(1).step();
-          qq.pageScrollTo({
-            scrollTop: (initY + this._initY) / 2 - e.touches[0].clientY,
-            duration: 400
-          })
-        } else {
-          var initX = e.detail.x - e.currentTarget.offsetLeft;
-          this._initY = initY;
-          this._scaleAm = qq.createAnimation({
-            transformOrigin: `${initX}px ${this._initY}px 0`,
-            timingFunction: 'ease-in-out'
-          });
-          this._scaleAm.scale(2).step();
-          this._tMax = initX / 2;
-          this._tMin = (initX - this.rect.width) / 2;
-          this._tX = 0;
-        }
-        this._zoom = !this._zoom;
-        this.setData({
-          scaleAm: this._scaleAm.export()
-        })
-      }
-      this._lastT = e.timeStamp;
-    },
-    _touchstart(e) {
-      if (e.touches.length == 1)
-        this._initX = this._lastX = e.touches[0].pageX;
-    },
-    _touchmove(e) {
-      var diff = e.touches[0].pageX - this._lastX;
-      if (this._zoom && e.touches.length == 1 && Math.abs(diff) > 20) {
-        this._lastX = e.touches[0].pageX;
-        if ((this._tX <= this._tMin && diff < 0) || (this._tX >= this._tMax && diff > 0)) return;
-        this._tX += diff * Math.abs(this._lastX - this._initX) * 0.05;
-        if (this._tX < this._tMin) this._tX = this._tMin;
-        if (this._tX > this._tMax) this._tX = this._tMax;
-        this._scaleAm.translateX(this._tX).step();
-        this.setData({
-          scaleAm: this._scaleAm.export()
-        })
-      }
     }
   }
 })

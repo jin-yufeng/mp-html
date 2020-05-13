@@ -1,9 +1,8 @@
-/*
-  parser-group 扩展包
-  github：https://github.com/jin-yufeng/Parser
-  docs：https://jin-yufeng.github.io/Parser
-  author：JinYufeng
-*/
+/**
+ * parser-group 扩展包
+ * @tutorial https://github.com/jin-yufeng/Parser
+ * @author JinYufeng
+ */
 Component({
   relations: {
     '../parser/parser': {

@@ -2,69 +2,81 @@
 page {
   background-color: #f8f8f8;
 }
+
 .parse-view {
-  margin-top: 0;
   padding: 10px;
+  margin-top: 0;
 }
+
 .editor-view {
+  position: relative;
+  color: #ccc;
+  background: #2d2d2d;
   border-top: 1rpx solid #d9d9d9;
   border-bottom: 1rpx solid #d9d9d9;
-  position: relative;
-  background: #2d2d2d;
-  color: #ccc;
 }
+
 .highlight-view {
   position: absolute;
-  left: 10px;
-  right: 10px;
   top: 10px;
+  right: 10px;
+  left: 10px;
 }
+
 .editor {
-  padding: 10px;
   height: auto;
-  word-break: break-all;
+  padding: 10px;
   font-family: monospace;
+  word-break: break-all;
   caret-color: #ccc;
 }
+
 .labels {
   display: flex;
   justify-content: center;
   margin: 5px 0;
 }
+
 .label {
-  font-size: 13px;
-  text-align: center;
-  padding-left: 8px;
-  padding-right: 8px;
   width: auto;
   height: 25px;
-  line-height: 25px;
-  border-radius: 5px;
+  padding-right: 8px;
+  padding-left: 8px;
   margin: 5px;
-  border: 1px solid #d9d9d9;
+  font-size: 13px;
+  line-height: 25px;
+  text-align: center;
   background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
 }
+
 .weui-cells__title {
+  padding-right: 15px;
+  padding-left: 15px;
   margin-top: 0.77em;
   margin-bottom: 0.3em;
-  padding-left: 15px;
-  padding-right: 15px;
-  color: #999;
   font-size: 14px;
+  color: #999;
 }
+
 .weui-textarea {
   display: block;
   width: 100%;
 }
+
 .weui-btn {
   margin-top: 15px;
 }
+
 .weui-btn:first-child {
   margin-top: 0;
 }
+
 .weui-btn-area {
   margin: 1.17647059em 15px 0.3em;
 }
-.ql-editor.ql-blank:before {
+
+.ql-editor.ql-blank::before {
   color: #ccc;
 }
