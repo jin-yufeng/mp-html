@@ -44,20 +44,20 @@ export default{
 
 - 组件属性  
 
-  | 属性 | 类型 | 默认值 | 必填 | 说明 |
-  |:----:|:----:|:----:|:----:|----|
-  | html | String/Array | | 是 | 要显示的富文本数据，格式同 rich-text |
-  | autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 |
-  | autoscroll | Boolean | false | 否 | 是否自动给 table 加一个滚动层（使表格可以单独滚动） |
-  | autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题上 |
-  | compress | Number | 0 | 否 | 压缩等级，可以选择是否移除 id 和 class |
-  | domain | String |  | 否 | 主域名，设置后将对于图片地址将自动拼接主域名或协议名 |
-  | lazy-load | Boolean | false | 否 | 是否开启图片懒加载 |
-  | selectable | Boolean | false | 否 | 是否允许长按复制内容 |
-  | show-with-animation | Boolean | false | 否 | 是否使用渐显动画 |
-  | tag-style | Object | | 否 | 设置标签的默认样式 |
-  | use-anchor | Boolean | false | 否 | 是否使用页面内锚点 |
-  | use-cache | Boolean | false | 否 | 是否使用缓存，设置后将会把解析结果进行缓存，下次打开不用重复解析 |
+  | 属性 | 类型 | 默认值 | 说明 |
+  |:----:|:----:|:----:|----|
+  | html | String/Array |  | 要显示的富文本数据，格式同 rich-text |
+  | autopause | Boolean | true | 是否允许播放视频时自动暂停其他视频 |
+  | autoscroll | Boolean | false | 是否自动给 table 加一个滚动层（使表格可以单独滚动） |
+  | autosetTitle | Boolean | true | 是否自动将 title 标签的内容设置到页面标题上 |
+  | compress | Number | 0 | 压缩等级，可以选择是否移除 id 和 class |
+  | domain | String |  | 主域名，设置后将对于图片地址将自动拼接主域名或协议名 |
+  | lazy-load | Boolean | false | 是否开启图片懒加载 |
+  | selectable | Boolean | false | 是否允许长按复制内容 |
+  | show-with-animation | Boolean | false | 是否使用渐显动画 |
+  | tag-style | Object |  | 设置标签的默认样式 |
+  | use-anchor | Boolean | false | 是否使用页面内锚点 |
+  | use-cache | Boolean | false | 是否使用缓存，设置后将会把解析结果进行缓存，下次打开不用重复解析 |
 
 - 事件  
 

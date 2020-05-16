@@ -264,20 +264,20 @@
 
 ### 组件属性 ###  
 
-| 属性 | 类型 | 默认值 | 必填 | 说明 | 添加日期 |
-|:----:|:----:|:----:|:----:|----|:---:|
-| html | String/Array |  | 是 | 要显示的富文本数据，格式同 [rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html) | - |
-| autopause | Boolean | true | 否 | 是否允许播放视频时自动暂停其他视频 | [20190510](/changelog#_20190510) |
-| autoscroll | Boolean | false | 否 | 是否自动给 table 加一个滚动层（使表格可以单独滚动） | [20200513](/changelog#_20200513) |
-| autosetTitle | Boolean | true | 否 | 是否自动将 title 标签的内容设置到页面标题 | [20190724](/changelog#_20190724) |
-| compress | Number | 0 | 否 | 压缩等级，可以选择是否移除 id 和 class | [20200312](/changelog#_20200312) |
-| domain | String |  | 否 | 主域名，设置后将给链接自动拼接上主域名或协议名 | [20191202](/changelog#_20191202) |
-| lazy-load | Boolean | false | 否 | 是否开启图片懒加载 | [20190928](/changelog#_20190928) |
-| selectable | Boolean | false | 否 | 是否允许长按复制内容 | [20190603](/changelog#_20190603) |
-| show-with-animation | Boolean | false | 否 | 是否使用渐显动画 | [20190519](/changelog#_20190519) |
-| tag-style | Object | {} | 否 | 设置标签的默认样式 | [20190421](/changelog#_20190421) |
-| use-anchor | Boolean | false | 否 | 是否使用页面内锚点 | [20191202](/changelog#_20191202) |
-| use-cache | Boolean | false | 否 | 是否使用缓存，设置后多次打开不用重复解析 | [20191215](/changelog#_20191215) |
+| 属性 | 类型 | 默认值 | 说明 | 添加日期 |
+|:----:|:----:|:----:|----|:---:|
+| html | String/Array |  | 要显示的富文本数据，格式同 [rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html) | - |
+| autopause | Boolean | true | 是否允许播放视频时自动暂停其他视频 | [20190510](/changelog#_20190510) |
+| autoscroll | Boolean | false | 是否自动给 table 加一个滚动层（使表格可以单独滚动） | [20200513](/changelog#_20200513) |
+| autosetTitle | Boolean | true | 是否自动将 title 标签的内容设置到页面标题 | [20190724](/changelog#_20190724) |
+| compress | Number | 0 | 压缩等级，可以选择是否移除 id 和 class | [20200312](/changelog#_20200312) |
+| domain | String |  | 主域名，设置后将给链接自动拼接上主域名或协议名 | [20191202](/changelog#_20191202) |
+| lazy-load | Boolean | false | 是否开启图片懒加载 | [20190928](/changelog#_20190928) |
+| selectable | Boolean | false | 是否允许长按复制内容 | [20190603](/changelog#_20190603) |
+| show-with-animation | Boolean | false | 是否使用渐显动画 | [20190519](/changelog#_20190519) |
+| tag-style | Object | {} | 设置标签的默认样式 | [20190421](/changelog#_20190421) |
+| use-anchor | Boolean | false | 是否使用页面内锚点 | [20191202](/changelog#_20191202) |
+| use-cache | Boolean | false | 是否使用缓存，设置后多次打开不用重复解析 | [20191215](/changelog#_20191215) |
   
 ##### html #####
 - 推荐通过 [setContent](#setContent) 方法传入，可以提高性能  
