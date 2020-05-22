@@ -63,7 +63,7 @@
 	 * @event {Function} linkpress 链接点击事件
 	 * @example <jyf-parser :html="html"></jyf-parser>
 	 * @author JinYufeng
-	 * @version 20200513
+	 * @version 20200521
 	 * @listens MIT
 	 */
 	export default {
@@ -170,11 +170,11 @@
 			// #endif
 			// #ifdef APP-PLUS-NVUE
 			this.document = this.$refs.web;
-			this.$nextTick(() => {
+			setTimeout(() => {
 				// #endif
 				if (this.html) this.setContent(this.html);
 				// #ifdef APP-PLUS-NVUE
-			})
+			}, 30)
 			// #endif
 		},
 		beforeDestroy() {
@@ -332,7 +332,10 @@
 							source: 'img',
 							target: this,
 							context: {
-								setSrc: src => this.src = src
+								setSrc: src => {
+									_ts.imgList[this.i] = src;
+									this.src = src;
+								}
 							}
 						});
 					}
@@ -402,7 +405,7 @@
 				if (this.autoscroll) {
 					var tables = this.rtf.getElementsByTagName('table');
 					for (var table of tables) {
-						var div = document.createElement('div');
+						let div = document.createElement('div');
 						div.style.overflow = 'scroll';
 						table.parentNode.replaceChild(div, table);
 						div.appendChild(table);
@@ -464,9 +467,9 @@
 					uni.setNavigationBarTitle({
 						title: nodes[0].title
 					})
+				if (this.imgList) this.imgList.length = 0;
+				this.videoContexts = [];
 				this.$nextTick(() => {
-					this.imgList.length = 0;
-					this.videoContexts = [];
 					this.$emit('load');
 				})
 				// #endif
@@ -484,6 +487,7 @@
 					this.createSelectorQuery()
 						// #endif
 						.select('#top').boundingClientRect().exec(res => {
+							if (!res) return;
 							this.rect = res[0];
 							// #endif
 							if (this.rect.height == height) {

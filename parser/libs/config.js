@@ -24,19 +24,18 @@ module.exports = {
     hellip: '…'
   },
   blankChar: makeMap(' ,\xA0,\t,\r,\n,\f'),
-  inlineTags: makeMap('abbr,b,big,code,del,em,i,ins,label,q,small,span,strong'),
   // 块级标签，将被转为 div
   blockTags: makeMap('address,article,aside,body,caption,center,cite,footer,header,html,nav,section' + (canIUse ? '' : ',pre')),
   // 将被移除的标签
-  ignoreTags: makeMap('area,base,basefont,canvas,command,embed,frame,iframe,input,isindex,keygen,link,map,meta,param,script,source,style,svg,textarea,title,track,use,wbr' + (canIUse ? ',rp' : '')),
+  ignoreTags: makeMap('area,base,basefont,canvas,command,frame,iframe,input,isindex,keygen,link,map,meta,param,script,source,style,svg,textarea,title,track,use,wbr' + (canIUse ? ',rp' : '')),
   // 只能被 rich-text 显示的标签
   richOnlyTags: makeMap('a,colgroup,fieldset,legend,picture,table' + (canIUse ? ',bdi,bdo,rt,ruby' : '')),
   // 自闭合的标签
   selfClosingTags: makeMap('area,base,basefont,br,col,circle,ellipse,embed,frame,hr,img,input,isindex,keygen,line,link,meta,param,path,polygon,rect,source,track,use,wbr'),
   // 信任的属性
-  trustAttrs: makeMap('align,alt,app-id,author,autoplay,border,cellpadding,cellspacing,class,color,colspan,controls,data-src,dir,face,height,href,id,ignore,loop,media,muted,name,path,poster,rowspan,size,span,src,start,style,type,unit-id,width,xmlns'),
+  trustAttrs: makeMap('align,alt,app-id,author,autoplay,autostart,border,cellpadding,cellspacing,class,color,colspan,controls,data-src,dir,face,height,href,id,ignore,loop,media,muted,name,path,poster,rowspan,size,span,src,start,style,type,unit-id,width,xmlns'),
   // bool 型的属性
-  boolAttrs: makeMap('autoplay,controls,ignore,loop,muted'),
+  boolAttrs: makeMap('autoplay,autostart,controls,ignore,loop,muted'),
   // 信任的标签
   trustTags: makeMap('a,abbr,ad,audio,b,blockquote,br,code,col,colgroup,dd,del,dl,dt,div,em,fieldset,h1,h2,h3,h4,h5,h6,hr,i,img,ins,label,legend,li,ol,p,q,source,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,title,ul,video' + (canIUse ? ',bdi,bdo,caption,pre,rt,ruby' : '')),
   // 默认的标签样式

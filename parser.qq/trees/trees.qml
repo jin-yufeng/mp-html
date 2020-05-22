@@ -1,13 +1,28 @@
 <!--trees 递归子组件-->
 <qs module="handler">
+var inline = {
+  abbr: 1,
+  b: 1,
+  big: 1,
+  code: 1,
+  del: 1,
+  em: 1,
+  i: 1,
+  ins: 1,
+  label: 1,
+  q: 1,
+  small: 1,
+  span: 1,
+  strong: 1
+}
 module.exports = {
   visited: function (e, owner) {
     if (!e.instance.hasClass('_visited'))
       e.instance.addClass('_visited')
-    owner.callMethod('linkpress', e);
+    owner.callMethod('linkpress', e)
   },
-  useRichText: function (item, inlineTags) {
-    return !item.c && !inlineTags[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1
+  use: function (item) {
+    return !item.c && !inline[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1
   }
 }
 </qs>
@@ -15,13 +30,13 @@ module.exports = {
   <!--图片-->
   <view qq:if="{{n.name=='img'}}" id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="imgtap">
     <rich-text nodes="{{[{attrs:{src:lazyLoad&&!n.load?placeholder:n.attrs.src,alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
-    <image class="_image" src="{{lazyLoad&&!n.load?placeholder:n.attrs.src}}" lazy-load="{{lazyLoad}}" data-i="{{index}}" data-source="img" bindload="loadImg" binderror="error" />
+    <image class="_image" src="{{lazyLoad&&!n.load?placeholder:n.attrs.src}}" lazy-load="{{lazyLoad}}" data-i="{{index}}" data-index="{{n.attrs.i}}" data-source="img" bindload="loadImg" binderror="error" />
   </view>
   <!--文本-->
   <text qq:elif="{{n.type=='text'}}" decode>{{n.text}}</text>
   <text qq:elif="{{n.name=='br'}}">\n</text>
   <!--链接-->
-  <view qq:elif="{{n.name=='a'}}" class="_a {{n.attrs.class}}" hover-class="_hover" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="{{handler.visited}}">
+  <view qq:elif="{{n.name=='a'}}" id="{{n.attrs.id}}" class="_a {{n.attrs.class}}" hover-class="_hover" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="{{handler.visited}}">
     <trees nodes="{{n.children}}" />
   </view>
   <!--视频-->
@@ -34,7 +49,7 @@ module.exports = {
   <!--广告-->
   <ad qq:elif="{{n.name=='ad'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" unit-id="{{n.attrs['unit-id']}}" data-source="ad" binderror="error" />
   <!--列表-->
-  <view qq:elif="{{n.name=='li'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}};display:flex">
+  <view qq:elif="{{n.name=='li'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}};display:flex">
     <view qq:if="{{n.type=='ol'}}" class="_ol-bef">{{n.num}}</view>
     <view qq:else class="_ul-bef">
       <view qq:if="{{n.floor%3==0}}" class="_ul-p1">█</view>
@@ -44,7 +59,7 @@ module.exports = {
     <trees class="_node _li" lazy-load="{{lazyLoad}}" nodes="{{n.children}}" />
   </view>
   <!--富文本-->
-  <rich-text qq:elif="{{handler.useRichText(n, inlineTags)}}" id="{{n.attrs.id}}" class="_p __{{n.name}}" nodes="{{[n]}}" />
+  <rich-text qq:elif="{{handler.use(n)}}" id="{{n.attrs.id}}" class="_p __{{n.name}}" nodes="{{[n]}}" />
   <!--继续递归-->
   <trees qq:else id="{{n.attrs.id}}" class="_node _{{n.name}} {{n.attrs.class}}" style="{{n.attrs.style}}" lazy-load="{{lazyLoad}}" nodes="{{n.children}}" />
 </block>

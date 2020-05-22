@@ -1,7 +1,7 @@
 /**
  * html 解析器
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200513
+ * @version 20200521
  * @author JinYufeng
  * @listens MIT
  */
@@ -123,12 +123,15 @@ class MpHtmlParser {
       var parent = this.parent();
       if (node.attrs.width == '100%' && parent && (parent.attrs.style || '').includes('inline'))
         parent.attrs.style = 'width:300px;max-width:100%;' + parent.attrs.style;
+      var attrs = {
+        src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
+        ignore: 'T'
+      }
+      var style = /vertical[^;]+/.exec(node.attrs.style);
+      if (style) attrs.style = style[0];
       this.siblings().push({
         name: 'img',
-        attrs: {
-          src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
-          ignore: 'T'
-        }
+        attrs
       })
     }
     if (node.name == 'svg' && this.data[j] == '/') return handleSvg(this.i++);
@@ -161,10 +164,10 @@ class MpHtmlParser {
       style = this.CssHandler.match(node.name, attrs, node) + (attrs.style || ''),
       styleObj = {};
     if (attrs.id) {
-      if (this.options.compress & 1) attrs.id = void 0;
+      if (this.options.compress & 1) delete attrs.id;
       else if (this.options.useAnchor) this.bubble();
     }
-    if ((this.options.compress & 2) && attrs.class) attrs.class = void 0;
+    if ((this.options.compress & 2) && attrs.class) delete attrs.class;
     switch (node.name) {
       case 'a':
       case 'ad':
@@ -173,11 +176,11 @@ class MpHtmlParser {
       case 'font':
         if (attrs.color) {
           styleObj['color'] = attrs.color;
-          attrs.color = void 0;
+          delete attrs.color;
         }
         if (attrs.face) {
           styleObj['font-family'] = attrs.face;
-          attrs.face = void 0;
+          delete attrs.face;
         }
         if (attrs.size) {
           var size = parseInt(attrs.size);
@@ -185,9 +188,21 @@ class MpHtmlParser {
           else if (size > 7) size = 7;
           var map = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'];
           styleObj['font-size'] = map[size - 1];
-          attrs.size = void 0;
+          delete attrs.size;
         }
         break;
+      case 'embed':
+        var src = node.attrs.src || '',
+          type = node.attrs.type || '';
+        if (type.includes('video') || src.includes('.mp4') || src.includes('.3gp') || src.includes('.m3u8'))
+          node.name = 'video';
+        else if (type.includes('audio') || src.includes('.m4a') || src.includes('.wav') || src.includes('.mp3') || src.includes('.aac'))
+          node.name = 'audio';
+        else break;
+        if (node.attrs.autostart)
+          node.attrs.autoplay = 'T';
+        node.attrs.controls = 'T';
+        // falls through
       case 'video':
       case 'audio':
         if (!attrs.id) attrs.id = node.name + (++this[`${node.name}Num`]);
@@ -197,17 +212,19 @@ class MpHtmlParser {
             node.lazyLoad = 1;
           if (attrs.width) {
             styleObj.width = parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : 'px');
-            attrs.width = void 0;
+            delete attrs.width;
           }
           if (attrs.height) {
             styleObj.height = parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : 'px');
-            attrs.height = void 0;
+            delete attrs.height;
           }
         }
         attrs.source = [];
-        if (attrs.src) attrs.source.push(attrs.src);
-        if (!attrs.controls && !attrs.autoplay)
-          console.warn(`存在没有 controls 属性的 ${node.name} 标签，可能导致无法播放`, node);
+        if (attrs.src) {
+          attrs.source.push(attrs.src);
+          delete attrs.src;
+        }
+        if (!attrs.controls && !attrs.autoplay) attrs.controls = 'T';
         this.bubble();
         break;
       case 'td':
@@ -215,13 +232,13 @@ class MpHtmlParser {
         if (attrs.colspan || attrs.rowspan)
           for (var k = this.STACK.length, item; item = this.STACK[--k];)
             if (item.name == 'table') {
-              item.c = void 0;
+              delete item.c;
               break;
             }
     }
     if (attrs.align) {
       styleObj['text-align'] = attrs.align;
-      attrs.align = void 0;
+      delete attrs.align;
     }
     // 压缩 style
     var styles = style.split(';');
@@ -239,7 +256,7 @@ class MpHtmlParser {
     if (node.name == 'img') {
       if (attrs['data-src']) {
         attrs.src = attrs.src || attrs['data-src'];
-        attrs['data-src'] = void 0;
+        delete attrs['data-src'];
       }
       if (attrs.src && !attrs.ignore) {
         if (this.bubble())
@@ -255,7 +272,7 @@ class MpHtmlParser {
         attrs.width = '100%';
         if (parseInt(width) > windowWidth) {
           styleObj.height = '';
-          if (attrs.height) attrs.height = void 0;
+          if (attrs.height) delete attrs.height;
         }
       }
       if (styleObj.height) {
@@ -289,7 +306,8 @@ class MpHtmlParser {
   popNode(node) {
     // 空白符处理
     if (node.pre) {
-      node.pre = this.pre = void 0;
+      this.pre = void 0;
+      delete node.pre;
       for (let i = this.STACK.length; i--;)
         if (this.STACK[i].pre)
           this.pre = true;
@@ -515,7 +533,7 @@ class MpHtmlParser {
         if (this.STACK[i].name == name) break;
       if (i != -1) {
         var node;
-        while ((node = this.STACK.pop()).name != name);
+        while ((node = this.STACK.pop()).name != name) this.popNode(node);
         this.popNode(node);
       } else if (name == 'p' || name == 'br')
         this.siblings().push({

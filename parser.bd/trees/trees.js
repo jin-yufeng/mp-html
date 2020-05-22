@@ -97,6 +97,7 @@ Component({
       } else if (source == 'img')
         context = {
           setSrc: src => {
+            this.top.imgList.setItem(e.target.dataset.index, src);
             this.setData({
               [`nodes[${i}].attrs.src`]: src
             })

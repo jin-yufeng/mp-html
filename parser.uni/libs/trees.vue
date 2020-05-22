@@ -1,11 +1,11 @@
 <template>
 	<view class="interlayer">
-		<block v-for="(n, index) in ns" v-bind:key="index">
+		<block v-for="(n, i) in nodes" v-bind:key="i">
 			<!--图片-->
 			<view v-if="n.name=='img'" :class="'_img '+n.attrs.class" :style="n.attrs.style" :data-attrs="n.attrs" @tap="imgtap">
-				<rich-text :nodes="[{attrs:{src:lazyLoad&&!n.load?placeholder:n.attrs.src,alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]" />
-				<image class="_image" :src="lazyLoad&&!n.load?placeholder:n.attrs.src" :lazy-load="lazyLoad"
-				 :show-menu-by-longpress="!n.attrs.ignore" :data-i="index" data-source="img" @load="loadImg" @error="error" />
+				<rich-text :nodes="[{attrs:{src:lazyLoad&&!controls[i]?placeholder:(controls[i]&&controls[i].src)||n.attrs.src,alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]" />
+				<image class="_image" :src="lazyLoad&&!controls[i]?placeholder:(controls[i]&&controls[i].src)||n.attrs.src" :lazy-load="lazyLoad"
+				 :show-menu-by-longpress="!n.attrs.ignore" :data-i="i" :data-index="n.attrs.i" data-source="img" @load="loadImg" @error="error" />
 			</view>
 			<!--文本-->
 			<text v-else-if="n.type=='text'" decode>{{n.text}}</text>
@@ -13,18 +13,18 @@
 			<text v-else-if="n.name=='br'">\n</text>
 			<!--#endif-->
 			<!--视频-->
-			<view v-else-if="n.lazyLoad||(n.name=='video'&&!loadVideo)" :id="n.attrs.id" :class="'_video '+(n.attrs.class||'')"
-			 :style="n.attrs.style" :data-i="index" @tap="_loadVideo" />
-			<video v-else-if="n.name=='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay"
-			 :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :poster="n.attrs.poster" :src="n.attrs.source[n.i||0]"
-			 :unit-id="n.attrs['unit-id']" :data-id="n.attrs.id" :data-i="index" data-source="video" @error="error" @play="play" />
+			<view v-else-if="(n.lazyLoad&&!controls[i])||(n.name=='video'&&!loadVideo)" :id="n.attrs.id" :class="'_video '+(n.attrs.class||'')"
+			 :style="n.attrs.style" :data-i="i" @tap="_loadVideo" />
+			<video v-else-if="n.name=='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay||(controls[i]&&controls[i].play)"
+			 :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :poster="n.attrs.poster" :src="n.attrs.source[(controls[i]&&controls[i].i)||0]"
+			 :unit-id="n.attrs['unit-id']" :data-id="n.attrs.id" :data-i="i" data-source="video" @error="error" @play="play" />
 			<!--音频-->
 			<audio v-else-if="n.name=='audio'" :ref="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :author="n.attrs.author"
 			 :autoplay="n.attrs.autoplay" :controls="n.attrs.controls" :loop="n.attrs.loop" :name="n.attrs.name" :poster="n.attrs.poster"
-			 :src="n.attrs.source[n.i||0]" :data-i="index" :data-id="n.attrs.id" data-source="audio" @error.native="error"
-			 @play.native="play" />
+			 :src="n.attrs.source[(controls[i]&&controls[i].i)||0]" :data-i="i" :data-id="n.attrs.id" data-source="audio"
+			 @error.native="error" @play.native="play" />
 			<!--链接-->
-			<view v-else-if="n.name=='a'" :class="'_a '+(n.attrs.class||'')" hover-class="_hover" :style="n.attrs.style"
+			<view v-else-if="n.name=='a'" :id="n.attrs.id" :class="'_a '+(n.attrs.class||'')" hover-class="_hover" :style="n.attrs.style"
 			 :data-attrs="n.attrs" @tap="linkpress">
 				<trees class="_span" :nodes="n.children" />
 			</view>
@@ -60,17 +60,17 @@
 			</view>
 			<!--表格-->
 			<view v-else-if="n.name=='table'&&n.c" :id="n.attrs.id" :class="n.attrs.class" :style="(n.attrs.style||'')+';display:table'">
-				<view v-for="(tbody, i) in n.children" v-bind:key="i" :class="tbody.attrs.class" :style="(tbody.attrs.style||'')+(tbody.name[0]=='t'?';display:table-'+(tbody.name=='tr'?'row':'row-group'):'')">
-					<view v-for="(tr, j) in tbody.children" v-bind:key="j" :class="tr.attrs.class" :style="(tr.attrs.style||'')+(tr.name[0]=='t'?';display:table-'+(tr.name=='tr'?'row':'cell'):'')">
+				<view v-for="(tbody, o) in n.children" v-bind:key="o" :class="tbody.attrs.class" :style="(tbody.attrs.style||'')+(tbody.name[0]=='t'?';display:table-'+(tbody.name=='tr'?'row':'row-group'):'')">
+					<view v-for="(tr, p) in tbody.children" v-bind:key="p" :class="tr.attrs.class" :style="(tr.attrs.style||'')+(tr.name[0]=='t'?';display:table-'+(tr.name=='tr'?'row':'cell'):'')">
 						<trees v-if="tr.name=='td'" :nodes="tr.children" />
 						<block v-else>
 							<!--#ifdef MP-ALIPAY-->
-							<view v-for="(td, k) in tr.children" v-bind:key="k" :class="td.attrs.class" :style="(td.attrs.style||'')+(td.name[0]=='t'?';display:table-'+(td.name=='tr'?'row':'cell'):'')">
+							<view v-for="(td, q) in tr.children" v-bind:key="q" :class="td.attrs.class" :style="(td.attrs.style||'')+(td.name[0]=='t'?';display:table-'+(td.name=='tr'?'row':'cell'):'')">
 								<trees :nodes="td.children" />
 							</view>
 							<!--#endif-->
 							<!--#ifndef MP-ALIPAY-->
-							<trees v-for="(td, k) in tr.children" v-bind:key="k" :class="td.attrs.class" :style="(td.attrs.style||'')+(td.name[0]=='t'?';display:table-'+(td.name=='tr'?'row':'cell'):'')"
+							<trees v-for="(td, q) in tr.children" v-bind:key="q" :class="td.attrs.class" :style="(td.attrs.style||'')+(td.name[0]=='t'?';display:table-'+(td.name=='tr'?'row':'cell'):'')"
 							 :nodes="td.children" />
 							<!--#endif-->
 						</block>
@@ -83,8 +83,8 @@
 			<embed v-else-if="n.name=='embed'" :style="n.attrs.style" :width="n.attrs.width" :height="n.attrs.height" :src="n.attrs.src" />
 			<!--#endif-->
 			<!--富文本-->
-			<!--#ifdef MP-WEIXIN || MP-QQ || MP-ALIPAY || APP-PLUS-->
-			<rich-text v-else-if="handler.useRichText(n)" :id="n.attrs.id" :class="'_p __'+n.name" :nodes="[n]" />
+			<!--#ifndef MP-BAIDU || MP-TOUTIAO-->
+			<rich-text v-else-if="handler.use(n)" :id="n.attrs.id" :class="'_p __'+n.name" :nodes="[n]" />
 			<!--#endif-->
 			<!--#ifdef MP-BAIDU || MP-TOUTIAO-->
 			<rich-text v-else-if="!n.c" :id="n.attrs.id" :nodes="[n]" />
@@ -113,7 +113,7 @@
 		name: 'trees',
 		data() {
 			return {
-				ns: [],
+				controls: [],
 				placeholder: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="225"/>',
 				loadVideo:
 					// #ifdef APP-PLUS
@@ -126,21 +126,7 @@
 		},
 		props: {
 			nodes: Array,
-			lazyLoad: Boolean,
-		},
-		watch: {
-			nodes: {
-				immediate: true,
-				handler(val) {
-					this.ns = val;
-					// #ifdef APP-PLUS
-					// APP 上避免 video 错位需要延时渲染
-					setTimeout(() => {
-						this.loadVideo = true;
-					}, 3000)
-					// #endif
-				}
-			}
+			lazyLoad: Boolean
 		},
 		mounted() {
 			// 获取顶层组件
@@ -182,6 +168,12 @@
 				}
 				// #endif
 			}
+			// #ifdef APP-PLUS
+			// APP 上避免 video 错位需要延时渲染
+			setTimeout(() => {
+				this.loadVideo = true;
+			}, 3000)
+			// #endif
 		},
 		methods: {
 			play(e) {
@@ -213,9 +205,9 @@
 				}
 			},
 			loadImg(e) {
-				var node = this.ns[e.currentTarget.dataset.i];
-				if (this.lazyLoad && !node.load)
-					this.$set(node, 'load', true);
+				var i = e.currentTarget.dataset.i
+				if (this.lazyLoad && !this.controls[i])
+					this.$set(this.controls, i, {});
 			},
 			linkpress(e) {
 				var jump = true,
@@ -267,12 +259,18 @@
 				var context, src = '',
 					target = e.currentTarget,
 					source = target.dataset.source,
-					node = this.ns[target.dataset.i];
+					i = target.dataset.i;
 				if (source == 'video' || source == 'audio') {
 					// 加载其他 source
-					var index = (node.i || 0) + 1;
-					if (index < node.attrs.source.length)
-						this.$set(node, 'i', index);
+					var index = this.controls[i] ? this.controls[i].i + 1 : 1;
+					if (index < this.nodes[i].attrs.source.length) {
+						if (this.controls[i])
+							this.controls[i].i = index;
+						else
+							this.$set(this.controls, i, {
+								i: index
+							});
+					}
 					if (source == 'video') context = uni.createVideoContext(target.id, this);
 					else if (e.detail.__args__) {
 						e.detail = e.detail.__args__[0];
@@ -281,21 +279,24 @@
 				} else if (source == 'img')
 					context = {
 						setSrc: src => {
-							node.attrs.src = src;
+							this.top.imgList.setItem(target.dataset.index, src);
+							this.$set(this.controls[i], 'src', src);
 						}
 					}
-				this.top && this.top.$emit('error', {
+				var obj = {
 					source,
 					target,
 					errMsg: e.detail.errMsg,
 					errCode: e.detail.errCode,
 					context
-				});
+				}
+				global.Parser.onError && global.Parser.onError(obj);
+				this.top && this.top.$emit('error', obj);
 			},
 			_loadVideo(e) {
-				var i = e.target.dataset.i;
-				this.ns[i].lazyLoad = false;
-				this.ns[i].attrs.autoplay = true;
+				this.$set(this.controls, e.target.dataset.i, {
+					play: true
+				});
 			}
 		}
 	}

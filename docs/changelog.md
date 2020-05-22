@@ -1,5 +1,19 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.05.21 ####
+1. `U` 支持 `embed` 标签（`type` 中含 `video` 或后缀名为 `.mp4`、`.3gp`、`.m3u8` 的将被转为视频；`type` 中含 `audio` 或后缀名为 `.m4a`、`.wav`、`.mp3`、`.aac` 的将被转为音频；其余不支持）  
+2. `U` 音视频如果既没有设置 `autoplay` 也没有设置 `controls` 将自动设置 `controls`，避免无法播放  
+3. `U` 头条小程序 `error` 事件可以通过 `global.Parser.onError` 接收（通过事件接收无法获取 `context`）  
+4. `F` 修复了锚点无法跳转到 `li` 和 `a` 标签的问题 [详细](https://github.com/jin-yufeng/Parser/issues/142)  
+5. `F` 修复了部分情况下 `svg` 标签 `style` 中的 `vertical-align` 无法生效的问题  
+6. `F` 修复了未闭合的标签如果是 `rich-text` 不支持的标签可能无法显示的问题 [详细](https://ask.dcloud.net.cn/question/96579)  
+7. `F` 修复了 `error` 事件中通过 [setSrc](/instructions#关于-error-事件) 重设图片地址后无法预览的问题  
+8. `F` 修复了微信包个别情况下可能出现 `null is not an object` 错误的问题 [详细](https://github.com/jin-yufeng/Parser/issues/146)  
+9. `F` 修复了百度包部分情况下预览时无法左右滑动查看所有图片的问题
+10. `F` 修复了 `uni-app` 包编译到百度小程序安卓真机可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/139)  
+11. `F` 修复了 `uni-app` 包编译到 `NVUE` 时通过 `v-if` 切换可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/147)  
+12. `F` 修复了 `uni-app` 包编译到 `app` 时 `iframe` 无法全屏的问题  
+
 #### 2020.05.13 ####
 1. `A` 添加了 `autoscroll` 属性，可以给所有表格添加一个滚动层 [详细](/instructions#autoscroll)  
 2. `U` `a` 标签可以跳转到 `tabbar` 页面  

@@ -26,12 +26,12 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 41.1KB | 微信小程序插件包 |
-| parser.min | 27.7KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 40.7KB | QQ 小程序插件包 |
-| parser.bd | 39.4KB | 百度小程序插件包 |
-| parser.tt | 39.9KB | 头条小程序插件包 |
-| parser.uni | 58.3KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 41.9KB | 微信小程序插件包 |
+| parser.min | 28.2KB | 微信小程序插件包压缩版（功能相同） |
+| parser.qq | 41.5KB | QQ 小程序插件包 |
+| parser.bd | 40.3KB | 百度小程序插件包 |
+| parser.tt | 40.8KB | 头条小程序插件包 |
+| parser.uni | 59.3KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
 1. 复制 `parser` 文件夹至 `components` 目录  
@@ -160,6 +160,20 @@
 
 
 ## 更新日志 ##
+- 2020.5.21
+  1. `U` 支持 `embed` 标签（`type` 中含 `video` 或后缀名为 `.mp4`、`.3gp`、`.m3u8` 的将被转为视频；`type` 中含 `audio` 或后缀名为 `.m4a`、`.wav`、`.mp3`、`.aac` 的将被转为音频；其余不支持）  
+  2. `U` 音视频如果既没有设置 `autoplay` 也没有设置 `controls` 将自动设置 `controls`，避免无法播放  
+  3. `U` 头条小程序 `error` 事件可以通过 `global.Parser.onError` 接收（通过事件接收无法获取 `context`）  
+  4. `F` 修复了锚点无法跳转到 `li` 和 `a` 标签的问题 [详细](https://github.com/jin-yufeng/Parser/issues/142)  
+  5. `F` 修复了部分情况下 `svg` 标签 `style` 中的 `vertical-align` 无法生效的问题  
+  6. `F` 修复了未闭合的标签如果是 `rich-text` 不支持的标签可能无法显示的问题 [详细](https://ask.dcloud.net.cn/question/96579)  
+  7. `F` 修复了 `error` 事件中通过 [setSrc](https://jin-yufeng.github.io/Parser/#/instructions?id=%e5%85%b3%e4%ba%8e-error-%e4%ba%8b%e4%bb%b6) 重设图片地址后无法预览的问题  
+  8. `F` 修复了微信包个别情况下可能出现 `null is not an object` 错误的问题 [详细](https://github.com/jin-yufeng/Parser/issues/146)  
+  9. `F` 修复了百度包部分情况下预览时无法左右滑动查看所有图片的问题
+  10. `F` 修复了 `uni-app` 包编译到百度小程序安卓真机可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/139)  
+  11. `F` 修复了 `uni-app` 包编译到 `NVUE` 时通过 `v-if` 切换可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/147)  
+  12. `F` 修复了 `uni-app` 包编译到 `app` 时 `iframe` 无法全屏的问题  
+
 - 2020.5.13
   1. `A` 添加了 `autoscroll` 属性，可以给所有表格添加一个滚动层 [详细](https://jin-yufeng.github.io/Parser/#/instructions#autoscroll)  
   2. `U` `a` 标签可以跳转到 `tabbar` 页面  
@@ -199,24 +213,5 @@
   8. `F` 修复了 `uni-app` 包编译到 `NVUE` 时在 `ready` 前设置数据可能无法显示的问题  
   9. `F` 修复了 `uni-app` 包编译到 `App` 时视频可能无法显示的问题  
   10. `F` 修复了 `uni-app` 包编译到 `H5` 时 `tag-style` 中的 `rpx` 失效的问题  
-
-- 2020.4.19  
-  1. `F` 修复了 原生包 部分情况下 `table` 中在 `td` 外有文本节点会导致解析错误的问题  
-  2. `F` 修复了 `uni-app` 包无法使用 [document 扩展包](https://jin-yufeng.github.io/Parser/#/instructions#document) 的问题（并增加了一些方法） [详细](https://github.com/jin-yufeng/Parser/issues/119)  
-
-- 2020.4.17  
-  1. `F` 修复了 `uni-app` 包 `NVUE` 端打包到安卓后可能白屏的问题（另外由于不再通过本地文件中转，显示速度应该更快）  
-
-- 2020.4.16  
-  1. `U` `uni-app` 包用通过 `image`（经过一些处理后）来显示图片（替代 `rich-text`），可以实现以下优化：
-     1. 百度、支付宝（1.9.0）、头条小程序支持 `lazy-load`，微信和 `App` 也采用 `image` 自带的 `lazy-load`，可能性能更好  
-     2. `img` 出错时也会触发 `error` 事件，且可以通过 `context` 重设 `src` [详细](https://jin-yufeng.github.io/Parser/#/instructions#关于-error-事件)  
-     3. 微信端还可以支持云文件 `ID`（2.3.0），长按弹出菜单（2.7.0），支持 `webp` 图片（2.9.0）  
-  2. `F` `uni-app` 包修复了 `NVUE` 中使用可能空白的问题  
-
-- 2020.4.14  
-  1. `A` 增加 `QQ` 小程序原生包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#插件包说明)  
-  2. `U` 头条小程序包优化实体编码处理  
-  3. `U` `uni-app` 包 `nvue` 端实现了 `navigateTo` 和 `preLoad` 的 `api`  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

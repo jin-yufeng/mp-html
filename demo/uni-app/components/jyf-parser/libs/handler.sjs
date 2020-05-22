@@ -1,4 +1,4 @@
-var inlineTags = {
+var inline = {
 	abbr: 1,
 	b: 1,
 	big: 1,
@@ -14,7 +14,7 @@ var inlineTags = {
 	strong: 1
 }
 export default {
-	useRichText: function(item) {
-		return !item.c && !inlineTags[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1;
+	use: function(item) {
+		return !item.c && !inline[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1;
 	}
 }

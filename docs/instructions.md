@@ -3,12 +3,12 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 41.1KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 27.7KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 40.7KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 39.4KB | 百度小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 39.9KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.3KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 41.9KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 28.2KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 41.5KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 40.3KB | 百度小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 40.8KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.3KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
@@ -26,7 +26,7 @@
 | 支付宝小程序 | 不支持 audio 标签 |
 | 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
 | H5 | 支持所有浏览器支持的标签<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
-| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签 |
+| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 标签 |
 | NVUE | 支持所有浏览器支持的标签<br>不支持 lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
 
 关于 `a` 标签：  
@@ -341,6 +341,9 @@ global.Parser.onImgtap = function(e) {
 global.Parser.onLinkpress = function(e) {
   if(e.href == "xxx")
     e.ignore();
+}
+global.Parser.onError = function(e) {
+  console.log(e); // 用于接收 context
 }
 // 用完需要设置为 null
 ```
@@ -920,14 +923,25 @@ error(e){
 5. 如果有使用自定义组件或插件需要在 `trees.json` 中声明（可选）  
 
 一些例子：  
-1. 使用 `embed` 标签：[#99](https://github.com/jin-yufeng/Parser/issues/99)  
-2. 使用 腾讯视频 插件：[#103](https://github.com/jin-yufeng/Parser/issues/103)  
-3. 使用 `details` 和 `summary` 标签：[#104](https://github.com/jin-yufeng/Parser/issues/104)  
+1. 使用 腾讯视频 插件：[#103](https://github.com/jin-yufeng/Parser/issues/103)  
+2. 使用 `details` 和 `summary` 标签：[#104](https://github.com/jin-yufeng/Parser/issues/104)  
      
 ### 添加自定义属性 ###
-像 `video`、`ad` 等标签有非常多属性，全写在模板里会增加一定的大小，因此默认只添加了一些常用属性，如果需要使用更多属性，可参考以下方法：  
-1. 在 `trees.wxml` 中的该标签中加上 `xxx="{{n.attrs['xxx']}}"`  
-2. 将 `xxx` 添加到 `config.js` 的 `trustAttrs` 中  
+- 功能性属性
+  像 `video`、`ad` 等标签有非常多属性，全写在模板里会增加一定的大小，因此默认只添加了一些常用属性，如果需要使用更多属性，可参考以下方法：  
+  1. 在 `trees.wxml` 中的该标签中加上 `xxx="{{n.attrs['xxx']}}"`  
+  2. 将 `xxx` 添加到 `config.js` 的 `trustAttrs` 中  
+
+- 样式性属性  
+  像 `bgcolor` 等样式性的属性（小程序中只支持 `style`），解析过程中并没有把所有这类样式都转换到 `style` 属性中，如果用到一些不支持的样式属性，可参考以下方法：  
+  1. 将 `config.js` 中的 `filter` 方法设置为：  
+     ```javascript
+     filter(node) {
+       if(node.attrs.bgcolor) // 以 bgcolor 属性为例
+         node.attrs.style += ";background-color:" + node.attrs.bgcolor;
+     }
+     ```
+  2. 将 `bgcolor` 添加到 `config.js` 的 `trustAttrs` 中  
 
 ### 添加自定义事件 ### 
 为节省大小，默认情况下仅支持 `img` 和 `a` 标签的点击事件，如果还需要其他事件，可以自行在 `trees.wxml` 中绑定和处理  

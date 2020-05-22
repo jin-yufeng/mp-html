@@ -91,7 +91,7 @@ export default{
 | 支付宝小程序 | 不支持 audio 标签 |
 | 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](https://jin-yufeng.github.io/Parser/#/instructions?id=关于-ignore-方法)） |
 | H5 | 支持所有浏览器支持的标签<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](https://jin-yufeng.github.io/Parser/#/instructions?id=配置项) 中除 userAgentStyles 外均无效 |
-| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 和 embed 标签 |
+| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 标签 |
 | NVUE | 支持所有浏览器支持的标签<br>不支持 lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](https://jin-yufeng.github.io/Parser/#/instructions?id=配置项) 中除 userAgentStyles 外均无效 |
 
 关于 `a` 标签：  

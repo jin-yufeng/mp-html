@@ -202,6 +202,7 @@ Page({
 | dl |  |
 | dt |  |
 | em |  |
+| embed | autostart, height, loop, src, type, width |
 | fieldset |  |
 | font | color, face, size |
 | footer |  |
@@ -303,7 +304,7 @@ Page({
 <div>!
 ```
 
-根据 [小程序测速](https://developers.weixin.qq.com/miniprogram/dev/framework/performanceReport/) 的结果，一篇长度约为 `2w` 的 `html` 字符串（示例小程序功能测试页面用的内容）在不同机型下的平均耗时如下：  
+根据 [小程序测速](https://developers.weixin.qq.com/miniprogram/dev/framework/performanceReport/) 的结果，一篇长度约为 `2w` 的 `html` 字符串（示例小程序（微信原生框架）功能测试页面用的内容）在不同机型下的平均耗时如下：  
 
 | / | 平均值（单位 ms） | 最大值（单位 ms） | 最小值（单位 ms） | 测试次数 |
 |:---:|:---:|:---:|:---:|:---:|

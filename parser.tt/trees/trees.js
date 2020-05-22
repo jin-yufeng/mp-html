@@ -99,17 +99,20 @@ Component({
       } else if (source == 'img')
         context = {
           setSrc: src => {
+            this.top.imgList.setItem(e.target.dataset.index, src);
             this.setData({
               [`nodes[${i}].attrs.src`]: src
             })
           }
         }
-      this.top && this.top.triggerEvent('error', {
+      var obj = {
         source,
         target: e.target,
         context,
         ...e.detail
-      })
+      };
+      global.Parser.onError && global.Parser.onError(obj);
+      this.top && this.top.triggerEvent('error', obj)
     },
     // 加载视频
     loadVideo(e) {

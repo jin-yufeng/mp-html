@@ -1,7 +1,6 @@
 Component({
   data: {
-    placeholder: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='225'/>",
-    inlineTags: require('../libs/config.js').inlineTags  
+    placeholder: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='225'/>"
   },
   properties: {
     nodes: Array,
@@ -97,6 +96,7 @@ Component({
       } else if (source == 'img')
         context = {
           setSrc: src => {
+            this.top.imgList.setItem(e.target.dataset.index, src);
             this.setData({
               [`nodes[${i}].attrs.src`]: src
             })

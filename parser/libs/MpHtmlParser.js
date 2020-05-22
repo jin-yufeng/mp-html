@@ -1,7 +1,7 @@
 /**
  * html 解析器
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200513
+ * @version 20200521
  * @author JinYufeng
  * @listens MIT
  */
@@ -127,6 +127,7 @@ class MpHtmlParser {
         name: 'img',
         attrs: {
           src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
+          style: (/vertical[^;]+/.exec(node.attrs.style) || []).shift(),
           ignore: 'T'
         }
       })
@@ -188,6 +189,18 @@ class MpHtmlParser {
           attrs.size = void 0;
         }
         break;
+      case 'embed':
+        var src = node.attrs.src || '',
+          type = node.attrs.type || '';
+        if (type.includes('video') || src.includes('.mp4') || src.includes('.3gp') || src.includes('.m3u8'))
+          node.name = 'video';
+        else if (type.includes('audio') || src.includes('.m4a') || src.includes('.wav') || src.includes('.mp3') || src.includes('.aac'))
+          node.name = 'audio';
+        else break;
+        if (node.attrs.autostart)
+          node.attrs.autoplay = 'T';
+        node.attrs.controls = 'T';
+        // falls through
       case 'video':
       case 'audio':
         if (!attrs.id) attrs.id = node.name + (++this[`${node.name}Num`]);
@@ -205,9 +218,11 @@ class MpHtmlParser {
           }
         }
         attrs.source = [];
-        if (attrs.src) attrs.source.push(attrs.src);
-        if (!attrs.controls && !attrs.autoplay)
-          console.warn(`存在没有 controls 属性的 ${node.name} 标签，可能导致无法播放`, node);
+        if (attrs.src) {
+          attrs.source.push(attrs.src);
+          attrs.src = void 0;
+        }
+        if (!attrs.controls && !attrs.autoplay) attrs.controls = 'T';
         this.bubble();
         break;
       case 'td':
@@ -516,7 +531,7 @@ class MpHtmlParser {
         if (this.STACK[i].name == name) break;
       if (i != -1) {
         var node;
-        while ((node = this.STACK.pop()).name != name);
+        while ((node = this.STACK.pop()).name != name) this.popNode(node);
         this.popNode(node);
       } else if (name == 'p' || name == 'br')
         this.siblings().push({

@@ -114,6 +114,9 @@ p {
       name: 'div, p',
       attrs: 'align'
     }, {
+      name: 'embed',
+      attrs: 'autostart, height, loop,\nsrc, type, width'
+    }, {
       name: 'font',
       attrs: 'color, face, size'
     }, {
@@ -478,6 +481,18 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.5.21
+    <ol>
+      <li><code>U</code> 支持<code>embed</code>标签（<code>type</code>中含<code>video</code>或后缀名为<code>.mp4</code> <code>.3gp</code> <code>.m3u8</code>的将被转为视频；<code>type</code>中含<code>audio</code>或后缀名为<code>.m4a</code> <code>.wav</code> <code>.mp3</code> <code>.aac</code>的将被转为音频；其余不支持）</li>
+      <li><code>U</code> 音视频既没有设置<code>autoplay</code>也没有设置<code>controls</code>将自动设置<code>controls</code>，避免无法播放</li>
+      <li><code>F</code> 修复了锚点无法跳转到<code>li</code>和<code>a</code>标签的问题</li>
+      <li><code>F</code> 修复了部分情况下<code>svg</code>标签<code>style</code>中的<code>vertical-align</code>无法生效的问题</li>
+      <li><code>F</code> 修复了未闭合的标签如果是<code>rich-text</code>不支持的标签可能无法显示的问题</li>
+      <li><code>F</code> 修复了<code>error</code>事件中通过<code>setSrc</code>重设图片地址后无法预览的问题</li>
+      <li><code>F</code> 修复了个别情况下可能出现<code>null is not an object</code>错误的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.5.13
     <ol>
       <li><code>A</code> 增加了<code>autoscroll</code>属性，可以给所有表格添加一个滚动层</li>
@@ -621,18 +636,6 @@ console.log(rect.height); // 高度</code></pre>
       <li><code>U</code> 支持预览<code>base64</code>图片（通过暂存到本地实现）</li>
       <li><code>U</code> <code>CssHandler</code>扩展包支持属性选择器和<code>@media</code>，伪类中的<code>content</code>支持<code>attr()</code></li>
       <li><code>U</code> 精简了部分代码</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.2.17
-    <ol>
-      <li><code>A</code> 增加了<code>imglongtap</code>事件，图片被长按时触发，可用于显示自定义菜单</li>
-      <li><code>U</code> 优化了双击缩放的效果</li> 
-      <li><code>U</code> 图片设置的宽度超出屏幕宽度时自动将高度设置为<code>auto</code>，避免变形（同时移除了<code>img-mode</code>属性）</li>
-      <li><code>U</code> 修改了部分文件和文件夹的命名（引入路径<b>有变化</b>）</li>
-      <li><code>D</code> 移除了<code>autocopy</code>、<code>autopreview</code>属性，如需禁用自动预览/复制链接，请使用<code>linkpress</code>和<code>imgtap</code>事件中的<code>ignore</code>函数</li>
-      <li><code>D</code> 移除了<code>versionHigherThan</code>、<code>parseHtml</code>、<code>parseCss</code>的<code>api</code></li>
-      <li><code>D</code> 废弃了后端加强包</li>
     </ol>
   </li>
 </ul>

@@ -1,7 +1,7 @@
 /**
  * Parser 富文本组件
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200512
+ * @version 20200521
  * @author JinYufeng
  * @listens MIT
  */
@@ -219,6 +219,7 @@ Component({
       clearInterval(this._timer);
       this._timer = setInterval(() => {
         this.createSelectorQuery().select('.top').boundingClientRect(res => {
+          if(!res) return;
           this.rect = res;
           if (res.height == height) {
             this.triggerEvent('ready', res)
