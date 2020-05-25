@@ -3,6 +3,8 @@
 const canIUse = wx.canIUse('editor'); // 高基础库标识，用于兼容
 // #endif
 module.exports = {
+	// 出错占位图
+	errorImg: null,
 	// 过滤器函数
 	filter: null,
 	// 代码高亮函数
@@ -36,7 +38,7 @@ module.exports = {
 		',pre')),
 	// 将被移除的标签
 	ignoreTags: makeMap(
-		'area,base,basefont,canvas,command,frame,input,isindex,keygen,link,map,meta,param,script,source,style,svg,textarea,title,track,use,wbr'
+		'area,base,canvas,frame,input,link,map,meta,param,script,source,style,svg,textarea,title,track,wbr'
 		// #ifdef MP-WEIXIN
 		+ (canIUse ? ',rp' : '')
 		// #endif
@@ -52,7 +54,7 @@ module.exports = {
 	),
 	// 自闭合的标签
 	selfClosingTags: makeMap(
-		'area,base,basefont,br,col,circle,ellipse,embed,frame,hr,img,input,isindex,keygen,line,link,meta,param,path,polygon,rect,source,track,use,wbr'
+		'area,base,br,col,circle,ellipse,embed,frame,hr,img,input,line,link,meta,param,path,polygon,rect,source,track,use,wbr'
 	),
 	// 信任的属性
 	trustAttrs: makeMap(
@@ -88,7 +90,7 @@ module.exports = {
 }
 
 function makeMap(str) {
-	var map = {},
+	var map = Object.create(null),
 		list = str.split(',');
 	for (var i = list.length; i--;)
 		map[list[i]] = true;

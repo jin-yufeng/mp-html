@@ -15,6 +15,7 @@
 			jyfParser
 		},
 		onReady() {
+			// 也可以通过 html 属性传入
 			this.$refs.article.setContent(testHtml);
 		},
 		methods: {

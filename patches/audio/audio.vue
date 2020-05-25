@@ -53,7 +53,6 @@
 			this._ctx = uni.createInnerAudioContext();
 			this._ctx.onError((err) => {
 				this.error = true;
-				err.context = this;
 				this.$emit('error', err);
 			})
 			// #ifdef MP-ALIPAY
@@ -84,7 +83,6 @@
 				this._ctx.play();
 		},
 		methods: {
-			toJSON() {},
 			// 设置源
 			setSrc(src) {
 				this._ctx.autoplay = this.autoplay;
@@ -163,16 +161,13 @@
 	}
 
 	.contain {
-		/* #endif */
 		position: relative;
-
 		/* #ifdef MP-WEIXIN */
 		display: flex;
-
 		/* #endif */
-
 		/* #ifndef MP-WEIXIN */
 		display: inline-flex;
+		/* #endif */
 		width: 680rpx;
 		background-color: #fcfcfc;
 		border: 1px solid #e0e0e0;

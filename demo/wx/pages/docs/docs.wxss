@@ -39,3 +39,11 @@
 .weui-article__p {
   margin: 0 0 0.8em;
 }
+
+.display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 280rpx;
+  border: 1px solid gray;
+}

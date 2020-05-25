@@ -51,20 +51,20 @@ class core {
 
 	// 包大小
 	final float wxSize = 41.9f;
-	final float wxMinSize = 28.2f;
-	final float qqSize = 41.5f;
-	final float bdSize = 40.3f;
-	final float ttSize = 40.8f;
-	final float uniAppSize = 59.3f;
+	final float wxMinSize = 26.4f;
+	final float qqSize = 41.4f;
+	final float bdSize = 40.2f;
+	final float ttSize = 40.7f;
+	final float uniAppSize = 59.8f;
 	final float emojiSize = 4.21f;
-	final float emojiMinSize = 3.15f;
-	final float domSize = 7.13f;
-	final float domUniSize = 5.81f;
-	final float domMinSize = 5.44f;
-	final float cssSize = 4.78f;
-	final float cssMinSize = 1.49f;
+	final float emojiMinSize = 3.12f;
+	final float domSize = 7.50f;
+	final float domUniSize = 6.32f;
+	final float domMinSize = 5.23f;
+	final float cssSize = 4.52f;
+	final float cssMinSize = 1.62f;
 	final float audioSize = 4.11f;
-	final float audioUniSize = 4.62f;
+	final float audioUniSize = 4.60f;
 
 	// 构造函数
 	core() {

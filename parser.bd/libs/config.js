@@ -1,5 +1,7 @@
 /* 配置文件 */
 module.exports = {
+  // 出错占位图
+  errorImg: null,
   // 过滤器函数
   filter: null,
   // 代码高亮函数
@@ -28,11 +30,11 @@ module.exports = {
   // 块级标签，将被转为 div
   blockTags: makeMap('address,article,aside,body,caption,center,cite,footer,header,html,nav,section,pre'),
   // 将被移除的标签
-  ignoreTags: makeMap('area,base,basefont,canvas,command,frame,iframe,input,isindex,keygen,link,map,meta,param,script,source,style,svg,textarea,title,track,use,wbr'),
+  ignoreTags: makeMap('area,base,canvas,frame,iframe,input,link,map,meta,param,script,source,style,svg,textarea,title,track,wbr'),
   // 只能被 rich-text 显示的标签
   richOnlyTags: makeMap('a,colgroup,fieldset,legend,picture,table'),
   // 自闭合的标签
-  selfClosingTags: makeMap('area,base,basefont,br,col,circle,ellipse,embed,frame,hr,img,input,isindex,keygen,line,link,meta,param,path,polygon,rect,source,track,use,wbr'),
+  selfClosingTags: makeMap('area,base,br,col,circle,ellipse,embed,frame,hr,img,input,line,link,meta,param,path,polygon,rect,source,track,use,wbr'),
   // 信任的属性
   trustAttrs: makeMap('align,alt,apid,appid,app-id,author,autoplay,autostart,border,cellpadding,cellspacing,class,color,colspan,controls,data-src,dir,face,height,href,id,ignore,loop,media,muted,name,path,poster,rowspan,size,span,src,start,style,type,width,xmlns'),
   // bool 型的属性

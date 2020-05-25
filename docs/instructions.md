@@ -4,11 +4,11 @@
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
 | [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 41.9KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 28.2KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 41.5KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 40.3KB | 百度小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 40.8KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.3KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 26.4KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 41.4KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 40.2KB | 百度小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 40.7KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.8KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
@@ -25,9 +25,9 @@
 | 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单 |
 | 支付宝小程序 | 不支持 audio 标签 |
 | 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
-| H5 | 支持所有浏览器支持的标签<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
+| H5 | 支持所有浏览器支持的标签<br>不支持 loading-img 属性<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
 | App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 标签 |
-| NVUE | 支持所有浏览器支持的标签<br>不支持 lazy-load 属性<br>不支持 getVideoContext 的 api<br>error 事件的返回值中没有 context<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 userAgentStyles 外均无效 |
+| NVUE | 支持所有浏览器支持的标签<br>不支持 lazy-load、loading-img 属性<br>不支持 getVideoContext 的 api<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
 
 关于 `a` 标签：  
 `H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  
@@ -273,6 +273,7 @@
 | compress | Number | 0 | 压缩等级，可以选择是否移除 id 和 class | [20200312](/changelog#_20200312) |
 | domain | String |  | 主域名，设置后将给链接自动拼接上主域名或协议名 | [20191202](/changelog#_20191202) |
 | lazy-load | Boolean | false | 是否开启图片懒加载 | [20190928](/changelog#_20190928) |
+| loading-img | String |  | 图片加载完成前的占位图，详见 [占位图](/#设置占位图) | [20200524](/changelog#_20200524) |
 | selectable | Boolean | false | 是否允许长按复制内容 | [20190603](/changelog#_20190603) |
 | show-with-animation | Boolean | false | 是否使用渐显动画 | [20190519](/changelog#_20190519) |
 | tag-style | Object | {} | 设置标签的默认样式 | [20190421](/changelog#_20190421) |
@@ -316,7 +317,7 @@
 | bindparse | 解析完成时触发 | 返回解析结果（一个 nodes 数组，仅传入的 html 类型为 String 时会触发），可以对该结果进行自定义修改，将在渲染时生效 |
 | bindload | dom 加载完成时触发 | 所有节点被添加到节点树中时触发，无返回值，可以调用 api |
 | bindready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息），所有图片（除懒加载）加载完成时才会触发，图片较大时可能 **延时较长** |
-| binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码，target 包含出错标签的具体信息，context 是多媒体的 context 对象，可以设置新的源 |
+| binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，target 包含出错标签的具体信息 |
 | bindimgtap | 图片被点击时触发 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在事件中调用将不进行预览；可用于阻挡 onShow 的调用 |
 | bindlinkpress | 在链接被点击时触发 | 返回一个 object，其中包含了被点击的 a 标签的所有属性，ignore 是一个函数，在事件中调用后将不自动跳转/复制；可在该事件中进行下载文档等进一步操作 |  
 
@@ -341,9 +342,6 @@ global.Parser.onImgtap = function(e) {
 global.Parser.onLinkpress = function(e) {
   if(e.href == "xxx")
     e.ignore();
-}
-global.Parser.onError = function(e) {
-  console.log(e); // 用于接收 context
 }
 // 用完需要设置为 null
 ```
@@ -385,6 +383,7 @@ error(e) {
 
 | 配置项 | 作用 |
 |:---:|:---:|
+| errorImg | 图片加载出错时的占位图 |
 | entities | 实体编码列表 |
 | blockTags | 块级标签列表 |
 | ignoreTags | 移除的标签列表 |
@@ -521,9 +520,9 @@ onText(text, hasTag) {
   
 | 版本 | 功能 | 占比 |
 |:---:|:---:|:---:|
-| < 2.7.1 | 不支持图片长按菜单（识别小程序码）<br>不支持 bdi bdo ruby 标签 | 1.73% |
-| < 2.4.4 | 不支持 a 标签 visited 效果 | 0.29% |
-| < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.13% |
+| < 2.7.1 | 不支持图片长按菜单（识别小程序码）<br>不支持 bdi bdo ruby 标签 | 1.41% |
+| < 2.4.4 | 不支持 a 标签 visited 效果 | 0.23% |
+| < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.10% |
 | < 1.6.3 | 无法使用 | < 0.01% |
 
 !> 使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
@@ -668,7 +667,7 @@ this.selectComponent("#article").setContent(html);
 - 功能  
   将形如 `[笑脸]` 的文本解析为 `emoji` 小表情  
 - 大小  
-  `4.21KB`（`min` 版本 `3.15KB`）  
+  `4.21KB`（`min` 版本 `3.12KB`）  
 - 使用方法  
   1. 将 [emoji.js](https://github.com/jin-yufeng/Parser/blob/master/patches/emoji/emoji.js) 复制到 `libs` 文件夹下（[emoji.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/emoji/emoji.min.js) 是压缩版本，功能相同，使用时也需要更名为 `emoji.js`）  
   2. 将 `libs/MpHtmlParser.js` 中的 `var emoji` 修改为 `var emoji = require('./emoji.js')`
@@ -686,7 +685,7 @@ this.selectComponent("#article").setContent(html);
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `7.13KB`（`min` 版本 `5.44KB`，`uni-app` 版本 `5.81KB`）  
+  `7.50KB`（`min` 版本 `5.23KB`，`uni-app` 版本 `6.32KB`）  
 - 使用方法  
   1. 将 [document.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.js) 复制到 `libs` 文件夹下（[document.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.min.js) 是压缩版本，功能相同；在 `uni-app` 中使用时需用 [document.uni.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.uni.js)；使用时也需要更名为 `document.js`）  
   2. 将 `parser.js`（`uni-app` 中是 `jyf-parser.vue`）中的 `var dom` 修改为 `var dom = require('./libs/document.js')`
@@ -777,7 +776,7 @@ error(e){
 4. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
   
 - 大小（与原大小相比增加）  
-  `4.78KB`（`min` 版本：`1.49KB`）  
+  `4.52KB`（`min` 版本：`1.62KB`）  
 - 使用方法  
   用 [CssHandler.js](https://github.com/jin-yufeng/Parser/blob/master/patches/CssHandler/CssHandler.js)（[CssHandler.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/CssHandler/CssHandler.min.js) 是压缩版本，功能相同，使用时也需要更名为 `CssHandler.js`）替换原插件包下的 `CssHandler.js` 即可
 
@@ -825,7 +824,7 @@ error(e){
   `error` 事件中会返回 `context` 对象（也可以通过 [getVideoContext](#getVideoContext) 方法获取），包含 `setSrc`、`play`、`pause`、`seek` 方法  
   封装成自定义组件，可以直接在页面上使用（属性和事件基本同 `audio`）  
 - 大小  
-  `4.11KB`（`uni-app` 版 `4.62KB`）  
+  `4.11KB`（`uni-app` 版 `4.60KB`）  
 - 使用方法  
 
   ?> 建议通过 [打包工具](#打包工具) 打包  

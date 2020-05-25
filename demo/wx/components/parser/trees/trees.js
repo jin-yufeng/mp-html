@@ -1,3 +1,4 @@
+const errorImg = require('../libs/config.js').errorImg;
 Component({
   data: {
     canIUse: !!wx.chooseMessageFile,
@@ -5,7 +6,8 @@ Component({
   },
   properties: {
     nodes: Array,
-    lazyLoad: Boolean
+    lazyLoad: Boolean,
+    loading: String
   },
   methods: {
     // 自定义事件
@@ -51,7 +53,11 @@ Component({
       var i = e.target.dataset.i;
       if (this.data.lazyLoad && !this.data.nodes[i].load)
         this.setData({
-          [`nodes[${i}].load`]: true
+          [`nodes[${i}].load`]: 1
+        })
+      else if (this.data.loading && this.data.nodes[i].load != 2)
+        this.setData({
+          [`nodes[${i}].load`]: 2
         })
     },
     // 链接点击事件
@@ -93,7 +99,7 @@ Component({
     },
     // 错误事件
     error(e) {
-      var context, source = e.target.dataset.source,
+      var source = e.target.dataset.source,
         i = e.target.dataset.i,
         node = this.data.nodes[i];
       if (source == 'video' || source == 'audio') {
@@ -103,28 +109,22 @@ Component({
           return this.setData({
             [`nodes[${i}].i`]: index
           })
-        if (this.top) context = this.top.getVideoContext(e.target.id);
-      } else if (source == 'img')
-        context = {
-          setSrc: src => {
-            this.top.imgList.setItem(e.target.dataset.index, src);
-            this.setData({
-              [`nodes[${i}].attrs.src`]: src
-            })
-          }
-        }
+      } else if (source == 'img' && errorImg) {
+        this.top.imgList.setItem(e.target.dataset.index, errorImg);
+        this.setData({
+          [`nodes[${i}].attrs.src`]: errorImg
+        })
+      }
       this.top && this.top.triggerEvent('error', {
         source,
         target: e.target,
-        context,
-        ...e.detail
+        errMsg: e.detail.errMsg
       })
     },
     // 加载视频
     loadVideo(e) {
       var i = e.target.dataset.i;
       this.setData({
-        [`nodes[${i}].lazyLoad`]: false,
         [`nodes[${i}].attrs.autoplay`]: true
       })
     }

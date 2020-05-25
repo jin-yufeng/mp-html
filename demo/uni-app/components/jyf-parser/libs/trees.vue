@@ -3,9 +3,10 @@
 		<block v-for="(n, i) in nodes" v-bind:key="i">
 			<!--图片-->
 			<view v-if="n.name=='img'" :class="'_img '+n.attrs.class" :style="n.attrs.style" :data-attrs="n.attrs" @tap="imgtap">
-				<rich-text :nodes="[{attrs:{src:lazyLoad&&!controls[i]?placeholder:(controls[i]&&controls[i].src)||n.attrs.src,alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]" />
-				<image class="_image" :src="lazyLoad&&!controls[i]?placeholder:(controls[i]&&controls[i].src)||n.attrs.src" :lazy-load="lazyLoad"
-				 :show-menu-by-longpress="!n.attrs.ignore" :data-i="i" :data-index="n.attrs.i" data-source="img" @load="loadImg" @error="error" />
+				<rich-text :nodes="[{attrs:{src:loading&&controls[i]!=2?loading:(lazyLoad&&!controls[i]?placeholder:(controls[i]==3?errorImg:n.attrs.src)),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]" />
+				<image class="_image" :src="lazyLoad&&!controls[i]?placeholder:n.attrs.src" :lazy-load="lazyLoad"
+				 :show-menu-by-longpress="!n.attrs.ignore" :data-i="i" :data-index="n.attrs.i" data-source="img" @load="loadImg"
+				 @error="error" />
 			</view>
 			<!--文本-->
 			<text v-else-if="n.type=='text'" decode>{{n.text}}</text>
@@ -13,15 +14,15 @@
 			<text v-else-if="n.name=='br'">\n</text>
 			<!--#endif-->
 			<!--视频-->
-			<view v-else-if="(n.lazyLoad&&!controls[i])||(n.name=='video'&&!loadVideo)" :id="n.attrs.id" :class="'_video '+(n.attrs.class||'')"
+			<view v-else-if="(n.lazyLoad&&controls[i]==undefined&&!n.attrs.autoplay)||(n.name=='video'&&!loadVideo)" :id="n.attrs.id" :class="'_video '+(n.attrs.class||'')"
 			 :style="n.attrs.style" :data-i="i" @tap="_loadVideo" />
-			<video v-else-if="n.name=='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay||(controls[i]&&controls[i].play)"
-			 :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :poster="n.attrs.poster" :src="n.attrs.source[(controls[i]&&controls[i].i)||0]"
+			<video v-else-if="n.name=='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay||n.lazyLoad"
+			 :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :poster="n.attrs.poster" :src="n.attrs.source[controls[i]||0]"
 			 :unit-id="n.attrs['unit-id']" :data-id="n.attrs.id" :data-i="i" data-source="video" @error="error" @play="play" />
 			<!--音频-->
 			<audio v-else-if="n.name=='audio'" :ref="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :author="n.attrs.author"
 			 :autoplay="n.attrs.autoplay" :controls="n.attrs.controls" :loop="n.attrs.loop" :name="n.attrs.name" :poster="n.attrs.poster"
-			 :src="n.attrs.source[(controls[i]&&controls[i].i)||0]" :data-i="i" :data-id="n.attrs.id" data-source="audio"
+			 :src="n.attrs.source[controls[i]||0]" :data-i="i" :data-id="n.attrs.id" data-source="audio"
 			 @error.native="error" @play.native="play" />
 			<!--链接-->
 			<view v-else-if="n.name=='a'" :id="n.attrs.id" :class="'_a '+(n.attrs.class||'')" hover-class="_hover" :style="n.attrs.style"
@@ -51,11 +52,11 @@
 				</view>
 				<!--#ifdef MP-ALIPAY-->
 				<view class="_li">
-					<trees :nodes="n.children" :lazyLoad="lazyLoad" />
+					<trees :nodes="n.children" :lazyLoad="lazyLoad" :loading="loading" />
 				</view>
 				<!--#endif-->
 				<!--#ifndef MP-ALIPAY-->
-				<trees class="_li" :nodes="n.children" :lazyLoad="lazyLoad" />
+				<trees class="_li" :nodes="n.children" :lazyLoad="lazyLoad" :loading="loading" />
 				<!--#endif-->
 			</view>
 			<!--表格-->
@@ -91,12 +92,12 @@
 			<!--#endif-->
 			<!--#ifdef MP-ALIPAY-->
 			<view v-else :id="n.attrs.id" :class="'_'+n.name+' '+(n.attrs.class||'')" :style="n.attrs.style">
-				<trees :nodes="n.children" :lazyLoad="lazyLoad" />
+				<trees :nodes="n.children" :lazyLoad="lazyLoad" :loading="loading" />
 			</view>
 			<!--#endif-->
 			<!--#ifndef MP-ALIPAY-->
 			<trees v-else :class="(n.attrs.id||'')+' _'+n.name+' '+(n.attrs.class||'')" :style="n.attrs.style" :nodes="n.children"
-			 :lazyLoad="lazyLoad" />
+			 :lazyLoad="lazyLoad" :loading="loading" />
 			<!--#endif-->
 		</block>
 	</view>
@@ -106,6 +107,7 @@
 <script>
 	global.Parser = {};
 	import trees from './trees'
+	const errorImg = require('../libs/config.js').errorImg;
 	export default {
 		components: {
 			trees
@@ -115,6 +117,7 @@
 			return {
 				controls: [],
 				placeholder: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="225"/>',
+				errorImg,
 				loadVideo:
 					// #ifdef APP-PLUS
 					false
@@ -126,7 +129,8 @@
 		},
 		props: {
 			nodes: Array,
-			lazyLoad: Boolean
+			lazyLoad: Boolean,
+			loading: String
 		},
 		mounted() {
 			// 获取顶层组件
@@ -207,7 +211,9 @@
 			loadImg(e) {
 				var i = e.currentTarget.dataset.i
 				if (this.lazyLoad && !this.controls[i])
-					this.$set(this.controls, i, {});
+					this.$set(this.controls, i, 1);
+				else if (this.loading && this.controls[i] != 2)
+					this.$set(this.controls, i, 2);
 			},
 			linkpress(e) {
 				var jump = true,
@@ -256,47 +262,28 @@
 				}
 			},
 			error(e) {
-				var context, src = '',
-					target = e.currentTarget,
+				var target = e.currentTarget,
 					source = target.dataset.source,
 					i = target.dataset.i;
 				if (source == 'video' || source == 'audio') {
 					// 加载其他 source
 					var index = this.controls[i] ? this.controls[i].i + 1 : 1;
-					if (index < this.nodes[i].attrs.source.length) {
-						if (this.controls[i])
-							this.controls[i].i = index;
-						else
-							this.$set(this.controls, i, {
-								i: index
-							});
-					}
-					if (source == 'video') context = uni.createVideoContext(target.id, this);
-					else if (e.detail.__args__) {
+					if (index < this.nodes[i].attrs.source.length)
+						this.$set(this.controls, i, index);
+					if (e.detail.__args__)
 						e.detail = e.detail.__args__[0];
-						context = e.detail.context;
-					}
-				} else if (source == 'img')
-					context = {
-						setSrc: src => {
-							this.top.imgList.setItem(target.dataset.index, src);
-							this.$set(this.controls[i], 'src', src);
-						}
-					}
-				var obj = {
+				} else if (errorImg && source == 'img') {
+					this.top.imgList.setItem(target.dataset.index, errorImg);
+					this.$set(this.controls, i, 3);
+				}
+				this.top && this.top.$emit('error', {
 					source,
 					target,
-					errMsg: e.detail.errMsg,
-					errCode: e.detail.errCode,
-					context
-				}
-				global.Parser.onError && global.Parser.onError(obj);
-				this.top && this.top.$emit('error', obj);
+					errMsg: e.detail.errMsg
+				});
 			},
 			_loadVideo(e) {
-				this.$set(this.controls, e.target.dataset.i, {
-					play: true
-				});
+				this.$set(this.controls, e.target.dataset.i, 0);
 			}
 		}
 	}

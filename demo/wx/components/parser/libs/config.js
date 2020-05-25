@@ -2,6 +2,8 @@
 const canIUse = wx.canIUse('editor'); // 高基础库标识，用于兼容
 const Prism = require('./prism.js');
 module.exports = {
+  // 出错占位图
+  errorImg: 'https://6874-html-foe72-1259071903.tcb.qcloud.la/error.jpg?sign=c224195f83974f1403f3e03aedc21149&t=1590221293',
   // 过滤器函数
   filter(node, cxt) {
     if (node.name == 'pre')
@@ -64,11 +66,11 @@ module.exports = {
   // 块级标签，将被转为 div
   blockTags: makeMap('address,article,aside,body,caption,center,cite,footer,header,html,nav,section' + (canIUse ? '' : ',pre')),
   // 将被移除的标签
-  ignoreTags: makeMap('area,base,basefont,canvas,command,frame,iframe,input,isindex,keygen,link,map,meta,param,script,source,style,svg,textarea,title,track,use,wbr' + (canIUse ? ',rp' : '')),
+  ignoreTags: makeMap('area,base,canvas,frame,iframe,input,link,map,meta,param,script,source,style,svg,textarea,title,track,wbr' + (canIUse ? ',rp' : '')),
   // 只能被 rich-text 显示的标签
   richOnlyTags: makeMap('a,colgroup,fieldset,legend,picture,table' + (canIUse ? ',bdi,bdo,rt,ruby' : '')),
   // 自闭合的标签
-  selfClosingTags: makeMap('area,base,basefont,br,col,circle,ellipse,embed,frame,hr,img,input,isindex,keygen,line,link,meta,param,path,polygon,rect,source,track,use,wbr'),
+  selfClosingTags: makeMap('area,base,br,col,circle,ellipse,embed,frame,hr,img,input,line,link,meta,param,path,polygon,rect,source,track,use,wbr'),
   // 信任的属性
   trustAttrs: makeMap('align,alt,app-id,author,autoplay,autostart,border,cellpadding,cellspacing,class,color,colspan,controls,data-src,dir,face,height,href,id,ignore,loop,media,muted,name,path,poster,rowspan,size,span,src,start,style,type,unit-id,width,xmlns'),
   // bool 型的属性
@@ -93,7 +95,7 @@ module.exports = {
 }
 
 function makeMap(str) {
-  var map = {},
+  var map = Object.create(null),
     list = str.split(',');
   for (var i = list.length; i--;)
     map[list[i]] = true;

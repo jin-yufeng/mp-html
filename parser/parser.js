@@ -1,7 +1,7 @@
 /**
  * Parser 富文本组件
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200521
+ * @version 20200524
  * @author JinYufeng
  * @listens MIT
  */
@@ -20,30 +20,31 @@ Component({
     pureDataPattern: /^[acdgtu]|W/
   },
   properties: {
-    'html': {
+    html: {
       type: null,
       observer(html) {
         if (this._refresh) this._refresh = false;
         else this.setContent(html, false, true);
       }
     },
-    'autopause': {
+    autopause: {
       type: Boolean,
       value: true
     },
-    'autoscroll': Boolean,
-    'autosetTitle': {
+    autoscroll: Boolean,
+    autosetTitle: {
       type: Boolean,
       value: true
     },
-    'compress': Number,
-    'domain': String,
-    'lazyLoad': Boolean,
-    'selectable': Boolean,
-    'tagStyle': Object,
-    'showWithAnimation': Boolean,
-    'useAnchor': Boolean,
-    'useCache': Boolean
+    compress: Number,
+    domain: String,
+    lazyLoad: Boolean,
+    loadingImg: String,
+    selectable: Boolean,
+    tagStyle: Object,
+    showWithAnimation: Boolean,
+    useAnchor: Boolean,
+    useCache: Boolean
   },
   relations: {
     '../parser-group/parser-group': {

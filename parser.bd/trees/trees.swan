@@ -2,7 +2,7 @@
 <block s-for="n,index in nodes">
   <!--图片-->
   <view s-if="n.name=='img'" id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="imgtap">
-    <rich-text nodes="{{[{attrs:{src:lazyLoad&&!n.load?placeholder:n.attrs.src,alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
+    <rich-text nodes="{{[{attrs:{src:loading&&n.load!=2?loading:(lazyLoad&&!n.load?placeholder:n.attrs.src),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
     <image class="_image" src="{{lazyLoad&&!n.load?placeholder:n.attrs.src}}" lazy-load="{{lazyLoad}}" data-i="{{index}}" data-index="{{n.attrs.i}}" data-source="img" bindload="loadImg" binderror="errorEvent" />
   </view>
   <!--文本-->
@@ -13,7 +13,7 @@
   </view>
   <!--视频-->
   <block s-elif="n.name=='video'">
-    <view s-if="n.lazyLoad" id="{{n.attrs.id}}" class="_video {{n.attrs.class}}" style="{{n.attrs.style}}" data-i="{{index}}" bindtap="loadVideo" />
+    <view s-if="n.lazyLoad&&!n.attrs.autoplay" id="{{n.attrs.id}}" class="_video {{n.attrs.class}}" style="{{n.attrs.style}}" data-i="{{index}}" bindtap="loadVideo" />
     <video s-else id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" unit-id="{{n.attrs['unit-id']}}" data-i="{{index}}" data-source="video" binderror="errorEvent" bindplay="play" />
   </block>
   <!--音频-->
@@ -28,10 +28,10 @@
       <view s-elif="n.floor%3==2" class="_ul-p2" />
       <view s-else class="_ul-p1" style="border-radius:50%">█</view>
     </view>
-    <trees class="_node _li" lazy-load="{{lazyLoad}}" nodes="{{n.children}}" />
+    <trees class="_node _li" lazy-load="{{lazyLoad}}" loading="{{loading}}" nodes="{{n.children}}" />
   </view>
   <!--富文本-->
   <rich-text s-elif="!n.c" id="{{n.attrs.id}}" nodes="{{[n]}}" />
   <!--继续递归-->
-  <trees s-else id="{{n.attrs.id}}" class="_node _{{n.name}} {{n.attrs.class}}" style="{{n.attrs.style}}" lazy-load="{{lazyLoad}}" nodes="{{n.children}}" />
+  <trees s-else id="{{n.attrs.id}}" class="_node _{{n.name}} {{n.attrs.class}}" style="{{n.attrs.style}}" lazy-load="{{lazyLoad}}" loading="{{loading}}" nodes="{{n.children}}" />
 </block>

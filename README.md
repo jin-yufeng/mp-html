@@ -10,6 +10,7 @@
 - 支持匹配 `style` 中的样式  
 - 支持 `svg`  
 - 支持锚点跳转  
+- 支持设置占位图  
 - 支持长按复制内容  
 - 支持给多媒体标签设置多个源  
 - 支持自动给链接填充主域名  
@@ -27,11 +28,11 @@
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
 | parser | 41.9KB | 微信小程序插件包 |
-| parser.min | 28.2KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 41.5KB | QQ 小程序插件包 |
-| parser.bd | 40.3KB | 百度小程序插件包 |
-| parser.tt | 40.8KB | 头条小程序插件包 |
-| parser.uni | 59.3KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.min | 26.4KB | 微信小程序插件包压缩版（功能相同） |
+| parser.qq | 41.4KB | QQ 小程序插件包 |
+| parser.bd | 40.2KB | 百度小程序插件包 |
+| parser.tt | 40.7KB | 头条小程序插件包 |
+| parser.uni | 59.8KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
 1. 复制 `parser` 文件夹至 `components` 目录  
@@ -99,6 +100,7 @@
 | compress | Number | 0 | 压缩等级，可以选择是否移除 id 和 class |
 | domain | String |  | 主域名，设置后将给链接自动拼接主域名或协议名 |
 | lazy-load | Boolean | false | 是否开启图片懒加载 |
+| loading-img | String |  | 图片加载完成前的占位图，详见 [占位图](https://jin-yufeng.github.io/Parser/#/#设置占位图) |
 | selectable | Boolean | false | 是否允许长按复制内容 |
 | show-with-animation | Boolean | false | 是否使用渐显动画 |
 | tag-style | Object |  | 设置标签的默认样式 |
@@ -114,7 +116,7 @@
 | bindparse | 解析完成时触发 | 返回解析结果（一个 nodes 数组，仅传入的 html 类型为 String 时会触发），可以对该结果进行自定义修改，将在渲染时生效 |
 | bindload | dom 加载完成时触发 | 所有节点被添加到节点树中时触发，无返回值，可以调用 api |
 | bindready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息），所有图片（除懒加载）加载完成时才会触发，图片较大时可能 **延时较长** |
-| binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，errCode 是错误代码（仅ad），target 包含出错标签的具体信息，context 是视频的 context 对象 |
+| binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，target 包含出错标签的具体信息 |
 | bindimgtap | 图片被点击时触发 | 返回一个 object，其中 src 是图片链接，ignore 是一个函数，在回调函数中调用将不进行预览 |
 | bindlinkpress | 链接被点击时触发 | 返回一个 object，其中 href 是链接地址，ignore 是一个函数，在回调中调用将不自动跳转/复制 |  
 
@@ -160,19 +162,24 @@
 
 
 ## 更新日志 ##
+- 2020.5.24
+  1. `A` 增加 `loading-img` 属性，可以设置图片加载完成前的占位图 [详细](https://jin-yufeng.github.io/Parser/#/#设置占位图)  
+  2. `A` 增加 `errorImg` 的配置项，可以设置图片出错时的占位图 [详细](https://jin-yufeng.github.io/Parser/#/#设置占位图)   
+  3. `F` 修复了 `uni-app` 包使用 [audio 扩展包](https://jin-yufeng.github.io/Parser/#/instructions?id=audio) 后编译到百度小程序出错的问题  
+  4. `D` `error` 事件中不再返回 `context` 对象  
+
 - 2020.5.21
   1. `U` 支持 `embed` 标签（`type` 中含 `video` 或后缀名为 `.mp4`、`.3gp`、`.m3u8` 的将被转为视频；`type` 中含 `audio` 或后缀名为 `.m4a`、`.wav`、`.mp3`、`.aac` 的将被转为音频；其余不支持）  
   2. `U` 音视频如果既没有设置 `autoplay` 也没有设置 `controls` 将自动设置 `controls`，避免无法播放  
-  3. `U` 头条小程序 `error` 事件可以通过 `global.Parser.onError` 接收（通过事件接收无法获取 `context`）  
-  4. `F` 修复了锚点无法跳转到 `li` 和 `a` 标签的问题 [详细](https://github.com/jin-yufeng/Parser/issues/142)  
-  5. `F` 修复了部分情况下 `svg` 标签 `style` 中的 `vertical-align` 无法生效的问题  
-  6. `F` 修复了未闭合的标签如果是 `rich-text` 不支持的标签可能无法显示的问题 [详细](https://ask.dcloud.net.cn/question/96579)  
-  7. `F` 修复了 `error` 事件中通过 [setSrc](https://jin-yufeng.github.io/Parser/#/instructions?id=%e5%85%b3%e4%ba%8e-error-%e4%ba%8b%e4%bb%b6) 重设图片地址后无法预览的问题  
-  8. `F` 修复了微信包个别情况下可能出现 `null is not an object` 错误的问题 [详细](https://github.com/jin-yufeng/Parser/issues/146)  
-  9. `F` 修复了百度包部分情况下预览时无法左右滑动查看所有图片的问题
-  10. `F` 修复了 `uni-app` 包编译到百度小程序安卓真机可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/139)  
-  11. `F` 修复了 `uni-app` 包编译到 `NVUE` 时通过 `v-if` 切换可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/147)  
-  12. `F` 修复了 `uni-app` 包编译到 `app` 时 `iframe` 无法全屏的问题  
+  3. `F` 修复了锚点无法跳转到 `li` 和 `a` 标签的问题 [详细](https://github.com/jin-yufeng/Parser/issues/142)  
+  4. `F` 修复了部分情况下 `svg` 标签 `style` 中的 `vertical-align` 无法生效的问题  
+  5. `F` 修复了未闭合的标签如果是 `rich-text` 不支持的标签可能无法显示的问题 [详细](https://ask.dcloud.net.cn/question/96579)  
+  6. `F` 修复了 `error` 事件中通过 [setSrc](https://jin-yufeng.github.io/Parser/#/instructions?id=%e5%85%b3%e4%ba%8e-error-%e4%ba%8b%e4%bb%b6) 重设图片地址后无法预览的问题  
+  7. `F` 修复了微信包个别情况下可能出现 `null is not an object` 错误的问题 [详细](https://github.com/jin-yufeng/Parser/issues/146)  
+  8. `F` 修复了百度包部分情况下预览时无法左右滑动查看所有图片的问题
+  9. `F` 修复了 `uni-app` 包编译到百度小程序安卓真机可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/139)  
+  10. `F` 修复了 `uni-app` 包编译到 `NVUE` 时通过 `v-if` 切换可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/147)  
+  11. `F` 修复了 `uni-app` 包编译到 `app` 时 `iframe` 无法全屏的问题  
 
 - 2020.5.13
   1. `A` 添加了 `autoscroll` 属性，可以给所有表格添加一个滚动层 [详细](https://jin-yufeng.github.io/Parser/#/instructions#autoscroll)  

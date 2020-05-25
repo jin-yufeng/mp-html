@@ -15,6 +15,6 @@ var inline = {
 }
 export default {
 	use: function(item) {
-		return !item.c && !inline[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1;
+		return !item.c && !inline[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1
 	}
 }

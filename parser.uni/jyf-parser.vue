@@ -10,7 +10,7 @@
 			<div :id="'rtf'+uid"></div>
 			<!--#endif-->
 			<!--#ifndef H5-->
-			<trees :nodes="nodes" :lazy-load="lazyLoad" />
+			<trees :nodes="nodes" :lazyLoad="lazyLoad" :loading="loadingImg" />
 			<!--#endif-->
 		</view>
 		<!--#endif-->
@@ -50,6 +50,7 @@
 	 * @property {Number} compress 压缩等级
 	 * @property {String} domain 图片、视频等链接的主域名
 	 * @property {Boolean} lazyLoad 是否开启图片懒加载
+	 * @property {String} loadingImg 图片加载完成前的占位图
 	 * @property {Boolean} selectable 是否开启长按复制
 	 * @property {Object} tagStyle 标签的默认样式
 	 * @property {Boolean} showWithAnimation 是否使用渐显动画
@@ -63,7 +64,7 @@
 	 * @event {Function} linkpress 链接点击事件
 	 * @example <jyf-parser :html="html"></jyf-parser>
 	 * @author JinYufeng
-	 * @version 20200521
+	 * @version 20200524
 	 * @listens MIT
 	 */
 	export default {
@@ -78,7 +79,6 @@
 				// #endif
 				// #ifndef APP-PLUS-NVUE
 				showAm: '',
-				imgs: [],
 				// #endif
 				nodes: []
 			}
@@ -89,26 +89,27 @@
 		},
 		// #endif
 		props: {
-			'html': null,
-			'autopause': {
+			html: null,
+			autopause: {
 				type: Boolean,
 				default: true
 			},
-			'autoscroll': Boolean,
-			'autosetTitle': {
+			autoscroll: Boolean,
+			autosetTitle: {
 				type: Boolean,
 				default: true
 			},
 			// #ifndef H5 || APP-PLUS-NVUE
-			'compress': Number,
-			'useCache': Boolean,
+			compress: Number,
+			loadingImg: String,
+			useCache: Boolean,
 			// #endif
-			'domain': String,
-			'lazyLoad': Boolean,
-			'selectable': Boolean,
-			'tagStyle': Object,
-			'showWithAnimation': Boolean,
-			'useAnchor': Boolean
+			domain: String,
+			lazyLoad: Boolean,
+			selectable: Boolean,
+			tagStyle: Object,
+			showWithAnimation: Boolean,
+			useAnchor: Boolean
 		},
 		watch: {
 			html(html) {
@@ -238,26 +239,25 @@
 				if (!html)
 					return this.height = 1;
 				if (append)
-					this.$refs.web.evalJs("var d=document.createElement('div');d.innerHTML='" + html.replace(/'/g, "\\'") +
-						"';document.getElementById('parser').appendChild(d)");
+					this.$refs.web.evalJs("var b=document.createElement('div');b.innerHTML='" + html.replace(/'/g, "\\'") +
+						"';document.getElementById('parser').appendChild(b)");
 				else {
 					html =
-						'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1' +
-						(this.selectable ? '' : ',user-scalable=no') + '"><base href="' + this.domain + '"><div id="parser">' + this._handleHtml(
-							html) +
-						'</div><script>"use strict";function post(n){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[n]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}function waitReady(){return new Promise(function(e){var t=document.getElementById("parser"),r=t.scrollHeight,n=setInterval(function(){r==t.scrollHeight?(clearInterval(n),e(r)):r=t.scrollHeight},500)})}' +
+						'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><base href="' +
+						this.domain + '"><div id="parser"' + (this.selectable ? '>' : ' style="user-select:none">') + this._handleHtml(html) +
+						'</div><script>"use strict";function e(e){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[e]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}' +
 						(this.showWithAnimation ? 'document.body.style.animation="show .5s",' : '') +
-						'setTimeout(function(){post({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight+16})},50);</' +
-						'script>';
+						'setTimeout(function(){e({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight+16})},50);\x3c/script>';
 					this.$refs.web.evalJs("document.write('" + html.replace(/'/g, "\\'") + "');document.close()");
 				}
 				this.$refs.web.evalJs(
-					'var e=document.getElementsByTagName("title");e.length&&post({action:"getTitle",title:e[0].innerText});for(var t,o=document.getElementsByTagName("style"),r=0;t=o[r];r++)t.innerHTML=t.innerHTML.replace(/body/g,"#parser");for(var n,i=document.getElementsByTagName("img"),a=[],s=0,c=0;n=i[s];s++)n.onerror=function(){post({action:"error",source:"img",target:this})},n.hasAttribute("ignore")||"A"==n.parentElement.nodeName||(n.i=c++,a.push(n.src),n.onclick=function(){post({action:"preview",img:{i:this.i,src:this.src}})});post({action:"getImgList",imgList:a});for(var m,g=document.getElementsByTagName("a"),l=0;m=g[l];l++)m.onclick=function(){var e,t=this.getAttribute("href");if("#"==t[0]){var o=document.getElementById(t.substr(1));o&&(e=o.offsetTop)}return post({action:"linkpress",href:t,offset:e}),!1};for(var u,d=document.getElementsByTagName("video"),f=0;u=d[f];f++)u.style.maxWidth="100%",u.onerror=function(){post({action:"error",source:"video",target:this})}' +
-					(this.autopause ? ',u.onplay=function(){for(var e,t=0;e=d[t];t++)e!=this&&e.pause()}' : '') +
-					';for(var p,h=document.getElementsByTagName("audio"),v=0;p=h[v];v++)p.onerror=function(){post({action:"error",source:"audio",target:this})};' +
-					(this.autoscroll ?
-						'for(var y,T=document.getElementsByTagName("table"),E=0;y=T[E];E++){var N=document.createElement("div");N.style.overflow="scroll",y.parentNode.replaceChild(N,y),N.appendChild(y)}' :
-						'') + ';waitReady().then(function(e){post({action:"ready",height:e+16})})'
+					'var t=document.getElementsByTagName("title");t.length&&e({action:"getTitle",title:t[0].innerText});for(var o,n=document.getElementsByTagName("style"),r=0;o=n[r++];)o.innerHTML=o.innerHTML.replace(/body/g,"#parser");for(var i,a=document.getElementsByTagName("img"),s=[],c=0,l=0;i=a[c];c++)i.onerror=function(){' +
+					(cfg.errorImg ? 'this.src=' + cfg.errorImg + ',' : '') +
+					'e({action:"error",source:"img",target:this})},i.hasAttribute("ignore")||"A"==i.parentElement.nodeName||(i.i=l++,s.push(i.src),i.onclick=function(){e({action:"preview",img:{i:this.i,src:this.src}})});e({action:"getImgList",imgList:s});for(var d,u=document.getElementsByTagName("a"),g=0;d=u[g];g++)d.onclick=function(){var t,o=this.getAttribute("href");if("#"==o[0]){var n=document.getElementById(o.substr(1));n&&(t=n.offsetTop)}return e({action:"linkpress",href:o,offset:t}),!1};for(var m,f=document.getElementsByTagName("video"),h=0;m=f[h];h++)m.style.maxWidth="100%",m.onerror=function(){e({action:"error",source:"video",target:this})}' +
+					(this.autopause ? ',m.onplay=function(){for(var e,t=0;e=f[t];t++)e!=this&&e.pause()}' : '') +
+					';for(var v,y=document.getElementsByTagName("audio"),_=0;v=y[_];_++)v.onerror=function(){e({action:"error",source:"audio",target:this})};' +
+					(this.autoscroll ? 'for(var p,w=document.getElementsByTagName("table"),T=0;p=w[T];T++){var E=document.createElement("div");E.style.overflow="scroll",p.parentNode.replaceChild(E,p),E.appendChild(p)}' : '') +
+					'(function(){return new Promise(function(e){var t=document.getElementById("parser"),o=t.scrollHeight,n=setInterval(function(){o==t.scrollHeight?(clearInterval(n),e(o)):o=t.scrollHeight},500)})})().then(function(t){e({action:"ready",height:t+16})})'
 				)
 				this.nodes = [1];
 				// #endif
@@ -328,15 +328,11 @@
 						}
 					}
 					img.onerror = function() {
+						if (cfg.errorImg)
+							_ts.imgList[this.i] = this.src = cfg.errorImg;
 						_ts.$emit('error', {
 							source: 'img',
-							target: this,
-							context: {
-								setSrc: src => {
-									_ts.imgList[this.i] = src;
-									this.src = src;
-								}
-							}
+							target: this
 						});
 					}
 					if (_ts.lazyLoad && this._observer && img.src && img.i != 0) {
@@ -381,8 +377,7 @@
 					video.onerror = function() {
 						_ts.$emit('error', {
 							source: 'video',
-							target: this,
-							context: this
+							target: this
 						});
 					}
 					video.onplay = function() {
@@ -397,8 +392,7 @@
 					audio.onerror = function() {
 						_ts.$emit('error', {
 							source: 'audio',
-							target: this,
-							context: this
+							target: this
 						});
 					}
 				// 表格处理
@@ -637,12 +631,14 @@
 								url: href
 							})
 					}
-				} else if (data.action == 'error')
+				} else if (data.action == 'error') {
+					if (data.source == 'img' && cfg.errorImg)
+						this.imgList.setItem(data.target.i, cfg.errorImg);
 					this.$emit('error', {
 						source: data.source,
 						target: data.target
 					})
-				else if (data.action == 'ready') {
+				} else if (data.action == 'ready') {
 					this.height = data.height;
 					this.$nextTick(() => {
 						uni.createSelectorQuery().in(this).select('#top').boundingClientRect().exec(res => {

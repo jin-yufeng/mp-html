@@ -36,118 +36,117 @@ function matchStyle(match_name, match_class, match_id, selector) {
   } else if (selector_name && match_name == selector_name[0]) return 0;
   return -1;
 }
-class CssHandler {
-  constructor(tagStyle = {}, screenWidth) {
-    this.screenWidth = screenWidth;
-    this.styles = [];
-    var styles = Object.assign({}, cfg.userAgentStyles);
-    for (var item in tagStyle)
-      styles[item] = (styles[item] ? styles[item] + ';' : '') + tagStyle[item];
-    for (var key in styles) {
-      this.styles.push({
-        key,
-        content: styles[key]
-      })
-    }
+
+function CssHandler(tagStyle = {}, screenWidth) {
+  this.screenWidth = screenWidth;
+  this.styles = [];
+  var styles = Object.assign({}, cfg.userAgentStyles);
+  for (var item in tagStyle)
+    styles[item] = (styles[item] ? styles[item] + ';' : '') + tagStyle[item];
+  for (var key in styles) {
+    this.styles.push({
+      key,
+      content: styles[key]
+    })
   }
-  getStyle(data) {
-    parseCss(data, this.styles, this.screenWidth);
+}
+CssHandler.prototype.getStyle = function (data) {
+  parseCss(data, this.styles, this.screenWidth);
+}
+CssHandler.prototype.match = function (name, attrs, ele) {
+  var match_class = [];
+  if (attrs.class) {
+    var match = attrs.class.split(/\s+/);
+    for (let i = match.length; i--;)
+      match_class.unshift('.' + match[i]);
   }
-  match(name, attrs, ele) {
-    var match_class = [];
-    if (attrs.class) {
-      var match = attrs.class.split(/\s+/);
-      for (let i = match.length; i--;)
-        match_class.unshift('.' + match[i]);
+  var matched = [],
+    key, flag = false; // 子选择器标识
+  ele.i = [];
+  ele.index = [];
+  ele.pseudo = [];
+  for (let i = 0, item; item = this.styles[i]; i++) {
+    if (item.key[0] == '>') {
+      key = item.key.substring(1);
+      flag = true;
+    } else {
+      key = item.key;
+      flag = false;
     }
-    var matched = [],
-      key, flag = false; // 子选择器标识
-    ele.i = [];
-    ele.index = [];
-    ele.pseudo = [];
-    for (let i = 0, item; item = this.styles[i]; i++) {
-      if (item.key[0] == '>') {
-        key = item.key.substring(1);
-        flag = true;
-      } else {
-        key = item.key;
-        flag = false;
-      }
-      var matchRes = matchStyle(name, match_class, attrs.id ? '#' + attrs.id : '', key);
-      if (matchRes != -1) {
-        if (!Object.hasOwnProperty.call(item, 'index') || item.index == item.list.length - 1) {
-          var matchAttr = true;
-          if (item.attr) {
-            for (var j = 0; j < item.attr.length; j++) {
-              if (!Object.hasOwnProperty.call(item.attr[j], 'value')) {
-                if (!Object.hasOwnProperty.call(attrs, item.attr[j].name)) matchAttr = false;
-              } else if (attrs[item.attr[j].name] != item.attr[j].value) matchAttr = false;
-            }
+    var matchRes = matchStyle(name, match_class, attrs.id ? '#' + attrs.id : '', key);
+    if (matchRes != -1) {
+      if (!Object.hasOwnProperty.call(item, 'index') || item.index == item.list.length - 1) {
+        var matchAttr = true;
+        if (item.attr) {
+          for (var j = 0; j < item.attr.length; j++) {
+            if (!Object.hasOwnProperty.call(item.attr[j], 'value')) {
+              if (!Object.hasOwnProperty.call(attrs, item.attr[j].name)) matchAttr = false;
+            } else if (attrs[item.attr[j].name] != item.attr[j].value) matchAttr = false;
           }
-          if (matchAttr) {
-            if (item.pseudo) ele.pseudo.push(item);
-            if (item.list) matched[3] += ';' + item.content;
-            else matched[matchRes] += ';' + item.content;
-          }
-        } else {
-          ele.i.push(i);
-          ele.index.push(item.index);
-          item.index++;
-          item.key = item.list[item.index];
         }
-      }
-      if (flag) {
+        if (matchAttr) {
+          if (item.pseudo) ele.pseudo.push(item);
+          if (item.list) matched[3] += ';' + item.content;
+          else matched[matchRes] += ';' + item.content;
+        }
+      } else {
         ele.i.push(i);
         ele.index.push(item.index);
-        item.index--;
+        item.index++;
         item.key = item.list[item.index];
       }
     }
-    if (!ele.i.length) {
-      ele.i = void 0;
-      ele.index = void 0;
+    if (flag) {
+      ele.i.push(i);
+      ele.index.push(item.index);
+      item.index--;
+      item.key = item.list[item.index];
     }
-    if (!ele.pseudo.length)
-      ele.pseudo = void 0;
-    return matched.join(';') + ';';
   }
-  pop(ele) {
-    // 多层class匹配标记
-    if (ele.i) {
-      for (let i = 0; i < ele.i.length; i++) {
-        var j = ele.i[i];
-        this.styles[j].key = this.styles[j].list[ele.index[i]];
-        this.styles[j].index = ele.index[i];
-      }
-      ele.i = void 0;
-      ele.index = void 0;
+  if (!ele.i.length) {
+    ele.i = void 0;
+    ele.index = void 0;
+  }
+  if (!ele.pseudo.length)
+    ele.pseudo = void 0;
+  return matched.join(';') + ';';
+}
+CssHandler.prototype.pop = function (ele) {
+  // 多层class匹配标记
+  if (ele.i) {
+    for (let i = 0; i < ele.i.length; i++) {
+      var j = ele.i[i];
+      this.styles[j].key = this.styles[j].list[ele.index[i]];
+      this.styles[j].index = ele.index[i];
     }
-    // 伪类
-    if (ele.pseudo) {
-      for (let i = 0; i < ele.pseudo.length; i++) {
-        var content;
-        var style = ele.pseudo[i].content.replace(/content:([^;\n]*)/, ($, $1) => {
-          // 转换 attr
-          content = $1.replace(/attr\((.+?)\)/, ($, $1) => ele.attrs[$1.trim()] || '').replace(/\s*['"](.*?)['"]\s*/g, '$1')
-            // 转换 \xxx
-            .replace(/\\(\w{4})/, ($, $1) => String.fromCharCode(parseInt($1, 16)));
-          return '';
-        })
-        var child = {
-          name: 'span',
-          attrs: {
-            style
-          },
-          children: [{
-            type: 'text',
-            text: content
-          }]
-        }
-        if (ele.pseudo[i].pseudo == 'before')
-          ele.children.unshift(child);
-        else
-          ele.children.push(child);
+    ele.i = void 0;
+    ele.index = void 0;
+  }
+  // 伪类
+  if (ele.pseudo) {
+    for (let i = 0; i < ele.pseudo.length; i++) {
+      var content;
+      var style = ele.pseudo[i].content.replace(/content:([^;\n]*)/, ($, $1) => {
+        // 转换 attr
+        content = $1.replace(/attr\((.+?)\)/, ($, $1) => ele.attrs[$1.trim()] || '').replace(/\s*['"](.*?)['"]\s*/g, '$1')
+          // 转换 \xxx
+          .replace(/\\(\w{4})/, ($, $1) => String.fromCharCode(parseInt($1, 16)));
+        return '';
+      })
+      var child = {
+        name: 'span',
+        attrs: {
+          style
+        },
+        children: [{
+          type: 'text',
+          text: content
+        }]
       }
+      if (ele.pseudo[i].pseudo == 'before')
+        ele.children.unshift(child);
+      else
+        ele.children.push(child);
     }
   }
 }

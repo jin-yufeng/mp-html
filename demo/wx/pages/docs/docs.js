@@ -111,9 +111,6 @@ p {
       name: 'base',
       attrs: 'href'
     }, {
-      name: 'div, p',
-      attrs: 'align'
-    }, {
       name: 'embed',
       attrs: 'autostart, height, loop,\nsrc, type, width'
     }, {
@@ -245,13 +242,16 @@ export default {
     }, {
       name: 'domain',
       type: 'String',
-      default: '',
       notice: '主域名，设置后将给链接拼接上主域名或协议名'
     }, {
       name: 'lazy-load',
       type: 'Boolean',
       default: 'false',
       notice: '是否开启图片懒加载'
+    }, {
+      name: 'loading-img',
+      type: 'String',
+      notice: '图片加载完成前的占位图'
     }, {
       name: 'selectable',
       type: 'Boolean',
@@ -289,7 +289,7 @@ export default {
       notice: '渲染完成时触发，返回组件框的位置大小信息（将等待所有图片加载完毕，延时较长）'
     }, {
       name: 'binderror',
-      notice: '出错时触发，返回错误来源和信息，音视频出错时还会返回 context 对象'
+      notice: '出错时触发，返回错误来源和信息'
     }, {
       name: 'bindlinkpress',
       notice: '链接受到点击时触发，返回链接地址和 ignore 函数，调用将不自动跳转'
@@ -373,6 +373,9 @@ console.log(rect.height); // 高度</code></pre>
 </ol>`,
     // 配置项示例代码
     configCode: `<ol style="margin-left:-15px">
+  <li><code>errorImg</code>
+    <div>图片出错时的占位图</div>
+  </li>
   <li><code>filter</code>
     <div>功能：过滤器函数，可以对解析到的标签进行自定义处理，将在渲染时生效</div>
     <div>输入值：<code>node</code>为解析到的节点的结构体，<code>context</code>是解析器实例（可以获取一些解析选项和方法）</div>
@@ -464,15 +467,15 @@ console.log(rect.height); // 高度</code></pre>
     versions: [{
       version: '<2.7.1',
       features: '不支持图片长按菜单\n不支持 bdi bdo ruby 标签',
-      percent: '1.73%'
+      percent: '1.41%'
     }, {
       version: '<2.4.4',
       features: '不支持 a 标签的 visited 效果',
-      percent: '0.29%'
+      percent: '0.23%'
     }, {
       version: '<2.2.5',
       features: '不支持部分实体编码',
-      percent: '0.13%'
+      percent: '0.10%'
     }, {
       version: '<1.6.3',
       features: '无法使用',
@@ -481,6 +484,14 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.5.24
+    <ol>
+      <li><code>A</code> 增加<code>loading-img</code>属性，可以设置图片加载完成前的占位图</li>
+      <li><code>A</code> 增加<code>errorImg</code>的配置项，可以设置图片出错时的占位图</li>
+      <li><code>D</code> <code>error</code>事件中不再返回<code>context</code>对象</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.5.21
     <ol>
       <li><code>U</code> 支持<code>embed</code>标签（<code>type</code>中含<code>video</code>或后缀名为<code>.mp4</code> <code>.3gp</code> <code>.m3u8</code>的将被转为视频；<code>type</code>中含<code>audio</code>或后缀名为<code>.m4a</code> <code>.wav</code> <code>.mp3</code> <code>.aac</code>的将被转为音频；其余不支持）</li>
@@ -629,15 +640,6 @@ console.log(rect.height); // 高度</code></pre>
       <li><code>F</code> 修复了部分情况下连续实体编码失效的问题</li>
     </ol>
   </li>
-  </br>
-  <li>2020.2.23
-    <ol>
-      <li><code>U</code> 支持自动压缩<code>style</code>属性，移除重复的样式，可以减少解析结果大小</li>
-      <li><code>U</code> 支持预览<code>base64</code>图片（通过暂存到本地实现）</li>
-      <li><code>U</code> <code>CssHandler</code>扩展包支持属性选择器和<code>@media</code>，伪类中的<code>content</code>支持<code>attr()</code></li>
-      <li><code>U</code> 精简了部分代码</li>
-    </ol>
-  </li>
 </ul>
 <div style="margin-top:20px">更多信息可见：<a href="https://jin-yufeng.github.io/Parser/#/changelog">更新日志</a></div>`
   },
@@ -645,6 +647,12 @@ console.log(rect.height); // 高度</code></pre>
   onLoad(e) {
     this.setData({
       index: e.index
+    })
+  },
+  // 演示
+  show() {
+    this.setData({
+      show: true
     })
   },
   // 切换章节

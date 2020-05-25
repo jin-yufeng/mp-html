@@ -56,6 +56,13 @@
         <code>source</code>标签，插件将按顺序进行加载；可用于解决平台支持性差异，最大程度避免无法播放，示例：
         <parser html="{{sourceCode}}" tag-style="{{tagStyle}}" />
       </view>
+      <!--设置占位图-->
+      <view class="weui-article__h2">设置占位图</view>
+      <view class="weui-article__section">
+        支持设置图片加载完成前（包括懒加载）和图片出错时的占位图
+        <view class="display" wx:if="{{!show}}" bindtap="show">点击加载</view>
+        <parser wx:else html="<img width='49%' style='margin-right:2%' src='https://6874-html-foe72-1259071903.tcb.qcloud.la/demo.jpeg?sign=c8d83ad0716504de55b65f3dd4e50f67&t=1590222258'><img src='xxx' width='49%'>" loading-img="https://6874-html-foe72-1259071903.tcb.qcloud.la/loading.jpg?sign=0236c3a5450fa5417d80b94c888eeb0f&t=1590221318" />
+      </view>
       <!--内容可复制-->
       <view class="weui-article__h2">内容可复制</view>
       <view class="weui-article__section">
@@ -154,7 +161,7 @@
         本插件解析和渲染效率高；轻量化（
         <code>41.9KB</code>，
         <code>min</code>版本
-        <code>28.2KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
+        <code>26.4KB</code>）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：
         <parser html="{{errorCode}}" tag-style="{{tagStyle}}" />
       </view>
       <view class="link" hover-class="link-hover" style="display:block;text-align:center" data-index="1" bindtap="changeSection">下一章：使用方法</view>
