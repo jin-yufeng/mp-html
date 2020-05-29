@@ -3,7 +3,7 @@
 		<block v-for="(n, i) in nodes" v-bind:key="i">
 			<!--图片-->
 			<view v-if="n.name=='img'" :class="'_img '+n.attrs.class" :style="n.attrs.style" :data-attrs="n.attrs" @tap="imgtap">
-				<rich-text :nodes="[{attrs:{src:loading&&controls[i]!=2?loading:(lazyLoad&&!controls[i]?placeholder:(controls[i]==3?errorImg:n.attrs.src)),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]" />
+				<rich-text :nodes="[{attrs:{src:loading&&(controls[i]||0)<2?loading:(lazyLoad&&!controls[i]?placeholder:(controls[i]==3?errorImg:n.attrs.src||'')),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]" />
 				<image class="_image" :src="lazyLoad&&!controls[i]?placeholder:n.attrs.src" :lazy-load="lazyLoad"
 				 :show-menu-by-longpress="!n.attrs.ignore" :data-i="i" :data-index="n.attrs.i" data-source="img" @load="loadImg"
 				 @error="error" />
@@ -14,9 +14,9 @@
 			<text v-else-if="n.name=='br'">\n</text>
 			<!--#endif-->
 			<!--视频-->
-			<view v-else-if="(n.lazyLoad&&controls[i]==undefined&&!n.attrs.autoplay)||(n.name=='video'&&!loadVideo)" :id="n.attrs.id" :class="'_video '+(n.attrs.class||'')"
+			<view v-else-if="((n.lazyLoad&&!n.attrs.autoplay)||(n.name=='video'&&!loadVideo))&&controls[i]==undefined" :id="n.attrs.id" :class="'_video '+(n.attrs.class||'')"
 			 :style="n.attrs.style" :data-i="i" @tap="_loadVideo" />
-			<video v-else-if="n.name=='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay||n.lazyLoad"
+			<video v-else-if="n.name=='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay||controls[i]==0"
 			 :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :poster="n.attrs.poster" :src="n.attrs.source[controls[i]||0]"
 			 :unit-id="n.attrs['unit-id']" :data-id="n.attrs.id" :data-i="i" data-source="video" @error="error" @play="play" />
 			<!--音频-->
@@ -176,7 +176,7 @@
 			// APP 上避免 video 错位需要延时渲染
 			setTimeout(() => {
 				this.loadVideo = true;
-			}, 3000)
+			}, 1000)
 			// #endif
 		},
 		methods: {

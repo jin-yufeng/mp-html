@@ -147,6 +147,18 @@
   }
   ```
 
+#### 懒加载不生效 ####
+*问题描述：*  
+图片的懒加载效果没有生效  
+
+*问题原因：*  
+- 检查是否设置了 `lazy-load` 属性（或者 `lazyLoad`，但不能是 `lazyload`）  
+- 检查富文本内容是否足够长，不够长会被一次性加载（加载时机见各平台 `image` 的懒加载加载时机）  
+- 一些平台懒加载加载时机较早，可能不能直观的看到效果，可以在 `Network` 面板查看图片请求时间  
+- `uni-app` 编译到 `App` 时还不支持懒加载 [详细](https://ask.dcloud.net.cn/question/93987)  
+
+*相关 issue：*[#30](https://github.com/jin-yufeng/Parser/issues/30)、[#118](https://github.com/jin-yufeng/Parser/issues/118)
+
 #### 锚点无法跳转 ####
 *问题描述：*  
 如果 `parser` 标签外层被限定高度且设置了滚动，锚点跳转将无法生效  

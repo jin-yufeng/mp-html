@@ -6,10 +6,10 @@
 		<!--#endif-->
 		<!--#ifndef APP-PLUS-NVUE-->
 		<view id="top" :style="showAm+(selectable?';user-select:text;-webkit-user-select:text':'')">
-			<!--#ifdef H5-->
+			<!--#ifdef H5 || MP-360-->
 			<div :id="'rtf'+uid"></div>
 			<!--#endif-->
-			<!--#ifndef H5-->
+			<!--#ifndef H5 || MP-360-->
 			<trees :nodes="nodes" :lazyLoad="lazyLoad" :loading="loadingImg" />
 			<!--#endif-->
 		</view>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-	// #ifndef H5 || APP-PLUS-NVUE
+	// #ifndef H5 || APP-PLUS-NVUE || MP-360
 	import trees from './libs/trees';
 	var cache = {},
 		// #ifdef MP-WEIXIN || MP-TOUTIAO
@@ -33,8 +33,8 @@
 		return val;
 	}
 	// #endif
-	// #ifdef H5 || APP-PLUS-NVUE
-	var rpx = uni.getSystemInfoSync().screenWidth / 750,
+	// #ifdef H5 || APP-PLUS-NVUE || MP-360
+	var rpx = uni.getSystemInfoSync().windowWidth / 750,
 		cfg = require('./libs/config.js');
 	// #endif
 	// #ifdef APP-PLUS-NVUE
@@ -64,14 +64,14 @@
 	 * @event {Function} linkpress 链接点击事件
 	 * @example <jyf-parser :html="html"></jyf-parser>
 	 * @author JinYufeng
-	 * @version 20200524
+	 * @version 20200528
 	 * @listens MIT
 	 */
 	export default {
 		name: 'parser',
 		data() {
 			return {
-				// #ifdef H5
+				// #ifdef H5 || MP-360
 				uid: this._uid,
 				// #endif
 				// #ifdef APP-PLUS-NVUE
@@ -83,7 +83,7 @@
 				nodes: []
 			}
 		},
-		// #ifndef H5 || APP-PLUS-NVUE
+		// #ifndef H5 || APP-PLUS-NVUE || MP-360
 		components: {
 			trees
 		},
@@ -99,7 +99,7 @@
 				type: Boolean,
 				default: true
 			},
-			// #ifndef H5 || APP-PLUS-NVUE
+			// #ifndef H5 || APP-PLUS-NVUE || MP-360
 			compress: Number,
 			loadingImg: String,
 			useCache: Boolean,
@@ -163,10 +163,10 @@
 					// #endif
 				}
 			}
-			// #ifdef H5
+			// #ifdef H5 || MP-360
 			this.document = document.getElementById('rtf' + this._uid);
 			// #endif
-			// #ifndef H5 || APP-PLUS-NVUE
+			// #ifndef H5 || APP-PLUS-NVUE || MP-360
 			if (dom) this.document = new dom(this);
 			// #endif
 			// #ifdef APP-PLUS-NVUE
@@ -179,7 +179,7 @@
 			// #endif
 		},
 		beforeDestroy() {
-			// #ifdef H5
+			// #ifdef H5 || MP-360
 			if (this._observer) this._observer.disconnect();
 			// #endif
 			this.imgList.each(src => {
@@ -200,7 +200,7 @@
 			clearInterval(this._timer);
 		},
 		methods: {
-			// #ifdef H5 || APP-PLUS-NVUE
+			// #ifdef H5 || APP-PLUS-NVUE || MP-360
 			_Dom2Str(nodes) {
 				var str = '';
 				for (var node of nodes) {
@@ -244,7 +244,7 @@
 				else {
 					html =
 						'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><base href="' +
-						this.domain + '"><div id="parser"' + (this.selectable ? '>' : ' style="user-select:none">') + this._handleHtml(html) +
+						this.domain + '"><div id="parser"' + (this.selectable ? '>' : ' style="user-select:none">') + this._handleHtml(html).replace(/\n/g, '\\n') +
 						'</div><script>"use strict";function e(e){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[e]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}' +
 						(this.showWithAnimation ? 'document.body.style.animation="show .5s",' : '') +
 						'setTimeout(function(){e({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight+16})},50);\x3c/script>';
@@ -252,7 +252,7 @@
 				}
 				this.$refs.web.evalJs(
 					'var t=document.getElementsByTagName("title");t.length&&e({action:"getTitle",title:t[0].innerText});for(var o,n=document.getElementsByTagName("style"),r=0;o=n[r++];)o.innerHTML=o.innerHTML.replace(/body/g,"#parser");for(var i,a=document.getElementsByTagName("img"),s=[],c=0,l=0;i=a[c];c++)i.onerror=function(){' +
-					(cfg.errorImg ? 'this.src=' + cfg.errorImg + ',' : '') +
+					(cfg.errorImg ? 'this.src="' + cfg.errorImg + '",' : '') +
 					'e({action:"error",source:"img",target:this})},i.hasAttribute("ignore")||"A"==i.parentElement.nodeName||(i.i=l++,s.push(i.src),i.onclick=function(){e({action:"preview",img:{i:this.i,src:this.src}})});e({action:"getImgList",imgList:s});for(var d,u=document.getElementsByTagName("a"),g=0;d=u[g];g++)d.onclick=function(){var t,o=this.getAttribute("href");if("#"==o[0]){var n=document.getElementById(o.substr(1));n&&(t=n.offsetTop)}return e({action:"linkpress",href:o,offset:t}),!1};for(var m,f=document.getElementsByTagName("video"),h=0;m=f[h];h++)m.style.maxWidth="100%",m.onerror=function(){e({action:"error",source:"video",target:this})}' +
 					(this.autopause ? ',m.onplay=function(){for(var e,t=0;e=f[t];t++)e!=this&&e.pause()}' : '') +
 					';for(var v,y=document.getElementsByTagName("audio"),_=0;v=y[_];_++)v.onerror=function(){e({action:"error",source:"audio",target:this})};' +
@@ -261,7 +261,7 @@
 				)
 				this.nodes = [1];
 				// #endif
-				// #ifdef H5
+				// #ifdef H5 || MP-360
 				if (!html) {
 					if (this.rtf && !append) this.rtf.parentNode.removeChild(this.rtf);
 					return;
@@ -360,11 +360,10 @@
 								}
 							} else if (href.indexOf('http') == 0 || href.indexOf('//') == 0)
 								return true;
-							else {
+							else
 								uni.navigateTo({
 									url: href
 								})
-							}
 						}
 						return false;
 					}
@@ -413,7 +412,7 @@
 				setTimeout(() => this.showAm = '', 500);
 				// #endif
 				// #ifndef APP-PLUS-NVUE
-				// #ifndef H5
+				// #ifndef H5 || MP-360
 				var nodes;
 				if (!html)
 					return this.nodes = [];
@@ -470,10 +469,10 @@
 				var height;
 				clearInterval(this._timer);
 				this._timer = setInterval(() => {
-					// #ifdef H5
+					// #ifdef H5 || MP-360
 					this.rect = this.rtf.getBoundingClientRect();
 					// #endif
-					// #ifndef H5
+					// #ifndef H5 || MP-360
 					// #ifdef APP-PLUS
 					uni.createSelectorQuery().in(this)
 					// #endif
@@ -489,7 +488,7 @@
 								clearInterval(this._timer);
 							}
 							height = this.rect.height;
-							// #ifndef H5
+							// #ifndef H5 || MP-360
 						});
 					// #endif
 				}, 350);
@@ -501,10 +500,10 @@
 				// #ifdef APP-PLUS-NVUE
 				txt = this._text;
 				// #endif
-				// #ifdef H5
+				// #ifdef H5 || MP-360
 				txt = this.rtf.innerText;
 				// #endif
-				// #ifndef H5 || APP-PLUS-NVUE
+				// #ifndef H5 || APP-PLUS-NVUE || MP-360
 				for (var i = 0, n; n = ns[i++];) {
 					if (n.type == 'text') txt += n.text.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
 						.replace(/&amp;/g, '&');
@@ -537,7 +536,7 @@
 					errMsg: 'pageScrollTo:ok'
 				});
 				// #endif
-				// #ifdef H5
+				// #ifdef H5 || MP-360
 				if (!obj.id) {
 					window.scrollTo(0, this.rtf.offsetTop);
 					return obj.success && obj.success({
@@ -551,7 +550,7 @@
 				obj.scrollTop = this.rtf.offsetTop + target.offsetTop + (obj.offset || 0);
 				uni.pageScrollTo(obj);
 				// #endif
-				// #ifndef H5 || APP-PLUS-NVUE
+				// #ifndef H5 || APP-PLUS-NVUE || MP-360
 				var Scroll = (selector, component) => {
 					uni.createSelectorQuery().in(component ? component : this).select(selector).boundingClientRect().selectViewport()
 						.scrollOffset()

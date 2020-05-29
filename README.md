@@ -27,12 +27,12 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 41.9KB | 微信小程序插件包 |
+| parser | 41.8KB | 微信小程序插件包 |
 | parser.min | 26.4KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 41.4KB | QQ 小程序插件包 |
-| parser.bd | 40.2KB | 百度小程序插件包 |
-| parser.tt | 40.7KB | 头条小程序插件包 |
-| parser.uni | 59.8KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.qq | 41.3KB | QQ 小程序插件包 |
+| parser.bd | 40.1KB | 百度小程序插件包 |
+| parser.tt | 40.6KB | 头条小程序插件包 |
+| parser.uni | 59.9KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
 1. 复制 `parser` 文件夹至 `components` 目录  
@@ -162,6 +162,14 @@
 
 
 ## 更新日志 ##
+- 2020.5.28  
+  1. `U` `uni-app` 包适配 `360` 小程序（由于 `360` 小程序在浏览器中运行，和 `H5` 处理方式相同）  
+  2. `F` 修复了属性名后有空格会无法识别的问题 [详细](https://github.com/jin-yufeng/Parser/issues/152)  
+  3. `F` 修复了 `img` 没有设置 `src` 会报错的问题  
+  4. `F` 修复了 `uni-app` 包部分情况下 `errorImg` 失效的问题  
+  5. `F` 修复了 `uni-app` 包编译到 `NVUE` 时若 `html` 中含有换行符可能无法显示的问题  
+  6. `F` 修复了 `uni-app` 包编译到 `App` 时前几秒点击视频无法播放的问题  
+
 - 2020.5.24
   1. `A` 增加 `loading-img` 属性，可以设置图片加载完成前的占位图 [详细](https://jin-yufeng.github.io/Parser/#/#设置占位图)  
   2. `A` 增加 `errorImg` 的配置项，可以设置图片出错时的占位图 [详细](https://jin-yufeng.github.io/Parser/#/#设置占位图)   
@@ -205,20 +213,5 @@
 - 2020.5.6
   1. `F` 修复了头条小程序真机图片可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/133)  
   2. `F` 修复了 [CssHandler 扩展包](https://jin-yufeng.github.io/Parser/#/instructions#csshandler) 后代选择器优先级低于 `id` 选择器的问题 [详细](https://github.com/jin-yufeng/Parser/issues/125)  
-
-- 2020.4.26  
-  1. `F` 修复了个别情况下图片表现不正常的问题  
-
-- 2020.4.25  
-  1. `U` 优化了图片的显示方式（可解决加载完毕时大小突变的问题，但不再支持云文件 `ID` 和 `webp` 图片）[详细](https://jin-yufeng.github.io/Parser/#/instructions#图片处理)  
-  2. `U` 支持在链接中使用实体编码  
-  3. `U` 模拟实现的列表（内含图片链接）支持 `list-style:none`  
-  4. `U` `navigateTo` 的 `api` 增加一个 `offset` 参数，可设置偏移量  
-  5. `U` `uni-app` 包支持使用 `audio` 扩展包  
-  6. `F` 修复了个别情况下图片宽度过宽的问题  
-  7. `F` 修复了 [CssHandler](https://jin-yufeng.github.io/Parser/#/instructions#csshandler) 扩展包 `class` 匹配错误的问题 [详细](https://github.com/jin-yufeng/Parser/issues/122)  
-  8. `F` 修复了 `uni-app` 包编译到 `NVUE` 时在 `ready` 前设置数据可能无法显示的问题  
-  9. `F` 修复了 `uni-app` 包编译到 `App` 时视频可能无法显示的问题  
-  10. `F` 修复了 `uni-app` 包编译到 `H5` 时 `tag-style` 中的 `rpx` 失效的问题  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

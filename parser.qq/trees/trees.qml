@@ -29,7 +29,7 @@ module.exports = {
 <block qq:for="{{nodes}}" qq:key="index" qq:for-item="n">
   <!--图片-->
   <view qq:if="{{n.name=='img'}}" id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="imgtap">
-    <rich-text nodes="{{[{attrs:{src:loading&&n.load!=2?loading:(lazyLoad&&!n.load?placeholder:n.attrs.src),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
+    <rich-text nodes="{{[{attrs:{src:loading&&n.load!=2?loading:(lazyLoad&&!n.load?placeholder:n.attrs.src||''),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
     <image class="_image" src="{{lazyLoad&&!n.load?placeholder:n.attrs.src}}" lazy-load="{{lazyLoad}}" data-i="{{index}}" data-index="{{n.attrs.i}}" data-source="img" bindload="loadImg" binderror="error" />
   </view>
   <!--文本-->

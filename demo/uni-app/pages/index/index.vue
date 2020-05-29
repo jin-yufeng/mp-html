@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<jyf-parser domain="https://6874-html-foe72-1259071903.tcb.qcloud.la" gesture-zoom lazy-load ref="article" selectable
+		<jyf-parser :html="html" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la" lazy-load ref="article" selectable
 		 show-with-animation use-anchor @error="error" @imgtap="imgtap" @linkpress="linkpress" @parse="parse" @ready="ready">加载中...</jyf-parser>
 	</view>
 </template>
@@ -14,10 +14,15 @@
 		components: {
 			jyfParser
 		},
-		onReady() {
-			// 也可以通过 html 属性传入
-			this.$refs.article.setContent(testHtml);
+		data() {
+			return {
+				html: testHtml
+			}
 		},
+		/*onReady() {
+			// 与 html 属性效果相同
+			this.$refs.article.setContent(testHtml);
+		},*/
 		methods: {
 			parse(e) {
 				console.log('parse finish', e);

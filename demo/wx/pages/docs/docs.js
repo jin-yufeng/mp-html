@@ -484,6 +484,13 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.5.28
+    <ol>
+      <li><code>F</code> 修复了属性名后有空格会无法识别的问题</li>
+      <li><code>F</code> 修复了<code>img</code>没有设置<code>src</code>会报错的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.5.24
     <ol>
       <li><code>A</code> 增加<code>loading-img</code>属性，可以设置图片加载完成前的占位图</li>
@@ -631,13 +638,6 @@ console.log(rect.height); // 高度</code></pre>
       <li><code>U</code> 给<code>document</code>扩展包增加和修改了一些方法</li>
       <li><code>F</code> 修复了由于自动压缩产生的一些问题（主要是<code>background-image</code>）</li>
       <li><code>F</code> 修复了使用<code>show-with-animation</code>属性时个别情况下可能出现白屏的问题</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.2.26
-    <ol>
-      <li><code>A</code> 添加了<code>parser-group</code>的扩展包</li>
-      <li><code>F</code> 修复了部分情况下连续实体编码失效的问题</li>
     </ol>
   </li>
 </ul>

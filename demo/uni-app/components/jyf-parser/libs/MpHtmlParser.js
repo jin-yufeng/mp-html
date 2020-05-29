@@ -1,7 +1,7 @@
 /**
  * html 解析器
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200524
+ * @version 20200528
  * @author JinYufeng
  * @listens MIT
  */
@@ -495,20 +495,15 @@ MpHtmlParser.prototype.TagName = function(c) {
 	}
 }
 MpHtmlParser.prototype.AttrName = function(c) {
-	var blank = blankChar[c];
-	if (blank) {
+	if (c == '=' || blankChar[c] || this.isClose()) {
 		this.attrName = this.section();
-		c = this.data[this.i];
-	}
-	if (c == '=') {
-		if (!blank) this.attrName = this.section();
-		while (blankChar[this.data[++this.i]]);
-		this.start = this.i--;
-		this.state = this.AttrValue;
-	} else if (blank) this.setAttr();
-	else if (this.isClose()) {
-		this.attrName = this.section();
-		this.setAttr();
+		if (blankChar[c])
+			while (blankChar[this.data[++this.i]]);
+		if (this.data[this.i] == '=') {
+			while (blankChar[this.data[++this.i]]);
+			this.start = this.i--;
+			this.state = this.AttrValue;
+		} else this.setAttr();
 	}
 }
 MpHtmlParser.prototype.AttrValue = function(c) {

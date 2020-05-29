@@ -1,7 +1,7 @@
 /**
  * html 解析器
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200524
+ * @version 20200528
  * @author JinYufeng
  * @listens MIT
  */
@@ -120,9 +120,9 @@ MpHtmlParser.prototype.setText = function () {
 // 设置元素节点
 MpHtmlParser.prototype.setNode = function () {
   var node = {
-      name: this.tagName.toLowerCase(),
-      attrs: this.attrs
-    },
+    name: this.tagName.toLowerCase(),
+    attrs: this.attrs
+  },
     close = cfg.selfClosingTags[node.name];
   this.attrs = {};
   if (!cfg.ignoreTags[node.name]) {
@@ -169,7 +169,7 @@ MpHtmlParser.prototype.setNode = function () {
         if (node.attrs.autostart)
           node.attrs.autoplay = 'T';
         node.attrs.controls = 'T';
-        // falls through
+      // falls through
       case 'video':
       case 'audio':
         if (!attrs.id) attrs.id = node.name + (++this[`${node.name}Num`]);
@@ -440,7 +440,7 @@ MpHtmlParser.prototype.popNode = function (node) {
     siblings[len - 1] = childs[0];
 }
 // 状态机
-MpHtmlParser.prototype.Text = function(c) {
+MpHtmlParser.prototype.Text = function (c) {
   if (c == '<') {
     var next = this.data[this.i + 1],
       isLetter = c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
@@ -460,7 +460,7 @@ MpHtmlParser.prototype.Text = function(c) {
     }
   }
 }
-MpHtmlParser.prototype.Comment = function() {
+MpHtmlParser.prototype.Comment = function () {
   var key;
   if (this.data.substring(this.i + 2, this.i + 4) == '--') key = '-->';
   else if (this.data.substring(this.i + 2, this.i + 9) == '[CDATA[') key = ']]>';
@@ -470,7 +470,7 @@ MpHtmlParser.prototype.Comment = function() {
   this.start = this.i + 1;
   this.state = this.Text;
 }
-MpHtmlParser.prototype.TagName = function(c) {
+MpHtmlParser.prototype.TagName = function (c) {
   if (blankChar[c]) {
     this.tagName = this.section();
     while (blankChar[this.data[this.i]]) this.i++;
@@ -484,24 +484,19 @@ MpHtmlParser.prototype.TagName = function(c) {
     this.setNode();
   }
 }
-MpHtmlParser.prototype.AttrName = function(c) {
-  var blank = blankChar[c];
-  if (blank) {
+MpHtmlParser.prototype.AttrName = function (c) {
+  if (c == '=' || blankChar[c] || this.isClose()) {
     this.attrName = this.section();
-    c = this.data[this.i];
-  }
-  if (c == '=') {
-    if (!blank) this.attrName = this.section();
-    while (blankChar[this.data[++this.i]]);
-    this.start = this.i--;
-    this.state = this.AttrValue;
-  } else if (blank) this.setAttr();
-  else if (this.isClose()) {
-    this.attrName = this.section();
-    this.setAttr();
+    if (blankChar[c])
+      while (blankChar[this.data[++this.i]]);
+    if (this.data[this.i] == '=') {
+      while (blankChar[this.data[++this.i]]);
+      this.start = this.i--;
+      this.state = this.AttrValue;
+    } else this.setAttr();
   }
 }
-MpHtmlParser.prototype.AttrValue = function(c) {
+MpHtmlParser.prototype.AttrValue = function (c) {
   if (c == '"' || c == "'") {
     this.start++;
     if ((this.i = this.data.indexOf(c, this.i + 1)) == -1) return this.i = this.data.length;
@@ -513,7 +508,7 @@ MpHtmlParser.prototype.AttrValue = function(c) {
   }
   this.setAttr();
 }
-MpHtmlParser.prototype.EndTag = function(c) {
+MpHtmlParser.prototype.EndTag = function (c) {
   if (blankChar[c] || c == '>' || c == '/') {
     var name = this.section().toLowerCase();
     for (var i = this.STACK.length; i--;)
