@@ -2,10 +2,10 @@
 	<view>
 		<slot v-if="!nodes.length" />
 		<!--#ifdef APP-PLUS-NVUE-->
-		<web-view id="top" ref="web" :style="'margin-top:-2px;height:'+height+'px'" @onPostMessage="_message" />
+		<web-view id="_top" ref="web" :style="'margin-top:-2px;height:'+height+'px'" @onPostMessage="_message" />
 		<!--#endif-->
 		<!--#ifndef APP-PLUS-NVUE-->
-		<view id="top" :style="showAm+(selectable?';user-select:text;-webkit-user-select:text':'')">
+		<view id="_top" :style="showAm+(selectable?';user-select:text;-webkit-user-select:text':'')">
 			<!--#ifdef H5 || MP-360-->
 			<div :id="'rtf'+uid"></div>
 			<!--#endif-->
@@ -62,9 +62,8 @@
 	 * @event {Function} error 错误事件
 	 * @event {Function} imgtap 图片点击事件
 	 * @event {Function} linkpress 链接点击事件
-	 * @example <jyf-parser :html="html"></jyf-parser>
 	 * @author JinYufeng
-	 * @version 20200528
+	 * @version 20200611
 	 * @listens MIT
 	 */
 	export default {
@@ -116,7 +115,7 @@
 				this.setContent(html);
 			}
 		},
-		mounted() {
+		created() {
 			// 图片数组
 			this.imgList = [];
 			this.imgList.each = function(f) {
@@ -128,8 +127,8 @@
 				// #ifndef MP-ALIPAY || APP-PLUS
 				// 去重
 				if (src.indexOf('http') == 0 && this.includes(src)) {
-					var newSrc = '';
-					for (var j = 0, c; c = src[j]; j++) {
+					var newSrc = src.split('://')[0];
+					for (var j = newSrc.length, c; c = src[j]; j++) {
 						if (c == '/' && src[j - 1] != '/' && src[j + 1] != '/') break;
 						newSrc += Math.random() > 0.5 ? c.toUpperCase() : c;
 					}
@@ -163,6 +162,8 @@
 					// #endif
 				}
 			}
+		},
+		mounted() {
 			// #ifdef H5 || MP-360
 			this.document = document.getElementById('rtf' + this._uid);
 			// #endif
@@ -220,7 +221,7 @@
 				if (typeof html != 'string') html = this._Dom2Str(html.nodes || html);
 				if (!append) {
 					// 处理 tag-style 和 userAgentStyles
-					var style = '<style>@keyframes show{0%{opacity:0}100%{opacity:1}}img{max-width:100%}';
+					var style = '<style>@keyframes _show{0%{opacity:0}100%{opacity:1}}img{max-width:100%}';
 					for (var item in cfg.userAgentStyles)
 						style += `${item}{${cfg.userAgentStyles[item]}}`;
 					for (item in this.tagStyle)
@@ -246,7 +247,7 @@
 						'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><base href="' +
 						this.domain + '"><div id="parser"' + (this.selectable ? '>' : ' style="user-select:none">') + this._handleHtml(html).replace(/\n/g, '\\n') +
 						'</div><script>"use strict";function e(e){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[e]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}' +
-						(this.showWithAnimation ? 'document.body.style.animation="show .5s",' : '') +
+						(this.showWithAnimation ? 'document.body.style.animation="_show .5s",' : '') +
 						'setTimeout(function(){e({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight+16})},50);\x3c/script>';
 					this.$refs.web.evalJs("document.write('" + html.replace(/'/g, "\\'") + "');document.close()");
 				}
@@ -463,6 +464,15 @@
 				if (this.imgList) this.imgList.length = 0;
 				this.videoContexts = [];
 				this.$nextTick(() => {
+					(function f(cs) {
+						for (var i = cs.length; i--;) {
+							if (cs[i].top) {
+								cs[i].controls = [];
+								cs[i].init();
+								f(cs[i].$children);
+							}
+						}
+					})(this.$children)
 					this.$emit('load');
 				})
 				// #endif
@@ -473,13 +483,8 @@
 					this.rect = this.rtf.getBoundingClientRect();
 					// #endif
 					// #ifndef H5 || MP-360
-					// #ifdef APP-PLUS
 					uni.createSelectorQuery().in(this)
-					// #endif
-					// #ifndef APP-PLUS
-					this.createSelectorQuery()
-						// #endif
-						.select('#top').boundingClientRect().exec(res => {
+						.select('#_top').boundingClientRect().exec(res => {
 							if (!res) return;
 							this.rect = res[0];
 							// #endif
@@ -492,7 +497,7 @@
 						});
 					// #endif
 				}, 350);
-				if (this.showWithAnimation && !append) this.showAm = 'animation:show .5s';
+				if (this.showWithAnimation && !append) this.showAm = 'animation:_show .5s';
 				// #endif
 			},
 			getText(ns = this.nodes) {
@@ -551,29 +556,27 @@
 				uni.pageScrollTo(obj);
 				// #endif
 				// #ifndef H5 || APP-PLUS-NVUE || MP-360
-				var Scroll = (selector, component) => {
-					uni.createSelectorQuery().in(component ? component : this).select(selector).boundingClientRect().selectViewport()
-						.scrollOffset()
-						.exec(res => {
-							if (!res || !res[0])
-								return obj.fail && obj.fail({
-									errMsg: 'Label not found'
-								});
-							obj.scrollTop = res[1].scrollTop + res[0].top + (obj.offset || 0);
-							uni.pageScrollTo(obj);
-						})
-				}
-				if (!obj.id) Scroll('#top');
-				else {
-					// #ifndef MP-BAIDU || MP-ALIPAY || APP-PLUS
-					Scroll('#top >>> #' + obj.id + ', #top >>> .' + obj.id);
-					// #endif
-					// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
-					for (var anchor of this.anchors)
-						if (anchor.id == obj.id)
-							Scroll('#' + obj.id + ', .' + obj.id, anchor.node);
-					// #endif
-				}
+				var d = ' ';
+				// #ifdef MP-WEIXIN || MP-QQ || MP-TOUTIAO
+				d = '>>>';
+				// #endif
+				uni.createSelectorQuery().in(this).select('#_top' + (obj.id ? d + '#' + obj.id + ',#_top' + d + '.' + obj.id : '')).boundingClientRect().selectViewport()
+					.scrollOffset()
+					.exec(res => {
+						if (!res || !res[0])
+							return obj.fail && obj.fail({
+								errMsg: 'Label not found'
+							});
+						obj.scrollTop = res[1].scrollTop + res[0].top + (obj.offset || 0);
+						// #ifdef MP-ALIPAY
+						obj.duration = 300;
+						my.
+						// #endif
+						// #ifndef MP-ALIPAY
+						uni.
+						// #endif
+						pageScrollTo(obj);
+					})
 				// #endif
 			},
 			getVideoContext(id) {
@@ -640,7 +643,7 @@
 				} else if (data.action == 'ready') {
 					this.height = data.height;
 					this.$nextTick(() => {
-						uni.createSelectorQuery().in(this).select('#top').boundingClientRect().exec(res => {
+						uni.createSelectorQuery().in(this).select('#_top').boundingClientRect().exec(res => {
 							this.rect = res[0];
 							this.$emit('ready', res[0]);
 						})
@@ -653,7 +656,7 @@
 </script>
 
 <style>
-	@keyframes show {
+	@keyframes _show {
 		0% {
 			opacity: 0;
 		}

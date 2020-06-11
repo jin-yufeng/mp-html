@@ -8,7 +8,7 @@
 const cfg = require('./config.js'),
   blankChar = cfg.blankChar,
   CssHandler = require('./CssHandler.js'),
-  windowWidth = swan.getSystemInfoSync().windowWidth;
+  windowWidth = my.getSystemInfoSync().windowWidth;
 var emoji;
 
 function MpHtmlParser(data, options = {}) {
@@ -119,9 +119,9 @@ MpHtmlParser.prototype.setText = function () {
 // 设置元素节点
 MpHtmlParser.prototype.setNode = function () {
   var node = {
-    name: this.tagName.toLowerCase(),
-    attrs: this.attrs
-  },
+      name: this.tagName.toLowerCase(),
+      attrs: this.attrs
+    },
     close = cfg.selfClosingTags[node.name];
   this.attrs = {};
   if (!cfg.ignoreTags[node.name]) {
@@ -130,10 +130,10 @@ MpHtmlParser.prototype.setNode = function () {
       style = this.CssHandler.match(node.name, attrs, node) + (attrs.style || ''),
       styleObj = {};
     if (attrs.id) {
-      if (this.options.compress & 1) delete attrs.id;
+      if (this.options.compress & 1) attrs.id = void 0;
       else if (this.options.useAnchor) this.bubble();
     }
-    if ((this.options.compress & 2) && attrs.class) delete attrs.class;
+    if ((this.options.compress & 2) && attrs.class) attrs.class = void 0;
     switch (node.name) {
       case 'a':
       case 'ad':
@@ -142,11 +142,11 @@ MpHtmlParser.prototype.setNode = function () {
       case 'font':
         if (attrs.color) {
           styleObj['color'] = attrs.color;
-          delete attrs.color;
+          attrs.color = void 0;
         }
         if (attrs.face) {
           styleObj['font-family'] = attrs.face;
-          delete attrs.face;
+          attrs.face = void 0;
         }
         if (attrs.size) {
           var size = parseInt(attrs.size);
@@ -154,7 +154,7 @@ MpHtmlParser.prototype.setNode = function () {
           else if (size > 7) size = 7;
           var map = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large'];
           styleObj['font-size'] = map[size - 1];
-          delete attrs.size;
+          attrs.size = void 0;
         }
         break;
       case 'embed':
@@ -168,7 +168,7 @@ MpHtmlParser.prototype.setNode = function () {
         if (node.attrs.autostart)
           node.attrs.autoplay = 'T';
         node.attrs.controls = 'T';
-      // falls through
+        // falls through
       case 'video':
       case 'audio':
         if (!attrs.id) attrs.id = node.name + (++this[`${node.name}Num`]);
@@ -178,17 +178,17 @@ MpHtmlParser.prototype.setNode = function () {
             node.lazyLoad = 1;
           if (attrs.width) {
             styleObj.width = parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : 'px');
-            delete attrs.width;
+            attrs.width = void 0;
           }
           if (attrs.height) {
             styleObj.height = parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : 'px');
-            delete attrs.height;
+            attrs.height = void 0;
           }
         }
         attrs.source = [];
         if (attrs.src) {
           attrs.source.push(attrs.src);
-          delete attrs.src;
+          attrs.src = void 0;
         }
         this.bubble();
         break;
@@ -197,13 +197,13 @@ MpHtmlParser.prototype.setNode = function () {
         if (attrs.colspan || attrs.rowspan)
           for (var k = this.STACK.length, item; item = this.STACK[--k];)
             if (item.name == 'table') {
-              delete item.c;
+              item.c = void 0;
               break;
             }
     }
     if (attrs.align) {
       styleObj['text-align'] = attrs.align;
-      delete attrs.align;
+      attrs.align = void 0;
     }
     // 压缩 style
     var styles = style.split(';');
@@ -236,7 +236,7 @@ MpHtmlParser.prototype.setNode = function () {
         attrs.width = '100%';
         if (parseInt(width) > windowWidth) {
           styleObj.height = '';
-          if (attrs.height) delete attrs.height;
+          if (attrs.height) attrs.height = void 0;
         }
       }
       if (styleObj.height) {
@@ -302,14 +302,13 @@ MpHtmlParser.prototype.remove = function (node) {
     var parent = this.parent();
     if (node.attrs.width == '100%' && parent && (parent.attrs.style || '').includes('inline'))
       parent.attrs.style = 'width:300px;max-width:100%;' + parent.attrs.style;
-    var attrs = {
-      src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
-      ignore: 'T'
-    }, style = /vertical[^;]+/.exec(node.attrs.style);
-    if (style) attrs.style = style[0];
     this.siblings().push({
       name: 'img',
-      attrs
+      attrs: {
+        src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
+        style: (/vertical[^;]+/.exec(node.attrs.style) || []).shift(),
+        ignore: 'T'
+      }
     })
   }
   if (node.name == 'svg' && this.data[j] == '/') return handleSvg(this.i++);
@@ -340,8 +339,7 @@ MpHtmlParser.prototype.remove = function (node) {
 MpHtmlParser.prototype.popNode = function (node) {
   // 空白符处理
   if (node.pre) {
-    delete node.pre;
-    this.pre = void 0;
+    node.pre = this.pre = void 0;
     for (let i = this.STACK.length; i--;)
       if (this.STACK[i].pre)
         this.pre = true;

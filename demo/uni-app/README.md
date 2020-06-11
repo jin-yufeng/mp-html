@@ -83,17 +83,18 @@ export default{
 2. 本插件通过组件递归的方式显示节点树，因此必须使用自定义组件模式编译（或 `v3`）  
 3. 由于 `ad` 标签的特殊性，若需要使用文中广告，需自行到 `trees.vue` 中打开对应的注释  
 4. 使用了 `colspan` 和 `rowspan` 的表格由于无法通过 `css` 模拟，将直接使用 `rich-text` 显示，其中的图片链接无法点击  
+5. 从 `2.3.0（20200212）` 以下版本进行升级时需注意引入路径发生了变化（为适配 `easycom` 规则）  
 
 平台差异：
 
 | 平台 | 差异 |
 |:---:|---|
 | 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单 |
-| 支付宝小程序 | 不支持 audio 标签 |
 | 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](https://jin-yufeng.github.io/Parser/#/instructions?id=关于-ignore-方法)） |
 | H5<br>360 小程序 | 支持所有浏览器支持的标签<br>不支持 loading-img 属性<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](https://jin-yufeng.github.io/Parser/#/instructions?id=配置项) 中除 errorImg、userAgentStyles 外均无效 |
-| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 标签 |
+| App | v3 不支持 audio 标签<br>v3 支持 iframe 标签 |
 | NVUE | 支持所有浏览器支持的标签<br>不支持 lazy-load、loading-img 属性<br>不支持 getVideoContext 的 api<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](https://jin-yufeng.github.io/Parser/#/instructions?id=配置项) 中除 errorImg、userAgentStyles 外均无效 |
+| 华为快应用 | 不支持锚点跳转 |
 
 关于 `a` 标签：  
 `H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  

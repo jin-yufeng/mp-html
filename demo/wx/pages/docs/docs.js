@@ -484,6 +484,13 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.6.11
+    <ol>
+      <li><code>F</code> 修复了<code>ios</code>端图片长按可能导致页面失去响应的问题</li>
+      <li><code>D</code> 移除了<code>trustAttrs</code>的配置项，改为自动移除<code>data-</code>开头的属性</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.5.28
     <ol>
       <li><code>F</code> 修复了属性名后有空格会无法识别的问题</li>
@@ -620,24 +627,6 @@ console.log(rect.height); // 高度</code></pre>
       <li><code>U</code> <code>setContent</code>的<code>api</code>支持传入<code>append</code>参数表示是否在尾部追加（用于加载更多）</li>
       <li><code>U</code> 支持通过<code>base</code>标签设置主域名（同<code>domain</code>属性，但优先级更低）</li>
       <li><code>F</code> 修复了在<code>ready</code>事件触发前再次设置数据会导致<code>ready</code>事件不停触发的问题</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.3.7
-    <ol>
-      <li><code>A</code> 增加了<code>preLoad</code>的<code>api</code>，可以预加载富文本中的图片</li>
-      <li><code>A</code> 增加<code>bindload</code>事件（<code>dom</code>加载完毕时触发，即原<code>ready</code>事件，<code>ready</code>事件更改为所有图片加载完毕时触发，可以获取准确大小）</li>
-      <li><code>U</code> 优化了不开启<code>lazy-load</code>属性时图片的加载速度；另外开启懒加载时，首图（较大概率直接进入视野）也将不经过判断直接加载，避免因懒加载判断拖慢加载速度</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.3.1
-    <ol>
-      <li><code>U</code> 支持<code>picture</code>标签，可以在不同大小的屏幕上显示不同链接的图片</li>
-      <li><code>U</code> 支持在<code>sub</code>、<code>sup</code>标签中使用<code>a</code>标签</li>
-      <li><code>U</code> 给<code>document</code>扩展包增加和修改了一些方法</li>
-      <li><code>F</code> 修复了由于自动压缩产生的一些问题（主要是<code>background-image</code>）</li>
-      <li><code>F</code> 修复了使用<code>show-with-animation</code>属性时个别情况下可能出现白屏的问题</li>
     </ol>
   </li>
 </ul>

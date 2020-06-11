@@ -1,7 +1,7 @@
 /**
  * Parser 富文本组件
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200528
+ * @version 20200611
  * @author JinYufeng
  * @listens MIT
  */
@@ -101,7 +101,7 @@ Component({
           errMsg: 'Anchor is disabled'
         })
       this.createSelectorQuery()
-        .select('.top' + (obj.id ? '>>>#' + obj.id : '')).boundingClientRect()
+        .select('._top' + (obj.id ? '>>>#' + obj.id : '')).boundingClientRect()
         .selectViewport().scrollOffset().exec(res => {
           if (!res[0])
             return this.group ? this.group.navigateTo(this.i, obj) :
@@ -183,9 +183,9 @@ Component({
       if (append) {
         this._refresh = true;
         data.html = (this.data.html || []).concat(data.html);
-      } else if (this.data.showWithAnimation) data.showAm = 'animation: show .5s';
+      } else if (this.data.showWithAnimation) data.showAm = 'animation: _show .5s';
       if (data.html || data.showAm) this.setData(data, () => {
-        var ns = this.selectAllComponents('.top,.top>>>._node');
+        var ns = this.selectAllComponents('._top,._top>>>._node');
         for (let i = 0, n; n = ns[i++];) {
           n.top = this;
           for (var j = 0, item; item = n.data.nodes[j++];) {
@@ -217,7 +217,7 @@ Component({
       var height;
       clearInterval(this._timer);
       this._timer = setInterval(() => {
-        this.createSelectorQuery().select('.top').boundingClientRect(res => {
+        this.createSelectorQuery().select('._top').boundingClientRect(res => {
           if (!res) return;
           this.rect = res;
           if (res.height == height) {

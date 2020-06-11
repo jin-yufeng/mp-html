@@ -16,6 +16,7 @@ module.exports = {
     	"wx": "readonly",
     	"qq": "readonly",
     	"swan": "readonly",
+    	"my": "readonly",
     	"tt": "readonly",
     	"uni": "readonly",
     	"plus": "readonly",

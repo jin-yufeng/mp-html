@@ -3,12 +3,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 41.8KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 26.4KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 41.3KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 40.1KB | 百度小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 40.6KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.9KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 41.4KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 26.1KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 41.0KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 39.4KB | 百度小程序插件包 |
+| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 39.7KB | 支付宝小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 40.2KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
@@ -23,11 +24,11 @@
 | 平台 | 差异 |
 |:---:|---|
 | 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单 |
-| 支付宝小程序 | 不支持 audio 标签 |
 | 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
 | H5<br>360 小程序 | 支持所有浏览器支持的标签<br>不支持 loading-img 属性<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
-| App | v3 不支持 audio 标签<br>在 [该问题](https://ask.dcloud.net.cn/question/93987) 未解决前，v3 不支持 lazy-load<br>v3 支持 iframe 标签 |
+| App | v3 不支持 audio 标签<br>v3 支持 iframe 标签 |
 | NVUE | 支持所有浏览器支持的标签<br>不支持 lazy-load、loading-img 属性<br>不支持 getVideoContext 的 api<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
+| 华为快应用 | 不支持锚点跳转 |
 
 关于 `a` 标签：  
 `H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  
@@ -357,8 +358,12 @@ error(e) {
 ```
 
 ##### 关于写法 #####  
-原生包事件以 `bind` 或 `catch` 开头，返回值从 `e.detail` 中获取  
-`uni-app` 包的事件以 `@` 开头，返回值直接从 `e` 获取  
+
+|  | 写法 | 举例 | 返回值 |
+|:---:|:---:|:---:|:---:|
+| 支付宝原生包 | on + 事件名（首字母大写） | onImgtap | 直接获取 |
+| 其他原生包 | bind/catch + 事件名 | bindimgtap | 从 detail 中获取 |
+| uni-app | @ + 事件名 | @imgtap | 直接获取 |
 
 ### 使用外部样式 ###
 如果需要使用一些固定的样式，可以通过 `wxss` / `css` 文件引入  
@@ -389,7 +394,6 @@ error(e) {
 | ignoreTags | 移除的标签列表 |
 | selfClosingTags | 自闭合的标签列表 |
 | trustTags | 信任的标签列表 |
-| trustAttrs | 信任的属性 |
 | userAgentStyles | 默认的样式 |
 | filter | 过滤器 |
 | highlight | 代码高亮处理器 |
@@ -399,8 +403,7 @@ error(e) {
 
 ?> 实体列表不代表所有支持的实体编码，但发现有不支持的实体时可以在这里添加  
 
-!> 不在信任的属性列表中的属性将被移除  
-不在信任的标签列表中的标签，除被移除的标签外，块级标签列表中的标签将被转为 `div` 标签，其他被转为 `span` 标签
+!> 不在信任的标签列表中的标签，除被移除的标签外，块级标签列表中的标签将被转为 `div` 标签，其他被转为 `span` 标签
 
 关于几个自定义处理器：  
 
@@ -443,6 +446,7 @@ filter(node, cxt) {
    const Prism = require('./prism.js');
    ...
    highlight(content, attrs) {
+     content = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/quot;/g, '"').replace(/&amp;/g, '&'); // 替换实体编码
      attrs["data-content"] = content; // 记录原始文本，可用于长按复制等操作
      switch (attrs[lan]) {
        case "javascript":
@@ -463,6 +467,8 @@ filter(node, cxt) {
    @import '../libs/prism.wxss';
    ```
 4. 其中不支持的标签名选择器可以通过 [tag-style](/features#设置默认的标签样式) 属性引入  
+
+!> 传入的 `content` 未对实体编码进行译码，如果直接交给 `Prism` 处理会导致实体编码原样显示，因此在传入前需要自行对需要的实体进行替换
 
 按以下操作还可以实现长按复制：  
 1. 在 `config.js` 的 `filter` 函数中添加：
@@ -491,7 +497,7 @@ filter(node, cxt) {
 
 可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)  
 `uni-app` 中使用可以参考此示例项目：[highlight](https://6874-html-foe72-1259071903.tcb.qcloud.la/highlight.zip?sign=c15980dfa79aaf1688db7059b23d05a7&t=1584685357)  
-*相关 issue：*[#83](https://github.com/jin-yufeng/Parser/issues/83)
+*相关 issue：*[#83](https://github.com/jin-yufeng/Parser/issues/83)、[#158](https://github.com/jin-yufeng/Parser/issues/158)  
 
 #### onText ####  
 
@@ -770,10 +776,9 @@ error(e){
 | @media 查询 | @media (min-width:300px){} |
 
 附加说明：  
-1. 属性选择器仅支持选择 [配置项](#配置项) 中添加到 `trustAttrs` 的属性，如有需要先要添加到列表  
-2. 属性选择器仅支持 `[hidden]`（存在 `hidden` 属性即可）和 `[name="123"]`（`name` 属性的值等于 `123`）两种形式  
-3. `before` 和 `after` 伪类中的 `content` 支持 `attr()` 函数（替换为某个属性的值，同样需要添加到`trustAttrs`）以及形如 `\200b` 的字符  
-4. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
+1. 属性选择器仅支持 `[hidden]`（存在 `hidden` 属性即可）和 `[name="123"]`（`name` 属性的值等于 `123`）两种形式  
+2. `before` 和 `after` 伪类中的 `content` 支持 `attr()` 函数（替换为某个属性的值）以及形如 `\200b` 的字符  
+3. `@media` 查询仅支持 `min-width` 和 `max-width`，单位仅支持 `px`，且无法响应屏幕大小变化
   
 - 大小（与原大小相比增加）  
   `4.52KB`（`min` 版本：`1.62KB`）  
@@ -813,6 +818,8 @@ error(e){
      ```
 
 ### audio ###
+!> 百度、支付宝小程序原生包暂不支持使用  
+
 - 功能  
   音乐播放器  
   功能上同原生的 `audio` 组件，由于微信原生的 `audio` 和 `wx.createAudioContext` 均已被废弃，一些平台直接不支持 `audio` 组件，因此设置这样一个组件代替，与原生的 `audio` 相比，所做的改进有：  
@@ -902,9 +909,8 @@ error(e){
 ## 二次开发 ##
 
 ### 添加一个自定义标签 ###  
-1. 在 `config.js` 中的 `trustAttrs` 中添加需要用到的属性（否则将被移除）  
-2. 在 `config.js` 中的 `trustTags` 中添加该标签名（否则将被转为 `span`，如果是自闭合标签还需要添加到 `selfClosingTags` 中）  
-3. 在 `config.js` 中的 [filter](#filter) 中添加  
+1. 在 `config.js` 中的 `trustTags` 中添加该标签名（否则将被转为 `span`，如果是自闭合标签还需要添加到 `selfClosingTags` 中）  
+2. 在 `config.js` 中的 [filter](#filter) 中添加  
    ```javascript
    filter(node, cxt) {
      if (node.name == 'element') {
@@ -913,13 +919,13 @@ error(e){
      }
    }
    ```  
-4. 在 `trees.wxml` 中添加该组件  
+3. 在 `trees.wxml` 中添加该组件  
    ```wxml
    <element wx:elif="{{n.name=='element'}}" xxx="{{n.attrs.xxx}}">
      <!--如果该标签内部还有其他节点还需要在这里添加一个 trees 标签-->
    </element>
    ```
-5. 如果有使用自定义组件或插件需要在 `trees.json` 中声明（可选）  
+4. 如果有使用自定义组件或插件需要在 `trees.json` 中声明（可选）  
 
 一些例子：  
 1. 使用 腾讯视频 插件：[#103](https://github.com/jin-yufeng/Parser/issues/103)  
@@ -927,20 +933,17 @@ error(e){
      
 ### 添加自定义属性 ###
 - 功能性属性
-  像 `video`、`ad` 等标签有非常多属性，全写在模板里会增加一定的大小，因此默认只添加了一些常用属性，如果需要使用更多属性，可参考以下方法：  
-  1. 在 `trees.wxml` 中的该标签中加上 `xxx="{{n.attrs['xxx']}}"`  
-  2. 将 `xxx` 添加到 `config.js` 的 `trustAttrs` 中  
+  像 `video`、`ad` 等标签有非常多属性，全写在模板里会增加一定的大小，因此默认只添加了一些常用属性，如果需要使用更多属性，可在 `trees.wxml` 中的该标签中加上 `xxx="{{n.attrs['xxx']}}"`  
 
 - 样式性属性  
   像 `bgcolor` 等样式性的属性（小程序中只支持 `style`），解析过程中并没有把所有这类样式都转换到 `style` 属性中，如果用到一些不支持的样式属性，可参考以下方法：  
-  1. 将 `config.js` 中的 `filter` 方法设置为：  
-     ```javascript
-     filter(node) {
-       if(node.attrs.bgcolor) // 以 bgcolor 属性为例
-         node.attrs.style += ";background-color:" + node.attrs.bgcolor;
-     }
-     ```
-  2. 将 `bgcolor` 添加到 `config.js` 的 `trustAttrs` 中  
+  将 `config.js` 中的 `filter` 方法设置为：  
+  ```javascript
+  filter(node) {
+    if(node.attrs.bgcolor) // 以 bgcolor 属性为例
+      node.attrs.style += ";background-color:" + node.attrs.bgcolor;
+  }
+  ```
 
 ### 添加自定义事件 ### 
 为节省大小，默认情况下仅支持 `img` 和 `a` 标签的点击事件，如果还需要其他事件，可以自行在 `trees.wxml` 中绑定和处理  

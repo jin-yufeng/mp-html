@@ -153,9 +153,8 @@
 
 *问题原因：*  
 - 检查是否设置了 `lazy-load` 属性（或者 `lazyLoad`，但不能是 `lazyload`）  
-- 检查富文本内容是否足够长，不够长会被一次性加载（加载时机见各平台 `image` 的懒加载加载时机）  
+- 检查富文本内容是否足够长，不够长会被一次性加载（加载时机：`H5` 和 `App` 为屏下 `500px`，小程序中同 `image` 的懒加载时机）  
 - 一些平台懒加载加载时机较早，可能不能直观的看到效果，可以在 `Network` 面板查看图片请求时间  
-- `uni-app` 编译到 `App` 时还不支持懒加载 [详细](https://ask.dcloud.net.cn/question/93987)  
 
 *相关 issue：*[#30](https://github.com/jin-yufeng/Parser/issues/30)、[#118](https://github.com/jin-yufeng/Parser/issues/118)
 
@@ -215,7 +214,7 @@
 - 使用 [腾讯视频插件](https://developers.weixin.qq.com/community/develop/doc/000ece3c044210190ef61a4a954c09?highLine=%25E8%2585%25BE%25E8%25AE%25AF%25E8%25A7%2586%25E9%25A2%2591)  
   微信小程序中可以考虑使用腾讯视频插件代替（参考 [添加自定义标签](/instructions#添加一个自定义标签)、[#103](https://github.com/jin-yufeng/Parser/issues/103)）  
 
-*相关 issue：*[#96](https://github.com/jin-yufeng/Parser/issues/96)
+*相关 issue：*[#96](https://github.com/jin-yufeng/Parser/issues/96)、[#156](https://github.com/jin-yufeng/Parser/issues/156)  
 
 #### 无法禁用自动预览 / 跳转 ####
 *问题描述：*  
@@ -277,6 +276,29 @@ html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 2. 滑动的时候难以直观看到整体高度（因为只渲染了一部分，也无法知晓总高度）  
 
 另外，异步渲染还存在增加处理难度、无法解决过长内容节点数过多等问题  
+
+#### 连续空格无效 ####
+*问题描述：*  
+使用连续的空格在显示时会被合并成一个空格  
+
+*问题原因：*  
+在 `html` 中默认会合并空白符  
+
+*解决方案：*  
+- 使用实体编码的空格  
+  可以用 `&nbsp;`、`&ensp;`、`&emsp;` 来替换空格，可以实现连续多个空格（可以通过正则全局替换）  
+  ```javascript
+  html = html.replace(/ /g, '&ensp;');
+  ```
+- 给需要的内容的 `style` 设置 `white-space:pre-wrap`  
+  ```javascript
+  html = '<div style="white-space:pre-wrap">' + html + '</div>'
+  ```
+
+!>如果通过 [外部样式](/instructions#使用外部样式) 设置 `white-space`，可能无法生效，因为在解析过程中，为减小解析结果大小，会提前合并空白格  
+
+*相关 issue：*  
+[#148](https://github.com/jin-yufeng/Parser/issues/148)、[#157](https://github.com/jin-yufeng/Parser/issues/157)
 
 #### 换行符无效 ####  
 *问题描述：*  

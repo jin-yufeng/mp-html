@@ -1,5 +1,13 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.06.11 ####
+1. `A` 增加支付宝小程序原生包 [详细](/instructions#插件包说明)  
+2. `U` `uni-app` 包适配华为快应用  
+3. `U` `uni-app` 包编译到 `App` 时实现了 `lazy-load` 属性（图片懒加载）  
+4. `F` 修复了 `ios` 端图片长按可能导致页面失去响应的问题 [详细](https://github.com/jin-yufeng/Parser/issues/130)  
+5. `F` 修复了 `uni-app` 包多次设置 `html` 内容时可能出现一些不正确情况的问题  
+6. `D` 移除了 `trustAttrs` 的配置项，改为自动移除 `data-` 开头的属性  
+
 #### 2020.05.28 ####
 1. `U` `uni-app` 包适配 `360` 小程序（由于 `360` 小程序在浏览器中运行，和 `H5` 处理方式相同）  
 2. `F` 修复了属性名后有空格会无法识别的问题 [详细](https://github.com/jin-yufeng/Parser/issues/152)  

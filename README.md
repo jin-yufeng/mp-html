@@ -17,7 +17,7 @@
 - 支持几乎所有的 `html` 标签  
 - 支持丰富的事件和效果  
 - 轻量化、效率高、容错性强  
-- 支持多平台（微信、QQ、百度、头条、uni-app 等）  
+- 支持多平台（微信、QQ、百度、支付宝、头条、uni-app 等）  
 ...
 
 更多功能可见：[功能介绍](https://jin-yufeng.github.io/Parser/#/)
@@ -27,12 +27,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 41.8KB | 微信小程序插件包 |
-| parser.min | 26.4KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 41.3KB | QQ 小程序插件包 |
-| parser.bd | 40.1KB | 百度小程序插件包 |
-| parser.tt | 40.6KB | 头条小程序插件包 |
-| parser.uni | 59.9KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 41.4KB | 微信小程序插件包 |
+| parser.min | 26.1KB | 微信小程序插件包压缩版（功能相同） |
+| parser.qq | 41.0KB | QQ 小程序插件包 |
+| parser.bd | 39.4KB | 百度小程序插件包 |
+| parser.my | 39.7KB | 支付宝小程序插件包 |
+| parser.tt | 40.2KB | 头条小程序插件包 |
+| parser.uni | 59.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
 1. 复制 `parser` 文件夹至 `components` 目录  
@@ -151,6 +152,10 @@
 
 以上排名不分先后，更多可见：[链接](https://github.com/jin-yufeng/Parser/issues/27)（欢迎添加）  
 
+相关项目：  
+[EastWorld/wechat-app-mall](https://github.com/EastWorld/wechat-app-mall)  
+[zhangdaren/miniprogram-to-uniapp](https://github.com/zhangdaren/miniprogram-to-uniapp)  
+
 ## 许可与支持 ##
 - 许可  
   您可以随意的使用和分享本插件 [MIT License](https://github.com/jin-yufeng/Parser/blob/master/LICENSE)  
@@ -162,6 +167,14 @@
 
 
 ## 更新日志 ##
+- 2020.6.11  
+  1. `A` 增加支付宝小程序原生包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#插件包说明)  
+  2. `U` `uni-app` 包适配华为快应用  
+  3. `U` `uni-app` 包编译到 `App` 时实现了 `lazy-load` 属性（图片懒加载）  
+  4. `F` 修复了 `ios` 端图片长按可能导致页面失去响应的问题 [详细](https://github.com/jin-yufeng/Parser/issues/130)  
+  5. `F` 修复了 `uni-app` 包多次设置 `html` 内容时可能出现一些不正确情况的问题  
+  6. `D` 移除了 `trustAttrs` 的配置项，改为自动移除 `data-` 开头的属性  
+
 - 2020.5.28  
   1. `U` `uni-app` 包适配 `360` 小程序（由于 `360` 小程序在浏览器中运行，和 `H5` 处理方式相同）  
   2. `F` 修复了属性名后有空格会无法识别的问题 [详细](https://github.com/jin-yufeng/Parser/issues/152)  
@@ -198,20 +211,5 @@
   6. `U` `uni-app` 包添加了组件文档注释，输入时可以有提示  
   7. `D` 移除了 `gesture-zoom` 属性  
   8. `D` 移除了 `preLoad` 的 `api`
-
-- 2020.5.11  
-  1. `A` 增加百度小程序原生包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#插件包说明)  
-  2. `F` 修复了微信小程序电脑端 `rpx` 可能换算不正确的问题  
-  3. `F` 修复了上一版本个别情况下可能出现 `Cannot read property 'name' of undefined` 的问题  
-  4. `F` 修复了 `uni-app` 包编译到百度小程序时 `br` 标签可能不生效的问题  
-
-- 2020.5.8  
-  1. `F` 修复了个别情况下空格被错误过滤的问题 [详细](https://github.com/jin-yufeng/Parser/issues/135)  
-  2. `D` 移除了 `xml` 属性（`svg` 标签默认按 `xml` 方式解析，可以以 `<svg />` 方式结束）  
-  3. `D` 取消对 `picture` 标签的支持  
-
-- 2020.5.6
-  1. `F` 修复了头条小程序真机图片可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/133)  
-  2. `F` 修复了 [CssHandler 扩展包](https://jin-yufeng.github.io/Parser/#/instructions#csshandler) 后代选择器优先级低于 `id` 选择器的问题 [详细](https://github.com/jin-yufeng/Parser/issues/125)  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

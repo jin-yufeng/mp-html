@@ -1,7 +1,7 @@
 /**
  * Parser 富文本组件
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200528
+ * @version 20200611
  * @author JinYufeng
  * @listens MIT
  */
@@ -45,26 +45,6 @@ Component({
   messages: {
     childAppend(e) {
       e.value.top = this;
-      for (var j = 0, item; item = e.value.data.nodes[j++];) {
-        if (item.c) continue;
-        // 获取图片列表
-        if (item.name == 'img')
-          this.imgList.setItem(item.attrs.i, item.attrs.src);
-        // 视频控制
-        else if (item.name == 'video') {
-          var ctx = swan.createVideoContext(item.attrs.id);
-          ctx.id = item.attrs.id;
-          this.videoContexts.push(ctx);
-        }
-        // 锚点管理
-        if (this.data.useAnchor && item.attrs && item.attrs.id) {
-          this.anchors = this.anchors || [];
-          this.anchors.push({
-            id: item.attrs.id,
-            node: this
-          })
-        }
-      }
     }
   },
   created() {
@@ -100,24 +80,17 @@ Component({
         return obj.fail && obj.fail({
           errMsg: 'Anchor is disabled'
         })
-      function scrollTo(selector, component) {
-        component.createSelectorQuery().select(selector).boundingClientRect().selectViewport()
-          .scrollOffset()
-          .exec(res => {
-            if (!res || !res[0])
-              return obj.fail && obj.fail({
+      this.createSelectorQuery()
+        .select('._top' + (obj.id ? ' #' + obj.id : '')).boundingClientRect()
+        .selectViewport().scrollOffset().exec(res => {
+          if (!res[0])
+            return this.group ? this.group.navigateTo(this.i, obj) :
+              obj.fail && obj.fail({
                 errMsg: 'Label not found'
               });
-            obj.scrollTop = res[1].scrollTop + res[0].top + (obj.offset || 0);
-            swan.pageScrollTo(obj);
-          })
-      }
-      if (!obj.id) scrollTo('#top', this);
-      else {
-        for (var anchor of this.anchors)
-          if (anchor.id == obj.id)
-            scrollTo('#' + obj.id, anchor.node);
-      }
+          obj.scrollTop = res[1].scrollTop + res[0].top + (obj.offset || 0);
+          swan.pageScrollTo(obj);
+        })
     },
     // 获取文本
     getText(ns = this.data.html) {
@@ -190,7 +163,7 @@ Component({
       if (append) {
         this._refresh = true;
         data.html = (this.data.html || []).concat(data.html);
-      } else if (this.data.showWithAnimation) data.showAm = 'animation: show .5s';
+      } else if (this.data.showWithAnimation) data.showAm = 'animation: _show .5s';
       if (data.html || data.showAm) this.setData(data, () => {
         this.triggerEvent('load');
       });
@@ -205,7 +178,7 @@ Component({
       var height;
       clearInterval(this._timer);
       this._timer = setInterval(() => {
-        this.createSelectorQuery().select('.top').boundingClientRect(res => {
+        this.createSelectorQuery().select('._top').boundingClientRect(res => {
           if (!res) return;
           this.rect = res;
           if (res.height == height) {

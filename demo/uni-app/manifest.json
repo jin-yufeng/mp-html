@@ -52,5 +52,10 @@
     },
     "mp-toutiao" : {
         "usingComponents" : true
+    },
+    "quickapp-webview" : {
+        "package" : "com.parser",
+        "versionCode" : 1,
+        "icon" : ""
     }
 }

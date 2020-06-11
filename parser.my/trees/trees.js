@@ -1,36 +1,46 @@
 const errorImg = require('../libs/config.js').errorImg;
 Component({
   data: {
-    placeholder: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='225'/>",
+    controls: [],
+    errorImg,
+    placeholder: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='225'/>"
   },
   properties: {
-    nodes: {
-      type: Array,
-      observer(e) {
-        for (var j = 0, item; item = e[j++];) {
-          if (item.c) continue;
-          // 获取图片列表
-          if (item.name == 'img')
-            this.top.imgList.setItem(item.attrs.i, item.attrs.src);
-          // 视频控制
-          else if (item.name == 'video') {
-            var ctx = swan.createVideoContext(item.attrs.id);
-            ctx.id = item.attrs.id;
-            this.top.videoContexts.push(ctx);
-          }
+    nodes: Array,
+    lazyLoad: Boolean,
+    loading: String,
+    onAppend() {}
+  },
+  didMount() {
+    this.props.onAppend(this);
+  },
+  didUpdate(e) {
+    if (e.nodes != this.props.nodes) {
+      if (this.data.controls.length)
+        this.setData({
+          controls: []
+        })
+      this.init();
+    }
+  },
+  methods: {
+    init() {
+      for (var j = 0, item; item = this.props.nodes[j++];) {
+        if (item.c) continue;
+        // 获取图片列表
+        if (item.name == 'img')
+          this.top.imgList.setItem(item.attrs.i, item.attrs.src);
+        // 音视频控制
+        else if (item.name == 'video') {
+          var ctx = my.createVideoContext(item.attrs.id);
+          ctx.id = item.attrs.id;
+          this.top.videoContexts.push(ctx);
         }
       }
     },
-    lazyLoad: Boolean,
-    loading: String
-  },
-  attached() {
-    this.dispatch('childAppend', this);
-  },
-  methods: {
     // 视频播放事件
     play(e) {
-      if (this.top.videoContexts.length > 1 && this.top.data.autopause)
+      if (this.top.videoContexts.length > 1 && this.top.props.autopause)
         for (var i = this.top.videoContexts.length; i--;)
           if (this.top.videoContexts[i].id != e.currentTarget.id)
             this.top.videoContexts[i].pause();
@@ -39,16 +49,16 @@ Component({
     imgtap(e) {
       var attrs = e.currentTarget.dataset.attrs;
       if (!attrs.ignore) {
-        var preview = true, data = {
+        var preview = true;
+        this.top.props.onImgtap({
           id: e.currentTarget.id,
           src: attrs.src,
           ignore: () => preview = false
-        };
-        this.top.triggerEvent('imgtap', data);
+        })
         if (preview) {
           var urls = this.top.imgList,
-            current = urls[attrs.i] ? urls[attrs.i] : (urls = [attrs.src], attrs.src);
-          swan.previewImage({
+            current = attrs.i;
+          my.previewImage({
             current,
             urls
           })
@@ -57,13 +67,13 @@ Component({
     },
     loadImg(e) {
       var i = e.target.dataset.i;
-      if (this.data.lazyLoad && !this.data.nodes[i].load)
+      if (this.props.lazyLoad && !this.data.controls[i])
         this.setData({
-          [`nodes[${i}].load`]: 1
+          [`controls[${i}]`]: 1
         })
-      else if (this.data.loading && this.data.nodes[i].load != 2)
+      else if (this.props.loading && this.data.controls[i] != 2)
         this.setData({
-          [`nodes[${i}].load`]: 2
+          [`controls[${i}]`]: 2
         })
     },
     // 链接点击事件
@@ -71,11 +81,11 @@ Component({
       var jump = true,
         attrs = e.currentTarget.dataset.attrs;
       attrs.ignore = () => jump = false;
-      this.top.triggerEvent('linkpress', attrs);
+      this.top.props.onLinkpress(attrs);
       if (jump) {
         if (attrs['app-id'])
-          swan.navigateToSmartProgram({
-            appKey: attrs['app-id'],
+          my.navigateToMiniProgram({
+            appId: attrs['app-id'],
             path: attrs.path
           })
         else if (attrs.href) {
@@ -84,18 +94,18 @@ Component({
               id: attrs.href.substring(1)
             })
           else if (attrs.href.indexOf('http') == 0 || attrs.href.indexOf('//') == 0)
-            swan.setClipboardData({
+            my.setClipboard({
               data: attrs.href,
               success: () =>
-                swan.showToast({
-                  title: '链接已复制'
+                my.showToast({
+                  content: '链接已复制'
                 })
             })
           else
-            swan.navigateTo({
+            my.navigateTo({
               url: attrs.href,
               fail() {
-                swan.switchTab({
+                my.switchTab({
                   url: attrs.href,
                 })
               }
@@ -104,24 +114,24 @@ Component({
       }
     },
     // 错误事件
-    errorEvent(e) {
+    error(e) {
       var source = e.target.dataset.source,
         i = e.target.dataset.i,
-        node = this.data.nodes[i];
+        node = this.props.nodes[i];
       if (source == 'video' || source == 'audio') {
         // 加载其他 source
         var index = (node.i || 0) + 1;
         if (index < node.attrs.source.length)
           return this.setData({
-            [`nodes[${i}].i`]: index
+            [`controls[${i}]`]: index
           })
       } else if (source == 'img' && errorImg) {
         this.top.imgList.setItem(e.target.dataset.index, errorImg);
         this.setData({
-          [`nodes[${i}].attrs.src`]: errorImg
+          [`controls[${i}]`]: 3
         })
       }
-      this.top && this.top.triggerEvent('error', {
+      this.top && this.top.props.onError({
         source,
         target: e.target,
         errMsg: e.detail.errMsg
@@ -129,10 +139,12 @@ Component({
     },
     // 加载视频
     loadVideo(e) {
-      var i = e.target.dataset.i;
       this.setData({
-        [`nodes[${i}].attrs.autoplay`]: true
+        [`controls[${e.target.dataset.i}]`]: 0
       })
+    },
+    appendChild(e) {
+      this.props.onAppend(e);
     }
   }
 })

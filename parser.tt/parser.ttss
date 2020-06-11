@@ -1,9 +1,9 @@
-.top {
+._top {
   display: block;
   -webkit-overflow-scrolling: touch;
 }
 
-@keyframes show {
+@keyframes _show {
   0% {
     opacity: 0;
   }

@@ -1,7 +1,7 @@
 /**
  * html 解析器
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200528
+ * @version 20200611
  * @author JinYufeng
  * @listens MIT
  */
@@ -77,14 +77,13 @@ MpHtmlParser.prototype.parse = function() {
 }
 // 设置属性
 MpHtmlParser.prototype.setAttr = function() {
-	var name = this.attrName.toLowerCase();
-	if (cfg.trustAttrs[name]) {
-		var val = this.attrVal;
-		if (val) {
-			if (name == 'src') this.attrs[name] = this.getUrl(this.decode(val, 'amp'));
-			else if (name == 'href' || name == 'style') this.attrs[name] = this.decode(val, 'amp');
-			else this.attrs[name] = val;
-		} else if (cfg.boolAttrs[name]) this.attrs[name] = 'T';
+	var name = this.attrName.toLowerCase(),
+		val = this.attrVal;
+	if (cfg.boolAttrs[name]) this.attrs[name] = 'T';
+	else if (val) {
+		if (name == 'src' || (name == 'data-src' && !this.attrs.src)) this.attrs.src = this.getUrl(this.decode(val, 'amp'));
+		else if (name == 'href' || name == 'style') this.attrs[name] = this.decode(val, 'amp');
+		else if (name.substr(0, 5) != 'data-') this.attrs[name] = val;
 	}
 	this.attrVal = '';
 	while (blankChar[this.data[this.i]]) this.i++;
@@ -199,7 +198,6 @@ MpHtmlParser.prototype.setNode = function() {
 					attrs.source.push(attrs.src);
 					attrs.src = void 0;
 				}
-				if (!attrs.controls && !attrs.autoplay) attrs.controls = 'T';
 				this.bubble();
 				break;
 			case 'td':
@@ -230,16 +228,15 @@ MpHtmlParser.prototype.setNode = function() {
 				styleObj[key] = value;
 		}
 		if (node.name == 'img') {
-			if (attrs['data-src']) {
-				attrs.src = attrs.src || attrs['data-src'];
-				attrs['data-src'] = void 0;
-			}
 			if (attrs.src && !attrs.ignore) {
 				if (this.bubble())
 					attrs.i = (this.imgNum++).toString();
 				else attrs.ignore = 'T';
 			}
-			if (attrs.ignore) styleObj['max-width'] = '100%';
+			if (attrs.ignore) {
+				style += ';-webkit-touch-callout:none';
+				styleObj['max-width'] = '100%';
+			}
 			var width;
 			if (styleObj.width) width = styleObj.width;
 			else if (attrs.width) width = attrs.width.includes('%') ? attrs.width : attrs.width + 'px';

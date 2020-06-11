@@ -3,7 +3,7 @@
 		<block v-for="(n, i) in nodes" v-bind:key="i">
 			<!--图片-->
 			<view v-if="n.name=='img'" :class="'_img '+n.attrs.class" :style="n.attrs.style" :data-attrs="n.attrs" @tap="imgtap">
-				<rich-text :nodes="[{attrs:{src:loading&&(controls[i]||0)<2?loading:(lazyLoad&&!controls[i]?placeholder:(controls[i]==3?errorImg:n.attrs.src||'')),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]" />
+				<rich-text v-if="controls[i]!=0" :nodes="[{attrs:{src:loading&&(controls[i]||0)<2?loading:(lazyLoad&&!controls[i]?placeholder:(controls[i]==3?errorImg:n.attrs.src||'')),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'-webkit-touch-callout:none;max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]" />
 				<image class="_image" :src="lazyLoad&&!controls[i]?placeholder:n.attrs.src" :lazy-load="lazyLoad"
 				 :show-menu-by-longpress="!n.attrs.ignore" :data-i="i" :data-index="n.attrs.i" data-source="img" @load="loadImg"
 				 @error="error" />
@@ -17,7 +17,7 @@
 			<view v-else-if="((n.lazyLoad&&!n.attrs.autoplay)||(n.name=='video'&&!loadVideo))&&controls[i]==undefined" :id="n.attrs.id" :class="'_video '+(n.attrs.class||'')"
 			 :style="n.attrs.style" :data-i="i" @tap="_loadVideo" />
 			<video v-else-if="n.name=='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay||controls[i]==0"
-			 :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :poster="n.attrs.poster" :src="n.attrs.source[controls[i]||0]"
+			 :controls="!n.attrs.autoplay||n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :poster="n.attrs.poster" :src="n.attrs.source[controls[i]||0]"
 			 :unit-id="n.attrs['unit-id']" :data-id="n.attrs.id" :data-i="i" data-source="video" @error="error" @play="play" />
 			<!--音频-->
 			<audio v-else-if="n.name=='audio'" :ref="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :author="n.attrs.author"
@@ -29,19 +29,8 @@
 			 :data-attrs="n.attrs" @tap="linkpress">
 				<trees class="_span" :nodes="n.children" />
 			</view>
-			<!--广告（按需打开注释）-->
-			<!--#ifdef MP-WEIXIN || MP-QQ || MP-TOUTIAO-->
-			<!--<ad v-else-if="n.name=='ad'" :class="n.attrs.class" :style="n.attrs.style" :unit-id="n.attrs['unit-id']"
-			 data-from="ad" @error="error" />-->
-			<!--#endif-->
-			<!--#ifdef MP-BAIDU-->
-			<!--<ad v-else-if="n.name=='ad'" :class="n.attrs.class" :style="n.attrs.style" :appid="n.attrs.appid"
-			 :apid="n.attrs.apid" :type="n.attrs.type" data-from="ad" @error="error" />-->
-			<!--#endif-->
-			<!--#ifdef APP-PLUS-->
-			<!--<ad v-else-if="n.name=='ad'" :class="n.attrs.class" :style="n.attrs.style" :adpid="n.attrs.adpid"
-			 data-from="ad" @error="error" />-->
-			<!--#endif-->
+			<!--广告-->
+			<!--<ad v-else-if="n.name=='ad'" :class="n.attrs.class" :style="n.attrs.style" :unit-id="n.attrs['unit-id']" :appid="n.attrs.appid" :apid="n.attrs.apid" :type="n.attrs.type" :adpid="n.attrs.adpid" data-source="ad" @error="error" />-->
 			<!--列表-->
 			<view v-else-if="n.name=='li'" :id="n.attrs.id" :class="n.attrs.class" :style="(n.attrs.style||'')+';display:flex'">
 				<view v-if="n.type=='ol'" class="_ol-bef">{{n.num}}</view>
@@ -84,11 +73,11 @@
 			<embed v-else-if="n.name=='embed'" :style="n.attrs.style" :width="n.attrs.width" :height="n.attrs.height" :src="n.attrs.src" />
 			<!--#endif-->
 			<!--富文本-->
-			<!--#ifndef MP-BAIDU || MP-TOUTIAO-->
+			<!--#ifdef MP-WEIXIN || MP-QQ || APP-PLUS-->
 			<rich-text v-else-if="handler.use(n)" :id="n.attrs.id" :class="'_p __'+n.name" :nodes="[n]" />
 			<!--#endif-->
-			<!--#ifdef MP-BAIDU || MP-TOUTIAO-->
-			<rich-text v-else-if="!n.c" :id="n.attrs.id" :nodes="[n]" />
+			<!--#ifndef MP-WEIXIN || MP-QQ || APP-PLUS-->
+			<rich-text v-else-if="!n.c" :id="n.attrs.id" :nodes="[n]" style="display:inline" />
 			<!--#endif-->
 			<!--#ifdef MP-ALIPAY-->
 			<view v-else :id="n.attrs.id" :class="'_'+n.name+' '+(n.attrs.class||'')" :style="n.attrs.style">
@@ -103,7 +92,6 @@
 	</view>
 </template>
 <script module="handler" lang="wxs" src="./handler.wxs"></script>
-<script module="handler" lang="sjs" src="./handler.sjs"></script>
 <script>
 	global.Parser = {};
 	import trees from './trees'
@@ -133,53 +121,60 @@
 			loading: String
 		},
 		mounted() {
-			// 获取顶层组件
-			var _top = this.$parent;
-			while (_top.$options.name != 'parser') {
-				if (_top.top) {
-					_top = _top.top;
-					break;
-				}
-				_top = _top.$parent;
-			}
-			this.top = _top;
-			for (var j = this.nodes.length, item; item = this.nodes[--j];) {
-				if (item.c) continue;
-				if (item.name == 'img')
-					_top.imgList.setItem(item.attrs.i, item.attrs.src);
-				else if (item.name == 'video' || item.name == 'audio') {
-					var ctx;
-					if (item.name == 'video')
-						ctx = uni.createVideoContext(item.attrs.id
-							// #ifndef MP-BAIDU
-							, this
-							// #endif
-						);
-					else if (this.$refs[item.attrs.id])
-						ctx = this.$refs[item.attrs.id][0];
-					if (ctx) {
-						ctx.id = item.attrs.id;
-						_top.videoContexts.push(ctx);
+			for (this.top = this.$parent; this.top.$options.name != 'parser'; this.top = this.top.$parent);
+			this.init();
+		},
+		// #ifdef APP-PLUS
+		beforeDestroy() {
+			this.observer && this.observer.disconnect();
+		},
+		// #endif
+		methods: {
+			init() {
+				for (var i = this.nodes.length, n; n = this.nodes[--i];) {
+					if (n.name == 'img') {
+						this.top.imgList.setItem(n.attrs.i, n.attrs.src);
+						// #ifdef APP-PLUS
+						if (this.lazyLoad && !this.observer) {
+							this.observer = uni.createIntersectionObserver(this).relativeToViewport({
+								top: 500,
+								bottom: 500
+							});
+							this.$nextTick(() => {
+								this.observer.observe('._img', res => {
+									if (res.intersectionRatio) {
+										for (var j = this.nodes.length; j--;)
+											if (this.nodes[j].name == 'img')
+												this.$set(this.controls, j, 1);
+										this.observer.disconnect();
+									}
+								})
+							})
+						}
+						// #endif
+					} else if (n.name == 'video' || n.name == 'audio') {
+						var ctx;
+						if (n.name == 'video') {
+							ctx = uni.createVideoContext(n.attrs.id
+								// #ifndef MP-BAIDU
+								, this
+								// #endif
+							);
+						} else if (this.$refs[n.attrs.id])
+							ctx = this.$refs[n.attrs.id][0];
+						if (ctx) {
+							ctx.id = n.attrs.id;
+							this.top.videoContexts.push(ctx);
+						}
 					}
 				}
-				// #ifdef MP-BAIDU || MP-ALIPAY || APP-PLUS
-				if (item.attrs && item.attrs.id) {
-					_top.anchors = _top.anchors || [];
-					_top.anchors.push({
-						id: item.attrs.id,
-						node: this
-					})
-				}
+				// #ifdef APP-PLUS
+				// APP 上避免 video 错位需要延时渲染
+				setTimeout(() => {
+					this.loadVideo = true;
+				}, 1000)
 				// #endif
-			}
-			// #ifdef APP-PLUS
-			// APP 上避免 video 错位需要延时渲染
-			setTimeout(() => {
-				this.loadVideo = true;
-			}, 1000)
-			// #endif
-		},
-		methods: {
+			},
 			play(e) {
 				var contexts = this.top.videoContexts;
 				if (contexts.length > 1 && this.top.autopause)
@@ -209,11 +204,28 @@
 				}
 			},
 			loadImg(e) {
-				var i = e.currentTarget.dataset.i
-				if (this.lazyLoad && !this.controls[i])
-					this.$set(this.controls, i, 1);
-				else if (this.loading && this.controls[i] != 2)
-					this.$set(this.controls, i, 2);
+				var i = e.currentTarget.dataset.i;
+				if (this.lazyLoad && !this.controls[i]) {
+					// #ifdef QUICKAPP-WEBVIEW
+					this.$set(this.controls, i, 0);
+					this.$nextTick(function() {
+						// #endif
+						// #ifndef APP-PLUS
+						this.$set(this.controls, i, 1);
+						// #endif
+						// #ifdef QUICKAPP-WEBVIEW
+					})
+					// #endif
+				} else if (this.loading && this.controls[i] != 2) {
+					// #ifdef QUICKAPP-WEBVIEW
+					this.$set(this.controls, i, 0);
+					this.$nextTick(function() {
+						// #endif
+						this.$set(this.controls, i, 2);
+						// #ifdef QUICKAPP-WEBVIEW
+					})
+					// #endif
+				}
 			},
 			linkpress(e) {
 				var jump = true,
@@ -318,7 +330,7 @@
 
 	/* #endif */
 
-	/* #ifdef MP */
+	/* #ifdef MP || QUICKAPP-WEBVIEW */
 	.interlayer {
 		display: inherit;
 		flex-direction: inherit;
@@ -458,7 +470,7 @@
 		vertical-align: super;
 	}
 
-	/* #ifdef MP-ALIPAY || APP-PLUS */
+	/* #ifdef MP-ALIPAY || APP-PLUS || QUICKAPP-WEBVIEW*/
 	._abbr,
 	._b,
 	._code,

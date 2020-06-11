@@ -146,7 +146,7 @@ Page({
 - 自动合并一些不必要的层级  
 - 在非 `pre` 标签且没有 `white-space:pre` 属性时自动去除没用的空白符  
 - 压缩 `style` 属性，去除重复的属性和多余的空格  
-- 移除不支持的属性和一些不支持的标签（如 `script` 等）  
+- 移除所有 `data-` 属性和一些不支持的标签（如 `script` 等）  
 
 通过设置 `compress` 属性，还可以实现以下压缩（在匹配完 `style` 标签中的样式后）：  
 - 移除所有 `id` 属性（将无法使用锚点）  
@@ -159,7 +159,7 @@ Page({
   ?> 可以通过修改 `trees.js` 中 `data` 里的 `placeholder` 来设置懒加载时的占位图  
 
 - 视频  
-  当视频数量超过三个时，将仅加载前三个视频，其他的用图片代替，避免一次加载过多视频导致卡死（设置了 `autoplay` 的视频将不会被懒加载）  
+  根据 [官方建议](https://developers.weixin.qq.com/community/develop/doc/000e4ef22583d8961919efb6b56009?highLine=video%2520%2520preload)，当视频数量超过三个时，将仅加载前三个视频，其他的用图片代替，避免一次加载过多视频导致卡死（设置了 `autoplay` 的视频将不会被懒加载）  
   另外通过设置 `autopause` 可以实现播放一个视频时自动暂停其他所有视频
 
 ### 自动填充链接 ###
@@ -350,3 +350,7 @@ Page({
 | ![多么生活](https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg ':size=200') | ![恋爱宝典xcx](https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg ':size=200') | ![古典文学名著阅读](https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567 ':size=200') | ![典典博客](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=5b2d371a4bd840c14c8d3740c35ee07f&t=1586360436 ':size=200') |
 
 以上排名不分先后，更多可见：[链接](https://github.com/jin-yufeng/Parser/issues/27)（欢迎添加）  
+
+相关项目：  
+[EastWorld/wechat-app-mall](https://github.com/EastWorld/wechat-app-mall)  
+[zhangdaren/miniprogram-to-uniapp](https://github.com/zhangdaren/miniprogram-to-uniapp)  
