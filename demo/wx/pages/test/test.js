@@ -1,5 +1,4 @@
 // test.js
-const MpHtmlParser = require('../../components/parser/libs/MpHtmlParser.js');
 const marked = require('./marked.min.js');
 Page({
   // 数据
@@ -155,7 +154,7 @@ Page({
     } else
       this.setData({
         tooLong: false,
-        code: new MpHtmlParser('<pre style="white-space:pre-wrap;word-break:break-all"><code class="language-' + (this.data.index == '0' ? 'html' : 'md') + '-editor">' + text + '</code></pre>').parse()
+        code: '<pre style="white-space:pre-wrap;word-break:break-all"><code class="language-' + (this.data.index == '0' ? 'html' : 'md') + '-editor">' + text + '</code></pre>'
       })
   },
   // 清空内容

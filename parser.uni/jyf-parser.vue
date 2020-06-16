@@ -43,7 +43,7 @@
 	/**
 	 * Parser 富文本组件
 	 * @tutorial https://github.com/jin-yufeng/Parser
-	 * @property {String|Array} html 富文本数据
+	 * @property {String} html 富文本数据
 	 * @property {Boolean} autopause 是否在播放一个视频时自动暂停其他视频
 	 * @property {Boolean} autoscroll 是否自动给所有表格添加一个滚动层
 	 * @property {Boolean} autosetTitle 是否自动将 title 标签中的内容设置到页面标题
@@ -63,7 +63,7 @@
 	 * @event {Function} imgtap 图片点击事件
 	 * @event {Function} linkpress 链接点击事件
 	 * @author JinYufeng
-	 * @version 20200611
+	 * @version 20200615
 	 * @listens MIT
 	 */
 	export default {
@@ -88,7 +88,7 @@
 		},
 		// #endif
 		props: {
-			html: null,
+			html: String,
 			autopause: {
 				type: Boolean,
 				default: true
@@ -202,23 +202,7 @@
 		},
 		methods: {
 			// #ifdef H5 || APP-PLUS-NVUE || MP-360
-			_Dom2Str(nodes) {
-				var str = '';
-				for (var node of nodes) {
-					if (node.type == 'text')
-						str += node.text;
-					else {
-						str += ('<' + node.name);
-						for (var attr in node.attrs || {})
-							str += (' ' + attr + '="' + node.attrs[attr] + '"');
-						if (!node.children || !node.children.length) str += '>';
-						else str += ('>' + this._Dom2Str(node.children) + '</' + node.name + '>');
-					}
-				}
-				return str;
-			},
 			_handleHtml(html, append) {
-				if (typeof html != 'string') html = this._Dom2Str(html.nodes || html);
 				if (!append) {
 					// 处理 tag-style 和 userAgentStyles
 					var style = '<style>@keyframes _show{0%{opacity:0}100%{opacity:1}}img{max-width:100%}';
@@ -415,51 +399,24 @@
 				// #ifndef APP-PLUS-NVUE
 				// #ifndef H5 || MP-360
 				var nodes;
-				if (!html)
-					return this.nodes = [];
-				else if (typeof html == 'string') {
-					let parser = new Parser(html, this);
-					// 缓存读取
-					if (this.useCache) {
-						var hashVal = hash(html);
-						if (cache[hashVal])
-							nodes = cache[hashVal];
-						else {
-							nodes = parser.parse();
-							cache[hashVal] = nodes;
-						}
-					} else nodes = parser.parse();
-					this.$emit('parse', nodes);
-				} else if (Object.prototype.toString.call(html) == '[object Array]') {
-					// 非本插件产生的 array 需要进行一些转换
-					if (html.length && html[0].PoweredBy != 'Parser') {
-						let parser = new Parser(html, this);
-						(function f(ns) {
-							for (var i = 0, n; n = ns[i]; i++) {
-								if (n.type == 'text') continue;
-								n.attrs = n.attrs || {};
-								for (var item in n.attrs)
-									if (typeof n.attrs[item] != 'string') n.attrs[item] = n.attrs[item].toString();
-								parser.matchAttr(n, parser);
-								if (n.children && n.children.length) {
-									parser.STACK.push(n);
-									f(n.children);
-									parser.popNode(parser.STACK.pop());
-								} else n.children = void 0;
-							}
-						})(html);
+				if (!html) return this.nodes = [];
+				var parser = new Parser(html, this);
+				// 缓存读取
+				if (this.useCache) {
+					var hashVal = hash(html);
+					if (cache[hashVal])
+						nodes = cache[hashVal];
+					else {
+						nodes = parser.parse();
+						cache[hashVal] = nodes;
 					}
-					nodes = html;
-				} else if (typeof html == 'object' && html.nodes) {
-					nodes = html.nodes;
-					console.warn('错误的 html 类型：object 类型已废弃');
-				} else
-					return console.warn('错误的 html 类型：' + typeof html);
+				} else nodes = parser.parse();
+				this.$emit('parse', nodes);
 				if (append) this.nodes = this.nodes.concat(nodes);
 				else this.nodes = nodes;
-				if (nodes.length && nodes[0].title && this.autosetTitle)
+				if (nodes.length && nodes.title && this.autosetTitle)
 					uni.setNavigationBarTitle({
-						title: nodes[0].title
+						title: nodes.title
 					})
 				if (this.imgList) this.imgList.length = 0;
 				this.videoContexts = [];
@@ -560,9 +517,8 @@
 				// #ifdef MP-WEIXIN || MP-QQ || MP-TOUTIAO
 				d = '>>>';
 				// #endif
-				uni.createSelectorQuery().in(this).select('#_top' + (obj.id ? d + '#' + obj.id + ',#_top' + d + '.' + obj.id : '')).boundingClientRect().selectViewport()
-					.scrollOffset()
-					.exec(res => {
+				uni.createSelectorQuery().in(this).select('#_top' + (obj.id ? d + '#' + obj.id + ',#_top' + d + '.' + obj.id : '')).boundingClientRect()
+					.selectViewport().scrollOffset().exec(res => {
 						if (!res || !res[0])
 							return obj.fail && obj.fail({
 								errMsg: 'Label not found'

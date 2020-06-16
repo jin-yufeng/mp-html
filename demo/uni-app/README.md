@@ -46,7 +46,7 @@ export default{
 
   | 属性 | 类型 | 默认值 | 说明 |
   |:----:|:----:|:----:|----|
-  | html | String/Array |  | 要显示的富文本数据，格式同 rich-text |
+  | html | String |  | 要显示的 html 字符串 |
   | autopause | Boolean | true | 是否允许播放视频时自动暂停其他视频 |
   | autoscroll | Boolean | false | 是否自动给 table 加一个滚动层（使表格可以单独滚动） |
   | autosetTitle | Boolean | true | 是否自动将 title 标签的内容设置到页面标题上 |
@@ -64,7 +64,7 @@ export default{
 
   | 名称 | 触发 | 说明 |
   |:----:|----|----|
-  | @parse | 解析完成时触发 | 返回解析结果（一个 nodes 数组，仅传入的 html 类型为 String 时会触发），可以对该结果进行自定义修改，将在渲染时生效 |
+  | @parse | 解析完成时触发 | 返回解析结果，可以对该结果进行自定义修改，将在渲染时生效 |
   | @load | dom 加载完成时触发 | 所有节点被添加到节点树中时触发，无返回值，可以调用 api |
   | @ready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息），所有图片（除懒加载）加载完成时才会触发，图片较大时可能 **延时较长** |
   | @error | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，target 包含出错标签的具体信息 |

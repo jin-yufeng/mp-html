@@ -174,7 +174,7 @@ element.prototype._setData = function () {
 }
 
 function dom(context) {
-  this._path = 'html';
+  this._path = 'nodes';
   this._context = context;
 }
 dom.prototype._search = function (nodes, path, search, type) {
@@ -190,22 +190,22 @@ dom.prototype._search = function (nodes, path, search, type) {
 dom.prototype.__defineGetter__('body', function () {
   return new element({
     name: 'body',
-    children: this._context.data.html
-  }, 'html', this._context)
+    children: this._context.data.nodes
+  }, 'nodes', this._context)
 })
 dom.prototype.getElementById = function (id) {
   this._nodeList = [];
-  this._search(this._context.data.html, 'html', id, 'id');
+  this._search(this._context.data.nodes, 'nodes', id, 'id');
   return this._nodeList[0];
 }
 dom.prototype.getElementsByClassName = function (className) {
   this._nodeList = [];
-  this._search(this._context.data.html, 'html', className, 'class');
+  this._search(this._context.data.nodes, 'nodes', className, 'class');
   return this._nodeList;
 }
 dom.prototype.getElementsByTagName = function (name) {
   this._nodeList = [];
-  this._search(this._context.data.html, 'html', name, 'name');
+  this._search(this._context.data.nodes, 'nodes', name, 'name');
   return this._nodeList;
 }
 dom.prototype.createElement = function (name) {
@@ -214,9 +214,7 @@ dom.prototype.createElement = function (name) {
   }, '', this._context);
 }
 dom.prototype.write = function (value) {
-  this._context.setData({
-    html: value.constructor == Array ? value : new MpHtmlParser(value, this._context.data).parse()
-  })
+  this._context.setContent(value);
   return true;
 }
 module.exports = dom;

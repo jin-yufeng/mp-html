@@ -1,7 +1,7 @@
 /**
  * Parser 富文本组件
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200611
+ * @version 20200615
  * @author JinYufeng
  * @listens MIT
  */
@@ -16,6 +16,9 @@ function hash(str) {
   return val;
 }
 Component({
+  data: {
+    nodes: []
+  },
   props: {
     html: '',
     autopause: true,
@@ -61,11 +64,11 @@ Component({
         this.setItem(i, f(this[i], i, this));
     }
     if (dom) this.document = new dom(this);
-    this.setContent(this.props.html, false, true);
+    this.setContent(this.props.html);
   },
   didUpdate(e) {
     if (e.html != this.props.html)
-      this.setContent(this.props.html, false, true);
+      this.setContent(this.props.html);
   },
   didUnmount() {
     // 删除暂存
@@ -120,60 +123,29 @@ Component({
         if (this.videoContexts[i].id == id) return this.videoContexts[i];
     },
     // 渲染富文本
-    setContent(html, append, _watch) {
+    setContent(html, append) {
+      var nodes, parser = new Parser(html, this.props);
+      // 缓存读取
+      if (this.props.useCache) {
+        var hashVal = hash(html);
+        if (cache[hashVal]) nodes = cache[hashVal];
+        else cache[hashVal] = nodes = parser.parse();
+      } else nodes = parser.parse();
+      this.props.onParse(nodes);
       var data = {};
-      if (!html) {
-        if (_watch || append) return;
-        data.html = '';
-      } else if (typeof html == 'string') {
-        let parser = new Parser(html, this.props);
-        // 缓存读取
-        if (this.props.useCache) {
-          var hashVal = hash(html);
-          if (cache[hashVal]) data.html = cache[hashVal];
-          else {
-            data.html = parser.parse();
-            cache[hashVal] = data.html;
-          }
-        } else data.html = parser.parse();
-        this.props.onParse(data.html);
-      } else if (html.constructor == Array) {
-        // 转换不符合格式的 array
-        if (html.length && html[0].PoweredBy != 'Parser') {
-          let parser = new Parser('', this.props);
-          (function f(ns) {
-            for (var i = 0, n; n = ns[i]; i++) {
-              if (n.type == 'text') continue;
-              n.attrs = n.attrs || {};
-              for (var key in n.attrs)
-                if (typeof n.attrs[key] != 'string') n.attrs[key] = n.attrs[key].toString();
-              parser.matchAttr(n);
-              if (n.children) {
-                parser.STACK.push(n);
-                f(n.children);
-                parser.popNode(parser.STACK.pop());
-              }
-            }
-          })(html);
-          data.html = html;
-        }
-        if (!_watch) data.html = html;
-      } else if (typeof html == 'object' && html.nodes) {
-        data.html = html.nodes;
-        console.warn('错误的 html 类型：object 类型已废弃');
-      } else
-        return console.warn('错误的 html 类型：' + typeof html);
-      if (append) data.html = (this.props.html || []).concat(data.html);
-      else if (this.props.showWithAnimation) data.showAm = 'animation: _show .5s';
-      if (data.html || data.showAm) this.setData(data);
+      if (append)
+        for (let i = this.data.nodes.length, j = nodes.length; j--;)
+          data[`nodes[${i + j}]`] = nodes[j];
+      else data.nodes = nodes;
+      if (this.showWithAnimation) data.showAm = 'animation: show .5s';
+      this.setData(data, this.props.onLoad);
       // 设置标题
-      if (this.props.html.length && this.props.html[0].title && this.props.autosetTitle)
-        my.setNavigationBarTitle({
-          title: this.props.html[0].title
+      if (nodes.title && this.props.autosetTitle)
+        my.setNavigationBar({
+          title: nodes.title
         })
       this.imgList.length = 0;
       this.videoContexts = [];
-      setTimeout(() => this.props.onLoad(), 50);
       var height;
       clearInterval(this._timer);
       this._timer = setInterval(() => {

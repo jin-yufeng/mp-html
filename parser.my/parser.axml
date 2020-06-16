@@ -1,5 +1,5 @@
 <!--parser 主组件-->
-<slot a:if="{{!html[0].name&&!html[0].type}}" />
+<slot a:if="{{!nodes.length}}" />
 <view  class="_top" style="{{selectable?'user-select:text;-webkit-user-select:text;':''}}{{showAm}}" >
-  <trees lazy-load="{{lazyLoad}}" loading="{{loadingImg}}" nodes="{{html[0].name||html[0].type?html:[]}}" onAppend="_appendChild" />
+  <trees lazy-load="{{lazyLoad}}" loading="{{loadingImg}}" nodes="{{nodes}}" onAppend="_appendChild" />
 </view>

@@ -27,13 +27,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 41.4KB | 微信小程序插件包 |
-| parser.min | 26.1KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 41.0KB | QQ 小程序插件包 |
-| parser.bd | 39.4KB | 百度小程序插件包 |
-| parser.my | 39.7KB | 支付宝小程序插件包 |
-| parser.tt | 40.2KB | 头条小程序插件包 |
-| parser.uni | 59.6KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 39.9KB | 微信小程序插件包 |
+| parser.min | 25.2KB | 微信小程序插件包压缩版（功能相同） |
+| parser.qq | 39.5KB | QQ 小程序插件包 |
+| parser.bd | 37.9KB | 百度小程序插件包 |
+| parser.my | 38.3KB | 支付宝小程序插件包 |
+| parser.tt | 38.7KB | 头条小程序插件包 |
+| parser.uni | 57.8KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
 1. 复制 `parser` 文件夹至 `components` 目录  
@@ -94,7 +94,7 @@
 
 | 属性 | 类型 | 默认值 | 说明 |
 |:----:|:----:|:----:|----|
-| html | String/Array |  | 要显示的富文本数据，格式同 rich-text |
+| html | String |  | 要显示的 html 字符串 |
 | autopause | Boolean | true | 是否允许播放视频时自动暂停其他视频 |
 | autoscroll | Boolean | false | 是否自动给 table 加一个滚动层（使表格可以单独滚动） |
 | autosetTitle | Boolean | true | 是否自动将 title 标签的内容设置到页面标题 |
@@ -114,7 +114,7 @@
 
 | 名称 | 功能 | 说明 |
 |:----:|----|----|
-| bindparse | 解析完成时触发 | 返回解析结果（一个 nodes 数组，仅传入的 html 类型为 String 时会触发），可以对该结果进行自定义修改，将在渲染时生效 |
+| bindparse | 解析完成时触发 | 返回解析结果，可以对该结果进行自定义修改，将在渲染时生效 |
 | bindload | dom 加载完成时触发 | 所有节点被添加到节点树中时触发，无返回值，可以调用 api |
 | bindready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息），所有图片（除懒加载）加载完成时才会触发，图片较大时可能 **延时较长** |
 | binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，target 包含出错标签的具体信息 |
@@ -142,13 +142,13 @@
 
 ## 案例体验 ##
 
-| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | APP 比比 | 全品作业小助手 |
-|:---:|:---:|:---:|:---:|
-| <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374" width="200" alt="富文本插件"> | <img src="https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg" width="200" alt="程序员技术之旅"> | <img src="https://user-images.githubusercontent.com/5304020/80313264-70229d80-881c-11ea-8d8f-aed45719aed5.jpg" width="200" alt="APP 比比"> | <img src="https://user-images.githubusercontent.com/21222276/80563130-b3e3f580-8a1c-11ea-9a07-7671ea5aa320.jpg" width="200" alt="全品作业小助手"> |
+| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | [极客时代](https://github.com/GeekEra/GBlog-wx) | APP 比比 | 全品作业小助手 |
+|:---:|:---:|:---:|:---:|:---:|
+| <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374" width="200" alt="富文本插件"> | <img src="https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg" width="200" alt="程序员技术之旅"> | <img src="https://camo.githubusercontent.com/f15b6b8854ae6d7fc4ceea552b79e326d5036978/68747470733a2f2f63646e2e66757a75692e6e65742f626c6f672f7172636f64655f313539323230383033333536372e6a7067" width="200" alt="极客时代"> | <img src="https://user-images.githubusercontent.com/5304020/80313264-70229d80-881c-11ea-8d8f-aed45719aed5.jpg" width="200" alt="APP 比比"> | <img src="https://user-images.githubusercontent.com/21222276/80563130-b3e3f580-8a1c-11ea-9a07-7671ea5aa320.jpg" width="200" alt="全品作业小助手"> |
 
-| 多么生活 | 恋爱宝典 xcx | 古典文学名著阅读 | 典典博客 |
-|:---:|:---:|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg" width="200" alt="多么生活"> | <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200" alt="恋爱宝典 xcx"> | <img src="https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567" width="200" alt="古典文学名著阅读"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=5b2d371a4bd840c14c8d3740c35ee07f&t=1586360436" width="200" alt="典典博客"> |
+| 多么生活 | 恋爱宝典 xcx | 古典文学名著阅读 | 典典博客 | 咚咚阅读 |
+|:---:|:---:|:---:|:---:|:---:|
+| <img src="https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg" width="200" alt="多么生活"> | <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200" alt="恋爱宝典 xcx"> | <img src="https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567" width="200" alt="古典文学名著阅读"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=5b2d371a4bd840c14c8d3740c35ee07f&t=1586360436" width="200" alt="典典博客"> | <img src="https://user-images.githubusercontent.com/7794149/84689281-575c7b80-af73-11ea-9035-6b3fcb3a3e5b.png " width="200" alt="咚咚阅读"> |
 
 以上排名不分先后，更多可见：[链接](https://github.com/jin-yufeng/Parser/issues/27)（欢迎添加）  
 
@@ -167,6 +167,10 @@
 
 
 ## 更新日志 ##
+- 2020.6.15  
+  1. `U` 文档添加 [性能优化建议](https://jin-yufeng.github.io/Parser/#/question#性能优化建议) 和 [体验优化建议](https://jin-yufeng.github.io/Parser/#/question#性能优化建议)  
+  2. `D` `html` 属性不再支持 `Array` 类型（传入 `Array` 的优化程度有限（解析时间基本 `<50ms`）；但相同的内容，解析为 `Array` 后会增加大小，进而导致网络传输时间增加；因此大部分情况下传入 `Array` 起到的优化效果不大，甚至可能负优化，还增加了处理复杂度）  
+
 - 2020.6.11  
   1. `A` 增加支付宝小程序原生包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#插件包说明)  
   2. `U` `uni-app` 包适配华为快应用  
@@ -201,15 +205,5 @@
   9. `F` 修复了 `uni-app` 包编译到百度小程序安卓真机可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/139)  
   10. `F` 修复了 `uni-app` 包编译到 `NVUE` 时通过 `v-if` 切换可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/147)  
   11. `F` 修复了 `uni-app` 包编译到 `app` 时 `iframe` 无法全屏的问题  
-
-- 2020.5.13
-  1. `A` 添加了 `autoscroll` 属性，可以给所有表格添加一个滚动层 [详细](https://jin-yufeng.github.io/Parser/#/instructions#autoscroll)  
-  2. `U` `a` 标签可以跳转到 `tabbar` 页面  
-  3. `U` 通过 `stylelint` 规范 `css` 写法  
-  4. `U` 为避免在一些框架中使用出现文件不存在的错误，扩展包不再默认引入（原来是在 `try` 中 `require`）  
-  5. `U` `uni-app` 包编译到百度小程序中实现了 `autopause` 属性  
-  6. `U` `uni-app` 包添加了组件文档注释，输入时可以有提示  
-  7. `D` 移除了 `gesture-zoom` 属性  
-  8. `D` 移除了 `preLoad` 的 `api`
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

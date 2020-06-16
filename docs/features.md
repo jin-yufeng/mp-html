@@ -323,13 +323,12 @@ Page({
 | 缓存读取时间 | 5.29 | 24 | 1 | 346 |
 | 渲染时间 | 99.67 | 369 | 37 | 354 |
 
-即平均情况下总耗时在缓存不命中时约 `145ms`，缓存命中（或直接传入数组）时约 `110ms`；大部分用户可以在 `200ms` 内完成    
+即平均情况下总耗时在缓存不命中时约 `145ms`，缓存命中时约 `110ms`；大部分用户可以在 `200ms` 内完成    
 相关解释：  
 1. 缓存是指开启 [use-cache](/instructions#use-cache) 属性后，首次解析后会缓存结果，多次打开不会重复解析，可以节省时间  
-2. 传入数组虽然可以省去解析时间，但一般来说数组序列化后长度比字符串长，可能增加网络传输时间，需酌情考虑  
-3. 这里不包含网络请求 `html` 数据的时间（从向组件传入 `html` 开始计算）  
-4. 渲染时间仅为 `dom` 加载完毕的时间（`setData` 完成），而不是图片加载完毕的时间  
-5. 网络请求和图片加载完毕的时间取决于网络状况和接口质量，与富文本解析无关，因此不纳入测试  
+2. 这里不包含网络请求 `html` 数据的时间（从向组件传入 `html` 开始计算）  
+3. 渲染时间仅为 `dom` 加载完毕的时间（`setData` 完成），而不是图片加载完毕的时间  
+4. 网络请求和图片加载完毕的时间取决于网络状况和接口质量，与富文本解析无关，因此不纳入测试  
 
 相比而言，解析时间偏长而渲染时间偏短，主要有以下原因：  
 1. `html` 中有很多样式性的属性（如 `align`、`width`、`height` 等），小程序中都必须写在 `style` 属性中，因此需要进行转换  
@@ -341,13 +340,13 @@ Page({
 
 ### 案例体验 ###
 
-| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | APP 比比 | 全品作业小助手 |
-|:---:|:---:|:---:|:---:|
-| ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374 ':size=200') | ![程序员技术之旅](https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg ':size=200') | ![APP比比](https://user-images.githubusercontent.com/5304020/80313264-70229d80-881c-11ea-8d8f-aed45719aed5.jpg ':size=200') | ![全品作业小助手](https://user-images.githubusercontent.com/21222276/80563130-b3e3f580-8a1c-11ea-9a07-7671ea5aa320.jpg ':size=200') |
+| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | [极客时代](https://github.com/GeekEra/GBlog-wx) | APP 比比 | 全品作业小助手 |
+|:---:|:---:|:---:|:---:|:---:|
+| ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374 ':size=200') | ![程序员技术之旅](https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg ':size=200') | ![极客时代](https://camo.githubusercontent.com/f15b6b8854ae6d7fc4ceea552b79e326d5036978/68747470733a2f2f63646e2e66757a75692e6e65742f626c6f672f7172636f64655f313539323230383033333536372e6a7067 ':size=200') | ![APP比比](https://user-images.githubusercontent.com/5304020/80313264-70229d80-881c-11ea-8d8f-aed45719aed5.jpg ':size=200') | ![全品作业小助手](https://user-images.githubusercontent.com/21222276/80563130-b3e3f580-8a1c-11ea-9a07-7671ea5aa320.jpg ':size=200') |
 
-| 多么生活 | 恋爱宝典 xcx | 古典文学名著阅读 | 典典博客 |
-|:---:|:---:|:---:|:---:|
-| ![多么生活](https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg ':size=200') | ![恋爱宝典xcx](https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg ':size=200') | ![古典文学名著阅读](https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567 ':size=200') | ![典典博客](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=5b2d371a4bd840c14c8d3740c35ee07f&t=1586360436 ':size=200') |
+| 多么生活 | 恋爱宝典 xcx | 古典文学名著阅读 | 典典博客 | 咚咚阅读 |
+|:---:|:---:|:---:|:---:|:---:|
+| ![多么生活](https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg ':size=200') | ![恋爱宝典xcx](https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg ':size=200') | ![古典文学名著阅读](https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567 ':size=200') | ![典典博客](https://6874-html-foe72-1259071903.tcb.qcloud.la/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=5b2d371a4bd840c14c8d3740c35ee07f&t=1586360436 ':size=200') | ![咚咚阅读](https://user-images.githubusercontent.com/7794149/84689281-575c7b80-af73-11ea-9035-6b3fcb3a3e5b.png ':size=200') |
 
 以上排名不分先后，更多可见：[链接](https://github.com/jin-yufeng/Parser/issues/27)（欢迎添加）  
 

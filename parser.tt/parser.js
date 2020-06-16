@@ -1,7 +1,7 @@
 /**
  * Parser 富文本组件
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200611
+ * @version 20200615
  * @author JinYufeng
  * @listens MIT
  */
@@ -16,12 +16,14 @@ function hash(str) {
   return val;
 }
 Component({
+  data: { 
+    nodes: [] 
+  },
   properties: {
     html: {
-      type: null,
+      type: String,
       observer(html) {
-        if (this._refresh) this._refresh = false;
-        else this.setContent(html, false, true);
+        this.setContent(html);
       }
     },
     autopause: {
@@ -136,55 +138,27 @@ Component({
         if (this.videoContexts[i].id == id) return this.videoContexts[i];
     },
     // 渲染富文本
-    setContent(html, append, _watch) {
+    setContent(html, append) {
+      var nodes, parser = new Parser(html, this.data);
+      // 缓存读取
+      if (this.data.useCache) {
+        var hashVal = hash(html);
+        if (cache[hashVal]) nodes = cache[hashVal];
+        else cache[hashVal] = nodes = parser.parse();
+      } else nodes = parser.parse();
+      this.triggerEvent('parse', nodes);
       var data = {};
-      if (!html) {
-        if (_watch || append) return;
-        data.html = '';
-      } else if (typeof html == 'string') {
-        let parser = new Parser(html, this.data);
-        // 缓存读取
-        if (this.data.useCache) {
-          var hashVal = hash(html);
-          if (cache[hashVal]) data.html = cache[hashVal];
-          else {
-            data.html = parser.parse();
-            cache[hashVal] = data.html;
-          }
-        } else data.html = parser.parse();
-        this._refresh = true;
-        this.triggerEvent('parse', data.html);
-      } else if (html.constructor == Array) {
-        // 转换不符合格式的 array
-        if (html.length && html[0].PoweredBy != 'Parser') {
-          let parser = new Parser('', this.data);
-          (function f(ns) {
-            for (var i = 0, n; n = ns[i]; i++) {
-              if (n.type == 'text') continue;
-              n.attrs = n.attrs || {};
-              for (var key in n.attrs)
-                if (typeof n.attrs[key] != 'string') n.attrs[key] = n.attrs[key].toString();
-              parser.matchAttr(n);
-              if (n.children) {
-                parser.STACK.push(n);
-                f(n.children);
-                parser.popNode(parser.STACK.pop());
-              }
-            }
-          })(html);
-          data.html = html;
-        }
-        if (!_watch) data.html = html;
-      } else if (typeof html == 'object' && html.nodes) {
-        data.html = html.nodes;
-        console.warn('错误的 html 类型：object 类型已废弃');
-      } else
-        return console.warn('错误的 html 类型：' + typeof html);
-      if (append) {
-        this._refresh = true;
-        data.html = (this.data.html || []).concat(data.html);
-      } else if (this.data.showWithAnimation) data.showAm = 'animation: _show .5s';
-      if (data.html || data.showAm) this.setData(data, () => {
+      if (append)
+        for (let i = this.data.nodes.length, j = nodes.length; j--;)
+          data[`nodes[${i + j}]`] = nodes[j];
+      else data.nodes = nodes;
+      if (this.showWithAnimation) data.showAm = 'animation: show .5s';
+      // 设置标题
+      if (nodes.title && this.data.autosetTitle)
+        tt.setNavigationBarTitle({
+          title: nodes.title
+        })
+      this.setData(data, () => {
         var ns = this.selectAllComponents('._top,._top>>>._node');
         for (let i = 0, n; n = ns[i++];) {
           n.top = this;
@@ -207,11 +181,6 @@ Component({
         }
         this.triggerEvent('load');
       });
-      // 设置标题
-      if (this.data.html.length && this.data.html[0].title && this.data.autosetTitle)
-        tt.setNavigationBarTitle({
-          title: this.data.html[0].title
-        })
       this.imgList.length = 0;
       this.videoContexts = [];
       var height;

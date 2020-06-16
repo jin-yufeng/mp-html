@@ -1,7 +1,7 @@
 /**
  * html 解析器
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200611
+ * @version 20200615
  * @author JinYufeng
  * @listens MIT
  */
@@ -69,10 +69,6 @@ MpHtmlParser.prototype.parse = function () {
     this.state(c);
   if (this.state == this.Text) this.setText();
   while (this.STACK.length) this.popNode(this.STACK.pop());
-  if (this.DOM.length) {
-    this.DOM[0].PoweredBy = 'Parser';
-    if (this.title) this.DOM[0].title = this.title;
-  }
   return this.DOM;
 }
 // 设置属性
@@ -328,7 +324,7 @@ MpHtmlParser.prototype.remove = function (node) {
       } else if (name == 'style')
         this.CssHandler.getStyle(this.data.substring(j + 1, this.i - 7));
       else if (name == 'title')
-        this.title = this.data.substring(j + 1, this.i - 7);
+        this.DOM.title = this.data.substring(j + 1, this.i - 7);
       if ((this.i = this.data.indexOf('>', this.i)) == -1) this.i = this.data.length;
       if (name == 'svg') handleSvg();
       return;

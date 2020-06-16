@@ -3,13 +3,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 41.4KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 26.1KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 41.0KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 39.4KB | 百度小程序插件包 |
-| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 39.7KB | 支付宝小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 40.2KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.6KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 39.9KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 25.2KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 39.5KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 37.9KB | 百度小程序插件包 |
+| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 38.3KB | 支付宝小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 38.7KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.8KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
@@ -267,7 +267,7 @@
 
 | 属性 | 类型 | 默认值 | 说明 | 添加日期 |
 |:----:|:----:|:----:|----|:---:|
-| html | String/Array |  | 要显示的富文本数据，格式同 [rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html) | - |
+| html | String |  | 要显示的 html 字符串 | - |
 | autopause | Boolean | true | 是否允许播放视频时自动暂停其他视频 | [20190510](/changelog#_20190510) |
 | autoscroll | Boolean | false | 是否自动给 table 加一个滚动层（使表格可以单独滚动） | [20200513](/changelog#_20200513) |
 | autosetTitle | Boolean | true | 是否自动将 title 标签的内容设置到页面标题 | [20190724](/changelog#_20190724) |
@@ -281,11 +281,6 @@
 | use-anchor | Boolean | false | 是否使用页面内锚点 | [20191202](/changelog#_20191202) |
 | use-cache | Boolean | false | 是否使用缓存，设置后多次打开不用重复解析 | [20191215](/changelog#_20191215) |
   
-##### html #####
-- 推荐通过 [setContent](#setContent) 方法传入，可以提高性能  
-- 传入的格式为 `array` 时，不需要进行解析，理论上可以提高性能，但是解析时间一般很短，且通常数组的大小比字符串大（传输时间更长），部分在解析过程中进行的处理也无法生效，不一定有明显的优化  
-- 本插件在解析的过程中会进行一些转换和设置一些标识，使得能够正确的渲染和使用；若传入非本插件产生的数组（区分方式是查看 `html[0].PoweredBy` 是否等于 `Parser`），插件会自动进行设置，并同时处理 `tag-style`、`domain`、`use-anchor` 等一些属性的效果，但会产生额外的性能开销   
-
 ##### autoscroll #####
 表格一般宽度较大，在移动端容易超出屏幕宽度，可能无法显示超出部分或导致所有内容跟随表格一起滚动，设置该属性后，会给所有表格外套一个设置了 `overflow:scroll` 的 `div`，使其可以单独滚动  
 不过在由于套了一个 `div`，个别情况下可能导致样式异常（如果有用到行内表格请勿使用）  
@@ -315,7 +310,7 @@
 
 | 名称 | 触发 | 说明 |
 |:----:|:----:|----|
-| bindparse | 解析完成时触发 | 返回解析结果（一个 nodes 数组，仅传入的 html 类型为 String 时会触发），可以对该结果进行自定义修改，将在渲染时生效 |
+| bindparse | 解析完成时触发 | 返回解析结果，可以对该结果进行自定义修改，将在渲染时生效 |
 | bindload | dom 加载完成时触发 | 所有节点被添加到节点树中时触发，无返回值，可以调用 api |
 | bindready | 渲染完成时触发 | 返回 boundingClientRect 的查询结果（包含宽高、位置等信息），所有图片（除懒加载）加载完成时才会触发，图片较大时可能 **延时较长** |
 | binderror | 出错时触发 | 返回一个 object，其中 source 是错误来源，errMsg 为错误信息，target 包含出错标签的具体信息 |
@@ -639,8 +634,8 @@ console.log(rect.height); // 高度
 !> 以下 `api` 可以立即执行  
 
 #### setContent ####
-功能：解析并渲染 `html` 内容（功能上同 `html` 属性）  
-说明：当 `html` 为字符串类型时，该字符串并不能直接在视图层进行渲染，而是在插件内部完成解析后再次 `setData` 并进行渲染的，因此，对字符串类型的 `html` 进行 `setData` 是没有必要的，会带来不必要的性能开销  
+功能：解析并渲染 `html` 内容  
+说明：功能上同通过 `setData` 设置 `html` 属性；理论上可以避免将不用于渲染的 `html` 字符串传入视图层（实测耗时上无明显差别，其他方面未知）；在尾部追加时，该方法具有更好的性能  
 输入值：`html` 为富文本字符串，`append` 表示是否在尾部追加（可用于加载更多）  
 
 使用方法：
@@ -649,11 +644,6 @@ console.log(rect.height); // 高度
 ```
 ```javascript
 var html = "<div>Hello World!</div>";
-/* 以下代码等价于
-this.setData({
-  html
-})
-但通过 setData 会带来不必要的性能开销 */
 this.selectComponent("#article").setContent(html);
 ```
 
@@ -691,7 +681,7 @@ this.selectComponent("#article").setContent(html);
 - 功能  
   实现类似于 `web` 中的 `document` 对象，可以动态操作 `DOM`  
 - 大小  
-  `7.50KB`（`min` 版本 `5.23KB`，`uni-app` 版本 `6.32KB`）  
+  `7.41KB`（`min` 版本 `5.17KB`，`uni-app` 版本 `6.32KB`）  
 - 使用方法  
   1. 将 [document.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.js) 复制到 `libs` 文件夹下（[document.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.min.js) 是压缩版本，功能相同；在 `uni-app` 中使用时需用 [document.uni.js](https://github.com/jin-yufeng/Parser/blob/master/patches/document/document.uni.js)；使用时也需要更名为 `document.js`）  
   2. 将 `parser.js`（`uni-app` 中是 `jyf-parser.vue`）中的 `var dom` 修改为 `var dom = require('./libs/document.js')`
@@ -707,7 +697,7 @@ this.selectComponent("#article").setContent(html);
   | getElementsByClassName | className | element [] | 按照 class 查找 element |
   | getElementsByTagName | name | element [] | 按照 标签名 查找 element |
   | createElement | name | element | 创建标签名为 name 的标签 |
-  | write | html（String / Array） |  | 写入 html 内容，将覆盖原内容 |
+  | write | html |  | 写入 html 内容，将覆盖原内容 |
    
 - `element` 类：  
   属性名：

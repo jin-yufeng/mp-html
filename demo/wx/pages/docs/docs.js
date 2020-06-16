@@ -217,8 +217,8 @@ export default {
     // 组件属性
     attrs: [{
       name: 'html',
-      type: 'String\nArray',
-      notice: '要显示的 html 数据，格式同 rich-text'
+      type: 'String',
+      notice: '要显示的 html 字符串'
     }, {
       name: 'autopause',
       type: 'Boolean',
@@ -354,7 +354,7 @@ console.log(rect.height); // 高度</code></pre>
   <div style="margin:10px 0 10px 25px">以下<code>api</code>可以立即使用</div>
   <li><code>setContent</code>
     <div>功能：解析和渲染<code>html</code>内容（功能上同<code>html</code>属性）</div>
-    <div>说明：当<code>html</code>为<code>string</code>类型时无法直接渲染，需要经过解析后再次<code>setData</code>，因此通过此方法可以避免这次无用的<code>setData</code>，提高性能</div>
+    <div>说明：功能上同通过<code>setData</code>设置<code>html</code>属性；理论上可以避免将不用于渲染的<code>html</code>字符串传入视图层（实测耗时上无明显差别，其他方面未知）；在尾部追加时，该方法具有更好的性能</div>
     <div>输入值：<code>html</code>是富文本字符串，<code>append</code>表示是否在尾部追加</div>
     <pre><code class="language-wxml"><parser id="article" /></code></pre>
     <pre style="margin-top:15px"><code class="language-javascript">Page({
@@ -362,11 +362,6 @@ console.log(rect.height); // 高度</code></pre>
     var html = "<div>Hello World!</div>";
     var context = this.selectComponent("#article");
     context.setContent(html);
-    /* 等价于
-    this.setData({
-      html
-    })
-    但可以减少一次 setData */
   }
 })</code></pre>
   </li>
@@ -484,6 +479,12 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.6.15
+    <ol>
+      <li><code>D</code> <code>html</code>属性不再支持<code>Array</code>类型（传入<code>Array</code>的优化程度有限（解析时间基本<code><50ms</code>）；但相同的内容，解析为<code>Array</code>后会增加大小，进而导致网络传输时间增加；因此大部分情况下传入<code>Array</code>起到的优化效果不大，甚至可能负优化，还增加了处理复杂度）</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.6.11
     <ol>
       <li><code>F</code> 修复了<code>ios</code>端图片长按可能导致页面失去响应的问题</li>
@@ -616,17 +617,6 @@ console.log(rect.height); // 高度</code></pre>
       </li>
       <li><code>U</code> <code>a</code>标签支持<code>:visited</code>效果（默认变为紫色）</li>
       <li><code>F</code> 修复了<code>a</code>标签所在段落若使用一些特殊实体编码可能被错误换行的问题</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.3.12
-    <ol>
-      <li><code>A</code> 增加了<code>compress</code>属性，可以设置压缩等级</li>
-      <li><code>A</code> 配置项中增加了<code>filter</code>和<code>onText</code>方法，可以在解析过程中进行一些自定义的处理</li>
-      <li><code>A</code> 增加了<code>rect</code>的<code>api</code>，可以获取富文本内容大小和位置</li>
-      <li><code>U</code> <code>setContent</code>的<code>api</code>支持传入<code>append</code>参数表示是否在尾部追加（用于加载更多）</li>
-      <li><code>U</code> 支持通过<code>base</code>标签设置主域名（同<code>domain</code>属性，但优先级更低）</li>
-      <li><code>F</code> 修复了在<code>ready</code>事件触发前再次设置数据会导致<code>ready</code>事件不停触发的问题</li>
     </ol>
   </li>
 </ul>
