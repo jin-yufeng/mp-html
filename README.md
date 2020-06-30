@@ -27,13 +27,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 39.9KB | 微信小程序插件包 |
-| parser.min | 25.2KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 39.5KB | QQ 小程序插件包 |
-| parser.bd | 37.9KB | 百度小程序插件包 |
-| parser.my | 38.3KB | 支付宝小程序插件包 |
-| parser.tt | 38.7KB | 头条小程序插件包 |
-| parser.uni | 57.8KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 40.1KB | 微信小程序插件包 |
+| parser.min | 25.3KB | 微信小程序插件包压缩版（功能相同） |
+| parser.qq | 39.6KB | QQ 小程序插件包 |
+| parser.bd | 38.1KB | 百度小程序插件包 |
+| parser.my | 38.4KB | 支付宝小程序插件包 |
+| parser.tt | 38.9KB | 头条小程序插件包 |
+| parser.uni | 58.0KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
 1. 复制 `parser` 文件夹至 `components` 目录  
@@ -142,13 +142,13 @@
 
 ## 案例体验 ##
 
-| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | [极客时代](https://github.com/GeekEra/GBlog-wx) | APP 比比 | 全品作业小助手 |
-|:---:|:---:|:---:|:---:|:---:|
-| <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374" width="200" alt="富文本插件"> | <img src="https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg" width="200" alt="程序员技术之旅"> | <img src="https://camo.githubusercontent.com/f15b6b8854ae6d7fc4ceea552b79e326d5036978/68747470733a2f2f63646e2e66757a75692e6e65742f626c6f672f7172636f64655f313539323230383033333536372e6a7067" width="200" alt="极客时代"> | <img src="https://user-images.githubusercontent.com/5304020/80313264-70229d80-881c-11ea-8d8f-aed45719aed5.jpg" width="200" alt="APP 比比"> | <img src="https://user-images.githubusercontent.com/21222276/80563130-b3e3f580-8a1c-11ea-9a07-7671ea5aa320.jpg" width="200" alt="全品作业小助手"> |
+| [富文本插件](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | [极客时代](https://github.com/GeekEra/GBlog-wx) | APP 比比 | 全品作业小助手 | 多么生活 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374" width="200" alt="富文本插件"> | <img src="https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg" width="200" alt="程序员技术之旅"> | <img src="https://camo.githubusercontent.com/f15b6b8854ae6d7fc4ceea552b79e326d5036978/68747470733a2f2f63646e2e66757a75692e6e65742f626c6f672f7172636f64655f313539323230383033333536372e6a7067" width="200" alt="极客时代"> | <img src="https://user-images.githubusercontent.com/5304020/80313264-70229d80-881c-11ea-8d8f-aed45719aed5.jpg" width="200" alt="APP 比比"> | <img src="https://user-images.githubusercontent.com/21222276/80563130-b3e3f580-8a1c-11ea-9a07-7671ea5aa320.jpg" width="200" alt="全品作业小助手"> | <img src="https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg" width="200" alt="多么生活"> |
 
-| 多么生活 | 恋爱宝典 xcx | 古典文学名著阅读 | 典典博客 | 咚咚阅读 |
-|:---:|:---:|:---:|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg" width="200" alt="多么生活"> | <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200" alt="恋爱宝典 xcx"> | <img src="https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567" width="200" alt="古典文学名著阅读"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=5b2d371a4bd840c14c8d3740c35ee07f&t=1586360436" width="200" alt="典典博客"> | <img src="https://user-images.githubusercontent.com/7794149/84689281-575c7b80-af73-11ea-9035-6b3fcb3a3e5b.png " width="200" alt="咚咚阅读"> |
+| 恋爱宝典 xcx | 古典文学名著阅读 | 典典博客 | 咚咚阅读 | 源创智造 |  |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200" alt="恋爱宝典 xcx"> | <img src="https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567" width="200" alt="古典文学名著阅读"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=5b2d371a4bd840c14c8d3740c35ee07f&t=1586360436" width="200" alt="典典博客"> | <img src="https://user-images.githubusercontent.com/7794149/84689281-575c7b80-af73-11ea-9035-6b3fcb3a3e5b.png " width="200" alt="咚咚阅读"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E6%BA%90%E5%88%9B%E6%99%BA%E9%80%A0.png?sign=71b39d28c444259a7204bc14a8091135&t=1593401495" width="200" alt="源创智造"> | <img width="200"> |
 
 以上排名不分先后，更多可见：[链接](https://github.com/jin-yufeng/Parser/issues/27)（欢迎添加）  
 
@@ -167,6 +167,10 @@
 
 
 ## 更新日志 ##
+- 2020.6.30  
+  1. `F` 修复了个别情况下图片样式异常的问题 [详细](https://github.com/jin-yufeng/Parser/issues/163)  
+  2. `F` 修复了个别情况下会出现多余的换行的问题  
+
 - 2020.6.15  
   1. `U` 文档添加 [性能优化建议](https://jin-yufeng.github.io/Parser/#/question#性能优化建议) 和 [体验优化建议](https://jin-yufeng.github.io/Parser/#/question#性能优化建议)  
   2. `D` `html` 属性不再支持 `Array` 类型（传入 `Array` 的优化程度有限（解析时间基本 `<50ms`）；但相同的内容，解析为 `Array` 后会增加大小，进而导致网络传输时间增加；因此大部分情况下传入 `Array` 起到的优化效果不大，甚至可能负优化，还增加了处理复杂度）  
@@ -178,32 +182,5 @@
   4. `F` 修复了 `ios` 端图片长按可能导致页面失去响应的问题 [详细](https://github.com/jin-yufeng/Parser/issues/130)  
   5. `F` 修复了 `uni-app` 包多次设置 `html` 内容时可能出现一些不正确情况的问题  
   6. `D` 移除了 `trustAttrs` 的配置项，改为自动移除 `data-` 开头的属性  
-
-- 2020.5.28  
-  1. `U` `uni-app` 包适配 `360` 小程序（由于 `360` 小程序在浏览器中运行，和 `H5` 处理方式相同）  
-  2. `F` 修复了属性名后有空格会无法识别的问题 [详细](https://github.com/jin-yufeng/Parser/issues/152)  
-  3. `F` 修复了 `img` 没有设置 `src` 会报错的问题  
-  4. `F` 修复了 `uni-app` 包部分情况下 `errorImg` 失效的问题  
-  5. `F` 修复了 `uni-app` 包编译到 `NVUE` 时若 `html` 中含有换行符可能无法显示的问题  
-  6. `F` 修复了 `uni-app` 包编译到 `App` 时前几秒点击视频无法播放的问题  
-
-- 2020.5.24
-  1. `A` 增加 `loading-img` 属性，可以设置图片加载完成前的占位图 [详细](https://jin-yufeng.github.io/Parser/#/#设置占位图)  
-  2. `A` 增加 `errorImg` 的配置项，可以设置图片出错时的占位图 [详细](https://jin-yufeng.github.io/Parser/#/#设置占位图)   
-  3. `F` 修复了 `uni-app` 包使用 [audio 扩展包](https://jin-yufeng.github.io/Parser/#/instructions?id=audio) 后编译到百度小程序出错的问题  
-  4. `D` `error` 事件中不再返回 `context` 对象  
-
-- 2020.5.21
-  1. `U` 支持 `embed` 标签（`type` 中含 `video` 或后缀名为 `.mp4`、`.3gp`、`.m3u8` 的将被转为视频；`type` 中含 `audio` 或后缀名为 `.m4a`、`.wav`、`.mp3`、`.aac` 的将被转为音频；其余不支持）  
-  2. `U` 音视频如果既没有设置 `autoplay` 也没有设置 `controls` 将自动设置 `controls`，避免无法播放  
-  3. `F` 修复了锚点无法跳转到 `li` 和 `a` 标签的问题 [详细](https://github.com/jin-yufeng/Parser/issues/142)  
-  4. `F` 修复了部分情况下 `svg` 标签 `style` 中的 `vertical-align` 无法生效的问题  
-  5. `F` 修复了未闭合的标签如果是 `rich-text` 不支持的标签可能无法显示的问题 [详细](https://ask.dcloud.net.cn/question/96579)  
-  6. `F` 修复了 `error` 事件中通过 [setSrc](https://jin-yufeng.github.io/Parser/#/instructions?id=%e5%85%b3%e4%ba%8e-error-%e4%ba%8b%e4%bb%b6) 重设图片地址后无法预览的问题  
-  7. `F` 修复了微信包个别情况下可能出现 `null is not an object` 错误的问题 [详细](https://github.com/jin-yufeng/Parser/issues/146)  
-  8. `F` 修复了百度包部分情况下预览时无法左右滑动查看所有图片的问题
-  9. `F` 修复了 `uni-app` 包编译到百度小程序安卓真机可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/139)  
-  10. `F` 修复了 `uni-app` 包编译到 `NVUE` 时通过 `v-if` 切换可能无法显示的问题 [详细](https://github.com/jin-yufeng/Parser/issues/147)  
-  11. `F` 修复了 `uni-app` 包编译到 `app` 时 `iframe` 无法全屏的问题  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

@@ -479,6 +479,13 @@ console.log(rect.height); // 高度</code></pre>
     // 更新日志
     changelog: `<style>ol{margin-left:-20px}</style>
 <ul style="margin-left:-10px">
+  <li>2020.6.30
+    <ol>
+      <li><code>F</code> 修复了个别情况下图片样式异常的问题</li>
+      <li><code>F</code> 修复了个别情况下会出现多余的换行的问题</li>
+    </ol>
+  </li>
+  </br>
   <li>2020.6.15
     <ol>
       <li><code>D</code> <code>html</code>属性不再支持<code>Array</code>类型（传入<code>Array</code>的优化程度有限（解析时间基本<code><50ms</code>）；但相同的内容，解析为<code>Array</code>后会增加大小，进而导致网络传输时间增加；因此大部分情况下传入<code>Array</code>起到的优化效果不大，甚至可能负优化，还增加了处理复杂度）</li>
@@ -572,51 +579,6 @@ console.log(rect.height); // 高度</code></pre>
       <li><code>F</code> 修复了自动移除空<code>div</code>导致换行失效的问题</li>
       <li><code>F</code> 修复了使用多个并列<code>rpx</code>时可能失效的问题</li>
       <li><code>F</code> 修复了<code>audio</code>扩展包音乐名太长会导致样式错乱的问题</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.3.26
-    <ol>
-      <li><code>A</code> 增加了<code>xml</code>属性，可以以<code>xml</code>方式解析</li>
-      <li><code>F</code> 修复了使用自闭合 <code>svg</code> 标签会导致死循环的问题</li>
-      <li><code>F</code> 修复了设置<code>domain</code>属性时<code>data:image</code>和<code>cloud://</code>的链接会被错误填充的问题</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.3.23
-    <ol>
-      <li><code>A</code> 增加了<code>audio</code>扩展包，用于解决原生<code>audio</code>被废弃的问题</li>
-      <li><code>U</code> 通过<code>eslint</code>检查规范和修复了一些问题</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.3.21
-    <ol>
-      <li><code>U</code> 没有使用<code>colspan</code>和<code>rowspan</code>的表格里的链接可以点击</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.3.20
-    <ol>
-      <li><code>U</code> 将不用于渲染的属性声明为纯数据字段，可以提升性能</li>
-      <li><code>U</code> 所有标签支持<code>align</code>属性</li>
-      <li><code>F</code> 修复了设置<code>domain</code>时背景图片链接被错误填充的问题</li>
-    </ol>
-  </li>
-  </br>
-  <li>2020.3.17 beta
-    <ol>
-      <li><code>U</code> 通过<code>image</code>（经过一些处理后）来显示图片（替代<code>rich-text</code>），可以实现以下优化：
-        <ul style="margin-left:-20px">
-          <li><code>2.3.0</code>起支持云文件<code>ID</code></li>
-          <li><code>2.7.0</code>起支持长按弹出菜单（可以识别小程序码，同时去除了<code>imglongtap</code>事件）</li>
-          <li><code>2.9.0</code>起支持<code>webp</code>图片</li>
-          <li>使用<code>image</code>原生的<code>lazy-load</code>，可能具有更好的性能</li>
-          <li>加载错误时能够触发<code>error</code>事件，且可以重设<code>src</code></li>
-        </ul>
-      </li>
-      <li><code>U</code> <code>a</code>标签支持<code>:visited</code>效果（默认变为紫色）</li>
-      <li><code>F</code> 修复了<code>a</code>标签所在段落若使用一些特殊实体编码可能被错误换行的问题</li>
     </ol>
   </li>
 </ul>

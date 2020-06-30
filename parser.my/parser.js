@@ -1,7 +1,7 @@
 /**
  * Parser 富文本组件
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200615
+ * @version 20200630
  * @author JinYufeng
  * @listens MIT
  */

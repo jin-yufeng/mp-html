@@ -1,7 +1,7 @@
 /**
  * html 解析器
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200615
+ * @version 20200630
  * @author JinYufeng
  * @listens MIT
  */
@@ -224,6 +224,8 @@ MpHtmlParser.prototype.setNode = function () {
         style += ';-webkit-touch-callout:none';
         styleObj['max-width'] = '100%';
       }
+      if (!styleObj.position)
+        styleObj.top = styleObj.bottom = styleObj.left = styleObj.right = styleObj['z-index'] = void 0;
       var width;
       if (styleObj.width) width = styleObj.width;
       else if (attrs.width) width = attrs.width.includes('%') ? attrs.width : attrs.width + 'px';
@@ -256,7 +258,7 @@ MpHtmlParser.prototype.setNode = function () {
       // 转换 rpx
       else if (value.includes('rpx'))
         value = value.replace(/[0-9.]+\s*rpx/g, $ => parseFloat($) * windowWidth / 750 + 'px');
-      else if (key == 'white-space' && value.includes('pre'))
+      else if (key == 'white-space' && value.includes('pre') && !close)
         this.pre = node.pre = true;
       style += `;${key}:${value}`;
     }

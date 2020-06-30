@@ -167,7 +167,7 @@
 
 *解决方案：*
 1. 如果可以不限制高度，则直接去掉高度限制即可（让富文本内容依赖页面滚动）  
-2. 如果必须限定高度，则在 `parser` 外套一个 `scroll-view`，然后参考以下方法自行实现锚点跳转（仅适用于微信小程序）  
+2. 如果必须限定高度，则在 `parser` 外套一个 `scroll-view`，然后参考以下方法自行实现锚点跳转  
    ```wxml
    <scroll-view id="scroll" style="height:300px" scroll-y scroll-top="{{top}}" scroll-with-animation>
      <!--use-anchor 属性仍是必要的，否则可能无法被选取到-->
@@ -181,7 +181,7 @@
        wx.createSelectorQuery().select('#scroll').fields({
          rect: true,
          scrollOffset: true
-       }).select('#scroll>>>#' + id).boundingClientRect().exec(res => {
+       }).select('#scroll>>>#' + id).boundingClientRect().exec(res => { // 百度、支付宝小程序要空格代替 >>>
          if (res[1])
            this.setData({
              top: res[0].scrollTop + res[1].top - res[0].top
@@ -193,8 +193,10 @@
      },
      linkpress(e) {
        // a 标签跳转
-       if(e.detail.href[0] == '#')
+       if(e.detail.href[0] == '#') {
          this.navigateTo(e.detail.href.substr(1))
+         e.detail.ignore(); // 屏蔽默认跳转
+       }
      }
    })
    ```
@@ -222,13 +224,15 @@
 
 *解决方案：*    
 禁用自动预览：  
-1. 给 `img` 标签增加 `ignore` 属性（如 `<img src="xxx" ignore>`），通过这种方法，点击无法预览，且其他图片预览时 **无法通过左右滑动** 看到这张图片（也无法从 [imgList](/instructions#imgList) 中获取）  
+1. 给 `img` 标签增加 `ignore` 属性（如 `<img src="xxx" ignore>`），通过这种方法，点击无法预览，且其他图片预览时 **无法通过左右滑动** 看到这张图片（也无法从 [imgList](/instructions#imgList) 中获取），且 **懒加载、占位图都会失效**  
 2. 在 `imgtap` 事件中调用 `ignore` 函数，通过这种方法将不会自动预览，但其他图片预览时 **仍可以** 通过左右滑动看到这张图片  
 
 禁用自动跳转/复制链接：  
 在 `linkpress` 事件中调用 `ignore` 函数，即可禁用自动跳转  
 
 头条小程序中，`imgtap` 和 `linkpress` 事件中无法获得 `ignore` 函数，如有需要，要通过 `global.Parser.onxxx` 接收，更多可见 [事件](/instructions#关于-ignore-方法) 中的相关说明  
+
+*相关issue：*[#51](https://github.com/jin-yufeng/Parser/issues/51)、[#166](https://github.com/jin-yufeng/Parser/issues/166)
 
 #### 标签原样显示 ####
 *问题描述：*  
@@ -387,7 +391,7 @@ html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 在多次打开时，设置缓存后的总耗时约为原来的 `75%`（节省了解析时间，详细数据见 [性能指标](/#性能指标)）  
 
 *优化建议：*  
-对于传入类型为字符串类型，**内容较长** 且 **较大可能会多次打开** 的情况，建议打开 [use-cache](/instructions#use-cache) 属性  
+对于 `html` **内容较长** 且 **较大可能会多次打开** 的情况，建议打开 [use-cache](/instructions#use-cache) 属性  
 但不要 **盲目设置**，因为缓存会占用一定的内存且计算哈希值也需要时间（非常短，主要是前者）  
 
 #### 利用压缩 ####
@@ -455,11 +459,13 @@ html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 
 #### 忽略装饰图 ####
 *问题描述：*  
-本插件对于图片的默认处理是点击时可以放大预览，预览时可以左右滑动查看所有图片，长按时会弹出菜单（仅微信端）。这些功能在大部分情况下是十分有用的，但是如果是一些小的装饰性的图片，用户可能不需要进行预览，这些功能反而会影响体验，比如在预览时进行左右滑动，翻了多张都是没用的图片等。因此，本插件支持给 `img` 标签设置了一个 `ignore` 属性，设置后，该图片不可预览，不可长按弹出菜单，也不可在预览时通过左右滑动查看  
+本插件对于图片的默认处理是点击时可以放大预览，预览时可以左右滑动查看所有图片，长按时会弹出菜单（仅微信端）。这些功能在大部分情况下是十分有用的，但是如果是一些小的装饰性的图片，用户可能不需要进行预览，这些功能反而会影响体验，比如在预览时进行左右滑动，翻了多张都是没用的图片等。因此，本插件支持给 `img` 标签设置 `ignore` 属性，设置后，该图片不可预览，不可长按弹出菜单，也不可在预览时通过左右滑动查看  
 
 *优化建议：*  
 1. 给装饰性的小图片的 `img` 标签上添加一个 `ignore` 属性  
 2. 装饰性的小图片用 `background-image` 设置  
+
+!> 加上 `ignore` 属性后，该图片将不会被暴露出来，直接通过 `rich-text` 显示，这样可以减少一定的标签数，提高性能，但懒加载、占位图等也会失效  
 
 *关于自动设置：*  
 尝试过对于小图片（在 `load` 事件中获取尺寸）自动禁用预览，但存在以下问题：  

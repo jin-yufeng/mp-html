@@ -63,7 +63,7 @@
 	 * @event {Function} imgtap 图片点击事件
 	 * @event {Function} linkpress 链接点击事件
 	 * @author JinYufeng
-	 * @version 20200615
+	 * @version 20200630
 	 * @listens MIT
 	 */
 	export default {

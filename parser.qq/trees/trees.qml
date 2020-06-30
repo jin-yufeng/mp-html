@@ -37,7 +37,7 @@ module.exports = {
   <text qq:elif="{{n.name=='br'}}">\n</text>
   <!--链接-->
   <view qq:elif="{{n.name=='a'}}" id="{{n.attrs.id}}" class="_a {{n.attrs.class}}" hover-class="_hover" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="{{handler.visited}}">
-    <trees nodes="{{n.children}}" />
+    <trees class="_node" nodes="{{n.children}}" />
   </view>
   <!--视频-->
   <block qq:elif="{{n.name=='video'}}">
