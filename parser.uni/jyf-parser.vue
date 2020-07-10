@@ -211,21 +211,21 @@
 						"';document.getElementById('parser').appendChild(b)");
 				else {
 					html =
-						'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><base href="' +
+						'<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><style>html,body{width:100%;height:100%;overflow:hidden}body{margin:0}</style><base href="' +
 						this.domain + '"><div id="parser"' + (this.selectable ? '>' : ' style="user-select:none">') + this._handleHtml(html).replace(/\n/g, '\\n') +
 						'</div><script>"use strict";function e(e){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[e]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}document.body.onclick=function(){e({action:"click"})},' +
 						(this.showWithAnimation ? 'document.body.style.animation="_show .5s",' : '') +
-						'setTimeout(function(){e({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight+16})},50);\x3c/script>';
+						'setTimeout(function(){e({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight})},50);\x3c/script>';
 					this.$refs.web.evalJs("document.write('" + html.replace(/'/g, "\\'") + "');document.close()");
 				}
 				this.$refs.web.evalJs(
-					'var t=document.getElementsByTagName("title");t.length&&e({action:"getTitle",title:t[0].innerText});for(var o,n=document.getElementsByTagName("style"),r=0;o=n[r++];)o.innerHTML=o.innerHTML.replace(/body/g,"#parser");for(var i,a=document.getElementsByTagName("img"),s=[],c=0,l=0;i=a[c];c++)i.onerror=function(){' +
+					'var t=document.getElementsByTagName("title");t.length&&e({action:"getTitle",title:t[0].innerText});for(var o,n=document.getElementsByTagName("style"),r=1;o=n[r++];)o.innerHTML=o.innerHTML.replace(/body/g,"#parser");for(var i,a,c=document.getElementsByTagName("img"),s=[],d=0,l=0,g=0;a=c[l];l++)a.onload=function(){++d==c.length&&(i=!0,e({action:"ready"}))},a.onerror=function(){' +
 					(cfg.errorImg ? 'this.src="' + cfg.errorImg + '",' : '') +
-					'e({action:"error",source:"img",target:this})},i.hasAttribute("ignore")||"A"==i.parentElement.nodeName||(i.i=l++,s.push(i.src),i.onclick=function(){e({action:"preview",img:{i:this.i,src:this.src}})});e({action:"getImgList",imgList:s});for(var d,u=document.getElementsByTagName("a"),g=0;d=u[g];g++)d.onclick=function(){var t,o=this.getAttribute("href");if("#"==o[0]){var n=document.getElementById(o.substr(1));n&&(t=n.offsetTop)}return e({action:"linkpress",href:o,offset:t}),!1};for(var m,f=document.getElementsByTagName("video"),h=0;m=f[h];h++)m.style.maxWidth="100%",m.onerror=function(){e({action:"error",source:"video",target:this})}' +
-					(this.autopause ? ',m.onplay=function(){for(var e,t=0;e=f[t];t++)e!=this&&e.pause()}' : '') +
-					';for(var v,y=document.getElementsByTagName("audio"),_=0;v=y[_];_++)v.onerror=function(){e({action:"error",source:"audio",target:this})};' +
-					(this.autoscroll ? 'for(var p,w=document.getElementsByTagName("table"),T=0;p=w[T];T++){var E=document.createElement("div");E.style.overflow="scroll",p.parentNode.replaceChild(E,p),E.appendChild(p)}' : '') +
-					'(function(){return new Promise(function(e){var t=document.getElementById("parser"),o=t.scrollHeight,n=setInterval(function(){o==t.scrollHeight?(clearInterval(n),e(o)):o=t.scrollHeight},500)})})().then(function(t){e({action:"ready",height:t+16})})'
+					'e({action:"error",source:"img",target:this})},a.hasAttribute("ignore")||"A"==a.parentElement.nodeName||(a.i=g++,s.push(a.src),a.onclick=function(){e({action:"preview",img:{i:this.i,src:this.src}})});e({action:"getImgList",imgList:s});for(var u,m=document.getElementsByTagName("a"),f=0;u=m[f];f++)u.onclick=function(){var t,o=this.getAttribute("href");if("#"==o[0]){var n=document.getElementById(o.substr(1));n&&(t=n.offsetTop)}return e({action:"linkpress",href:o,offset:t}),!1};for(var h,y=document.getElementsByTagName("video"),v=0;h=y[v];v++)h.style.maxWidth="100%",h.onerror=function(){e({action:"error",source:"video",target:this})}' +
+					(this.autopause ? ',h.onplay=function(){for(var e,t=0;e=y[t];t++)e!=this&&e.pause()}' : '') +
+					';for(var _,p=document.getElementsByTagName("audio"),w=0;_=p[w];w++)_.onerror=function(){e({action:"error",source:"audio",target:this})};' +
+					(this.autoscroll ? 'for(var T,E=document.getElementsByTagName("table"),B=0;T=E[B];B++){var N=document.createElement("div");N.style.overflow="scroll",T.parentNode.replaceChild(N,T),N.appendChild(T)}' : '') +
+					'var x=document.getElementById("parser"),b=setInterval(function(){i&&clearInterval(b),e({action:"height",height:x.scrollHeight})},350)'
 				)
 				this.nodes = [1];
 				// #endif
@@ -532,66 +532,76 @@
 			// #ifdef APP-PLUS-NVUE
 			_message(e) {
 				// 接收 web-view 消息
-				var data = e.detail.data[0];
-				if (data.action == 'load') {
-					this.$emit('load');
-					this.height = data.height;
-					this._text = data.text;
-				} else if (data.action == 'getTitle') {
-					if (this.autosetTitle)
-						uni.setNavigationBarTitle({
-							title: data.title
-						})
-				} else if (data.action == 'getImgList') {
-					this.imgList.length = 0;
-					for (var i = data.imgList.length; i--;)
-						this.imgList.setItem(i, data.imgList[i]);
-				} else if (data.action == 'preview') {
-					var preview = true;
-					data.img.ignore = () => preview = false;
-					this.$emit('imgtap', data.img);
-					if (preview)
-						uni.previewImage({
-							current: data.img.i,
-							urls: this.imgList
-						})
-				} else if (data.action == 'linkpress') {
-					var jump = true,
-						href = data.href;
-					this.$emit('linkpress', {
-						href,
-						ignore: () => jump = false
-					})
-					if (jump && href) {
-						if (href[0] == '#') {
-							if (this.useAnchor)
-								weexDom.scrollToElement(this.$refs.web, {
-									offset: data.offset
-								})
-						} else if (href.includes('://'))
-							plus.runtime.openWeb(href);
-						else
-							uni.navigateTo({
-								url: href
+				var d = e.detail.data[0];
+				switch (d.action) {
+					case 'load':
+						this.$emit('load');
+						this.height = d.height;
+						this._text = d.text;
+						break;
+					case 'getTitle':
+						if (this.autosetTitle)
+							uni.setNavigationBarTitle({
+								title: d.title
 							})
-					}
-				} else if (data.action == 'error') {
-					if (data.source == 'img' && cfg.errorImg)
-						this.imgList.setItem(data.target.i, cfg.errorImg);
-					this.$emit('error', {
-						source: data.source,
-						target: data.target
-					})
-				} else if (data.action == 'ready') {
-					this.height = data.height;
-					this.$nextTick(() => {
+						break;
+					case 'getImgList':
+						this.imgList.length = 0;
+						for (var i = d.imgList.length; i--;)
+							this.imgList.setItem(i, d.imgList[i]);
+						break;
+					case 'preview':
+						var preview = true;
+						d.img.ignore = () => preview = false;
+						this.$emit('imgtap', d.img);
+						if (preview)
+							uni.previewImage({
+								current: d.img.i,
+								urls: this.imgList
+							})
+						break;
+					case 'linkpress':
+						var jump = true,
+							href = d.href;
+						this.$emit('linkpress', {
+							href,
+							ignore: () => jump = false
+						})
+						if (jump && href) {
+							if (href[0] == '#') {
+								if (this.useAnchor)
+									weexDom.scrollToElement(this.$refs.web, {
+										offset: d.offset
+									})
+							} else if (href.includes('://'))
+								plus.runtime.openWeb(href);
+							else
+								uni.navigateTo({
+									url: href
+								})
+						}
+						break;
+					case 'error':
+						if (d.source == 'img' && cfg.errorImg)
+							this.imgList.setItem(d.target.i, cfg.errorImg);
+						this.$emit('error', {
+							source: d.source,
+							target: d.target
+						})
+						break;
+					case 'ready':
 						uni.createSelectorQuery().in(this).select('#_top').boundingClientRect().exec(res => {
 							this.rect = res[0];
 							this.$emit('ready', res[0]);
 						})
-					})
-				} else if (data.action == 'click')
-					this.$emit('click');
+						break;
+					case 'height':
+						this.height = d.height;
+						break;
+					case 'click':
+						this.$emit('click');
+						this.$emit('tap');
+				}
 			},
 			// #endif
 		}
