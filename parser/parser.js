@@ -100,22 +100,29 @@ Component({
   },
   methods: {
     // 锚点跳转
+    in (obj) {
+      if (obj.page && obj.selector && obj.scrollTop) this._in = obj;
+    },
     navigateTo(obj) {
-      if (!this.data.useAnchor)
-        return obj.fail && obj.fail({
-          errMsg: 'Anchor is disabled'
+      if (!this.data.useAnchor) return obj.fail && obj.fail('Anchor is disabled');
+      var selector = (this._in ? this._in.page : this).createSelectorQuery().select((this._in ? this._in.selector : '.top') + (obj.id ? '>>>#' + obj.id : '')).boundingClientRect();
+      if (this._in) selector.select(this._in.selector).fields({
+        rect: true,
+        scrollOffset: true
+      });
+      else selector.selectViewport().scrollOffset();
+      selector.exec(res => {
+        if (!res[0]) return this.group ? this.group.navigateTo(this.i, obj) : obj.fail && obj.fail('Label not found');
+        var scrollTop = res[1].scrollTop + res[0].top - (res[1].top || 0) + (obj.offset || 0);
+        if (this._in) {
+          var data = {};
+          data[this._in.scrollTop] = scrollTop;
+          this._in.page.setData(data);
+        } else wx.pageScrollTo({
+          scrollTop
         })
-      this.createSelectorQuery()
-        .select('.top' + (obj.id ? '>>>#' + obj.id : '')).boundingClientRect()
-        .selectViewport().scrollOffset().exec(res => {
-          if (!res[0])
-            return this.group ? this.group.navigateTo(this.i, obj) :
-              obj.fail && obj.fail({
-                errMsg: 'Label not found'
-              });
-          obj.scrollTop = res[1].scrollTop + res[0].top + (obj.offset || 0);
-          wx.pageScrollTo(obj);
-        })
+        obj.success && obj.success();
+      })
     },
     // 获取文本
     getText(ns = this.data.html) {

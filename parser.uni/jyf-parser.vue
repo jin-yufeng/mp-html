@@ -201,24 +201,7 @@
 			clearInterval(this._timer);
 		},
 		methods: {
-			// #ifdef H5 || APP-PLUS-NVUE || MP-360
-			_handleHtml(html, append) {
-				if (!append) {
-					// 处理 tag-style 和 userAgentStyles
-					var style = '<style>@keyframes _show{0%{opacity:0}100%{opacity:1}}img{max-width:100%}';
-					for (var item in cfg.userAgentStyles)
-						style += `${item}{${cfg.userAgentStyles[item]}}`;
-					for (item in this.tagStyle)
-						style += `${item}{${this.tagStyle[item]}}`;
-					style += '</style>';
-					html = style + html;
-				}
-				// 处理 rpx
-				if (html.includes('rpx'))
-					html = html.replace(/[0-9.]+\s*rpx/g, $ => parseFloat($) * rpx + 'px');
-				return html;
-			},
-			// #endif
+			// 设置富文本内容
 			setContent(html, append) {
 				// #ifdef APP-PLUS-NVUE
 				if (!html)
@@ -457,6 +440,7 @@
 				if (this.showWithAnimation && !append) this.showAm = 'animation:_show .5s';
 				// #endif
 			},
+			// 获取文本内容
 			getText(ns = this.nodes) {
 				var txt = '';
 				// #ifdef APP-PLUS-NVUE
@@ -483,58 +467,42 @@
 				// #endif
 				return txt;
 			},
+			// 锚点跳转
+			in (obj) {
+				if (obj.page && obj.selector && obj.scrollTop) this._in = obj;
+			},
 			navigateTo(obj) {
-				if (!this.useAnchor)
-					return obj.fail && obj.fail({
-						errMsg: 'Anchor is disabled'
-					})
+				if (!this.useAnchor) return obj.fail && obj.fail('Anchor is disabled');
 				// #ifdef APP-PLUS-NVUE
 				if (!obj.id)
 					weexDom.scrollToElement(this.$refs.web);
 				else
 					this.$refs.web.evalJs('var pos=document.getElementById("' + obj.id +
 						'");if(pos)post({action:"linkpress",href:"#",offset:pos.offsetTop+' + (obj.offset || 0) + '})');
-				obj.success && obj.success({
-					errMsg: 'pageScrollTo:ok'
-				});
+				obj.success && obj.success();
 				// #endif
-				// #ifdef H5 || MP-360
-				if (!obj.id) {
-					window.scrollTo(0, this.rtf.offsetTop);
-					return obj.success && obj.success({
-						errMsg: 'pageScrollTo:ok'
-					});
-				}
-				var target = document.getElementById(obj.id);
-				if (!target) return obj.fail && obj.fail({
-					errMsg: 'Label not found'
-				});
-				obj.scrollTop = this.rtf.offsetTop + target.offsetTop + (obj.offset || 0);
-				uni.pageScrollTo(obj);
-				// #endif
-				// #ifndef H5 || APP-PLUS-NVUE || MP-360
+				// #ifndef APP-PLUS-NVUE
 				var d = ' ';
 				// #ifdef MP-WEIXIN || MP-QQ || MP-TOUTIAO
 				d = '>>>';
 				// #endif
-				uni.createSelectorQuery().in(this).select('#_top' + (obj.id ? d + '#' + obj.id + ',#_top' + d + '.' + obj.id : '')).boundingClientRect()
-					.selectViewport().scrollOffset().exec(res => {
-						if (!res || !res[0])
-							return obj.fail && obj.fail({
-								errMsg: 'Label not found'
-							});
-						obj.scrollTop = res[1].scrollTop + res[0].top + (obj.offset || 0);
-						// #ifdef MP-ALIPAY
-						obj.duration = 300;
-						my.
-						// #endif
-						// #ifndef MP-ALIPAY
-						uni.
-						// #endif
-						pageScrollTo(obj);
+				var selector = uni.createSelectorQuery().in(this._in ? this._in.page : this).select((this._in ? this._in.selector :
+					'#_top') + (obj.id ? `${d}#${obj.id},${this._in?this._in.selector:'#_top'}${d}.${obj.id}` : '')).boundingClientRect();
+				if (this._in) selector.select(this._in.selector).scrollOffset().select(this._in.selector).boundingClientRect();
+				else selector.selectViewport().scrollOffset();
+				selector.exec(res => {
+					if (!res[0]) return obj.fail && obj.fail('Label not found')
+					var scrollTop = res[1].scrollTop + res[0].top - (res[2] ? res[2].top : 0) + (obj.offset || 0);
+					if (this._in) this._in.page[this._in.scrollTop] = scrollTop;
+					else uni.pageScrollTo({
+						scrollTop,
+						duration: 300
 					})
+					obj.success && obj.success();
+				})
 				// #endif
 			},
+			// 获取视频对象
 			getVideoContext(id) {
 				// #ifndef APP-PLUS-NVUE
 				if (!id) return this.videoContexts;
@@ -543,6 +511,24 @@
 						if (this.videoContexts[i].id == id) return this.videoContexts[i];
 				// #endif
 			},
+			// #ifdef H5 || APP-PLUS-NVUE || MP-360
+			_handleHtml(html, append) {
+				if (!append) {
+					// 处理 tag-style 和 userAgentStyles
+					var style = '<style>@keyframes _show{0%{opacity:0}100%{opacity:1}}img{max-width:100%}';
+					for (var item in cfg.userAgentStyles)
+						style += `${item}{${cfg.userAgentStyles[item]}}`;
+					for (item in this.tagStyle)
+						style += `${item}{${this.tagStyle[item]}}`;
+					style += '</style>';
+					html = style + html;
+				}
+				// 处理 rpx
+				if (html.includes('rpx'))
+					html = html.replace(/[0-9.]+\s*rpx/g, $ => parseFloat($) * rpx + 'px');
+				return html;
+			},
+			// #endif
 			// #ifdef APP-PLUS-NVUE
 			_message(e) {
 				// 接收 web-view 消息

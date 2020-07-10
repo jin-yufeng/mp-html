@@ -82,22 +82,27 @@ Component({
   },
   methods: {
     // 锚点跳转
+    in (obj) {
+      if (obj.page && obj.selector && obj.scrollTop) this._in = obj;
+    },
     navigateTo(obj) {
-      if (!this.props.useAnchor)
-        return obj.fail && obj.fail({
-          errMsg: 'Anchor is disabled'
+      if (!this.props.useAnchor) return obj.fail && obj.fail('Anchor is disabled');
+      var selector = my.createSelectorQuery().select((this._in ? this._in.selector : '._top') + (obj.id ? ' #' + obj.id : '')).boundingClientRect();
+      if (this._in) selector.select(this._in.selector).scrollOffset().select(this._in.selector).boundingClientRect();
+      else selector.selectViewport().scrollOffset();
+      selector.exec(res => {
+        if (!res[0]) return obj.fail && obj.fail('Label not found');
+        var scrollTop = res[1].scrollTop + res[0].top - (res[2] ? res[2].top : 0) + (obj.offset || 0);
+        if (this._in) {
+          var data = {};
+          data[this._in.scrollTop] = scrollTop;
+          this._in.page.setData(data);
+        } else my.pageScrollTo({
+          scrollTop,
+          duration: 300
         })
-      my.createSelectorQuery()
-        .select('._top' + (obj.id ? ' #' + obj.id : '')).boundingClientRect()
-        .selectViewport().scrollOffset().exec(res => {
-          if (!res[0])
-            return obj.fail && obj.fail({
-                errMsg: 'Label not found'
-              });
-          obj.scrollTop = res[1].scrollTop + res[0].top + (obj.offset || 0);
-          obj.duration = 300;
-          my.pageScrollTo(obj);
-        })
+        obj.success && obj.success();
+      })
     },
     // 获取文本
     getText(ns = this.props.html) {
