@@ -158,52 +158,6 @@
 
 *相关 issue：*[#30](https://github.com/jin-yufeng/Parser/issues/30)、[#118](https://github.com/jin-yufeng/Parser/issues/118)
 
-#### 锚点无法跳转 ####
-*问题描述：*  
-如果 `parser` 标签外层被限定高度且设置了滚动，锚点跳转将无法生效  
-
-*问题原因：*  
-组件内只能控制页面的跳转（`wx.pageScrollTo`），如果限定了 `parser` 组件的高度，则富文本内容是在父组件内滚动（这个滚动在 `parser` 组件内是无法控制的），这样就无法使用内置的锚点跳转  
-
-*解决方案：*
-1. 如果可以不限制高度，则直接去掉高度限制即可（让富文本内容依赖页面滚动）  
-2. 如果必须限定高度，则在 `parser` 外套一个 `scroll-view`，然后参考以下方法自行实现锚点跳转  
-   ```wxml
-   <scroll-view id="scroll" style="height:300px" scroll-y scroll-top="{{top}}" scroll-with-animation>
-     <!--use-anchor 属性仍是必要的，否则可能无法被选取到-->
-     <parser html="{{html}}" use-anchor bindready="ready" bindlinkpress="linkpress" />
-   </scroll-view>
-   ```
-   ```javascript
-   Page({
-     // 自行实现锚点跳转方法
-     navigateTo(id) {
-       wx.createSelectorQuery().select('#scroll').fields({
-         rect: true,
-         scrollOffset: true
-       }).select('#scroll>>>#' + id).boundingClientRect().exec(res => { // 百度、支付宝小程序要空格代替 >>>
-         if (res[1])
-           this.setData({
-             top: res[0].scrollTop + res[1].top - res[0].top
-           })
-       })
-     },
-     ready() {
-       this.navigateTo('id') // api 方式调用
-     },
-     linkpress(e) {
-       // a 标签跳转
-       if(e.detail.href[0] == '#') {
-         this.navigateTo(e.detail.href.substr(1))
-         e.detail.ignore(); // 屏蔽默认跳转
-       }
-     }
-   })
-   ```
-
-*为什么不内置一个 scroll-view：*  
-根据 [官网说明](https://developers.weixin.qq.com/miniprogram/dev/component/scroll-view.html)，`scroll-view` 在基础库 `2.4.0` 以下不支持嵌套 `video`，一些场景下不适用  
-
 #### 无法使用 iframe 视频 ####
 *问题描述：*  
 除 `uni-app` 包编译到 `H5` 和 `App(v3)` 端外，均无法使用 `iframe` 标签  
@@ -327,17 +281,6 @@ html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
       return text.replace(/↵/g,''); // 移除所有 ↵
   }
   ```
-
-#### 无法使用 markdown #### 
-*问题描述：*  
-无法直接使用 `markdown`  
-
-*问题原因：*  
-`markdown` 库较大，且用到的人不多，默认没有支持  
-
-*解决方案：*  
-先自行通过 `markdown` 库转为 `html` 后再进行解析和显示，其中一些标签的默认样式可以放在 `tag-style` 属性中  
-可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) 中的 `markdown` 解析  
 
 #### style 标签中的样式没有生效 ####
 *问题描述：*  

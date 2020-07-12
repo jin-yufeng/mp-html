@@ -1,5 +1,13 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.07.11 ####
+1. `A` 增加了 `in` 的 `api`，可以将锚点跳转的范围限定在一个 `scroll-view` 内 [详细](/instructions#in)  
+2. `U` 支持识别 `xml` 声明（`<?xml`）  
+3. `U` 优化了 `uni-app` 包 `NVUE` 端的显示模式（避免显示不全和内部滚动）  
+4. `F` 修复了 `audio` 扩展包设置 `autoplay` 时状态不正确的问题  
+5. `F` 修复了微信和 `QQ` 端 `sub` 和 `sup` 标签可能被错误换行的问题  
+6. `F` 修复了 `uni-app` 包 `NVUE` 端无法触发 `click` 事件的问题  
+
 #### 2020.06.30 ####
 1. `F` 修复了个别情况下图片样式异常的问题 [详细](https://github.com/jin-yufeng/Parser/issues/163)  
 2. `F` 修复了个别情况下会出现多余的换行的问题  

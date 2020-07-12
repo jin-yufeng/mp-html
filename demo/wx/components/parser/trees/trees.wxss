@@ -1,5 +1,5 @@
 /* 在这里引入自定义样式 */
-@import "../libs/prism.wxss";
+@import "../../../utils/prism.wxss";
 
 /* 链接和图片效果 */
 ._a {

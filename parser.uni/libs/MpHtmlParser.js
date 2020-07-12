@@ -1,7 +1,7 @@
 /**
  * html 解析器
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200630
+ * @version 20200712
  * @author JinYufeng
  * @listens MIT
  */
@@ -459,7 +459,7 @@ MpHtmlParser.prototype.Text = function(c) {
 				this.start = this.i + 1;
 				this.state = this.EndTag;
 			} else this.Comment();
-		} else if (next == '!') {
+		} else if (next == '!' || next == '?') {
 			this.setText();
 			this.Comment();
 		}

@@ -67,8 +67,7 @@ Page({
   onShareAppMessage() {
     return {
       title: '富文本插件',
-      imageUrl: 'https://6874-html-foe72-1259071903.tcb.qcloud.la/share.png?sign=1d1c1938f23a3b1d8b34818599f9f0b4&t=1560250134',
-      path: '/pages/index/index'
+      imageUrl: 'https://6874-html-foe72-1259071903.tcb.qcloud.la/share.png?sign=1d1c1938f23a3b1d8b34818599f9f0b4&t=1560250134'
     }
   }
 })

@@ -59,6 +59,12 @@ Component({
       this._ctx.autoplay = this.data.autoplay;
       this._ctx.loop = this.data.loop;
       this._ctx.src = src;
+      if (this.data.autoplay && !this.data.playing)
+        setTimeout(()=>{
+          this.setData({
+            playing: true
+          })
+        }, 50)
     },
     // 播放
     play() {

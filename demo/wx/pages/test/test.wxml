@@ -7,7 +7,7 @@
   <view class="page__bd">
     <view class="weui-cells__title" id="result">解析结果</view>
     <view class="weui-cells parse-view">
-      <parser html="{{html}}" tag-style="{{tagStyle}}" bindimglongtap="imglongtap" />
+      <parser html="{{html}}" tag-style="{{tagStyle}}" />
     </view>
     <view class="weui-cells__title">输入字符</view>
     <view class="editor-view">

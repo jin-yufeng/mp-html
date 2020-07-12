@@ -13,7 +13,9 @@ var inline = {
   q: 1,
   small: 1,
   span: 1,
-  strong: 1
+  strong: 1,
+  sub: 1,
+  sup: 1
 }
 module.exports = {
   visited: function (e, owner) {
@@ -45,7 +47,7 @@ module.exports = {
     <video wx:else id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay}}" controls="{{!n.attrs.autoplay||n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" unit-id="{{n.attrs['unit-id']}}" data-i="{{index}}" data-source="video" binderror="error" bindplay="play" />
   </block>
   <!--音频-->
-  <myAudio wx:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" data-i="{{index}}" data-source="audio" binderror="error" bindplay="play" />
+  <myAudio wx:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" autoplay="{{n.attrs.autoplay}}" controls="{{!n.attrs.autoplay||n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" data-i="{{index}}" data-source="audio" binderror="error" bindplay="play" />
   <!--广告-->
   <ad wx:elif="{{n.name=='ad'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" unit-id="{{n.attrs['unit-id']}}" data-source="ad" binderror="error" />
   <!--列表-->

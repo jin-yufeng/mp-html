@@ -18,7 +18,7 @@
     <video a:else id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay||controls[i]==0}}" controls="{{!n.attrs.autoplay||n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[controls[i]||0]}}" unit-id="{{n.attrs['unit-id']}}" data-i="{{i}}" data-source="video" onError="error" onPlay="play" />
   </block>
   <!--音频-->
-  <audio a:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[controls[i]||0]}}" data-i="{{i}}" data-source="audio" onError="error" onPlay="play" />
+  <audio a:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" autoplay="{{n.attrs.autoplay}}" controls="{{!n.attrs.autoplay||n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[controls[i]||0]}}" data-i="{{i}}" data-source="audio" onError="error" onPlay="play" />
   <!--列表-->
   <view a:elif="{{n.name=='li'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}};display:flex">
     <view a:if="{{n.type=='ol'}}" class="_ol-bef">{{n.num}}</view>

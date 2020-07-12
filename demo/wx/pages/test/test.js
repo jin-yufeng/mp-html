@@ -1,9 +1,10 @@
 // test.js
-const marked = require('./marked.min.js');
+const marked = require('../../utils/marked.min.js');
 Page({
   // 数据
   data: {
-    modes: ['html 解析', 'markdown 解析']
+    modes: ['html 解析', 'markdown 解析'],
+    tagStyle: {}
   },
   // 页面加载
   onLoad(e) {
@@ -26,9 +27,9 @@ Page({
     }
     // markdown 表格样式
     if (e.index == '1') {
-      tagStyle.table = 'border-collapse:collapse;border-top:1px solid gray;border-left:1px solid gray';
-      tagStyle.th = 'border-right:1px solid gray;border-bottom:1px solid gray;padding:5px;font-weight:bold';
-      tagStyle.td = 'border-right:1px solid gray;border-bottom:1px solid gray;padding:5px';
+      tagStyle.table = 'width:100%;box-sizing:border-box;font-size:14px;border-collapse:collapse;border-top:1px solid #dfe2e5;border-left:1px solid #dfe2e5';
+      tagStyle.th = 'border-right:1px solid #dfe2e5;border-bottom:1px solid #dfe2e5;padding:5px;font-weight:bold';
+      tagStyle.td = 'border-right:1px solid #dfe2e5;border-bottom:1px solid #dfe2e5;padding:5px';
     }
     this.setData({
       index: e.index,
@@ -61,7 +62,8 @@ Page({
           template =
           `| 标题1 | 标题2 |
 |:---:|:---:|
-| 内容1 | [链接](https://github.com/jin-yufeng/Parser) |`;
+| 内容1 | [链接](https://github.com/jin-yufeng/Parser) |
+| 内容2 | 内容3 |`;
         break;
       case 'list':
         if (this.data.index == '0')
@@ -190,8 +192,7 @@ Page({
   onShareAppMessage() {
     return {
       title: this.data.modes[this.data.index],
-      imageUrl: 'https://6874-html-foe72-1259071903.tcb.qcloud.la/share.png?sign=1d1c1938f23a3b1d8b34818599f9f0b4&t=1560250134',
-      path: '/pages/test/test?index=' + this.data.index
+      imageUrl: 'https://6874-html-foe72-1259071903.tcb.qcloud.la/share.png?sign=1d1c1938f23a3b1d8b34818599f9f0b4&t=1560250134'
     }
   }
 })

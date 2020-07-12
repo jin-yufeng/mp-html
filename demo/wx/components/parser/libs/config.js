@@ -1,20 +1,27 @@
 /* 配置文件 */
 const canIUse = wx.canIUse('editor'); // 高基础库标识，用于兼容
-const Prism = require('./prism.js');
+const Prism = require('../../../utils/prism.js');
 module.exports = {
   // 出错占位图
   errorImg: 'https://6874-html-foe72-1259071903.tcb.qcloud.la/error.jpg?sign=c224195f83974f1403f3e03aedc21149&t=1590221293',
   // 过滤器函数
   filter(node, cxt) {
+    // 使得 pre 不被 rich-text 包含（为实现长按复制）
     if (node.name == 'pre')
-      cxt.bubble(); // 使得 pre 不被 rich-text 包含（为实现长按复制）
+      cxt.bubble();
+    // markdown 表格间隔背景色
+    if(node.name == 'table' && (cxt.options.tagStyle || {}).table) {
+      var arr = node.children[1].children;
+      for(var i = 1; i < arr.length; i += 2)
+        arr[i].attrs.style = 'background-color:#f6f8fa';
+    }
   },
   // 代码高亮函数
   highlight(content, attrs) {
     var info = content.match(/<code.*?language-([a-z-]+).*?>([\s\S]+)<\/code.*?>/m);
     if (!info) return content;
     var lan = info[1];
-    content = info[2].replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    content = info[2].replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
     attrs['data-content'] = content; // 记录原始内容，长按复制时使用
     switch (lan) {
       case 'js':

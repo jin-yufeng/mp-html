@@ -21,7 +21,7 @@
 			 :unit-id="n.attrs['unit-id']" :data-id="n.attrs.id" :data-i="i" data-source="video" @error="error" @play="play" />
 			<!--音频-->
 			<audio v-else-if="n.name=='audio'" :ref="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :author="n.attrs.author"
-			 :autoplay="n.attrs.autoplay" :controls="n.attrs.controls" :loop="n.attrs.loop" :name="n.attrs.name" :poster="n.attrs.poster"
+			 :autoplay="n.attrs.autoplay" :controls="!n.attrs.autoplay||n.attrs.controls" :loop="n.attrs.loop" :name="n.attrs.name" :poster="n.attrs.poster"
 			 :src="n.attrs.source[controls[i]||0]" :data-i="i" :data-id="n.attrs.id" data-source="audio"
 			 @error.native="error" @play.native="play" />
 			<!--链接-->

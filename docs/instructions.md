@@ -3,16 +3,17 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 40.1KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 25.3KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 39.6KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 38.1KB | 百度小程序插件包 |
-| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 38.4KB | 支付宝小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 38.9KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.0KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 40.6KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 25.6KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 40.1KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 38.5KB | 百度小程序插件包 |
+| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 38.9KB | 支付宝小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 39.3KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.1KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
+版本分为 [发布版](https://github.com/jin-yufeng/Parser)（较为稳定）和 [开发版](https://github.com/jin-yufeng/Parser/tree/develop)（可以尝鲜）  
 
 关于 `uni-app` 包的相关说明：  
 1. 为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
@@ -25,7 +26,7 @@
 |:---:|---|
 | 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单 |
 | 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
-| H5<br>360 小程序 | 支持所有浏览器支持的标签<br>不支持 loading-img 属性<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
+| H5<br>360 小程序 | 支持所有浏览器支持的标签<br>不支持 loading-img 属性<br>不支持写在 trees.vue 中的自定义标签和样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
 | App | v3 不支持 audio 标签<br>v3 支持 iframe 标签 |
 | NVUE | 支持所有浏览器支持的标签<br>不支持 lazy-load、loading-img 属性<br>不支持 getVideoContext 的 api<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
 | 华为快应用 | 不支持锚点跳转 |
@@ -435,10 +436,10 @@ filter(node, cxt) {
 输入值：`content` 是 `pre` 标签的内容，`attrs` 是 `pre` 标签的属性列表  
 返回值：高亮处理后的 `html` 内容  
 示例（以 [prism](https://prismjs.com/) 为例）：  
-1. 下载需要的 `prism.js` 和 `prism.css` 至 `libs` 目录（`css` 更名为 `wxss`）  
+1. 下载需要的 `prism.js` 和 `prism.css` 至 `utils` 目录（`css` 更名为 `wxss`）  
 2. 在 `config.js` 中实现 `highlight` 函数  
    ```javascript
-   const Prism = require('./prism.js');
+   const Prism = require('/utils/prism.js');
    ...
    highlight(content, attrs) {
      content = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/quot;/g, '"').replace(/&amp;/g, '&'); // 替换实体编码
@@ -459,7 +460,7 @@ filter(node, cxt) {
 3. 在 `trees.wxss` 中引入样式
    ```css
    /* trees/trees.wxss */
-   @import '../libs/prism.wxss';
+   @import 'utils/prism.wxss';
    ```
 4. 其中不支持的标签名选择器可以通过 [tag-style](/features#设置默认的标签样式) 属性引入  
 
@@ -521,9 +522,9 @@ onText(text, hasTag) {
   
 | 版本 | 功能 | 占比 |
 |:---:|:---:|:---:|
-| < 2.7.1 | 不支持图片长按菜单（识别小程序码）<br>不支持 bdi bdo ruby 标签 | 1.41% |
-| < 2.4.4 | 不支持 a 标签 visited 效果 | 0.23% |
-| < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.10% |
+| < 2.7.1 | 不支持图片长按菜单（识别小程序码）<br>不支持 bdi bdo ruby 标签 | 1.18% |
+| < 2.4.4 | 不支持 a 标签 visited 效果 | 0.19% |
+| < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.08% |
 | < 1.6.3 | 无法使用 | < 0.01% |
 
 !> 使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
@@ -592,6 +593,29 @@ context.navigateTo({
 })
 ```
 
+#### in ####
+功能：将锚点跳转的范围限定在一个 `scroll-view` 内  
+说明：默认情况下，锚点跳转是通过控制页面的滚动实现的，但如果 `parser` 标签被放置在一个 `scroll-view` 内，通过页面的跳转就无法到达该锚点的位置，而组件内又无法直接控制 `scroll-view` 的滚动，因此设置这样一个方法传入必要信息  
+输入值：一个 `object`，`selector` 为该 `scroll-view` 的选择器，`page` 为 `scroll-view` 所在页面或组件的实例（一般为 `this`），`scrollTop` 为 `scroll-view` 标签 `scroll-top` 属性绑定的变量名，这三者 **缺一不可**，另外 `scroll-view` 需要限制高度并开启 `scroll-y` 属性  
+使用方法：  
+```wxml
+<scroll-view id="scroll" scroll-y scroll-top="{{top}}" scroll-with-animation style="height:300px">
+  <parser id="article" html="{{html}}" use-anchor />
+</scroll-view>
+```
+
+```javascript
+Page({
+  onLoad() {
+    this.selectComponent("#article").in({
+      page: this,
+      selector: '#scroll',
+      scrollTop: 'top'
+    })
+    // 之后内部的锚点跳转或手动调用 navigateTo 方法都会在这个 scroll-view 内部滚动
+  }
+})
+```
 #### getVideoContext ####
 功能：获取组件中视频的 `context` 对象，可以操控视频的播放  
 输入值：`video` 标签的 `id`（没有设置 `id` 时会被自动设置为 `video + i`，不输入返回一个包含所有视频的数组）  
@@ -821,7 +845,7 @@ error(e){
   `error` 事件中会返回 `context` 对象（也可以通过 [getVideoContext](#getVideoContext) 方法获取），包含 `setSrc`、`play`、`pause`、`seek` 方法  
   封装成自定义组件，可以直接在页面上使用（属性和事件基本同 `audio`）  
 - 大小  
-  `4.11KB`（`uni-app` 版 `4.60KB`）  
+  `4.26KB`（`uni-app` 版 `4.66KB`）  
 - 使用方法  
 
   ?> 建议通过 [打包工具](#打包工具) 打包  
@@ -949,6 +973,49 @@ filter(node, cxt) {
 
 一些例子：  
 `div` 点击事件：[#113](https://github.com/jin-yufeng/Parser/issues/113)  
+
+### 使用 markdown ###
+由于 `markdown` 使用量相对较少，解析脚本较大且 `markdown` 的美观性很大程度上依赖于内置样式，不同场景下需求差异较大，因此默认不支持 `markdown`，如果需要可以先借助其他库将 `markdown` 转为 `html`，并通过 `tag-style` 和 `filter` 等工具进行美化，可参考以下方案：  
+```wxml
+<parser html="{{content}}" tag-style="{{tagStyle}}" />
+```
+```javascript
+const marked = require('marked');
+Page({
+  data: {
+    // 默认样式
+    tagStyle: {
+      // 代码块
+      pre: 'padding:1em 1em 0 1em;margin:.5em 0;border-radius:0.3em;background:#2d2d2d;color:#ccc;line-height: 1.5;font-family:Consolas,Monaco,"Andale Mono","Ubuntu Mono",monospace',
+      code: 'background-color:#f0f0f0;font-size:85%;margin:0 3px;padding:2px 5px 2px 5px;border-radius:2px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
+      // 表格添加边框
+      table: 'width:100%;margin:10px 0;font-size:14px;border-collapse:collapse;border-top:1px solid #dfe2e5;border-left:1px solid #dfe2e5',
+      th: 'padding:5px;border-right:1px solid #dfe2e5;border-bottom:1px solid #dfe2e5',
+      td: 'padding:5px;border-right:1px solid #dfe2e5;border-bottom:1px solid #dfe2e5'
+    }
+  },
+  onLoad() {
+    var markdown = '## 标题';
+    this.setData({
+      content: marked(markdown)
+    })
+  }
+})
+```
+
+如果需要实现表格间隔的背景色，可以在 `config.js` 中的 `filter` 中进行处理  
+```javascript
+filter(node, cxt) {
+  if(node.name == 'table') {
+    var arr = node.children[1].children;
+    for(var i = 1; i < arr.length; i += 2)
+      arr[i].attrs.style = 'background-color:#f6f8fa';
+  }
+}
+```
+
+代码高亮的处理方式见：[highlight](#highlight)  
+[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) 中的文档页面都是由 `markdown` 生成，可供参考  
 
 ## 许可与支持 ##
 - 许可  

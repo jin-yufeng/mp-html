@@ -27,13 +27,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 40.1KB | 微信小程序插件包 |
-| parser.min | 25.3KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 39.6KB | QQ 小程序插件包 |
-| parser.bd | 38.1KB | 百度小程序插件包 |
-| parser.my | 38.4KB | 支付宝小程序插件包 |
-| parser.tt | 38.9KB | 头条小程序插件包 |
-| parser.uni | 58.0KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 40.6KB | 微信小程序插件包 |
+| parser.min | 25.6KB | 微信小程序插件包压缩版（功能相同） |
+| parser.qq | 40.1KB | QQ 小程序插件包 |
+| parser.bd | 38.5KB | 百度小程序插件包 |
+| parser.my | 38.9KB | 支付宝小程序插件包 |
+| parser.tt | 39.3KB | 头条小程序插件包 |
+| parser.uni | 58.1KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
 1. 复制 `parser` 文件夹至 `components` 目录  
@@ -167,6 +167,14 @@
 
 
 ## 更新日志 ##
+- 2020.7.12  
+  1. `A` 增加了 `in` 的 `api`，可以将锚点跳转的范围限定在一个 `scroll-view` 内 [详细](https://jin-yufeng.github.io/Parser/#/instructions#in)  
+  2. `U` 支持识别 `xml` 声明（`<?xml`）  
+  3. `U` 优化了 `uni-app` 包 `NVUE` 端的显示模式（避免显示不全和内部滚动）  
+  4. `F` 修复了 `audio` 扩展包设置 `autoplay` 时状态不正确的问题  
+  5. `F` 修复了微信和 `QQ` 端 `sub` 和 `sup` 标签可能被错误换行的问题  
+  6. `F` 修复了 `uni-app` 包 `NVUE` 端无法触发 `click` 事件的问题  
+
 - 2020.6.30  
   1. `F` 修复了个别情况下图片样式异常的问题 [详细](https://github.com/jin-yufeng/Parser/issues/163)  
   2. `F` 修复了个别情况下会出现多余的换行的问题  
@@ -174,13 +182,5 @@
 - 2020.6.15  
   1. `U` 文档添加 [性能优化建议](https://jin-yufeng.github.io/Parser/#/question#性能优化建议) 和 [体验优化建议](https://jin-yufeng.github.io/Parser/#/question#性能优化建议)  
   2. `D` `html` 属性不再支持 `Array` 类型（传入 `Array` 的优化程度有限（解析时间基本 `<50ms`）；但相同的内容，解析为 `Array` 后会增加大小，进而导致网络传输时间增加；因此大部分情况下传入 `Array` 起到的优化效果不大，甚至可能负优化，还增加了处理复杂度）  
-
-- 2020.6.11  
-  1. `A` 增加支付宝小程序原生包 [详细](https://jin-yufeng.github.io/Parser/#/instructions#插件包说明)  
-  2. `U` `uni-app` 包适配华为快应用  
-  3. `U` `uni-app` 包编译到 `App` 时实现了 `lazy-load` 属性（图片懒加载）  
-  4. `F` 修复了 `ios` 端图片长按可能导致页面失去响应的问题 [详细](https://github.com/jin-yufeng/Parser/issues/130)  
-  5. `F` 修复了 `uni-app` 包多次设置 `html` 内容时可能出现一些不正确情况的问题  
-  6. `D` 移除了 `trustAttrs` 的配置项，改为自动移除 `data-` 开头的属性  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)

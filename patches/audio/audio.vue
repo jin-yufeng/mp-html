@@ -85,9 +85,11 @@
 		methods: {
 			// 设置源
 			setSrc(src) {
-				this._ctx.autoplay = this.autoplay;
-				this._ctx.loop = this.loop;
+				this._ctx.autoplay = Boolean(this.autoplay);
+				this._ctx.loop = Boolean(this.loop);
 				this._ctx.src = src;
+				if (this.autoplay && !this.playing)
+					this.playing = true;
 			},
 			// 播放
 			play() {

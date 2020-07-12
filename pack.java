@@ -51,13 +51,13 @@ class core {
 	boolean isMin = false;
 
 	// 包大小
-	final float wxSize = 40.1f;
-	final float wxMinSize = 25.3f;
-	final float qqSize = 39.6f;
-	final float bdSize = 38.1f;
-	final float mySize = 38.4f;
-	final float ttSize = 38.9f;
-	final float uniAppSize = 58.0f;
+	final float wxSize = 40.6f;
+	final float wxMinSize = 25.6f;
+	final float qqSize = 40.1f;
+	final float bdSize = 38.5f;
+	final float mySize = 38.9f;
+	final float ttSize = 39.3f;
+	final float uniAppSize = 58.1f;
 	final float emojiSize = 4.21f;
 	final float emojiMinSize = 3.12f;
 	final float domSize = 7.41f;
@@ -65,8 +65,8 @@ class core {
 	final float domMinSize = 5.17f;
 	final float cssSize = 4.52f;
 	final float cssMinSize = 1.62f;
-	final float audioSize = 4.11f;
-	final float audioUniSize = 4.60f;
+	final float audioSize = 4.26f;
+	final float audioUniSize = 4.66f;
 
 	// 构造函数
 	core() {
@@ -349,7 +349,7 @@ class core {
 								modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
 										"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
 								modifyFile(newPath + "/trees/trees.ttml", "<!--音频-->",
-										"<myAudio tt:elif=\"{{n.name=='audio'}}\" id=\"{{n.attrs.id}}\" class=\"{{n.attrs.class}}\" style=\"{{n.attrs.style}}\" author=\"{{n.attrs.author}}\" autoplay=\"{{n.attrs.autoplay}}\" controls=\"{{n.attrs.controls}}\" loop=\"{{n.attrs.loop}}\" name=\"{{n.attrs.name}}\" poster=\"{{n.attrs.poster}}\" src=\"{{n.attrs.source[n.i||0]}}\" data-i=\"{{index}}\" data-source=\"audio\" binderror=\"error\" bindplay=\"play\" />");
+										"<myAudio tt:elif=\"{{n.name=='audio'}}\" id=\"{{n.attrs.id}}\" class=\"{{n.attrs.class}}\" style=\"{{n.attrs.style}}\" author=\"{{n.attrs.author}}\" autoplay=\"{{n.attrs.autoplay}}\" controls=\"{{!n.attrs.autoplay||n.attrs.controls}}\" loop=\"{{n.attrs.loop}}\" name=\"{{n.attrs.name}}\" poster=\"{{n.attrs.poster}}\" src=\"{{n.attrs.source[n.i||0]}}\" data-i=\"{{index}}\" data-source=\"audio\" binderror=\"error\" bindplay=\"play\" />");
 							}
 						}
 						if (document.isSelected()) {

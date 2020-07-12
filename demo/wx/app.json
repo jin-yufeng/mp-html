@@ -10,5 +10,6 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "富文本插件",
     "navigationBarTextStyle": "black"
-  }
+  },
+  "lazyCodeLoading": "requiredComponents"
 }

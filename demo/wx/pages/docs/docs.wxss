@@ -1,49 +1,6 @@
 /* docs.wxss */
-.table {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  border-top: 1px solid #dfe2e5;
-  border-left: 1px solid #dfe2e5;
-}
-
-.tr {
-  display: flex;
-}
-
-.th {
-  font-weight: bold;
-}
-
-.td,
-.th {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 3px;
-  border-right: 1px solid #dfe2e5;
-  border-bottom: 1px solid #dfe2e5;
-}
-
-.link {
-  display: inline;
-  padding: 1.5px 0 1.5px 0;
-  color: #366092;
-}
-
-.link-hover {
-  text-decoration: underline;
-  opacity: 0.7;
-}
-
-.weui-article__p {
-  margin: 0 0 0.8em;
-}
-
-.display {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 280rpx;
-  border: 1px solid gray;
+.loading {
+  color:gray;
+  text-align: center;
+  font-size: 18px;
 }
