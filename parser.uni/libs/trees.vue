@@ -140,7 +140,7 @@
 								top: 500,
 								bottom: 500
 							});
-							this.$nextTick(() => {
+							setTimeout(() => {
 								this.observer.observe('._img', res => {
 									if (res.intersectionRatio) {
 										for (var j = this.nodes.length; j--;)
@@ -149,7 +149,7 @@
 										this.observer.disconnect();
 									}
 								})
-							})
+							}, 0)
 						}
 						// #endif
 					} else if (n.name == 'video' || n.name == 'audio') {
