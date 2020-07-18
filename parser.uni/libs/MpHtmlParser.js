@@ -233,8 +233,6 @@ MpHtmlParser.prototype.setNode = function() {
 				style += ';-webkit-touch-callout:none';
 				styleObj['max-width'] = '100%';
 			}
-			if (!styleObj.position)
-				styleObj.top = styleObj.bottom = styleObj.left = styleObj.right = styleObj['z-index'] = void 0;
 			var width;
 			if (styleObj.width) width = styleObj.width;
 			else if (attrs.width) width = attrs.width.includes('%') ? attrs.width : attrs.width + 'px';

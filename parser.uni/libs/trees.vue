@@ -318,9 +318,9 @@
 	}
 
 	._img {
-		position: relative;
 		display: inline-block;
 		max-width: 100%;
+		overflow: hidden;
 	}
 
 	/* #ifdef MP-WEIXIN */
@@ -402,11 +402,10 @@
 	}
 
 	._image {
-		position: absolute;
-		top: 0;
-		left: 0;
+		display: block;
 		width: 100%;
-		height: 100%;
+		height: 360px;
+		margin-top: -360px;
 		opacity: 0;
 	}
 

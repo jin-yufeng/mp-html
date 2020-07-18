@@ -18,7 +18,6 @@
 }
 
 ._img {
-  position: relative;
   display: inline-block;
   max-width: 100%;
 }
@@ -82,11 +81,10 @@
 }
 
 ._image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  display: block;
+  width: 1px;
+  height: 1px;
+  margin-top: -1px;
   opacity: 0;
 }
 
