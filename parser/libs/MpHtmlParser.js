@@ -296,7 +296,7 @@ MpHtmlParser.prototype.remove = function (node) {
     if (!node.attrs.xmlns) src = ' xmlns="http://www.w3.org/2000/svg"' + src;
     var i = j;
     while (this.data[j] != '<') j--;
-    src = this.data.substring(j, i) + src;
+    src = this.data.substring(j, i).replace("viewbox", "viewBox") + src;
     var parent = this.parent();
     if (node.attrs.width == '100%' && parent && (parent.attrs.style || '').includes('inline'))
       parent.attrs.style = 'width:300px;max-width:100%;' + parent.attrs.style;
