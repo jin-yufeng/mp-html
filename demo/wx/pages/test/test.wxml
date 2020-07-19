@@ -9,7 +9,9 @@
     <view class="weui-cells parse-view">
       <parser html="{{html}}" tag-style="{{tagStyle}}" />
     </view>
-    <view class="weui-cells__title">输入字符</view>
+    <view class="weui-cells__title">输入字符
+      <view class="link" hover-class="link-hover" style="float:right" bindtap="file">文件读取</view>
+    </view>
     <view class="editor-view">
       <parser hidden="{{tooLong}}" class="highlight-view" html="{{code}}" />
       <editor id="editor" class="editor" placeholder="{{modes[index]}}" style="color:{{tooLong?'#ccc':'transparent'}}" bindinput="input" />

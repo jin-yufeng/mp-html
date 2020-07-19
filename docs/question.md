@@ -7,7 +7,7 @@
 多张图片连续排列时，中间会有一条缝隙  
 
 *问题原因：*  
-由于 `img` 的默认 `display` 是 `inline-block`，每张图片的底部会有空隙，如果不需要，可以对该 `img` 设置 `display:block`  
+由于 `img` 的默认 `display` 是 `inline-block`，以基线对齐，底部会有空隙；如果不需要，可以对该 `img` 设置 `display:block` 或 `vertical-align:bottom` 或者对其父级设置 `font-size:0`  
   
 *解决方案：*  
 - 设置行内样式  
@@ -97,6 +97,7 @@
     }
   }
   ```  
+- 设置 [autoscroll](/instructions#autoscroll) 属性让表格能够单独滚动  
 - 通过 [filter](/instructions#filter) 方法个别调整样式  
 
 *相关 issue：*[#6](https://github.com/jin-yufeng/Parser/issues/6)、[#44](https://github.com/jin-yufeng/Parser/issues/44)、[#50](https://github.com/jin-yufeng/Parser/issues/50)、[#66](https://github.com/jin-yufeng/Parser/issues/66)
@@ -198,12 +199,22 @@
 *解决方案：*  
 自行全局替换一下  
 ```javascript
-html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>'); // 如果还转义了其他字符如 &amp; &quot; 等也要进行替换
 ```
 
 组件内部不会对此进行处理，因为在 `html` 中使用实体就是为了不被解析为标签  
 
 *相关 issue：*[#97](https://github.com/jin-yufeng/Parser/issues/97)
+
+#### 图片被缩进 ####
+*问题描述：*  
+图片和文字一样被缩进  
+
+*问题原因：*  
+富文本编辑器中开启缩进后，会给 `p` 标签设置 `text-indent`，如果某张图片处于段落开头，也将被缩进  
+
+*解决方案：*  
+将图片设置为 `display:block` 可以解决这个问题，设置方法 [同上](#连续图片间有间隙)  
 
 #### 长内容卡顿 ####
 *问题描述：*  

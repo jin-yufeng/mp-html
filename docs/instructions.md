@@ -3,13 +3,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 40.6KB | 微信小程序插件包 |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 40.4KB | 微信小程序插件包 |
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 25.6KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 40.1KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 38.5KB | 百度小程序插件包 |
-| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 38.9KB | 支付宝小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 39.3KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 58.1KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 40.0KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 38.3KB | 百度小程序插件包 |
+| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 38.7KB | 支付宝小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 39.2KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.7KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
@@ -47,6 +47,7 @@
 以下统称为 `parser`  
 
 ### 在原生框架中使用 ###
+#### 源码引入 ####
 1. 复制 [parser](#插件包说明) 文件夹至 `components` 目录  
 2. 在需要使用页面的 `json` 文件中添加  
    ``` json
@@ -68,6 +69,27 @@
      }
    })
    ```
+
+#### npm 引入（仅限微信） ####
+1. 在小程序目录下执行  
+     
+   ```bash
+   npm install parser-wx
+   ```
+2. 选择工具-构建 `npm`  
+3. 在需要使用页面的 `json` 文件中添加  
+     
+   ```json
+   {
+     "usingComponents": {
+       "parser":"parser-wx"
+     }
+   }
+   ```
+
+后续步骤同上  
+
+!> npm 引入需要基础库 `2.2.1` 以上（更多信息参考 [官方文档](https://developers.weixin.qq.com/miniprogram/dev/devtools/npm.html)）  
 
 ?> [demo/wx](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) 文件夹下的是微信小程序 [富文本插件](#立即体验) 示例程序的源码，可供参考  
 
@@ -886,19 +908,31 @@ error(e){
 ### 图片处理 ###
 由于小程序中的 `image` 和 `html` 中的 `img` 表现有很大不同（`html` 中的 `img` 在没有设置宽高时按原大小显示，设置了宽或高时按比例缩放，同时设置宽高时按设置值显示；小程序中的 `image` 必须设置宽高，否则将按照默认大小（`300×225`）显示），因此在小程序上模拟实现 `img` 将成为一个难题，插件的处理如下：  
 
-- `20200317` 版本前  
+- `v1`  
+  往常的富文本组件中往往是通过 `image` 组件来显示图片，然后在 `load` 事件中将图片设置为原大小  
+  缺陷：  
+  1. 每张图片需要一次 `setData`，如果还没有进行组件封装，性能影响较大  
+  2. 无法自定义图片大小或按比例缩放，只能按原大小或比例显示  
+  3. 图片加载完成后大小才会突然从 `0` 闪现到原大小，加载时间长时效果不佳  
+
+  本插件未采用此方案  
+  
+- `v2`  
   通过 `rich-text` 中的 `img` 显示图片  
+
   优点：  
   与 `html` 中的 `img` 表现基本一致  
   缺陷：  
   1. 不支持 `image` 的一些原生能力，包括：  
      1. 懒加载，`20190928` 版本后通过 `IntersectionObserver` 实现，但效果依然不如原生  
-     2. 云文件 `ID`（`2.3.0+`）
+     2. 云文件 `ID`（`2.3.0+`）  
      3. 长按菜单（`2.7.0+`，能够识别小程序码）  
      4. `webp` 图片（`2.9.0+`）  
   2. `img` 外套了一层 `rich-text`，会在一些情况下导致样式错误  
 
-- `20200317`版本 - `20200425` 版本  
+  `20200317` 版本前采用  
+
+- `v3`  
   对 `image` 进行如下处理后显示图片：  
   1. 若只设置了宽度，则设置 `mode` 为 `widthFix`  
   2. 若只设置了高度，则设置 `mode` 为 `heightFix`（`2.10.3` 以上支持，低基础库可能存在问题）  
@@ -911,15 +945,36 @@ error(e){
   1. 对于上述最后一种情况，在图片加载完成时会突然从默认大小变成原大小，一些情况下较影响体验  
   2. 在 `inline-block` 的容器中，`img` 能够撑开容器，但 `image` 不能，一些情况下会导致错误，需要额外处理  
   2. 增加了处理复杂度，需要计算各类情况下的 `mode` 和设置宽度等  
+  
+  `20200317`版本 - `20200425` 版本采用  
 
-- `20200425` 后版本  
+- `v4`  
   结合 `rich-text` 和 `image`，`rich-text` 由于控制图片大小，`image` 覆盖其上，设置为透明，用于控制懒加载和长按菜单  
   优点：  
   1. 与 `html` 中的 `img` 表现基本一致  
   2. 部分利用了 `image` 的原生能力（懒加载和长按菜单）  
   
-  此方案最大程度上结合了上述两种方案的优点（只是还不能支持云文件 `ID` 和 `webp`，因为这两种情况下 `rich-text` 无法显示，要控制 `image` 的大小则又会带来第二种方案中的问题）  
+  此方案最大程度上结合了 `2`，`3` 两种方案的优点（只是还不能支持云文件 `ID` 和 `webp`，因为这两种情况下 `rich-text` 无法显示，要控制 `image` 的大小则又会带来 `v3` 中的问题）  
 
+  - `v4.1`  
+    通过将 `rich-text` 和 `image` 置于一个 `view` 内，父组件的 `position` 设置为 `relative`，`image` 的 `position` 设置为 `absolute` 并铺满父级，实现 `image` 覆盖在 `rich-text` 上的效果  
+    优点：  
+    确保 `image` 能够完全覆盖住 `rich-text`  
+    缺陷：  
+    1. 设置 `position` 为 `relative` 会让图片的层次高于一般标签，使得其无法被覆盖  
+    2. `absolute` 布局效率和性能较低  
+    
+    `20200425` 版本 - `20200719` 版本采用  
+
+  - `v4.2`  
+    通过给 `image` 预设一个高度，然后将 `margin-top` 设置为负值，缩进相同的高度，父组件设置 `overflow:hidden` 隐藏溢出的部分，通过这样的方式实现覆盖  
+    优点：  
+    解决了 `v4.1` 中的问题  
+    缺陷：  
+    如果图片高度超过了预设的高度（目前为 `360px`，可自行在 `trees.wxss` 中的 `._image` 中进行修改），长按图片的上半部分将无法弹出菜单（其他不受影响）  
+    
+    `20200719` 版本后采用  
+    
 ## 二次开发 ##
 
 ### 添加一个自定义标签 ###  

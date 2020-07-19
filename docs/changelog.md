@@ -1,5 +1,13 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.07.19 ####
+1. `A` 发布了微信端的 `npm` 包 [详细](https://www.npmjs.com/package/parser-wx)  
+2. `U` `uni-app` 包 `H5` 端图片设置的宽度超出屏幕宽度时自动将高度设置为 `auto`，避免变形  
+3. `U` 优化了 `uni-app` 包支付宝端的处理方式，减少了层级  
+4. `F` 修复了 `svg` 的 `viewBox` 属性小写不生效的问题 [详细](https://github.com/jin-yufeng/Parser/issues/171)  
+5. `F` 修复了图片层级过高，无法被遮盖的问题  
+6. `F` 修复了 `uni-app` 包 `NVUE` 端多次设置数据可能闪烁的问题  
+
 #### 2020.07.11 ####
 1. `A` 增加了 `in` 的 `api`，可以将锚点跳转的范围限定在一个 `scroll-view` 内 [详细](/instructions#in)  
 2. `U` 支持识别 `xml` 声明（`<?xml`）  

@@ -35,7 +35,6 @@
 	// #endif
 	// #ifdef H5 || APP-PLUS-NVUE || MP-360
 	var windowWidth = uni.getSystemInfoSync().windowWidth,
-		rpx = windowWidth / 750,
 		cfg = require('./libs/config.js');
 	// #endif
 	// #ifdef APP-PLUS-NVUE
@@ -64,7 +63,7 @@
 	 * @event {Function} imgtap 图片点击事件
 	 * @event {Function} linkpress 链接点击事件
 	 * @author JinYufeng
-	 * @version 20200712
+	 * @version 20200719
 	 * @listens MIT
 	 */
 	export default {
@@ -528,7 +527,7 @@
 				}
 				// 处理 rpx
 				if (html.includes('rpx'))
-					html = html.replace(/[0-9.]+\s*rpx/g, $ => parseFloat($) * rpx + 'px');
+					html = html.replace(/[0-9.]+\s*rpx/g, $ => (parseFloat($) * windowWidth / 750) + 'px');
 				return html;
 			},
 			// #endif

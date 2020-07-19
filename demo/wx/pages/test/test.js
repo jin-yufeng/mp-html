@@ -188,6 +188,22 @@ Page({
       }
     })
   },
+  // 文件读取
+  file() {
+    wx.chooseMessageFile({
+      count: 1,
+      type: 'file',
+      extension: ['txt', this.data.index == '0' ? 'html' : 'md'],
+      success: res => {
+        this.editor.insertText({
+          text: wx.getFileSystemManager().readFileSync(res.tempFiles[0].path, 'utf8')
+        })
+        wx.pageScrollTo({
+          selector: '.weui-btn-area'
+        })
+      }
+    })
+  },
   // 页面分享
   onShareAppMessage() {
     return {

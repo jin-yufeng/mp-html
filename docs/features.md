@@ -352,4 +352,5 @@ Page({
 
 相关项目：  
 [EastWorld/wechat-app-mall](https://github.com/EastWorld/wechat-app-mall)  
+[YanxinNet/uView](https://github.com/YanxinNet/uView)  
 [zhangdaren/miniprogram-to-uniapp](https://github.com/zhangdaren/miniprogram-to-uniapp)  

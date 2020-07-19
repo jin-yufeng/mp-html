@@ -139,13 +139,6 @@ module.exports = [`<head>
   <p>
     </br>
   </p>
-  <div id="adContainer">
-    <ad unit-id="xxx"></ad>
-    <div style="font-size:12px;color:gray;text-align:center;">文中广告</div>
-  </div>
-  <p>
-    </br>
-  </p>
   <section id="anchor" style="border:0px none;">
     <section style="padding:10px;">
       <section style="box-shadow:0px 0px 5px #e5e5e5 ;height:65px;">

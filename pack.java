@@ -51,13 +51,13 @@ class core {
 	boolean isMin = false;
 
 	// 包大小
-	final float wxSize = 40.6f;
+	final float wxSize = 40.4f;
 	final float wxMinSize = 25.6f;
-	final float qqSize = 40.1f;
-	final float bdSize = 38.5f;
-	final float mySize = 38.9f;
-	final float ttSize = 39.3f;
-	final float uniAppSize = 58.1f;
+	final float qqSize = 40.0f;
+	final float bdSize = 38.3f;
+	final float mySize = 38.7f;
+	final float ttSize = 39.2f;
+	final float uniAppSize = 57.7f;
 	final float emojiSize = 4.21f;
 	final float emojiMinSize = 3.12f;
 	final float domSize = 7.41f;

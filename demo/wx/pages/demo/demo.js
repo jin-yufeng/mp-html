@@ -17,8 +17,6 @@ Page({
   // 富文本出错事件
   error(e) {
     console.error(e);
-    if (e.detail.source == 'ad')
-      this.context.document.getElementById('adContainer').setStyle('display', 'none');
   },
   // 链接点击事件
   linkpress(e) {

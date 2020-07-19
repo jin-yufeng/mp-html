@@ -1,7 +1,7 @@
 /**
  * html 解析器
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200712
+ * @version 20200719
  * @author JinYufeng
  * @listens MIT
  */

@@ -27,37 +27,56 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 40.6KB | 微信小程序插件包 |
+| parser | 40.4KB | 微信小程序插件包 |
 | parser.min | 25.6KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 40.1KB | QQ 小程序插件包 |
-| parser.bd | 38.5KB | 百度小程序插件包 |
-| parser.my | 38.9KB | 支付宝小程序插件包 |
-| parser.tt | 39.3KB | 头条小程序插件包 |
-| parser.uni | 58.1KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.qq | 40.0KB | QQ 小程序插件包 |
+| parser.bd | 38.3KB | 百度小程序插件包 |
+| parser.my | 38.7KB | 支付宝小程序插件包 |
+| parser.tt | 39.2KB | 头条小程序插件包 |
+| parser.uni | 57.7KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
-1. 复制 `parser` 文件夹至 `components` 目录  
-2. 在需要使用页面的 `json` 文件中添加  
-   
-   ```json
-   {
-     "usingComponents": {
-       "parser":"/components/parser/parser"
+- 源码引入  
+  1. 复制 `parser` 文件夹至 `components` 目录  
+  2. 在需要使用页面的 `json` 文件中添加  
+     
+     ```json
+     {
+       "usingComponents": {
+         "parser":"/components/parser/parser"
+       }
      }
-   }
-   ```
-3. 在需要使用页面的 `wxml` 文件中添加  
-   
-   ```html
-   <parser html="{{html}}" />
-   ```
-4. 在需要使用页面的 `js` 文件中添加  
-   
-   ``` javascript
-   data: {
-     html:"<div>Hello World!</div>"
-   }
-   ```
+     ```
+  3. 在需要使用页面的 `wxml` 文件中添加  
+     
+     ```html
+     <parser html="{{html}}" />
+     ```
+  4. 在需要使用页面的 `js` 文件中添加  
+     
+     ``` javascript
+     data: {
+       html:"<div>Hello World!</div>"
+     }
+     ```
+- `npm` 引入（仅限微信，需要基础库 `2.1.1` 以上）  
+  1. 在小程序目录下执行  
+     
+     ```bash
+     npm install parser-wx
+     ```
+  2. 选择工具-构建 `npm`  
+  3. 在需要使用页面的 `json` 文件中添加  
+     
+     ```json
+     {
+       "usingComponents": {
+         "parser":"parser-wx"
+       }
+     }
+     ```
+     后续步骤同上  
+
 - `demo/wx` 文件夹下的是微信小程序 `富文本插件` 示例程序的源码，可供参考  
 
 ### 在 uni-app 中使用 ###
@@ -154,6 +173,7 @@
 
 相关项目：  
 [EastWorld/wechat-app-mall](https://github.com/EastWorld/wechat-app-mall)  
+[YanxinNet/uView](https://github.com/YanxinNet/uView)  
 [zhangdaren/miniprogram-to-uniapp](https://github.com/zhangdaren/miniprogram-to-uniapp)  
 
 ## 许可与支持 ##
@@ -167,6 +187,14 @@
 
 
 ## 更新日志 ##
+- 2020.7.19  
+  1. `A` 发布了微信端的 `npm` 包 [详细](https://www.npmjs.com/package/parser-wx)  
+  2. `U` `uni-app` 包 `H5` 端图片设置的宽度超出屏幕宽度时自动将高度设置为 `auto`，避免变形  
+  3. `U` 优化了 `uni-app` 包支付宝端的处理方式，减少了层级  
+  4. `F` 修复了 `svg` 的 `viewBox` 属性小写不生效的问题 [详细](https://github.com/jin-yufeng/Parser/issues/171)  
+  5. `F` 修复了图片层级过高，无法被遮盖的问题  
+  6. `F` 修复了 `uni-app` 包 `NVUE` 端多次设置数据可能闪烁的问题  
+
 - 2020.7.12  
   1. `A` 增加了 `in` 的 `api`，可以将锚点跳转的范围限定在一个 `scroll-view` 内 [详细](https://jin-yufeng.github.io/Parser/#/instructions#in)  
   2. `U` 支持识别 `xml` 声明（`<?xml`）  
@@ -178,9 +206,5 @@
 - 2020.6.30  
   1. `F` 修复了个别情况下图片样式异常的问题 [详细](https://github.com/jin-yufeng/Parser/issues/163)  
   2. `F` 修复了个别情况下会出现多余的换行的问题  
-
-- 2020.6.15  
-  1. `U` 文档添加 [性能优化建议](https://jin-yufeng.github.io/Parser/#/question#性能优化建议) 和 [体验优化建议](https://jin-yufeng.github.io/Parser/#/question#性能优化建议)  
-  2. `D` `html` 属性不再支持 `Array` 类型（传入 `Array` 的优化程度有限（解析时间基本 `<50ms`）；但相同的内容，解析为 `Array` 后会增加大小，进而导致网络传输时间增加；因此大部分情况下传入 `Array` 起到的优化效果不大，甚至可能负优化，还增加了处理复杂度）  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)
