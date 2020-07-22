@@ -125,7 +125,7 @@ Component({
       })
     },
     // 获取文本
-    getText(ns = this.data.html) {
+    getText(ns = this.data.nodes) {
       var txt = '';
       for (var i = 0, n; n = ns[i++];) {
         if (n.type == 'text') txt += n.text.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
