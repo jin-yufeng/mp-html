@@ -16,8 +16,8 @@ function hash(str) {
   return val;
 }
 Component({
-  data: { 
-    nodes: [] 
+  data: {
+    nodes: []
   },
   properties: {
     html: {
@@ -97,7 +97,7 @@ Component({
   },
   methods: {
     // 锚点跳转
-    in (obj) {
+    in(obj) {
       if (obj.page && obj.selector && obj.scrollTop) this._in = obj;
     },
     navigateTo(obj) {
@@ -165,8 +165,8 @@ Component({
         tt.setNavigationBarTitle({
           title: nodes.title
         })
-      this.setData(data, () => {
-        var ns = this.selectAllComponents('._top,._top>>>._node');
+      this.setData(data);
+      this.selectAllComponents('._top,._top>>>._node', ns => {
         for (let i = 0, n; n = ns[i++];) {
           n.top = this;
           for (var j = 0, item; item = n.data.nodes[j++];) {
@@ -187,7 +187,7 @@ Component({
           }
         }
         this.triggerEvent('load');
-      });
+      })
       this.imgList.length = 0;
       this.videoContexts = [];
       var height;

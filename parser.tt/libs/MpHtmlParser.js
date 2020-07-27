@@ -181,6 +181,7 @@ MpHtmlParser.prototype.setNode = function () {
             attrs.height = void 0;
           }
         }
+        if (!attrs.controls && !attrs.autoplay) attrs.controls = 'T';
         attrs.source = [];
         if (attrs.src) {
           attrs.source.push(attrs.src);

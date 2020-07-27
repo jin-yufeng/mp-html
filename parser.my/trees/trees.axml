@@ -2,8 +2,8 @@
 <block a:for="{{nodes}}" a:for-item="n" a:for-index="i" a:key="i">
   <!--图片-->
   <view a:if="{{n.name=='img'}}" id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" onTap="imgtap">
-    <rich-text nodes="{{[{attrs:{src:loading&&controls[i]!=2?loading:(lazyLoad&&!controls[i]?placeholder:(controls[i]==3?errorImg:n.attrs.src||'')),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'-webkit-touch-callout:none;max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
-    <image class="_image" src="{{lazyLoad&&!controls[i]?placeholder:n.attrs.src}}" lazy-load="{{lazyLoad}}" data-i="{{i}}" data-index="{{n.attrs.i}}" data-source="img" onLoad="loadImg" onError="error" />
+    <rich-text nodes="{{[{attrs:{src:loading&&ctrl[i]!=2?loading:(lazyLoad&&!ctrl[i]?placeholder:(ctrl[i]==3?errorImg:n.attrs.src||'')),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'-webkit-touch-callout:none;max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
+    <image class="_image" src="{{lazyLoad&&!ctrl[i]?placeholder:n.attrs.src}}" lazy-load="{{lazyLoad}}" data-i="{{i}}" data-index="{{n.attrs.i}}" data-source="img" onLoad="loadImg" onError="error" />
   </view>
   <!--文本-->
   <text a:elif="{{n.type=='text'}}" decode>{{n.text}}</text>
@@ -14,11 +14,11 @@
   </view>
   <!--视频-->
   <block a:elif="{{n.name=='video'}}">
-    <view a:if="{{n.lazyLoad&&!n.attrs.autoplay&&controls[i]==undefined}}" id="{{n.attrs.id}}" class="_video {{n.attrs.class}}" style="{{n.attrs.style}}" data-i="{{i}}" onTap="loadVideo" />
-    <video a:else id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay||controls[i]==0}}" controls="{{!n.attrs.autoplay||n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[controls[i]||0]}}" unit-id="{{n.attrs['unit-id']}}" data-i="{{i}}" data-source="video" onError="error" onPlay="play" />
+    <view a:if="{{n.lazyLoad&&!n.attrs.autoplay&&ctrl[i]==undefined}}" id="{{n.attrs.id}}" class="_video {{n.attrs.class}}" style="{{n.attrs.style}}" data-i="{{i}}" onTap="loadVideo" />
+    <video a:else id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay||ctrl[i]==0}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[ctrl[i]||0]}}" unit-id="{{n.attrs['unit-id']}}" data-i="{{i}}" data-source="video" onError="error" onPlay="play" />
   </block>
   <!--音频-->
-  <audio a:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" autoplay="{{n.attrs.autoplay}}" controls="{{!n.attrs.autoplay||n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[controls[i]||0]}}" data-i="{{i}}" data-source="audio" onError="error" onPlay="play" />
+  <audio a:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[ctrl[i]||0]}}" data-i="{{i}}" data-source="audio" onError="error" onPlay="play" />
   <!--列表-->
   <view a:elif="{{n.name=='li'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}};display:flex">
     <view a:if="{{n.type=='ol'}}" class="_ol-bef">{{n.num}}</view>

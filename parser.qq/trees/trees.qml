@@ -28,11 +28,11 @@ module.exports = {
   }
 }
 </qs>
-<block qq:for="{{nodes}}" qq:key="index" qq:for-item="n">
+<block qq:for="{{nodes}}" qq:for-item="n" qq:for-index="i" qq:key="i">
   <!--图片-->
   <view qq:if="{{n.name=='img'}}" id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="imgtap">
-    <rich-text nodes="{{[{attrs:{src:loading&&n.load!=2?loading:(lazyLoad&&!n.load?placeholder:n.attrs.src||''),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'-webkit-touch-callout:none;max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
-    <image class="_image" src="{{lazyLoad&&!n.load?placeholder:n.attrs.src}}" lazy-load="{{lazyLoad}}" data-i="{{index}}" data-index="{{n.attrs.i}}" data-source="img" bindload="loadImg" binderror="error" />
+    <rich-text nodes="{{[{attrs:{src:loading&&ctrl[i]!=2?loading:(lazyLoad&&!ctrl[i]?placeholder:n.attrs.src||''),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'-webkit-touch-callout:none;max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
+    <image class="_image" src="{{lazyLoad&&!ctrl[i]?placeholder:n.attrs.src}}" lazy-load="{{lazyLoad}}" data-i="{{i}}" data-index="{{n.attrs.i}}" data-source="img" bindload="loadImg" binderror="error" />
   </view>
   <!--文本-->
   <text qq:elif="{{n.type=='text'}}" decode>{{n.text}}</text>
@@ -43,11 +43,11 @@ module.exports = {
   </view>
   <!--视频-->
   <block qq:elif="{{n.name=='video'}}">
-    <view qq:if="{{n.lazyLoad&&!n.attrs.autoplay}}" id="{{n.attrs.id}}" class="_video {{n.attrs.class}}" style="{{n.attrs.style}}" data-i="{{index}}" bindtap="loadVideo" />
-    <video qq:else id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay}}" controls="{{!n.attrs.autoplay||n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" unit-id="{{n.attrs['unit-id']}}" data-i="{{index}}" data-source="video" binderror="error" bindplay="play" />
+    <view qq:if="{{n.lazyLoad&&!n.attrs.autoplay}}" id="{{n.attrs.id}}" class="_video {{n.attrs.class}}" style="{{n.attrs.style}}" data-i="{{i}}" bindtap="loadVideo" />
+    <video qq:else id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" unit-id="{{n.attrs['unit-id']}}" data-i="{{i}}" data-source="video" binderror="error" bindplay="play" />
   </block>
   <!--音频-->
-  <audio qq:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" autoplay="{{n.attrs.autoplay}}" controls="{{!n.attrs.autoplay||n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" data-i="{{index}}" data-source="audio" binderror="error" bindplay="play" />
+  <audio qq:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" data-i="{{i}}" data-source="audio" binderror="error" bindplay="play" />
   <!--广告-->
   <ad qq:elif="{{n.name=='ad'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" unit-id="{{n.attrs['unit-id']}}" data-source="ad" binderror="error" />
   <!--列表-->

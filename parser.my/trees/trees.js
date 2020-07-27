@@ -1,7 +1,7 @@
 const errorImg = require('../libs/config.js').errorImg;
 Component({
   data: {
-    controls: [],
+    ctrl: [],
     errorImg,
     placeholder: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='225'/>"
   },
@@ -16,9 +16,9 @@ Component({
   },
   didUpdate(e) {
     if (e.nodes != this.props.nodes) {
-      if (this.data.controls.length)
+      if (this.data.ctrl.length)
         this.setData({
-          controls: []
+          ctrl: []
         })
       this.init();
     }
@@ -67,13 +67,13 @@ Component({
     },
     loadImg(e) {
       var i = e.target.dataset.i;
-      if (this.props.lazyLoad && !this.data.controls[i])
+      if (this.props.lazyLoad && !this.data.ctrl[i])
         this.setData({
-          [`controls[${i}]`]: 1
+          [`ctrl[${i}]`]: 1
         })
-      else if (this.props.loading && this.data.controls[i] != 2)
+      else if (this.props.loading && this.data.ctrl[i] != 2)
         this.setData({
-          [`controls[${i}]`]: 2
+          [`ctrl[${i}]`]: 2
         })
     },
     // 链接点击事件
@@ -123,12 +123,12 @@ Component({
         var index = (node.i || 0) + 1;
         if (index < node.attrs.source.length)
           return this.setData({
-            [`controls[${i}]`]: index
+            [`ctrl[${i}]`]: index
           })
       } else if (source == 'img' && errorImg) {
         this.top.imgList.setItem(e.target.dataset.index, errorImg);
         this.setData({
-          [`controls[${i}]`]: 3
+          [`ctrl[${i}]`]: 3
         })
       }
       this.top && this.top.props.onError({
@@ -140,7 +140,7 @@ Component({
     // 加载视频
     loadVideo(e) {
       this.setData({
-        [`controls[${e.target.dataset.i}]`]: 0
+        [`ctrl[${e.target.dataset.i}]`]: 0
       })
     },
     appendChild(e) {
