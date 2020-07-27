@@ -412,7 +412,7 @@
 	}
 
 	._ol-bef,
-	._ul_bef {
+	._ul-bef {
 		flex: none;
 		user-select: none;
 	}
