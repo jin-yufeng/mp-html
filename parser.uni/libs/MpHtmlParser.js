@@ -119,6 +119,7 @@ MpHtmlParser.prototype.setNode = function() {
 			attrs: this.attrs
 		},
 		close = cfg.selfClosingTags[node.name];
+	if (this.options.nodes.length) node.type = 'node';
 	this.attrs = {};
 	if (!cfg.ignoreTags[node.name]) {
 		// 处理属性
