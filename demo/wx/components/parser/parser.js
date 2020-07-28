@@ -1,7 +1,7 @@
 /**
  * Parser 富文本组件
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200719
+ * @version 20200728
  * @author JinYufeng
  * @listens MIT
  */
@@ -9,6 +9,7 @@ var cache = {},
   Parser = require('./libs/MpHtmlParser.js'),
   fs = wx.getFileSystemManager && wx.getFileSystemManager();
 var dom = require('./libs/document.js');
+var search = require('./libs/search.js');
 // 计算 cache 的 key
 function hash(str) {
   for (var i = str.length, val = 5381; i--;)
@@ -87,6 +88,7 @@ Component({
         this.setItem(i, f(this[i], i, this));
     }
     if (dom) this.document = new dom(this);
+    if (search) this.search = args => search(this, args);
   },
   detached() {
     // 删除暂存
@@ -125,7 +127,7 @@ Component({
       })
     },
     // 获取文本
-    getText(ns = this.data.html) {
+    getText(ns = this.data.nodes) {
       var txt = '';
       for (var i = 0, n; n = ns[i++];) {
         if (n.type == 'text') txt += n.text.replace(/&nbsp;/g, '\u00A0').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');

@@ -47,17 +47,18 @@ class core {
 	JCheckBox document;
 	JCheckBox CssHandler;
 	JCheckBox audio;
+	JCheckBox search;
 	// 是否 min 版本
 	boolean isMin = false;
 
 	// 包大小
-	final float wxSize = 40.4f;
+	final float wxSize = 40.3f;
 	final float wxMinSize = 25.6f;
-	final float qqSize = 40.0f;
-	final float bdSize = 38.3f;
-	final float mySize = 38.7f;
-	final float ttSize = 39.2f;
-	final float uniAppSize = 57.7f;
+	final float qqSize = 39.8f;
+	final float bdSize = 38.2f;
+	final float mySize = 38.5f;
+	final float ttSize = 39.1f;
+	final float uniAppSize = 57.4f;
 	final float emojiSize = 4.21f;
 	final float emojiMinSize = 3.12f;
 	final float domSize = 7.41f;
@@ -67,11 +68,13 @@ class core {
 	final float cssMinSize = 1.62f;
 	final float audioSize = 4.26f;
 	final float audioUniSize = 4.66f;
+	final float searchSize = 2.87f;
+	final float searchMinSize = 1.41f;
 
 	// 构造函数
 	core() {
 		JFrame frame = new JFrame("Parser 插件包选择");
-		frame.setSize(480, 495);
+		frame.setSize(480, 520);
 		frame.setLocationRelativeTo(null);
 		frame.setLayout(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -121,16 +124,19 @@ class core {
 		audio = new JCheckBox("audio（音乐播放器，" + audioSize + "KB）");
 		audio.setBounds(100, 250, 300, 20);
 		frame.add(audio);
+		search = new JCheckBox("search（关键词搜索，" + searchSize + "KB）");
+		search.setBounds(100, 275, 250, 20);
+		frame.add(search);
 		// 版本
 		JLabel versionLabel = new JLabel("版\u2003\u2003本：");
-		versionLabel.setBounds(20, 280, 80, 20);
+		versionLabel.setBounds(20, 305, 80, 20);
 		frame.add(versionLabel);
 		JRadioButton normal = new JRadioButton("正常");
-		normal.setBounds(100, 280, 80, 20);
+		normal.setBounds(100, 305, 80, 20);
 		normal.setSelected(true);
 		frame.add(normal);
 		JRadioButton min = new JRadioButton("min");
-		min.setBounds(180, 280, 80, 20);
+		min.setBounds(180, 305, 80, 20);
 		ButtonGroup versionGroup = new ButtonGroup();
 		versionGroup.add(normal);
 		versionGroup.add(min);
@@ -138,21 +144,21 @@ class core {
 		frame.add(min);
 		// 总大小
 		JLabel sizeLabel = new JLabel("总\u2002大\u2002小：");
-		sizeLabel.setBounds(20, 310, 80, 20);
+		sizeLabel.setBounds(20, 335, 80, 20);
 		frame.add(sizeLabel);
 		JLabel size = new JLabel(wxSize + " KB");
-		size.setBounds(100, 310, 80, 20);
+		size.setBounds(100, 335, 80, 20);
 		frame.add(size);
 		// 生成目录
 		final File desktop = FileSystemView.getFileSystemView().getHomeDirectory();
 		JLabel dirLabel = new JLabel("生成目录：");
-		dirLabel.setBounds(20, 340, 80, 20);
+		dirLabel.setBounds(20, 365, 80, 20);
 		JTextField dir = new JTextField(desktop.getAbsolutePath() + File.separator + "parser");
-		dir.setBounds(100, 340, 230, 20);
+		dir.setBounds(100, 365, 230, 20);
 		frame.add(dir);
 		frame.add(dirLabel);
 		JButton dirBut = new JButton("...");
-		dirBut.setBounds(340, 340, 30, 20);
+		dirBut.setBounds(340, 365, 30, 20);
 		frame.add(dirBut);
 		dirBut.addActionListener(new ActionListener() {
 
@@ -175,7 +181,7 @@ class core {
 		});
 		// 生成按钮
 		JButton createBut = new JButton("生成");
-		createBut.setBounds(200, 385, 80, 30);
+		createBut.setBounds(200, 410, 80, 30);
 		frame.add(createBut);
 		// 生成平台选择
 		typeWx.addItemListener(new ItemListener() {
@@ -228,9 +234,12 @@ class core {
 				if (item.getStateChange() != ItemEvent.SELECTED) {
 					audio.setText("audio（音乐播放器，" + audioSize + "KB）");
 					document.setText("document（动态操作 dom，" + (isMin ? domMinSize : domSize) + "KB）");
+					search.setEnabled(true);
 				} else {
 					audio.setText("audio（音乐播放器，" + audioUniSize + "KB）");
 					document.setText("document（动态操作 dom，" + domUniSize + "KB）");
+					search.setSelected(false);
+					search.setEnabled(false);
 					size.setText(calcSize()); // 重新计算大小
 				}
 				String[] path = dir.getText().split(Matcher.quoteReplacement(File.separator));
@@ -260,6 +269,7 @@ class core {
 		document.addActionListener(listener);
 		CssHandler.addActionListener(listener);
 		audio.addActionListener(listener);
+		search.addActionListener(listener);
 		// min 版本选择
 		min.addItemListener(new ItemListener() {
 
@@ -270,15 +280,19 @@ class core {
 					isMin = true;
 					typeWx.setText("微信（" + wxMinSize + "KB）");
 					emoji.setText("emoji（解析 emoji 小表情，" + emojiMinSize + "KB）");
-					if (!typeUniApp.isSelected())
+					if (!typeUniApp.isSelected()) {
 						document.setText("document（动态操作 dom，" + domMinSize + "KB）");
+						search.setText("search（关键词搜索，" + searchMinSize + "KB）");
+					}
 					CssHandler.setText("CssHandler（支持更多 css 选择器，" + cssMinSize + "KB）");
 				} else {
 					isMin = false;
 					typeWx.setText("微信（" + wxSize + "KB）");
 					emoji.setText("emoji（解析 emoji 小表情，" + emojiSize + "KB）");
-					if (!typeUniApp.isSelected())
+					if (!typeUniApp.isSelected()) {
 						document.setText("document（动态操作 dom，" + domSize + "KB）");
+						search.setText("search（关键词搜索，" + searchSize + "KB）");
+					}
 					CssHandler.setText("CssHandler（支持更多 css 选择器，" + cssSize + "KB）");
 				}
 				size.setText(calcSize());
@@ -357,6 +371,12 @@ class core {
 							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
 									new FileOutputStream(newPath + "/libs/document.js"));
 						}
+						if (search.isSelected()) {
+							modifyFile(newPath + "/parser.js", "var search",
+									"var search = require(\"./libs/search.js\")");
+							Files.copy(Paths.get("./patches/search/search" + (isMin ? ".min" : "") + ".js"),
+									new FileOutputStream(newPath + "/libs/search.js"));
+						}
 					}
 					// 处理公共补丁包
 					if (emoji.isSelected()) {
@@ -417,6 +437,8 @@ class core {
 			size += isMin ? cssMinSize : cssSize;
 		if (audio.isSelected())
 			size += typeUniApp.isSelected() ? audioUniSize : audioSize;
+		if (search.isSelected())
+			size += isMin ? searchMinSize : searchSize;
 		return new DecimalFormat(".00").format(size) + " KB";
 	}
 

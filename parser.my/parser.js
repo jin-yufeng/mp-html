@@ -1,7 +1,7 @@
 /**
  * Parser 富文本组件
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200719
+ * @version 20200728
  * @author JinYufeng
  * @listens MIT
  */
@@ -9,6 +9,7 @@ var cache = {},
   Parser = require('./libs/MpHtmlParser.js'),
   fs = my.getFileSystemManager && my.getFileSystemManager();
 var dom;
+var search;
 // 计算 cache 的 key
 function hash(str) {
   for (var i = str.length, val = 5381; i--;)
@@ -64,6 +65,7 @@ Component({
         this.setItem(i, f(this[i], i, this));
     }
     if (dom) this.document = new dom(this);
+    if (search) this.search = args => search(this, args);
     this.setContent(this.props.html);
   },
   didUpdate(e) {

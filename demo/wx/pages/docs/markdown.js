@@ -191,7 +191,7 @@ Page({
 </br>
 
 ## 性能指标  
-本插件解析和渲染效率高，轻量化（\`40.4KB\`，\`min\`版本\`25.6KB\`）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：  
+本插件解析和渲染效率高，轻量化（\`40.3KB\`，\`min\`版本\`25.6KB\`）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：  
 \`\`\`html
 <!--冒号不匹配-->
 <div style="font-family:"宋体"">Hello</div>
@@ -239,7 +239,7 @@ Page({
   \`\`\`bash
   npm install parser-wx
   \`\`\`
-2. 选择工具-构建 \`npm\`  
+2. 勾选使用\`npm\`模块，并点击工具-构建\`npm\`  
 3. 在需要使用页面的\`json\`文件中添加  
   \`\`\`json
   {
@@ -467,10 +467,12 @@ Page({
   功能：将多个\`parser\`标签组合在一起，实现图片、锚点等的互通  
 5. \`audio\`  
   功能：音乐播放器，替代被废弃的\`audio\`标签，并进行了一些优化  
+  <div style="text-align:center;margin-left:-20px">
+    <audio poster="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.jpg?sign=fcc5ef3dc42d606ea54064f0291eb4b6&t=1584979825" name="致爱丽丝" author="暂无" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.mp3?sign=ee1a9895e9421d296cda186b17f0de22&t=1584979840" controls loop style="margin:0.8em 0"></audio>
+  </div>
 
-<div style="text-align:center">
-  <audio poster="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.jpg?sign=fcc5ef3dc42d606ea54064f0291eb4b6&t=1584979825" name="致爱丽丝" author="暂无" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/music.mp3?sign=ee1a9895e9421d296cda186b17f0de22&t=1584979840" controls loop style="margin:0.8em 0"></audio>
-</div>
+6. \`search\`  
+  功能：关键词搜索并高亮显示，[立即体验](../demo/demo?index=0&search=true)
 
 详细可见：[扩展包](https://jin-yufeng.github.io/Parser/#/instructions?id=扩展包)  
 </br>
@@ -495,7 +497,14 @@ Page({
   <div style="flex:1"></div>
   <a href="page2">下一章：更新日志</a>
 </div>`,
-`- 2020.7.19  
+`- 2020.7.28  
+  1. \`A\` 增加了\`search\`扩展包，可以进行关键词搜索并高亮显示
+  2. \`U\` 优化了解析过程，含有换行的空字符串将被去除以减小大小
+  3. \`F\` 修复了\`getText\`方法可能无法使用的问题
+  4. \`F\` 修复了\`ul\`中\`li\`的黑块可能被复制的问题
+  5. \`F\` 修复了通过\`document\`扩展包进行修改时设置了懒加载的图片可能闪一下的问题
+</br></br>
+- 2020.7.19  
   1. \`A\` 发布了\`npm\`包
   2. \`F\` 修复了\`svg\`的\`viewBox\`属性小写无法生效的问题
   3. \`F\` 修复了图片层级过高，无法被遮盖的问题
@@ -553,17 +562,6 @@ Page({
 </br></br>
 - 2020.5.6
   1. \`F\` 修复了\`CssHandler\`扩展包后代选择器优先级低于\`id\`选择器的问题
-</br></br>
-- 2020.4.26
-  1. \`F\` 修复了个别情况下图片表现不正常的问题
-</br></br>
-- 2020.4.25
-  1. \`U\` 优化了图片的显示方式（可解决加载完毕时大小突变的问题，但不再支持云文件\`ID\`和\`webp\`图片）
-  2. \`U\` 支持在链接中使用实体编码
-  3. \`U\` 模拟实现的列表（内含图片链接）支持\`list-style:none\`
-  4. \`U\` \`navigateTo\`的\`api\`增加一个\`offset\`参数，可设置偏移量
-  5. \`F\` 修复了个别情况下图片宽度过宽的问题
-  6. \`F\` 修复了\`CssHandler\`扩展包\`class\`匹配错误的问题
 </br></br>
 
 更多信息可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)  

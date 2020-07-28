@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<jyf-parser :html="html" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la" lazy-load ref="article" selectable
-		 show-with-animation use-anchor @error="error" @imgtap="imgtap" @linkpress="linkpress" @parse="parse" @ready="ready">加载中...</jyf-parser>
+		 show-with-animation use-anchor @error="error" @imgtap="imgtap" @linkpress="linkpress" @ready="ready">加载中...</jyf-parser>
 	</view>
 </template>
 
@@ -24,9 +24,6 @@
 			this.$refs.article.setContent(testHtml);
 		},*/
 		methods: {
-			parse(e) {
-				console.log('parse finish', e);
-			},
 			ready(e) {
 				console.log('ready', e);
 				// console.log('api: getText', this.$refs.article.getText());

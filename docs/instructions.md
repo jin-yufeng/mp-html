@@ -3,13 +3,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 40.4KB | 微信小程序插件包 |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 40.3KB | 微信小程序插件包 |
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 25.6KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 40.0KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 38.3KB | 百度小程序插件包 |
-| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 38.7KB | 支付宝小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 39.2KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.7KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 39.8KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 38.2KB | 百度小程序插件包 |
+| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 38.5KB | 支付宝小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 39.1KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
@@ -76,7 +76,7 @@
    ```bash
    npm install parser-wx
    ```
-2. 选择工具-构建 `npm`  
+2. 勾选使用 `npm` 模块，并点击工具-构建 `npm`  
 3. 在需要使用页面的 `json` 文件中添加  
      
    ```json
@@ -264,6 +264,8 @@
    }
    </script>
    ```
+
+!> 低版本的 `mpVue` 可能不会自动将 `src` 目录下页面中的 `json` 文件拷贝到 `dist` 中，需要自行直接添加到 `dist` 目录下  
 
 #### 在 chameleon 中使用 ####
 1. 将 [parser](#插件包说明) 文件夹复制到 `components` 目录下  
@@ -898,6 +900,87 @@ error(e){
     } 
     ```
   3. 将 `trees.vue` 中的 `audio` 修改为 `myAudio`
+
+### search ###
+!> `uni-app` 包暂不支持使用  
+
+- 功能  
+  关键词搜索  
+- 大小  
+  `2.87KB`（`min` 版本 `1.41KB`）  
+- 使用方法  
+  1. 将 [search.js](https://github.com/jin-yufeng/Parser/blob/master/patches/search/search.js) 复制到 `libs` 文件夹下（[search.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/search/search.min.js) 是压缩版本，功能相同，使用时也需要更名为 `search.js`）  
+  2. 将 `parser.js` 中的 `var search` 改为 `var search = require('./libs/search.js')`  
+  
+  引入后会在组件实例上添加一个 `search` 方法  
+  
+  输入值：  
+  一个 `object`，其中：  
+  `key`：要搜索的关键词（支持字符串和正则表达式）  
+  `style`：给搜索结果设置的样式，默认为 `background-color:yellow`  
+  `anchor`：是否将搜索结果设置为锚点  
+  `success`：成功回调  
+  
+  效果：将搜索到的结果设置为 `style` 样式  
+  
+  返回值：  
+  一个 `object`，其中：  
+  `num`：搜索结果个数  
+  `highlight`：单独高亮一个结果的方法，接受两个输入值，`i` 为需要高亮第几个结果（有效值为 `1` - `num`），`style` 为高亮的样式（默认为 `background-color:#FF9632`）  
+  `jump`：跳转到一个结果的方法，将 `anchor` 设置为 `true` 才有，接受两个输入值，`i` 为要跳转到第几个结果（有效值为 `1` - `num`），`offset` 为偏移量  
+
+  注意事项：  
+  1. 不传入 `key`（或为空）时即可 **取消搜索**，取消所有的高亮，还原到原来的效果  
+  2. 进行新的搜索时旧的搜索结果将被还原，旧的结果中的 `highlight` 等方法 **不再可用**，否则可能带来不可预期的结果  
+  3. 调用 `highlight` 方法高亮一个结果时，之前被高亮的结果会被还原，即始终只有 **一个** 结果被高亮  
+  4. `key` 传入字符串时 **大小写敏感**，如果要忽略大小写可以用正则的 `i`（字符串搜索效率高于正则）  
+  5. 设置 `anchor` 为 `true` 会一定程度上 **降低效率**，非必要不要开启  
+  6. 暂 **不支持** 跨标签搜索，即只有一个文本节点内包含整个关键词才能被搜索到  
+  7. 一般来说，此方法比起修改 `html` 字符串后重新设置效率要高，也能实现更多功能  
+  
+  示例程序：  
+  ```javascript
+  Page({
+    onLoad() {
+      this.context = this.selectComponent('#article'); // 获取实例
+    },
+    // 搜索
+    search(key) {
+      this.context.search({
+        key: key,
+        anchor: true,
+        success: res => {
+          this.res = res;
+          this.i = 1;
+          this.highlight(1);
+        }
+      })
+    },
+    // 高亮
+    highlight(i) {
+      this.res.highlight(i); // 高亮第 i 个  
+      this.res.jump(i, -50); // 跳转到第 i 个结果
+      this.setData({
+        state: i + '/' + this.res.num // 设置个数
+      })
+    },
+    // 下一个
+    next() {
+      if(this.i < this.res.num)
+        this.highlight(++this.i);
+    },
+    // 上一个
+    before() {
+      if(this.i > 1)
+        this.highlight(--this.i);
+    },
+    // 取消搜索
+    cancel() {
+      this.context.search();
+    }
+  })
+  ```
+
 
 ## 插件原理 ##
 

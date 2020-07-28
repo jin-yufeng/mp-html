@@ -7,7 +7,7 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#f8f8f8",
     "navigationBarTitleText": "富文本插件",
     "navigationBarTextStyle": "black"
   },

@@ -27,13 +27,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 40.4KB | 微信小程序插件包 |
+| parser | 40.3KB | 微信小程序插件包 |
 | parser.min | 25.6KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 40.0KB | QQ 小程序插件包 |
-| parser.bd | 38.3KB | 百度小程序插件包 |
-| parser.my | 38.7KB | 支付宝小程序插件包 |
-| parser.tt | 39.2KB | 头条小程序插件包 |
-| parser.uni | 57.7KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.qq | 39.8KB | QQ 小程序插件包 |
+| parser.bd | 38.2KB | 百度小程序插件包 |
+| parser.my | 38.5KB | 支付宝小程序插件包 |
+| parser.tt | 39.1KB | 头条小程序插件包 |
+| parser.uni | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
 - 源码引入  
@@ -187,6 +187,16 @@
 
 
 ## 更新日志 ##
+- 2020.7.28  
+  1. `A` 增加了 `search` 的扩展包，可以进行关键词搜索并高亮显示 [详细](https://jin-yufeng.github.io/Parser/#/instructions#search)  
+  2. `U` 优化了解析过程，含有换行的空字符串将被去除以减小大小    
+  3. `U` 优化了 `uni-app` 包 `config.js` 的写法，避免格式化后可能报错的问题  
+  4. `F` 修复了 `getText` 方法可能无法使用的问题  
+  5. `F` 修复了 `ul` 中的 `li` 的黑块可能被复制的问题  
+  6. `F` 修复了通过 `document` 扩展包进行修改时设置了懒加载的图片可能闪一下的问题  
+  7. `F` 修复了 `uni-app` 包从一个文本节点变为元素节点时可能不显示的问题  
+  8. `F` 修复了 `uni-app` 包 `NVUE` 页面编译到小程序时列表可能显示不正常的问题  
+
 - 2020.7.19  
   1. `A` 发布了微信端的 `npm` 包 [详细](https://www.npmjs.com/package/parser-wx)  
   2. `U` `uni-app` 包 `H5` 端图片设置的宽度超出屏幕宽度时自动将高度设置为 `auto`，避免变形  

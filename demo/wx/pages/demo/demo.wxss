@@ -63,3 +63,56 @@
     transform: scaleY(1);
   }
 }
+
+.search {
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #ccc;
+}
+
+.input {
+  display: flex;
+  width: 65%;
+  height: 25px;
+  padding: 5px;
+  margin-left: 7.5px;
+  line-height: 25px;
+  background-color: white;
+}
+
+.button {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.triangle {
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml;utf8,<svg t="1595855312634" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4785"><path d="M512.34106768 334.81806719l-403.42507403 403.41955065c-16.9429169 16.9567253-44.44374272 16.9567253-61.38804046 0-16.9567253-16.9429169-16.9567253-44.44374272 0-61.38804048l434.11978468-434.11978467c16.9429169-16.9567253 44.44374272-16.9567253 61.38804047 0l434.11840383 434.11978467c8.47836265 8.4728393 12.71892482 19.58446539 12.71892483 30.69332981s-4.24056217 22.22049053-12.71892483 30.69332983c-16.9429169 16.9567253-44.44374272 16.9567253-61.38804046 0l-403.42645486-403.41955067z" p-id="4786" fill="%238a8a8a"></path></svg>');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.cancel {
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml;utf8,<svg t="1595858444272" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5828"><path d="M572.43662043 516.3789597l261.7247696-261.49305209c15.83402025-15.83402025 15.83402025-41.40016991 0-57.15695121a40.28020283 40.28020283 0 0 0-57.11833141 0L515.24105009 459.22200848 253.40042174 197.61309764a40.28020283 40.28020283 0 0 0-57.07971226 0c-15.83402025 15.83402025-15.83402025 41.40016991 0 57.11833141l261.72476959 261.49305208-261.72476959 261.60891082a40.28020283 40.28020283 0 0 0 28.57847594 68.89729793c10.3500423 0 20.62284567-3.86195603 28.53985614-11.77896584l261.80200853-261.53167189 261.84062767 261.60891084c7.87839066 7.91701046 18.15119402 11.81758564 28.501237 11.81758564a40.28020283 40.28020283 0 0 0 28.57847527-68.93591772L572.43662043 516.3789597z" p-id="5829" fill="%238a8a8a"></path></svg>');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.icon {
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  width: 30px;
+  height: 30px;
+}

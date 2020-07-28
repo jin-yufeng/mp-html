@@ -47,6 +47,8 @@
   ```  
 
 如果加了还不生效可能是优先级的问题，可以尝试再加一个 `!important`  
+
+!> 对所有图片设置 `block` 布局或改变对齐方式都可能影响行内小图片的布局
   
 *相关 issue：*[#25](https://github.com/jin-yufeng/Parser/issues/25)、[#65](https://github.com/jin-yufeng/Parser/issues/65)、[#74](https://github.com/jin-yufeng/Parser/issues/74)
 
@@ -202,7 +204,7 @@
 html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>'); // 如果还转义了其他字符如 &amp; &quot; 等也要进行替换
 ```
 
-组件内部不会对此进行处理，因为在 `html` 中使用实体就是为了不被解析为标签  
+组件内部不会对此进行处理，因为不同的后台处理方法转义的字符不同（有的只对 `<` 和 `>` 进行转义，有的可能还对 `&` 和 `"` 等进行转义），如果前端和后台的处理不一致，可能导致不正确的结果，因此需要自行根据后台的处理进行还原    
 
 *相关 issue：*[#97](https://github.com/jin-yufeng/Parser/issues/97)
 

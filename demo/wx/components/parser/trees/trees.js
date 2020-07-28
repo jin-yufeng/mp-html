@@ -2,7 +2,8 @@ const errorImg = require('../libs/config.js').errorImg;
 Component({
   data: {
     canIUse: !!wx.chooseMessageFile,
-    placeholder: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='225'/>"
+    placeholder: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='225'/>",
+    ctrl: []
   },
   properties: {
     nodes: Array,
@@ -51,13 +52,13 @@ Component({
     },
     loadImg(e) {
       var i = e.target.dataset.i;
-      if (this.data.lazyLoad && !this.data.nodes[i].load)
+      if (this.data.lazyLoad && !this.data.ctrl[i])
         this.setData({
-          [`nodes[${i}].load`]: 1
+          [`ctrl[${i}]`]: 1
         })
-      else if (this.data.loading && this.data.nodes[i].load != 2)
+      else if (this.data.loading && this.data.ctrl[i] != 2)
         this.setData({
-          [`nodes[${i}].load`]: 2
+          [`ctrl[${i}]`]: 2
         })
     },
     // 链接点击事件
@@ -123,9 +124,8 @@ Component({
     },
     // 加载视频
     loadVideo(e) {
-      var i = e.target.dataset.i;
       this.setData({
-        [`nodes[${i}].attrs.autoplay`]: true
+        [`nodes[${e.target.dataset.i}].attrs.autoplay`]: true
       })
     }
   }

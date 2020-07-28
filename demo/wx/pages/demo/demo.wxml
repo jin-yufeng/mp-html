@@ -1,5 +1,23 @@
 <!-- demo.wxml -->
+<view wx:if="{{search}}" class="search">
+  <view class="input">
+    <input style="flex:1" placeholder="搜索" auto-focus bindinput="search"/>
+    <view style="color:gray;margin-left:5px">{{state}}</view>
+  </view>
+  <view style="width:35%;display:flex">
+    <view class="button" bindtap="before">
+      <view class="triangle" />
+    </view>
+    <view class="button" bindtap="next">
+      <view class="triangle" style="transform:rotate(180deg)" />
+    </view>
+    <view class="button" bindtap="cancel">
+      <view class="cancel" />
+    </view>
+  </view>
+</view>
 <parser id="article"
+  style="{{search?'margin-top:50px':''}}"
   domain="https://6874-html-foe72-1259071903.tcb.qcloud.la"
   gesture-zoom
   lazy-load
@@ -21,3 +39,4 @@
     </view>
   </view>
 </parser>
+<icon class="icon" type="search" size="30" bindtap="open" />
