@@ -65,7 +65,7 @@
      ```bash
      npm install parser-wx
      ```
-  2. 选择工具-构建 `npm`  
+  2. 勾选使用 `npm` 模块，并点击工具-构建 `npm`  
   3. 在需要使用页面的 `json` 文件中添加  
      
      ```json
@@ -165,9 +165,9 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md5.jpg?sign=911a1fd62af2666f9c8dfa367b22479c&t=1574499374" width="200" alt="富文本插件"> | <img src="https://user-images.githubusercontent.com/16144460/74083526-0528bc80-4aa0-11ea-841f-a974c5f9131d.jpg" width="200" alt="程序员技术之旅"> | <img src="https://camo.githubusercontent.com/f15b6b8854ae6d7fc4ceea552b79e326d5036978/68747470733a2f2f63646e2e66757a75692e6e65742f626c6f672f7172636f64655f313539323230383033333536372e6a7067" width="200" alt="极客时代"> | <img src="https://user-images.githubusercontent.com/5304020/80313264-70229d80-881c-11ea-8d8f-aed45719aed5.jpg" width="200" alt="APP 比比"> | <img src="https://user-images.githubusercontent.com/21222276/80563130-b3e3f580-8a1c-11ea-9a07-7671ea5aa320.jpg" width="200" alt="全品作业小助手"> | <img src="https://user-images.githubusercontent.com/16403746/69929565-665d6e00-14fa-11ea-807a-8d9050caf342.jpg" width="200" alt="多么生活"> |
 
-| 恋爱宝典 xcx | 古典文学名著阅读 | 典典博客 | 咚咚阅读 | 源创智造 |  |
+| 欢喜商城 | 古典文学名著阅读 | 典典博客 | 咚咚阅读 | 源创智造 |  |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/22900470/70421652-2de30480-1aa5-11ea-93b0-180352d4c397.jpg" width="200" alt="恋爱宝典 xcx"> | <img src="https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567" width="200" alt="古典文学名著阅读"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=5b2d371a4bd840c14c8d3740c35ee07f&t=1586360436" width="200" alt="典典博客"> | <img src="https://user-images.githubusercontent.com/7794149/84689281-575c7b80-af73-11ea-9035-6b3fcb3a3e5b.png " width="200" alt="咚咚阅读"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E6%BA%90%E5%88%9B%E6%99%BA%E9%80%A0.png?sign=71b39d28c444259a7204bc14a8091135&t=1593401495" width="200" alt="源创智造"> | <img width="200"> |
+| <img src="https://user-images.githubusercontent.com/13982274/89155296-1e1bb180-d59b-11ea-8fe7-8ae2c298d736.png" width="200" alt="欢喜商城"> | <img src="https://camo.githubusercontent.com/bb2aa4562a8b4912c82129f10ff15d1eb4ce0d08/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323031392f6a7065672f3432383733322f313537353830303731333133312d36326639663836362d366233362d343766312d396234302d6132633964373839616633362e6a706567" width="200" alt="古典文学名著阅读"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=5b2d371a4bd840c14c8d3740c35ee07f&t=1586360436" width="200" alt="典典博客"> | <img src="https://user-images.githubusercontent.com/7794149/84689281-575c7b80-af73-11ea-9035-6b3fcb3a3e5b.png " width="200" alt="咚咚阅读"> | <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/%E6%BA%90%E5%88%9B%E6%99%BA%E9%80%A0.png?sign=71b39d28c444259a7204bc14a8091135&t=1593401495" width="200" alt="源创智造"> | <img width="200"> |
 
 以上排名不分先后，更多可见：[链接](https://github.com/jin-yufeng/Parser/issues/27)（欢迎添加）  
 
@@ -175,6 +175,7 @@
 [EastWorld/wechat-app-mall](https://github.com/EastWorld/wechat-app-mall)  
 [YanxinNet/uView](https://github.com/YanxinNet/uView)  
 [zhangdaren/miniprogram-to-uniapp](https://github.com/zhangdaren/miniprogram-to-uniapp)  
+[woniudiancang/bee](https://gitee.com/woniudiancang/bee)  
 
 ## 许可与支持 ##
 - 许可  

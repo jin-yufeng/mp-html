@@ -19,6 +19,7 @@
 1. 为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
 2. 需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式（或 `v3`）  
 3. 由于 `ad` 标签的特殊性，若需要使用文中广告，需自行到 `trees.vue` 中打开注释  
+4. 在 `NVUE` 页面使用时，如果配置里设置了 `flex-direction` 为 `row` 可能导致异常  
 
 编译到各平台后差异：
 
@@ -514,9 +515,10 @@ filter(node, cxt) {
     })
    }
    ```
+4. 如果 `pre` 在 `config.js` 中的 `blockTags` 里，则需要去掉（一些平台的 `rich-text` 不支持 `pre`，为避免无法显示会被转为 `div`，这样 `2` 中就无法匹配到 `pre`）  
 
 可以参考：[示例小程序](https://github.com/jin-yufeng/Parser/tree/master/demo/wx)  
-`uni-app` 中使用可以参考此示例项目：[highlight](https://6874-html-foe72-1259071903.tcb.qcloud.la/highlight.zip?sign=c15980dfa79aaf1688db7059b23d05a7&t=1584685357)  
+`uni-app` 中使用可以参考此示例项目：[highlight](https://6874-html-foe72-1259071903.tcb.qcloud.la/highlight.zip?sign=c15980dfa79aaf1688db7059b23d05a7&t=1584685357)（部分 `HBuilder X` 版本可能因为这个 [bug](https://ask.dcloud.net.cn/question/102899) 导致 `App` 上的高亮样式不生效）  
 *相关 issue：*[#83](https://github.com/jin-yufeng/Parser/issues/83)、[#158](https://github.com/jin-yufeng/Parser/issues/158)  
 
 #### onText ####  
