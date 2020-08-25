@@ -12,7 +12,7 @@ Component({
           if (item.c) continue;
           // 获取图片列表
           if (item.name == 'img')
-            this.top.imgList.setItem(item.attrs.i, item.attrs.src);
+            this.top.imgList.setItem(item.attrs.i, item.attrs['original-src'] || item.attrs.src);
           // 视频控制
           else if (item.name == 'video') {
             var ctx = swan.createVideoContext(item.attrs.id);
