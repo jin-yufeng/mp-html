@@ -42,7 +42,7 @@ class core {
 	JRadioButton typeMy;
 	JRadioButton typeTt;
 	JRadioButton typeUniApp;
-	// 补丁包
+	// 扩展包
 	JCheckBox emoji;
 	JCheckBox document;
 	JCheckBox CssHandler;
@@ -108,8 +108,8 @@ class core {
 		typeGroup.add(typeTt);
 		typeGroup.add(typeUniApp);
 		frame.add(typeLabel);
-		// 补丁包
-		JLabel patchLabel = new JLabel("补\u2002丁\u2002包：");
+		// 扩展包
+		JLabel patchLabel = new JLabel("扩\u2002展\u2002包：");
 		patchLabel.setBounds(20, 175, 80, 20);
 		frame.add(patchLabel);
 		emoji = new JCheckBox("emoji（解析 emoji 小表情，" + emojiSize + "KB）");
@@ -256,7 +256,7 @@ class core {
 				}
 			}
 		});
-		// 补丁包选择
+		// 扩展包选择
 		ActionListener listener = new ActionListener() {
 
 			@Override
@@ -344,6 +344,9 @@ class core {
 							copyDir("./parser.qq", newPath);
 							if (audio.isSelected()) {
 								copyDir("./patches/audio/audio", newPath + "/audio");
+								renameFile(newPath + "/audio/audio.wxml", newPath + "/audio/audio.qml");
+								renameFile(newPath + "/audio/audio.wxss", newPath + "/audio/audio.qss");
+								modifyFile(newPath + "/audio/audio.js", "wx", "qq");
 								modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
 										"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
 								modifyFile(newPath + "/trees/trees.qml", "<audio", "<myAudio");
@@ -360,6 +363,9 @@ class core {
 							copyDir("./parser.tt", newPath);
 							if (audio.isSelected()) {
 								copyDir("./patches/audio/audio", newPath + "/audio");
+								renameFile(newPath + "/audio/audio.wxml", newPath + "/audio/audio.ttml");
+								renameFile(newPath + "/audio/audio.wxss", newPath + "/audio/audio.ttss");
+								modifyFile(newPath + "/audio/audio.js", "wx", "tt");
 								modifyFile(newPath + "/trees/trees.json", "\"./trees\"",
 										"\"./trees\"," + endl + "    \"myAudio\": \"../audio/audio\"");
 								modifyFile(newPath + "/trees/trees.ttml", "<!--音频-->",
@@ -378,7 +384,7 @@ class core {
 									new FileOutputStream(newPath + "/libs/search.js"));
 						}
 					}
-					// 处理公共补丁包
+					// 处理公共扩展包
 					if (emoji.isSelected()) {
 						modifyFile(newPath + "/libs/MpHtmlParser.js", "var emoji",
 								"var emoji = require(\"./emoji.js\")");
@@ -398,20 +404,6 @@ class core {
 
 		});
 		frame.setVisible(true);
-	}
-
-	// 修改文件
-	private void modifyFile(String path, String oldVal, String newVal) throws IOException {
-		File file = new File(path);
-		byte[] bytes = new byte[(int) file.length()];
-		FileInputStream reader = new FileInputStream(file);
-		reader.read(bytes);
-		reader.close();
-		String content = new String(bytes, "utf-8");
-		content = content.replaceFirst(oldVal, newVal);
-		FileOutputStream writer = new FileOutputStream(file, false);
-		writer.write(content.getBytes("utf-8"));
-		writer.close();
 	}
 
 	// 计算大小
@@ -442,6 +434,20 @@ class core {
 		return new DecimalFormat(".00").format(size) + " KB";
 	}
 
+	// 修改文件
+	private void modifyFile(String path, String oldVal, String newVal) throws IOException {
+		File file = new File(path);
+		byte[] bytes = new byte[(int) file.length()];
+		FileInputStream reader = new FileInputStream(file);
+		reader.read(bytes);
+		reader.close();
+		String content = new String(bytes, "utf-8");
+		content = content.replaceFirst(oldVal, newVal);
+		FileOutputStream writer = new FileOutputStream(file, false);
+		writer.write(content.getBytes("utf-8"));
+		writer.close();
+	}
+
 	// 拷贝文件夹
 	private void copyDir(String oldPath, String newPath) throws IOException {
 		File file = new File(oldPath);
@@ -454,10 +460,20 @@ class core {
 			if ((new File(oldPath + File.separator + filePath[i])).isDirectory())
 				copyDir(oldPath + File.separator + filePath[i], newPath + File.separator + filePath[i]);
 
-			if (new File(oldPath + File.separator + filePath[i]).isFile())
-				Files.copy(Paths.get(oldPath + File.separator + filePath[i]),
-						new FileOutputStream(newPath + File.separator + filePath[i]));
+			if (new File(oldPath + File.separator + filePath[i]).isFile()) {
+				FileOutputStream out = new FileOutputStream(newPath + File.separator + filePath[i]);
+				Files.copy(Paths.get(oldPath + File.separator + filePath[i]), out);
+				out.close();
+			}
 
 		}
+	}
+
+	// 重命名文件
+	private void renameFile(String oldPath, String newPath) {
+		File oldFile = new File(oldPath);
+		File newFile = new File(newPath);
+		if (oldFile.exists() && oldFile.isFile())
+			oldFile.renameTo(newFile);
 	}
 }
