@@ -104,6 +104,23 @@ Page({
 </div>
 </br>
 
+## 设置高清预览图  
+支持设置给显示的图片和预览的图片设置不同的地址以节省流量，加快渲染速度  
+设置方法：  
+1. 通过 \`img\` 标签的 \`original-src\` 属性设置  
+   \`\`\`html
+   <!--显示时使用 xxx，预览时使用 yyy-->
+   <img src="xxx" original-src="yyy" />
+   \`\`\`
+2. 通过 \`imgList\` 设置  
+   如果高清图地址可以通过粗略图地址进行简单变换得到的，可以直接通过修改组件实例中挂载的 \`imgList\` 实现
+
+</br>
+<div style="text-align:center">
+  <img src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md10.jpg?sign=bda45cd00e38e0381585541c505944d2&t=1598680512" original-src="https://6874-html-foe72-1259071903.tcb.qcloud.la/md/md11.jpg?sign=63a6de92cdfd59bdff545cb63c85236d&t=1598680305" />
+</div>
+</br>
+
 ## 内容可复制  
 <div style="user-select:text;-webkit-user-select:text">
 
@@ -169,6 +186,7 @@ Page({
 | base | href |
 | embed | autostart, height, loop, src, type, width |
 | font | color, face, size |
+| img | alt, height, ignore, original-src, src, width |
 | source | src |
 | svg | svg 系列所有标签 |
 | table | border, cellpadding, cellspacing, width |
@@ -191,7 +209,7 @@ Page({
 </br>
 
 ## 性能指标  
-本插件解析和渲染效率高，轻量化（\`40.3KB\`，\`min\`版本\`25.6KB\`）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：  
+本插件解析和渲染效率高，轻量化（\`40.4KB\`，\`min\`版本\`25.6KB\`）；封装成自定义组件，简便易用；容错性强，稳定性高，以下情况都不会出错：  
 \`\`\`html
 <!--冒号不匹配-->
 <div style="font-family:"宋体"">Hello</div>
@@ -481,9 +499,9 @@ Page({
 
 | 版本 | 功能 | 占比 |
 |:---:|:---:|:---:|
-| <2.7.1 | 不支持图片长按菜单</br>不支持 bdi bdo ruby 标签 | 1.18% |
-| <2.4.4 | 不支持 a 标签的 visited 效果 | 0.19% |
-| <2.2.5 | 不支持部分实体编码 | 0.08% |
+| <2.7.1 | 不支持图片长按菜单</br>不支持 bdi bdo ruby 标签 | 0.76% |
+| <2.4.4 | 不支持 a 标签的 visited 效果 | 0.08% |
+| <2.2.5 | 不支持部分实体编码 | 0.06% |
 | <1.6.3 | 无法使用 | <0.01% |
 
 </br>
@@ -497,7 +515,11 @@ Page({
   <div style="flex:1"></div>
   <a href="page2">下一章：更新日志</a>
 </div>`,
-`- 2020.7.28  
+`- 2020.8.28  
+  1. \`U\` \`img\` 标签支持通过 \`original-src\` 属性设置预览时的图片地址
+  2. \`F\` 修复了 \`img\` 标签 \`width\` 和 \`height\` 属性使用非 \`px\` 单位时没有被转为 \`px\` 的问题
+</br></br>
+- 2020.7.28  
   1. \`A\` 增加了\`search\`扩展包，可以进行关键词搜索并高亮显示
   2. \`U\` 优化了解析过程，含有换行的空字符串将被去除以减小大小
   3. \`F\` 修复了\`getText\`方法可能无法使用的问题
@@ -529,39 +551,6 @@ Page({
 - 2020.5.28
   1. \`F\` 修复了属性名后有空格会无法识别的问题
   2. \`F\` 修复了\`img\`没有设置\`src\`会报错的问题
-</br></br>
-- 2020.5.24
-  1. \`A\` 增加\`loading-img\`属性，可以设置图片加载完成前的占位图
-  2. \`A\` 增加\`errorImg\`的配置项，可以设置图片出错时的占位图
-  3. \`D\` \`error\`事件中不再返回\`context\`对象
-</br></br>
-- 2020.5.21
-  1. \`U\` 支持\`embed\`标签（\`type\`中含\`video\`或后缀名为\`.mp4\` \`.3gp\` \`.m3u8\`的将被转为视频；\`type\`中含\`audio\`或后缀名为\`.m4a\` \`.wav\` \`.mp3\` \`.aac\`的将被转为音频；其余不支持）
-  2. \`U\` 音视频既没有设置\`autoplay\`也没有设置\`controls\`将自动设置\`controls\`，避免无法播放
-  3. \`F\` 修复了锚点无法跳转到\`li\`和\`a\`标签的问题
-  4. \`F\` 修复了部分情况下\`svg\`标签\`style\`中的\`vertical-align\`无法生效的问题
-  5. \`F\` 修复了未闭合的标签如果是\`rich-text\`不支持的标签可能无法显示的问题
-  6. \`F\` 修复了\`error\`事件中通过\`setSrc\`重设图片地址后无法预览的问题
-  7. \`F\` 修复了个别情况下可能出现\`null is not an object\`错误的问题
-</br></br>
-- 2020.5.13
-  1. \`A\` 增加了\`autoscroll\`属性，可以给所有表格添加一个滚动层
-  2. \`U\` \`a\`标签可以跳转到\`tabbar\`页面
-  3. \`U\` 通过\`stylelint\`规范\`css\`的写法
-  4. \`D\` 去除了\`gesture-zoom\`属性
-  5. \`D\` 去除了\`preLoad\`的\`api\`
-</br></br>
-- 2020.5.11
-  1. \`F\` 修复了电脑端\`rpx\`可能换算不正确的问题
-  2. \`F\` 修复了上一版本个别情况下可能出现\`Cannot read property 'name' of undefined\`的问题
-</br></br>
-- 2020.5.8
-  1. \`F\` 修复了个别情况下空格被错误过滤的问题
-  2. \`D\` 移除了\`xml\`属性（\`svg\`标签默认按\`xml\`方式解析，可以以\`&lt;svg />\`方式结束）
-  3. \`D\` 取消对\`picture\`标签的支持
-</br></br>
-- 2020.5.6
-  1. \`F\` 修复了\`CssHandler\`扩展包后代选择器优先级低于\`id\`选择器的问题
 </br></br>
 
 更多信息可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)  

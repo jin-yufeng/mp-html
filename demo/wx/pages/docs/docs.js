@@ -38,7 +38,7 @@ Page({
       })
       e.detail.ignore();
     } else if (e.detail.href == 'display') {
-      this.context.document.getElementById('display').innerHTML = '<img width="49%" style="margin-right:2%" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo.jpeg?sign=c8d83ad0716504de55b65f3dd4e50f67&t=1590222258"><img src="xxx" width="49%">';
+      this.context.document.getElementById('display').innerHTML = '<img width="49%" style="margin-right:2%" src="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo.jpeg?sign=c8d83ad0716504de55b65f3dd4e50f67&t=1590222258" ignore><img src="xxx" width="49%" ignore>';
       e.detail.ignore();
     }
   },

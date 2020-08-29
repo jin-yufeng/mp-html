@@ -52,13 +52,13 @@ class core {
 	boolean isMin = false;
 
 	// 包大小
-	final float wxSize = 40.3f;
+	final float wxSize = 40.4f;
 	final float wxMinSize = 25.6f;
-	final float qqSize = 39.8f;
-	final float bdSize = 38.2f;
-	final float mySize = 38.5f;
+	final float qqSize = 39.9f;
+	final float bdSize = 38.3f;
+	final float mySize = 38.6f;
 	final float ttSize = 39.1f;
-	final float uniAppSize = 57.4f;
+	final float uniAppSize = 57.5f;
 	final float emojiSize = 4.21f;
 	final float emojiMinSize = 3.12f;
 	final float domSize = 7.41f;
@@ -309,6 +309,14 @@ class core {
 					File file = new File(newPath);
 					if (!file.exists())
 						file.mkdir(); // 创建目标目录
+					if (!file.isDirectory()) {
+						JOptionPane.showMessageDialog(null, "该目录不是一个文件夹", "失败", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					if (file.listFiles().length > 0) {
+						if (JOptionPane.showConfirmDialog(null, "选择的文件夹非空，是否继续？", "确认", JOptionPane.YES_NO_OPTION) == 1)
+							return;
+					}
 					// 生成 uni-app 包
 					if (typeUniApp.isSelected()) {
 						copyDir("./parser.uni", newPath);

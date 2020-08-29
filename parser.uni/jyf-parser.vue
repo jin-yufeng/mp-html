@@ -34,7 +34,10 @@
 	}
 	// #endif
 	// #ifdef H5 || APP-PLUS-NVUE || MP-360
-	var windowWidth = uni.getSystemInfoSync().windowWidth,
+	var {
+		windowWidth,
+		platform
+	} = uni.getSystemInfoSync(),
 		cfg = require('./libs/config.js');
 	// #endif
 	// #ifdef APP-PLUS-NVUE
@@ -63,7 +66,7 @@
 	 * @event {Function} imgtap 图片点击事件
 	 * @event {Function} linkpress 链接点击事件
 	 * @author JinYufeng
-	 * @version 20200728
+	 * @version 20200828
 	 * @listens MIT
 	 */
 	export default {
@@ -216,6 +219,7 @@
 						'</div><script>"use strict";function e(e){if(window.__dcloud_weex_postMessage||window.__dcloud_weex_){var t={data:[e]};window.__dcloud_weex_postMessage?window.__dcloud_weex_postMessage(t):window.__dcloud_weex_.postMessage(JSON.stringify(t))}}document.body.onclick=function(){e({action:"click"})},' +
 						(this.showWithAnimation ? 'document.body.style.animation="_show .5s",' : '') +
 						'setTimeout(function(){e({action:"load",text:document.body.innerText,height:document.getElementById("parser").scrollHeight})},50);\x3c/script>';
+					if (platform == 'android') html = html.replace(/%/g, '%25');
 					this.$refs.web.evalJs("document.write('" + html.replace(/'/g, "\\'") + "');document.close()");
 				}
 				this.$refs.web.evalJs(

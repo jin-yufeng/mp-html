@@ -3,13 +3,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 40.3KB | 微信小程序插件包 |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 40.4KB | 微信小程序插件包 |
 | [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 25.6KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 39.8KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 38.2KB | 百度小程序插件包 |
-| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 38.5KB | 支付宝小程序插件包 |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 39.9KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 38.3KB | 百度小程序插件包 |
+| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 38.6KB | 支付宝小程序插件包 |
 | [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 39.1KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.5KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
@@ -548,9 +548,9 @@ onText(text, hasTag) {
   
 | 版本 | 功能 | 占比 |
 |:---:|:---:|:---:|
-| < 2.7.1 | 不支持图片长按菜单（识别小程序码）<br>不支持 bdi bdo ruby 标签 | 1.18% |
-| < 2.4.4 | 不支持 a 标签 visited 效果 | 0.19% |
-| < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.08% |
+| < 2.7.1 | 不支持图片长按菜单（识别小程序码）<br>不支持 bdi bdo ruby 标签 | 0.76% |
+| < 2.4.4 | 不支持 a 标签 visited 效果 | 0.08% |
+| < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.06% |
 | < 1.6.3 | 无法使用 | < 0.01% |
 
 !> 使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
@@ -609,6 +609,7 @@ console.log(text);
 功能：跳转到指定的锚点  
 输入值：一个 `object`，`id` 为锚点的 `id`（为空时将跳转到组件顶部），`offset` 为偏移量，`success` 和 `fail` 是成功和失败的回调（需要配合 `use-anchor` 属性使用）  
 为确保跳转位置准确，建议在 `ready` 事件中或之后使用  
+`id` 中有中文的，可能无法跳转  
 使用方法：  
 ```javascript
 // context 为组件实例
@@ -780,7 +781,8 @@ this.selectComponent("#article").setContent(html);
 
 1. 对于没有标注返回值的方法，设置成功则返回 `true`，否则返回 `false`  
 2. 所有 `set` 类的方法，在一个同步流结束后刷新到视图，请不要过于频繁的调用
-3. 部分标签名在解析过程中会被转换（具体见 [配置项](#配置项)），通过标签名可能无法获取
+3. 部分标签名在解析过程中会被转换（具体见 [配置项](#配置项)），通过标签名可能无法获取  
+4. 建议不要通过 `innerHTML` 增删图片，否则在预览时可能出现问题  
 
 综合示例：  
 ```wxml
@@ -1063,7 +1065,7 @@ error(e){
 ## 二次开发 ##
 
 ### 添加一个自定义标签 ###  
-1. 在 `config.js` 中的 `trustTags` 中添加该标签名（否则将被转为 `span`，如果是自闭合标签还需要添加到 `selfClosingTags` 中）  
+1. 在 `config.js` 中的 `trustTags` 中添加该标签名（否则将被转为 `span`；如果该标签在 `ignoreTags` 中则还需要去掉；如果是自闭合标签还需要添加到 `selfClosingTags` 中）  
 2. 在 `config.js` 中的 [filter](#filter) 中添加  
    ```javascript
    filter(node, cxt) {
@@ -1084,6 +1086,7 @@ error(e){
 一些例子：  
 1. 使用 腾讯视频 插件：[#103](https://github.com/jin-yufeng/Parser/issues/103)  
 2. 使用 `details` 和 `summary` 标签：[#104](https://github.com/jin-yufeng/Parser/issues/104)  
+3. 使用 `input` 标签：[链接](https://ask.dcloud.net.cn/question/105547)  
      
 ### 添加自定义属性 ###
 - 功能性属性

@@ -7,9 +7,7 @@ Page({
     this.context.setContent(htmls[e.index]);
     this.anchor = e.anchor;
     if (e.search)
-      this.setData({
-        search: true
-      })
+      this.open();
   },
   // 富文本渲染完成
   ready() {
@@ -46,10 +44,14 @@ Page({
   },
   // 打开搜索框
   open() {
-    if (!this.data.search)
+    if (!this.data.search) {
+      this.res = {
+        num: 0
+      }
       this.setData({
         search: true
       })
+    }
   },
   // 搜索
   search(e) {

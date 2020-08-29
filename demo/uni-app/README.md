@@ -83,7 +83,8 @@ export default{
 2. 本插件通过组件递归的方式显示节点树，因此必须使用自定义组件模式编译（或 `v3`）  
 3. 由于 `ad` 标签的特殊性，若需要使用文中广告，需自行到 `trees.vue` 中打开对应的注释  
 4. 使用了 `colspan` 和 `rowspan` 的表格由于无法通过 `css` 模拟，将直接使用 `rich-text` 显示，其中的图片链接无法点击  
-5. 从 `2.3.0（20200212）` 以下版本进行升级时需注意引入路径发生了变化（为适配 `easycom` 规则）  
+5. 在 `NVUE` 页面使用时，如果配置里设置了 `flex-direction` 为 `row` 可能导致异常  
+6. 从 `2.3.0（20200212）` 以下版本进行升级时需注意引入路径发生了变化（为适配 `easycom` 规则）  
 
 平台差异：
 
@@ -111,3 +112,14 @@ export default{
 
 关于 `audio` 标签：  
 针对一些平台不支持 `audio` 标签的问题，可以引入 [audio](https://jin-yufeng.github.io/Parser/#/instructions?id=audio) 扩展包解决  
+
+## 问题反馈 ##
+大家在使用过程中如果遇到问题，请首先查阅 [常见问题](https://jin-yufeng.github.io/Parser/#/question) 和 [issue](https://github.com/jin-yufeng/Parser/issues) 确认是否已有解决方案，如果没有，请详细说明以下信息：  
+1. 运行到哪个平台遇到的问题  
+2. 用示例项目能否复现这个问题，如果可以，请提供必要的 `html` 片段，如果不能，请提供能复现的 `demo` 项目，并说明复现的步骤  
+
+对于渲染效果有疑问的话，建议先运行到 `H5` 测试一下，`H5` 直接使用 `html` 标签渲染（可以直接调试查看），如果也有问题，请检查修改 `html` 内容；如果 `H5` 正常但其他端不正常则更有可能是组件的问题，欢迎反馈  
+
+对于描述不清或重复的问题将不会回复，另外，对于复杂的问题建议通过下方的 [插件问答](https://ask.dcloud.net.cn/publish/ext/?pn=Parser%E5%AF%8C%E6%96%87%E6%9C%AC%E6%8F%92%E4%BB%B6%E3%80%90%E5%85%A8%E7%AB%AF%E6%94%AF%E6%8C%81%E3%80%91&uid=1362928) 或前往 `github` 提 [issue](https://github.com/jin-yufeng/Parser/issues/new/choose) 的方式反馈，评论区没有回复不方便问答 
+ 
+需要私聊的，可以通过示例小程序中的联系客服或 `DCloud` 社区的 [私信](https://ask.dcloud.net.cn/people/Jyf) 联系，请直接发送问题内容，无意义内容将不会回复  

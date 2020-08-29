@@ -1,7 +1,7 @@
 /**
  * Parser 富文本组件
  * @tutorial https://github.com/jin-yufeng/Parser
- * @version 20200728
+ * @version 20200828
  * @author JinYufeng
  * @listens MIT
  */
@@ -182,7 +182,7 @@ Component({
           if (item.c) continue;
           // 获取图片列表
           if (item.name == 'img')
-            this.imgList.setItem(item.attrs.i, item.attrs.src);
+            this.imgList.setItem(item.attrs.i, item.attrs['original-src'] || item.attrs.src);
           // 音视频控制
           else if (item.name == 'video' || item.name == 'audio') {
             var ctx;

@@ -1,5 +1,13 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.08.28 ####
+`npm` 包：`1.0.2`  
+
+1. `U` `img` 标签支持通过 `original-src` 属性设置预览时的图片地址 [详细](/#设置高清预览图)  
+2. `F` 修复了 `img` 标签 `width` 和 `height` 属性使用非 `px` 单位时没有被转为 `px` 的问题 [详细](https://github.com/jin-yufeng/Parser/issues/188)  
+3. `F` 修复了 `uni-app` 包 `NVUE` 端编译到安卓时若含有 `%` 会被转义的问题  
+4. `F` 修复了 [打包工具](/instructions#打包工具) 未关闭前生成的文件被占用的问题  
+
 #### 2020.07.28 ####
 `npm` 包：`1.0.1`  
 

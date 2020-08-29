@@ -132,6 +132,17 @@ Page({
 1. 只支持网络链接和 `base64`，不支持本地链接  
 2. 设置 `loading-img` 后会一定程度上增加 `setData` 的次数（在加载完成时切换状态），需酌情使用  
 
+### 设置高清预览图 ###
+支持给显示的图片和预览的图片设置不同的地址（显示用小图片，预览用高清图）以达到节省流量，加快渲染速度的目的  
+设置预览图片地址的方法：  
+1. 给 `img` 标签设置 `original-src` 属性  
+   ```html
+   <!--显示时使用 xxx，预览时使用 yyy-->
+   <img src="xxx" original-src="yyy" />
+   ```
+2. 通过 `imgList` 设置  
+   如果不方便修改 `html` 且高清图地址可以直接通过粗略图地址进行简单变换后得到，通过 [imgList](/instructions#imgList) 可以更加方便的设置
+
 ### 自动设置标题 ###
 若存在 `title` 标签，将自动把其内容设置到页面标题上（可通过 `autosetTitle` 属性控制）  
 
@@ -228,7 +239,7 @@ Page({
 | hr |  |
 | html |  |
 | i |  |
-| img | alt, src, ignore |
+| img | alt, height, ignore, original-src, src, width |
 | ins |  |
 | label |  |
 | legend |  |

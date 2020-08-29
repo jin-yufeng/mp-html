@@ -11,6 +11,7 @@
 - 支持 `svg`  
 - 支持锚点跳转  
 - 支持设置占位图  
+- 支持设置高清预览图  
 - 支持长按复制内容  
 - 支持给多媒体标签设置多个源  
 - 支持自动给链接填充主域名  
@@ -27,13 +28,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 40.3KB | 微信小程序插件包 |
+| parser | 40.4KB | 微信小程序插件包 |
 | parser.min | 25.6KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 39.8KB | QQ 小程序插件包 |
-| parser.bd | 38.2KB | 百度小程序插件包 |
-| parser.my | 38.5KB | 支付宝小程序插件包 |
+| parser.qq | 39.9KB | QQ 小程序插件包 |
+| parser.bd | 38.3KB | 百度小程序插件包 |
+| parser.my | 38.6KB | 支付宝小程序插件包 |
 | parser.tt | 39.1KB | 头条小程序插件包 |
-| parser.uni | 57.4KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser.uni | 57.5KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
 - 源码引入  
@@ -188,6 +189,12 @@
 
 
 ## 更新日志 ##
+- 2020.8.28  
+  1. `U` `img` 标签支持通过 `original-src` 属性设置预览时的图片地址 [详细](https://jin-yufeng.github.io/Parser/#/#设置高清预览图)  
+  2. `F` 修复了 `img` 标签 `width` 和 `height` 属性使用非 `px` 单位时没有被转为 `px` 的问题 [详细](https://github.com/jin-yufeng/Parser/issues/188)  
+  3. `F` 修复了 `uni-app` 包 `NVUE` 端编译到安卓时若含有 `%` 会被转义的问题  
+  4. `F` 修复了 [打包工具](https://jin-yufeng.github.io/Parser/#/instructions#打包工具) 未关闭前生成的文件被占用的问题  
+
 - 2020.7.28  
   1. `A` 增加了 `search` 的扩展包，可以进行关键词搜索并高亮显示 [详细](https://jin-yufeng.github.io/Parser/#/instructions#search)  
   2. `U` 优化了解析过程，含有换行的空字符串将被去除以减小大小    
@@ -205,17 +212,5 @@
   4. `F` 修复了 `svg` 的 `viewBox` 属性小写不生效的问题 [详细](https://github.com/jin-yufeng/Parser/issues/171)  
   5. `F` 修复了图片层级过高，无法被遮盖的问题  
   6. `F` 修复了 `uni-app` 包 `NVUE` 端多次设置数据可能闪烁的问题  
-
-- 2020.7.12  
-  1. `A` 增加了 `in` 的 `api`，可以将锚点跳转的范围限定在一个 `scroll-view` 内 [详细](https://jin-yufeng.github.io/Parser/#/instructions#in)  
-  2. `U` 支持识别 `xml` 声明（`<?xml`）  
-  3. `U` 优化了 `uni-app` 包 `NVUE` 端的显示模式（避免显示不全和内部滚动）  
-  4. `F` 修复了 `audio` 扩展包设置 `autoplay` 时状态不正确的问题  
-  5. `F` 修复了微信和 `QQ` 端 `sub` 和 `sup` 标签可能被错误换行的问题  
-  6. `F` 修复了 `uni-app` 包 `NVUE` 端无法触发 `click` 事件的问题  
-
-- 2020.6.30  
-  1. `F` 修复了个别情况下图片样式异常的问题 [详细](https://github.com/jin-yufeng/Parser/issues/163)  
-  2. `F` 修复了个别情况下会出现多余的换行的问题  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)
