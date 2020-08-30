@@ -25,10 +25,7 @@ function MpHtmlParser(data, options = {}) {
   // 工具函数
   this.bubble = () => {
     for (var i = this.STACK.length, item; item = this.STACK[--i];) {
-      if (cfg.richOnlyTags[item.name]) {
-        if (item.name == 'table' && !Object.hasOwnProperty.call(item, 'c')) item.c = 1;
-        return false;
-      }
+      if (cfg.richOnlyTags[item.name]) return false;
       item.c = 1;
     }
     return true;
@@ -201,7 +198,7 @@ MpHtmlParser.prototype.setNode = function () {
         if (attrs.colspan || attrs.rowspan)
           for (var k = this.STACK.length, item; item = this.STACK[--k];)
             if (item.name == 'table') {
-              item.c = void 0;
+              item.flag = 1;
               break;
             }
     }
@@ -390,35 +387,86 @@ MpHtmlParser.prototype.popNode = function (node) {
         }
     }
   }
-  // 处理表格的边框
+  // 处理表格
   if (node.name == 'table') {
-    var padding = attrs.cellpadding,
-      spacing = attrs.cellspacing,
-      border = attrs.border;
+    var padding = parseFloat(attrs.cellpadding),
+      spacing = parseFloat(attrs.cellspacing),
+      border = parseFloat(attrs.border);
     if (node.c) {
-      this.bubble();
-      attrs.style = (attrs.style || '') + ';display:table';
-      if (!padding) padding = 2;
-      if (!spacing) spacing = 2;
+      if (isNaN(padding)) padding = 2;
+      if (isNaN(spacing)) spacing = 2;
     }
-    if (border) attrs.style = `border:${border}px solid gray;${attrs.style || ''}`;
-    if (spacing) attrs.style = `border-spacing:${spacing}px;${attrs.style || ''}`;
-    if (border || padding || node.c)
+    if (node.flag && node.c) {
+      // 有 colspan 或 rowspan 且含有链接的表格转为 grid 布局实现
+      node.flag = void 0;
+      attrs.style = `${attrs.style || ''};display:grid${spacing ? `;grid-gap:${spacing}px` : ''}`;
+      var row = 1,
+        col = 1,
+        colNum,
+        trs = [],
+        children = [],
+        map = {};
       (function f(ns) {
-        for (var i = 0, n; n = ns[i]; i++) {
-          if (n.type == 'text') continue;
-          var style = n.attrs.style || '';
-          if (node.c && n.name[0] == 't') {
-            n.c = 1;
-            style += ';display:table-' + (n.name == 'th' || n.name == 'td' ? 'cell' : (n.name == 'tr' ? 'row' : 'row-group'));
-          }
-          if (n.name == 'th' || n.name == 'td') {
-            if (border) style = `border:${border}px solid gray;${style}`;
-            if (padding) style = `padding:${padding}px;${style}`;
-          } else f(n.children || []);
-          if (style) n.attrs.style = style;
+        for (var i = 0; i < ns.length; i++) {
+          if (ns[i].name == 'tr') trs.push(ns[i]);
+          else f(ns[i].children || []);
         }
-      })(childs)
+      })(node.children)
+      for (let i = 0; i < trs.length; i++) {
+        for (let j = 0, td; td = trs[i].children[j]; j++) {
+          if (td.name == 'td' || td.name == 'th') {
+            while (map[row + '.' + col]) col++;
+            var cell = {
+              name: 'div',
+              c: 1,
+              attrs: {
+                style: (td.attrs.style || '') + (border ? `;border:${border}px solid gray` + (spacing ? '' : `;margin:0 -${border}px -${border}px 0`) : '') + (padding ? `;padding:${padding}px` : '')
+              },
+              children: td.children
+            }
+            if (td.attrs.colspan) {
+              cell.attrs.style += ';grid-column-start:' + col + ';grid-column-end:' + (col + parseInt(td.attrs.colspan));
+              if (!td.attrs.rowspan) cell.attrs.style += ';grid-row-start:' + row + ';grid-row-end:' + (row + 1);
+              col += parseInt(td.attrs.colspan) - 1;
+            }
+            if (td.attrs.rowspan) {
+              cell.attrs.style += ';grid-row-start:' + row + ';grid-row-end:' + (row + parseInt(td.attrs.rowspan));
+              if (!td.attrs.colspan) cell.attrs.style += ';grid-column-start:' + col + ';grid-column-end:' + (col + 1);
+              for (var k = 1; k < td.attrs.rowspan; k++) map[(row + k) + '.' + col] = 1;
+            }
+            children.push(cell);
+            col++;
+          }
+        }
+        if (!colNum) {
+          colNum = col - 1;
+          attrs.style += `;grid-template-columns:repeat(${colNum},auto)`
+        }
+        col = 1;
+        row++;
+      }
+      node.children = children;
+    } else {
+      if (node.c) attrs.style = (attrs.style || '') + ';display:table';
+      if (border) attrs.style = `border:${border}px solid gray;${attrs.style || ''}`;
+      if (spacing) attrs.style = `border-spacing:${spacing}px;${attrs.style || ''}`;
+      if (border || padding || node.c)
+        (function f(ns) {
+          for (var i = 0, n; n = ns[i]; i++) {
+            if (n.type == 'text') continue;
+            var style = n.attrs.style || '';
+            if (node.c && n.name[0] == 't') {
+              n.c = 1;
+              style += ';display:table-' + (n.name == 'th' || n.name == 'td' ? 'cell' : (n.name == 'tr' ? 'row' : 'row-group'));
+            }
+            if (n.name == 'th' || n.name == 'td') {
+              if (border) style = `border:${border}px solid gray;${style}`;
+              if (padding) style = `padding:${padding}px;${style}`;
+            } else f(n.children || []);
+            if (style) n.attrs.style = style;
+          }
+        })(childs)
+    }
     if (this.options.autoscroll) {
       var table = Object.assign({}, node);
       node.name = 'div';
