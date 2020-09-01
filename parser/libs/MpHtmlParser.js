@@ -396,10 +396,11 @@ MpHtmlParser.prototype.popNode = function (node) {
       if (isNaN(padding)) padding = 2;
       if (isNaN(spacing)) spacing = 2;
     }
+    if (border) attrs.style = `border:${border}px solid gray;${attrs.style || ''}`;
     if (node.flag && node.c) {
       // 有 colspan 或 rowspan 且含有链接的表格转为 grid 布局实现
       node.flag = void 0;
-      attrs.style = `${attrs.style || ''};display:grid${spacing ? `;grid-gap:${spacing}px` : ''}`;
+      attrs.style = `${attrs.style || ''};display:grid${spacing ? `;grid-gap:${spacing}px;padding:${spacing}px` : ';border-left:0;border-top:0'}`;
       var row = 1,
         col = 1,
         colNum,
@@ -420,7 +421,7 @@ MpHtmlParser.prototype.popNode = function (node) {
               name: 'div',
               c: 1,
               attrs: {
-                style: (td.attrs.style || '') + (border ? `;border:${border}px solid gray` + (spacing ? '' : `;margin:0 -${border}px -${border}px 0`) : '') + (padding ? `;padding:${padding}px` : '')
+                style: (td.attrs.style || '') + (border ? `;border:${border}px solid gray` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '')
               },
               children: td.children
             }
@@ -448,7 +449,6 @@ MpHtmlParser.prototype.popNode = function (node) {
       node.children = children;
     } else {
       if (node.c) attrs.style = (attrs.style || '') + ';display:table';
-      if (border) attrs.style = `border:${border}px solid gray;${attrs.style || ''}`;
       if (spacing) attrs.style = `border-spacing:${spacing}px;${attrs.style || ''}`;
       if (border || padding || node.c)
         (function f(ns) {
