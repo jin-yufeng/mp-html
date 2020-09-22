@@ -206,7 +206,10 @@ MpHtmlParser.prototype.setNode = function () {
             }
     }
     if (attrs.align) {
-      styleObj['text-align'] = attrs.align;
+      if (node.name == 'table') {
+        if (attrs.align == 'center') styleObj['margin-inline-start'] = styleObj['margin-inline-end'] = 'auto';
+        else styleObj['float'] = attrs.align;
+      } else styleObj['text-align'] = attrs.align;
       attrs.align = void 0;
     }
     // 压缩 style
