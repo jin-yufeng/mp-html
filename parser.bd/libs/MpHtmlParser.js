@@ -302,21 +302,22 @@ MpHtmlParser.prototype.remove = function (node) {
   // 处理 svg
   var handleSvg = () => {
     var src = this.data.substring(j, this.i + 1);
-    if (!node.attrs.xmlns) src = ' xmlns="http://www.w3.org/2000/svg"' + src;
-    var i = j;
-    while (this.data[j] != '<') j--;
-    src = this.data.substring(j, i).replace("viewbox", "viewBox") + src;
+    node.attrs.xmlns = 'http://www.w3.org/2000/svg';
+    for (var key in node.attrs) {
+      if (key == 'viewbox') src = ` viewBox="${node.attrs.viewbox}"` + src;
+      else if (key != 'style') src = ` ${key}="${node.attrs[key]}"` + src;
+    }
+    src = '<svg' + src;
     var parent = this.parent();
     if (node.attrs.width == '100%' && parent && (parent.attrs.style || '').includes('inline'))
       parent.attrs.style = 'width:300px;max-width:100%;' + parent.attrs.style;
-    var attrs = {
-      src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
-      ignore: 'T'
-    }, style = /vertical[^;]+/.exec(node.attrs.style);
-    if (style) attrs.style = style[0];
     this.siblings().push({
       name: 'img',
-      attrs
+      attrs: {
+        src: 'data:image/svg+xml;utf8,' + src.replace(/#/g, '%23'),
+        style: node.attrs.style,
+        ignore: 'T'
+      }
     })
   }
   if (node.name == 'svg' && this.data[j] == '/') return handleSvg(this.i++);
