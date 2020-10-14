@@ -43,20 +43,32 @@ Page({
       case 'table':
         if (this.data.index == '0')
           template =
-          `<table border="1">
-  <tr>
-    <td>标题1</td>
-    <td colspan="2">标题2</td>
-  </tr>
-  <tr>
-    <td rowspan="2">内容1</td>
-    <td>内容2</td>
-    <td>内容3</td>
-  </tr>
-  <tr>
-    <td>内容4</td>
-    <td>内容5</td>
-  </tr>
+          `<table border="1" cellspacing="0">
+  <thead>
+    <tr>
+      <th align="center">标题1</th>
+      <th align="center">标题2</th>
+      <th align="center">标题3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">1</td>
+      <td rowspan="2">2</td>
+    </tr>
+    <tr>
+      <td rowspan="2">3</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td colspan="2">5</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>7</td>
+      <td><a href="https://github.com/jin-yufeng/Parser">链接</a></td>
+    </tr>
+  </tbody>
 </table>`;
         else
           template =

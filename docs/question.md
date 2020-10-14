@@ -2,34 +2,6 @@
 
 ### 已知问题 ###
 
-#### 表格中的链接无法点击 ####
-*问题描述：*  
-使用了 `colspan` 或 `rowspan` 的表格，其中的链接和图片无法点击  
-
-*问题原因：*  
-小程序中不支持使用 `table` 标签，这使得显示 `table` 成为一个难题，目前的处理如下：  
-对于没有使用 `colspan` 和 `rowspan` 的 `table`，将被转为如下结构，可以实现和 `table` 相同的效果：  
-```wxml
-<view style="display:table">
-  <view style="display:table-row">
-    <view style="display:table-cell">
-      单元格
-    </view>
-    <view style="display:table-cell">
-      单元格
-    </view>
-  </view>
-</view>
-```
-
-但这无法实现 `colspan` 和 `rowspan` 的效果（没有 `css` 可以实现），因此只能通过 `rich-text` 显示，其中的图片、链接无法点击，也无法使用音视频  
-
-*临时解决方案：*  
-1. 不在使用了 `colspan` 和 `rowspan` 的表格中使用图片、链接等  
-2. 自行将其用其他标签实现（就个例而言，还是可以通过 `flex` 布局实现的，但很难有一个通用的模板）  
-
-*相关 issue：*[#159](https://github.com/jin-yufeng/Parser/issues/159)
-
 #### 微信苹果端长按复制无效 ####
 *问题描述：*  
 部分苹果端的微信小程序 `selectable` 属性无法生效  
@@ -237,6 +209,15 @@ html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>'); // 如果还转义了�
 
 *解决方案：*  
 将图片设置为 `display:block` 可以解决这个问题，设置方法 [同上](#连续图片间有间隙)  
+
+#### 修改默认的字体样式 ####
+*问题描述：*  
+有时可能需要设置默认的字体样式（大小、颜色等）  
+
+*解决方案：*  
+`font-` 系列的 `css` 样式基本都是继承属性，只要在顶层的 `parser` 标签的 `style` 属性中设置字体样式即可对子标签中没有另外设置样式的标签生效，达到默认字体效果。
+
+*相关 issue：*[#105571](https://ask.dcloud.net.cn/question/105571)、[#108273](https://ask.dcloud.net.cn/question/108273)
 
 #### 视频显示问题 ####
 *问题描述：*  

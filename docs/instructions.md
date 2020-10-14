@@ -3,13 +3,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 40.4KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 25.6KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 39.9KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 38.3KB | 百度小程序插件包 |
-| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 38.6KB | 支付宝小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 39.1KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 57.5KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 42.7KB | 微信小程序插件包 |
+| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 26.8KB | 微信小程序插件包压缩版（功能相同） |
+| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 42.2KB | QQ 小程序插件包 |
+| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 40.6KB | 百度小程序插件包 |
+| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 41.0KB | 支付宝小程序插件包 |
+| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 41.5KB | 头条小程序插件包 |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
@@ -357,15 +357,17 @@ linkpress(e) {
 针对头条小程序事件中无法传递函数的问题，可以用以下方式接收  
 
 ```javascript
-// 全局唯一的监听器
-global.Parser.onImgtap = function(e) {
-  console.log(e);
+onLoad() {
+  // 全局唯一的监听器
+  global.Parser.onImgtap = function(e) {
+    console.log(e);
+  }
+  global.Parser.onLinkpress = function(e) {
+    if(e.href == "xxx")
+      e.ignore();
+  }
+  // 用完需要设置为 null
 }
-global.Parser.onLinkpress = function(e) {
-  if(e.href == "xxx")
-    e.ignore();
-}
-// 用完需要设置为 null
 ```
 
 ##### 关于 error 事件 #####  
@@ -905,6 +907,8 @@ error(e){
     ```
   3. 将 `trees.vue` 中的 `audio` 修改为 `myAudio`
 
+[@woxiaoyao81](https://github.com/woxiaoyao81) 提供了一个 [优化版](https://github.com/woxiaoyao81/parser-audio)，可供参考  
+
 ### search ###
 !> `uni-app` 包暂不支持使用  
 
@@ -1061,7 +1065,36 @@ error(e){
     如果图片高度超过了预设的高度（目前为 `360px`，可自行在 `trees.wxss` 中的 `._image` 中进行修改），长按图片的上半部分将无法弹出菜单（其他不受影响）  
     
     `20200719` 版本后采用  
-    
+  
+### 表格处理 ###
+小程序不支持 `table` 标签，而 `table` 标签样式非常复杂，如何显示表格也是一个难题  
+
+- `v1`  
+  由于表格很难用其他标签模拟实现（其他富文本组件的表格也都有着或多或少的缺陷），最初的版本通过 `rich-text` 显示 `table` 标签，这种方法可以实现和浏览器中相同的效果（包括有合并单元格的空格）  
+  存在的问题：  
+  1. 不支持表格中链接的点击  
+  2. 不支持 `table` 的一些常用属性（如 `border`、`cellspacing`、`cellpadding` 等）  
+     这个问题，在解析过程中转为 `style` 中的样式，能够得以解决，因此主要问题是第一个  
+
+  `20200321` 版本前采用，`20191128` 版本后解决了问题 `2`  
+
+- `v2`  
+  对于没有使用合并单元格的表格，可以通过 `css` 中 `display:table/table-row/table-cell` 实现相同的效果（但没有 `css` 可以模拟 `colspan` 和 `rowspan` 的效果），因此通过一定的转换后，没有合并单元格的表格中的链接可以实现点击  
+
+  `20200321` - `20200831 beta` 版本采用  
+
+- `v3`  
+  对于使用了合并单元格的表格，通过 `grid` 布局实现，`grid` 布局二维网格的模式，非常适合实现表格合并单元格的效果（通过 `grid-row-start/end` 和 `grid-column-start/end` 进行控制），不过 `grid` 布局的节点数格式与 `table` 有较大差异，需要在解析过程中分析出表格结构后转为 `grid` 结构。因此目前的处理方案如下：  
+
+  | 情况 | 显示方式 |
+  |:---:|:---:|
+  | 没有使用链接的表格 | rich-text |
+  | 使用了链接但没有使用合并单元格的表格 | table 布局 |
+  | 使用了链接也使用了合并单元格的表格 | grid 布局 |
+
+  `20200831 beta` 版本后采用  
+
+
 ## 二次开发 ##
 
 ### 添加一个自定义标签 ###  
@@ -1087,6 +1120,7 @@ error(e){
 1. 使用 腾讯视频 插件：[#103](https://github.com/jin-yufeng/Parser/issues/103)  
 2. 使用 `details` 和 `summary` 标签：[#104](https://github.com/jin-yufeng/Parser/issues/104)  
 3. 使用 `input` 标签：[链接](https://ask.dcloud.net.cn/question/105547)  
+4. 使用 `strike` 标签：[#196](https://github.com/jin-yufeng/Parser/issues/196)  
      
 ### 添加自定义属性 ###
 - 功能性属性

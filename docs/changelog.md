@@ -1,5 +1,13 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.10.14 ####
+`npm` 包：`1.1.0`  
+
+1. `U` 通过 `grid` 布局实现含有合并单元格的表格中链接的点击 [详细](/instructions#表格处理)  
+2. `F` 修复了 `table` 标签的 `align` 属性表现不正确的问题 [详细](https://github.com/jin-yufeng/Parser/issues/193)  
+3. `F` 修复了部分情况下 `svg` 显示不正常的问题 [详细](https://github.com/jin-yufeng/Parser/issues/199)  
+4. `F` 修复了后代选择器可能导致不正确的效果的问题 [详细](https://github.com/jin-yufeng/Parser/issues/202)  
+
 #### 2020.08.28 ####
 `npm` 包：`1.0.2`  
 

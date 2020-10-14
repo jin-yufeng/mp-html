@@ -28,13 +28,13 @@
 
 | 名称 | 大小 | 使用 |
 |:---:|:---:|:---:|
-| parser | 40.4KB | 微信小程序插件包 |
-| parser.min | 25.6KB | 微信小程序插件包压缩版（功能相同） |
-| parser.qq | 39.9KB | QQ 小程序插件包 |
-| parser.bd | 38.3KB | 百度小程序插件包 |
-| parser.my | 38.6KB | 支付宝小程序插件包 |
-| parser.tt | 39.1KB | 头条小程序插件包 |
-| parser.uni | 57.5KB | `uni-app` 插件包（可以编译到所有平台） |
+| parser | 42.7KB | 微信小程序插件包 |
+| parser.min | 26.8KB | 微信小程序插件包压缩版（功能相同） |
+| parser.qq | 42.2KB | QQ 小程序插件包 |
+| parser.bd | 40.6KB | 百度小程序插件包 |
+| parser.my | 41.0KB | 支付宝小程序插件包 |
+| parser.tt | 41.5KB | 头条小程序插件包 |
+| parser.uni | 59.6KB | `uni-app` 插件包（可以编译到所有平台） |
 
 ### 在原生框架中使用 ###
 - 源码引入  
@@ -189,6 +189,12 @@
 
 
 ## 更新日志 ##
+- 2020.10.14  
+  1. `U` 通过 `grid` 布局实现含有合并单元格的表格中链接的点击 [详细](https://jin-yufeng.github.io/Parser/#/instructions#表格处理)  
+  2. `F` 修复了 `table` 标签的 `align` 属性表现不正确的问题 [详细](https://github.com/jin-yufeng/Parser/issues/193)  
+  3. `F` 修复了部分情况下 `svg` 显示不正常的问题 [详细](https://github.com/jin-yufeng/Parser/issues/199)  
+  4. `F` 修复了后代选择器可能导致不正确的效果的问题 [详细](https://github.com/jin-yufeng/Parser/issues/202)  
+
 - 2020.8.28  
   1. `U` `img` 标签支持通过 `original-src` 属性设置预览时的图片地址 [详细](https://jin-yufeng.github.io/Parser/#/#设置高清预览图)  
   2. `F` 修复了 `img` 标签 `width` 和 `height` 属性使用非 `px` 单位时没有被转为 `px` 的问题 [详细](https://github.com/jin-yufeng/Parser/issues/188)  
@@ -204,13 +210,5 @@
   6. `F` 修复了通过 `document` 扩展包进行修改时设置了懒加载的图片可能闪一下的问题  
   7. `F` 修复了 `uni-app` 包从一个文本节点变为元素节点时可能不显示的问题  
   8. `F` 修复了 `uni-app` 包 `NVUE` 页面编译到小程序时列表可能显示不正常的问题  
-
-- 2020.7.19  
-  1. `A` 发布了微信端的 `npm` 包 [详细](https://www.npmjs.com/package/parser-wx)  
-  2. `U` `uni-app` 包 `H5` 端图片设置的宽度超出屏幕宽度时自动将高度设置为 `auto`，避免变形  
-  3. `U` 优化了 `uni-app` 包支付宝端的处理方式，减少了层级  
-  4. `F` 修复了 `svg` 的 `viewBox` 属性小写不生效的问题 [详细](https://github.com/jin-yufeng/Parser/issues/171)  
-  5. `F` 修复了图片层级过高，无法被遮盖的问题  
-  6. `F` 修复了 `uni-app` 包 `NVUE` 端多次设置数据可能闪烁的问题  
 
 更多可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)
