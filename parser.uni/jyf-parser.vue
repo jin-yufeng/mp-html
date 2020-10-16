@@ -272,20 +272,24 @@
 					uni.setNavigationBarTitle({
 						title: title[0].innerText
 					})
+				// 填充 domain
+				var fill = target => {
+					var src = target.getAttribute('src');
+					if (this.domain && src) {
+						if (src[0] == '/') {
+							if (src[1] == '/')
+								target.src = (this.domain.includes('://') ? this.domain.split('://')[0] : '') + ':' + src;
+							else target.src = this.domain + src;
+						} else if (!src.includes('://') && src.indexOf('data:') != 0) target.src = this.domain + '/' + src;
+					}
+				}
 				// 图片处理
 				this.imgList.length = 0;
 				var imgs = this.rtf.getElementsByTagName('img');
 				for (let i = 0, j = 0, img; img = imgs[i]; i++) {
 					if (parseInt(img.style.width || img.getAttribute('width')) > windowWidth)
 						img.style.height = 'auto';
-					var src = img.getAttribute('src');
-					if (this.domain && src) {
-						if (src[0] == '/') {
-							if (src[1] == '/')
-								img.src = (this.domain.includes('://') ? this.domain.split('://')[0] : '') + ':' + src;
-							else img.src = this.domain + src;
-						} else if (!src.includes('://')) img.src = this.domain + '/' + src;
-					}
+					fill(img);
 					if (!img.hasAttribute('ignore') && img.parentElement.nodeName != 'A') {
 						img.i = j++;
 						_ts.imgList.push(img.getAttribute('original-src') || img.src || img.getAttribute('data-src'));
@@ -346,6 +350,7 @@
 				var videos = this.rtf.getElementsByTagName('video');
 				_ts.videoContexts = videos;
 				for (let video, i = 0; video = videos[i++];) {
+					fill(video);
 					video.style.maxWidth = '100%';
 					video.onerror = function() {
 						_ts.$emit('error', {
@@ -361,13 +366,15 @@
 				}
 				// 音频处理
 				var audios = this.rtf.getElementsByTagName('audio');
-				for (var audio of audios)
+				for (var audio of audios) {
+					fill(audio);
 					audio.onerror = function() {
 						_ts.$emit('error', {
 							source: 'audio',
 							target: this
 						});
 					}
+				}
 				// 表格处理
 				if (this.autoscroll) {
 					var tables = this.rtf.getElementsByTagName('table');
