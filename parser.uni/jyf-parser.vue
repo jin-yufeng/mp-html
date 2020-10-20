@@ -637,7 +637,7 @@
 	/* #ifdef MP-WEIXIN */
 	:host {
 		display: block;
-		overflow: scroll;
+		overflow: auto;
 		-webkit-overflow-scrolling: touch;
 	}
 
