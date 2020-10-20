@@ -30,7 +30,7 @@ module.exports = {
 </qs>
 <block qq:for="{{nodes}}" qq:for-item="n" qq:for-index="i" qq:key="i">
   <!--图片-->
-  <view qq:if="{{n.name=='img'}}" id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="imgtap">
+  <view qq:if="{{n.name=='img'}}" id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" catchtap="imgtap">
     <rich-text nodes="{{[{attrs:{src:loading&&ctrl[i]!=2?loading:(lazyLoad&&!ctrl[i]?placeholder:n.attrs.src||''),alt:n.attrs.alt||'',width:n.attrs.width||'',style:'-webkit-touch-callout:none;max-width:100%;display:block'+(n.attrs.height?';height:'+n.attrs.height:'')},name:'img'}]}}" />
     <image class="_image" src="{{lazyLoad&&!ctrl[i]?placeholder:n.attrs.src}}" lazy-load="{{lazyLoad}}" data-i="{{i}}" data-index="{{n.attrs.i}}" data-source="img" bindload="loadImg" binderror="error" />
   </view>
@@ -38,12 +38,12 @@ module.exports = {
   <text qq:elif="{{n.type=='text'}}" decode>{{n.text}}</text>
   <text qq:elif="{{n.name=='br'}}">\n</text>
   <!--链接-->
-  <view qq:elif="{{n.name=='a'}}" id="{{n.attrs.id}}" class="_a {{n.attrs.class}}" hover-class="_hover" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" bindtap="{{handler.visited}}">
+  <view qq:elif="{{n.name=='a'}}" id="{{n.attrs.id}}" class="_a {{n.attrs.class}}" hover-class="_hover" style="{{n.attrs.style}}" data-attrs="{{n.attrs}}" catchtap="{{handler.visited}}">
     <trees class="_node" nodes="{{n.children}}" />
   </view>
   <!--视频-->
   <block qq:elif="{{n.name=='video'}}">
-    <view qq:if="{{n.lazyLoad&&!n.attrs.autoplay}}" id="{{n.attrs.id}}" class="_video {{n.attrs.class}}" style="{{n.attrs.style}}" data-i="{{i}}" bindtap="loadVideo" />
+    <view qq:if="{{n.lazyLoad&&!n.attrs.autoplay}}" id="{{n.attrs.id}}" class="_video {{n.attrs.class}}" style="{{n.attrs.style}}" data-i="{{i}}" catchtap="loadVideo" />
     <video qq:else id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.attrs.source[n.i||0]}}" unit-id="{{n.attrs['unit-id']}}" data-i="{{i}}" data-source="video" binderror="error" bindplay="play" />
   </block>
   <!--音频-->
