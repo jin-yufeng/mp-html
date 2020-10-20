@@ -18,6 +18,7 @@
 </template>
 
 <script>
+	var search;
 	// #ifndef H5 || APP-PLUS-NVUE || MP-360
 	import trees from './libs/trees';
 	var cache = {},
@@ -173,6 +174,7 @@
 			// #ifndef H5 || APP-PLUS-NVUE || MP-360
 			if (dom) this.document = new dom(this);
 			// #endif
+			if (search) this.search = args => search(this, args);
 			// #ifdef APP-PLUS-NVUE
 			this.document = this.$refs.web;
 			setTimeout(() => {
