@@ -58,7 +58,7 @@ class core {
 	final float bdSize = 40.6f;
 	final float mySize = 41.0f;
 	final float ttSize = 41.5f;
-	final float uniAppSize = 59.6f;
+	final float uniAppSize = 60.0f;
 	final float emojiSize = 4.21f;
 	final float emojiMinSize = 3.12f;
 	final float domSize = 7.41f;
@@ -69,6 +69,7 @@ class core {
 	final float audioSize = 4.26f;
 	final float audioUniSize = 4.66f;
 	final float searchSize = 2.87f;
+	final float searchUniSize = 3.77f;
 	final float searchMinSize = 1.41f;
 
 	// 构造函数
@@ -234,12 +235,11 @@ class core {
 				if (item.getStateChange() != ItemEvent.SELECTED) {
 					audio.setText("audio（音乐播放器，" + audioSize + "KB）");
 					document.setText("document（动态操作 dom，" + (isMin ? domMinSize : domSize) + "KB）");
-					search.setEnabled(true);
+					search.setText("search（关键词搜索，" + (isMin ? searchMinSize : searchSize) + "KB）");
 				} else {
 					audio.setText("audio（音乐播放器，" + audioUniSize + "KB）");
 					document.setText("document（动态操作 dom，" + domUniSize + "KB）");
-					search.setSelected(false);
-					search.setEnabled(false);
+					search.setText("search（关键词搜索，" + searchUniSize + "KB）");
 					size.setText(calcSize()); // 重新计算大小
 				}
 				String[] path = dir.getText().split(Matcher.quoteReplacement(File.separator));
@@ -321,17 +321,20 @@ class core {
 					if (typeUniApp.isSelected()) {
 						copyDir("./parser.uni", newPath);
 						if (audio.isSelected()) {
-							Files.copy(Paths.get("./patches/audio/audio.vue"),
-									new FileOutputStream(newPath + "/libs/audio.vue"));
+							copyFile("./patches/audio/audio.vue", newPath + "/libs/audio.vue");
 							modifyFile(newPath + "/libs/trees.vue", "<audio", "<myAudio");
 							modifyFile(newPath + "/libs/trees.vue", "export default {\r\n		components: {",
 									"import myAudio from './audio'\r\n	export default {\r\n		components: {\r\n			myAudio,");
 						}
 						if (document.isSelected()) {
+							copyFile("./patches/document/document.uni.js", newPath + "/libs/document.js");
 							modifyFile(newPath + "/jyf-parser.vue", "var dom",
 									"var dom = require(\"./libs/document.js\")");
-							Files.copy(Paths.get("./patches/document/document.uni.js"),
-									new FileOutputStream(newPath + "/libs/document.js"));
+						}
+						if (search.isSelected()) {
+							copyFile("./patches/search/search.uni.js", newPath + "/libs/search.js");
+							modifyFile(newPath + "/jyf-parser.vue", "var search",
+									"var search = require(\"./libs/search.js\")");
 						}
 					} else {
 						// 生成微信包
@@ -382,26 +385,25 @@ class core {
 						}
 						if (document.isSelected()) {
 							modifyFile(newPath + "/parser.js", "var dom", "var dom = require(\"./libs/document.js\")");
-							Files.copy(Paths.get("./patches/document/document" + (isMin ? ".min" : "") + ".js"),
-									new FileOutputStream(newPath + "/libs/document.js"));
+							copyFile("./patches/document/document" + (isMin ? ".min" : "") + ".js",
+									newPath + "/libs/document.js");
 						}
 						if (search.isSelected()) {
 							modifyFile(newPath + "/parser.js", "var search",
 									"var search = require(\"./libs/search.js\")");
-							Files.copy(Paths.get("./patches/search/search" + (isMin ? ".min" : "") + ".js"),
-									new FileOutputStream(newPath + "/libs/search.js"));
+							copyFile("./patches/search/search" + (isMin ? ".min" : "") + ".js",
+									newPath + "/libs/search.js");
 						}
 					}
 					// 处理公共扩展包
 					if (emoji.isSelected()) {
 						modifyFile(newPath + "/libs/MpHtmlParser.js", "var emoji",
 								"var emoji = require(\"./emoji.js\")");
-						Files.copy(Paths.get("./patches/emoji/emoji" + (isMin ? ".min" : "") + ".js"),
-								new FileOutputStream(newPath + "/libs/emoji.js"));
+						copyFile("./patches/emoji/emoji" + (isMin ? ".min" : "") + ".js", newPath + "/libs/emoji.js");
 					}
 					if (CssHandler.isSelected())
-						Files.copy(Paths.get("./patches/CssHandler/CssHandler" + (isMin ? ".min" : "") + ".js"),
-								new FileOutputStream(newPath + "/libs/CssHandler.js"));
+						copyFile("./patches/CssHandler/CssHandler" + (isMin ? ".min" : "") + ".js",
+								newPath + "/libs/CssHandler.js");
 					String cmdDir[] = { "explorer.exe", newPath };
 					Runtime.getRuntime().exec(cmdDir);
 					JOptionPane.showMessageDialog(null, "生成成功", "成功", JOptionPane.PLAIN_MESSAGE);
@@ -438,7 +440,7 @@ class core {
 		if (audio.isSelected())
 			size += typeUniApp.isSelected() ? audioUniSize : audioSize;
 		if (search.isSelected())
-			size += isMin ? searchMinSize : searchSize;
+			size += typeUniApp.isSelected() ? searchUniSize : (isMin ? searchMinSize : searchSize);
 		return new DecimalFormat(".00").format(size) + " KB";
 	}
 
@@ -456,6 +458,13 @@ class core {
 		writer.close();
 	}
 
+	// 拷贝文件
+	private void copyFile(String oldPath, String newPath) throws IOException {
+		FileOutputStream out = new FileOutputStream(newPath);
+		Files.copy(Paths.get(oldPath), out);
+		out.close();
+	}
+
 	// 拷贝文件夹
 	private void copyDir(String oldPath, String newPath) throws IOException {
 		File file = new File(oldPath);
@@ -468,11 +477,8 @@ class core {
 			if ((new File(oldPath + File.separator + filePath[i])).isDirectory())
 				copyDir(oldPath + File.separator + filePath[i], newPath + File.separator + filePath[i]);
 
-			if (new File(oldPath + File.separator + filePath[i]).isFile()) {
-				FileOutputStream out = new FileOutputStream(newPath + File.separator + filePath[i]);
-				Files.copy(Paths.get(oldPath + File.separator + filePath[i]), out);
-				out.close();
-			}
+			if (new File(oldPath + File.separator + filePath[i]).isFile())
+				copyFile(oldPath + File.separator + filePath[i], newPath + File.separator + filePath[i]);
 
 		}
 	}

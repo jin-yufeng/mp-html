@@ -222,7 +222,7 @@ Page({
 \`\`\`
 </br>
 
-更多功能可见：[功能介绍](https://jin-yufeng.github.io/Parser/#/)  
+更多功能可见：[功能介绍](https://jin-yufeng.gitee.io/parser/#/)  
 </br>
 <a style="display:block;text-align:center" href="page1">下一章：使用方法</a>`,
 `## 使用步骤  
@@ -270,7 +270,7 @@ Page({
 后续步骤同上  
 </br>
 
-本插件还支持在\`uni-app\`等多个框架中使用，更多信息见：[使用方法](https://jin-yufeng.github.io/Parser/#/instructions)  
+本插件还支持在\`uni-app\`等多个框架中使用，更多信息见：[使用方法](https://jin-yufeng.gitee.io/parser/#/instructions)  
 </br>
 
 ## 组件属性  
@@ -290,7 +290,7 @@ Page({
 | use-anchor | Boolean | false | 是否使用锚点跳转 |
 | use-cache | Boolean | false | 是否缓存解析结果 |
 
-详细可见：[组件属性](https://jin-yufeng.github.io/Parser/#/instructions?id=组件属性)  
+详细可见：[组件属性](https://jin-yufeng.gitee.io/parser/#/instructions?id=组件属性)  
 </br>
 
 ## 事件  
@@ -304,7 +304,7 @@ Page({
 | bindlinkpress | 链接被点击时触发，返回链接地址和 ignore 函数（阻止自动跳转） |
 | bindimgtap | 图片被点击时触发，返回图片地址和 ignore 函数（阻止自动预览） |
 
-详细可见：[事件](https://jin-yufeng.github.io/Parser/#/instructions?id=事件)  
+详细可见：[事件](https://jin-yufeng.gitee.io/parser/#/instructions?id=事件)  
 </br>
 
 ## api  
@@ -396,7 +396,7 @@ Page({
   context.setContent(html);
   \`\`\`
 
-详细可见：[api](https://jin-yufeng.github.io/Parser/#/instructions?id=api)  
+详细可见：[api](https://jin-yufeng.gitee.io/parser/#/instructions?id=api)  
 </br>
 
 ## 配置项  
@@ -492,7 +492,7 @@ Page({
 6. \`search\`  
   功能：关键词搜索并高亮显示，[立即体验](../demo/demo?index=0&search=true)
 
-详细可见：[扩展包](https://jin-yufeng.github.io/Parser/#/instructions?id=扩展包)  
+详细可见：[扩展包](https://jin-yufeng.gitee.io/parser/#/instructions?id=扩展包)  
 </br>
 
 ## 基础库要求  
@@ -515,7 +515,12 @@ Page({
   <div style="flex:1"></div>
   <a href="page2">下一章：更新日志</a>
 </div>`,
-`- 2020.10.14  
+`- 2020.10.29  
+  1. \`U\` 文档同步到码云
+  2. \`U\` 图片和链接的点击事件不冒泡，内部和整体的点击可以独立处理
+  3. \`F\` 修复了 \`PC\` 端可能出现不必要的滚动条的问题
+</br></br>
+- 2020.10.14  
   1. \`U\` 通过 \`grid\` 布局实现含有合并单元格的表格中链接的点击
   2. \`F\` 修复了 \`table\` 标签的 \`align\` 属性表现不正确的问题
   3. \`F\` 修复了部分情况下 \`svg\` 显示不正常的问题
@@ -547,10 +552,7 @@ Page({
   1. \`F\` 修复了个别情况下图片样式异常的问题
   2. \`F\` 修复了个别情况下会出现多余的换行的问题
 </br></br>
-- 2020.6.15
-  1. \`D\` \`html\`属性不再支持\`Array\`类型
-</br></br>
 
-更多信息可见：[更新日志](https://jin-yufeng.github.io/Parser/#/changelog)  
+更多信息可见：[更新日志](https://jin-yufeng.gitee.io/parser/#/changelog)  
 </br>
 <a style="display:block;text-align:center" href="page1">上一章：使用方法</a>`]

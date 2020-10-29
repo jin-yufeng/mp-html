@@ -1,5 +1,14 @@
 ## 更新日志 {docsify-ignore} ##
 
+#### 2020.10.29 ####
+`npm` 包：`1.1.1`  
+
+1. `U` 文档同步到码云 [详细](https://jin-yufeng.gitee.io/parser)
+2. `U` 图片和链接的点击事件不冒泡，内部和整体的点击可以独立处理 [详细](https://github.com/jin-yufeng/Parser/issues/206)  
+3. `U` `uni-app` 包支持使用 [search 扩展包](/instructions#search)  
+4. `F` 修复了 `uni-app` 包 `H5` 端 `domain` 属性可能导致 `dataUrl` 无法显示和无法对音视频生效的问题  
+5. `F` 修复了微信 `PC` 端可能出现不必要的滚动条的问题 [详细](https://github.com/jin-yufeng/Parser/issues/207)  
+
 #### 2020.10.14 ####
 `npm` 包：`1.1.0`  
 

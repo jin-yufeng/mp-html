@@ -9,7 +9,7 @@
 | [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 40.6KB | 百度小程序插件包 |
 | [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 41.0KB | 支付宝小程序插件包 |
 | [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 41.5KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 59.6KB | `uni-app` 插件包（可以编译到所有平台） |
+| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 60.0KB | `uni-app` 插件包（可以编译到所有平台） |
 
 说明：  
 除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
@@ -160,7 +160,7 @@
    }
    ```
 
-更多信息参考：[官网说明](https://nervjs.github.io/taro/docs/mini-third-party.html)  
+更多信息参考：[官网说明](https://nervjs.github.io/taro/docs/mini-third-party.html)（`v3.x` 引入方式可能有变化，请留意）  
 组件方式引入可参考 [Taro-ParserRichText](https://github.com/xPixv/Taro-ParserRichText)（由 [@xPixv](https://github.com/xPixv) 提供）  
 
 #### 在 kbone 中使用 ####
@@ -910,15 +910,19 @@ error(e){
 [@woxiaoyao81](https://github.com/woxiaoyao81) 提供了一个 [优化版](https://github.com/woxiaoyao81/parser-audio)，可供参考  
 
 ### search ###
-!> `uni-app` 包暂不支持使用  
 
 - 功能  
   关键词搜索  
 - 大小  
-  `2.87KB`（`min` 版本 `1.41KB`）  
+  `2.87KB`（`min` 版本 `1.41KB`，`uni-app` 版本 `3.77KB`）  
 - 使用方法  
+  原生包：  
   1. 将 [search.js](https://github.com/jin-yufeng/Parser/blob/master/patches/search/search.js) 复制到 `libs` 文件夹下（[search.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/search/search.min.js) 是压缩版本，功能相同，使用时也需要更名为 `search.js`）  
   2. 将 `parser.js` 中的 `var search` 改为 `var search = require('./libs/search.js')`  
+
+  uni-app：  
+  1. 将 [search.uni.js](https://github.com/jin-yufeng/Parser/blob/master/patches/search/search.uni.js) 复制到 `libs` 文件夹下（更名为 `search.js`）  
+  2. 将 `jyf-parser.vue` 中的 `var search` 改为 `var search = require('./libs/search.js')`  
   
   引入后会在组件实例上添加一个 `search` 方法  
   
@@ -968,9 +972,6 @@ error(e){
     highlight(i) {
       this.res.highlight(i); // 高亮第 i 个  
       this.res.jump(i, -50); // 跳转到第 i 个结果
-      this.setData({
-        state: i + '/' + this.res.num // 设置个数
-      })
     },
     // 下一个
     next() {
