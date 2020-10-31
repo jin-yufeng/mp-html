@@ -76,6 +76,7 @@ export default{
 
 更多信息可见：  
 [文档地址](https://jin-yufeng.gitee.io/parser)  
+[Gitee 链接](https://gitee.com/jin-yufeng/Parser)  
 [Github 链接](https://github.com/jin-yufeng/Parser)（好用的话，点个 `star` 吧）  
 
 ## 注意事项 ##
@@ -87,6 +88,16 @@ export default{
 6. 从 `2.3.0（20200212）` 以下版本进行升级时需注意引入路径发生了变化（为适配 `easycom` 规则）  
 
 平台差异：
+
+本插件基本支持所有平台，不同平台间环境有一定差异，为充分利用各平台的特点和优势，采用了不同的渲染方式：  
+
+| 平台 | 渲染方式 |
+|:---:|---|
+| H5 | 直接操作 dom 显示富文本，基本达到和 web 相同的效果 |
+| 小程序和 APP(VUE) | 通过递归组件模拟节点树，配合 rich-text 提升性能 |
+| App(NVUE) | 内嵌 webview 显示，效果上与 H5 接近，但有更多限制 |
+
+由此带来了一些功能差异：  
 
 | 平台 | 差异 |
 |:---:|---|
@@ -100,15 +111,6 @@ export default{
 关于 `a` 标签：  
 `H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  
 小程序端 `a` 标签设置 `app-id` 后可以跳转到其他小程序  
-
-关于 `document` 对象：  
-[组件实例](https://jin-yufeng.gitee.io/parser/#/instructions?id=获取实例的方法) 中提供了一个 `document` 对象，可以更加灵活的操作和调整富文本内容，不同平台的表现如下：  
-- `H5` 和 `360` 小程序  
-  `document` 为富文本所在 `div` 的实例，可以直接调用 `dom` 的各类方法  
-- 小程序和 `App`  
-  若使用了 [document](https://jin-yufeng.gitee.io/parser/#/instructions?id=document) 补丁包，则指向一个虚拟的 `dom` 对象（否则为 `undefined`），具体方法见文档  
-- `NVUE`  
-  `document` 为所在 `webview` 的实例，可以通过 `evalJs` （注意不是 `evalJS`）方法修改 `dom`  
 
 关于 `audio` 标签：  
 针对一些平台不支持 `audio` 标签的问题，可以引入 [audio](https://jin-yufeng.gitee.io/parser/#/instructions?id=audio) 扩展包解决  

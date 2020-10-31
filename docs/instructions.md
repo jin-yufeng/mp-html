@@ -1,55 +1,148 @@
 ## 使用方法 {docsify-ignore} ##
-### 插件包说明 ###
+### 插件包获取 ###
+##### 版本和版本号 #####
+版本：  
+稳定版（`master` 分支）：经过一定时间的测试，稳定性较佳  
+开发版（`develop` 分支）：包含最新功能，尚未经过仔细测试（欢迎参与测试）  
 
-| 名称 | 大小 | 使用 |
-|:---:|:---:|:---:|
-| [parser](https://github.com/jin-yufeng/Parser/tree/master/parser) | 42.7KB | 微信小程序插件包 |
-| [parser.min](https://github.com/jin-yufeng/Parser/tree/master/parser.min) | 26.8KB | 微信小程序插件包压缩版（功能相同） |
-| [parser.qq](https://github.com/jin-yufeng/Parser/tree/master/parser.qq) | 42.2KB | QQ 小程序插件包 |
-| [parser.bd](https://github.com/jin-yufeng/Parser/tree/master/parser.bd) | 40.6KB | 百度小程序插件包 |
-| [parser.my](https://github.com/jin-yufeng/Parser/tree/master/parser.my) | 41.0KB | 支付宝小程序插件包 |
-| [parser.tt](https://github.com/jin-yufeng/Parser/tree/master/parser.tt) | 41.5KB | 头条小程序插件包 |
-| [parser.uni](https://github.com/jin-yufeng/Parser/tree/master/parser.uni) | 60.0KB | `uni-app` 插件包（可以编译到所有平台） |
+版本号：  
+`github` 发布的版本直接以日期命名（`yyyymmdd` 格式）  
+`npm` 的版本号格式为 `x.x.x`，与日期的对应关系可见：[更新日志](/changelog)  
+
+##### 稳定版获取 #####
+1. `git` 方式  
+   ```bash
+   # 通过 github 获取
+   git clone https://github.com/jin-yufeng/Parser.git
+   # 或通过 gitee 获取，速度较快
+   git clone https://gitee.com/jin-yufeng/Parser.git
+   ```
+
+2. `zip` 方式  
+   `github` 主页地址：[https://github.com/jin-yufeng/Parser](https://github.com/jin-yufeng/Parser)  
+   `gitee` 主页地址：[https://gitee.com/jin-yufeng/Parser](https://gitee.com/jin-yufeng/Parser)  
+   点击下载 `zip` 即可获取  
+
+3. `npm` 方式（仅限微信包）  
+   ```bash
+   # 通过 npm 获取
+   npm install parser-wx
+   # 或通过 cnpm 获取
+   cnpm install parser-wx
+   # 或通过 yarn 获取
+   yarn add parser-wx
+   ```
+
+##### 开发版获取 #####
+1. `git` 方式  
+   ```bash
+   # 直接 clone develop 分支
+   git clone -b develop https://github.com/jin-yufeng/Parser.git
+   # 或 clone 整个仓库后切换到 develop 分支
+   git clone https://github.com/jin-yufeng/Parser.git
+   git checkout develop
+   ```
+
+2. `zip` 方式：  
+   `github` `develop` 分支主页地址：[https://github.com/jin-yufeng/Parser/tree/develop](https://github.com/jin-yufeng/Parser/tree/develop)  
+   `gitee` `develop` 分支主页地址：[https://gitee.com/jin-yufeng/Parser/tree/develop](https://gitee.com/jin-yufeng/Parser/tree/develop)  
+   点击下载 `zip` 即可获取  
+
+##### 历史版本获取 #####
+1. `git` 方式  
+   ```bash
+   # 在 log 中找到需要版本的 commit_id
+   git log
+   # 切换到该次提交
+   git checkout commit_id
+   ```
+
+2. `zip` 方式：  
+   `github` 提交历史：[https://github.com/jin-yufeng/Parser/commits/master](https://github.com/jin-yufeng/Parser/commits/master)  
+   `gitee` 提交历史：[https://gitee.com/jin-yufeng/Parser/commits/master](https://gitee.com/jin-yufeng/Parser/commits/master)  
+   在提交历史中找到需要的版本，点击进入后即可下载 `zip` 包    
+
+3. `npm` 方式（仅限微信包）：
+   ```bash
+   npm install parser-wx@x.x.x
+   ```
+
+更新日志可见：[更新日志](/changelog)  
+
+##### 版本更新 #####
+当前版本号查看：  
+插件包中 `parser.js`（`jyf-parser.vue`）顶部的声明（`@version`）中注明了版本号  
+开发版无版本号，标注的版本号与最近发布的稳定版相同  
+
+1. `git` 方式  
+   ```bash
+   git pull
+   ```
+
+2. `zip` 方式  
+   需要重新下载新版 `zip` 包  
+
+3. `npm` 方式  
+   ```bash
+   # 通过 npm 更新
+   npm update parser-wx
+   # 或通过 yarn 更新
+   yarn upgrade parser-wx
+   ```
+
+##### 插件包结构 #####
+整体结构：  
+```
+├─demo（示例项目）
+│  ├─uni-app（uni-app 示例项目）
+│  └─wx（富文本插件微信小程序源码）
+├─docs（文档）
+├─parser（微信小程序插件包，42.7KB）
+├─parser.min（微信小程序压缩版插件包,26.8KB）
+├─parser.bd（百度小程序插件包，40.6KB）
+├─parser.my（支付宝小程序插件包，41.0KB）
+├─parser.qq（QQ 小程序插件包，42.2KB）
+├─parser.tt（头条小程序插件包，41.5KB）
+├─parser.uni（uni-app 插件包，60.0KB）
+├─patches（扩展包）
+│   ├─audio（音乐播放器）
+│   ├─CssHandler（更多 css 选择器）
+│   ├─document（动态操作 dom）
+│   ├─emoji（显示小表情）
+│   ├─parser-group（组合多个富文本）
+│   └─search（关键词搜索）
+├─pack.jar（插件包打包工具-可执行文件）
+├─pack.java（插件包打包工具-源码）
+├─LICENSE（许可证 MIT）
+├─.eslintrc.js（eslint 检查配置）
+├─.stylelintrc.json（stylelint 检查配置）
+```
+
+各平台包结构（以微信包为例）：  
+```
+├─libs
+│   ├─config.js（配置文件）
+│   ├─CssHandler.js（解析和匹配 style 标签中的样式）
+│   ├─MpHtmlParser.js（将 html 字符串解析为 json 结构）
+├─trees
+│   ├─trees.js（递归显示节点树组件）
+│   ├─trees.json
+│   ├─trees.wxml
+│   ├─trees.wxss
+├─parser.js（主组件）
+├─parser.json
+├─parser.wxml
+├─parser.wxss
+```
 
 说明：  
-除原生和 `uni-app` 框架外，其他框架暂无专用包，但也可以引入原生包使用（仅限相应端使用），具体方法见 [在其他框架使用](#在其他框架使用)  
-版本分为 [发布版](https://github.com/jin-yufeng/Parser)（较为稳定）和 [开发版](https://github.com/jin-yufeng/Parser/tree/develop)（可以尝鲜）  
-
-关于 `uni-app` 包的相关说明：  
-1. 为解决平台差异使用了较多条件编译的内容，编译到各平台后会变小  
-2. 需要使用 `HBuilderX 2.2.5` 及以上版本编译，且必须使用自定义组件模式（或 `v3`）  
-3. 由于 `ad` 标签的特殊性，若需要使用文中广告，需自行到 `trees.vue` 中打开注释  
-4. 在 `NVUE` 页面使用时，如果配置里设置了 `flex-direction` 为 `row` 可能导致异常  
-
-编译到各平台后差异：
-
-| 平台 | 差异 |
-|:---:|---|
-| 微信小程序 | 基础库 2.7.1 及以上支持 ruby、bdi、bdo 标签，支持图片长按弹出菜单 |
-| 头条小程序 | 不支持 audio 标签<br>imgtap 和 linkpress 事件的返回值中没有 ignore 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
-| H5<br>360 小程序 | 支持所有浏览器支持的标签<br>不支持 loading-img 属性<br>不支持写在 trees.vue 中的自定义标签和样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
-| App | v3 不支持 audio 标签<br>v3 支持 iframe 标签 |
-| NVUE | 支持所有浏览器支持的标签<br>不支持 lazy-load、loading-img 属性<br>不支持 getVideoContext 的 api<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
-| 华为快应用 | 不支持锚点跳转 |
-
-关于 `a` 标签：  
-`H5`、`App（含 NVUE）` 外链可以直接打开，小程序端将自动复制链接  
-小程序端 `a` 标签设置 `app-id` 后可以跳转到其他小程序  
-
-关于 `document` 对象：  
-[组件实例](#获取实例的方法) 中提供了一个 `document` 对象，可以更加灵活的操作和调整富文本内容，不同平台的表现如下：  
-- `H5` 和 `360` 小程序  
-  `document` 为富文本所在 `div` 的实例，可以直接调用 `dom` 的各类方法  
-- 小程序和 `App`  
-  若使用了 [document](#document) 扩展包，则指向一个虚拟的 `dom` 对象（否则为 `undefined`），具体方法见文档  
-- `NVUE`  
-  `document` 为所在 `webview` 的实例，可以通过 `evalJs` （注意不是 `evalJS`）方法修改 `dom`  
-
-以下统称为 `parser`  
+1. 通过 `git` 或 `zip` 方式获取的都是完整的插件包，通过 `npm` 方式获取的是微信小程序压缩版插件包  
+2. 压缩版通过 `UglifyJS2` 等工具进行无损压缩，功能相同，适合直接应用不需要进行二次开发的情况  
+3. 下方的使用说明将插件包统称为 `parser` 文件夹，请按平台和需要选择对应的插件包  
 
 ### 在原生框架中使用 ###
 #### 源码引入 ####
-1. 复制 [parser](#插件包说明) 文件夹至 `components` 目录  
+1. 复制 [parser](#插件包获取) 文件夹至 `components` 目录  
 2. 在需要使用页面的 `json` 文件中添加  
    ``` json
    {
@@ -83,7 +176,7 @@
    ```json
    {
      "usingComponents": {
-       "parser":"parser-wx"
+       "parser": "parser-wx"
      }
    }
    ```
@@ -92,11 +185,9 @@
 
 !> npm 引入需要基础库 `2.2.1` 以上（更多信息参考 [官方文档](https://developers.weixin.qq.com/miniprogram/dev/devtools/npm.html)）  
 
-?> [demo/wx](https://github.com/jin-yufeng/Parser/tree/master/demo/wx) 文件夹下的是微信小程序 [富文本插件](#立即体验) 示例程序的源码，可供参考  
-
 ### 在 uni-app 中使用 ###
-- 使用 `uni-app` 包（可以编译到所有小程序平台）  
-  1. 复制 [parser](#插件包说明) 文件夹到 `components` 目录下（更名为 `jyf-parser`）  
+- 使用 `uni-app` 包（可以编译到多个平台）  
+  1. 复制 [parser](#插件包获取) 文件夹到 `components` 目录下（更名为 `jyf-parser`）  
   2. 在需要使用页面的`vue`文件中添加  
      ```vue
      <template>
@@ -121,16 +212,15 @@
      ```
   
   ?> 可以直接通过插件市场引入：[插件市场](https://ext.dcloud.net.cn/plugin?id=805)  
-     [demo/uni-app](https://github.com/jin-yufeng/Parser/tree/master/demo/uni-app) 文件夹下是一个示例程序，可供参考 
  
 - 使用原生包  
   参考 [官网-小程序组件支持](https://uniapp.dcloud.io/frame?id=%e5%b0%8f%e7%a8%8b%e5%ba%8f%e7%bb%84%e4%bb%b6%e6%94%af%e6%8c%81)（若仅开发微信端，更建议使用原生包）  
 
 ### 在其他框架中使用 ###
-在其他框架中 **没有专用包**，但也可以引入原生包使用  
+在其他框架中 **没有专用包**，但也可以引入各平台的原生包使用  
 
 #### 在 taro 中使用 ####
-1. 将 [parser](#插件包说明) 文件夹复制到 `/src/components` 目录下  
+1. 将 [parser](#插件包获取) 文件夹复制到 `/src/components` 目录下  
 2. 使用的页面中参考此配置  
    ```javascript
    import Taro, { Component } from '@tarojs/taro'
@@ -165,7 +255,7 @@
 
 #### 在 kbone 中使用 ####
 以 [vue 模板](https://github.com/wechat-miniprogram/kbone-template-vue) 开发为例
-1. 将 [parser](#插件包说明) 文件夹复制到 `/src/components` 目录下  
+1. 将 [parser](#插件包获取) 文件夹复制到 `/src/components` 目录下  
 2. 在 `/build/miniprogram.config.js` 中的 `generate` 字段中添加  
    ```javascript
    generate: {
@@ -190,7 +280,7 @@
 更多信息参考：[官网说明](https://wechat-miniprogram.github.io/kbone/docs/guide/advanced.html#%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6)
 
 #### 在 wepy 中使用 ####
-1. 将 [parser](#插件包说明) 文件夹复制到 `/src/components` 目录下  
+1. 将 [parser](#插件包获取) 文件夹复制到 `/src/components` 目录下  
 2. 在需要使用的页面的 `wpy` 文件中添加  
    ##### v1.x #####
    ```wpy
@@ -241,7 +331,7 @@
 !> 如果出现 `Components not found` 错误，则用 `wepy build --no-cache --watch` 命令清理缓存，重新编译  
 
 #### 在 mpVue 中使用 ####
-1. 下载 [parser](#插件包说明) 文件夹至 `static` 目录下
+1. 下载 [parser](#插件包获取) 文件夹至 `static` 目录下
 2. 在 `src` 目录下需要使用本插件的页面文件夹下添加 `json` 文件
    ```json
    {
@@ -269,7 +359,7 @@
 !> 低版本的 `mpVue` 可能不会自动将 `src` 目录下页面中的 `json` 文件拷贝到 `dist` 中，需要自行直接添加到 `dist` 目录下  
 
 #### 在 chameleon 中使用 ####
-1. 将 [parser](#插件包说明) 文件夹复制到 `components` 目录下  
+1. 将 [parser](#插件包获取) 文件夹复制到 `components` 目录下  
 2. 在需要使用页面的 `wx.cml` 文件中添加  
    ```vue
    <template>
@@ -545,6 +635,23 @@ onText(text, hasTag) {
 1. 替换无效的换行符：[链接](/question#换行符无效)  
 2. 显示数学公式：[链接](https://github.com/jin-yufeng/Parser/issues/90)  
 
+### 平台差异 ###
+各小程序平台通过各个包的内部处理，基本达到完全相同的效果，仅有以下差别：  
+
+| 平台 | 差异 |
+|:---:|---|
+| 微信小程序 | 基础库 `2.7.1` 及以上支持 `ruby`、`bdi`、`bdo` 标签，支持图片长按弹出菜单 |
+| 头条小程序 | 不支持 `audio` 标签；`imgtap` 和 `linkpress` 事件的返回值中没有 `ignore` 方法（需使用 [global.Parser.onxxx](#关于-ignore-方法)） |
+
+`uni-app` 除小程序外还支持 `H5`、`App` 等平台，其环境与小程序有一定差异，为充分发挥各平台的特点和优势，采取了不同的渲染方式并产生了一些差异：  
+
+| 平台 | 渲染方式 | 差异 |
+|:---:|---|---|
+| H5 | 直接操作 dom 显示富文本，基本达到和 web 相同的效果 | 支持所有浏览器支持的标签<br>不支持 loading-img 属性<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
+| 小程序 | 通过递归组件模拟节点树，配合 rich-text 提升性能 | a 标签外链只能复制链接，其他平台均能直接打开 |
+| App(NVUE) | 内嵌 webview 显示，效果上与 H5 接近，但有更多限制 | 支持所有浏览器支持的标签<br>不支持 lazy-load、loading-img 属性<br>不支持 getVideoContext 的 api<br>不支持写在 trees.vue 中的样式（需要直接使用 style 标签）<br>[配置项](#配置项) 中除 errorImg、userAgentStyles 外均无效 |
+| App(VUE) | 基本同小程序 | v3 不支持 audio 标签<br>v3 支持 iframe 标签 |
+
 ### 基础库要求 ###
 微信小程序：
   
@@ -555,7 +662,7 @@ onText(text, hasTag) {
 | < 2.2.5 | 不支持部分实体编码（形如 &amp;copy;） | 0.06% |
 | < 1.6.3 | 无法使用 | < 0.01% |
 
-!> 使用 `uni-app` 包编译到微信小程序时要求基础库 `2.3.0` 及以上  
+!> 使用 `uni-app` 包要求 `HBuilderX` 版本 `2.2.5` 及以上，编译到微信小程序时要求基础库 `2.3.0` 及以上  
 
 !> 百度小程序基础库版本 `3.60`（客户端版本 `11.9`）以下的可能无法正常显示  
 
@@ -785,6 +892,7 @@ this.selectComponent("#article").setContent(html);
 2. 所有 `set` 类的方法，在一个同步流结束后刷新到视图，请不要过于频繁的调用
 3. 部分标签名在解析过程中会被转换（具体见 [配置项](#配置项)），通过标签名可能无法获取  
 4. 建议不要通过 `innerHTML` 增删图片，否则在预览时可能出现问题  
+5. 在 `uni-app` 中，`H5` 和 `NVUE` 不需要引入就可以使用 `document` 对象，`H5` 中为富文本所在 `div` 的实例，可以直接调用 `dom` 的各类方法，`NUVE` 中为所在 `webview` 的实例，可以通过 `evalJs`  方法修改 `dom`  
 
 综合示例：  
 ```wxml
@@ -920,7 +1028,7 @@ error(e){
   1. 将 [search.js](https://github.com/jin-yufeng/Parser/blob/master/patches/search/search.js) 复制到 `libs` 文件夹下（[search.min.js](https://github.com/jin-yufeng/Parser/blob/master/patches/search/search.min.js) 是压缩版本，功能相同，使用时也需要更名为 `search.js`）  
   2. 将 `parser.js` 中的 `var search` 改为 `var search = require('./libs/search.js')`  
 
-  uni-app：  
+  uni-app（`NVUE` 暂不支持）：  
   1. 将 [search.uni.js](https://github.com/jin-yufeng/Parser/blob/master/patches/search/search.uni.js) 复制到 `libs` 文件夹下（更名为 `search.js`）  
   2. 将 `jyf-parser.vue` 中的 `var search` 改为 `var search = require('./libs/search.js')`  
   

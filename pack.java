@@ -468,6 +468,8 @@ class core {
 	// 拷贝文件夹
 	private void copyDir(String oldPath, String newPath) throws IOException {
 		File file = new File(oldPath);
+		if (!file.exists())
+			throw new IOException("文件夹不存在：" + oldPath);
 		String[] filePath = file.list();
 
 		if (!(new File(newPath)).exists())

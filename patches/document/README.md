@@ -4,4 +4,4 @@
 原生包中使用 `document.js`（`document.min.js` 是压缩版本，功能相同）  
 `uni-app` 包中使用 `document.uni.js`  
 
-详细用法见：[document](https://jin-yufeng.github.io/Parser/#/instructions?id=document)  
+详细用法见：[document](https://jin-yufeng.gitee.io/parser/#/instructions?id=document)  
