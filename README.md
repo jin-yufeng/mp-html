@@ -6,6 +6,9 @@
 ![last-commit](https://badgen.net/github/last-commit/jin-yufeng/Parser)
 ![license](https://badgen.net/github/license/jin-yufeng/Parser)  
 
+## 需求调查 ##
+如果您希望本组件能有一个配套的编辑器或有相关意见，欢迎通过 [问卷](https://www.wjx.cn/jq/97197417.aspx) 反馈
+
 ## 功能简介 ##
 - 支持匹配 `style` 中的样式  
 - 支持 `svg`  
