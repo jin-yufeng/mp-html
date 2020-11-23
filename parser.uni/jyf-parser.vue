@@ -242,7 +242,7 @@
 				}
 				var div = document.createElement('div');
 				if (!append) {
-					if (this.rtf) this.rtf.parentNode.removeChild(this.rtf);
+					if (this.rtf && this.rtf.parentNode) this.rtf.parentNode.removeChild(this.rtf);
 					this.rtf = div;
 				} else {
 					if (!this.rtf) this.rtf = div;
