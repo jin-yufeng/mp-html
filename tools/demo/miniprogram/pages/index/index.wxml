@@ -1,0 +1,3 @@
+<mp-html content="{{html}}" domain="https://gitee.com/jin-yufeng/mp-html/raw/master" lazy-load scroll-table selectable use-anchor show-with-animation tag-style="{{tagStyle}}" bindload="load" bindready="ready" bindimgtap="imgtap" bindlinktap="linktap">
+  加载中...
+</mp-html>

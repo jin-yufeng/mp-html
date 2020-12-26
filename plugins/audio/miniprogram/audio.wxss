@@ -1,0 +1,127 @@
+/* 顶层容器 */
+._contain {
+  position: relative;
+  display: inline-flex;
+  width: 290px;
+  background-color: #fcfcfc;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+}
+
+/* 播放、暂停按钮 */
+._button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  background-color: rgb(0, 0, 0, 0.2);
+  border: 1px solid white;
+  border-radius: 50%;
+  opacity: 0.9;
+}
+
+._play {
+  margin-left: 2px;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 8px solid white;
+}
+
+._pause {
+  width: 8px;
+  height: 8px;
+  background-color: white;
+}
+
+/* 海报 */
+._poster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  background-color: #e6e6e6;
+  background-size: contain;
+}
+
+/* 标题栏 */
+._title {
+  flex: 1;
+  margin: 4px 0 0 14px;
+  text-align: left;
+}
+
+._author {
+  width: 45px;
+  font-size: 12px;
+  color: #888;
+}
+
+._name {
+  width: 140px;
+  font-size: 15px;
+  line-height: 39px;
+}
+
+._author,
+._name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 进度条 */
+._slider {
+  position: absolute;
+  right: 16px;
+  bottom: 8px;
+  width: 140px;
+  margin: 0;
+}
+
+/* 播放时间 */
+._time {
+  margin: 7px 14px 0 0;
+  font-size: 12px;
+  color: #888;
+}
+
+/* 响应式布局，大屏幕用更大的尺寸 */
+@media (min-width: 400px) {
+  ._contain {
+    width: 380px;
+  }
+
+  ._button {
+    width: 26px;
+    height: 26px;
+  }
+
+  ._poster {
+    width: 90px;
+    height: 90px;
+  }
+
+  ._author {
+    width: 60px;
+    font-size: 15px;
+  }
+
+  ._name {
+    width: 180px;
+    font-size: 19px;
+    line-height: 55px;
+  }
+
+  ._slider {
+    right: 20px;
+    bottom: 10px;
+    width: 180px;
+  }
+
+  ._time {
+    font-size: 15px;
+  }
+}

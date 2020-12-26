@@ -1,0 +1,214 @@
+# 快速开始 :id=quickstart
+
+## 📦 源码获取 :id=source
+#### npm 方式 :id=npm
+   ```bash
+   # 通过 npm 获取
+   npm install mp-html
+   # 或通过 yarn 获取
+   yarn add mp-html
+   ```
+   需要升级时：  
+   ```bash
+   # 通过 npm 升级
+   npm update mp-html
+   # 或通过 yarn 升级
+   yarn upgrade mp-html
+   ```
+#### git 方式 :id=git
+   ```bash
+   # 通过 github 获取
+   git clone https://github.com/jin-yufeng/mp-html.git
+   # 或通过 gitee 获取
+   git clone https://gitee.com/jin-yufeng/mp-html.git
+   ```
+#### 下载 zip :id=zip
+   *github releases*：[https://github.com/jin-yufeng/mp-html/releases](https://github.com/jin-yufeng/mp-html/releases)  
+   *gitee releases*：[https://gitee.com/jin-yufeng/mp-html/releases](https://gitee.com/jin-yufeng/mp-html/releases)
+
+## 📚 引入和使用 :id=use
+
+### 📗 原生框架 :id=miniprogram
+
+#### 引入 :id=mp-import
+- npm 方式  
+  
+  ?> 本方法仅适用于微信、*QQ* 小程序  
+
+  1. 在小程序项目根目录下通过 [npm](#npm) 安装组件包  
+  2. 开发者工具中勾选 *使用 npm 模块* 并点击 *工具* - *构建 npm*  
+  3. 在需要使用页面的 *json* 文件中添加  
+     ```json
+     {
+       "usingComponents": {
+         "mp-html": "mp-html"
+       }
+     }
+     ```
+
+- 源码引入
+  
+  ?> 本方法适用于所有平台  
+
+  1. 将 [源码](#source) 中对应平台的代码包（*dist/platform*）拷贝到 *components* 目录下，更名为 *mp-html*  
+  2. 在需要使用页面的 *json* 文件中添加  
+     ```json
+     {
+       "usingComponents": {
+         "mp-html": "/components/mp-html/index"
+       }
+     }
+     ```
+
+!> 在此 [问题](https://smartprogram.baidu.com/forum/topic/show/125787) 未解决前，在百度小程序中使用时，请将以下样式拷贝到 *app.css* 以保证正确显示  
+```css
+/* a 标签默认效果 */
+._a {
+  padding: 1.5px 0 1.5px 0;
+  color: #366092;
+  word-break: break-all;
+}
+
+/* a 标签点击态效果 */
+._hover {
+  text-decoration: underline;
+  opacity: 0.7;
+}
+
+/* 图片默认效果 */
+._img {
+  max-width: 100%;
+  -webkit-touch-callout: none;
+}
+```
+
+#### 使用 :id=mp-use
+
+1. 在需要使用页面的 *wxml* 文件中添加  
+   ```wxml
+   <mp-html content="{{html}}" />
+   ```
+2. 在需要使用页面的 *js* 文件中添加  
+   ```javascript
+   Page({
+     onLoad() {
+       this.setData({
+         html: '<div>Hello World!</div>'
+       })
+     }
+   })
+   ```
+
+支持的 [属性](basic/prop) 和 [事件](basic/event) 见对应文档
+
+### 📘 uni-app 框架 :id=uni-app
+
+#### 引入 :id=uni-app-import
+- 插件市场引入  
+  
+  ?> 本方法仅适用于通过 *HBuilderX* 开发  
+
+  前往 [插件主页](https://ext.dcloud.net.cn/plugin?id=805) 点击 *使用 HBuilderX 导入插件* 按钮即可  
+
+- 源码引入  
+  将 [源码](#source) 中 *dist/uni-app* 内的内容拷贝到项目根目录下  
+
+#### 使用 :id=uni-app-use
+在需要使用页面的 *(n)vue* 文件中添加  
+```vue
+<template>
+  <view>
+    <mp-html :content="html" />
+  </view>
+</template>
+<script>
+  import mpHtml from '@/components/mp-html/mp-html'
+  export default {
+    // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
+    components: {
+      mpHtml
+    },
+    data() {
+      return {
+        html: ''
+      }
+    },
+    onLoad() {
+      this.html = '<div>Hello World!</div>'
+    }
+  }
+</script>
+```
+
+支持的 [属性](basic/prop) 和 [事件](basic/event) 见对应文档  
+
+由于 *uni-app* 编译过程中会进行压缩，构建 *uni-app* 包时基本不进行压缩，包的体积与原生包相比较大  
+
+关于 *nvue* 的说明：  
+*nvue* 中不支持很多 *css* 样式，常规的方式无法实现等同于 *html* 的效果，因此 *nvue* 通过 *web-view* 实现渲染，不支持 [lazy-load](basic/prop#lazy-load) 属性；默认背景为白色，可以通过 *bgColor* 属性修改（设置为透明无效）  
+
+### 📙 其他框架 :id=other
+其他框架没有专用包，但也可以引入对应平台的原生包使用，具体方法参考各框架官方文档    
+
+- taro  
+  [https://nervjs.github.io/taro/docs/mini-third-party](https://nervjs.github.io/taro/docs/mini-third-party)
+- kbone  
+  [https://wechat-miniprogram.github.io/kbone/docs/guide/advanced.html#使用小程序自定义组件](https://wechat-miniprogram.github.io/kbone/docs/guide/advanced.html#%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6)  
+- chameleon  
+  [https://cml.js.org/docs/io.html#怎么引入微信小程序组件](https://cml.js.org/docs/io.html#%E6%80%8E%E4%B9%88%E5%BC%95%E5%85%A5%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%BB%84%E4%BB%B6)
+
+## 💡 运行示例 :id=demo
+1. 安装依赖  
+   ```bash
+   # 通过 npm 安装
+   npm install
+   # 或通过 yarn 安装
+   yarn
+   ```
+2. 生成 *demo* 项目  
+   ```bash
+   # 生成微信示例项目到 dev/mp-weixin
+   npm run dev:weixin
+   # 生成 qq 示例项目到 dev/mp-qq
+   npm run dev:qq
+   # 生成百度示例项目到 dev/mp-baidu
+   npm run dev:baidu
+   # 生成支付宝示例项目到 dev/mp-alipay
+   npm run dev:alipay
+   # 生成头条示例项目到 dev/mp-toutiao
+   npm run dev:toutiao
+   # 生成 uni-app 示例项目到 dev/uni-app
+   npm run dev:uni-app
+   ```
+3. 运行  
+   用各平台的开发者工具打开 *dev/platform* 文件夹即可  
+4. 监听修改  
+   如果要对 *demo* 项目进行修改（如放入自己的测试内容）可在 *tools/demo* 目录中进行修改  
+   如果要对组件包进行修改可在 *src* 目录中进行修改（参考 [二次开发](advanced/develop) ）  
+   可以通过 *watch* 命令监听修改并实时编译到 *dev* 目录下  
+   ```bash
+   # 监听并实时生成微信示例项目到 dev/mp-weixin
+   npm run watch:weixin
+   # 监听并实时生成 qq 示例项目到 dev/mp-qq
+   npm run watch:qq
+   # 监听并实时生成百度示例项目到 dev/mp-baidu
+   npm run watch:baidu
+   # 监听并实时生成支付宝示例项目到 dev/mp-alipay
+   npm run watch:alipay
+   # 监听并实时生成头条示例项目到 dev/mp-toutiao
+   npm run watch:toutiao
+   ```
+
+## 🎈 个性化 :id=setting  
+通过编辑 *tools/config.js* 可以按需要生成个性化的组件包，主要的字段有：  
+
+- plugins  
+  需要使用的插件名称列表，关于插件的详细信息见 [插件](advanced/plugin)  
+- ad  
+  是否使用广告，设置为 *true* 后，可以在传入的 *html* 中使用 [ad](https://developers.weixin.qq.com/miniprogram/dev/component/ad.html) 标签  
+- externStyle  
+  外部样式，一个 *css* 字符串，将被用于 *html* 的渲染，但仅支持 *class* 选择器  
+
+剩余的是一些编译过程中压缩工具的配置，可以按需要设置  
+
+设置完成后即可 [生成新的组件包](advanced/develop#pack)，升级组件包前注意备份这个配置文件  

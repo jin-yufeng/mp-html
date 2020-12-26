@@ -1,0 +1,30 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/essential"
+  ],
+  "globals": {
+    "Component": "readonly",
+    "wx": "readonly",
+    "qq": "readonly",
+    "swan": "readonly",
+    "my": "readonly",
+    "tt": "readonly",
+    "uni": "readonly",
+    "plus": "readonly",
+    "weex": "readonly",
+    "requirePlugin": "readonly"
+  },
+  "rules": {
+    "semi": [
+      "error",
+      "never"
+    ],
+    "no-console": "error"
+  }
+}

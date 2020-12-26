@@ -1,0 +1,12 @@
+/* 根节点样式 */
+._root {
+  display: block;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 长按复制 */
+._select {
+  -webkit-user-select: text;
+  user-select: text;
+}

@@ -1,0 +1,17 @@
+<view wx:if="{{controls}}" class="_contain">
+  <!-- 海报和按钮 -->
+	<view class="_poster" style="background-image:url('{{poster}}')">
+		<view class="_button" bindtap="{{playing?'pause':'play'}}">
+			<view class="{{playing?'_pause':'_play'}}" />
+		</view>
+  </view>
+  <!-- 曲名和作者 -->
+	<view class="_title">
+		<view class="_name">{{name||'未知音频'}}</view>
+		<view class="_author">{{author||'未知作者'}}</view>
+  </view>
+  <!-- 进度条 -->
+  <slider class="_slider" activeColor="#585959" block-size="12" disabled="{{error}}" value="{{value}}" bindchanging="_seeking" bindchange="_seeked" />
+  <!--播放时间-->
+  <view class="_time">{{time}}</view>
+</view>

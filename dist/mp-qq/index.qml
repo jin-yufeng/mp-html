@@ -1,0 +1,1 @@
+<slot qq:if="{{!nodes[0]}}"/><node class="_root {{selectable?'_select':''}}" childs="{{nodes}}" opts="{{[lazyLoad,loadingImg,errorImg,showImgMenu]}}"/>

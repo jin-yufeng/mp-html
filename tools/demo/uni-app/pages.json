@@ -1,0 +1,16 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index"
+		},
+		{
+			"path": "pages/jump/jump"
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "mp-html",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}

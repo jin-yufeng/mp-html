@@ -1,0 +1,72 @@
+{
+  "name": "mp-html",
+  "version": "2.0.0",
+  "description": "小程序富文本组件",
+  "miniprogram": "dist/mp-weixin",
+  "repository": "https://github.com/jin-yufeng/mp-html",
+  "author": "Jin Yufeng",
+  "license": "MIT",
+  "keywords": [
+    "miniprogram",
+    "rich-text",
+    "html"
+  ],
+  "jest": {
+    "testEnvironment": "jsdom",
+    "collectCoverageFrom": [
+      "dev/mp-weixin/components/mp-html/**/*.js"
+    ]
+  },
+  "scripts": {
+    "lint": "npx eslint --ext .js,.vue src plugins",
+    "lintcss": "npx stylelint src/**/*.wxss",
+    "build:weixin": "gulp build --mp-weixin",
+    "build:qq": "gulp build --mp-qq",
+    "build:baidu": "gulp build --mp-baidu",
+    "build:alipay": "gulp build --mp-alipay",
+    "build:toutiao": "gulp build --mp-toutiao",
+    "build:uni-app": "gulp build --uni-app",
+    "build": "gulp build --mp-weixin & gulp build --mp-qq & gulp build --mp-baidu & gulp build --mp-alipay & gulp build --mp-toutiao & gulp build --uni-app",
+    "watch:weixin": "gulp watch --mp-weixin --dev",
+    "watch:qq": "gulp watch --mp-qq --dev",
+    "watch:baidu": "gulp watch --mp-baidu --dev",
+    "watch:alipay": "gulp watch --mp-alipay --dev",
+    "watch:toutiao": "gulp watch --mp-toutiao --dev",
+    "watch:uni-app": "gulp watch --uni-app --dev",
+    "dev:weixin": "gulp dev --mp-weixin --dev",
+    "dev:qq": "gulp dev --mp-qq --dev",
+    "dev:baidu": "gulp dev --mp-baidu --dev",
+    "dev:alipay": "gulp dev --mp-alipay --dev",
+    "dev:toutiao": "gulp dev --mp-toutiao --dev",
+    "dev:uni-app": "gulp dev --uni-app --dev",
+    "test": "gulp dev --mp-weixin --dev && npx jest",
+    "coverage": "gulp dev --mp-weixin --dev && npx jest --coverage",
+    "coveralls": "npx coveralls < coverage/lcov.info",
+    "clean": "gulp clean --all",
+    "clean:dev": "gulp clean --all --dev"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "coveralls": "^3.1.0",
+    "eslint": "^7.12.1",
+    "eslint-plugin-vue": "^7.1.0",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-if": "^3.0.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-size": "^3.0.0",
+    "gulp-uglify": "^2.1.2",
+    "jest": "^26.6.1",
+    "miniprogram-simulate": "^1.2.7",
+    "stylelint": "^13.7.2",
+    "stylelint-config-recess-order": "^2.3.0",
+    "stylelint-config-standard": "^20.0.0",
+    "through2": "^4.0.2",
+    "uglify-js": "^2.8.29"
+  },
+  "dependencies": {}
+}

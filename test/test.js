@@ -1,0 +1,245 @@
+/**
+ * @fileoverview 单元测试
+ */
+const path = require('path')
+const simulate = require('miniprogram-simulate')
+
+const html = require('./content')                        // 测试 html
+const dist = '../dev/mp-weixin/components/mp-html/index' // 组件目录
+
+const mpHtml = simulate.load(path.resolve(__dirname, dist), 'mp-html')
+
+// 渲染测试
+test('render', async () => {
+  // 创建和渲染页面
+  let id = simulate.load({
+    data: {
+      copyLink: true,
+      pauseVideo: true,
+      previewImg: true,
+      showWithAnimation: true,
+      useAnchor: true
+    },
+    template:
+      `<scroll-view id="scroll" style="height:100px" scroll-y scroll-top="{{top}}">
+  <mp-html id="article" content="{{html}}" domain="https://gitee.com/jin-yufeng/mp-html/raw/master" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table show-with-animation="{{showWithAnimation}}" use-anchor="{{useAnchor}}">加载中...</mp-html>
+</scroll-view>`,
+    usingComponents: {
+      'mp-html': mpHtml
+    }
+  })
+  let page = simulate.render(id)
+
+  // 设置数据
+  page.setData({
+    html
+  })
+  await simulate.sleep(1000)
+
+  // api 测试
+  const comp = page.querySelector('#article')
+  expect(comp.dom.tagName).toBe('MP-HTML')
+
+  page.setData({
+    showWithAnimation: false // 取消动画
+  })
+  await simulate.sleep(50)
+
+  comp.instance.setContent(
+    `<!-- 测试 base 标签 -->
+<base href="https://xxx.com">
+<!-- 测试 embed 标签 -->
+<embed src="xxx.mp4" />
+<embed autostart src="xxx.mp3" />
+<!-- 测试 source 标签 -->
+<video src="xxx.mp4" loop ></video>
+<!-- 测试 table 标签的 align 属性 -->
+<table align="center"></table>
+<table align="left" border="1">
+  <td>
+    <a>xxx</a>
+  </td>
+</table>
+<!-- 测试 font 标签、不同属性写法、实体 -->
+<font color='red' face = "宋体" size=8 >&#26356;&#x591a;</font >
+<font size=0>1 < 2</font>
+<font>&#aaa;&aaa;&</FONT>
+<!-- 测试 rpx 单位处理 -->
+<span id="anchor" style="font-size:30rpx">11</span>
+<!-- 测试 pre 标签处理（保留空白符） -->
+<div style="white-space:pre">
+  <pre>var i = 0</pre>
+</div>
+<!-- 测试不同情况中的图片处理 -->
+<a data-test="test">
+  <img src="//xxx.jpg">
+</a>
+<div style="display:inline-block">
+  <img style="width:100%;" src="xxx.jpg">
+  </p>
+</div>
+<div style="display:flex">
+  <div style="flex:1">
+    <img src="//xxx.jpg" style="display:inline">
+  </div>
+</div>
+<img style="width:auto" src="data:image/png;base64,xxxx">
+<img src="yyy.webp" style="width:1000px" height="200" ignore>
+<svg />
+<div class="ql-align-center" style="background-image:url(&quot;/xxx.jpg?a=2&amp;b=3&quot;)"></div>
+<![CDATA[<]]>
+<!-- 测试 flex 布局、未闭合标签、data- 属性处理 -->
+<div style="display:flex">
+  <div style="flex:1">123</div>
+</div>
+</br><div data-test="xxx" style="display:flex;display:-webkit-flex;"><div>
+  <img data-src="/xxx.jpg" style="width:100%;height:100px">  `, true) // 补充测试
+  let text = comp.instance.getText()
+  expect(text.includes('更多')).toBe(true) // 检查上方的实体是否被解码
+  await comp.instance.getRect()
+
+  await comp.instance.navigateTo('anchor') // 基于页面跳转
+  comp.instance.in(page.instance) // 错误设置
+  comp.instance.in(page.instance, '#scroll', 'top')
+  await comp.instance.navigateTo('anchor') // 基于 scroll-view 滚动
+
+  page.setData({
+    useAnchor: false
+  })
+  await simulate.sleep(50)
+  try {
+    await comp.instance.navigateTo('anchor') // 禁用锚点的情况下跳转
+  } catch (e) { }
+
+  await simulate.sleep(50) // 等待异步 api 执行完毕
+
+  // 移除节点
+  comp.triggerLifeTime('detached')
+})
+
+// 事件测试
+test('event', async () => {
+  // 模拟 api
+  wx.createVideoContext = function () {
+    // 模拟视频 context
+    return {
+      pause: function () { }
+    }
+  }
+  wx.navigateTo = function (obj) {
+    setTimeout(() => {
+      // 测试失败回调（tab 页面）
+      if (typeof obj.fail == 'function')
+        obj.fail()
+    }, 0)
+  }
+
+  let comp = simulate.render(mpHtml)
+  comp.instance.setContent(
+    `<img src="xxx">
+<img src="yyy" width="100" ignore>
+<a href="#aaa">链接1</a>
+<a href="https://github.com/jin-yufeng/mp-html">链接2</a>
+<a href="pages/test/test">链接3</a>
+<video src="xxx"></video>
+<video>
+  <source src="xxx">
+  <source src="yyy">
+</video>`)
+
+  await simulate.sleep(100)
+
+  let node = comp.querySelector('._root')
+  // 模拟图片加载完毕
+  for (let i = 0; i <= 1; i++) {
+    node.instance.imgLoad({
+      target: {
+        dataset: {
+          i: i.toString()
+        }
+      },
+      detail: {
+        width: 100,
+        height: 100
+      }
+    })
+    // 模拟图片被点击
+    node.instance.imgTap({
+      target: {
+        dataset: {
+          i: i.toString()
+        }
+      }
+    })
+  }
+  // 模拟图片出错
+  node.instance.mediaError({
+    target: {
+      dataset: {
+        i: '0'
+      }
+    },
+    detail: {
+      errMsg: 'test'
+    }
+  })
+  // 模拟链接被点击
+  for (let i = 2; i <= 4; i++)
+    node.instance.linkTap({
+      currentTarget: {
+        dataset: {
+          i: i.toString()
+        }
+      }
+    })
+  // 模拟视频播放
+  for (let i = 0; i < 3; i++)
+    node.instance.play({
+      target: {
+        id: 'v' + (i % 2)
+      }
+    })
+  // 模拟视频出错
+  node.instance.mediaError({
+    target: {
+      dataset: {
+        i: '6'
+      }
+    },
+    detail: {
+      errMsg: 'test'
+    }
+  })
+
+  // 禁用一些功能
+  comp.setData({
+    copyLink: false,
+    pauseVideo: false,
+    previewImg: false
+  }, () => {
+    // 禁用自动拷贝后点击外部链接
+    node.instance.linkTap({
+      currentTarget: {
+        dataset: {
+          i: '3'
+        }
+      }
+    })
+    // 禁用自动暂停后播放视频
+    node.instance.play({
+      target: {
+        id: 'v0'
+      }
+    })
+    // 禁用预览后点击图片
+    node.instance.imgTap({
+      target: {
+        dataset: {
+          i: '0'
+        }
+      }
+    })
+  })
+
+  await simulate.sleep(100)
+})
