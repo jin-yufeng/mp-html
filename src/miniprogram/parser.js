@@ -633,14 +633,12 @@ parser.prototype.popNode = function () {
       // 有 colspan 或 rowspan 且含有链接的表格通过 grid 布局实现
       styleObj.display = 'grid'
       if (spacing)
-        attrs.style += ';grid-gap' + spacing + 'px;padding:' + spacing + 'px'
+        attrs.style += `;grid-gap:${spacing}px;padding:${spacing}px`
       // 无间隔的情况下避免边框重叠
       else if (border)
         attrs.style += ';border-left:0;border-top:0'
 
-      let row = 1,     // 当前单元格行号
-        col = 1,       // 当前单元格列号
-        colNum,        // 表格的列数
+      let width = [],  // 表格的列宽
         trList = [],   // tr 列表
         cells = [],    // 保存新的单元格
         map = {};      // 被合并单元格占用的格子
@@ -654,43 +652,53 @@ parser.prototype.popNode = function () {
         }
       })(children)
 
-      for (let i = 0; i < trList.length; i++) {
-        for (let j = 0; j < trList[i].children.length; j++) {
-          let td = trList[i].children[j]
+      for (let row = 1; row <= trList.length; row++) {
+        let col = 1
+        for (let j = 0; j < trList[row - 1].children.length; j++, col++) {
+          let td = trList[row - 1].children[j]
           if (td.name == 'td' || td.name == 'th') {
             // 这个格子被上面的单元格占用，则列号++
             while (map[row + '.' + col])
               col++
             td.c = 1
-            td.attrs.style = (td.attrs.style || '') + (border ? `;border:${border}px solid gray` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '')
+            let style = td.attrs.style || '',
+              start = style.indexOf('width') ? style.indexOf(';width') : 0
+            // 提取出 td 的宽度
+            if (start != -1) {
+              let end = style.indexOf(';', start + 6)
+              if (end == -1)
+                end = style.length
+              if (!td.attrs.colspan)
+                width[col] = style.substring(start ? start + 7 : 6, end)
+              style = style.substr(0, start) + style.substr(end)
+            }
+            style += (border ? `;border:${border}px solid gray` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '')
             // 处理列合并
             if (td.attrs.colspan) {
-              td.attrs.style += `;grid-column-start:${col};grid-column-end:${col + parseInt(td.attrs.colspan)}`
+              style += `;grid-column-start:${col};grid-column-end:${col + parseInt(td.attrs.colspan)}`
               if (!td.attrs.rowspan)
-                td.attrs.style += `;grid-row-start:${row};grid-row-end:${row + 1}`
+                style += `;grid-row-start:${row};grid-row-end:${row + 1}`
               col += parseInt(td.attrs.colspan) - 1
             }
             // 处理行合并
             if (td.attrs.rowspan) {
-              td.attrs.style += `;grid-row-start:${row};grid-row-end:${row + parseInt(td.attrs.rowspan)}`
+              style += `;grid-row-start:${row};grid-row-end:${row + parseInt(td.attrs.rowspan)}`
               if (!td.attrs.colspan)
-                td.attrs.style += `;grid-column-start:${col};grid-column-end:${col + 1}`
+                style += `;grid-column-start:${col};grid-column-end:${col + 1}`
               // 记录下方单元格被占用
               for (let k = 1; k < td.attrs.rowspan; k++)
                 map[(row + k) + '.' + col] = 1
             }
+            if (style)
+              td.attrs.style = style
             cells.push(td)
-            col++
           }
         }
-        // 获取到表格的列数
-        if (!colNum) {
-          colNum = col - 1
-          attrs.style += `;grid-template-columns:repeat(${colNum},auto)`
+        if (row == 1) {
+          attrs.style += ';grid-template-columns:'
+          for (let i = 1; i < col; i++)
+            attrs.style += (width[i] ? width[i] : 'auto') + ' '
         }
-        // 下一行
-        col = 1
-        row++
       }
       node.children = cells
     } else {
