@@ -282,7 +282,8 @@ export default {
             url: href,
             fail() {
               uni.switchTab({
-                url: href
+                url: href,
+                fail() { }
               })
             }
           })

@@ -51,7 +51,7 @@ Component({
             // #ifndef MP-BAIDU
             , this
             // #endif
-            )
+          )
           ctx.id = id
           this.root._videos.push(ctx)
         }
@@ -130,7 +130,8 @@ Component({
             url: href,
             fail() {
               wx.switchTab({
-                url: href
+                url: href,
+                fail() { }
               })
             }
           })
