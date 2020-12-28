@@ -442,6 +442,7 @@ export default {
 ._td,
 ._th {
   display: table-cell;
+  vertical-align: middle;
 }
 
 ._th {

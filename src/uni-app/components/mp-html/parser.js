@@ -379,7 +379,7 @@ parser.prototype.onOpenTag = function (selfClose) {
           let i
           for (i = this.stack.length; i--;) {
             let item = this.stack[i]
-            if (item.name == 'a' || item.name == 'table')
+            if (item.name == 'a')
               break
             // #ifndef H5 || APP-PLUS
             let style = item.attrs.style || ''
