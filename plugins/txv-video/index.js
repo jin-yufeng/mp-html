@@ -2,13 +2,13 @@
  * @fileoverview txv-video 插件
  * Include txv-video (https://github.com/tvfe/txv-miniprogram-plugin)
  */
-const TxvContext = requirePlugin("tencentvideo")
-
 const txvVideo = function (vm) {
   this.vm = vm
 }
 
 // #ifdef MP-WEIXIN || MP-QQ
+const TxvContext = requirePlugin("tencentvideo")
+
 txvVideo.prototype.onUpdate = function (_, config) {
   config.trustTags['txv-video'] = true
   this.videos = []

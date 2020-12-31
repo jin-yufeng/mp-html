@@ -67,7 +67,7 @@ function packComp() {
     // json 处理
     .pipe(gulpif(file => file.extname == '.json', minifier.json()))                                              // 压缩 json
     // 公共处理
-    .pipe(gulpif(platform != 'uni-app', converter(platform)))                                                    // 将微信端的代码转换到各个平台
+    .pipe(converter(platform))                                                                                   // 将微信端的代码转换到各个平台
     .pipe(gulpif(!isDev, size({
       title: `${platform} 包生成完毕`
     })))
