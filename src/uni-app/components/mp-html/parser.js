@@ -315,9 +315,9 @@ parser.prototype.onOpenTag = function (selfClose) {
     siblings = parent ? parent.children : this.nodes,
     close = this.xml ? selfClose : config.voidTags[node.name]
 
-  // #ifndef H5 || APP-PLUS
   // 转换 embed 标签
   if (node.name == 'embed') {
+    // #ifndef H5 || APP-PLUS
     let src = attrs.src || ''
     // 按照后缀名和 type 将 embed 转为 video 或 audio
     if (src.includes('.mp4') || src.includes('.3gp') || src.includes('.m3u8') || (attrs.type || '').includes('video'))
@@ -327,8 +327,11 @@ parser.prototype.onOpenTag = function (selfClose) {
     if (attrs.autostart)
       attrs.autoplay = 'T'
     attrs.controls = 'T'
+    // #endif
+    // #ifdef H5 || APP-PLUS
+    this.expose()
+    // #endif
   }
-  // #endif
 
   // #ifndef APP-PLUS-NVUE
   // 处理音视频
@@ -624,7 +627,11 @@ parser.prototype.popNode = function () {
   else if (!config.trustTags[node.name] && !this.xml)
     node.name = 'span'
 
-  if (node.name == 'a' || node.name == 'ad')
+  if (node.name == 'a' || node.name == 'ad'
+    // #ifdef H5 || APP-PLUS
+    || node.name == 'iframe'
+    // #endif
+  )
     this.expose()
 
   // #ifdef APP-PLUS
