@@ -177,7 +177,7 @@ parser.prototype.getUrl = function (url) {
   let domain = this.options.domain
   if (domain && domain.includes('://')) {
     if (url[0] == '/') {
-      // // 开头的补充协议名
+      // 开头的补充协议名
       if (url[1] == '/')
         url = domain.split('://')[0] + ':' + url
       // 否则补充整个域名
@@ -681,13 +681,15 @@ parser.prototype.popNode = function () {
       if (isNaN(spacing))
         spacing = 2
     }
-    if (border && !styleObj.border)
-      styleObj.border = border + 'px solid gray'
+    if (border)
+      attrs.style += ';border:' + border + 'px solid gray'
     if (node.flag && node.c) {
       // 有 colspan 或 rowspan 且含有链接的表格通过 grid 布局实现
       styleObj.display = 'grid'
-      if (spacing)
-        attrs.style += `;grid-gap:${spacing}px;padding:${spacing}px`
+      if (spacing) {
+        styleObj['grid-gap'] = spacing + 'px'
+        styleObj.padding = spacing + 'px'
+      }
       // 无间隔的情况下避免边框重叠
       else if (border)
         attrs.style += ';border-left:0;border-top:0'
@@ -748,9 +750,10 @@ parser.prototype.popNode = function () {
           }
         }
         if (row == 1) {
-          attrs.style += ';grid-template-columns:'
+          let temp = ''
           for (let i = 1; i < col; i++)
-            attrs.style += (width[i] ? width[i] : 'auto') + ' '
+            temp += (width[i] ? width[i] : 'auto') + ' '
+          styleObj['grid-template-columns'] = temp
         }
       }
       node.children = cells

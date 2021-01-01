@@ -12,7 +12,7 @@
 
 <script>
 /**
- * mp-html v2.0.0
+ * mp-html v2.0.1
  * @description 富文本组件
  * @tutorial https://github.com/jin-yufeng/mp-html
  * @property {String} content 用于渲染的 html 字符串
@@ -74,15 +74,15 @@ export default {
       type: Boolean,
       default: true
     },
-    showImgMenu: {
-      type: Boolean,
-      default: true
-    },
     scrollTable: Boolean,
     selectable: Boolean,
     setTitle: {
       type: Boolean,
       value: true
+    },
+    showImgMenu: {
+      type: Boolean,
+      default: true
     },
     tagStyle: Object,
     useAnchor: null,
@@ -246,10 +246,7 @@ export default {
       if (this._ready)
         this._set(nodes, append)
       // #endif
-      if (!append)
-        this.nodes = nodes
-      else
-        this.nodes = (this.nodes || []).concat(nodes)
+      this.$set(this, 'nodes', append ? (this.nodes || []).concat(nodes) : nodes)
 
       // #ifndef APP-PLUS-NVUE
       this._videos = []

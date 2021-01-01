@@ -284,7 +284,8 @@ export default {
             url: href,
             fail() {
               uni.switchTab({
-                url: href
+                url: href,
+                fail() { }
               })
             }
           })
@@ -443,6 +444,7 @@ export default {
 ._td,
 ._th {
   display: table-cell;
+  vertical-align: middle;
 }
 
 ._th {

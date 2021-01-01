@@ -153,7 +153,7 @@ module.exports = {
         }, 50)
         var i = e.currentTarget.dataset.i,
           node = this.getNode(i)
-        if (this.root._edit.data.ctrl[this.i] == 3)
+        if (this.data.ctrl[this.i] == 3)
           return
         this.root._maskTap()
         // 显示实线框

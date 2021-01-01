@@ -96,7 +96,7 @@ export default {
 | style | 匹配 style 标签中的样式 |
 | txv-video | 使用腾讯视频 |
 
-从插件市场导入的包中不含有扩展插件，需要使用插件参考以下方法：  
+从插件市场导入的包中 **不含有** 扩展插件，需要使用插件参考以下方法：  
 1. 获取完整组件包  
    ```bash
    npm install mp-html
@@ -117,6 +117,6 @@ export default {
 ## 问题反馈
 遇到问题时，请先查阅 [常见问题](https://jin-yufeng.gitee.io/mp-html/#/question/faq) 和 [issue](https://github.com/jin-yufeng/mp-html/issues) 中是否已有相同的问题  
 可通过 [issue](https://github.com/jin-yufeng/mp-html/issues/new/choose) 或插件问答提问，不建议在评论区提问（不方便回复）  
-提问请严格按照 [issue 模板](https://github.com/jin-yufeng/mp-html/issues/new/choose) 描述，对于 **描述不清**、**无法复现** 或重复的问题将不予回复  
+提问请严格按照 [issue 模板](https://github.com/jin-yufeng/mp-html/issues/new/choose) ，描述清楚使用环境、`html` 内容或可复现的 `demo` 项目以及复现方式，对于 **描述不清**、**无法复现** 或重复的问题将不予回复  
 
 查看 [问题反馈](https://jin-yufeng.gitee.io/mp-html/#/question/feedback) 了解更多

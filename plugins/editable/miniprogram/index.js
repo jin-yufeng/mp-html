@@ -324,8 +324,8 @@ function editable(vm) {
           // 还原 table
           if (item.name == 'table') {
             table = item.attrs
-            if ((item.attrs.style || '').includes(';display:grid')) {
-              item.attrs.style = item.attrs.style.split(';display:grid')[0]
+            if ((item.attrs.style || '').includes('display:grid')) {
+              item.attrs.style = item.attrs.style.split('display:grid')[0]
               var children = [{
                 name: 'tr',
                 attrs: {},
