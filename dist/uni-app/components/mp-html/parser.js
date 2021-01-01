@@ -184,7 +184,7 @@ parser.prototype.getUrl = function (url) {
 
   if (domain && domain.includes('://')) {
     if (url[0] == '/') {
-      // // 开头的补充协议名
+      // 开头的补充协议名
       if (url[1] == '/') url = domain.split('://')[0] + ':' + url; // 否则补充整个域名
       else url = domain + url;
     } else if (!url.includes('data:') && !url.includes('://')) url = domain + '/' + url;
@@ -313,17 +313,19 @@ parser.prototype.onOpenTag = function (selfClose) {
   var attrs = node.attrs,
       parent = this.stack[this.stack.length - 1],
       siblings = parent ? parent.children : this.nodes,
-      close = this.xml ? selfClose : config.voidTags[node.name]; // #ifndef H5 || APP-PLUS
-  // 转换 embed 标签
+      close = this.xml ? selfClose : config.voidTags[node.name]; // 转换 embed 标签
 
   if (node.name == 'embed') {
+    // #ifndef H5 || APP-PLUS
     var src = attrs.src || ''; // 按照后缀名和 type 将 embed 转为 video 或 audio
 
     if (src.includes('.mp4') || src.includes('.3gp') || src.includes('.m3u8') || (attrs.type || '').includes('video')) node.name = 'video';else if (src.includes('.mp3') || src.includes('.wav') || src.includes('.aac') || src.includes('.m4a') || (attrs.type || '').includes('audio')) node.name = 'audio';
     if (attrs.autostart) attrs.autoplay = 'T';
-    attrs.controls = 'T';
-  } // #endif
-  // #ifndef APP-PLUS-NVUE
+    attrs.controls = 'T'; // #endif
+    // #ifdef H5 || APP-PLUS
+
+    this.expose(); // #endif
+  } // #ifndef APP-PLUS-NVUE
   // 处理音视频
 
 
@@ -370,7 +372,7 @@ parser.prototype.onOpenTag = function (selfClose) {
 
           for (i = this.stack.length; i--;) {
             var item = this.stack[i];
-            if (item.name == 'a' || item.name == 'table') break; // #ifndef H5 || APP-PLUS
+            if (item.name == 'a') break; // #ifndef H5 || APP-PLUS
 
             var style = item.attrs.style || '';
 
@@ -621,7 +623,9 @@ parser.prototype.popNode = function () {
 
   if (config.blockTags[node.name]) node.name = 'div'; // 未知标签转为 span，避免无法显示
   else if (!config.trustTags[node.name] && !this.xml) node.name = 'span';
-  if (node.name == 'a' || node.name == 'ad') this.expose(); // #ifdef APP-PLUS
+  if (node.name == 'a' || node.name == 'ad' // #ifdef H5 || APP-PLUS
+  || node.name == 'iframe' // #endif
+  ) this.expose(); // #ifdef APP-PLUS
   else if (node.name == 'video') {
       var str = '<video style="max-width:100%"';
 
@@ -669,19 +673,20 @@ parser.prototype.popNode = function () {
             if (isNaN(spacing)) spacing = 2;
           }
 
-          if (border && !styleObj.border) styleObj.border = border + 'px solid gray';
+          if (border) attrs.style += ';border:' + border + 'px solid gray';
 
           if (node.flag && node.c) {
             // 有 colspan 或 rowspan 且含有链接的表格通过 grid 布局实现
             styleObj.display = 'grid';
-            if (spacing) attrs.style += ";grid-gap:".concat(spacing, "px;padding:").concat(spacing, "px"); // 无间隔的情况下避免边框重叠
+
+            if (spacing) {
+              styleObj['grid-gap'] = spacing + 'px';
+              styleObj.padding = spacing + 'px';
+            } // 无间隔的情况下避免边框重叠
             else if (border) attrs.style += ';border-left:0;border-top:0';
-            var row = 1,
-                // 当前单元格行号
-            col = 1,
-                // 当前单元格列号
-            colNum,
-                // 表格的列数
+
+            var width = [],
+                // 表格的列宽
             trList = [],
                 // tr 列表
             cells = [],
@@ -694,9 +699,11 @@ parser.prototype.popNode = function () {
               }
             })(children);
 
-            for (var _i6 = 0; _i6 < trList.length; _i6++) {
-              for (var j = 0; j < trList[_i6].children.length; j++) {
-                var td = trList[_i6].children[j];
+            for (var row = 1; row <= trList.length; row++) {
+              var col = 1;
+
+              for (var j = 0; j < trList[row - 1].children.length; j++, col++) {
+                var td = trList[row - 1].children[j];
 
                 if (td.name == 'td' || td.name == 'th') {
                   // 这个格子被上面的单元格占用，则列号++
@@ -704,38 +711,50 @@ parser.prototype.popNode = function () {
                     col++;
                   }
 
-                  td.attrs.style = (td.attrs.style || '') + (border ? ";border:".concat(border, "px solid gray") + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? ";padding:".concat(padding, "px") : ''); // 处理列合并
+                  var _style2 = td.attrs.style || '',
+                      start = _style2.indexOf('width') ? _style2.indexOf(';width') : 0; // 提取出 td 的宽度
+
+
+                  if (start != -1) {
+                    var end = _style2.indexOf(';', start + 6);
+
+                    if (end == -1) end = _style2.length;
+                    if (!td.attrs.colspan) width[col] = _style2.substring(start ? start + 7 : 6, end);
+                    _style2 = _style2.substr(0, start) + _style2.substr(end);
+                  }
+
+                  _style2 += (border ? ";border:".concat(border, "px solid gray") + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? ";padding:".concat(padding, "px") : ''); // 处理列合并
 
                   if (td.attrs.colspan) {
-                    td.attrs.style += ";grid-column-start:".concat(col, ";grid-column-end:").concat(col + parseInt(td.attrs.colspan));
-                    if (!td.attrs.rowspan) td.attrs.style += ";grid-row-start:".concat(row, ";grid-row-end:").concat(row + 1);
+                    _style2 += ";grid-column-start:".concat(col, ";grid-column-end:").concat(col + parseInt(td.attrs.colspan));
+                    if (!td.attrs.rowspan) _style2 += ";grid-row-start:".concat(row, ";grid-row-end:").concat(row + 1);
                     col += parseInt(td.attrs.colspan) - 1;
                   } // 处理行合并
 
 
                   if (td.attrs.rowspan) {
-                    td.attrs.style += ";grid-row-start:".concat(row, ";grid-row-end:").concat(row + parseInt(td.attrs.rowspan));
-                    if (!td.attrs.colspan) td.attrs.style += ";grid-column-start:".concat(col, ";grid-column-end:").concat(col + 1); // 记录下方单元格被占用
+                    _style2 += ";grid-row-start:".concat(row, ";grid-row-end:").concat(row + parseInt(td.attrs.rowspan));
+                    if (!td.attrs.colspan) _style2 += ";grid-column-start:".concat(col, ";grid-column-end:").concat(col + 1); // 记录下方单元格被占用
 
                     for (var k = 1; k < td.attrs.rowspan; k++) {
                       map[row + k + '.' + col] = 1;
                     }
                   }
 
+                  if (_style2) td.attrs.style = _style2;
                   cells.push(td);
-                  col++;
                 }
-              } // 获取到表格的列数
+              }
 
+              if (row == 1) {
+                var temp = '';
 
-              if (!colNum) {
-                colNum = col - 1;
-                attrs.style += ";grid-template-columns:repeat(".concat(colNum, ",auto)");
-              } // 下一行
+                for (var _i6 = 1; _i6 < col; _i6++) {
+                  temp += (width[_i6] ? width[_i6] : 'auto') + ' ';
+                }
 
-
-              col = 1;
-              row++;
+                styleObj['grid-template-columns'] = temp;
+              }
             }
 
             node.children = cells;

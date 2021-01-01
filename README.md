@@ -188,6 +188,14 @@
   ![支持](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.0.1 (20210101)
+  1. `F` 修复了 `a` 标签自动跳转到不存在页面时可能报错的问题
+  2. `F` 修复了含合并单元格的表格设置列宽可能导致显示不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/239)
+  3. `F` 修复了表格中的图片可能错位的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/194)
+  4. `F` 修复了原生包使用 `editable` 插件点击标签时可能报错的问题
+  5. `F` 修复了 `uni-app` 的 `h5` 和 `app` 端可能无法使用 `iframe` 和 `embed` 标签的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/245)
+  6. `F` 修复了 uni-app 使用部分插件会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/246)
+
 - v2.0.0 (20201226)  
   1. `U` 通过 `gulp` 进行构建，自动生成各平台压缩版代码，减小引入包大小 [详细](https://jin-yufeng.gitee.io/mp-html/#/advanced/develop#pack)
   2. `U` 没有设置 `href` 属性的 `a` 标签不应用链接的样式，可以用作一般标签的点击处理 [详细](https://jin-yufeng.gitee.io/mp-html/#/question/faq#tap)
@@ -196,7 +204,7 @@
   5. `U` 支持生成各平台的示例项目，便于调试 [详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart#demo)
   6. `U` 原生包共用一份源代码（构建时进行自动转换），注释更加详细，便于了解和维护
   7. `U` 通过 `jest` 进行单元测试，进一步保证代码质量 [详细](https://jin-yufeng.gitee.io/mp-html/#/advanced/develop#test)
-  8. `U` 去除了一些冗余功能，进一步减小包大小（约 `24KB`）
+  8. `U` 去除了一些冗余功能，进一步减小包大小（约 `24.5KB`）
   9. `U` 减少了递归节点树，加快渲染速度
   10. `U` `uni-app` 的 `app` 端使用非原生的 `video` 显示视频以解决无法同层带来的系列问题
   11. `U` `uni-app` 的 `nvue` 端支持通过 `bgColor` 属性设置背景色（默认白色，不可设置为透明）

@@ -22,7 +22,7 @@ test('render', async () => {
     },
     template:
       `<scroll-view id="scroll" style="height:100px" scroll-y scroll-top="{{top}}">
-  <mp-html id="article" content="{{html}}" domain="https://gitee.com/jin-yufeng/mp-html/raw/master" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table show-with-animation="{{showWithAnimation}}" use-anchor="{{useAnchor}}">加载中...</mp-html>
+  <mp-html id="article" content="{{html}}" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table show-with-animation="{{showWithAnimation}}" use-anchor="{{useAnchor}}">加载中...</mp-html>
 </scroll-view>`,
     usingComponents: {
       'mp-html': mpHtml
@@ -53,12 +53,21 @@ test('render', async () => {
 <embed autostart src="xxx.mp3" />
 <!-- 测试 source 标签 -->
 <video src="xxx.mp4" loop ></video>
-<!-- 测试 table 标签的 align 属性 -->
+<!-- 测试 table 标签 -->
 <table align="center"></table>
 <table align="left" border="1">
   <td>
     <a>xxx</a>
   </td>
+</table>
+<table width="100%">
+  <tr>
+    <th width="20%">标题1</th>
+    <th width="80%">标题2</th>
+  </tr>
+  <tr>
+    <td colspan="2"><a>内容1</a></td>
+  </tr>
 </table>
 <!-- 测试 font 标签、不同属性写法、实体 -->
 <font color='red' face = "宋体" size=8 >&#26356;&#x591a;</font >

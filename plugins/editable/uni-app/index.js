@@ -313,8 +313,8 @@ function editable(vm) {
           if (item.name == 'table') {
             item = JSON.parse(JSON.stringify(item))
             table = item.attrs
-            if ((item.attrs.style || '').includes(';display:grid')) {
-              item.attrs.style = item.attrs.style.split(';display:grid')[0]
+            if ((item.attrs.style || '').includes('display:grid')) {
+              item.attrs.style = item.attrs.style.split('display:grid')[0]
               var children = [{
                 name: 'tr',
                 attrs: {},
