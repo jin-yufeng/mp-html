@@ -59,14 +59,14 @@
   <audio wx:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.src[ctrl[i]||0]}}" data-i="{{i}}" bindplay="play" binderror="mediaError" />
   <!-- #endif -->
   <!-- #ifdef MP-TOUTIAO -->
-  <view wx:elif="{{n.name=='table'}}" id="{{n.attrs.id}}" class="_{{n.name}} {{n.attrs.class}}" style="{{n.attrs.style}}">
-    <block wx:for="{{n.children}}" wx:for-item="t1" wx:key="index">
-      <node wx:if="{{t1.name=='td'||t1.name=='th'}}" class="_{{t1.name}} {{t1.attrs.class}}" style="{{t1.attrs.style}}" childs="{{t1.children}}" opts="{{opts}}" />
+  <view wx:elif="{{n.name=='table'&&n.c}}" id="{{n.attrs.id}}" class="_{{n.name}} {{n.attrs.class}}" style="{{n.attrs.style}}">
+    <block wx:for="{{n.children}}" wx:for-item="t1" wx:for-index="i1" wx:key="i1">
+      <node wx:if="{{t1.name=='td'||t1.name=='th'}}" class="_n _{{t1.name}} {{t1.attrs.class}}" style="{{t1.attrs.style}}" childs="{{t1.children}}" opts="{{opts}}" />
       <view wx:else class="_{{t1.name}} {{t1.attrs.class}}" style="{{t1.attrs.style}}">
-        <block wx:for="{{t1.children}}" wx:for-item="t2" wx:key="index">
-          <node wx:if="{{t2.name=='td'||t2.name=='th'}}" class="_{{t2.name}} {{t2.attrs.class}}" style="{{t2.attrs.style}}" childs="{{t2.children}}" opts="{{opts}}" />
+        <block wx:for="{{t1.children}}" wx:for-item="t2" wx:for-index="i2" wx:key="i2">
+          <node wx:if="{{t2.name=='td'||t2.name=='th'}}" class="_n _{{t2.name}} {{t2.attrs.class}}" style="{{t2.attrs.style}}" childs="{{t2.children}}" opts="{{opts}}" />
           <view wx:else class="_{{t2.name}} {{t2.attrs.class}}" style="{{t2.attrs.style}}">
-            <node wx:for="{{t2.children}}" wx:key="index" class="_{{item.name}} {{item.attrs.class}}" style="{{item.attrs.style}}" childs="{{item.children}}" opts="{{opts}}" />
+            <node wx:for="{{t2.children}}" wx:for-index="i3" wx:key="i3" class="_n _{{item.name}} {{item.attrs.class}}" style="{{item.attrs.style}}" childs="{{item.children}}" opts="{{opts}}" />
           </view>
         </block>
       </view>
@@ -82,23 +82,23 @@
   <!-- #endif -->
   <!-- 第 1 层 -->
   <block wx:for="{{childs}}" wx:for-item="n1" wx:for-index="i1" wx:key="i1">
-    <template mp-weixin:mp-qq:wx:if="{{use(n1)}}" mp-baidu:mp-alipay:mp-toutiao:wx:if="{{!n1.c}}" is="el" data="{{n:n1,i:''+i1,opts:opts,ctrl:ctrl}}" />
+    <template mp-weixin:mp-qq:wx:if="{{use(n1)}}" mp-baidu:mp-alipay:wx:if="{{!n1.c}}" mp-toutiao:wx:if="{{!n1.c||n1.name=='table'}}" is="el" data="{{n:n1,i:''+i1,opts:opts,ctrl:ctrl}}" />
     <view wx:else id="{{n1.attrs.id}}" class="_{{n1.name}} {{n1.attrs.class}}" style="{{n1.attrs.style}}">
       <!-- 第 2 层 -->
       <block wx:for="{{n1.children}}" wx:for-item="n2" wx:for-index="i2" wx:key="i2">
-        <template mp-weixin:mp-qq:wx:if="{{use(n2)}}" mp-baidu:mp-alipay:mp-toutiao:wx:if="{{!n2.c}}" is="el" data="{{n:n2,i:i1+'_'+i2,opts:opts,ctrl:ctrl}}" />
+        <template mp-weixin:mp-qq:wx:if="{{use(n2)}}" mp-baidu:mp-alipay:wx:if="{{!n2.c}}" mp-toutiao:wx:if="{{!n2.c||n2.name=='table'}}" is="el" data="{{n:n2,i:i1+'_'+i2,opts:opts,ctrl:ctrl}}" />
         <view wx:else id="{{n2.attrs.id}}" class="_{{n2.name}} {{n2.attrs.class}}" style="{{n2.attrs.style}}">
           <!-- 第 3 层 -->
           <block wx:for="{{n2.children}}" wx:for-item="n3" wx:for-index="i3" wx:key="i3">
-            <template mp-weixin:mp-qq:wx:if="{{use(n3)}}" mp-baidu:mp-alipay:mp-toutiao:wx:if="{{!n3.c}}" is="el" data="{{n:n3,i:i1+'_'+i2+'_'+i3,opts:opts,ctrl:ctrl}}" />
+            <template mp-weixin:mp-qq:wx:if="{{use(n3)}}" mp-baidu:mp-alipay:wx:if="{{!n3.c}}" mp-toutiao:wx:if="{{!n3.c||n3.name=='table'}}" is="el" data="{{n:n3,i:i1+'_'+i2+'_'+i3,opts:opts,ctrl:ctrl}}" />
             <view wx:else id="{{n3.attrs.id}}" class="_{{n3.name}} {{n3.attrs.class}}" style="{{n3.attrs.style}}">
               <!-- 第 4 层 -->
               <block wx:for="{{n3.children}}" wx:for-item="n4" wx:for-index="i4" wx:key="i4">
-                <template mp-weixin:mp-qq:wx:if="{{use(n4)}}" mp-baidu:mp-alipay:mp-toutiao:wx:if="{{!n4.c}}" is="el" data="{{n:n4,i:i1+'_'+i2+'_'+i3+'_'+i4,opts:opts,ctrl:ctrl}}" />
+                <template mp-weixin:mp-qq:wx:if="{{use(n4)}}" mp-baidu:mp-alipay:wx:if="{{!n4.c}}" mp-toutiao:wx:if="{{!n4.c||n4.name=='table'}}" is="el" data="{{n:n4,i:i1+'_'+i2+'_'+i3+'_'+i4,opts:opts,ctrl:ctrl}}" />
                 <view wx:else id="{{n4.attrs.id}}" class="_{{n4.name}} {{n4.attrs.class}}" style="{{n4.attrs.style}}">
                   <!-- 第 5 层 -->
                   <block wx:for="{{n4.children}}" wx:for-item="n5" wx:for-index="i5" wx:key="i5">
-                    <template mp-weixin:mp-qq:wx:if="{{use(n5)}}" mp-baidu:mp-alipay:mp-toutiao:wx:if="{{!n5.c}}" is="el" data="{{n:n5,i:i1+'_'+i2+'_'+i3+'_'+i4+'_'+i5,opts:opts,ctrl:ctrl}}" />
+                    <template mp-weixin:mp-qq:wx:if="{{use(n5)}}" mp-baidu:mp-alipay:wx:if="{{!n5.c}}" mp-toutiao:wx:if="{{!n5.c||n5.name=='table'}}" is="el" data="{{n:n5,i:i1+'_'+i2+'_'+i3+'_'+i4+'_'+i5,opts:opts,ctrl:ctrl}}" />
                     <node wx:else id="{{n5.attrs.id}}" class="_n _{{n5.name}} {{n5.attrs.class}}" style="{{n5.attrs.style}}" childs="{{n5.children}}" opts="{{opts}}" mp-alipay:onAdd="add" />
                   </block>
                 </view>

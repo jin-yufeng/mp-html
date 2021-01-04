@@ -384,9 +384,13 @@ module.exports = {
       }
       else if (file.path.includes('node.wxml')) {
         content = content.replace(/opts\s*=\s*"{{opts}}"/, 'opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+i+\'_\']}}"')
+          .replace(/opts\s*=\s*"{{opts}}"/, 'opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+i+\'_\'+i1+\'_\']}}"')
+          .replace(/opts\s*=\s*"{{opts}}"/, 'opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+i+\'_\'+i1+\'_\'+i2+\'_\']}}"')
+          .replace(/opts\s*=\s*"{{opts}}"/, 'opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+i+\'_\'+i1+\'_\'+i2+\'_\'+i3+\'_\']}}"')
           .replace(/childs\s*=\s*"{{n5.children}}"\s+opts\s*=\s*"{{opts}}"/, 'childs="{{n5.children}}" opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+i1+\'_\'+i2+\'_\'+i3+\'_\'+i4+\'_\'+i5+\'_\']}}"')
-          .replace(/!(n.)\.c/g, 'opts[4]?!$1.children||$1.name==\'a\':!$1.c')
+          .replace(/!(n.)\.c/g, '(opts[4]?!$1.children||$1.name==\'a\':!$1.c)')
           .replace(/use\((n.)\)/g, 'opts[4]?!$1.children||$1.name==\'a\':use($1)')
+          .replace('&&n.c', '&&(n.c||opts[4])')
           // 修改普通标签
           .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{\'\'+i1}}" bindtap="nodeTap" id$1style="{{ctrl[i1]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
           .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2}}" bindtap="nodeTap" id$1style="{{ctrl[i1+\'_\'+i2]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')

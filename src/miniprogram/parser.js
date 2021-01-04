@@ -627,9 +627,6 @@ parser.prototype.popNode = function () {
       attrs.style += ';border:' + border + 'px solid gray'
     if (node.flag && node.c) {
       node.flag = void 0
-      // #ifdef MP-TOUTIAO
-      node.c = void 0
-      // #endif
       // 有 colspan 或 rowspan 且含有链接的表格通过 grid 布局实现
       styleObj.display = 'grid'
       if (spacing) {
@@ -706,12 +703,8 @@ parser.prototype.popNode = function () {
       node.children = cells
     } else {
       // 没有使用合并单元格的表格通过 table 布局实现
-      if (node.c) {
+      if (node.c)
         styleObj.display = 'table'
-        // #ifdef MP-TOUTIAO
-        node.c = void 0
-        // #endif
-      }
       if (!isNaN(spacing))
         styleObj['border-spacing'] = spacing + 'px'
       if (border || padding || node.c) {
