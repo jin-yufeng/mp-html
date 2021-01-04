@@ -11,10 +11,15 @@ const highlight = function (vm) {
 }
 
 highlight.prototype.onParse = function (node, vm) {
-  if (node.name == 'pre' && node.children.length && node.children[0].name == 'code') {
-    var code = node.children[0],
+  if (node.name == 'pre') {
+    for (var i = node.children.length; i--;)
+      if (node.children[i].name == 'code')
+        break
+    if (i == -1)
+      return
+    var code = node.children[i],
       className = code.attrs.class || ''
-    var i = className.indexOf('language-')
+    i = className.indexOf('language-')
     if (i == -1) {
       className = node.attrs.class || ''
       i = className.indexOf('language-')
