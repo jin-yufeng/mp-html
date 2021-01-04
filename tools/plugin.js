@@ -116,7 +116,7 @@ module.exports = {
           }
           // 引入样式
           else if (file.basename == 'local.html' && wxss)
-            content = '<style>' + wxss + '</style>' + content
+            content = '<style>' + wxss.replace(/\/deep\/\s*/g, '') + '</style>' + content
           file.contents = Buffer.from(content)
           for (let item in builds)
             if (builds[item].handler)
@@ -170,7 +170,7 @@ module.exports = {
         else if (file.basename == 'node.vue')
           content = content.replace('</style>', css + '</style>')
         else if (file.basename == 'local.html' && css)
-          content = '<style>' + css + '</style>' + content
+          content = '<style>' + css.replace(/\/deep\/\s*/g, '') + '</style>' + content
         file.contents = Buffer.from(content)
       }
       this.push(file)

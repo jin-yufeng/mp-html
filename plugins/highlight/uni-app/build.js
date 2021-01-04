@@ -1,20 +1,18 @@
-const config = require('./config')
+const config = require('../config')
 
 const build = {
   import: 'prism.css',
   handler(file) {
     if (file.path.includes('prism.css')) {
-      var content = file.contents.toString()
       // 将标签名选择器和属性选择器转为 class 选择器（组件内仅支持 class 选择器）
-      content = content.replace(/pre([[)])/g, '.hl-pre$1').replace(/code/g, '.hl-code').replace(/\[class\*="language-"\]/g, '').replace(/:not[^,}]+[,}]*/g, '').replace(/\.token\./g, '.hl-')
-      file.contents = Buffer.from(content)
+      file.contents = Buffer.from(file.contents.toString().replace(/pre([[)])/g, '.hl-pre$1').replace(/code/g, '.hl-code').replace(/\[class\*="language-"\]/g, '').replace(/:not[^,}]+[,}]*/g, '').replace(/\.token\./g, '.hl-').replace(/\.[a-z]/g, '/deep/ $&'))
     }
   }
 }
 
 if (config.showLanguageName || config.showLineNumber)
   // pre 内部的 code 进行滚动，避免行号和语言名称跟随滚动
-  build.style = `.hl-pre {
+  build.style = `/deep/ .hl-pre {
   position: relative;
 }
 .hl-code {
@@ -23,13 +21,13 @@ if (config.showLanguageName || config.showLineNumber)
 }`
 
 if (config.copyByLongPress) {
-  build.template = `<rich-text wx:if="{{n.attrs['data-content']}}" nodes="{{[n]}}" data-content="{{n.attrs['data-content']}}" data-lang="{{n.attrs['data-lang']}}" bindlongpress="copyCode" />`
+  build.template = `<rich-text v-if="n.attrs['data-content']" :nodes="[n]" :data-content="n.attrs['data-content']" :data-lang="n.attrs['data-lang']" @longpress="copyCode" />`
   build.methods = {
     copyCode(e) {
-      wx.showActionSheet({
+      uni.showActionSheet({
         itemList: ['复制代码'],
         success: () =>
-          wx.setClipboardData({
+          uni.setClipboardData({
             data: e.currentTarget.dataset.content
           })
       })
@@ -39,7 +37,7 @@ if (config.copyByLongPress) {
 
 if (config.showLanguageName) {
   build.style = (build.style || '') +
-    `.hl-language {
+    `/deep/ .hl-language {
   font-size: .7em;
   font-weight: 600;
   position: absolute;
@@ -51,11 +49,11 @@ if (config.showLanguageName) {
 
 if (config.showLineNumber) {
   build.style = (build.style || '') +
-    `.hl-pre {
+    `/deep/ .hl-pre {
   padding-left: 3.8em;
   counter-reset: linenumber;
 }
-.line-numbers-rows {
+/deep/ .line-numbers-rows {
   position: absolute;
   pointer-events: none;
   top: 1em;
@@ -69,11 +67,11 @@ if (config.showLineNumber) {
   -ms-user-select: none;
   user-select: none;
 }
-.line-numbers-rows .span {
+/deep/ .line-numbers-rows .span {
   display: block;
   counter-increment: linenumber;
 } 
-.line-numbers-rows .span:before {
+/deep/ .line-numbers-rows .span:before {
   content: counter(linenumber);
   color: #999;
   display: block;
