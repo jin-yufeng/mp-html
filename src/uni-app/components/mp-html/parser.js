@@ -269,8 +269,11 @@ parser.prototype.onTagName = function (name) {
 parser.prototype.onAttrName = function (name) {
   name = this.xml ? name : name.toLowerCase()
   if (name.substr(0, 5) == 'data-') {
+    // data-src 自动转为 src
+    if (name == 'data-src')
+      this.attrName = 'src'
     // a 和 img 标签保留 data- 的属性，可以在 imgtap 和 linktap 事件中使用
-    if (this.tagName == 'img' || this.tagName == 'a')
+    else if (this.tagName == 'img' || this.tagName == 'a')
       this.attrName = name
     // 剩余的移除以减小大小
     else
