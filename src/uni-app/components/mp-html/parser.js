@@ -386,7 +386,7 @@ parser.prototype.onOpenTag = function (selfClose) {
               break
             // #ifndef H5 || APP-PLUS
             let style = item.attrs.style || ''
-            if (style.includes('flex:') && (!styleObj.width || !styleObj.width.includes('%'))) {
+            if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || !styleObj.width.includes('%'))) {
               styleObj.width = '100% !important'
               styleObj.height = ''
               for (let j = i + 1; j < this.stack.length; j++)
@@ -849,9 +849,11 @@ parser.prototype.popNode = function () {
     if (styleObj[key]) {
       let val = `;${key}:${styleObj[key].replace(' !important', '')}`
       // #ifndef APP-PLUS-NVUE
-      if (flex && ((key.includes('flex') && key != 'flex-direction') || styleObj[key][0] == '-'))
+      if (flex && ((key.includes('flex') && key != 'flex-direction') || key == 'align-self' || styleObj[key][0] == '-' || (key == 'width' && val.includes('%')))) {
         node.f += val
-      else
+        if (key == 'width')
+          attrs.style += ';width:100%'
+      } else
         // #endif
         attrs.style += val
     }

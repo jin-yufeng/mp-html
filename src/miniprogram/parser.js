@@ -361,7 +361,7 @@ parser.prototype.onOpenTag = function (selfClose) {
             if (item.name == 'a')
               break
             let style = item.attrs.style || ''
-            if (style.includes('flex:') && (!styleObj.width || !styleObj.width.includes('%'))) {
+            if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || !styleObj.width.includes('%'))) {
               styleObj.width = '100% !important'
               styleObj.height = ''
               for (let j = i + 1; j < this.stack.length; j++)
@@ -778,16 +778,27 @@ parser.prototype.popNode = function () {
     }
 
   // flex 布局时部分样式需要提取到 rich-text 外层
-  let flex = parent && (parent.attrs.style || '').includes('flex') && !node.c
+  let flex = parent && (parent.attrs.style || '').includes('flex')
+    // #ifdef MP-TOUTIAO
+    && (!node.c || this.stack.length % 5 == 4)
+    // #endif
+    // #ifndef MP-TOUTIAO
+    && !node.c
+    // #endif
+    // #ifdef MP-WEIXIN || MP-QQ
+    && !(styleObj.display || '').includes('inline')
+  // #endif
   if (flex)
     node.f = ';max-width:100%'
 
   for (let key in styleObj)
     if (styleObj[key]) {
       let val = `;${key}:${styleObj[key].replace(' !important', '')}`
-      if (flex && ((key.includes('flex') && key != 'flex-direction') || styleObj[key][0] == '-'))
+      if (flex && ((key.includes('flex') && key != 'flex-direction') || key == 'align-self' || styleObj[key][0] == '-' || (key == 'width' && val.includes('%')))) {
         node.f += val
-      else
+        if (key == 'width')
+          attrs.style += ';width:100%'
+      } else
         attrs.style += val
     }
   attrs.style = attrs.style.substr(1) || void 0

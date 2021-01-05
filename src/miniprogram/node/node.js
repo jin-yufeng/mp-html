@@ -6,6 +6,10 @@ Component({
     ctrl: {} // 控制信号
   },
   properties: {
+    // #ifdef MP-TOUTIAO
+    name: String,
+    attrs: Object,
+    // #endif
     childs: Array,  // 子节点列表
     opts: Array     // 设置 [是否开启懒加载, 加载中占位图, 错误占位图, 是否使用长按菜单]
   },
