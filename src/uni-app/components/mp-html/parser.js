@@ -968,8 +968,7 @@ lexer.prototype.text = function () {
       // 标签结尾
       this.i += 2
       this.start = this.i
-      this.state = this.endTag
-      return
+      return this.state = this.endTag
     }
     // 处理注释
     let end = '-->'
@@ -1020,15 +1019,13 @@ lexer.prototype.attrName = function () {
         if (needVal) {
           // 等号后遇到第一个非空字符
           this.start = this.i
-          this.state = this.attrVal
-          return
+          return this.state = this.attrVal
         }
         if (this.content[this.i] == '=')
           needVal = true
         else {
           this.start = this.i
-          this.state = this.attrName
-          return
+          return this.state = this.attrName
         }
       }
     }
