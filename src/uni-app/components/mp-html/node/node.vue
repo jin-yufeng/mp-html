@@ -102,6 +102,11 @@ module.exports = {
 import node from './node'
 export default {
   name: 'node',
+  // #ifdef MP-WEIXIN
+  options: {
+    virtualHost: true
+  },
+  // #endif
   data() {
     return {
       ctrl: {}

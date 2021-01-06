@@ -841,6 +841,10 @@ parser.prototype.popNode = function () {
     }
   // flex 布局时部分样式需要提取到 rich-text 外层
   let flex = parent && (parent.attrs.style || '').includes('flex')
+    // #ifdef MP-WEIXIN
+    // 检查基础库版本 virtualHost 是否可用
+    && !(node.c && wx.getNFCAdapter)
+    // #endif
     // #ifndef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
     && !node.c
   // #endif
