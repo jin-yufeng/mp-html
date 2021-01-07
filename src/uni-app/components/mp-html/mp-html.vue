@@ -1,5 +1,5 @@
 <template>
-  <view :class="(selectable?'_select ':'')+'_root'">
+  <view id="_root" :class="(selectable?'_select ':'')+'_root'">
     <slot v-if="!nodes[0]" />
     <!-- #ifndef APP-PLUS-NVUE -->
     <node v-else :childs="nodes" :opts="[lazyLoad,loadingImg,errorImg,showImgMenu]" />
@@ -229,7 +229,7 @@ export default {
           // #ifndef MP-ALIPAY
           .in(this)
           // #endif
-          .select('._root').boundingClientRect().exec(res => res[0] ? resolve(res[0]) : reject('Root label not found'))
+          .select('#_root').boundingClientRect().exec(res => res[0] ? resolve(res[0]) : reject('Root label not found'))
       })
     },
 
