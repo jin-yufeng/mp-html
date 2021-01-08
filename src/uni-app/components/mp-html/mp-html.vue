@@ -63,9 +63,18 @@ export default {
       default: true
     },
     domain: String,
-    errorImg: String,
-    lazyLoad: Boolean,
-    loadingImg: String,
+    errorImg: {
+      type: String,
+      default: ''
+    },
+    lazyLoad: {
+      type: Boolean,
+      default: false
+    },
+    loadingImg: {
+      type: String,
+      default: ''
+    },
     pauseVideo: {
       type: Boolean,
       default: true
