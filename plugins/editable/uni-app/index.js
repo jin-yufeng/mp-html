@@ -261,6 +261,7 @@ function editable(vm) {
    * @description 清空内容
    */
   vm.clear = function () {
+    vm._maskTap()
     vm._edit = void 0
     vm.$set(vm, 'nodes', [{
       name: 'p',
