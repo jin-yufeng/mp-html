@@ -11,11 +11,11 @@
 ```
 ├─dev（生成的各平台示例项目）
 ├─dist（生成的各平台代码包）
-│  ├─alipay
-│  ├─baidu
-│  ├─qq
-│  ├─toutiao
-│  ├─weixin
+│  ├─mp-alipay
+│  ├─mp-baidu
+│  ├─mp-qq
+│  ├─mp-toutiao
+│  ├─mp-weixin
 │  └─uni-app
 ├─docs（文档，由 docsify 生成）
 ├─plugins（插件源代码）
@@ -27,10 +27,11 @@
 │   ├─demo（示例项目源代码）
 │   │  ├─miniprogram（原生平台示例项目）
 │   │  └─uni-app（uni-app 平台示例项目）
-|   ├─ifdef.js（处理条件编译）
 |   ├─config.js（构建工具的配置项）
+|   ├─converter.js（将微信端的代码转换到各个平台）
+|   ├─ifdef.js（处理条件编译）
 |   ├─minifier.js（处理 json 和 wxs 的压缩）
-|   └─converter.js（将微信端的代码转换到各个平台）
+|   └─plugin.js（处理插件构建）
 ├─.eslintrc.json（eslint 配置）
 ├─.stylelintrc.json（stylelint 配置）
 ├─gulpfile.js（gulp 生成文件）

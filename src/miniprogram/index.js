@@ -1,10 +1,9 @@
 /*!
- * mp-html v2.0.1
+ * mp-html v2.0.2
  * https://github.com/jin-yufeng/mp-html
  * 
  * Released under the MIT license
  * Author: Jin Yufeng
- * Date: 2021-01-01
  */
 const parser = require('./parser')
 const plugins = []

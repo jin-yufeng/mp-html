@@ -58,7 +58,7 @@ const windowWidth = uni.getSystemInfoSync().windowWidth
 const blankChar = makeMap(' ,\r,\n,\t,\f')
 let idIndex = 0
 
-// #ifdef H5 || APP-PLUS || MP-360
+// #ifdef H5 || APP-PLUS
 config.ignoreTags.iframe = void 0
 config.trustTags.iframe = true
 config.ignoreTags.embed = void 0
@@ -766,20 +766,18 @@ parser.prototype.popNode = function () {
         styleObj.display = 'table'
       if (!isNaN(spacing))
         styleObj['border-spacing'] = spacing + 'px'
-      if (border || padding || node.c) {
+      if (border || padding) {
         // 遍历
         (function traversal(nodes) {
           for (let i = 0; i < nodes.length; i++) {
             let td = nodes[i]
-            if (td.type == 'text')
-              continue
             if (td.name == 'th' || td.name == 'td') {
               if (border)
                 td.attrs.style = `border:${border}px solid gray;${td.attrs.style || ''}`
               if (padding)
                 td.attrs.style = `padding:${padding}px;${td.attrs.style || ''}`
-            } else
-              traversal(td.children || [])
+            } else if (td.children)
+              traversal(td.children)
           }
         })(children)
       }

@@ -6,6 +6,7 @@
 
 <script>
 // 需要测试 nvue 时，将本文件后缀改为 .nvue 即可
+// 注意：此示例不包含编辑功能
 const html = require("../../content")
 import mpHtml from '@/components/mp-html/mp-html'
 export default {

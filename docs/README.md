@@ -4,7 +4,8 @@
 
 ![star](https://badgen.net/github/stars/jin-yufeng/mp-html)
 ![forks](https://badgen.net/github/forks/jin-yufeng/mp-html)
-![last-commit](https://badgen.net/github/last-commit/jin-yufeng/mp-html)
+[![npm](https://badgen.net/npm/v/mp-html)](https://www.npmjs.com/package/mp-html)
+![downloads](https://badgen.net/npm/dt/mp-html)
 [![Coverage Status](https://coveralls.io/repos/github/jin-yufeng/mp-html/badge.svg?branch=master)](https://coveralls.io/github/jin-yufeng/mp-html?branch=master)
 ![license](https://badgen.net/github/license/jin-yufeng/mp-html)
 

@@ -6,10 +6,10 @@
       <image v-if="n.name=='img'&&((opts[1]&&!ctrl[i])||ctrl[i]<0)" class="_img" :style="n.attrs.style" :src="ctrl[i]<0?opts[2]:opts[1]" mode="widthFix" />
       <!-- 显示图片 -->
       <!-- #ifdef H5 || APP-PLUS -->
-      <img v-if="n.name=='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="((opts[1]&&!ctrl[i])||ctrl[i]==-1?'display:none;':'')+n.attrs.style" :src="n.attrs.src||(ctrl.load?n.attrs['data-src']:'')" :data-i="i" @load="imgLoad" @error="mediaError" @tap="imgTap" @longpress="imgLongTap"/>
+      <img v-if="n.name=='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]==-1?'display:none;':'')+n.attrs.style" :src="n.attrs.src||(ctrl.load?n.attrs['data-src']:'')" :data-i="i" @load="imgLoad" @error="mediaError" @tap="imgTap" @longpress="imgLongTap"/>
       <!-- #endif -->
       <!-- #ifndef H5 || APP-PLUS -->
-      <image v-if="n.name=='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="((opts[1]&&!ctrl[i])||ctrl[i]==-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;height:1px;'+n.attrs.style" :src="n.attrs.src" :mode="n.h?'':'widthFix'" :lazy-load="opts[0]" :webp="n.webp" :show-menu-by-longpress="opts[3]&&!n.attrs.ignore" :image-menu-prevent="!opts[3]||n.attrs.ignore" :data-i="i" @load="imgLoad" @error="mediaError" @tap="imgTap" @longpress="imgLongTap" />
+      <image v-if="n.name=='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]==-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;height:1px;'+n.attrs.style" :src="n.attrs.src" :mode="n.h?'':'widthFix'" :lazy-load="opts[0]" :webp="n.webp" :show-menu-by-longpress="opts[3]&&!n.attrs.ignore" :image-menu-prevent="!opts[3]||n.attrs.ignore" :data-i="i" @load="imgLoad" @error="mediaError" @tap="imgTap" @longpress="imgLongTap" />
       <!-- #endif -->
       <!-- 文本 -->
       <!-- #ifndef MP-BAIDU -->
@@ -60,7 +60,7 @@
       <rich-text v-else-if="!n.c" :id="n.attrs.id" :style="n.f+';display:inline'" :preview="false" :nodes="[n]" />
       <!-- #endif -->
       <!-- 继续递归 -->
-      <view v-else-if="n.c==2" :id="n.attrs.id" :class="'_'+n.name+' '+n.attrs.class" :style="n.attrs.style">
+      <view v-else-if="n.c==2" :id="n.attrs.id" :class="'_'+n.name+' '+n.attrs.class" :style="n.f+';'+n.attrs.style">
         <node v-for="(n2, j) in n.children" v-bind:key="j" :style="n2.f" :name="n2.name" :attrs="n2.attrs" :childs="n2.children" :opts="opts" />
       </view>
       <node v-else :style="n.f" :name="n.name" :attrs="n.attrs" :childs="n.children" :opts="opts" />
@@ -103,6 +103,11 @@ module.exports = {
 import node from './node'
 export default {
   name: 'node',
+  // #ifdef MP-WEIXIN
+  options: {
+    virtualHost: true
+  },
+  // #endif
   data() {
     return {
       ctrl: {}

@@ -11,26 +11,52 @@
 查看 [功能介绍](https://jin-yufeng.gitee.io/mp-html/#/overview/feature) 了解更多
 
 ## 使用方法
-```html
-<mp-html :content="html" />
-```
-```javascript
-import mpHtml from '@/components/mp-html/mp-html'
-export default {
-  // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
-  components: {
-    mpHtml
-  },
-  data() {
-    return {
-      html: ''
-    }
-  },
-  onLoad() {
-    this.html = '<div>Hello World!</div>'
-  }
-}
-```
+- 源码方式  
+  1. 点击上方的使用 `HBuilder X` 导入插件或将下载的插件包拷贝到项目根目录下  
+  2. 在需要使用页面的 `(n)vue` 文件中添加  
+     ```html
+     <mp-html :content="html" />
+     ```
+     ```javascript
+     import mpHtml from '@/components/mp-html/mp-html'
+     export default {
+       // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
+       components: {
+         mpHtml
+       },
+       data() {
+         return {
+           html: '<div>Hello World!</div>'
+         }
+       }
+     }
+     ```
+
+- npm 方式  
+  1. 在项目根目录下执行  
+     ```bash
+     npm install mp-html
+     ```
+  2. 在需要使用页面的 `(n)vue` 文件中添加  
+     ```html
+     <mp-html :content="html" />
+     ```
+     ```javascript
+     import mpHtml from 'mp-html/dist/uni-app/components/mp-html/mp-html'
+     export default {
+       // 不可省略
+       components: {
+         mpHtml
+       },
+       data() {
+         return {
+           html: '<div>Hello World!</div>'
+         }
+       }
+     }
+     ```
+  
+  如果在 **nvue** 中使用还要将 `dist/uni-app/static` 目录下的内容拷贝到项目的 `static` 目录下，否则无法运行  
 
 查看 [快速开始](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart) 了解更多
 
@@ -114,9 +140,15 @@ export default {
 ## 示例体验
 ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg)
 
+## 关于 nvue
+`nvue` 使用原生渲染，不支持部分 `css` 样式，为实现和 `html` 相同的效果，组件内部通过 `web-view` 进行渲染，性能上差于原生，根据 `weex` 官方建议，`web` 标签仅应用在非常规的降级场景。因此，如果通过原生的方式（如 `richtext`）能够满足需要，则不建议使用本组件，如果有较多的富文本内容，则可以直接使用 `vue` 页面  
+由于渲染方式与其他端不同，有以下限制：  
+1. 默认背景为白色，可以通过 `bgColor` 属性修改（设置为透明无效）
+2. 不支持 `lazy-load` 属性
+
 ## 问题反馈
 遇到问题时，请先查阅 [常见问题](https://jin-yufeng.gitee.io/mp-html/#/question/faq) 和 [issue](https://github.com/jin-yufeng/mp-html/issues) 中是否已有相同的问题  
-可通过 [issue](https://github.com/jin-yufeng/mp-html/issues/new/choose) 或插件问答提问，不建议在评论区提问（不方便回复）  
+可通过 [issue](https://github.com/jin-yufeng/mp-html/issues/new/choose) 、插件问答或发送邮件到 [mp_html@126.com](mailto:mp_html@126.com) 提问，不建议在评论区提问（不方便回复）  
 提问请严格按照 [issue 模板](https://github.com/jin-yufeng/mp-html/issues/new/choose) ，描述清楚使用环境、`html` 内容或可复现的 `demo` 项目以及复现方式，对于 **描述不清**、**无法复现** 或重复的问题将不予回复  
 
 查看 [问题反馈](https://jin-yufeng.gitee.io/mp-html/#/question/feedback) 了解更多

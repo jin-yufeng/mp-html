@@ -116,6 +116,7 @@ test('render', async () => {
     useAnchor: false
   })
   await simulate.sleep(50)
+  comp.instance.setContent('<span id="test">123</span>', true)
   try {
     await comp.instance.navigateTo('anchor') // 禁用锚点的情况下跳转
   } catch (e) { }

@@ -66,10 +66,16 @@ QQ：
 设置方法参考 [样式设置](overview/feature#style)  
 
 ## 标签原样显示 :id=entity
-如果出现渲染后 *html* 标签还是原样显示，请检查传入的 *html* 是否被转义（ *&lt;* 和 *&gt;* 被转义为 *&amp;lt;* 和 *&amp;gt;* ）  
+如果出现渲染后 *html* 标签还是原样显示，请检查传入的 *html* 是否被转义：
+1. *&lt;* 和 *&gt;* 被转义为 *&amp;lt;* 和 *&amp;gt;*  
+2. *&lt;img* 被转义为 *< img*  
+
 如果是则需要进行替换  
 ```javascript
-html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>'); // 如果还转义了其他字符如 &amp; 等也要进行替换
+// 第一种
+html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>') // 如果还转义了其他字符如 &amp; 等也要进行替换
+// 第二种
+html = html.replace(/< img/g, '<img')
 ```
 
 ## 空白符失效 :id=space

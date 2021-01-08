@@ -52,7 +52,7 @@ var config = {
 };
 var windowWidth = uni.getSystemInfoSync().windowWidth;
 var blankChar = makeMap(' ,\r,\n,\t,\f');
-var idIndex = 0; // #ifdef H5 || APP-PLUS || MP-360
+var idIndex = 0; // #ifdef H5 || APP-PLUS
 
 config.ignoreTags.iframe = void 0;
 config.trustTags.iframe = true;
@@ -276,9 +276,10 @@ parser.prototype.onAttrName = function (name) {
   name = this.xml ? name : name.toLowerCase();
 
   if (name.substr(0, 5) == 'data-') {
-    // a 和 img 标签保留 data- 的属性，可以在 imgtap 和 linktap 事件中使用
-    if (this.tagName == 'img' || this.tagName == 'a') this.attrName = name; // 剩余的移除以减小大小
-    else this.attrName = void 0;
+    // data-src 自动转为 src
+    if (name == 'data-src') this.attrName = 'src'; // a 和 img 标签保留 data- 的属性，可以在 imgtap 和 linktap 事件中使用
+    else if (this.tagName == 'img' || this.tagName == 'a') this.attrName = name; // 剩余的移除以减小大小
+      else this.attrName = void 0;
   } else {
     this.attrName = name;
     this.attrs[name] = 'T'; // boolean 型属性缺省设置
@@ -376,7 +377,7 @@ parser.prototype.onOpenTag = function (selfClose) {
 
             var style = item.attrs.style || '';
 
-            if (style.includes('flex:') && (!styleObj.width || !styleObj.width.includes('%'))) {
+            if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || !styleObj.width.includes('%'))) {
               styleObj.width = '100% !important';
               styleObj.height = '';
 
@@ -763,17 +764,16 @@ parser.prototype.popNode = function () {
             if (node.c) styleObj.display = 'table';
             if (!isNaN(spacing)) styleObj['border-spacing'] = spacing + 'px';
 
-            if (border || padding || node.c) {
+            if (border || padding) {
               // 遍历
               (function traversal(nodes) {
                 for (var _i7 = 0; _i7 < nodes.length; _i7++) {
                   var _td = nodes[_i7];
-                  if (_td.type == 'text') continue;
 
                   if (_td.name == 'th' || _td.name == 'td') {
                     if (border) _td.attrs.style = "border:".concat(border, "px solid gray;").concat(_td.attrs.style || '');
                     if (padding) _td.attrs.style = "padding:".concat(padding, "px;").concat(_td.attrs.style || '');
-                  } else traversal(_td.children || []);
+                  } else if (_td.children) traversal(_td.children);
                 }
               })(children);
             }
@@ -835,7 +835,10 @@ parser.prototype.popNode = function () {
     }
   } // flex 布局时部分样式需要提取到 rich-text 外层
 
-  var flex = parent && (parent.attrs.style || '').includes('flex') // #ifndef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
+  var flex = parent && (parent.attrs.style || '').includes('flex') // #ifdef MP-WEIXIN
+  // 检查基础库版本 virtualHost 是否可用
+  && !(node.c && wx.getNFCAdapter) // #endif
+  // #ifndef MP-WEIXIN || MP-QQ || MP-BAIDU || MP-TOUTIAO
   && !node.c; // #endif
 
   if (flex) node.f = ';max-width:100%'; // #endif
@@ -844,7 +847,10 @@ parser.prototype.popNode = function () {
     if (styleObj[key]) {
       var val = ";".concat(key, ":").concat(styleObj[key].replace(' !important', '')); // #ifndef APP-PLUS-NVUE
 
-      if (flex && (key.includes('flex') && key != 'flex-direction' || styleObj[key][0] == '-')) node.f += val;else // #endif
+      if (flex && (key.includes('flex') && key != 'flex-direction' || key == 'align-self' || styleObj[key][0] == '-' || key == 'width' && val.includes('%'))) {
+        node.f += val;
+        if (key == 'width') attrs.style += ';width:100%';
+      } else // #endif
         attrs.style += val;
     }
   }
@@ -963,8 +969,7 @@ lexer.prototype.text = function () {
       // 标签结尾
       this.i += 2;
       this.start = this.i;
-      this.state = this.endTag;
-      return;
+      return this.state = this.endTag;
     } // 处理注释
 
 
@@ -1023,14 +1028,12 @@ lexer.prototype.attrName = function () {
         if (needVal) {
           // 等号后遇到第一个非空字符
           this.start = this.i;
-          this.state = this.attrVal;
-          return;
+          return this.state = this.attrVal;
         }
 
         if (this.content[this.i] == '=') needVal = true;else {
           this.start = this.i;
-          this.state = this.attrName;
-          return;
+          return this.state = this.attrName;
         }
       }
     }

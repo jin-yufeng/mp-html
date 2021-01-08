@@ -1,5 +1,5 @@
 <template>
-  <view :class="(selectable?'_select ':'')+'_root'">
+  <view id="_root" :class="(selectable?'_select ':'')+'_root'">
     <slot v-if="!nodes[0]" />
     <!-- #ifndef APP-PLUS-NVUE -->
     <node v-else :childs="nodes" :opts="[lazyLoad,loadingImg,errorImg,showImgMenu]" />
@@ -12,7 +12,7 @@
 
 <script>
 /**
- * mp-html v2.0.1
+ * mp-html v2.0.2
  * @description 富文本组件
  * @tutorial https://github.com/jin-yufeng/mp-html
  * @property {String} content 用于渲染的 html 字符串
@@ -63,9 +63,18 @@ export default {
       default: true
     },
     domain: String,
-    errorImg: String,
-    lazyLoad: Boolean,
-    loadingImg: String,
+    errorImg: {
+      type: String,
+      default: ''
+    },
+    lazyLoad: {
+      type: Boolean,
+      default: false
+    },
+    loadingImg: {
+      type: String,
+      default: ''
+    },
     pauseVideo: {
       type: Boolean,
       default: true
@@ -85,7 +94,7 @@ export default {
       default: true
     },
     tagStyle: Object,
-    useAnchor: null,
+    useAnchor: null
   },
   // #ifndef APP-PLUS-NVUE
   components: {
@@ -229,7 +238,7 @@ export default {
           // #ifndef MP-ALIPAY
           .in(this)
           // #endif
-          .select('._root').boundingClientRect().exec(res => res[0] ? resolve(res[0]) : reject('Root label not found'))
+          .select('#_root').boundingClientRect().exec(res => res[0] ? resolve(res[0]) : reject('Root label not found'))
       })
     },
 

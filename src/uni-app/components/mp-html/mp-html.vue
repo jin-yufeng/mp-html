@@ -12,7 +12,7 @@
 
 <script>
 /**
- * mp-html v2.0.1
+ * mp-html v2.0.2
  * @description 富文本组件
  * @tutorial https://github.com/jin-yufeng/mp-html
  * @property {String} content 用于渲染的 html 字符串
@@ -94,7 +94,7 @@ export default {
       default: true
     },
     tagStyle: Object,
-    useAnchor: null,
+    useAnchor: null
   },
   // #ifndef APP-PLUS-NVUE
   components: {

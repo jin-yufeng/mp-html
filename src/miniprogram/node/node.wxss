@@ -154,7 +154,7 @@
   display: inline;
 }
 
-/* #ifndef ALIPAY */
+/* #ifndef MP-ALIPAY || MP-TOUTIAO */
 ._blockquote,
 ._div,
 ._p {

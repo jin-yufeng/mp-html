@@ -71,35 +71,63 @@
 查看 [快速开始](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart) 了解更多
 
 ### uni-app
-1. 将源码中 `dist/uni-app` 内的内容拷贝到项目根目录下
-2. 在需要使用页面的 `vue` 文件中添加
+- 源码方式
+  1. 将源码中 `dist/uni-app` 内的内容拷贝到项目根目录下  
+     可以直接通过 [插件市场](https://ext.dcloud.net.cn/plugin?id=805) 引入
+  2. 在需要使用页面的 `vue` 文件中添加
 
-   ```vue
-   <template>
-     <view>
-       <mp-html :content="html" />
-     </view>
-   </template>
-   <script>
-     import mpHtml from '@/components/mp-html/mp-html'
-     export default {
-       // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
-       components: {
-         mpHtml
-       },
-       data() {
-         return {
-           html: ''
+     ```vue
+     <template>
+       <view>
+         <mp-html :content="html" />
+       </view>
+     </template>
+     <script>
+       import mpHtml from '@/components/mp-html/mp-html'
+       export default {
+         // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
+         components: {
+           mpHtml
+         },
+         data() {
+           return {
+             html: '<div>Hello World!</div>'
+           }
          }
-       },
-       onLoad() {
-         this.html = '<div>Hello World!</div>'
        }
-     }
-   </script>
-   ```
+     </script>
+     ```
+- `npm` 方式
+  1. 在项目目录下安装组件包
 
-可以直接通过 [插件市场](https://ext.dcloud.net.cn/plugin?id=805) 引入
+     ```bash
+     npm install mp-html
+     ```
+  2. 在需要使用页面的 `vue` 文件中添加
+
+     ```vue
+     <template>
+       <view>
+         <mp-html :content="html" />
+       </view>
+     </template>
+     <script>
+       import mpHtml from 'mp-html/dist/uni-app/components/mp-html/mp-html'
+       export default {
+         // 不可省略
+         components: {
+           mpHtml
+         },
+         data() {
+           return {
+             html: '<div>Hello World!</div>'
+           }
+         }
+       }
+     </script>
+     ```
+
+  如果在 `nvue` 中使用还要将 `dist/uni-app/static` 目录下的内容拷贝到项目的 `static` 目录下，否则无法运行  
 
 查看 [快速开始](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart) 了解更多
 
@@ -188,6 +216,19 @@
   ![支持](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.0.2 (20210108)
+  1. `U` `uni-app` 包微信端利用 `virtualHost` 去除夹层，加快渲染
+  2. `F` 修复了部分情况下 `flex` 布局显示不正确的问题
+  3. `F` 修复了设置 `loading-img` 会导致懒加载失效的问题
+  4. `F` 修复了头条原生包部分情况下表格显示不正确的问题
+  5. `F` 修复了 `uni-app` 的 `h5` 和 `app` 端部分插件样式无法应用的问题
+  6. `F` 修复了 `uni-app` 包没有自动将 `data-src` 设置为 `src` 的问题
+  7. `F` 修复了 `uni-app` 包的 `nvue` 端 `getRect` 方法无法使用的问题
+  8. `F` 修复了 `uni-app` 包运行到华为快应用可能报错的问题
+  9. `F` 修复了在低版本 taro 中使用可能无法正确解析的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/248)
+  10. `F` 修复了 `highlight` 插件 `pre` 和 `code` 之间有空白符时无法高亮的问题
+  11. `F` 修复了 `editable` 插件清空内容后插入可能报错的问题
+
 - v2.0.1 (20210101)
   1. `F` 修复了 `a` 标签自动跳转到不存在页面时可能报错的问题
   2. `F` 修复了含合并单元格的表格设置列宽可能导致显示不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/239)
@@ -195,20 +236,6 @@
   4. `F` 修复了原生包使用 `editable` 插件点击标签时可能报错的问题
   5. `F` 修复了 `uni-app` 的 `h5` 和 `app` 端可能无法使用 `iframe` 和 `embed` 标签的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/245)
   6. `F` 修复了 uni-app 使用部分插件会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/246)
-
-- v2.0.0 (20201226)  
-  1. `U` 通过 `gulp` 进行构建，自动生成各平台压缩版代码，减小引入包大小 [详细](https://jin-yufeng.gitee.io/mp-html/#/advanced/develop#pack)
-  2. `U` 没有设置 `href` 属性的 `a` 标签不应用链接的样式，可以用作一般标签的点击处理 [详细](https://jin-yufeng.gitee.io/mp-html/#/question/faq#tap)
-  3. `U` 提供了统一的插件接口，扩展更加方便（代码高亮、`markdown` 等都可以直接通过引入插件实现）[详细](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin)
-  4. `U` 实现了简单的编辑功能 [详细](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin#editable)
-  5. `U` 支持生成各平台的示例项目，便于调试 [详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart#demo)
-  6. `U` 原生包共用一份源代码（构建时进行自动转换），注释更加详细，便于了解和维护
-  7. `U` 通过 `jest` 进行单元测试，进一步保证代码质量 [详细](https://jin-yufeng.gitee.io/mp-html/#/advanced/develop#test)
-  8. `U` 去除了一些冗余功能，进一步减小包大小（约 `24.5KB`）
-  9. `U` 减少了递归节点树，加快渲染速度
-  10. `U` `uni-app` 的 `app` 端使用非原生的 `video` 显示视频以解决无法同层带来的系列问题
-  11. `U` `uni-app` 的 `nvue` 端支持通过 `bgColor` 属性设置背景色（默认白色，不可设置为透明）
-  12. `F` 修复了 `uni-app` 的 `nvue` 端从不可见区域到可见时可能显示不正确的问题
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 

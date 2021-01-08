@@ -60,7 +60,7 @@
      }
      ```
 
-!> 在此 [问题](https://smartprogram.baidu.com/forum/topic/show/125787) 未解决前，在百度小程序中使用时，请将以下样式拷贝到 *app.css* 以保证正确显示  
+!> 在此 [问题](https://smartprogram.baidu.com/forum/topic/show/125787) 未解决前，在 **百度小程序** 中使用时，请将以下样式拷贝到 *app.css* 以保证正确显示  
 ```css
 /* a 标签默认效果 */
 ._a {
@@ -103,49 +103,69 @@
 
 ### 📘 uni-app 框架 :id=uni-app
 
-#### 引入 :id=uni-app-import
-- 插件市场引入  
-  
-  ?> 本方法仅适用于通过 *HBuilderX* 开发  
+#### 源码方式 :id=uni-app-source
+1. 将 [源码](#source) 中 *dist/uni-app* 内的内容拷贝到 **项目根目录** 下  
+   
+   ?> 使用 *HBuilder X* 开发时，可以直接通过 [插件市场](https://ext.dcloud.net.cn/plugin?id=805) 导入
+2. 在需要使用页面的 *(n)vue* 文件中添加  
+   ```vue
+   <template>
+     <view>
+       <mp-html :content="html" />
+     </view>
+   </template>
+   <script>
+     import mpHtml from '@/components/mp-html/mp-html'
+     export default {
+       // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
+       components: {
+         mpHtml
+       },
+       data() {
+         return {
+           html: '<div>Hello World!</div>'
+         }
+       }
+     }
+   </script>
+   ```
 
-  前往 [插件主页](https://ext.dcloud.net.cn/plugin?id=805) 点击 *使用 HBuilderX 导入插件* 按钮即可  
+#### npm 方式 :id=uni-app-npm
+1. 在项目根目录下通过 [npm](#npm) 安装组件包  
+2. 在需要使用页面的 *(n)vue* 文件中添加  
+   ```vue
+   <template>
+     <view>
+       <mp-html :content="html" />
+     </view>
+   </template>
+   <script>
+     import mpHtml from 'mp-html/dist/uni-app/components/mp-html/mp-html'
+     export default {
+       // 不可省略
+       components: {
+         mpHtml
+       },
+       data() {
+         return {
+           html: '<div>Hello World!</div>'
+         }
+       }
+     }
+   </script>
+   ```
 
-- 源码引入  
-  将 [源码](#source) 中 *dist/uni-app* 内的内容拷贝到项目根目录下  
-
-#### 使用 :id=uni-app-use
-在需要使用页面的 *(n)vue* 文件中添加  
-```vue
-<template>
-  <view>
-    <mp-html :content="html" />
-  </view>
-</template>
-<script>
-  import mpHtml from '@/components/mp-html/mp-html'
-  export default {
-    // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
-    components: {
-      mpHtml
-    },
-    data() {
-      return {
-        html: ''
-      }
-    },
-    onLoad() {
-      this.html = '<div>Hello World!</div>'
-    }
-  }
-</script>
-```
+!> 如果在 *nvue* 中使用还要将 *dist/uni-app/static* 目录下的内容拷贝到项目的 *static* 目录下，否则无法运行  
 
 支持的 [属性](basic/prop) 和 [事件](basic/event) 见对应文档  
 
 由于 *uni-app* 编译过程中会进行压缩，构建 *uni-app* 包时基本不进行压缩，包的体积与原生包相比较大  
 
-关于 *nvue* 的说明：  
-*nvue* 中不支持很多 *css* 样式，常规的方式无法实现等同于 *html* 的效果，因此 *nvue* 通过 *web-view* 实现渲染，不支持 [lazy-load](basic/prop#lazy-load) 属性；默认背景为白色，可以通过 *bgColor* 属性修改（设置为透明无效）  
+#### 关于 nvue :id=nvue
+*nvue* 使用原生渲染，不支持部分 *css* 样式，为实现和 *html* 相同的效果，组件内部通过 *web-view* 进行渲染，性能上差于原生，根据 *weex* 官方建议，*web* 标签仅应用在非常规的降级场景。因此，如果通过原生的方式（如 *richtext*）能够满足需要，则不建议使用本组件，如果有较多的富文本内容，则可以直接使用 *vue* 页面  
+由于渲染方式与其他端不同，有以下限制：  
+1. 默认背景为白色，可以通过 *bgColor* 属性修改（设置为透明无效）
+2. 不支持 [lazy-load](basic/prop#lazy-load) 属性
 
 ### 📙 其他框架 :id=other
 其他框架没有专用包，但也可以引入对应平台的原生包使用，具体方法参考各框架官方文档    

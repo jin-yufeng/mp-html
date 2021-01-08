@@ -92,7 +92,7 @@ Page({
 ```
 
 示例项目：  
-微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/fi8lxTmt72mZ) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
+微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/m72bydm67dnO) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
 
 注意事项：  
 1. 不要在 *editable* 属性被设置为 *true* 前通过 *setContent* 方法（用 *content* 属性）设置内容，否则在切换为 *true* 后会变成空白  
