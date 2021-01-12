@@ -175,17 +175,15 @@ parser.prototype.hook = function (node) {
  */
 parser.prototype.getUrl = function (url) {
   let domain = this.options.domain
-  if (domain && domain.includes('://')) {
-    if (url[0] == '/') {
-      // 开头的补充协议名
-      if (url[1] == '/')
-        url = domain.split('://')[0] + ':' + url
-      // 否则补充整个域名
-      else
-        url = domain + url
-    } else if (!url.includes('data:') && !url.includes('://'))
-      url = domain + '/' + url
-  }
+  if (url[0] == '/') {
+    // // 开头的补充协议名
+    if (url[1] == '/')
+      url = (domain ? domain.split('://')[0] : 'http') + ':' + url
+    // 否则补充整个域名
+    else if (domain)
+      url = domain + url
+  } else if (domain && !url.includes('data:') && !url.includes('://'))
+    url = domain + '/' + url
   return url
 }
 
