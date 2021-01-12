@@ -100,7 +100,7 @@ module.exports = {
           else if (file.basename == 'node.vue') {
             content = content.replace(/<!--\s*insert\s*-->/, wxml)
               .replace(/methods\s*:\s*{/, 'methods:{' + js)
-              .replace('</style>', wxss + '</style>')
+              .replace('<style>', '<style>' + wxss)
             let importComp = '', comps = ''
             for (let item in json) {
               let val = json[item]
@@ -168,7 +168,7 @@ module.exports = {
         if (file.basename == 'node.wxss')
           content = css + content
         else if (file.basename == 'node.vue')
-          content = content.replace('</style>', css + '</style>')
+          content = content.replace('<style>', '<style>' + css)
         else if (file.basename == 'local.html' && css)
           content = '<style>' + css.replace(/\/deep\/\s*/g, '') + '</style>' + content
         file.contents = Buffer.from(content)

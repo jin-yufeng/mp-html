@@ -15,7 +15,7 @@ if (config.showLanguageName || config.showLineNumber)
   build.style = `/deep/ .hl-pre {
   position: relative;
 }
-.hl-code {
+/deep/ .hl-code {
   overflow: auto;
   display: block;
 }`
@@ -38,25 +38,29 @@ if (config.copyByLongPress) {
 if (config.showLanguageName) {
   build.style = (build.style || '') +
     `/deep/ .hl-language {
-  font-size: .7em;
+  font-size: 12px;
   font-weight: 600;
   position: absolute;
   right: 8px;
   text-align: right;
   top: 3px;
+}
+/deep/ .hl-pre {
+  padding-top: 1.5em;
 }`
 }
 
 if (config.showLineNumber) {
   build.style = (build.style || '') +
     `/deep/ .hl-pre {
+  font-size: 14px;
   padding-left: 3.8em;
   counter-reset: linenumber;
 }
 /deep/ .line-numbers-rows {
   position: absolute;
   pointer-events: none;
-  top: 1em;
+  top: ${config.showLanguageName ? 1.5 : 1}em;
   font-size: 100%;
   left: 0;
   width: 3em; /* works for line-numbers below 1000 lines */
