@@ -438,8 +438,7 @@ parser.prototype.onOpenTag = function (selfClose) {
   } else {
     if (node.name == 'pre' || ((attrs.style || '').includes('white-space') && attrs.style.includes('pre')))
       this.pre = node.pre = true
-    if (node.name != 'video' && node.name != 'audio')
-      node.children = []
+    node.children = []
     this.stack.push(node)
   }
   // 加入节点树
@@ -588,6 +587,9 @@ parser.prototype.popNode = function () {
 
   else if (node.name == 'a' || node.name == 'ad')
     this.expose()
+
+  else if (node.name == 'video' || node.name == 'audio')
+    node.children = void 0
 
   // 列表处理
   else if ((node.name == 'ul' || node.name == 'ol') && node.c) {
