@@ -381,7 +381,7 @@ module.exports = {
             // 修改图片
             .replace(/<image(.+?)id="n.attrs.id/, '<image$1id="n.attrs.id||(\'n\'+i)')
             .replace('height:1px', "height:'+(ctrl['ii'+i]||1)+'px")
-            .replace(/:style\s*=\s*"\(\(opts\[1\]/g, ':style="(ctrl[\'i\'+i]?\'border:1px dashed black;padding:3px;\':\'\')+((opts[1]')
+            .replace(/:style\s*=\s*"\(ctrl\[i\]/g, ':style="(ctrl[\'i\'+i]?\'border:1px dashed black;padding:3px;\':\'\')+(ctrl[i]')
             .replace(/show-menu-by-longpress\s*=\s*"(\S+?)"\s*:image-menu-prevent\s*=\s*"(\S+?)"/, 'show-menu-by-longpress="!opts[4]&&$1" :image-menu-prevent="opts[4]||$2"')
             // 修改音视频
             .replace(/<!--\s*视频\s*-->/, `<!-- 视频 -->

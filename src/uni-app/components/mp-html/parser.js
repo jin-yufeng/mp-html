@@ -521,7 +521,7 @@ parser.prototype.popNode = function () {
   if (!this.hook(node) || config.ignoreTags[node.name]) {
     // 获取标题
     if (node.name == 'title' && children.length && children[0].type == 'text' && this.options.setTitle)
-      wx.setNavigationBarTitle({
+      uni.setNavigationBarTitle({
         title: children[0].text
       })
     siblings.pop()

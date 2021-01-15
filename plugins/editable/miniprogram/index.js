@@ -180,7 +180,7 @@ function editable(vm) {
       // #ifdef TOUTIAO
       vm.selectAllComponents('._root,._root>>>._n', setRoot)
       // #endif
-    }, 200)
+    }, 350)
   }
 
   /**

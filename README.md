@@ -4,7 +4,8 @@
 
 ![star](https://badgen.net/github/stars/jin-yufeng/mp-html)
 ![forks](https://badgen.net/github/forks/jin-yufeng/mp-html)
-![last-commit](https://badgen.net/github/last-commit/jin-yufeng/mp-html)
+[![npm](https://badgen.net/npm/v/mp-html)](https://www.npmjs.com/package/mp-html)
+![downloads](https://badgen.net/npm/dt/mp-html)
 [![Coverage Status](https://coveralls.io/repos/github/jin-yufeng/mp-html/badge.svg?branch=master)](https://coveralls.io/github/jin-yufeng/mp-html?branch=master)
 ![license](https://badgen.net/github/license/jin-yufeng/mp-html)
 
@@ -200,9 +201,9 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg) | ![欢喜商城](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/欢喜商城.png) | ![多么生活](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/多么生活.jpg) | ![米兔旅行](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/米兔旅行.png) | ![全品作业小助手](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/全品作业小助手.jpg) | ![古典文学名著阅读](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/古典文学名著阅读.jpg) |
 
-| APP 比比 | 源创智造 | 程序员技术之旅 | Geek 时代 | 典典博客 | 咚咚阅读 |
+| 食法查 | APP 比比 | 源创智造 | 程序员技术之旅 | Geek 时代 | 典典博客 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![APP比比](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/APP比比.jpg) | ![源创智造](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/源创智造.png) | ![程序员技术之旅](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/程序员技术之旅.jpg) | ![Geek时代](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/Geek时代.jpg) | ![典典博客](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/典典博客.jpg) | ![咚咚阅读](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/咚咚阅读.png) |
+| ![食法查](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/食法查.png) | ![APP比比](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/APP比比.jpg) | ![源创智造](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/源创智造.png) | ![程序员技术之旅](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/程序员技术之旅.jpg) | ![Geek时代](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/Geek时代.jpg) | ![典典博客](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/典典博客.jpg) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 
@@ -216,6 +217,14 @@
   ![支持](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.0.3 (20210115)
+  1. `U` 图片被点击时不冒泡（可以与整体的点击区分开，不影响链接中的图片）
+  2. `F` 修复了图片链接缺省协议名时可能无法预览的问题
+  3. `F` 修复了原生包 `video` 和 `audio` 标签内放置文本会报错的问题
+  4. `F` 修复了 `editable` 插件清空内容时弹窗可能不消失的问题
+  5. `F` 修复了 `highlight` 插件部分情况下样式不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/231)
+  6. `F` 修复了文档首页跳转到快速开始页时 `404` 的问题 by [@AnsonZnl](https://github.com/AnsonZnl)
+
 - v2.0.2 (20210108)
   1. `U` `uni-app` 包微信端利用 `virtualHost` 去除夹层，加快渲染
   2. `F` 修复了部分情况下 `flex` 布局显示不正确的问题
@@ -228,14 +237,6 @@
   9. `F` 修复了在低版本 taro 中使用可能无法正确解析的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/248)
   10. `F` 修复了 `highlight` 插件 `pre` 和 `code` 之间有空白符时无法高亮的问题
   11. `F` 修复了 `editable` 插件清空内容后插入可能报错的问题
-
-- v2.0.1 (20210101)
-  1. `F` 修复了 `a` 标签自动跳转到不存在页面时可能报错的问题
-  2. `F` 修复了含合并单元格的表格设置列宽可能导致显示不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/239)
-  3. `F` 修复了表格中的图片可能错位的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/194)
-  4. `F` 修复了原生包使用 `editable` 插件点击标签时可能报错的问题
-  5. `F` 修复了 `uni-app` 的 `h5` 和 `app` 端可能无法使用 `iframe` 和 `embed` 标签的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/245)
-  6. `F` 修复了 uni-app 使用部分插件会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/246)
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 

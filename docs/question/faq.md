@@ -88,3 +88,8 @@ html = html.replace(/< img/g, '<img')
 3. 设置 *white-space*  
    设置 *css* 中的 *white-space* 为 *pre* 可以让 *html* 不合并空白符，设置方法见 [样式设置](overview/feature#style)  
    需要注意的是如果通过外部样式设置 *white-space* 将不会生效，因为在解析过程中为减小解析结果大小提前进行了空白符合并（解析过程中无法获取外部样式）  
+
+## 懒加载失效 :id=lazy-load
+如果富文本内容全部（或大部分）是图片，由于其图片未加载时大小为零，即使数量很多也会全部进入视图范围，导致懒加载失效，若出现这种情况，可通过以下方案解决  
+1. 通过 [tag-style](basic/prop#tag-style) 属性等方法给 *img* 父级标签的样式里设置 *min-height*（如果直接给图片本身设置 *min-height*，可能在加载过程中出现变形的情况）  
+2. 通过 [loading-img](basic/prop#loading-img) 属性设置加载过程中的占位图  

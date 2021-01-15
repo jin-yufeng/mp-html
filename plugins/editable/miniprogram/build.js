@@ -407,7 +407,7 @@ module.exports = {
           // 修改图片
           .replace(/<image(.+?)id="\{\{n.attrs.id/, '<image$1id="{{n.attrs.id||(\'n\'+i)')
           .replace('height:1px', "height:{{ctrl['ii'+i]||1}}px")
-          .replace('style="{{opts[1]', 'style="{{ctrl[\'i\'+i]?\'border:1px dashed black;padding:3px;\':\'\'}}{{opts[1]')
+          .replace('style="{{ctrl[i]', 'style="{{ctrl[\'i\'+i]?\'border:1px dashed black;padding:3px;\':\'\'}}{{ctrl[i]')
           .replace(/weixin:show-menu-by-longpress\s*=\s*"{{(\S+?)}}"\s*baidu:image-menu-prevent\s*=\s*"{{(\S+?)}}"/, 'weixin:show-menu-by-longpress="{{!opts[4]&&$1}}" baidu:image-menu-prevent="{{opts[4]||$2}}"')
           // 修改音视频
           .replace('<video', '<video bindtap="mediaTap"')

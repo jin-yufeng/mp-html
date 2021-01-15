@@ -9,6 +9,8 @@
 2. 生成组件包  
    设置完成后，可通过项目提供的命令行工具生成新的组件包，具体见 [生成组件包](advanced/develop#pack)  
 
+?> 从 *uni-app* 的插件市场中导入的包中仅包含构建后的组件，不包含构建工具和插件，使用插件需要先 [获取完整的组件包](overview/quickstart#source)
+
 ## audio
 功能：音乐播放器  
 大小：*≈4KB*  
@@ -129,7 +131,7 @@ Page({
 ```
 
 示例项目：  
-微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/m72bydm67dnO) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
+微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/aixttnmk7cn5) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
 
 注意事项：  
 不要在 *editable* 属性被设置为 *true* 前通过 [setContent](advanced/api#setContent) 方法（用 [content](basic/prop#content) 属性）设置内容，否则在切换为 *true* 后会变成空白  

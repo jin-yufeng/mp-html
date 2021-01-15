@@ -29,9 +29,9 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | ![富文本插件](assets/case/富文本插件.jpg) | ![欢喜商城](assets/case/欢喜商城.png) | ![多么生活](assets/case/多么生活.jpg) | ![米兔旅行](assets/case/米兔旅行.png) | ![全品作业小助手](assets/case/全品作业小助手.jpg) | ![古典文学名著阅读](assets/case/古典文学名著阅读.jpg) |
 
-| APP 比比 | 源创智造 | 程序员技术之旅 | Geek 时代 | 典典博客 | 咚咚阅读 |
+| 食法查 | APP 比比 | 源创智造 | 程序员技术之旅 | Geek 时代 | 典典博客 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![APP比比](assets/case/APP比比.jpg) | ![源创智造](assets/case/源创智造.png) | ![程序员技术之旅](assets/case/程序员技术之旅.jpg) | ![Geek时代](assets/case/Geek时代.jpg) | ![典典博客](assets/case/典典博客.jpg) | ![咚咚阅读](assets/case/咚咚阅读.png) |
+| ![食法查](assets/case/食法查.png) | ![APP比比](assets/case/APP比比.jpg) | ![源创智造](assets/case/源创智造.png) | ![程序员技术之旅](assets/case/程序员技术之旅.jpg) | ![Geek时代](assets/case/Geek时代.jpg) | ![典典博客](assets/case/典典博客.jpg) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 
