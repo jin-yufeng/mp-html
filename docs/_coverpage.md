@@ -9,4 +9,4 @@
 - 丰富的附加功能
 
 [GitHub](https://github.com/jin-yufeng/mp-html)
-[快速开始](quickstart)
+[快速开始](/overview/quickstart)
