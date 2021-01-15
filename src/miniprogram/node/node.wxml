@@ -36,7 +36,7 @@
     <!-- 占位图 -->
     <image wx:if="{{(opts[1]&&!ctrl[i])||ctrl[i]<0}}" class="_img" style="{{n.attrs.style}}" src="{{ctrl[i]<0?opts[2]:opts[1]}}" mode="widthFix" />
     <!-- 显示图片 -->
-    <image id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{ctrl[i]==-1?'display:none;':''}}width:{{ctrl[i]||1}}px;height:1px;{{n.attrs.style}}" src="{{n.attrs.src}}" mode="{{n.h?'':'widthFix'}}" lazy-load="{{opts[0]}}" mp-weixin:mp-baidu:webp="{{n.webp}}" mp-weixin:show-menu-by-longpress="{{opts[3]&&!n.attrs.ignore}}" mp-baidu:image-menu-prevent="{{!opts[3]||n.attrs.ignore}}" data-i="{{i}}" bindload="imgLoad" binderror="mediaError" bindtap="imgTap" bindlongpress="noop" />
+    <image id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{ctrl[i]==-1?'display:none;':''}}width:{{ctrl[i]||1}}px;height:1px;{{n.attrs.style}}" src="{{n.attrs.src}}" mode="{{n.h?'':'widthFix'}}" lazy-load="{{opts[0]}}" mp-weixin:mp-baidu:webp="{{n.webp}}" mp-weixin:show-menu-by-longpress="{{opts[3]&&!n.attrs.ignore}}" mp-baidu:image-menu-prevent="{{!opts[3]||n.attrs.ignore}}" data-i="{{i}}" bindload="imgLoad" binderror="mediaError" catchtap="imgTap" bindlongpress="noop" />
   </block>
   <!-- 文本 -->
   <!-- #ifndef MP-BAIDU -->
@@ -44,12 +44,12 @@
   <!-- #endif -->
   <text wx:elif="{{n.name=='br'}}">\n</text>
   <!-- 链接 -->
-  <view wx:elif="{{n.name=='a'}}" id="{{n.attrs.id}}" class="{{n.attrs.href?'_a ':''}}{{n.attrs.class}}" hover-class="_hover" style="display:inline;{{n.attrs.style}}" data-i="{{i}}" catchtap="linkTap">
-    <!-- #ifndef MP-BAIDU -->
-    <node childs="{{n.children}}" class="_n" opts="{{opts}}" mp-alipay:style="display:inline" mp-toutiao:name="span" mp-alipay:onAdd="add" />
+  <view wx:elif="{{n.name=='a'}}" id="{{n.attrs.id}}" class="{{n.attrs.href?'_a ':''}}{{n.attrs.class}}" hover-class="_hover" style="display:inline;{{n.attrs.style}}" data-i="{{i}}" mp-weixin:mp-qq:capture-catch:tap="linkTap" mp-baidu:mp-alipay:mp-toutiao:catchtap="linkTap">
+    <!-- #ifdef MP-WEIXIN || MP-QQ -->
+    <node childs="{{n.children}}" class="_n" opts="{{opts}}" />
     <!-- #endif -->
-    <!-- #ifdef MP-BAIDU -->
-    <rich-text nodes="{{n.children}}" />
+    <!-- #ifdef MP-BAIDU || MP-ALIPAY || MP-TOUTIAO -->
+    <rich-text nodes="{{n.children}}" mp-alipay:style="display:inline" />
     <!-- #endif -->
   </view>
   <!-- 视频 -->
