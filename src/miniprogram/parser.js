@@ -707,19 +707,13 @@ parser.prototype.popNode = function () {
         styleObj.display = 'table'
       if (!isNaN(spacing))
         styleObj['border-spacing'] = spacing + 'px'
-      if (border || padding
-        // #ifndef MP-TOUTIAO
-        || node.c
-        // #endif
-      ) {
+      if (border || padding || node.c) {
         // 遍历
         (function traversal(nodes) {
           for (let i = 0; i < nodes.length; i++) {
             let td = nodes[i]
-            // #ifndef MP-TOUTIAO
             if (node.c)
               td.c = 1
-            // #endif
             if (td.name == 'th' || td.name == 'td') {
               if (border)
                 td.attrs.style = `border:${border}px solid gray;${td.attrs.style || ''}`
@@ -782,13 +776,7 @@ parser.prototype.popNode = function () {
     }
 
   // flex 布局时部分样式需要提取到 rich-text 外层
-  let flex = parent && (parent.attrs.style || '').includes('flex')
-    // #ifdef MP-TOUTIAO
-    && (!node.c || this.stack.length % 5 == 4)
-    // #endif
-    // #ifndef MP-TOUTIAO
-    && !node.c
-    // #endif
+  let flex = parent && (parent.attrs.style || '').includes('flex') && !node.c
     // #ifdef MP-WEIXIN || MP-QQ
     && !(styleObj.display || '').includes('inline')
   // #endif

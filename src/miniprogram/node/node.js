@@ -6,17 +6,16 @@ Component({
     ctrl: {} // 控制信号
   },
   properties: {
-    // #ifdef MP-TOUTIAO
-    name: String,
-    attrs: Object,
-    // #endif
     childs: Array,  // 子节点列表
     opts: Array     // 设置 [是否开启懒加载, 加载中占位图, 错误占位图, 是否使用长按菜单]
   },
-  // #ifdef MP-BAIDU || MP-ALIPAY
-  created() {
-    // #ifdef MP-BAIDU
-    this.dispatch('add')
+  // #ifndef MP-TOUTIAO
+  attached() {
+    // #ifndef MP-ALIPAY
+    this.triggerEvent('add', this, {
+      bubbles: true,
+      composed: true
+    })
     // #endif
     // #ifdef MP-ALIPAY
     this.props.onAdd(this)
@@ -99,7 +98,11 @@ Component({
       // 加载完毕，取消加载中占位图
       else if ((this.properties.opts[1] && !this.data.ctrl[i]) || this.data.ctrl[i] == -1)
         val = 1
-      if (val)
+      if (val
+        // #ifdef MP-TOUTIAO
+        && val != this.data.ctrl[i]
+        // #endif
+      )
         this.setData({
           ['ctrl.' + i]: val
         })
@@ -170,11 +173,6 @@ Component({
           attrs: node.attrs,
           errMsg: e.detail.errMsg
         })
-    },
-    // #ifdef MP-ALIPAY
-    add(e) {
-      this.triggerEvent('add', e)
     }
-    // #endif
   }
 })

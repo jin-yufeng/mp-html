@@ -1,6 +1,5 @@
 /* 根节点样式 */
 ._root {
-  display: block;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }

@@ -169,18 +169,6 @@ function editable(vm) {
         ['nodes[' + vm.data.nodes.length + ']']: node
       })
     }
-    function setRoot(nodes) {
-      for (var i = 0; i < nodes.length; i++)
-        nodes[i].root = vm
-    }
-    setTimeout(() => {
-      // #ifdef MP-WEIXIN || MP-QQ
-      setRoot(vm.selectAllComponents('._root,._root>>>._n'))
-      // #endif
-      // #ifdef TOUTIAO
-      vm.selectAllComponents('._root,._root>>>._n', setRoot)
-      // #endif
-    }, 350)
   }
 
   /**

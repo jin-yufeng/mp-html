@@ -284,10 +284,6 @@ Component({
       this.setData(data,
         // #ifndef MP-TOUTIAO
         () => {
-          // #ifdef MP-WEIXIN || MP-QQ
-          for (let childs = this.selectAllComponents('._root,._root>>>._n'), i = childs.length; i--;)
-            childs[i].root = this
-          // #endif
           this._hook('onLoad')
           this.triggerEvent('load')
         }
@@ -295,9 +291,8 @@ Component({
       )
 
       // #ifdef MP-TOUTIAO
-      this.selectAllComponents('._root,._root>>>._n', childs => {
-        for (let i = childs.length; i--;)
-          childs[i].root = this
+      this.selectComponent('#_root', child => {
+        child.root = this
         this._hook('onLoad')
         this.triggerEvent('load')
       })
@@ -328,22 +323,18 @@ Component({
           this.plugins[i][name]()
     },
 
-    // #ifdef MP-ALIPAY
+    // #ifndef MP-TOUTIAO
     /**
      * @description 添加子组件
      * @private
      */
     _add(e) {
-      e.root = this
+      e
+        // #ifndef MP-ALIPAY
+        .detail
+        // #endif
+        .root = this
     }
     // #endif
-  },
-
-  // #ifdef MP-BAIDU
-  messages: {
-    add(e) {
-      e.target.root = this
-    }
   }
-  // #endif
 })

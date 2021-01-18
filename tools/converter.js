@@ -95,7 +95,8 @@ module.exports = function (platform) {
               .replace(/s-for=['"]{{(\S+)}}['"]/g, 's-for="$1"')
               .replace(/data="(.*?)"/g, 'data="{$1}"')
           else if (platform == 'alipay')
-            content = content.replace(/longpress/g, 'longTap')
+            content = content.replace('block-size', 'handle-size')
+              .replace(/longpress/g, 'longTap')
               .replace(/bind([\S])/g, (_, $1) => { // bindevent 转为 onEvent
                 return 'on' + $1.toUpperCase()
               }).replace(/catch([\S])/g, (_, $1) => { // catchevent 转为 catchEvent
@@ -144,6 +145,7 @@ module.exports = function (platform) {
             if (content.includes('Component({')) {
               // 替换生命周期
               content = content.replace('created:', 'didMount:')
+                .replace('attached:', 'didMount:')
                 .replace('detached:', 'didUnmount:')
               // 将 properties 字段转为 props 格式
               i = content.indexOf('{', content.indexOf('properties:'))

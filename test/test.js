@@ -161,7 +161,10 @@ test('event', async () => {
 
   await simulate.sleep(100)
 
-  let node = comp.querySelector('._root')
+  let node = comp.querySelector('#_root')
+  comp.instance._add({
+    detail: node.instance
+  })
   // 模拟图片加载完毕
   for (let i = 0; i <= 1; i++) {
     node.instance.imgLoad({
