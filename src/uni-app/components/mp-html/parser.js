@@ -205,7 +205,6 @@ parser.prototype.parseStyle = function (node) {
       attrs.id = void 0
   }
 
-  // #ifndef APP-PLUS-NVUE
   // 转换 width 和 height 属性
   if (attrs.width) {
     styleObj.width = parseFloat(attrs.width) + (attrs.width.includes('%') ? '%' : 'px')
@@ -215,7 +214,6 @@ parser.prototype.parseStyle = function (node) {
     styleObj.height = parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : 'px')
     attrs.height = void 0
   }
-  // #endif
 
   for (let i = 0, len = list.length; i < len; i++) {
     var info = list[i].split(':')
@@ -637,7 +635,10 @@ parser.prototype.popNode = function () {
 
   // #ifdef APP-PLUS
   else if (node.name == 'video') {
-    var str = '<video style="max-width:100%"'
+    var str = '<video style="width:100%;height:100%"'
+    // 空白图占位
+    if (!attrs.poster && !attrs.autoplay)
+      attrs.poster = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'/>"
     for (let item in attrs)
       if (attrs[item])
         str += ' ' + item + '="' + attrs[item] + '"'
