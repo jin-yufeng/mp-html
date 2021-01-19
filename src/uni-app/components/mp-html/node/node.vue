@@ -212,7 +212,7 @@ export default {
     /**
      * @description 图片长按
      */
-    imgLongTap() {
+    imgLongTap(e) {
       // #ifdef APP-PLUS
       var attrs = this.childs[e.currentTarget.dataset.i].attrs
       if (!attrs.ignore)
