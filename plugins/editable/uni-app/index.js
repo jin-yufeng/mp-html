@@ -9,7 +9,7 @@ function editable(vm) {
   this.editI = -1            // 历史记录指针
   vm._mask = []              // 蒙版被点击时进行的操作
 
-  vm._set = function (path, val) {
+  vm._setData = function (path, val) {
     var paths = path.split('.'),
       target = vm
     for (var i = 0; i < paths.length - 1; i++)
@@ -26,7 +26,7 @@ function editable(vm) {
       var item = this.editHistory[this.editI + num]
       if (item) {
         this.editI += num
-        vm._set(item.key, item.value)
+        vm._setData(item.key, item.value)
       }
     }, 200)
   }
@@ -76,7 +76,7 @@ function editable(vm) {
 
     // 更新到视图
     if (set)
-      vm._set(path, newVal)
+      vm._setData(path, newVal)
   }
 
   /**

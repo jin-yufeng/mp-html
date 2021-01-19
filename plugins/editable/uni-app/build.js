@@ -77,7 +77,7 @@ module.exports = {
       var i = e.target.dataset.i
       this.$set(this.ctrl, i, 0)
       // 更新到视图
-      this.root._set(`${this.opts[5]}.${i}.text`, e.detail.value)
+      this.root._setData(`${this.opts[5]}.${i}.text`, e.detail.value)
     },
     /**
      * @description 插入一个标签
@@ -237,7 +237,7 @@ module.exports = {
               this.remove(i)
             // 切换循环播放
             else {
-              this.root._set(`${this.opts[5]}.${i}.attrs.loop`, !node.attrs.loop)
+              this.root._setData(`${this.opts[5]}.${i}.attrs.loop`, !node.attrs.loop)
               uni.showToast({
                 title: '成功'
               })
@@ -266,7 +266,7 @@ module.exports = {
       // 没有则新增
       else
         style += ';' + name + ':' + value
-      this.root._set(`${this.opts[5]}.${i}.attrs.style`, style)
+      this.root._setData(`${this.opts[5]}.${i}.attrs.style`, style)
     }
   },
   handler(file) {
@@ -425,8 +425,8 @@ function getTop(e) {
         if (this.opts[4]) {
           var path = this.opts[5] + '.' + i + '.attrs.'
           if (e.detail.width < 150)
-            this.root._set(path + 'ignore', 'T')
-          this.root._set(path + 'width', e.detail.width.toString())
+            this.root._setData(path + 'ignore', 'T')
+          this.root._setData(path + 'width', e.detail.width.toString())
         }
       }`)
             // 处理图片长按
@@ -494,7 +494,7 @@ function getTop(e) {
               this.remove(i)
             // 禁用 / 启用预览
             else {
-              this.root._set(this.opts[5] + '.' + i + '.attrs.ignore', !node.attrs.ignore)
+              this.root._setData(this.opts[5] + '.' + i + '.attrs.ignore', !node.attrs.ignore)
               uni.showToast({
                 title: '成功'
               })
