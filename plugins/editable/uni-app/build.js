@@ -32,11 +32,11 @@ module.exports = {
     editStart(e) {
       if (this.opts[4]) {
         var i = e.target.dataset.i
-        if (!this.ctrl[i]) {
+        if (!this.ctrl['e' + i]) {
           // 显示虚线框
-          this.$set(this.ctrl, i, 1)
+          this.$set(this.ctrl, 'e' + i, 1)
           setTimeout(() => {
-            this.root._mask.push(() => this.$set(this.ctrl, i, 0))
+            this.root._mask.push(() => this.$set(this.ctrl, 'e' + i, 0))
           }, 50)
           this.root._edit = this
           this.i = i
@@ -45,10 +45,10 @@ module.exports = {
           this.root._mask.pop()
           this.root._maskTap()
           // 将 text 转为 
-          this.$set(this.ctrl, i, 2)
+          this.$set(this.ctrl, 'e' + i, 2)
           // 延时对焦，避免高度错误
           setTimeout(() => {
-            this.$set(this.ctrl, i, 3)
+            this.$set(this.ctrl, 'e' + i, 3)
           }, 50)
         }
       }
@@ -75,7 +75,7 @@ module.exports = {
      */
     editEnd(e) {
       var i = e.target.dataset.i
-      this.$set(this.ctrl, i, 0)
+      this.$set(this.ctrl, 'e' + i, 0)
       // 更新到视图
       this.root._setData(`${this.opts[5]}.${i}.text`, e.detail.value)
     },
@@ -126,7 +126,7 @@ module.exports = {
         setTimeout(() => {
           this.root._lock = false
         }, 50)
-        if (this.ctrl[this.i] == 3)
+        if (this.ctrl['e' + this.i] == 3)
           return
         this.root._maskTap()
         this.root._edit = this
@@ -144,9 +144,9 @@ module.exports = {
         // 显示实线框
         this.$set(this.ctrl, 'root', 1)
         this.root._mask.push(() => this.$set(this.ctrl, 'root', 0))
-        if (this.childs.length == 1 && this.childs[0].type == 'text' && !this.ctrl[0]) {
-          this.$set(this.ctrl, 0, 1)
-          this.root._mask.push(() => this.$set(this.ctrl, 0, 0))
+        if (this.childs.length == 1 && this.childs[0].type == 'text' && !this.ctrl.e0) {
+          this.$set(this.ctrl, 'e0', 1)
+          this.root._mask.push(() => this.$set(this.ctrl, 'e0', 0))
           this.i = 0
           this.cursor = this.childs[0].text.length
         }
@@ -373,15 +373,15 @@ module.exports = {
             // 修改文本块
             .replace(/<!--\s*文本\s*-->[\s\S]+?<!--\s*链接\s*-->/,
               `<!-- 文本 -->
-      <text v-else-if="n.type=='text'&&!ctrl[i]" :data-i="i" @tap="editStart">{{n.text}}</text>
-      <text v-else-if="n.type=='text'&&ctrl[i]==1" :data-i="i" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" @tap.stop="editStart">{{n.text}}</text>
-      <textarea v-else-if="n.type=='text'" style="border:1px dashed black;min-width:50px;width:auto;padding:5px" auto-height maxlength="-1" :focus="ctrl[i]==3" :value="n.text" :data-i="i" @input="editInput" @blur="editEnd" />
+      <text v-else-if="n.type=='text'&&!ctrl['e'+i]" :data-i="i" @tap="editStart">{{n.text}}</text>
+      <text v-else-if="n.type=='text'&&ctrl['e'+i]==1" :data-i="i" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" @tap.stop="editStart">{{n.text}}</text>
+      <textarea v-else-if="n.type=='text'" style="border:1px dashed black;min-width:50px;width:auto;padding:5px" auto-height maxlength="-1" :focus="ctrl['e'+i]==3" :value="n.text" :data-i="i" @input="editInput" @blur="editEnd" />
       <text v-else-if="n.name=='br'">\\n</text>
       <!-- 链接 -->`)
             // 修改图片
             .replace(/<image(.+?)id="n.attrs.id/, '<image$1id="n.attrs.id||(\'n\'+i)')
-            .replace('height:1px', "height:'+(ctrl['ii'+i]||1)+'px")
-            .replace(/:style\s*=\s*"\(ctrl\[i\]/g, ':style="(ctrl[\'i\'+i]?\'border:1px dashed black;padding:3px;\':\'\')+(ctrl[i]')
+            .replace('height:1px', "height:'+(ctrl['h'+i]||1)+'px")
+            .replace(/:style\s*=\s*"\(ctrl\[i\]/g, ':style="(ctrl[\'e\'+i]?\'border:1px dashed black;padding:3px;\':\'\')+(ctrl[i]')
             .replace(/show-menu-by-longpress\s*=\s*"(\S+?)"\s*:image-menu-prevent\s*=\s*"(\S+?)"/, 'show-menu-by-longpress="!opts[4]&&$1" :image-menu-prevent="opts[4]||$2"')
             // 修改音视频
             .replace(/<!--\s*视频\s*-->/, `<!-- 视频 -->
@@ -415,7 +415,7 @@ function getTop(e) {
         this.$nextTick(() => {
           var id = this.childs[i].attrs.id || ('n' + i)
           uni.createSelectorQuery().in(this).select('#' + id).boundingClientRect().exec(res => {
-            this.$set(this.ctrl, 'ii'+i, res[0].height)
+            this.$set(this.ctrl, 'h'+i, res[0].height)
           })
         })
       // #endif`)
@@ -444,8 +444,8 @@ function getTop(e) {
         this.root._edit = this
         this.i = i
         this.root._maskTap()
-        this.$set(this.ctrl, 'i' + i, 1)
-        this.root._mask.push(() => this.$set(this.ctrl, 'i' + i, 0))
+        this.$set(this.ctrl, 'e' + i, 1)
+        this.root._mask.push(() => this.$set(this.ctrl, 'e' + i, 0))
         this.root._tooltip({
           top: getTop(e),
           items,

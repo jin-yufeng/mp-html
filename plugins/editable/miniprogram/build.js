@@ -27,16 +27,16 @@ module.exports = {
     editStart(e) {
       if (this.properties.opts[4]) {
         var i = e.target.dataset.i
-        if (!this.data.ctrl[i]) {
+        if (!this.data.ctrl['e' + i]) {
           // 显示虚线框
           this.setData({
-            ['ctrl.' + i]: 1
+            ['ctrl.e' + i]: 1
           })
           // 点击其他地方则取消虚线框
           setTimeout(() => {
             this.root._mask.push(() => {
               this.setData({
-                ['ctrl.' + i]: 0
+                ['ctrl.e' + i]: 0
               })
             })
           }, 50)
@@ -48,12 +48,12 @@ module.exports = {
           this.root._maskTap()
           // 将 text 转为 textarea
           this.setData({
-            ['ctrl.' + i]: 2
+            ['ctrl.e' + i]: 2
           })
           // 延时对焦，避免高度错误
           setTimeout(() => {
             this.setData({
-              ['ctrl.' + i]: 3
+              ['ctrl.e' + i]: 3
             })
           }, 50)
         }
@@ -86,7 +86,7 @@ module.exports = {
         ['nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].text']: e.detail.value
       })
       this.setData({
-        ['ctrl.' + i]: 0
+        ['ctrl.e' + i]: 0
       })
     },
     /**
@@ -153,28 +153,28 @@ module.exports = {
         }, 50)
         var i = e.currentTarget.dataset.i,
           node = this.getNode(i)
-        if (this.data.ctrl[this.i] == 3)
+        if (this.data.ctrl['e' + this.i] == 3)
           return
         this.root._maskTap()
         // 显示实线框
         this.setData({
-          ['ctrl.' + i]: 1
+          ['ctrl.e' + i]: 1
         })
         this.root._mask.push(() => {
           this.setData({
-            ['ctrl.' + i]: 0
+            ['ctrl.e' + i]: 0
           })
         })
         this.root._edit = this
         if (node.children.length == 1 && node.children[0].type == 'text') {
           var ii = i + '_0'
-          if (!this.data.ctrl[ii]) {
+          if (!this.data.ctrl['e' + ii]) {
             this.setData({
-              ['ctrl.' + ii]: 1
+              ['ctrl.e' + ii]: 1
             })
             this.root._mask.push(() => {
               this.setData({
-                ['ctrl.' + ii]: 0
+                ['ctrl.e' + ii]: 0
               })
             })
             this.cursor = node.children[0].text.length
@@ -390,23 +390,23 @@ module.exports = {
           .replace(/!(n.*)\.c/g, '(opts[4]?!$1.children||$1.name==\'a\':!$1.c)')
           .replace(/use\((n.)\)/g, 'opts[4]?!$1.children||$1.name==\'a\':use($1)')
           // 修改普通标签
-          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{path+i}}" bindtap="nodeTap" id$1style="{{ctrl[path+i]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
-          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{\'\'+i1}}" bindtap="nodeTap" id$1style="{{ctrl[i1]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
-          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2}}" bindtap="nodeTap" id$1style="{{ctrl[i1+\'_\'+i2]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
-          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2+\'_\'+i3}}" bindtap="nodeTap" id$1style="{{ctrl[i1+\'_\'+i2+\'_\'+i3]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
-          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2+\'_\'+i3+\'_\'+i4}}" bindtap="nodeTap" id$1style="{{ctrl[i1+\'_\'+i2+\'_\'+i3+\'_\'+i4]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
+          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{path+i}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+path+i]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
+          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{\'\'+i1}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
+          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1+\'_\'+i2]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
+          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2+\'_\'+i3}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1+\'_\'+i2+\'_\'+i3]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
+          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2+\'_\'+i3+\'_\'+i4}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1+\'_\'+i2+\'_\'+i3+\'_\'+i4]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
           // 修改文本块
           .replace(/<!--\s*文本\s*-->[\s\S]+?<!--\s*链接\s*-->/,
             `<block wx:elif="{{n.type=='text'}}">
-  <text wx:if="{{!ctrl[i]}}" data-i="{{i}}" decode="{{!opts[4]}}" bindtap="editStart">{{n.text}}</text>
-  <text wx:elif="{{ctrl[i]==1}}" data-i="{{i}}" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" catchtap="editStart">{{n.text}}</text>
-  <textarea wx:else style="border:1px dashed black;min-width:50px;width:auto;padding:5px" auto-height maxlength="-1" focus="{{ctrl[i]==3}}" value="{{n.text}}" data-i="{{i}}" bindinput="editInput" bindblur="editEnd" />
+  <text wx:if="{{!ctrl['e'+i]}}" data-i="{{i}}" decode="{{!opts[4]}}" bindtap="editStart">{{n.text}}</text>
+  <text wx:elif="{{ctrl['e'+i]==1}}" data-i="{{i}}" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" catchtap="editStart">{{n.text}}</text>
+  <textarea wx:else style="border:1px dashed black;min-width:50px;width:auto;padding:5px" auto-height maxlength="-1" focus="{{ctrl['e'+i]==3}}" value="{{n.text}}" data-i="{{i}}" bindinput="editInput" bindblur="editEnd" />
 </block>
 <text wx:elif="{{n.name=='br'}}">\\n</text>`)
           // 修改图片
           .replace(/<image(.+?)id="\{\{n.attrs.id/, '<image$1id="{{n.attrs.id||(\'n\'+i)')
-          .replace('height:1px', "height:{{ctrl['ii'+i]||1}}px")
-          .replace('style="{{ctrl[i]', 'style="{{ctrl[\'i\'+i]?\'border:1px dashed black;padding:3px;\':\'\'}}{{ctrl[i]')
+          .replace('height:1px', "height:{{ctrl['h'+i]||1}}px")
+          .replace('style="{{ctrl[i]', 'style="{{ctrl[\'e\'+i]?\'border:1px dashed black;padding:3px;\':\'\'}}{{ctrl[i]')
           .replace(/weixin:show-menu-by-longpress\s*=\s*"{{(\S+?)}}"\s*baidu:image-menu-prevent\s*=\s*"{{(\S+?)}}"/, 'weixin:show-menu-by-longpress="{{!opts[4]&&$1}}" baidu:image-menu-prevent="{{opts[4]||$2}}"')
           // 修改音视频
           .replace('<video', '<video bindtap="mediaTap"')
@@ -434,7 +434,7 @@ module.exports = {
       var id = this.getNode(i).attrs.id || ('n' + i)
       wx.createSelectorQuery().in(this).select('#' + id).boundingClientRect().exec(res => {
         this.setData({
-          ['ctrl.ii'+i]: res[0].height
+          ['ctrl.h'+i]: res[0].height
         })
       })
     }, 50)
@@ -463,11 +463,11 @@ module.exports = {
     this.i = i
     this.root._maskTap()
     this.setData({
-      ['ctrl.i' + i]: 1
+      ['ctrl.e' + i]: 1
     })
     this.root._mask.push(() => {
       this.setData({
-        ['ctrl.i' + i]: 0
+        ['ctrl.e' + i]: 0
       })
     })
     this.root._tooltip({

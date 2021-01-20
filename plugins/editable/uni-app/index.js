@@ -378,6 +378,7 @@ function editable(vm) {
 
 editable.prototype.onUpdate = function (content, config) {
   if (this.vm.editable) {
+    this.vm._maskTap()
     this.vm._edit = void 0
     config.entities.amp = '&'
     if (!content)
