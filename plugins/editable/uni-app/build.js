@@ -191,8 +191,11 @@ module.exports = {
                 name = 'font-style'
                 value = 'italic'
               } else if (item == '粗体') {
-                name = 'font-weight',
-                  value = 'bold'
+                name = 'font-weight'
+                value = 'bold'
+              } else if (item == '下划线') {
+                name = 'text-decoration'
+                value = 'underline'
               } else if (item == '居中') {
                 name = 'text-align'
                 value = 'center'
@@ -275,12 +278,15 @@ module.exports = {
       if (file.path.includes('mp-html.vue')) {
         // 传递 editable 属性和路径
         content = content.replace(/opts\s*=\s*"\[([^\]]+)\]"/, 'opts="[$1,editable,\'nodes\']"')
+          .replace('<view', '<view :style="editable?\'position:relative\':\'\'"')
           // 工具弹窗
-          .replace(/<\/view>\s*<\/template>/, `  <view v-if="tooltip" class="_tooltip" :style="'top:'+tooltip.top+'px'">
-      <view v-for="(item, index) in tooltip.items" v-bind:key="index" class="_tooltip_item" :data-i="index" @tap="_tooltipTap">{{item}}</view>
+          .replace(/<\/view>\s*<\/template>/, `  <view v-if="tooltip" class="_tooltip_contain" :style="'top:'+tooltip.top+'px'">
+      <view class="_tooltip">
+        <view v-for="(item, index) in tooltip.items" v-bind:key="index" class="_tooltip_item" :data-i="index" @tap="_tooltipTap">{{item}}</view>
+      </view>
     </view>
     <view v-if="slider" class="_slider" :style="'top:'+slider.top+'px'">
-      <slider :value="slider.value" :min="slider.min" :max="slider.max" block-size="14" show-value activeColor="white" style="padding:5px 0;" @changing="_sliderChanging" @change="_sliderChange" />
+      <slider :value="slider.value" :min="slider.min" :max="slider.max" handle-size="14" block-size="14" show-value activeColor="white" style="padding:3px" @changing="_sliderChanging" @change="_sliderChange" />
     </view>
   </view>
 </template>`)
@@ -313,11 +319,17 @@ module.exports = {
           // 工具弹窗的样式
           .replace('</style>', `
 /* 提示条 */
+._tooltip_contain {
+  position: absolute;
+  width: 100vw;
+  text-align: center;
+}
+
 ._tooltip {
   display: inline-block;
   width: auto;
   height: 30px;
-  padding-right: 5px;
+  padding: 0 3px;
   font-size: 14px;
   line-height: 30px;
 }
@@ -325,7 +337,7 @@ module.exports = {
 ._tooltip_item {
   display: inline-block;
   width: auto;
-  padding: 0 8px;
+  padding: 0 2vw;
   line-height: 30px;
   background-color: black;
   color: white;
@@ -333,13 +345,13 @@ module.exports = {
 
 /* 图片宽度滚动条 */
 ._slider {
+  position: absolute;
+  left: 20px;
   width: 220px;
 }
 
 ._tooltip,
 ._slider {
-  position: absolute;
-  left: 30px;
   background-color: black;
   border-radius: 3px;
   opacity: 0.75;
@@ -458,7 +470,7 @@ function getTop(e) {
             // 更改宽度
             else if (items[tapIndex] == '宽度') {
               var style = node.attrs.style || '',
-              value = style.match(/;width:([0-9]+)%/)
+              value = style.match(/max-width:([0-9]+)%/)
               if (value)
                 value = parseInt(value[1])
               else
@@ -472,16 +484,32 @@ function getTop(e) {
                   // 变化超过 5% 更新时视图
                   if (Math.abs(val - value) > 5) {
                     this.changeStyle('max-width', i, val + '%', value + '%')
-                    value = e.detail.value
+                    value = val
                   }
                 },
                 change: val => {
-                  if (val != value)
-                  this.changeStyle('max-width', i, val + '%', value + '%')
+                  if (val != value) {
+                    this.changeStyle('max-width', i, val + '%', value + '%')
+                    value = val
+                  }
                   this.root._editVal(this.opts[5] + '.' + i + '.attrs.style', style, this.childs[i].attrs.style)
                 }
               })
             }
+            // 将图片设置为链接
+            else if (items[tapIndex] == '超链接')
+              this.root.getSrc('link').then(url => {
+                this.root._editVal(this.opts[5] + '.' + i, node, {
+                  name: 'a',
+                  attrs: {
+                    href: url
+                  },
+                  children: [node]
+                }, true)
+                wx.showToast({
+                  title: '成功'
+                })
+              }).catch(() => { })
             // 设置预览图链接
             else if (items[tapIndex] == '预览图')
               this.root.getSrc('img', node.attrs['original-src']).then(url => {

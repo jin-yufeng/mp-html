@@ -409,7 +409,7 @@ parser.prototype.onOpenTag = function (selfClose) {
       if (styleObj.display == 'inline')
         styleObj.display = ''
       if (attrs.ignore) {
-        styleObj['max-width'] = '100%'
+        styleObj['max-width'] = styleObj['max-width'] || '100%'
         attrs.style += ';-webkit-touch-callout:none'
       }
       // 设置的宽度超出屏幕，为避免变形，高度转为自动

@@ -443,7 +443,7 @@ parser.prototype.onOpenTag = function (selfClose) {
         styleObj.display = ''
       // #ifndef APP-PLUS-NVUE
       if (attrs.ignore) {
-        styleObj['max-width'] = '100%'
+        styleObj['max-width'] = styleObj['max-width'] || '100%'
         attrs.style += ';-webkit-touch-callout:none'
       }
       // #endif

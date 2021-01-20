@@ -223,8 +223,11 @@ module.exports = {
                 name = 'font-style'
                 value = 'italic'
               } else if (item == '粗体') {
-                name = 'font-weight',
-                  value = 'bold'
+                name = 'font-weight'
+                value = 'bold'
+              } else if (item == '下划线') {
+                name = 'text-decoration'
+                value = 'underline'
               } else if (item == '居中') {
                 name = 'text-align'
                 value = 'center'
@@ -312,11 +315,13 @@ module.exports = {
         content = content.replace(/opts\s*=\s*"{{\[([^\]]+)\]}}"/, 'opts="{{[$1,editable,\'\']}}"')
           .replace('<view', '<view mp-alipay:style="{{editable?\'position:relative\':\'\'}}"')
           // 工具弹窗
-          .replace('</view>', `<view wx:if="{{tooltip}}" class="_tooltip" style="top:{{tooltip.top}}px">
-  <view wx:for="{{tooltip.items}}" wx:key="index" class="_tooltip_item" data-i="{{index}}" bindtap="_tooltipTap">{{item}}</view>
+          .replace('</view>', `<view wx:if="{{tooltip}}" class="_tooltip_contain" style="top:{{tooltip.top}}px">
+  <view class="_tooltip">
+    <view wx:for="{{tooltip.items}}" wx:key="index" class="_tooltip_item" data-i="{{index}}" bindtap="_tooltipTap">{{item}}</view>
+  </view>
 </view>
 <view wx:if="{{slider}}" class="_slider" style="top:{{slider.top}}px">
-  <slider value="{{slider.value}}" min="{{slider.min}}" max="{{slider.max}}" block-size="14" show-value activeColor="white" mp-weixin:mp-qq:mp-baidu:mp-toutiao:style="padding:5px 0" mp-alipay:style="padding:10px" bindchanging="_sliderChanging" bindchange="_sliderChange" />
+  <slider value="{{slider.value}}" min="{{slider.min}}" max="{{slider.max}}" block-size="14" show-value activeColor="white" mp-alipay:style="padding:10px" bindchanging="_sliderChanging" bindchange="_sliderChange" />
 </view>
 </view>`)
       }
@@ -342,11 +347,17 @@ module.exports = {
       else if (file.path.includes('miniprogram' + path.sep + 'index.wxss')) {
         // 工具弹窗的样式
         content += `/* 提示条 */
+._tooltip_contain {
+  position: absolute;
+  width: 100vw;
+  text-align: center;
+}
+
 ._tooltip {
   display: inline-block;
   width: auto;
   height: 30px;
-  padding-right: 5px;
+  padding: 0 3px;
   font-size: 14px;
   line-height: 30px;
 }
@@ -354,7 +365,7 @@ module.exports = {
 ._tooltip_item {
   display: inline-block;
   width: auto;
-  padding: 0 8px;
+  padding: 0 2vw;
   line-height: 30px;
   background-color: black;
   color: white;
@@ -362,13 +373,13 @@ module.exports = {
 
 /* 图片宽度滚动条 */
 ._slider {
+  position: absolute;
+  left: 20px;
   width: 220px;
 }
 
 ._tooltip,
 ._slider {
-  position: absolute;
-  left: 30px;
   background-color: black;
   border-radius: 3px;
   opacity: 0.75;
@@ -482,7 +493,7 @@ module.exports = {
         // 更改宽度
         else if (items[tapIndex] == '宽度') {
           var style = node.attrs.style || '',
-            value = style.match(/;width:([0-9]+)%/)
+            value = style.match(/max-width:([0-9]+)%/)
           if (value)
             value = parseInt(value[1])
           else
@@ -496,16 +507,32 @@ module.exports = {
               // 变化超过 5% 更新时视图
               if (Math.abs(val - value) > 5) {
                 this.changeStyle('max-width', i, val + '%', value + '%')
-                value = e.detail.value
+                value = val
               }
             },
             change: val => {
-              if (val != value)
+              if (val != value) {
                 this.changeStyle('max-width', i, val + '%', value + '%')
+                value = val
+              }
               this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.style', style, this.getNode(i).attrs.style)
             }
           })
         }
+        // 将图片设置为链接
+        else if (items[tapIndex] == '超链接')
+          this.root.getSrc('link').then(url => {
+            this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + ']', node, {
+              name: 'a',
+              attrs: {
+                href: url
+              },
+              children: [node]
+            }, true)
+            wx.showToast({
+              title: '成功'
+            })
+          }).catch(() => { })
         // 设置预览图链接
         else if (items[tapIndex] == '预览图')
           this.root.getSrc('img', node.attrs['original-src']).then(url => {
