@@ -67,8 +67,12 @@ Component({
      */
     imgTap(e) {
       var node = this.getNode(e.target.dataset.i)
-      if (node.attrs.ignore)
+      if (node.attrs.ignore) {
+        // 父级中有链接
+        if (node.a)
+          this.linkTap(node.a)
         return
+      }
       this.root.triggerEvent('imgtap', node.attrs)
       if (this.root.properties.previewImg) {
         var current =
@@ -113,9 +117,9 @@ Component({
      * @param {Event} e 
      */
     linkTap(e) {
-      var node = this.getNode(e.currentTarget.dataset.i),
-        href = node.attrs.href
-      this.root.triggerEvent('linktap', node.attrs)
+      var attrs = e.currentTarget ? this.getNode(e.currentTarget.dataset.i).attrs : e,
+        href = attrs.href
+      this.root.triggerEvent('linktap', attrs)
       if (href) {
         // 跳转锚点
         if (href[0] == '#')

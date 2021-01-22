@@ -381,8 +381,10 @@ parser.prototype.onOpenTag = function (selfClose) {
           let i
           for (i = this.stack.length; i--;) {
             let item = this.stack[i]
-            if (item.name == 'a')
+            if (item.name == 'a') {
+              node.a = item.attrs
               break
+            }
             // #ifndef H5 || APP-PLUS
             let style = item.attrs.style || ''
             if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || !styleObj.width.includes('%'))) {
@@ -409,7 +411,7 @@ parser.prototype.onOpenTag = function (selfClose) {
             item.c = 1
           }
           if (i == -1) {
-            attrs.i = this.imgList.length.toString()
+            node.i = this.imgList.length.toString()
             let src = attrs['original-src'] || attrs.src
             // #ifndef H5 || MP-ALIPAY || APP-PLUS || MP-360
             if (this.imgList.includes(src)) {

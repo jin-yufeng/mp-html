@@ -44,12 +44,17 @@
   <!-- #endif -->
   <text wx:elif="{{n.name=='br'}}">\n</text>
   <!-- 链接 -->
-  <view wx:elif="{{n.name=='a'}}" id="{{n.attrs.id}}" class="{{n.attrs.href?'_a ':''}}{{n.attrs.class}}" hover-class="_hover" style="display:inline;{{n.attrs.style}}" data-i="{{i}}" mp-weixin:mp-qq:capture-catch:tap="linkTap" mp-baidu:mp-alipay:mp-toutiao:catchtap="linkTap">
+  <view wx:elif="{{n.name=='a'}}" id="{{n.attrs.id}}" class="{{n.attrs.href?'_a ':''}}{{n.attrs.class}}" hover-class="_hover" style="display:inline;{{n.attrs.style}}" data-i="{{i}}" catchtap="linkTap">
     <!-- #ifdef MP-WEIXIN || MP-QQ -->
     <node childs="{{n.children}}" opts="{{opts}}" />
     <!-- #endif -->
-    <!-- #ifdef MP-BAIDU || MP-ALIPAY || MP-TOUTIAO -->
-    <rich-text nodes="{{n.children}}" mp-alipay:style="display:inline" />
+    <!-- #ifdef MP-BAIDU -->
+    <block wx:for="{{n.children}}" wx:key="index">
+      <template is="el" data="{{n:item,i:i+'_'+index,opts:opts,ctrl:ctrl}}"></template>
+    </block>
+    <!-- #endif -->
+    <!-- #ifdef MP-ALIPAY || MP-TOUTIAO -->
+    <template is="node" data="{{childs:n.children,path:i+'_',opts:opts,ctrl:ctrl}}"></template>
     <!-- #endif -->
   </view>
   <!-- 视频 -->

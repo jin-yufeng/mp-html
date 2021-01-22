@@ -356,8 +356,10 @@ parser.prototype.onOpenTag = function (selfClose) {
           let i
           for (i = this.stack.length; i--;) {
             let item = this.stack[i]
-            if (item.name == 'a')
+            if (item.name == 'a') {
+              node.a = item.attrs
               break
+            }
             let style = item.attrs.style || ''
             if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || !styleObj.width.includes('%'))) {
               styleObj.width = '100% !important'
