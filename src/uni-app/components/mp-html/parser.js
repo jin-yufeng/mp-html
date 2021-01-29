@@ -934,7 +934,15 @@ lexer.prototype.checkClose = function (method) {
     this.i += selfClose ? 2 : 1
     this.start = this.i
     this.handler.onOpenTag(selfClose)
-    this.state = this.text
+    if (this.handler.tagName == 'script') {
+      this.i = this.content.indexOf('</', this.i)
+      if (this.i != -1) {
+        this.i += 2
+        this.start = this.i
+      }
+      this.state = this.endTag
+    } else
+      this.state = this.text
     return true
   }
   return false
