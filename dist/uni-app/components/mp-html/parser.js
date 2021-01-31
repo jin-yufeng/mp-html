@@ -206,8 +206,7 @@ parser.prototype.parseStyle = function (node) {
   if (attrs.id) {
     // 暴露锚点
     if (this.options.useAnchor) this.expose();else if (node.name != 'img' && node.name != 'a' && node.name != 'video' && node.name != 'audio') attrs.id = void 0;
-  } // #ifndef APP-PLUS-NVUE
-  // 转换 width 和 height 属性
+  } // 转换 width 和 height 属性
 
 
   if (attrs.width) {
@@ -218,8 +217,7 @@ parser.prototype.parseStyle = function (node) {
   if (attrs.height) {
     styleObj.height = parseFloat(attrs.height) + (attrs.height.includes('%') ? '%' : 'px');
     attrs.height = void 0;
-  } // #endif
-
+  }
 
   for (var i = 0, len = list.length; i < len; i++) {
     var info = list[i].split(':');
@@ -275,7 +273,7 @@ parser.prototype.onAttrName = function (name) {
 
   if (name.substr(0, 5) == 'data-') {
     // data-src 自动转为 src
-    if (name == 'data-src') this.attrName = 'src'; // a 和 img 标签保留 data- 的属性，可以在 imgtap 和 linktap 事件中使用
+    if (name == 'data-src' && !this.attrs.src) this.attrName = 'src'; // a 和 img 标签保留 data- 的属性，可以在 imgtap 和 linktap 事件中使用
     else if (this.tagName == 'img' || this.tagName == 'a') this.attrName = name; // 剩余的移除以减小大小
       else this.attrName = void 0;
   } else {
@@ -367,11 +365,14 @@ parser.prototype.onOpenTag = function (selfClose) {
         if (attrs.src.includes('data:') && !attrs['original-src']) attrs.ignore = 'T';
 
         if (!attrs.ignore || node.webp || attrs.src.includes('cloud://')) {
-          var i;
-
-          for (i = this.stack.length; i--;) {
+          for (var i = this.stack.length; i--;) {
             var item = this.stack[i];
-            if (item.name == 'a') break; // #ifndef H5 || APP-PLUS
+
+            if (item.name == 'a') {
+              node.a = item.attrs;
+              break;
+            } // #ifndef H5 || APP-PLUS
+
 
             var style = item.attrs.style || '';
 
@@ -402,47 +403,45 @@ parser.prototype.onOpenTag = function (selfClose) {
             item.c = 1;
           }
 
-          if (i == -1) {
-            attrs.i = this.imgList.length.toString();
+          attrs.i = this.imgList.length.toString();
 
-            var _src = attrs['original-src'] || attrs.src; // #ifndef H5 || MP-ALIPAY || APP-PLUS || MP-360
+          var _src = attrs['original-src'] || attrs.src; // #ifndef H5 || MP-ALIPAY || APP-PLUS || MP-360
 
 
-            if (this.imgList.includes(_src)) {
-              // 如果有重复的链接则对域名进行随机大小写变换避免预览时错位
-              var _i = _src.indexOf('://');
+          if (this.imgList.includes(_src)) {
+            // 如果有重复的链接则对域名进行随机大小写变换避免预览时错位
+            var _i = _src.indexOf('://');
 
-              if (_i != -1) {
-                _i += 3;
+            if (_i != -1) {
+              _i += 3;
 
-                var newSrc = _src.substr(0, _i);
+              var newSrc = _src.substr(0, _i);
 
-                for (; _i < _src.length; _i++) {
-                  if (_src[_i] == '/') break;
-                  newSrc += Math.random() > 0.5 ? _src[_i].toUpperCase() : _src[_i];
-                }
-
-                newSrc += _src.substr(_i);
-                _src = newSrc;
+              for (; _i < _src.length; _i++) {
+                if (_src[_i] == '/') break;
+                newSrc += Math.random() > 0.5 ? _src[_i].toUpperCase() : _src[_i];
               }
-            } // #endif
+
+              newSrc += _src.substr(_i);
+              _src = newSrc;
+            }
+          } // #endif
 
 
-            this.imgList.push(_src); // #ifdef H5 || APP-PLUS
+          this.imgList.push(_src); // #ifdef H5 || APP-PLUS
 
-            if (this.options.lazyLoad) {
-              attrs['data-src'] = attrs.src;
-              attrs.src = void 0;
-            } // #endif
+          if (this.options.lazyLoad) {
+            attrs['data-src'] = attrs.src;
+            attrs.src = void 0;
+          } // #endif
 
-          } else attrs.ignore = 'T';
         }
       }
 
       if (styleObj.display == 'inline') styleObj.display = ''; // #ifndef APP-PLUS-NVUE
 
       if (attrs.ignore) {
-        styleObj['max-width'] = '100%';
+        styleObj['max-width'] = styleObj['max-width'] || '100%';
         attrs.style += ';-webkit-touch-callout:none';
       } // #endif
       // 设置的宽度超出屏幕，为避免变形，高度转为自动
@@ -618,7 +617,12 @@ parser.prototype.popNode = function () {
 
   if ((attrs["class"] || '').includes('align-center')) styleObj['text-align'] = 'center';
   Object.assign(styleObj, this.parseStyle(node));
-  if (parseInt(styleObj.width) > windowWidth) styleObj['max-width'] = '100%'; // #ifndef APP-PLUS-NVUE
+
+  if (parseInt(styleObj.width) > windowWidth) {
+    styleObj['max-width'] = '100%';
+    styleObj['box-sizing'] = 'border-box';
+  } // #ifndef APP-PLUS-NVUE
+
 
   if (config.blockTags[node.name]) node.name = 'div'; // 未知标签转为 span，避免无法显示
   else if (!config.trustTags[node.name] && !this.xml) node.name = 'span';
@@ -626,7 +630,9 @@ parser.prototype.popNode = function () {
   || node.name == 'iframe' // #endif
   ) this.expose(); // #ifdef APP-PLUS
   else if (node.name == 'video') {
-      var str = '<video style="max-width:100%"';
+      var str = '<video style="width:100%;height:100%"'; // 空白图占位
+
+      if (!attrs.poster && !attrs.autoplay) attrs.poster = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'/>";
 
       for (var item in attrs) {
         if (attrs[item]) str += ' ' + item + '="' + attrs[item] + '"';
@@ -931,7 +937,18 @@ lexer.prototype.checkClose = function (method) {
     this.i += selfClose ? 2 : 1;
     this.start = this.i;
     this.handler.onOpenTag(selfClose);
-    this.state = this.text;
+
+    if (this.handler.tagName == 'script') {
+      this.i = this.content.indexOf('</', this.i);
+
+      if (this.i != -1) {
+        this.i += 2;
+        this.start = this.i;
+      }
+
+      this.state = this.endTag;
+    } else this.state = this.text;
+
     return true;
   }
 

@@ -39,7 +39,7 @@ export default {
       console.log('imgtap 事件触发：', e)
     },
     linktap(e) {
-      console.log('linkpress 事件触发：', e)
+      console.log('linktap 事件触发：', e)
     }
   }
 }

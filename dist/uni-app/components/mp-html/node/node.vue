@@ -17,17 +17,12 @@
       <!-- #endif -->
       <text v-else-if="n.name=='br'">\n</text>
       <!-- 链接 -->
-      <view v-else-if="n.name=='a'" :id="n.attrs.id" :class="(n.attrs.href?'_a ':'')+n.attrs.class" hover-class="_hover" :style="'display:inline;'+n.attrs.style" :data-i="i" @click.capture.stop="linkTap">
-        <!-- #ifdef MP-ALIPAY || MP-TOUTIAO -->
-        <rich-text :nodes="n.children" style="display:inline" />
-        <!-- #endif -->
-        <!-- #ifndef MP-ALIPAY || MP-TOUTIAO -->
-        <node name="span" :childs="n.children" :opts="opts" />
-        <!-- #endif -->
+      <view v-else-if="n.name=='a'" :id="n.attrs.id" :class="(n.attrs.href?'_a ':'')+n.attrs.class" hover-class="_hover" :style="'display:inline;'+n.attrs.style" :data-i="i" @tap.stop="linkTap">
+        <node name="span" :childs="n.children" :opts="opts" style="display:inherit" />
       </view>
       <!-- 视频 -->
       <!-- #ifdef APP-PLUS -->
-      <view v-else-if="n.html" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" v-html="n.html" />
+      <view v-else-if="n.html" :id="n.attrs.id" :class="'_video '+n.attrs.class" :style="n.attrs.style" v-html="n.html" />
       <!-- #endif -->
       <!-- #ifndef APP-PLUS -->
       <video v-else-if="n.name=='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay" :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :poster="n.attrs.poster" :src="n.src[ctrl[i]||0]" :data-i="i" @play="play" @error="mediaError" />
@@ -198,15 +193,19 @@ export default {
      * @param {Event} e 
      */
     imgTap(e) {
-      var attrs = this.childs[e.currentTarget.dataset.i].attrs
-      if (attrs.ignore)
+      var node = this.childs[e.currentTarget.dataset.i]
+      if (node.a)
+        return this.linkTap(node.a)
+      if (node.attrs.ignore)
         return
-      attrs.src = attrs['data-src'] || attrs.src
-      this.root.$emit('imgtap', attrs)
+      // #ifdef H5 || APP-PLUS
+      node.attrs.src = node.attrs.src || node.attrs['data-src']
+      // #endif
+      this.root.$emit('imgtap', node.attrs)
       // 自动预览图片
       if (this.root.previewImg)
         uni.previewImage({
-          current: parseInt(attrs.i),
+          current: parseInt(node.attrs.i),
           urls: this.root.imgList
         })
     },
@@ -214,7 +213,7 @@ export default {
     /**
      * @description 图片长按
      */
-    imgLongTap() {
+    imgLongTap(e) {
       // #ifdef APP-PLUS
       var attrs = this.childs[e.currentTarget.dataset.i].attrs
       if (!attrs.ignore)
@@ -261,7 +260,7 @@ export default {
      * @param {Event} e 
      */
     linkTap(e) {
-      var attrs = this.childs[e.currentTarget.dataset.i].attrs,
+      var attrs = e.currentTarget ? this.childs[e.currentTarget.dataset.i].attrs : e,
         href = attrs.href
       this.root.$emit('linktap', attrs)
       if (href) {
@@ -490,4 +489,11 @@ export default {
 ._sup {
   display: inline;
 }
+
+/* #ifdef APP-PLUS */
+._video {
+  width: 300px;
+  height: 225px;
+}
+/* #endif */
 </style>

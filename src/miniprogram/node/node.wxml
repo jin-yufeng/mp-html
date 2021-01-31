@@ -46,7 +46,7 @@
   <!-- 链接 -->
   <view wx:elif="{{n.name=='a'}}" id="{{n.attrs.id}}" class="{{n.attrs.href?'_a ':''}}{{n.attrs.class}}" hover-class="_hover" style="display:inline;{{n.attrs.style}}" data-i="{{i}}" catchtap="linkTap">
     <!-- #ifdef MP-WEIXIN || MP-QQ -->
-    <node childs="{{n.children}}" opts="{{opts}}" />
+    <node childs="{{n.children}}" opts="{{opts}}" style="display:inherit" />
     <!-- #endif -->
     <!-- #ifdef MP-BAIDU -->
     <block wx:for="{{n.children}}" wx:key="index">

@@ -1,0 +1,21 @@
+/* #ifdef MP-BAIDU */
+/* 在 https://smartprogram.baidu.com/forum/topic/show/125787 解决前，需要将以下样式放在 app.css 中 */
+/* a 标签默认效果 */
+._a {
+  padding: 1.5px 0 1.5px 0;
+  color: #366092;
+  word-break: break-all;
+}
+
+/* a 标签点击态效果 */
+._hover {
+  text-decoration: underline;
+  opacity: 0.7;
+}
+
+/* 图片默认效果 */
+._img {
+  max-width: 100%;
+  -webkit-touch-callout: none;
+}
+/* #endif */

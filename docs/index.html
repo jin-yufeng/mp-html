@@ -35,7 +35,7 @@
     }
     // 渲染测试内容
     function render() {
-      document.getElementById("show").srcdoc='<meta name="viewport" content="width=device-width"><style>img{max-width:100%}</style>'+document.getElementById("input").value
+      document.getElementById("show").srcdoc='<meta name="viewport" content="width=device-width"><style>img{max-width:100%}</style>'+document.getElementById("input").value.replace(/<script[\s\S]+?<\/script>/g, '')
     }
     // 清空测试内容
     function reset() {

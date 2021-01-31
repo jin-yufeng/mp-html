@@ -378,8 +378,7 @@ parser.prototype.onOpenTag = function (selfClose) {
         if (attrs.src.includes('data:') && !attrs['original-src'])
           attrs.ignore = 'T'
         if (!attrs.ignore || node.webp || attrs.src.includes('cloud://')) {
-          let i
-          for (i = this.stack.length; i--;) {
+          for (let i = this.stack.length; i--;) {
             let item = this.stack[i]
             if (item.name == 'a') {
               node.a = item.attrs
@@ -410,35 +409,32 @@ parser.prototype.onOpenTag = function (selfClose) {
             // #endif
             item.c = 1
           }
-          if (i == -1) {
-            node.i = this.imgList.length.toString()
-            let src = attrs['original-src'] || attrs.src
-            // #ifndef H5 || MP-ALIPAY || APP-PLUS || MP-360
-            if (this.imgList.includes(src)) {
-              // 如果有重复的链接则对域名进行随机大小写变换避免预览时错位
-              let i = src.indexOf('://')
-              if (i != -1) {
-                i += 3
-                let newSrc = src.substr(0, i)
-                for (; i < src.length; i++) {
-                  if (src[i] == '/')
-                    break
-                  newSrc += Math.random() > 0.5 ? src[i].toUpperCase() : src[i]
-                }
-                newSrc += src.substr(i)
-                src = newSrc
+          attrs.i = this.imgList.length.toString()
+          let src = attrs['original-src'] || attrs.src
+          // #ifndef H5 || MP-ALIPAY || APP-PLUS || MP-360
+          if (this.imgList.includes(src)) {
+            // 如果有重复的链接则对域名进行随机大小写变换避免预览时错位
+            let i = src.indexOf('://')
+            if (i != -1) {
+              i += 3
+              let newSrc = src.substr(0, i)
+              for (; i < src.length; i++) {
+                if (src[i] == '/')
+                  break
+                newSrc += Math.random() > 0.5 ? src[i].toUpperCase() : src[i]
               }
+              newSrc += src.substr(i)
+              src = newSrc
             }
-            // #endif
-            this.imgList.push(src)
-            // #ifdef H5 || APP-PLUS
-            if (this.options.lazyLoad) {
-              attrs['data-src'] = attrs.src
-              attrs.src = void 0
-            }
-            // #endif
-          } else
-            attrs.ignore = 'T'
+          }
+          // #endif
+          this.imgList.push(src)
+          // #ifdef H5 || APP-PLUS
+          if (this.options.lazyLoad) {
+            attrs['data-src'] = attrs.src
+            attrs.src = void 0
+          }
+          // #endif
         }
       }
       if (styleObj.display == 'inline')
@@ -618,8 +614,10 @@ parser.prototype.popNode = function () {
 
   Object.assign(styleObj, this.parseStyle(node))
 
-  if (parseInt(styleObj.width) > windowWidth)
+  if (parseInt(styleObj.width) > windowWidth) {
     styleObj['max-width'] = '100%'
+    styleObj['box-sizing'] = 'border-box'
+  }
 
   // #ifndef APP-PLUS-NVUE
   if (config.blockTags[node.name])

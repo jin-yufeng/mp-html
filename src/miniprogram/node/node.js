@@ -67,12 +67,11 @@ Component({
      */
     imgTap(e) {
       var node = this.getNode(e.target.dataset.i)
-      if (node.attrs.ignore) {
-        // 父级中有链接
-        if (node.a)
-          this.linkTap(node.a)
+      // 父级中有链接
+      if (node.a)
+        return this.linkTap(node.a)
+      if (node.attrs.ignore)
         return
-      }
       this.root.triggerEvent('imgtap', node.attrs)
       if (this.root.properties.previewImg) {
         var current =

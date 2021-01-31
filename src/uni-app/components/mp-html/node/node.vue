@@ -18,7 +18,7 @@
       <text v-else-if="n.name=='br'">\n</text>
       <!-- 链接 -->
       <view v-else-if="n.name=='a'" :id="n.attrs.id" :class="(n.attrs.href?'_a ':'')+n.attrs.class" hover-class="_hover" :style="'display:inline;'+n.attrs.style" :data-i="i" @tap.stop="linkTap">
-        <node name="span" :childs="n.children" :opts="opts" />
+        <node name="span" :childs="n.children" :opts="opts" style="display:inherit" />
       </view>
       <!-- 视频 -->
       <!-- #ifdef APP-PLUS -->
@@ -192,11 +192,10 @@ export default {
      */
     imgTap(e) {
       var node = this.childs[e.currentTarget.dataset.i]
-      if (node.attrs.ignore) {
-        if (node.a)
-          this.linkTap(node.a)
+      if (node.a)
+        return this.linkTap(node.a)
+      if (node.attrs.ignore)
         return
-      }
       // #ifdef H5 || APP-PLUS
       node.attrs.src = node.attrs.src || node.attrs['data-src']
       // #endif
@@ -204,7 +203,7 @@ export default {
       // 自动预览图片
       if (this.root.previewImg)
         uni.previewImage({
-          current: parseInt(node.i),
+          current: parseInt(node.attrs.i),
           urls: this.root.imgList
         })
     },
