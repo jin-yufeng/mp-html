@@ -19,7 +19,7 @@ txvVideo.prototype.onParse = function (node, parser) {
     var vid = node.attrs.src.match(/vid=([^&\s]+)/)
     if (vid) {
       node.name = 'txv-video'
-      node.attrs.id = vid[1]
+      node.attrs.vid = vid[1]
       this.videos.push(vid[1])
       node.attrs.src = void 0
       parser.expose()
