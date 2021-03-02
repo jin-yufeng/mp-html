@@ -24,7 +24,7 @@
  * @property {Boolean} pause-video 是否在播放一个视频时自动暂停其他视频
  * @property {Boolean} preview-img 是否允许图片被点击时自动预览
  * @property {Boolean} scroll-table 是否给每个表格添加一个滚动层使其能单独横向滚动
- * @property {Boolean} selectable 是否开启长按复制
+ * @property {Boolean | String} selectable 是否开启长按复制
  * @property {Boolean} set-title 是否将 title 标签的内容设置到页面标题
  * @property {Boolean} show-img-menu 是否允许图片被长按时显示菜单
  * @property {Object} tag-style 标签的默认样式
@@ -84,7 +84,7 @@ export default {
       default: true
     },
     scrollTable: Boolean,
-    selectable: Boolean,
+    selectable: null,
     setTitle: {
       type: Boolean,
       default: true

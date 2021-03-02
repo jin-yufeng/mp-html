@@ -13,7 +13,7 @@
       <!-- #endif -->
       <!-- 文本 -->
       <!-- #ifndef MP-BAIDU -->
-      <text v-else-if="n.type=='text'" decode>{{n.text}}</text>
+      <text v-else-if="n.type=='text'" :user-select="n.us" decode>{{n.text}}</text>
       <!-- #endif -->
       <text v-else-if="n.name=='br'">\n</text>
       <!-- 链接 -->

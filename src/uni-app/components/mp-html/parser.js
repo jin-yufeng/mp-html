@@ -54,7 +54,12 @@ const config = {
     // #endif
   }
 }
-const windowWidth = uni.getSystemInfoSync().windowWidth
+const {
+  windowWidth,
+  // #ifdef MP-WEIXIN
+  system
+  // #endif
+} = uni.getSystemInfoSync()
 const blankChar = makeMap(' ,\r,\n,\t,\f')
 let idIndex = 0
 
@@ -894,6 +899,12 @@ parser.prototype.onText = function (text) {
   node.type = 'text'
   node.text = decodeEntity(text)
   if (this.hook(node)) {
+    // #ifdef MP-WEIXIN
+    if (this.options.selectable == 'force' && system.includes('iOS')) {
+      this.expose()
+      node.us = 'T'
+    }
+    // #endif
     let siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes
     siblings.push(node)
   }
