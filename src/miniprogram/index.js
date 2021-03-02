@@ -221,7 +221,7 @@ Component({
      * @description 获取文本内容
      * @returns {String}
      */
-    getText() {
+    getText(nodes) {
       var text = '';
       (function traversal(nodes) {
         for (var i = 0; i < nodes.length; i++) {
@@ -244,7 +244,7 @@ Component({
               text += '\t'
           }
         }
-      })(this.data.nodes)
+      })(nodes || this.data.nodes)
       return text
     },
 

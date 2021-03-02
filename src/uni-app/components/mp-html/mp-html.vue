@@ -201,7 +201,7 @@ export default {
      * @description 获取文本内容
      * @return {String}
      */
-    getText() {
+    getText(nodes) {
       var text = '';
       (function traversal(nodes) {
         for (var i = 0; i < nodes.length; i++) {
@@ -224,7 +224,7 @@ export default {
               text += '\t'
           }
         }
-      })(this.nodes)
+      })(nodes || this.nodes)
       return text
     },
 

@@ -258,9 +258,12 @@ export default {
      * @param {Event} e 
      */
     linkTap(e) {
-      var attrs = e.currentTarget ? this.childs[e.currentTarget.dataset.i].attrs : e,
+      var node = e.currentTarget ? this.childs[e.currentTarget.dataset.i] : {},
+        attrs = node.attrs || e,
         href = attrs.href
-      this.root.$emit('linktap', attrs)
+      this.root.$emit('linktap', Object.assign({
+        innerText: this.root.getText(node.children || []), // 链接内的文本内容
+      }, attrs))
       if (href) {
         // 跳转锚点
         if (href[0] == '#')
