@@ -307,6 +307,9 @@ parser.prototype.onOpenTag = function (selfClose) {
   let node = Object.create(null)
   node.name = this.tagName
   node.attrs = this.attrs
+  // 避免因为自动 diff 使得 type 被设置为 null 导致部分内容不显示
+  if (this.options.nodes.length)
+    node.type = 'node'
   this.attrs = Object.create(null)
 
   let attrs = node.attrs,
