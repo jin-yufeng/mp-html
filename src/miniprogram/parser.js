@@ -798,7 +798,10 @@ parser.prototype.popNode = function () {
       } else
         attrs.style += val
     }
-  attrs.style = attrs.style.substr(1) || void 0
+  attrs.style = attrs.style.substr(1)
+    // #ifndef MP-BAIDU
+    || void 0
+  // #endif
 }
 
 /**
