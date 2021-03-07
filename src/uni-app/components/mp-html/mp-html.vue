@@ -393,7 +393,9 @@ export default {
 /* #ifndef APP-PLUS-NVUE */
 /* 根节点样式 */
 ._root {
-  overflow: auto;
+  padding: 1px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
