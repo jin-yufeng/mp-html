@@ -90,6 +90,9 @@ Page({
 ## linktap
 触发时机：链接被点击时  
 返回值：该 *a* 标签的属性列表  
+
+?> [2.0.5](changelog/changelog#v205) 版本起增加返回该标签内部文本 *innerText*
+
 用途：  
 默认情况下链接被点击时，对于外部链接，将被拷贝到剪贴板，如果不希望如此，可以将 [copy-link](basic/prop#copy-link) 属性的值设置为 *false* 后在这里自定义处理，可参考以下方案：  
 

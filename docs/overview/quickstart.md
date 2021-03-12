@@ -60,28 +60,6 @@
      }
      ```
 
-!> 在此 [问题](https://smartprogram.baidu.com/forum/topic/show/125787) 未解决前，在 **百度小程序** 中使用时，请将以下样式拷贝到 *app.css* 以保证正确显示  
-```css
-/* a 标签默认效果 */
-._a {
-  padding: 1.5px 0 1.5px 0;
-  color: #366092;
-  word-break: break-all;
-}
-
-/* a 标签点击态效果 */
-._hover {
-  text-decoration: underline;
-  opacity: 0.7;
-}
-
-/* 图片默认效果 */
-._img {
-  max-width: 100%;
-  -webkit-touch-callout: none;
-}
-```
-
 #### 使用 :id=mp-use
 
 1. 在需要使用页面的 *wxml* 文件中添加  
@@ -176,6 +154,8 @@
   [https://wechat-miniprogram.github.io/kbone/docs/guide/advanced.html#使用小程序自定义组件](https://wechat-miniprogram.github.io/kbone/docs/guide/advanced.html#%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6)  
 - chameleon  
   [https://cml.js.org/docs/io.html#怎么引入微信小程序组件](https://cml.js.org/docs/io.html#%E6%80%8E%E4%B9%88%E5%BC%95%E5%85%A5%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%BB%84%E4%BB%B6)
+- remax  
+  [https://remaxjs.org/guide/basic/custom-component](https://remaxjs.org/guide/basic/custom-component)
 
 ## 💡 运行示例 :id=demo
 1. 安装依赖  

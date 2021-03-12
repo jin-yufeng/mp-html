@@ -50,7 +50,11 @@ var config = {
 
   }
 };
-var windowWidth = uni.getSystemInfoSync().windowWidth;
+
+var _uni$getSystemInfoSyn = uni.getSystemInfoSync(),
+    windowWidth = _uni$getSystemInfoSyn.windowWidth,
+    system = _uni$getSystemInfoSyn.system;
+
 var blankChar = makeMap(' ,\r,\n,\t,\f');
 var idIndex = 0; // #ifdef H5 || APP-PLUS
 
@@ -305,7 +309,9 @@ parser.prototype.onOpenTag = function (selfClose) {
   // 拼装 node
   var node = Object.create(null);
   node.name = this.tagName;
-  node.attrs = this.attrs;
+  node.attrs = this.attrs; // 避免因为自动 diff 使得 type 被设置为 null 导致部分内容不显示
+
+  if (this.options.nodes.length) node.type = 'node';
   this.attrs = Object.create(null);
   var attrs = node.attrs,
       parent = this.stack[this.stack.length - 1],
@@ -890,6 +896,13 @@ parser.prototype.onText = function (text) {
   node.text = decodeEntity(text);
 
   if (this.hook(node)) {
+    // #ifdef MP-WEIXIN
+    if (this.options.selectable == 'force' && system.includes('iOS')) {
+      this.expose();
+      node.us = 'T';
+    } // #endif
+
+
     var siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes;
     siblings.push(node);
   }

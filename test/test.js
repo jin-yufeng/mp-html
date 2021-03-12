@@ -17,12 +17,11 @@ test('render', async () => {
       copyLink: true,
       pauseVideo: true,
       previewImg: true,
-      showWithAnimation: true,
       useAnchor: true
     },
     template:
       `<scroll-view id="scroll" style="height:100px" scroll-y scroll-top="{{top}}">
-  <mp-html id="article" content="{{html}}" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table show-with-animation="{{showWithAnimation}}" use-anchor="{{useAnchor}}">加载中...</mp-html>
+  <mp-html id="article" content="{{html}}" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table use-anchor="{{useAnchor}}">加载中...</mp-html>
 </scroll-view>`,
     usingComponents: {
       'mp-html': mpHtml
@@ -40,9 +39,7 @@ test('render', async () => {
   const comp = page.querySelector('#article')
   expect(comp.dom.tagName).toBe('MP-HTML')
 
-  page.setData({
-    showWithAnimation: false // 取消动画
-  })
+
   await simulate.sleep(50)
 
   comp.instance.setContent(
@@ -150,6 +147,11 @@ test('event', async () => {
   }
 
   let comp = simulate.render(mpHtml)
+  comp.setData({
+    selectable: 'force'
+  })
+  await simulate.sleep(50)
+
   comp.instance.setContent(
     `<img src="xxx">
 <img src="yyy" width="100" ignore>

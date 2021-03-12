@@ -30,6 +30,28 @@ QQ：
 | 3.170.1+ | 支持图片长按弹出菜单 | >97.37% |
 | 3.90.25+ | 可以使用 | >99.87% |
 
+*3.240.10* - *3.260.25* 基础库由于 [此问题](https://smartprogram.baidu.com/forum/topic/show/125787)，需要将以下样式拷贝到 *app.css* 以保证正确显示  
+```css
+/* a 标签默认效果 */
+._a {
+  padding: 1.5px 0 1.5px 0;
+  color: #366092;
+  word-break: break-all;
+}
+
+/* a 标签点击态效果 */
+._hover {
+  text-decoration: underline;
+  opacity: 0.7;
+}
+
+/* 图片默认效果 */
+._img {
+  max-width: 100%;
+  -webkit-touch-callout: none;
+}
+```
+
 支付宝：  
 
 | 版本 | 功能 | 占比 |

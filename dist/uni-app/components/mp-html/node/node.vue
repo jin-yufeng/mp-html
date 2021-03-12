@@ -13,7 +13,7 @@
       <!-- #endif -->
       <!-- 文本 -->
       <!-- #ifndef MP-BAIDU -->
-      <text v-else-if="n.type=='text'" decode>{{n.text}}</text>
+      <text v-else-if="n.type=='text'" :user-select="n.us" decode>{{n.text}}</text>
       <!-- #endif -->
       <text v-else-if="n.name=='br'">\n</text>
       <!-- 链接 -->
@@ -260,9 +260,12 @@ export default {
      * @param {Event} e 
      */
     linkTap(e) {
-      var attrs = e.currentTarget ? this.childs[e.currentTarget.dataset.i].attrs : e,
+      var node = e.currentTarget ? this.childs[e.currentTarget.dataset.i] : {},
+        attrs = node.attrs || e,
         href = attrs.href
-      this.root.$emit('linktap', attrs)
+      this.root.$emit('linktap', Object.assign({
+        innerText: this.root.getText(node.children || []), // 链接内的文本内容
+      }, attrs))
       if (href) {
         // 跳转锚点
         if (href[0] == '#')
