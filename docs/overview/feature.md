@@ -115,7 +115,7 @@
    这是本组件独有的一种样式设置方式，可以给某一种标签名设置默认的样式  
    可以通过 [tag-style](basic/prop#tag-style) 属性设置，具体用法见对应说明  
 3. *外部样式*  
-   如果希望将某些样式固定的用于渲染，可以添加到 *tools/config.js* 的 *externStyle* 字段中，该方法仅支持 *class* 选择器，优先级最低，具体见 [个性化](overview/quickstart#setting)  
+   如果希望将某些样式固定的用于渲染，可以添加到 *tools/config.js* 的 *externStyle* 字段中，该方法仅支持 *class* 选择器（[2.x.x](changelog/changlog) 版本起支持标签名选择器），优先级最低，具体见 [个性化](overview/quickstart#setting)  
 
 需要调整优先级时，可以通过设置 *!important* 实现  
 

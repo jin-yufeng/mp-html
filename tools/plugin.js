@@ -21,6 +21,18 @@ config.plugins.sort((a, b) => {
   return 0
 })
 
+// 提取和替换标签名选择器（组件中仅支持 class 选择器）
+var tagSelector = {}, tagI = 0
+if (config.externStyle)
+  config.externStyle = config.externStyle.replace(/[\.#\[@]*([a-zA-Z]+)(?=[^}]*{)/g, ($, $1) => {
+    if ($ != $1)
+      return $
+    if (tagSelector[$])
+      return '.' + tagSelector[$]
+    tagSelector[$] = '_' + tagI++
+    return '.' + tagSelector[$]
+  })
+
 module.exports = {
   /**
    * @description 构建插件
@@ -72,7 +84,7 @@ module.exports = {
       else
         wxml += `<ad wx:elif="{{n.name=='ad'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" mp-weixin:mp-qq:mp-toutiao:unit-id="{{n.attrs['unit-id']}}" mp-baidu:appid="{{n.attrs.appid}}" mp-baidu:apid="{{n.attrs.apid}}" data-i="{{i}}" binderror="mediaError" />`
     }
-    
+
     return through2.obj(function (file, _, callback) {
       if (file.isBuffer()) {
         // src 目录
@@ -81,6 +93,9 @@ module.exports = {
           // 注册插件列表
           if (file.basename == 'index.js' || file.basename == 'mp-html.vue')
             content = content.replace(/plugins\s*=\s*\[\]/, `plugins=[${plugins}]`)
+          // 设置标签名选择器
+          else if (file.basename == 'parser.js' && tagI)
+            content = content.replace(/tagSelector\s*=\s*{}/, `tagSelector=${JSON.stringify(tagSelector)}`)
           // 引入模板
           else if (file.basename == 'node.wxml')
             content = content.replace(/<!--\s*insert\s*-->/, wxml)

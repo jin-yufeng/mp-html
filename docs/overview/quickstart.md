@@ -209,7 +209,8 @@
 - externStyle  
   外部样式，一个 *css* 字符串，将被用于 *html* 的渲染，但仅支持 *class* 选择器  
 
-  ?> 如果要对标签设置默认样式，可以使用 [tag-style](basic/prop#tag-style) 属性，外部样式不支持标签名选择器
+  ?> [2.x.x](changelog/changelog) 版本起增加支持 **标签名选择器**，通过这种方式给标签设置的样式全局有效，在样式较长或作用标签数量较大时这种方法的性能要高于 [tag-style](basic/prop#tag-style) 属性，且写法更加灵活（可以与伪类、*class* 配合等）  
+  需要注意的是，由于[组件](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html#%E7%BB%84%E4%BB%B6%E6%A0%B7%E5%BC%8F) 内仅支持 *class* 选择器，直接将标签名选择器 **写在 wxss 中是无效的**，必须写在本字段中，构建过程中会自动转换为 *class* 选择器
 
 剩余的是一些编译过程中压缩工具的配置，可以按需要设置  
 

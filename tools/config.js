@@ -24,7 +24,7 @@ module.exports = {
 
   /**
    * @description 要引入到组件中的外部样式（css）
-   * 仅支持 class 选择器
+   * 仅支持标签名和 class 选择器
    */
   externStyle: ``,
 

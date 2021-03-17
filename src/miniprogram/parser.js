@@ -52,6 +52,7 @@ const config = {
     u: 'text-decoration:underline'
   }
 }
+const tagSelector = {}
 const {
   windowWidth,
   // #ifdef MP-WEIXIN
@@ -301,6 +302,10 @@ parser.prototype.onOpenTag = function (selfClose) {
     parent = this.stack[this.stack.length - 1],
     siblings = parent ? parent.children : this.nodes,
     close = this.xml ? selfClose : config.voidTags[node.name]
+
+  // 替换标签名选择器
+  if (tagSelector[node.name])
+    attrs.class = tagSelector[node.name] + (attrs.class ? ' ' + attrs.class : '')
 
   // 转换 embed 标签
   if (node.name == 'embed') {
