@@ -49,6 +49,7 @@ const config = {
     pre: 'font-family:monospace;white-space:pre',
     s: 'text-decoration:line-through',
     small: 'display:inline;font-size:0.8em',
+    strike: 'text-decoration:line-through',
     u: 'text-decoration:underline'
   }
 }

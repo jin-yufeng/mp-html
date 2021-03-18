@@ -183,6 +183,7 @@
 | small |  |
 | source | src |
 | span |  |
+| strike |  |
 | strong |  |
 | style |  |
 | sub |  |
