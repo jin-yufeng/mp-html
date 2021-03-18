@@ -2,6 +2,7 @@
  * @fileoverview editable 插件
  */
 const config = require('./config')
+const parser = require('../parser')
 
 function editable(vm) {
   this.vm = vm
@@ -172,6 +173,16 @@ function editable(vm) {
         ['nodes[' + vm.data.nodes.length + ']']: node
       })
     }
+  }
+
+  /**
+   * @description 在光标处插入指定 html 内容
+   * @param {String} html 内容
+   */
+  vm.insertHtml = function (html) {
+    var arr = new parser(vm).parse(html)
+    for (var i = 0; i < arr.length; i++)
+      insert(arr[i])
   }
 
   /**

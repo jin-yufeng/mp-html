@@ -72,6 +72,7 @@
 |:---:|:---:|
 | undo | 撤销一个操作 |
 | redo | 重做一个操作 |
+| insertHtml | 在光标处插入指定 html 内容（[2.x.x+](changelog/changelog)） |
 | insertImg | 在光标处插入一张图片 |
 | insertVideo | 在光标处插入一个视频 |
 | insertAudio | 在光标处插入一个音频 |
