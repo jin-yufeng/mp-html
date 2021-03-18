@@ -72,7 +72,7 @@ module.exports = {
             res += '\xa0'
           return res
         })
-      this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].text', this.getNode(i).text, value) // 记录编辑历史
+      this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].text', this.getNode(i).text, value) // 记录编辑历史
       this.cursor = e.detail.cursor
     },
     /**
@@ -83,7 +83,7 @@ module.exports = {
       var i = e.target.dataset.i
       // 更新到视图
       this.root.setData({
-        ['nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].text']: e.detail.value
+        ['nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].text']: e.detail.value
       })
       this.setData({
         ['ctrl.e' + i]: 0
@@ -104,17 +104,23 @@ module.exports = {
           childs.push(node)
         // 在文本中插入
         else if (childs[i].text) {
-          var text = childs[i].text
-          childs.splice(i, 1, {
-            type: 'text',
-            text: text.substring(0, this.cursor)
-          }, node, {
-            type: 'text',
-            text: text.substring(this.cursor)
-          })
+          var text = childs[i].text,
+            list = []
+          if (this.cursor)
+            list.push({
+              type: 'text',
+              text: text.substring(0, this.cursor)
+            })
+          list.push(node)
+          if (this.cursor < text.length)
+            list.push({
+              type: 'text',
+              text: text.substring(this.cursor)
+            })
+          childs.splice(i, 1, ...list)
         } else
           childs.splice(i + 1, 0, node)
-        path = this.properties.opts[5] + path
+        path = this.properties.opts[6] + path
         if (path[path.length - 1] == '_')
           path = path.slice(0, -1)
         this.root._editVal('nodes' + (path ? '[' + path.replace(/_/g, '].children[') + '].children' : ''), children, childs, true)
@@ -133,7 +139,7 @@ module.exports = {
       childs.splice(j, 1)
       this.root._edit = void 0
       this.root._maskTap()
-      path = this.properties.opts[5] + path
+      path = this.properties.opts[6] + path
       if (path[path.length - 1] == '_')
         path = path.slice(0, -1)
       this.root._editVal('nodes' + (path ? '[' + path.replace(/_/g, '].children[') + '].children' : ''), children, childs, true)
@@ -210,7 +216,7 @@ module.exports = {
                 change: val => {
                   if (val != value)
                     this.changeStyle('font-size', i, val + 'px', value + 'px')
-                  this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.style', style, this.getNode(i).attrs.style)
+                  this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.style', style, this.getNode(i).attrs.style)
                 }
               })
             } else if (items[tapIndex] == '删除')
@@ -241,7 +247,7 @@ module.exports = {
               // 没有则添加
               else
                 newStyle = style + ';' + name + ':' + value
-              this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.style', style, newStyle, true)
+              this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.style', style, newStyle, true)
             }
           }
         })
@@ -265,14 +271,14 @@ module.exports = {
             // 设置封面
             if (items[tapIndex] == '封面')
               this.root.getSrc('img', node.attrs.poster).then(url => {
-                this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.poster', node.attrs.poster, url, true)
+                this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.poster', node.attrs.poster, url, true)
               }).catch(() => { })
             else if (items[tapIndex] == '删除')
               this.remove(i)
             // 切换循环播放
             else {
               this.root.setData({
-                ['nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.loop']: !node.attrs.loop
+                ['nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.loop']: !node.attrs.loop
               })
               wx.showToast({
                 title: '成功'
@@ -303,7 +309,7 @@ module.exports = {
       else
         style += ';' + name + ':' + value
       this.root.setData({
-        ['nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.style']: style
+        ['nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.style']: style
       })
     }
   },
@@ -312,8 +318,8 @@ module.exports = {
       var content = file.contents.toString()
       if (file.path.includes('miniprogram' + path.sep + 'index.wxml')) {
         // 传递 editable 属性和路径
-        content = content.replace(/opts\s*=\s*"{{\[([^\]]+)\]}}"/, 'opts="{{[$1,editable,\'\']}}"')
-          .replace('<view', '<view mp-alipay:style="{{editable?\'position:relative\':\'\'}}"')
+        content = content.replace(/opts\s*=\s*"{{\[([^\]]+)\]}}"/, 'opts="{{[$1,editable,placeholder,\'\']}}"')
+          .replace('<view', '<view style="{{editable?\'position:relative;min-height:200px\':\'\'}}" bindtap="_containTap"')
           // 工具弹窗
           .replace('</view>', `<view wx:if="{{tooltip}}" class="_tooltip_contain" style="top:{{tooltip.top}}px">
   <view class="_tooltip">
@@ -327,10 +333,55 @@ module.exports = {
       }
       else if (file.path.includes('miniprogram' + path.sep + 'index.js')) {
         // 添加 editable 属性，发生变化时重新解析
-        content = content.replace(/properties\s*:\s*{/, 'properties:{editable:{type:Boolean,observer(val){this.properties.content&&(this.setContent(val?this.properties.content:this.getContent()),val||this._maskTap())}},')
-          .replace(/didUpdate\(e\)\s*{/, 'didUpdate(e) {if(e.editable != this.properties.editable) this.setContent(val?this.properties.content:this.getContent())')
+        content = content.replace(/properties\s*:\s*{/, `properties: {
+  editable: {
+    type: Boolean,
+    observer(val) {
+      if (this.properties.content)
+        this.setContent(val?this.properties.content:this.getContent())
+      else if(val)
+        this.setData({
+          nodes: [{
+            name: 'p',
+            attrs: {},
+            children: [{
+              type: 'text',
+              text: ''
+            }]
+          }]
+        })
+      if (!val)
+        this._maskTap()
+    }
+  },
+  placeholder: String,`)
+          .replace(/didUpdate\(e\)\s*{/, `didUpdate(e) {
+  if (e.editable!=this.properties.editable) {
+    var val = this.properties.editable
+    if (this.properties.content)
+      this.setContent(val?this.properties.content:this.getContent())
+    else if(val)
+      this.setData({
+        nodes: [{
+          name: 'p',
+          attrs: {},
+          children: [{
+            type: 'text',
+            text: ''
+          }]
+        }]
+      })
+    if (!val)
+      this._maskTap()
+  }`)
           // 处理各类弹窗的事件
           .replace(/methods\s*:\s*{/, `methods: {
+  _containTap() {
+    if (!this._lock) {
+      this._edit = void 0
+      this._maskTap()
+    }
+  },
   _tooltipTap(e) {
     this._tooltipcb(e.currentTarget.dataset.i)
     this.setData({
@@ -396,8 +447,8 @@ module.exports = {
           .replace(/parser.prototype.expose\s*=\s*function\s*\(\)\s*{/, 'parser.prototype.expose=function(){if(this.options.editable)return')
       }
       else if (file.path.includes('node.wxml')) {
-        content = content.replace(/opts\s*=\s*"{{opts}}"/, 'opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+i+\'_\']}}"')
-          .replace(/opts\s*=\s*"{{opts}}"/, 'opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+i1+\'_\'+i2+\'_\'+i3+\'_\'+i4+\'_\'+i5+\'_\']}}"')
+        content = content.replace(/opts\s*=\s*"{{opts}}"/, 'opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+i+\'_\']}}"')
+          .replace(/opts\s*=\s*"{{opts}}"/, 'opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+i1+\'_\'+i2+\'_\'+i3+\'_\'+i4+\'_\'+i5+\'_\']}}"')
           .replace(/!(n.*)\.c/g, '(opts[4]?!$1.children||$1.name==\'a\':!$1.c)')
           .replace(/use\((n.)\)/g, 'opts[4]?!$1.children||$1.name==\'a\':use($1)')
           // 修改普通标签
@@ -409,8 +460,12 @@ module.exports = {
           // 修改文本块
           .replace(/<!--\s*文本\s*-->[\s\S]+?<!--\s*链接\s*-->/,
             `<block wx:elif="{{n.type=='text'}}">
-  <text wx:if="{{!ctrl['e'+i]}}" data-i="{{i}}" decode="{{!opts[4]}}" bindtap="editStart">{{n.text}}</text>
-  <text wx:elif="{{ctrl['e'+i]==1}}" data-i="{{i}}" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" catchtap="editStart">{{n.text}}</text>
+  <text wx:if="{{!ctrl['e'+i]}}" data-i="{{i}}" decode="{{!opts[4]}}" bindtap="editStart">{{n.text}}
+    <text wx:if="{{!n.text}}" style="color:gray">{{opts[5]||'请输入'}}</text>
+  </text>
+  <text wx:elif="{{ctrl['e'+i]==1}}" data-i="{{i}}" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" catchtap="editStart">{{n.text}}
+    <text wx:if="{{!n.text}}" style="color:gray">{{opts[5]||'请输入'}}</text>
+  </text>
   <textarea wx:else style="border:1px dashed black;min-width:50px;width:auto;padding:5px" auto-height maxlength="-1" focus="{{ctrl['e'+i]==3}}" value="{{n.text}}" data-i="{{i}}" bindinput="editInput" bindblur="editEnd" />
 </block>
 <text wx:elif="{{n.name=='br'}}">\\n</text>`)
@@ -455,7 +510,7 @@ module.exports = {
   val = e.detail.width
   if (this.properties.opts[4]) {
     var data = {},
-      path = 'nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.'
+      path = 'nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.'
     if (val < 150)
       data[path + 'ignore'] = 'T'
     data[path + 'width'] = val.toString()
@@ -488,7 +543,7 @@ module.exports = {
         // 换图
         if (items[tapIndex] == '换图')
           this.root.getSrc('img', node.attrs.src).then(src => {
-            this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.src', node.attrs.src, src, true)
+            this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.src', node.attrs.src, src, true)
           }).catch(() => { })
         // 更改宽度
         else if (items[tapIndex] == '宽度') {
@@ -515,14 +570,14 @@ module.exports = {
                 this.changeStyle('max-width', i, val + '%', value + '%')
                 value = val
               }
-              this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.style', style, this.getNode(i).attrs.style)
+              this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.style', style, this.getNode(i).attrs.style)
             }
           })
         }
         // 将图片设置为链接
         else if (items[tapIndex] == '超链接')
           this.root.getSrc('link').then(url => {
-            this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + ']', node, {
+            this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + ']', node, {
               name: 'a',
               attrs: {
                 href: url
@@ -536,7 +591,7 @@ module.exports = {
         // 设置预览图链接
         else if (items[tapIndex] == '预览图')
           this.root.getSrc('img', node.attrs['original-src']).then(url => {
-            this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.original-src', node.attrs['original-src'], url, true)
+            this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.original-src', node.attrs['original-src'], url, true)
             wx.showToast({
               title: '成功'
             })
@@ -546,7 +601,7 @@ module.exports = {
         // 禁用 / 启用预览
         else {
           this.root.setData({
-            ['nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.ignore']: !node.attrs.ignore
+            ['nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.ignore']: !node.attrs.ignore
           })
           wx.showToast({
             title: '成功'
@@ -575,7 +630,7 @@ module.exports = {
       success: tapIndex => {
         if (items[tapIndex] == '更换链接')
           this.root.getSrc('link', node.attrs.href).then(url => {
-            this.root._editVal('nodes[' + (this.properties.opts[5] + i).replace(/_/g, '].children[') + '].attrs.href', node.attrs.href, url, true)
+            this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.href', node.attrs.href, url, true)
             wx.showToast({
               title: '成功'
             })

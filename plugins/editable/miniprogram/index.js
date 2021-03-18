@@ -257,7 +257,7 @@ function editable(vm) {
       attrs: {},
       children: [{
         type: 'text',
-        text: '新段落'
+        text: ''
       }]
     })
   }
@@ -274,7 +274,7 @@ function editable(vm) {
         attrs: {},
         children: [{
           type: 'text',
-          text: '开始'
+          text: ''
         }]
       }]
     })
@@ -384,7 +384,18 @@ editable.prototype.onUpdate = function (content, config) {
     this.vm._edit = void 0
     config.entities.amp = '&'
     if (!content)
-      return '<p>开始</p>'
+      setTimeout(() => {
+        this.vm.setData({
+          nodes: [{
+            name: 'p',
+            attrs: {},
+            children: [{
+              type: 'text',
+              text: ''
+            }]
+          }]
+        })
+      }, 0)
   }
 }
 

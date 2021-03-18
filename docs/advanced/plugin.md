@@ -47,8 +47,14 @@
 | √ | √ | √ | √ | √ | √(nvue 不支持) |
 
 说明：  
-引入本插件后，会给组件添加一个 *editable* 属性，将该属性设置为 *true* 后，即可对 [content](basic/prop#content) 属性传入的内容进行编辑，支持的标签和属性基本不变，无特殊基础库要求  
-对已有的内容，支持以下操作：  
+引入本插件后，会给组件添加以下属性：  
+
+| 属性名 | 类型 | 默认值 | 说明 |
+|:---:|:---:|:---:|:---:|
+| editable | Boolean | false | 是否开启内容编辑 |
+| placeholder | String | 请输入 | 输入框为空时占位符（[2.x.x+](changelog/changelog)） |
+
+支持以下操作：  
 
 | 类型 | 操作 |
 |:---:|:---:|
@@ -130,7 +136,7 @@ Page({
 })
 ```
 
-示例项目：  
+**示例项目**：  
 微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/I9Y2xLmA7pnN) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
 
 注意事项：  

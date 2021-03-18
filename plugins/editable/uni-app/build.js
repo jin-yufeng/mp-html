@@ -66,7 +66,7 @@ module.exports = {
             res += '\xa0'
           return res
         })
-      this.root._editVal(`${this.opts[5]}.${i}.text`, this.childs[i].text, value) // 记录编辑历史
+      this.root._editVal(`${this.opts[6]}.${i}.text`, this.childs[i].text, value) // 记录编辑历史
       this.cursor = e.detail.cursor
     },
     /**
@@ -77,7 +77,7 @@ module.exports = {
       var i = e.target.dataset.i
       this.$set(this.ctrl, 'e' + i, 0)
       // 更新到视图
-      this.root._setData(`${this.opts[5]}.${i}.text`, e.detail.value)
+      this.root._setData(`${this.opts[6]}.${i}.text`, e.detail.value)
     },
     /**
      * @description 插入一个标签
@@ -90,17 +90,23 @@ module.exports = {
           childs.push(node)
         // 在文本中插入
         else if (childs[this.i].text) {
-          var text = childs[this.i].text
-          childs.splice(this.i, 1, {
-            type: 'text',
-            text: text.substring(0, this.cursor)
-          }, node, {
-            type: 'text',
-            text: text.substring(this.cursor)
-          })
+          var text = childs[this.i].text,
+            list = []
+          if (this.cursor)
+            list.push({
+              type: 'text',
+              text: text.substring(0, this.cursor)
+            })
+          list.push(node)
+          if (this.cursor < text.length)
+            list.push({
+              type: 'text',
+              text: text.substring(this.cursor)
+            })
+          childs.splice(this.i, 1, ...list)
         } else
           childs.splice(parseInt(this.i) + 1, 0, node)
-        this.root._editVal(this.opts[5], this.childs, childs, true)
+        this.root._editVal(this.opts[6], this.childs, childs, true)
       }, 200)
     },
     /**
@@ -112,7 +118,7 @@ module.exports = {
       arr.splice(i, 1)
       this.root._edit = void 0
       this.root._maskTap()
-      this.root._editVal(this.opts[5], this.childs, arr, true)
+      this.root._editVal(this.opts[6], this.childs, arr, true)
     },
     /**
      * @description 标签被点击
@@ -130,16 +136,16 @@ module.exports = {
           return
         this.root._maskTap()
         this.root._edit = this
-        var start = this.opts[5].lastIndexOf('children.')
+        var start = this.opts[6].lastIndexOf('children.')
         if (start != -1)
           start += 9
         else
           start = 6
-        var i = parseInt(this.opts[5].substring(start, this.opts[5].lastIndexOf('.children'))),
+        var i = parseInt(this.opts[6].substring(start, this.opts[6].lastIndexOf('.children'))),
           parent = this.$parent
         while (parent && parent.$options.name != 'node')
           parent = parent.$parent
-        if (!parent || this.opts[5].length - parent.opts[5].length > 15)
+        if (!parent || this.opts[6].length - parent.opts[6].length > 15)
           return
         // 显示实线框
         this.$set(this.ctrl, 'root', 1)
@@ -178,7 +184,7 @@ module.exports = {
                 change: val => {
                   if (val != value)
                     parent.changeStyle('font-size', i, val + 'px', value + 'px')
-                  this.root._editVal(`${parent.opts[5]}.${i}.attrs.style`, style, parent.childs[i].attrs.style)
+                  this.root._editVal(`${parent.opts[6]}.${i}.attrs.style`, style, parent.childs[i].attrs.style)
                 }
               })
             } else if (items[tapIndex] == '删除')
@@ -209,7 +215,7 @@ module.exports = {
               // 没有则添加
               else
                 newStyle = style + ';' + name + ':' + value
-              this.root._editVal(`${parent.opts[5]}.${i}.attrs.style`, style, newStyle, true)
+              this.root._editVal(`${parent.opts[6]}.${i}.attrs.style`, style, newStyle, true)
             }
           }
         })
@@ -233,14 +239,14 @@ module.exports = {
             // 设置封面
             if (items[tapIndex] == '封面') {
               this.root.getSrc('img', node.attrs.poster).then(url => {
-                this.root._editVal(`${this.opts[5]}.${i}.attrs.poster`, node.attrs.poster, url, true)
+                this.root._editVal(`${this.opts[6]}.${i}.attrs.poster`, node.attrs.poster, url, true)
               }).catch(() => { })
             }
             else if (items[tapIndex] == '删除')
               this.remove(i)
             // 切换循环播放
             else {
-              this.root._setData(`${this.opts[5]}.${i}.attrs.loop`, !node.attrs.loop)
+              this.root._setData(`${this.opts[6]}.${i}.attrs.loop`, !node.attrs.loop)
               uni.showToast({
                 title: '成功'
               })
@@ -269,7 +275,7 @@ module.exports = {
       // 没有则新增
       else
         style += ';' + name + ':' + value
-      this.root._setData(`${this.opts[5]}.${i}.attrs.style`, style)
+      this.root._setData(`${this.opts[6]}.${i}.attrs.style`, style)
     }
   },
   handler(file) {
@@ -277,8 +283,8 @@ module.exports = {
       var content = file.contents.toString()
       if (file.path.includes('mp-html.vue')) {
         // 传递 editable 属性和路径
-        content = content.replace(/opts\s*=\s*"\[([^\]]+)\]"/, 'opts="[$1,editable,\'nodes\']"')
-          .replace('<view', '<view :style="editable?\'position:relative\':\'\'"')
+        content = content.replace(/opts\s*=\s*"\[([^\]]+)\]"/, 'opts="[$1,editable,placeholder,\'nodes\']"')
+          .replace('<view', '<view :style="editable?\'position:relative;min-height:200px\':\'\'" @tap="_containTap"')
           // 工具弹窗
           .replace(/<\/view>\s*<\/template>/, `  <view v-if="tooltip" class="_tooltip_contain" :style="'top:'+tooltip.top+'px'">
       <view class="_tooltip">
@@ -296,16 +302,37 @@ module.exports = {
       tooltip: null,
       slider: null,`)
           // 添加 editable 属性
-          .replace(/props\s*:\s*{/, 'props: {\n    editable:Boolean,')
+          .replace(/props\s*:\s*{/, `props: {
+    editable: Boolean,
+    placeholder: String,`)
           // 添加 watch
           .replace(/watch\s*:\s*{/, `watch: {
-    editable(val) {
-      this.setContent(val ? this.content : this.getContent())
-      if(!val)
-        this._maskTap()
+    editable: {
+      handler(val) {
+        if (this.content)
+          this.setContent(val ? this.content : this.getContent())
+        else if (val)
+          this.$set(this, 'nodes', [{
+            name: 'p',
+            attrs: {},
+            children: [{
+              type: 'text',
+              text: ''
+            }]
+          }])
+        if (!val)
+          this._maskTap()
+      },
+      immediate: true
     },`)
           // 处理各类弹窗的事件
           .replace(/methods\s*:\s*{/, `methods: {
+    _containTap() {
+      if (!this._lock) {
+        this._edit = void 0
+        this._maskTap()
+      }
+    },
     _tooltipTap(e) {
       this._tooltipcb(e.currentTarget.dataset.i)
       this.$set(this, 'tooltip', null)
@@ -377,7 +404,7 @@ module.exports = {
             .replace(/:childs\s*=\s*"n2.children"\s*:opts="opts"/, ':childs="n2.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+\'.\'+i+\'.children.\'+j+\'.children\']"')
             .replace(/:childs\s*=\s*"tr.children"\s*:opts="opts"/, ':childs="tr.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children\']"')
             .replace(/:childs\s*=\s*"td.children"\s*:opts="opts"/, ':childs="td.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children.\'+z+\'.children\']"')
-            .replace(/opts\s*=\s*"opts"/g, 'opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+\'.\'+i+\'.children\']"')
+            .replace(/opts\s*=\s*"opts"/g, 'opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children\']"')
             // 不使用 rich-text
             .replace(/handler\.use\(n\)/g, '!opts[4]&&handler.use(n)').replace(/!n.c/g, '!opts[4]&&!n.c').replace('&&n.c', '&&(n.c||opts[4])')
             // 修改普通标签
@@ -385,8 +412,12 @@ module.exports = {
             // 修改文本块
             .replace(/<!--\s*文本\s*-->[\s\S]+?<!--\s*链接\s*-->/,
               `<!-- 文本 -->
-      <text v-else-if="n.type=='text'&&!ctrl['e'+i]" :data-i="i" @tap="editStart">{{n.text}}</text>
-      <text v-else-if="n.type=='text'&&ctrl['e'+i]==1" :data-i="i" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" @tap.stop="editStart">{{n.text}}</text>
+      <text v-else-if="n.type=='text'&&!ctrl['e'+i]" :data-i="i" @tap="editStart">{{n.text}}
+        <text v-if="!n.text" style="color:gray">{{opts[5]||'请输入'}}</text>
+      </text>
+      <text v-else-if="n.type=='text'&&ctrl['e'+i]==1" :data-i="i" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" @tap.stop="editStart">{{n.text}}
+        <text v-if="!n.text" style="color:gray">{{opts[5]||'请输入'}}</text>
+      </text>
       <textarea v-else-if="n.type=='text'" style="border:1px dashed black;min-width:50px;width:auto;padding:5px" auto-height maxlength="-1" :focus="ctrl['e'+i]==3" :value="n.text" :data-i="i" @input="editInput" @blur="editEnd" />
       <text v-else-if="n.name=='br'">\\n</text>
       <!-- 链接 -->`)
@@ -435,7 +466,7 @@ function getTop(e) {
               `if (!this.childs[i].w) {
         this.$set(this.ctrl, i, e.detail.width)
         if (this.opts[4]) {
-          var path = this.opts[5] + '.' + i + '.attrs.'
+          var path = this.opts[6] + '.' + i + '.attrs.'
           if (e.detail.width < 150)
             this.root._setData(path + 'ignore', 'T')
           this.root._setData(path + 'width', e.detail.width.toString())
@@ -465,7 +496,7 @@ function getTop(e) {
             // 换图
             if (items[tapIndex] == '换图')
               this.root.getSrc('img', node.attrs.src).then(src => {
-                this.root._editVal(this.opts[5] + '.' + i + '.attrs.src', node.attrs.src, src, true)
+                this.root._editVal(this.opts[6] + '.' + i + '.attrs.src', node.attrs.src, src, true)
               }).catch(() => { })
             // 更改宽度
             else if (items[tapIndex] == '宽度') {
@@ -492,14 +523,14 @@ function getTop(e) {
                     this.changeStyle('max-width', i, val + '%', value + '%')
                     value = val
                   }
-                  this.root._editVal(this.opts[5] + '.' + i + '.attrs.style', style, this.childs[i].attrs.style)
+                  this.root._editVal(this.opts[6] + '.' + i + '.attrs.style', style, this.childs[i].attrs.style)
                 }
               })
             }
             // 将图片设置为链接
             else if (items[tapIndex] == '超链接')
               this.root.getSrc('link').then(url => {
-                this.root._editVal(this.opts[5] + '.' + i, node, {
+                this.root._editVal(this.opts[6] + '.' + i, node, {
                   name: 'a',
                   attrs: {
                     href: url
@@ -513,7 +544,7 @@ function getTop(e) {
             // 设置预览图链接
             else if (items[tapIndex] == '预览图')
               this.root.getSrc('img', node.attrs['original-src']).then(url => {
-                this.root._editVal(this.opts[5] + '.' + i + '.attrs.original-src', node.attrs['original-src'], url, true)
+                this.root._editVal(this.opts[6] + '.' + i + '.attrs.original-src', node.attrs['original-src'], url, true)
                 uni.showToast({
                   title: '成功'
                 })
@@ -522,7 +553,7 @@ function getTop(e) {
               this.remove(i)
             // 禁用 / 启用预览
             else {
-              this.root._setData(this.opts[5] + '.' + i + '.attrs.ignore', !node.attrs.ignore)
+              this.root._setData(this.opts[6] + '.' + i + '.attrs.ignore', !node.attrs.ignore)
               uni.showToast({
                 title: '成功'
               })
@@ -550,7 +581,7 @@ function getTop(e) {
           success: tapIndex => {
             if (items[tapIndex] == '更换链接') {
               this.root.getSrc('link', node.attrs.href).then(url => {
-                this.root._editVal(this.opts[5] + '.' + i + '.attrs.href', node.attrs.href, url, true)
+                this.root._editVal(this.opts[6] + '.' + i + '.attrs.href', node.attrs.href, url, true)
                 uni.showToast({
                   title: '成功'
                 })
