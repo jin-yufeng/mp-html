@@ -49,7 +49,7 @@ export default {
     return {
       nodes: [],
       // #ifdef APP-PLUS-NVUE
-      height: 0
+      height: 3
       // #endif
     }
   },
