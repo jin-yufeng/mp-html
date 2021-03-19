@@ -2,6 +2,19 @@
 
 !> 需要将某个属性设置为 *false* 时，应写作 *attr="{{false}}"*  
 
+## container-style
+功能：设置容器的样式（[2.x.x](changelog/changelog) 版本起支持）  
+类型：*String*  
+示例：  
+```css
+padding: 5px; /* 设置内边距 */
+font-size: 18px; /* 设置默认的字体大小 */
+overflow: hidden; /* 禁用横向滚动 */
+display: inline; /* 行内显示 */
+```
+
+?> *uni-app* 的 *nvue* 端默认背景色是白色，可以通过本属性进行修改（*background-color*），但不能设置为透明
+
 ## content
 功能：用于渲染的 *html* 字符串  
 类型：*String*  

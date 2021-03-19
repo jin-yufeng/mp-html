@@ -1,8 +1,8 @@
 <template>
-  <view id="_root" :class="(selectable?'_select ':'')+'_root'">
+  <view id="_root" :class="(selectable?'_select ':'')+'_root'" :style="containerStyle">
     <slot v-if="!nodes[0]" />
     <!-- #ifndef APP-PLUS-NVUE -->
-    <node v-else :childs="nodes" :opts="[lazyLoad,loadingImg,errorImg,showImgMenu]" />
+    <node v-else :childs="nodes" :opts="[lazyLoad,loadingImg,errorImg,showImgMenu]" name="span" />
     <!-- #endif -->
     <!-- #ifdef APP-PLUS-NVUE -->
     <web-view ref="web" src="/static/app-plus/mp-html/local.html" :style="'margin-top:-2px;height:' + height + 'px'" @onPostMessage="_onMessage" />
@@ -15,6 +15,7 @@
  * mp-html v2.0.5
  * @description 富文本组件
  * @tutorial https://github.com/jin-yufeng/mp-html
+ * @property {String} container-style 容器的样式
  * @property {String} content 用于渲染的 html 字符串
  * @property {Boolean} copy-link 是否允许外部链接被点击时自动复制
  * @property {String} domain 主域名，用于拼接链接
@@ -54,9 +55,7 @@ export default {
     }
   },
   props: {
-    // #ifdef APP-PLUS-NVUE
-    bgColor: String,
-    // #endif
+    containerStyle: String,
     content: String,
     copyLink: {
       type: Boolean,
@@ -294,7 +293,7 @@ export default {
      * @description 设置内容
      */
     _set(nodes, append) {
-      this.$refs.web.evalJs('setContent(' + JSON.stringify(nodes) + ',' + JSON.stringify([this.bgColor, this.errorImg, this.loadingImg, this.pauseVideo, this.scrollTable, this.selectable]) + ',' + append + ')')
+      this.$refs.web.evalJs('setContent(' + JSON.stringify(nodes) + ',' + JSON.stringify([this.containerStyle.replace(/(?:margin|padding)[^;]+/g, ''), this.errorImg, this.loadingImg, this.pauseVideo, this.scrollTable, this.selectable]) + ',' + append + ')')
     },
 
     /**

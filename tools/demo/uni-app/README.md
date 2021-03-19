@@ -64,6 +64,7 @@
 
 | 属性 | 类型 | 默认值 | 说明 |
 |:---:|:---:|:---:|---|
+| container-style | String |  | 容器的样式 |
 | content | String |  | 用于渲染的 html 字符串 |
 | copy-link | Boolean | true | 是否允许外部链接被点击时自动复制 |
 | domain | String |  | 主域名（用于链接拼接） |
@@ -78,7 +79,6 @@
 | show-img-menu | Boolean | true | 是否允许图片被长按时显示菜单 |
 | tag-style | Object |  | 设置标签的默认样式 |
 | use-anchor | Boolean | false | 是否使用锚点链接 |
-| bgColor | String | white | 背景色，仅 NVUE 可用，不可设置为透明 |
 
 查看 [属性](https://jin-yufeng.gitee.io/mp-html/#/basic/prop) 了解更多
 
@@ -129,6 +129,7 @@
    ```
 2. 编辑 `tools/config.js` 中的 `plugins` 项，选择需要的插件  
 3. 生成新的组件包  
+   在 `node_modules/mp-html` 目录下执行  
    ```bash
    npm install
    npm run build:uni-app
@@ -143,8 +144,9 @@
 ## 关于 nvue
 `nvue` 使用原生渲染，不支持部分 `css` 样式，为实现和 `html` 相同的效果，组件内部通过 `web-view` 进行渲染，性能上差于原生，根据 `weex` 官方建议，`web` 标签仅应用在非常规的降级场景。因此，如果通过原生的方式（如 `richtext`）能够满足需要，则不建议使用本组件，如果有较多的富文本内容，则可以直接使用 `vue` 页面  
 由于渲染方式与其他端不同，有以下限制：  
-1. 默认背景为白色，可以通过 `bgColor` 属性修改（设置为透明无效）
+1. 默认背景为白色，可以通过 `container-style` 属性修改（设置为透明无效）
 2. 不支持 `lazy-load` 属性
+3. 视频不支持全屏播放
 
 ## 问题反馈
 遇到问题时，请先查阅 [常见问题](https://jin-yufeng.gitee.io/mp-html/#/question/faq) 和 [issue](https://github.com/jin-yufeng/mp-html/issues) 中是否已有相同的问题  

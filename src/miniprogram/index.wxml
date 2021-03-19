@@ -1,5 +1,5 @@
 <!-- 主组件 -->
-<view class="_root {{selectable?'_select':''}}">
+<view class="_root {{selectable?'_select':''}}" style="{{containerStyle}}">
   <!-- 加载完成前显示自定义 loading -->
   <slot wx:if="{{!nodes[0]}}" />
   <!-- 节点树 -->

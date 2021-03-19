@@ -14,6 +14,12 @@ Component({
   },
   properties: {
     /**
+     * @description 容器的样式
+     * @type {String}
+     */
+    containerStyle: String,
+    
+    /**
      * @description 用于渲染的 html 字符串
      * @type {String}
      */

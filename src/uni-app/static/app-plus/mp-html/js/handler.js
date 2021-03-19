@@ -170,9 +170,9 @@ function createDom(nodes, parent, namespace) {
 window.setContent = function (nodes, opts, append) {
   var ele = document.getElementById('content')
 
-  // 背景颜色
+  // 容器样式
   if (opts[0])
-    document.body.bgColor = opts[0]
+    document.body.style.cssText = opts[0]
 
   // 长按复制
   if (!opts[5])
