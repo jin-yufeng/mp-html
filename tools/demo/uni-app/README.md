@@ -64,7 +64,7 @@
 
 | 属性 | 类型 | 默认值 | 说明 |
 |:---:|:---:|:---:|---|
-| container-style | String |  | 容器的样式 |
+| container-style | String |  | 容器的样式（[2.1.0+](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog#v210)） |
 | content | String |  | 用于渲染的 html 字符串 |
 | copy-link | Boolean | true | 是否允许外部链接被点击时自动复制 |
 | domain | String |  | 主域名（用于链接拼接） |

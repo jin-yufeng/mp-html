@@ -26,7 +26,7 @@ module.exports = {
      */
     editStart(e) {
       if (this.properties.opts[4]) {
-        var i = e.target.dataset.i
+        var i = e.currentTarget.dataset.i
         if (!this.data.ctrl['e' + i]) {
           // 显示虚线框
           this.setData({
@@ -319,7 +319,7 @@ module.exports = {
       if (file.path.includes('miniprogram' + path.sep + 'index.wxml')) {
         // 传递 editable 属性和路径
         content = content.replace(/opts\s*=\s*"{{\[([^\]]+)\]}}"/, 'opts="{{[$1,editable,placeholder,\'\']}}"')
-          .replace('<view', '<view style="{{editable?\'position:relative;min-height:200px\':\'\'}}" bindtap="_containTap"')
+          .replace(/<view(.*?)style\s*=\s*"{{containerStyle}}"/, '<view$1style="{{editable?\'position:relative;min-height:200px;\':\'\'}}{{containerStyle}}" bindtap="_containTap"')
           // 工具弹窗
           .replace('</view>', `<view wx:if="{{tooltip}}" class="_tooltip_contain" style="top:{{tooltip.top}}px">
   <view class="_tooltip">

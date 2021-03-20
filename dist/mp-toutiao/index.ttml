@@ -1,1 +1,1 @@
-<view class="_root {{selectable?'_select':''}}"><slot tt:if="{{!nodes[0]}}"/><node id="_root" childs="{{nodes}}" opts="{{[lazyLoad,loadingImg,errorImg,showImgMenu]}}"/></view>
+<view class="_root {{selectable?'_select':''}}" style="{{containerStyle}}"><slot tt:if="{{!nodes[0]}}"/><node id="_root" childs="{{nodes}}" opts="{{[lazyLoad,loadingImg,errorImg,showImgMenu]}}"/></view>

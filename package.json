@@ -1,6 +1,6 @@
 {
   "name": "mp-html",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "description": "小程序富文本组件",
   "miniprogram": "dist/mp-weixin",
   "repository": "https://github.com/jin-yufeng/mp-html",

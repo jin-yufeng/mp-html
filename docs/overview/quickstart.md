@@ -142,9 +142,8 @@
 #### 关于 nvue :id=nvue
 *nvue* 使用原生渲染，不支持部分 *css* 样式，为实现和 *html* 相同的效果，组件内部通过 *web-view* 进行渲染，性能上差于原生，根据 *weex* 官方建议，*web* 标签仅应用在非常规的降级场景。因此，如果通过原生的方式（如 *richtext*）能够满足需要，则不建议使用本组件，如果有较多的富文本内容，则可以直接使用 *vue* 页面  
 由于渲染方式与其他端不同，有以下限制：  
-1. 默认背景为白色，可以通过 [container-style](basic/prop#container-style) 属性修改（设置为透明无效）
+1. 默认背景为白色，可以通过 *bgColor* 属性修改（设置为透明无效）
 2. 不支持 [lazy-load](basic/prop#lazy-load) 属性
-3. 视频不支持全屏播放
 
 ### 📙 其他框架 :id=other
 其他框架没有专用包，但也可以引入对应平台的原生包使用，具体方法参考各框架官方文档    
@@ -201,7 +200,7 @@
    ```
 
 ## 🎈 个性化 :id=setting  
-通过编辑 *tools/config.js* 可以按需要生成个性化的组件包，主要的字段有：  
+通过编辑 [tools/config.js](https://github.com/jin-yufeng/mp-html/blob/master/tools/config.js) 可以按需要生成个性化的组件包，主要的字段有：  
 
 - plugins  
   需要使用的插件名称列表，关于插件的详细信息见 [插件](advanced/plugin)  
@@ -210,7 +209,7 @@
 - externStyle  
   外部样式，一个 *css* 字符串，将被用于 *html* 的渲染，但仅支持 *class* 选择器  
 
-  ?> [2.x.x](changelog/changelog) 版本起增加支持 **标签名选择器**，通过这种方式给标签设置的样式全局有效，在样式较长或作用标签数量较大时这种方法的性能要高于 [tag-style](basic/prop#tag-style) 属性，且写法更加灵活（可以与伪类、*class* 配合等）  
+  ?> [2.1.0](changelog/changelog#v210) 版本起增加支持 **标签名选择器**，通过这种方式给标签设置的样式全局有效，在样式较长或作用标签数量较大时这种方法的性能要高于 [tag-style](basic/prop#tag-style) 属性，且写法更加灵活（可以与伪类、*class* 配合等）  
   需要注意的是，由于[组件](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html#%E7%BB%84%E4%BB%B6%E6%A0%B7%E5%BC%8F) 内仅支持 *class* 选择器，直接将标签名选择器 **写在 wxss 中是无效的**，必须写在本字段中，构建过程中会自动转换为 *class* 选择器
 
 剩余的是一些编译过程中压缩工具的配置，可以按需要设置  

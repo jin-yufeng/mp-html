@@ -13,7 +13,7 @@
       <!-- #endif -->
       <!-- 文本 -->
       <!-- #ifndef MP-BAIDU -->
-      <text v-else-if="n.type=='text'" :user-select="n.us" decode>{{n.text}}</text>
+      <text v-else-if="n.text" :user-select="n.us" decode>{{n.text}}</text>
       <!-- #endif -->
       <text v-else-if="n.name=='br'">\n</text>
       <!-- 链接 -->
@@ -91,10 +91,10 @@ var inlineTags = {
  */
 module.exports = {
   use: function (item) {
-  // 微信和 QQ 的 rich-text inline 布局无效
-  if (inlineTags[item.name] || (item.attrs.style || '').indexOf('display:inline') != -1)
-    return false
-  return !item.c
+    if (item.c)
+      return false
+    // 微信和 QQ 的 rich-text inline 布局无效
+    return !inlineTags[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1
   }
 }
 </script>

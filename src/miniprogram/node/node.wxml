@@ -23,10 +23,12 @@
    * @description 是否使用 rich-text 显示剩余内容
    */
   module.exports = function (item) {
-    // 微信小程序 rich-text 无法被设置为 inline 布局
-    if (inlineTags[item.name] || (item.children && (item.attrs.style || '').indexOf('inline') != -1))
+    if (item.c)
       return false
-    return !item.c
+    if (item.text)
+      return true
+    // 微信小程序 rich-text 无法被设置为 inline 布局
+    return !inlineTags[item.name] && (item.attrs.style || '').indexOf('inline') == -1
   }
 </wxs>
 <!-- #endif -->
@@ -40,7 +42,7 @@
   </block>
   <!-- 文本 -->
   <!-- #ifndef MP-BAIDU -->
-  <text wx:elif="{{n.type=='text'}}" mp-weixin:user-select="{{n.us}}" decode>{{n.text}}</text>
+  <text wx:elif="{{n.text}}" mp-weixin:user-select="{{n.us}}" decode>{{n.text}}</text>
   <!-- #endif -->
   <text wx:elif="{{n.name=='br'}}">\n</text>
   <!-- 链接 -->

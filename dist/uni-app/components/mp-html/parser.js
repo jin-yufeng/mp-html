@@ -46,10 +46,12 @@ var config = {
     pre: 'font-family:monospace;white-space:pre',
     s: 'text-decoration:line-through',
     small: 'display:inline;font-size:0.8em',
+    strike: 'text-decoration:line-through',
     u: 'text-decoration:underline' // #endif
 
   }
 };
+var tagSelector = {};
 
 var _uni$getSystemInfoSyn = uni.getSystemInfoSync(),
     windowWidth = _uni$getSystemInfoSyn.windowWidth,
@@ -316,7 +318,9 @@ parser.prototype.onOpenTag = function (selfClose) {
   var attrs = node.attrs,
       parent = this.stack[this.stack.length - 1],
       siblings = parent ? parent.children : this.nodes,
-      close = this.xml ? selfClose : config.voidTags[node.name]; // 转换 embed 标签
+      close = this.xml ? selfClose : config.voidTags[node.name]; // 替换标签名选择器
+
+  if (tagSelector[node.name]) attrs["class"] = tagSelector[node.name] + (attrs["class"] ? ' ' + attrs["class"] : ''); // 转换 embed 标签
 
   if (node.name == 'embed') {
     // #ifndef H5 || APP-PLUS

@@ -13,7 +13,7 @@
 | 属性名 | 类型 | 默认值 | 说明 |
 |:---:|:---:|:---:|:---:|
 | editable | Boolean | false | 是否开启内容编辑 |
-| placeholder | String | 请输入 | 输入框为空时占位符（[2.x.x+](changelog/changelog)） |
+| placeholder | String | 请输入 | 输入框为空时占位符（[2.1.0+](changelog/changelog#v210)） |
 
 支持以下操作：  
 
@@ -33,7 +33,7 @@
 |:---:|:---:|
 | undo | 撤销一个操作 |
 | redo | 重做一个操作 |
-| insertHtml | 在光标处插入指定 html 内容（[2.x.x+](changelog/changelog)） |
+| insertHtml | 在光标处插入指定 html 内容（[2.1.0+](changelog/changelog#v210)） |
 | insertImg | 在光标处插入一张图片 |
 | insertVideo | 在光标处插入一个视频 |
 | insertAudio | 在光标处插入一个音频 |
@@ -99,7 +99,7 @@ Page({
 ```
 
 **示例项目**：  
-微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/I9Y2xLmA7pnN) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
+微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/R0mqhVm47go8) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
 
 注意事项：  
 1. 不要在 *editable* 属性被设置为 *true* 前通过 *setContent* 方法（用 *content* 属性）设置内容，否则在切换为 *true* 后会变成空白  

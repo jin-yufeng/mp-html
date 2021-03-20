@@ -1,5 +1,15 @@
 # 📖 更新日志 :id=changelog
 
+## v2.1.0
+发布时间：*2021-03-20*  
+主要更新：  
+1. `A` 增加了 [container-style](basic/prop#container-style) 属性 [详细](https://gitee.com/jin-yufeng/mp-html/pulls/1)
+2. `A` 增加支持 `strike` 标签
+3. `A` `editable` 插件增加 `placeholder` 属性 [详细](advanced/plugin#editable)
+4. `A` `editable` 插件增加 `insertHtml` 方法 [详细](advanced/plugin#editable)
+5. `U` 外部样式支持标签名选择器 [详细](overview/quickstart#setting)
+6. `F` 修复了 `uni-app` 包 `nvue` 端部分情况下可能不显示的问题
+
 ## v2.0.5
 发布时间：*2021-03-12*  
 主要更新：  

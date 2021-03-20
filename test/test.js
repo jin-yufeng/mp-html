@@ -61,7 +61,7 @@ console.log('11')
     <a>xxx</a>
   </td>
 </table>
-<table width="100%">
+<table width="100%" border="1">
   <tr>
     <th width="20%">标题1</th>
     <th width="80%">标题2</th>
@@ -138,9 +138,15 @@ test('event', async () => {
       pause: function () { }
     }
   }
+  // 测试失败回调
   wx.navigateTo = function (obj) {
     setTimeout(() => {
-      // 测试失败回调（tab 页面）
+      if (typeof obj.fail == 'function')
+        obj.fail()
+    }, 0)
+  }
+  wx.switchTab = function (obj) {
+    setTimeout(() => {
       if (typeof obj.fail == 'function')
         obj.fail()
     }, 0)

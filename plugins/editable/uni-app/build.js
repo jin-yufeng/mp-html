@@ -31,7 +31,7 @@ module.exports = {
      */
     editStart(e) {
       if (this.opts[4]) {
-        var i = e.target.dataset.i
+        var i = e.currentTarget.dataset.i
         if (!this.ctrl['e' + i]) {
           // 显示虚线框
           this.$set(this.ctrl, 'e' + i, 1)
@@ -284,7 +284,7 @@ module.exports = {
       if (file.path.includes('mp-html.vue')) {
         // 传递 editable 属性和路径
         content = content.replace(/opts\s*=\s*"\[([^\]]+)\]"/, 'opts="[$1,editable,placeholder,\'nodes\']"')
-          .replace('<view', '<view :style="editable?\'position:relative;min-height:200px\':\'\'" @tap="_containTap"')
+          .replace(/<view(.*?):style\s*=\s*"containerStyle"/, '<view$1:style="(editable?\'position:relative;min-height:200px;\':\'\')+containerStyle" @tap="_containTap"')
           // 工具弹窗
           .replace(/<\/view>\s*<\/template>/, `  <view v-if="tooltip" class="_tooltip_contain" :style="'top:'+tooltip.top+'px'">
       <view class="_tooltip">
