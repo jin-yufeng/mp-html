@@ -55,7 +55,10 @@ export default {
     }
   },
   props: {
-    containerStyle: String,
+    containerStyle: {
+      type: String,
+      default: ''
+    },
     content: String,
     copyLink: {
       type: Boolean,
