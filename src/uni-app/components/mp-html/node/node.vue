@@ -102,11 +102,14 @@ module.exports = {
 import node from './node'
 export default {
   name: 'node',
-  // #ifdef MP-WEIXIN
   options: {
-    virtualHost: true
+    // #ifdef MP-WEIXIN
+    virtualHost: true,
+    // #endif
+    // #ifdef MP-TOUTIAO
+    addGlobalClass: false
+    // #endif
   },
-  // #endif
   data() {
     return {
       ctrl: {}
