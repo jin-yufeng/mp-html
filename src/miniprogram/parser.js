@@ -473,7 +473,10 @@ parser.prototype.onCloseTag = function (name) {
     let siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes
     siblings.push({
       name,
-      attrs: {}
+      attrs: {
+        class: tagSelector[name],
+        style: this.tagStyle[name]
+      }
     })
   }
 }
