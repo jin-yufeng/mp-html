@@ -400,10 +400,10 @@ module.exports = {
       else if (file.path.includes('node.vue')) {
         content =
           // 传递 opts
-          content.replace(/:childs\s*=\s*"tbody.children"\s*:opts="opts"/, ':childs="tbody.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+\'.\'+i+\'.children.\'+x+\'.children\']"')
-            .replace(/:childs\s*=\s*"n2.children"\s*:opts="opts"/, ':childs="n2.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+\'.\'+i+\'.children.\'+j+\'.children\']"')
-            .replace(/:childs\s*=\s*"tr.children"\s*:opts="opts"/, ':childs="tr.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children\']"')
-            .replace(/:childs\s*=\s*"td.children"\s*:opts="opts"/, ':childs="td.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children.\'+z+\'.children\']"')
+          content.replace(/:childs\s*=\s*"tbody.children"\s*:opts="opts"/, ':childs="tbody.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children.\'+x+\'.children\']"')
+            .replace(/:childs\s*=\s*"n2.children"\s*:opts="opts"/, ':childs="n2.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children.\'+j+\'.children\']"')
+            .replace(/:childs\s*=\s*"tr.children"\s*:opts="opts"/, ':childs="tr.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children\']"')
+            .replace(/:childs\s*=\s*"td.children"\s*:opts="opts"/, ':childs="td.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children.\'+z+\'.children\']"')
             .replace(/opts\s*=\s*"opts"/g, 'opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children\']"')
             // 不使用 rich-text
             .replace(/handler\.use\(n\)/g, '!opts[4]&&handler.use(n)').replace(/!n.c/g, '!opts[4]&&!n.c').replace('&&n.c', '&&(n.c||opts[4])')
