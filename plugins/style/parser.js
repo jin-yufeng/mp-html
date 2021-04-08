@@ -64,15 +64,12 @@ parser.prototype.onSelector = function (name) {
     for (var i = 0; i < list.length; i++) {
       if (list[i].length) {
         // 拆分子选择器
-        var j = list[i].indexOf('>')
-        if (j != -1) {
-          if (j != 0)
-            selector.list.push(splitItem(list[i].substring(0, j)))
-          selector.list.push('>')
-          if (j != list[i].length - 1)
-            selector.list.push(splitItem(list[i].substr(j + 1)))
-        } else
-          selector.list.push(splitItem(list[i]))
+        var arr = list[i].split('>')
+        for (var j = 0; j < arr.length; j++) {
+          selector.list.push(splitItem(arr[j]))
+          if (j < arr.length - 1)
+            selector.list.push('>')
+        }
       }
     }
   } else
