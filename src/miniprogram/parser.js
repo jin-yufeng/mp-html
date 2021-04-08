@@ -519,6 +519,8 @@ parser.prototype.popNode = function () {
       attrs.viewBox = attrs.viewbox
     attrs.xmlns = 'http://www.w3.org/2000/svg';
     (function traversal(node) {
+      if (node.type == 'text')
+        return src += node.text
       src += '<' + node.name
       for (let item in node.attrs) {
         let val = node.attrs[item]
