@@ -307,24 +307,12 @@ module.exports = {
     placeholder: String,`)
           // 添加 watch
           .replace(/watch\s*:\s*{/, `watch: {
-    editable: {
-      handler(val) {
-        if (this.content)
-          this.setContent(val ? this.content : this.getContent())
-        else if (val)
-          this.$set(this, 'nodes', [{
-            name: 'p',
-            attrs: {},
-            children: [{
-              type: 'text',
-              text: ''
-            }]
-          }])
-        if (!val)
-          this._maskTap()
-      },
-      immediate: true
+    editable(val) {
+      this.setContent(val ? this.content : this.getContent())
+      if (!val)
+        this._maskTap()
     },`)
+          .replace(/if\s*\(this.content/, 'if ((this.content || this.editable)')
           // 处理各类弹窗的事件
           .replace(/methods\s*:\s*{/, `methods: {
     _containTap() {
