@@ -9,7 +9,7 @@ Page({
       li: 'margin: 5px 0;'
     }
   },
-  onLoad() {
+  onReady() {
     this.setData({
       html
     })

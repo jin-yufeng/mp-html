@@ -96,7 +96,7 @@ console.log('11')
 <img style="width:auto" src="data:image/png;base64,xxxx">
 <img src="yyy.webp" style="width:1000px" height="200" ignore>
 <svg />
-<svg viewbox="0 0 1 1"></svg>
+<svg viewbox="0 0 1 1"><text>123</text></svg>
 <div class="ql-align-center" style="background-image:url(&quot;/xxx.jpg?a=2&amp;b=3&quot;)"></div>
 <![CDATA[<]]>
 <!-- 测试 flex 布局、未闭合标签、data- 属性处理 -->

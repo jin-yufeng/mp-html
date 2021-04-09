@@ -510,7 +510,10 @@ parser.prototype.onCloseTag = function (name) {
     var siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes;
     siblings.push({
       name: name,
-      attrs: {}
+      attrs: {
+        "class": tagSelector[name],
+        style: this.tagStyle[name]
+      }
     });
   }
 };
@@ -555,6 +558,7 @@ parser.prototype.popNode = function () {
     attrs.xmlns = 'http://www.w3.org/2000/svg';
 
     (function traversal(node) {
+      if (node.type == 'text') return src += node.text;
       src += '<' + node.name;
 
       for (var item in node.attrs) {

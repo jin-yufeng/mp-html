@@ -25,7 +25,7 @@ export default {
       }
     }
   },
-  onLoad() {
+  onReady() {
     this.html = html
   },
   methods: {

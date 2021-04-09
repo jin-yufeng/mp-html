@@ -323,7 +323,7 @@ parser.prototype.onOpenTag = function (selfClose) {
     parent = this.stack[this.stack.length - 1],
     siblings = parent ? parent.children : this.nodes,
     close = this.xml ? selfClose : config.voidTags[node.name]
-  
+
   // 替换标签名选择器
   if (tagSelector[node.name])
     attrs.class = tagSelector[node.name] + (attrs.class ? ' ' + attrs.class : '')
@@ -558,6 +558,8 @@ parser.prototype.popNode = function () {
     attrs.style = ''
     attrs.xmlns = 'http://www.w3.org/2000/svg';
     (function traversal(node) {
+      if (node.type == 'text')
+        return src += node.text
       src += '<' + node.name
       for (let item in node.attrs) {
         let val = node.attrs[item]

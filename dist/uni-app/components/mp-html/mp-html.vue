@@ -12,7 +12,7 @@
 
 <script>
 /**
- * mp-html v2.1.0
+ * mp-html v2.1.1
  * @description 富文本组件
  * @tutorial https://github.com/jin-yufeng/mp-html
  * @property {String} container-style 容器的样式
@@ -55,7 +55,10 @@ export default {
     }
   },
   props: {
-    containerStyle: String,
+    containerStyle: {
+      type: String,
+      default: ''
+    },
     content: String,
     copyLink: {
       type: Boolean,
