@@ -377,7 +377,7 @@ module.exports = {
           // 处理各类弹窗的事件
           .replace(/methods\s*:\s*{/, `methods: {
   _containTap() {
-    if (!this._lock) {
+    if (!this._lock && !this.data.slider) {
       this._edit = void 0
       this._maskTap()
     }
