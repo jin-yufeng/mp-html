@@ -261,7 +261,7 @@ parser.prototype.parseStyle = function (node) {
 parser.prototype.onTagName = function (name) {
   this.tagName = this.xml ? name : name.toLowerCase()
   if (this.tagName == 'svg')
-    this.xml = true // svg 标签内大小写敏感
+    this.xml = (this.xml || 0) + 1 // svg 标签内大小写敏感
 }
 
 /**
@@ -553,6 +553,8 @@ parser.prototype.popNode = function () {
 
   // 转换 svg
   if (node.name == 'svg') {
+    if (this.xml > 1)
+      return this.xml-- // 多层 svg 嵌套
     // #ifndef APP-PLUS-NVUE
     let src = '', style = attrs.style
     attrs.style = ''
