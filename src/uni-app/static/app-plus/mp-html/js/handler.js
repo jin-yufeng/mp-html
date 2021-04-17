@@ -126,13 +126,8 @@ function createDom(nodes, parent, namespace) {
       // 处理音视频
       else if (name == 'video' || name == 'audio') {
         medias.push(ele)
-        if (!node.attrs.autoplay) {
-          if (!node.attrs.controls)
-            ele.setAttribute('controls', 'true')
-          // 空白图占位
-          if (!node.attrs.poster)
-            ele.setAttribute('poster', "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'/>")
-        }
+        if (!node.attrs.autoplay && !node.attrs.controls)
+          ele.setAttribute('controls', 'true')
         if (options[3])
           ele.onplay = function () {
             for (let i = 0; i < medias.length; i++)

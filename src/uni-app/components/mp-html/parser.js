@@ -657,9 +657,6 @@ parser.prototype.popNode = function () {
   // #ifdef APP-PLUS
   else if (node.name == 'video') {
     var str = '<video style="width:100%;height:100%"'
-    // 空白图占位
-    if (!attrs.poster && !attrs.autoplay)
-      attrs.poster = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'/>"
     for (let item in attrs)
       if (attrs[item])
         str += ' ' + item + '="' + attrs[item] + '"'

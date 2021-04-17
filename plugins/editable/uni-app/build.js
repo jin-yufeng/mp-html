@@ -233,7 +233,7 @@ module.exports = {
         this.root._edit = this
         this.i = i
         this.root._tooltip({
-          top: e.target.offsetTop,
+          top: e.target.offsetTop - 30,
           items,
           success: tapIndex => {
             // 设置封面
@@ -383,7 +383,7 @@ module.exports = {
           .replace(/else\s*if\s*\(node.c\)/, 'else if (!editable && node.c )')
           .replace(/node.c(\)|\s*&&|\s*\n)/g, '(node.c||editable)$1')
           .replace(/while\s*\(map\[row\s*\+\s*'.'\s*\+\s*col\]\)\s*col\+\+/, "while(map[row+'.'+col])col++;if(editable)td.r=row")
-          .replace(/var\s+str\s*=\s*'<video style="max-width:100%"'/, 'var str=\'<video style="max-width:100%"\'\nif(editable)attrs.controls=\'\'')
+          .replace(/var\s+str\s*=\s*'<video style="width:100%;height:100%"'/, 'var str=\'<video style="width:100%;height:100%"\'\nif(editable)attrs.controls=\'\'')
       }
       else if (file.path.includes('node.vue')) {
         content =
@@ -415,8 +415,8 @@ module.exports = {
             .replace(/:style\s*=\s*"\(ctrl\[i\]/g, ':style="(ctrl[\'e\'+i]?\'border:1px dashed black;padding:3px;\':\'\')+(ctrl[i]')
             .replace(/show-menu-by-longpress\s*=\s*"(\S+?)"\s*:image-menu-prevent\s*=\s*"(\S+?)"/, 'show-menu-by-longpress="!opts[4]&&$1" :image-menu-prevent="opts[4]||$2"')
             // 修改音视频
-            .replace(/<!--\s*视频\s*-->/, `<!-- 视频 -->
-		  <view v-else-if="opts[4]&&n.name=='video'" :class="'_video '+n.attrs.class" :style="(n.attrs.poster?'background-image:url('+n.attrs.poster+');background-size:100% 100%;':'')+n.attrs.style" :data-i="i" @tap="mediaTap" />`)
+            .replace('v-else-if="n.html"', 'v-else-if="n.html" :data-i="i" @tap="mediaTap"')
+            .replace('<video', '<video :show-center-play-btn="!opts[4]" @tap="mediaTap"')
             .replace('audio ', 'audio @tap="mediaTap" ')
             .replace('<script>',
               `<script>
