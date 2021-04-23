@@ -221,6 +221,8 @@ export default {
         uni.showActionSheet({
           itemList: ['保存图片'],
           success: () => {
+            if(!this.root.imgList[attrs.i]) return
+            if (this.root.imgList[attrs.i].startsWith('http'))
             uni.downloadFile({
               url: this.root.imgList[attrs.i],
               success: res => {
@@ -231,6 +233,15 @@ export default {
                       title: '保存成功'
                     })
                   }
+                })
+              }
+            })
+            else
+            uni.saveImageToPhotosAlbum({
+              filePath: this.root.imgList[attrs.i],
+              success() {
+                uni.showToast({
+                  title: '保存成功'
                 })
               }
             })
