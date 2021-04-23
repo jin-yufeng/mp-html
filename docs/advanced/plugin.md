@@ -294,6 +294,31 @@ function search(key) {
 
 !> 本插件仅用于将官方 [腾讯视频插件](https://github.com/tvfe/txv-miniprogram-plugin) 应用于本组件，使用前请确认已经成功申请使用该插件并按要求在小程序 *app.json* 中配置完成（*uni-app* 中的配置方法可以参考 [#103](https://github.com/jin-yufeng/mp-html/issues/103#issuecomment-654586246)），否则无法生效  
 
+## img-cache
+功能：图片本地缓存  
+大小：*≈4KB*  
+支持平台：  
+
+| 微信小程序 | QQ 小程序 | 百度小程序 | 支付宝小程序 | 头条小程序 | uni-app |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+|  |  |  |  |  | √(仅支持vue页面) |
+
+说明：  
+引入本插件后，会给组件添加一个 img-cache 属性，将该属性设置为 true 后，将自动下载引用的图片并将src属性更换为本地地址  
+同时在 [组件实例](advanced/api#getCompent) 上挂载了 *imgCache* 对象，扩充缓存控制能力  
+
+*imgCache* 对象属性和方法：  
+
+| 属性 | 功能 |
+|:---:|:---:|
+| list | 当前缓存的url列表 |
+| get(url) | 传入url获得本地地址 |
+| delete(url) | 传入url删除缓存记录 |
+| add(url) | 传入url并下载目标为缓存 |
+| clear() | 清空所有缓存 |
+
+!> 请尽量确保src中含有文件后缀名，不以后缀结尾也没关系，插件会从路径中推测合理的图片后缀，如果完全不包含后缀信息可能会无法保存到相册  
+
 ## 开发插件 :id=develop
 一个插件大致需要以下文件（*plugin/template* 中提供了一个模板） 
 
