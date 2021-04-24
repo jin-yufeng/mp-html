@@ -121,6 +121,7 @@
 | search | 关键词搜索 |
 | style | 匹配 style 标签中的样式 |
 | txv-video | 使用腾讯视频 |
+| img-cache | 图片缓存 by [@PentaTea](https://github.com/PentaTea) |
 
 从插件市场导入的包中 **不含有** 扩展插件，需要使用插件参考以下方法：  
 1. 获取完整组件包  

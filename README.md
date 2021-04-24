@@ -49,7 +49,7 @@
 
      ```javascript
      Page({
-       onLoad() {
+       onLoad () {
          this.setData({
            html: '<div>Hello World!</div>'
          })
@@ -91,7 +91,7 @@
          components: {
            mpHtml
          },
-         data() {
+         data () {
            return {
              html: '<div>Hello World!</div>'
            }
@@ -120,7 +120,7 @@
          components: {
            mpHtml
          },
-         data() {
+         data () {
            return {
              html: '<div>Hello World!</div>'
            }
@@ -194,6 +194,7 @@
 | search | 关键词搜索 |
 | style | 匹配 style 标签中的样式 |
 | txv-video | 使用腾讯视频 |
+| img-cache | 图片缓存 by [@PentaTea](https://github.com/PentaTea) |
 
 查看 [插件](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin) 了解更多
 
@@ -222,23 +223,24 @@
   ![支持](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/sponsor.png)   
 
 ## 更新日志
-- v2.1.1 (20210409)
-  1. 修复了对 `p` 标签设置 `tag-style` 可能不生效的问题
-  2. 修复了 `svg` 标签中的文本无法显示的问题
-  3. 修复了 `uni-app` 包的 `nvue` 端不设置 `container-style` 可能报错的问题
-  4. 修复了 `uni-app` 包使用 `editable` 插件编辑表格时可能报错的问题
-  5. 修复了 `uni-app` 包使用 `highlight` 插件运行到头条小程序时可能没有样式的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/280)
-  6. 修复了 `uni-app` 包使用 `editable` 插件 `editable` 属性为 `false` 时会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/284)
-  7. 修复了 `style` 插件连续子选择器失效的问题
-  8. 修复了 `editable` 插件无法修改图片和字体大小的问题
+- v2.1.2 (20210424)
+  1. `A` 增加了 [img-cache](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin#img-cache) 插件，可以在 `uni-app` 的 `app` 端缓存图片 [详细](https://github.com/jin-yufeng/mp-html/issues/292) by [@PentaTea](https://github.com/PentaTea)
+  2. `U` 支持通过 `container-style` 属性设置 `white-space` 来保留连续空格和换行符 [详细](https://jin-yufeng.gitee.io/mp-html/#/question/faq#space)
+  3. `U` 代码风格符合 [standard](https://standardjs.com) 标准
+  4. `U` `uni-app` 包使用 `editable` 插件编辑状态下支持预览视频 [详细](https://github.com/jin-yufeng/mp-html/issues/286)
+  5. `F` 修复了 `svg` 标签内嵌 `svg` 时无法显示的问题
+  6. `F` 修复了微信原生包 `img` 标签的 `style` 中包含 `inline` 时不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/287)
+  7. `F` 修复了支付宝和头条小程序部分区域不可复制的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/291)
 
-- v2.1.0 (20210320)
-  1. `A` 增加了 [container-style](https://jin-yufeng.gitee.io/mp-html/#/basic/prop#container-style) 属性 [详细](https://gitee.com/jin-yufeng/mp-html/pulls/1)
-  2. `A` 增加支持 `strike` 标签
-  3. `A` `editable` 插件增加 `placeholder` 属性 [详细](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin#editable)
-  4. `A` `editable` 插件增加 `insertHtml` 方法 [详细](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin#editable)
-  5. `U` 外部样式支持标签名选择器 [详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart#setting)
-  6. `F` 修复了 `uni-app` 包 `nvue` 端部分情况下可能不显示的问题
+- v2.1.1 (20210409)
+  1. `F` 修复了对 `p` 标签设置 `tag-style` 可能不生效的问题
+  2. `F` 修复了 `svg` 标签中的文本无法显示的问题
+  3. `F` 修复了 `uni-app` 包的 `nvue` 端不设置 `container-style` 可能报错的问题
+  4. `F` 修复了 `uni-app` 包使用 `editable` 插件编辑表格时可能报错的问题
+  5. `F` 修复了 `uni-app` 包使用 `highlight` 插件运行到头条小程序时可能没有样式的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/280)
+  6. `F` 修复了 `uni-app` 包使用 `editable` 插件 `editable` 属性为 `false` 时会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/284)
+  7. `F` 修复了 `style` 插件连续子选择器失效的问题
+  8. `F` 修复了 `editable` 插件无法修改图片和字体大小的问题
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 

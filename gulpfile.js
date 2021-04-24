@@ -59,9 +59,8 @@ function packComp () {
       minifyCSS: true
     }))))
     // js 处理
-    .pipe(gulpif(file => file.extname === '.js' && !file.stem.includes('.min'), babel(config.babel))) // es6 转 es5
-    .pipe(gulpif(file => file.extname === '.js' && !file.stem.includes('.min') && !isDev && // 压缩 js
-      !file.relative.includes('components') && !(platform === 'uni-app' && file.base.includes('plugins')), uglify(config.uglify)))
+    .pipe(gulpif(file => file.extname === '.js' && !file.stem.includes('.min') && (platform !== 'uni-app' || file.relative.includes('static')), babel(config.babel))) // es6 转 es5
+    .pipe(gulpif(file => file.extname === '.js' && !file.stem.includes('.min') && !isDev && (platform !== 'uni-app' || file.relative.includes('static')), uglify(config.uglify))) // 压缩 js
     // wxss（css）处理
     .pipe(gulpif(file => file.extname.includes('ss'), cleanCss(config.cleanCss))) // 压缩 wxss
     .pipe(plugin.importCss()) // 引入插件中的 css 文件

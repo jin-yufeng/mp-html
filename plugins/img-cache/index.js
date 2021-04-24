@@ -55,12 +55,7 @@ function ImgCache (vm) {
 }
 
 // #ifdef APP-PLUS
-ImgCache.prototype.onParse = function (node) {
-  // 标记图片位置
-  if (node.name === 'img' && node.attrs.src) {
-    node.attrs.i = this.i
-    this.i++
-  }
+ImgCache.prototype.onParse = function (node, parser) {
   // 启用本插件 && 解析图片标签 && 拥有src属性 && 是网络图片
   if (
     this.vm.ImgCache &&
@@ -70,6 +65,8 @@ ImgCache.prototype.onParse = function (node) {
   ) {
     const src = node.attrs.src
     node.attrs.src = ''
+    node.attrs.i = this.vm.imgList.length + this.i++
+    parser.expose()
 
     async function getUrl (path) {
       if (await resolveFile(path)) return path

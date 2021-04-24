@@ -6,7 +6,11 @@ const standard = require('standard')
 let fix = false
 let mode = '**/*.@(js|vue)'
 for (let i = 2; i < process.argv.length; i++) {
-  if (process.argv[i] === '--fix') { fix = true } else { mode = process.argv[i] }
+  if (process.argv[i] === '--fix') {
+    fix = true
+  } else {
+    mode = process.argv[i]
+  }
 }
 
 // 检查 js 文件
@@ -16,7 +20,9 @@ function lintJs (filePath, content) {
     fix
   }).results
   // 写回修复的内容
-  if (fix && res[0].output) { fs.writeFileSync(filePath, res[0].output) }
+  if (fix && res[0].output) {
+    fs.writeFileSync(filePath, res[0].output)
+  }
   // 打印错误信息
   for (let i = 0; i < res[0].messages.length; i++) {
     const item = res[0].messages[i]
@@ -34,7 +40,9 @@ function lintVue (filePath, content) {
     fix
   }).results
   // 写回修复的内容
-  if (fix && res[0].output) { fs.writeFileSync(filePath, content.replace(/<script>[\s\S]+?<\/script>/, '<script>' + res[0].output + '</script>')) }
+  if (fix && res[0].output) {
+    fs.writeFileSync(filePath, content.replace(/<script>[\s\S]+?<\/script>/, '<script>' + res[0].output + '</script>'))
+  }
   // 打印错误信息
   for (let i = 0; i < res[0].messages.length; i++) {
     const item = res[0].messages[i]

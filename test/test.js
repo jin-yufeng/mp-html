@@ -14,6 +14,7 @@ test('render', async () => {
   // 创建和渲染页面
   const id = simulate.load({
     data: {
+      containerStyle: '',
       copyLink: true,
       pauseVideo: true,
       previewImg: true,
@@ -21,7 +22,7 @@ test('render', async () => {
     },
     template:
       `<scroll-view id="scroll" style="height:100px" scroll-y scroll-top="{{top}}">
-  <mp-html id="article" content="{{html}}" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table use-anchor="{{useAnchor}}">加载中...</mp-html>
+  <mp-html id="article" container-style="{{containerStyle}}" content="{{html}}" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table use-anchor="{{useAnchor}}">加载中...</mp-html>
 </scroll-view>`,
     usingComponents: {
       'mp-html': mpHtml
@@ -93,9 +94,10 @@ console.log('11')
   </div>
 </div>
 <img style="width:auto" src="data:image/png;base64,xxxx">
-<img src="yyy.webp" style="width:1000px" height="200" ignore>
+<img src="xxx" style="width:20px" height="10">
+<img src="yyy.webp" style="width:1000px" ignore>
 <svg />
-<svg viewbox="0 0 1 1"><text>123</text></svg>
+<svg viewbox="0 0 1 1"><text>123</text><svg></svg></svg>
 <div class="ql-align-center" style="background-image:url(&quot;/xxx.jpg?a=2&amp;b=3&quot;)"></div>
 <![CDATA[<]]>
 <!-- 测试 flex 布局、未闭合标签、data- 属性处理 -->
@@ -104,8 +106,7 @@ console.log('11')
 </div>
 </br><div data-test="xxx" style="display:flex;display:-webkit-flex;"><div>
   <img data-src="/xxx.jpg" style="width:100%;height:100px">  `, true) // 补充测试
-  const text = comp.instance.getText()
-  expect(text.includes('更多')).toBe(true) // 检查上方的实体是否被解码
+  expect(comp.instance.getText().includes('更多')).toBe(true) // 检查上方的实体是否被解码
   await comp.instance.getRect()
 
   await comp.instance.navigateTo('anchor') // 基于页面跳转
@@ -121,6 +122,13 @@ console.log('11')
   try {
     await comp.instance.navigateTo('anchor') // 禁用锚点的情况下跳转
   } catch (e) { }
+
+  page.setData({
+    containerStyle: 'white-space:pre-wrap'
+  })
+  await simulate.sleep(50)
+  comp.instance.setContent('  空格\n换行')
+  expect(comp.instance.getText().includes('\n')).toBe(true) // 检查换行是否被保留
 
   await simulate.sleep(50) // 等待异步 api 执行完毕
 
@@ -155,13 +163,14 @@ test('event', async () => {
 
   const comp = simulate.render(mpHtml)
   comp.setData({
-    selectable: 'force'
+    selectable: 'force',
+    loadingImg: 'xxx'
   })
   await simulate.sleep(50)
 
   comp.instance.setContent(
     `<img src="xxx">
-<img src="yyy" width="100" ignore>
+<img src="yyy" width="100" height="50" ignore>
 <a href="#aaa"><img src="xxx"></a>
 <a href="https://github.com/jin-yufeng/mp-html">链接2</a>
 <a href="pages/test/test">链接3</a>
@@ -201,6 +210,18 @@ test('event', async () => {
       }
     })
   }
+  comp.setData({
+    loadingImg: ''
+  })
+  await simulate.sleep(50)
+  node.instance.imgLoad({
+    target: {
+      dataset: {
+        i: '1'
+      }
+    }
+  })
+
   // 模拟图片链接被点击
   node.instance.imgTap({
     target: {

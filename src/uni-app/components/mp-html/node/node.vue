@@ -225,30 +225,23 @@ export default {
         uni.showActionSheet({
           itemList: ['保存图片'],
           success: () => {
-            if (!this.root.imgList[attrs.i]) return
-            if (this.root.imgList[attrs.i].startsWith('http')) {
-              uni.downloadFile({
-                url: this.root.imgList[attrs.i],
-                success: res => {
-                  uni.saveImageToPhotosAlbum({
-                    filePath: res.tempFilePath,
-                    success () {
-                      uni.showToast({
-                        title: '保存成功'
-                      })
-                    }
-                  })
-                }
-              })
-            } else {
+            const save = path => {
               uni.saveImageToPhotosAlbum({
-                filePath: this.root.imgList[attrs.i],
+                filePath: path,
                 success () {
                   uni.showToast({
                     title: '保存成功'
                   })
                 }
               })
+            }
+            if (this.root.imgList[attrs.i].startsWith('http')) {
+              uni.downloadFile({
+                url: this.root.imgList[attrs.i],
+                success: res => save(res.tempFilePath)
+              })
+            } else {
+              save(this.root.imgList[attrs.i])
             }
           }
         })
