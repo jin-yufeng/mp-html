@@ -131,6 +131,7 @@ function Parser (vm) {
   this.attrs = Object.create(null)
   this.stack = []
   this.nodes = []
+  this.pre = (this.options.containerStyle || '').includes('white-space') && this.options.containerStyle.includes('pre') ? 2 : 0
 }
 
 /**
@@ -508,8 +509,8 @@ Parser.prototype.onOpenTag = function (selfClose) {
     }
     attrs.style = attrs.style.substr(1) || undefined
   } else {
-    if (node.name === 'pre' || ((attrs.style || '').includes('white-space') && attrs.style.includes('pre'))) {
-      this.pre = node.pre = true
+    if ((node.name === 'pre' || ((attrs.style || '').includes('white-space') && attrs.style.includes('pre'))) && this.pre !== 2) {
+      this.pre = node.pre = 1
     }
     node.children = []
     this.stack.push(node)
@@ -569,12 +570,12 @@ Parser.prototype.popNode = function () {
     return
   }
 
-  if (node.pre) {
+  if (node.pre && this.pre !== 2) {
     // 是否合并空白符标识
-    node.pre = this.pre = undefined
+    this.pre = node.pre = undefined
     for (let i = this.stack.length; i--;) {
       if (this.stack[i].pre) {
-        this.pre = true
+        this.pre = 1
       }
     }
   }

@@ -97,15 +97,21 @@ html = html.replace(/< img/g, '<img')
 ```
 
 ## 空白符失效 :id=space
-*html* 中，默认会将多个空白符合并为一个（换行无效），如果需要使用换行，需使用 *br* 标签  
-使用连续空格，可使用以下方法  
-1. 使用 *html* 实体  
-   用 *&amp;nbsp;* *&amp;ensp;* *&amp;emsp;* 等实体空格可以实现连续多个空格  
-2. 使用 *pre* 标签  
-   *pre* 标签内的空白符不会被合并  
-3. 设置 *white-space*  
-   设置 *css* 中的 *white-space* 为 *pre* 可以让 *html* 不合并空白符，设置方法见 [样式设置](overview/feature#style)  
-   需要注意的是如果通过外部样式设置 *white-space* 将不会生效，因为在解析过程中为减小解析结果大小提前进行了空白符合并（解析过程中无法获取外部样式）  
+*html* 中，默认会将多个空白符（包括换行）合并为一个空格，若不希望如此，可参考以下方法：  
+1. 替换为指定标签或实体编码  
+   换行可以使用 *br* 标签  
+   连续空格可以使用 *&amp;nbsp;* *&amp;ensp;* *&amp;emsp;* 等实体编码  
+   ```javascript
+   html = html.replace(/\n/g, '<br>') // 替换换行符
+   html = html.replace(/ /g, '&nbsp;') // 替换空格
+   ```
+2. 通过 *css* 设置 *white-space*  
+   将 *css* 中的 *white-space* 设置为 *pre-line* 可以保留换行符，设置为 *pre-wrap* 可以保留空格和换行符  
+   给特定标签设置的方法见 [样式设置](overview/feature#style)，需要注意的是如果通过外部样式设置 *white-space* 将不会生效，因为在解析过程中为减小解析结果大小提前进行了空白符合并（解析过程中无法获取外部样式）  
+   [2.1.2]() 版本起可以通过 [container-style](basic/prop#container-style) 属性全局设置 *white-space*  
+   ```html
+   <mp-html container-style="white-space:pre-wrap" />
+   ```
 
 ## 懒加载失效 :id=lazy-load
 如果富文本内容全部（或大部分）是图片，由于其图片未加载时大小为零，即使数量很多也会全部进入视图范围，导致懒加载失效，若出现这种情况，可通过以下方案解决  
