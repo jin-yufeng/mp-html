@@ -12,7 +12,7 @@
       <image v-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;height:1px;'+n.attrs.style" :src="n.attrs.src" :mode="n.h?'':'widthFix'" :lazy-load="opts[0]" :webp="n.webp" :show-menu-by-longpress="opts[3]&&!n.attrs.ignore" :image-menu-prevent="!opts[3]||n.attrs.ignore" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
       <!-- #endif -->
       <!-- 文本 -->
-      <!-- #ifndef MP-BAIDU -->
+      <!-- #ifndef MP-BAIDU || MP-ALIPAY || MP-TOUTIAO -->
       <text v-else-if="n.text" :user-select="n.us" decode>{{n.text}}</text>
       <!-- #endif -->
       <text v-else-if="n.name==='br'">\n</text>

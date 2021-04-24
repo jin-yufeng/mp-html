@@ -39,7 +39,7 @@
     <image id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{ctrl[i]===-1?'display:none;':''}}width:{{ctrl[i]||1}}px;height:1px;{{n.attrs.style}}" src="{{n.attrs.src}}" mode="{{n.h?'':'widthFix'}}" lazy-load="{{opts[0]}}" mp-weixin:mp-baidu:webp="{{n.webp}}" mp-weixin:show-menu-by-longpress="{{opts[3]&&!n.attrs.ignore}}" mp-baidu:image-menu-prevent="{{!opts[3]||n.attrs.ignore}}" data-i="{{i}}" bindload="imgLoad" binderror="mediaError" catchtap="imgTap" bindlongpress="noop" />
   </block>
   <!-- 文本 -->
-  <!-- #ifndef MP-BAIDU -->
+  <!-- #ifdef MP-WEIXIN || MP-QQ -->
   <text wx:elif="{{n.text}}" mp-weixin:user-select="{{n.us}}" decode>{{n.text}}</text>
   <!-- #endif -->
   <text wx:elif="{{n.name==='br'}}">\n</text>
