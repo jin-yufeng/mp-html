@@ -4,30 +4,31 @@
 const context = require('./context')
 let index = 0
 
-function audio(vm) {
+function Audio (vm) {
   this.vm = vm
 }
 
-audio.prototype.onUpdate = function () {
+Audio.prototype.onUpdate = function () {
   this.audios = []
 }
 
-audio.prototype.onParse = function (node) {
-  if (node.name == 'audio') {
-    if (!node.attrs.id)
+Audio.prototype.onParse = function (node) {
+  if (node.name === 'audio') {
+    if (!node.attrs.id) {
       node.attrs.id = 'a' + index++
+    }
     this.audios.push(node.attrs.id)
   }
 }
 
-audio.prototype.onLoad = function () {
+Audio.prototype.onLoad = function () {
   setTimeout(() => {
-    for (var i = 0; i < this.audios.length; i++) {
-      var ctx = context.get(this.audios[i])
+    for (let i = 0; i < this.audios.length; i++) {
+      const ctx = context.get(this.audios[i])
       ctx.id = this.audios[i]
       this.vm._videos.push(ctx)
     }
   }, 50)
 }
 
-module.exports = audio
+module.exports = Audio

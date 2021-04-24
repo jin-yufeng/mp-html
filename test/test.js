@@ -4,7 +4,7 @@
 const path = require('path')
 const simulate = require('miniprogram-simulate')
 
-const html = require('./content')                        // 测试 html
+const html = require('./content') // 测试 html
 const dist = '../dev/mp-weixin/components/mp-html/index' // 组件目录
 
 const mpHtml = simulate.load(path.resolve(__dirname, dist), 'mp-html')
@@ -12,7 +12,7 @@ const mpHtml = simulate.load(path.resolve(__dirname, dist), 'mp-html')
 // 渲染测试
 test('render', async () => {
   // 创建和渲染页面
-  let id = simulate.load({
+  const id = simulate.load({
     data: {
       copyLink: true,
       pauseVideo: true,
@@ -27,7 +27,7 @@ test('render', async () => {
       'mp-html': mpHtml
     }
   })
-  let page = simulate.render(id)
+  const page = simulate.render(id)
 
   // 设置数据
   page.setData({
@@ -38,7 +38,6 @@ test('render', async () => {
   // api 测试
   const comp = page.querySelector('#article')
   expect(comp.dom.tagName).toBe('MP-HTML')
-
 
   await simulate.sleep(50)
 
@@ -105,7 +104,7 @@ console.log('11')
 </div>
 </br><div data-test="xxx" style="display:flex;display:-webkit-flex;"><div>
   <img data-src="/xxx.jpg" style="width:100%;height:100px">  `, true) // 补充测试
-  let text = comp.instance.getText()
+  const text = comp.instance.getText()
   expect(text.includes('更多')).toBe(true) // 检查上方的实体是否被解码
   await comp.instance.getRect()
 
@@ -141,18 +140,20 @@ test('event', async () => {
   // 测试失败回调
   wx.navigateTo = function (obj) {
     setTimeout(() => {
-      if (typeof obj.fail == 'function')
+      if (typeof obj.fail === 'function') {
         obj.fail()
+      }
     }, 0)
   }
   wx.switchTab = function (obj) {
     setTimeout(() => {
-      if (typeof obj.fail == 'function')
+      if (typeof obj.fail === 'function') {
         obj.fail()
+      }
     }, 0)
   }
 
-  let comp = simulate.render(mpHtml)
+  const comp = simulate.render(mpHtml)
   comp.setData({
     selectable: 'force'
   })
@@ -173,7 +174,7 @@ test('event', async () => {
 
   await simulate.sleep(100)
 
-  let node = comp.querySelector('#_root')
+  const node = comp.querySelector('#_root')
   node.triggerLifeTime('attached')
   comp.instance._add({
     detail: node.instance
@@ -210,7 +211,7 @@ test('event', async () => {
   })
   node.instance.noop()
   // 模拟图片出错
-  let imgError = () => node.instance.mediaError({
+  const imgError = () => node.instance.mediaError({
     target: {
       dataset: {
         i: '0'
@@ -225,7 +226,7 @@ test('event', async () => {
     errorImg: 'xxx'
   }, imgError)
   // 模拟链接被点击
-  for (let i = 2; i <= 4; i++)
+  for (let i = 2; i <= 4; i++) {
     node.instance.linkTap({
       currentTarget: {
         dataset: {
@@ -233,13 +234,15 @@ test('event', async () => {
         }
       }
     })
+  }
   // 模拟视频播放
-  for (let i = 0; i < 3; i++)
+  for (let i = 0; i < 3; i++) {
     node.instance.play({
       target: {
         id: 'v' + (i % 2)
       }
     })
+  }
   // 模拟视频出错
   node.instance.mediaError({
     target: {

@@ -11,7 +11,7 @@
   </template>
   <script>
     export default {
-      onLoad() {
+      onLoad () {
         var ctx = this.$refs.article
       }
     }
@@ -25,7 +25,7 @@
   ```
   ```javascript
   Page({
-    article(ctx) {
+    article (ctx) {
       // 获得组件实例
     } 
   })
@@ -37,7 +37,7 @@
   ```
   ```javascript
   Page({
-    onLoad() {
+    onLoad () {
       // 微信、QQ、百度
       var ctx = this.selectComponent('#article')
       // 头条
@@ -67,7 +67,7 @@
 ```
 ```javascript
 Page({
-  onLoad() {
+  onLoad () {
     // ctx 为组件实例
     ctx.in(this, '#scroll', 'top')
   }
@@ -95,7 +95,7 @@ Page({
 示例：  
 ```javascript
 Page({
-  ready() {
+  ready () {
     // ctx 为组件实例
     ctx.navigateTo('anchor').then(() => {
       console.log('跳转成功')
@@ -120,7 +120,7 @@ Page({
 示例：  
 ```javascript
 Page({
-  getRect() {
+  getRect () {
     // ctx 为组件实例
     ctx.getRect().then(rect => {
       console.log(rect) // boundingClientRect 信息
@@ -153,7 +153,7 @@ Page({
 
 ```javascript
 Page({
-  load() {
+  load () {
     // ctx 为组件实例
     var cover = ctx.imgList[0] // 首张图可以作为转发封面图
     ctx.imgList.forEach((src, i, array) => {

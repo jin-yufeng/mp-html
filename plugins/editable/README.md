@@ -48,7 +48,7 @@
 示例：  
 ```javascript
 Page({
-  onLoad() {
+  onLoad () {
     // ctx 为组件实例，获取方法见上
     /**
      * @description 设置获取链接的方法
@@ -68,7 +68,7 @@ Page({
                 url: 'xxx', // 接口地址
                 filePath: res.tempFilePaths[0],
                 name: 'xxx',
-                success(res) {
+                success (res) {
                   resolve(res.data.path) // 返回线上地址
                 },
                 fail: reject
@@ -80,7 +80,7 @@ Page({
       })
     }
   },
-  finishEdit() {
+  finishEdit () {
     var html = ctx.getContent() // 获取编辑好的 html
     // 上传 html
     wx.request({

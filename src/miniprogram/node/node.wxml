@@ -23,30 +23,28 @@
    * @description 是否使用 rich-text 显示剩余内容
    */
   module.exports = function (item) {
-    if (item.c)
-      return false
-    if (!item.children)
-      return true
+    if (item.c) return false
+    if (!item.children) return true
     // 微信小程序 rich-text 无法被设置为 inline 布局
-    return !inlineTags[item.name] && (item.attrs.style || '').indexOf('inline') == -1
+    return !inlineTags[item.name] && (item.attrs.style || '').indexOf('inline') === -1
   }
 </wxs>
 <!-- #endif -->
 <template name="el">
   <!-- 图片 -->
-  <block wx:if="{{n.name=='img'}}">
+  <block wx:if="{{n.name==='img'}}">
     <!-- 占位图 -->
     <image wx:if="{{(opts[1]&&!ctrl[i])||ctrl[i]<0}}" class="_img" style="{{n.attrs.style}}" src="{{ctrl[i]<0?opts[2]:opts[1]}}" mode="widthFix" />
     <!-- 显示图片 -->
-    <image id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{ctrl[i]==-1?'display:none;':''}}width:{{ctrl[i]||1}}px;height:1px;{{n.attrs.style}}" src="{{n.attrs.src}}" mode="{{n.h?'':'widthFix'}}" lazy-load="{{opts[0]}}" mp-weixin:mp-baidu:webp="{{n.webp}}" mp-weixin:show-menu-by-longpress="{{opts[3]&&!n.attrs.ignore}}" mp-baidu:image-menu-prevent="{{!opts[3]||n.attrs.ignore}}" data-i="{{i}}" bindload="imgLoad" binderror="mediaError" catchtap="imgTap" bindlongpress="noop" />
+    <image id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{ctrl[i]===-1?'display:none;':''}}width:{{ctrl[i]||1}}px;height:1px;{{n.attrs.style}}" src="{{n.attrs.src}}" mode="{{n.h?'':'widthFix'}}" lazy-load="{{opts[0]}}" mp-weixin:mp-baidu:webp="{{n.webp}}" mp-weixin:show-menu-by-longpress="{{opts[3]&&!n.attrs.ignore}}" mp-baidu:image-menu-prevent="{{!opts[3]||n.attrs.ignore}}" data-i="{{i}}" bindload="imgLoad" binderror="mediaError" catchtap="imgTap" bindlongpress="noop" />
   </block>
   <!-- 文本 -->
   <!-- #ifndef MP-BAIDU -->
   <text wx:elif="{{n.text}}" mp-weixin:user-select="{{n.us}}" decode>{{n.text}}</text>
   <!-- #endif -->
-  <text wx:elif="{{n.name=='br'}}">\n</text>
+  <text wx:elif="{{n.name==='br'}}">\n</text>
   <!-- 链接 -->
-  <view wx:elif="{{n.name=='a'}}" id="{{n.attrs.id}}" class="{{n.attrs.href?'_a ':''}}{{n.attrs.class}}" hover-class="_hover" style="display:inline;{{n.attrs.style}}" data-i="{{i}}" catchtap="linkTap">
+  <view wx:elif="{{n.name==='a'}}" id="{{n.attrs.id}}" class="{{n.attrs.href?'_a ':''}}{{n.attrs.class}}" hover-class="_hover" style="display:inline;{{n.attrs.style}}" data-i="{{i}}" catchtap="linkTap">
     <!-- #ifdef MP-WEIXIN || MP-QQ -->
     <node childs="{{n.children}}" opts="{{opts}}" style="display:inherit" />
     <!-- #endif -->
@@ -60,10 +58,10 @@
     <!-- #endif -->
   </view>
   <!-- 视频 -->
-  <video wx:elif="{{n.name=='video'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.src[ctrl[i]||0]}}" data-i="{{i}}" bindplay="play" binderror="mediaError" />
+  <video wx:elif="{{n.name==='video'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" poster="{{n.attrs.poster}}" src="{{n.src[ctrl[i]||0]}}" data-i="{{i}}" bindplay="play" binderror="mediaError" />
   <!-- #ifndef MP-TOUTIAO -->
   <!-- 音频 -->
-  <audio wx:elif="{{n.name=='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.src[ctrl[i]||0]}}" data-i="{{i}}" bindplay="play" binderror="mediaError" />
+  <audio wx:elif="{{n.name==='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.src[ctrl[i]||0]}}" data-i="{{i}}" bindplay="play" binderror="mediaError" />
   <!-- #endif -->
   <!-- insert -->
   <!-- 富文本 -->

@@ -4,7 +4,7 @@ const through2 = require('through2')
 /**
  * @description 压缩内联 wxs 脚本
  */
-function wxs() {
+function wxs () {
   return through2.obj(function (file, _, callback) {
     if (file.isBuffer()) {
       file.contents = Buffer.from(file.contents.toString().replace(/<wxs(.*?)>([\s\S]+?)<\/wxs>/, (_, $1, $2) => {
@@ -24,10 +24,11 @@ function wxs() {
 /**
  * @description 压缩 json 文件
  */
-function json() {
+function json () {
   return through2.obj(function (file, _, callback) {
-    if (file.isBuffer())
+    if (file.isBuffer()) {
       file.contents = Buffer.from(JSON.stringify(JSON.parse(file.contents.toString())))
+    }
     this.push(file)
     callback()
   })

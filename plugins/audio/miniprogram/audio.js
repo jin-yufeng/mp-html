@@ -8,20 +8,20 @@ Component({
     time: '00:00'
   },
   properties: {
-    name: String,       // 音乐名
-    author: String,     // 作者
-    poster: String,     // 海报图片地址
-    autoplay: Boolean,  // 是否自动播放
-    controls: Boolean,  // 是否显示控件
-    loop: Boolean,      // 是否循环播放
-    src: {              // 源地址
+    name: String, // 音乐名
+    author: String, // 作者
+    poster: String, // 海报图片地址
+    autoplay: Boolean, // 是否自动播放
+    controls: Boolean, // 是否显示控件
+    loop: Boolean, // 是否循环播放
+    src: { // 源地址
       type: String,
-      observer(src) {
+      observer (src) {
         this.setSrc(src)
       }
     }
   },
-  created() {
+  created () {
     // 创建内部 context
     this._ctx = wx.createInnerAudioContext()
     this._ctx.onError(err => {
@@ -31,25 +31,27 @@ Component({
       this.triggerEvent('error', err)
     })
     this._ctx.onTimeUpdate(() => {
-      var time = this._ctx.currentTime,
-        min = parseInt(time / 60),
-        sec = Math.ceil(time % 60),
-        data = {}
+      const time = this._ctx.currentTime
+      const min = parseInt(time / 60)
+      const sec = Math.ceil(time % 60)
+      const data = {}
       data.time = (min > 9 ? min : '0' + min) + ':' + (sec > 9 ? sec : '0' + sec)
       // 不在拖动状态下需要更新进度条
-      if (!this.lastTime)
+      if (!this.lastTime) {
         data.value = time / this._ctx.duration * 100
+      }
       this.setData(data)
     })
     this._ctx.onEnded(() => {
-      if (!this.properties.loop)
+      if (!this.properties.loop) {
         this.setData({
           playing: false
         })
+      }
     })
     // #ifndef ALIPAY
   },
-  attached() {
+  attached () {
     context.set(this.id, this)
     // #endif
     // #ifdef MP-ALIPAY
@@ -58,21 +60,23 @@ Component({
     // #endif
   },
   // #ifdef MP-ALIPAY
-  didUpdate(e) {
-    if (e.src != this.properties.src)
+  didUpdate (e) {
+    if (e.src !== this.properties.src) {
       this.setSrc(this.properties.src)
+    }
   },
   // #endif
-  detached() {
+  detached () {
     this._ctx.destroy()
     context.remove(this.properties.audioId)
   },
   // #ifndef ALIPAY | TOUTIAO
   pageLifetimes: {
-    show() {
+    show () {
       // 播放被后台打断时，页面显示后自动继续播放
-      if (this.data.playing && this._ctx.paused)
+      if (this.data.playing && this._ctx.paused) {
         this._ctx.play()
+      }
     }
   },
   // #endif
@@ -81,20 +85,21 @@ Component({
      * @description 设置源
      * @param {string} src 源地址
      */
-    setSrc(src) {
+    setSrc (src) {
       this._ctx.autoplay = this.properties.autoplay
       this._ctx.loop = this.properties.loop
       this._ctx.src = src
-      if (this.properties.autoplay && !this.data.playing)
+      if (this.properties.autoplay && !this.data.playing) {
         this.setData({
           playing: true
         })
+      }
     },
 
     /**
      * @description 播放音乐
      */
-    play() {
+    play () {
       this._ctx.play()
       this.setData({
         playing: true
@@ -113,7 +118,7 @@ Component({
     /**
      * @description 暂停音乐
      */
-    pause() {
+    pause () {
       this._ctx.pause()
       this.setData({
         playing: false
@@ -124,7 +129,7 @@ Component({
     /**
      * @description 停止音乐
      */
-    stop() {
+    stop () {
       this._ctx.stop()
       this.setData({
         playing: false,
@@ -137,22 +142,21 @@ Component({
      * @description 控制进度
      * @param {number} sec 秒数
      */
-    seek(sec) {
+    seek (sec) {
       this._ctx.seek(sec)
     },
 
     /**
      * @description 移动进度条
-     * @param {event} e 
+     * @param {event} e
      * @private
      */
-    _seeking(e) {
+    _seeking (e) {
       // 避免过于频繁 setData
-      if (e.timeStamp - this.lastTime < 200)
-        return
-      var time = Math.round(e.detail.value / 100 * this._ctx.duration),
-        min = parseInt(time / 60),
-        sec = time % 60
+      if (e.timeStamp - this.lastTime < 200) return
+      const time = Math.round(e.detail.value / 100 * this._ctx.duration)
+      const min = parseInt(time / 60)
+      const sec = time % 60
       this.setData({
         time: (min > 9 ? min : '0' + min) + ':' + (sec > 9 ? sec : '0' + sec)
       })
@@ -161,12 +165,12 @@ Component({
 
     /**
      * @description 进度条移动完毕
-     * @param {event} e 
+     * @param {event} e
      * @private
      */
-    _seeked(e) {
+    _seeked (e) {
       this._ctx.seek(e.detail.value / 100 * this._ctx.duration)
-      this.lastTime = void 0
+      this.lastTime = undefined
     }
   }
 })

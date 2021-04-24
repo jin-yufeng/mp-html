@@ -28,7 +28,7 @@
 
 示例：  
 ```javascript
-function search(key) {
+function search (key) {
   // ctx 为组件实例
   ctx.search(key, true).then(res => {
     res.highlight(1)

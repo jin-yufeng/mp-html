@@ -13,7 +13,7 @@
   <script>
     export default {
       methods: {
-        ready(e) {
+        ready (e) {
           console.log(e)
         }
       }
@@ -29,7 +29,7 @@
   ```
   ```javascript
   Page({
-    ready(e) {
+    ready (e) {
       console.log(e)
     }
   })
@@ -43,7 +43,7 @@
   ```
   ```javascript
   Page({
-    ready(e) {
+    ready (e) {
       console.log(e.detail)
     }
   })
@@ -75,7 +75,7 @@
 示例：  
 ```javascript
 Page({
-  imgtap(e) {
+  imgtap (e) {
     // 对做了某种标记的图片进行预览
     if (e.detail['data-flag']) {
       wx.previewImage({
@@ -109,18 +109,18 @@ Page({
 示例：  
 ```javascript
 Page({
-  linktap(e) {
+  linktap (e) {
     // 下载 doc 文件
     if (e.detail.href.includes('.doc'))
       wx.downloadFile({
         url: e.detail.href,
-        success(res) {
+        success (res) {
           wx.hideLoading()
           wx.openDocument({
             filePath: res.tempFilePath
           })
         },
-        fail(err) {
+        fail (err) {
           wx.hideLoading()
           wx.showModal({
             title: '失败',

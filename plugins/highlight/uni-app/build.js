@@ -2,7 +2,7 @@ const config = require('../config')
 
 const build = {
   import: 'prism.css',
-  handler(file) {
+  handler (file) {
     if (file.path.includes('prism.css')) {
       // 将标签名选择器和属性选择器转为 class 选择器（组件内仅支持 class 选择器）
       file.contents = Buffer.from(file.contents.toString().replace(/pre([[)])/g, '.hl-pre$1').replace(/code/g, '.hl-code').replace(/\[class\*="language-"\]/g, '').replace(/:not[^,}]+[,}]*/g, '').replace(/\.token\./g, '.hl-').replace(/\.[a-z]/g, '/deep/ $&'))
@@ -10,7 +10,7 @@ const build = {
   }
 }
 
-if (config.showLanguageName || config.showLineNumber)
+if (config.showLanguageName || config.showLineNumber) {
   // pre 内部的 code 进行滚动，避免行号和语言名称跟随滚动
   build.style = `/deep/ .hl-pre {
   position: relative;
@@ -19,11 +19,12 @@ if (config.showLanguageName || config.showLineNumber)
   overflow: auto;
   display: block;
 }`
+}
 
 if (config.copyByLongPress) {
-  build.template = `<rich-text v-if="n.attrs['data-content']" :nodes="[n]" :data-content="n.attrs['data-content']" :data-lang="n.attrs['data-lang']" @longpress="copyCode" />`
+  build.template = '<rich-text v-if="n.attrs[\'data-content\']" :nodes="[n]" :data-content="n.attrs[\'data-content\']" :data-lang="n.attrs[\'data-lang\']" @longpress="copyCode" />'
   build.methods = {
-    copyCode(e) {
+    copyCode (e) {
       uni.showActionSheet({
         itemList: ['复制代码'],
         success: () =>

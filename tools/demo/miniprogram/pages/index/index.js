@@ -9,21 +9,24 @@ Page({
       li: 'margin: 5px 0;'
     }
   },
-  onReady() {
-    this.setData({
-      html
-    })
+  onLoad () {
+    // 模拟网络请求
+    setTimeout(() => {
+      this.setData({
+        html
+      })
+    }, 200)
   },
-  load() {
+  load () {
     console.log('dom 树加载完毕')
   },
-  ready(e) {
+  ready (e) {
     console.log('ready 事件触发：', e)
   },
-  imgtap(e) {
+  imgtap (e) {
     console.log('imgtap 事件触发：', e)
   },
-  linktap(e) {
+  linktap (e) {
     console.log('linktap 事件触发：', e)
   }
 })

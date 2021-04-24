@@ -1,10 +1,11 @@
 module.exports = {
   usingComponents: {
-    "my-audio": "../audio/audio"
+    'my-audio': '../audio/audio'
   },
-  handler(file) {
+  handler (file) {
     // 删去原来的 audio 标签
-    if (file.basename == 'node.wxml' || file.basename == 'node.vue')
+    if (file.basename === 'node.wxml' || file.basename === 'node.vue') {
       file.contents = Buffer.from(file.contents.toString().replace(/<audio[\s\S]+?>/, ''))
+    }
   }
 }

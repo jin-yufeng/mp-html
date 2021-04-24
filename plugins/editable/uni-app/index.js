@@ -2,19 +2,20 @@
  * @fileoverview editable 插件
  */
 const config = require('./config')
-const parser = require('../parser')
+const Parser = require('../parser')
 
-function editable(vm) {
+function Editable (vm) {
   this.vm = vm
-  this.editHistory = []      // 历史记录
-  this.editI = -1            // 历史记录指针
-  vm._mask = []              // 蒙版被点击时进行的操作
+  this.editHistory = [] // 历史记录
+  this.editI = -1 // 历史记录指针
+  vm._mask = [] // 蒙版被点击时进行的操作
 
   vm._setData = function (path, val) {
-    var paths = path.split('.'),
-      target = vm
-    for (var i = 0; i < paths.length - 1; i++)
+    const paths = path.split('.')
+    let target = vm
+    for (let i = 0; i < paths.length - 1; i++) {
       target = target[paths[i]]
+    }
     vm.$set(target, paths.pop(), val)
   }
 
@@ -22,9 +23,9 @@ function editable(vm) {
    * @description 移动历史记录指针
    * @param {Number} num 移动距离
    */
-  var move = num => {
+  const move = num => {
     setTimeout(() => {
-      var item = this.editHistory[this.editI + num]
+      const item = this.editHistory[this.editI + num]
       if (item) {
         this.editI += num
         vm._setData(item.key, item.value)
@@ -32,7 +33,7 @@ function editable(vm) {
     }, 200)
   }
   vm.undo = () => move(-1) // 撤销
-  vm.redo = () => move(1)  // 重做
+  vm.redo = () => move(1) // 重做
 
   /**
    * @description 更新记录
@@ -44,8 +45,9 @@ function editable(vm) {
    */
   vm._editVal = (path, oldVal, newVal, set) => {
     // 当前指针后的内容去除
-    while (this.editI < this.editHistory.length - 1)
+    while (this.editI < this.editHistory.length - 1) {
       this.editHistory.pop()
+    }
 
     // 最多存储 30 条操作记录
     while (this.editHistory.length > 30) {
@@ -53,8 +55,8 @@ function editable(vm) {
       this.editI--
     }
 
-    var last = this.editHistory[this.editHistory.length - 1]
-    if (!last || last.key != path) {
+    const last = this.editHistory[this.editHistory.length - 1]
+    if (!last || last.key !== path) {
       if (last) {
         // 去掉上一次的新值
         this.editHistory.pop()
@@ -76,8 +78,9 @@ function editable(vm) {
     this.editI++
 
     // 更新到视图
-    if (set)
+    if (set) {
       vm._setData(path, newVal)
+    }
   }
 
   /**
@@ -85,35 +88,49 @@ function editable(vm) {
    * @private
    */
   vm._getItem = function (node) {
-    var items
-    if (node.name == 'img') {
+    let items
+    let i
+    if (node.name === 'img') {
       items = config.img.slice(0)
       if (!vm.getSrc) {
-        let i = items.indexOf('换图')
-        if (i != -1)
+        i = items.indexOf('换图')
+        if (i !== -1) {
           items.splice(i, 1)
+        }
         i = items.indexOf('超链接')
-        if (i != -1)
+        if (i !== -1) {
           items.splice(i, 1)
+        }
         i = items.indexOf('预览图')
-        if (i != -1)
+        if (i !== -1) {
           items.splice(i, 1)
+        }
       }
-      let i = items.indexOf('禁用预览')
-      if (i != -1 && node.attrs.ignore)
+      i = items.indexOf('禁用预览')
+      if (i !== -1 && node.attrs.ignore) {
         items[i] = '启用预览'
-    } else if (node.name == 'a')
+      }
+    } else if (node.name === 'a') {
       items = config.link.slice(0)
-    else if (node.name == 'video' || node.name == 'audio') {
+      if (!vm.getSrc) {
+        i = items.indexOf('更换链接')
+        if (i !== -1) {
+          items.splice(i, 1)
+        }
+      }
+    } else if (node.name === 'video' || node.name === 'audio') {
       items = config.media.slice(0)
-      let i = items.indexOf('封面')
-      if (!vm.getSrc && i != -1)
+      i = items.indexOf('封面')
+      if (!vm.getSrc && i !== -1) {
         items.splice(i, 1)
+      }
       i = items.indexOf('循环')
-      if (node.attrs.loop && i != -1)
+      if (node.attrs.loop && i !== -1) {
         items[i] = '不循环'
-    } else
+      }
+    } else {
       items = config.node.slice(0)
+    }
     return items
   }
 
@@ -152,33 +169,38 @@ function editable(vm) {
    */
   vm._maskTap = function () {
     // 隐藏所有悬浮窗
-    while (vm._mask.length)
+    while (vm._mask.length) {
       (vm._mask.pop())()
-    if (vm.tooltip)
+    }
+    if (vm.tooltip) {
       vm.$set(vm, 'tooltip', null)
-    if (vm.slider)
+    }
+    if (vm.slider) {
       vm.$set(vm, 'slider', null)
+    }
   }
 
   /**
    * @description 插入节点
-   * @param {Object} node 
+   * @param {Object} node
    */
-  function insert(node) {
-    if (vm._edit)
+  function insert (node) {
+    if (vm._edit) {
       vm._edit.insert(node)
-    else
+    } else {
       vm.nodes.push(node)
+    }
   }
 
   /**
    * @description 在光标处插入指定 html 内容
    * @param {String} html 内容
    */
-   vm.insertHtml = function (html) {
-    var arr = new parser(vm).parse(html)
-    for (var i = 0; i < arr.length; i++)
+  vm.insertHtml = function (html) {
+    const arr = new Parser(vm).parse(html)
+    for (let i = 0; i < arr.length; i++) {
       insert(arr[i])
+    }
   }
 
   /**
@@ -218,8 +240,9 @@ function editable(vm) {
    */
   vm.insertVideo = function () {
     vm.getSrc && vm.getSrc('video').then(src => {
-      if (typeof src == 'string')
+      if (typeof src === 'string') {
         src = [src]
+      }
       insert({
         name: 'div',
         attrs: {
@@ -240,8 +263,9 @@ function editable(vm) {
    */
   vm.insertAudio = function () {
     vm.getSrc && vm.getSrc('audio').then(src => {
-      if (typeof src == 'string')
+      if (typeof src === 'string') {
         src = [src]
+      }
       insert({
         name: 'div',
         attrs: {
@@ -276,7 +300,7 @@ function editable(vm) {
    */
   vm.clear = function () {
     vm._maskTap()
-    vm._edit = void 0
+    vm._edit = undefined
     vm.$set(vm, 'nodes', [{
       name: 'p',
       attrs: {},
@@ -291,84 +315,85 @@ function editable(vm) {
    * @description 获取编辑后的 html
    */
   vm.getContent = function () {
-    var html = '';
+    let html = '';
     // 递归遍历获取
-    (function traversal(nodes, table) {
-      for (var i = 0; i < nodes.length; i++) {
-        var item = nodes[i]
-        if (item.type == 'text')
+    (function traversal (nodes, table) {
+      for (let i = 0; i < nodes.length; i++) {
+        let item = nodes[i]
+        if (item.type === 'text') {
           html += item.text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>').replace(/\xa0/g, '&nbsp;') // 编码实体
-        else {
-          if (item.name == 'img') {
+        } else {
+          if (item.name === 'img') {
             item.attrs.i = ''
             // 还原被转换的 svg
             if ((item.attrs.src || '').includes('data:image/svg+xml;utf8,')) {
               html += item.attrs.src.substr(24).replace(/%23/g, '#').replace('<svg', '<svg style="' + (item.attrs.style || '') + '"')
               continue
             }
-          }
-          // 还原 video 和 audio 的 source
-          else if (item.name == 'video' || item.name == 'audio') {
+          } else if (item.name === 'video' || item.name === 'audio') {
+            // 还原 video 和 audio 的 source
             item = JSON.parse(JSON.stringify(item))
             if (item.src.length > 1) {
               item.children = []
-              for (let j = 0; j < item.src.length; j++)
+              for (let j = 0; j < item.src.length; j++) {
                 item.children.push({
                   name: 'source',
                   attrs: {
                     src: item.src[j]
                   }
                 })
-            } else
+              }
+            } else {
               item.attrs.src = item.src[0]
-          }
-          // 还原滚动层
-          else if (item.name == 'div' && (item.attrs.style || '').includes('overflow:auto') && (item.children[0] || {}).name == 'table')
+            }
+          } else if (item.name === 'div' && (item.attrs.style || '').includes('overflow:auto') && (item.children[0] || {}).name === 'table') {
+            // 还原滚动层
             item = item.children[0]
+          }
           // 还原 table
-          if (item.name == 'table') {
+          if (item.name === 'table') {
             item = JSON.parse(JSON.stringify(item))
             table = item.attrs
             if ((item.attrs.style || '').includes('display:grid')) {
               item.attrs.style = item.attrs.style.split('display:grid')[0]
-              var children = [{
+              const children = [{
                 name: 'tr',
                 attrs: {},
                 children: []
               }]
               for (let j = 0; j < item.children.length; j++) {
                 item.children[j].attrs.style = item.children[j].attrs.style.replace(/grid-[^;]+;*/g, '')
-                if (item.children[j].r != children.length) {
+                if (item.children[j].r !== children.length) {
                   children.push({
                     name: 'tr',
                     attrs: {},
                     children: [item.children[j]]
                   })
-                } else
+                } else {
                   children[children.length - 1].children.push(item.children[j])
+                }
               }
               item.children = children
             }
           }
           html += '<' + item.name
-          for (var attr in item.attrs) {
-            var val = item.attrs[attr]
-            if (!val)
-              continue
-            // bool 型省略值
-            if (val == 'T' || val === true) {
+          for (const attr in item.attrs) {
+            let val = item.attrs[attr]
+            if (!val) continue
+            if (val === 'T' || val === true) {
+              // bool 型省略值
               html += ' ' + attr
               continue
-            }
-            // 取消为了显示 table 添加的 style
-            else if (item.name[0] == 't' && attr == 'style' && table) {
+            } else if (item.name[0] === 't' && attr === 'style' && table) {
+              // 取消为了显示 table 添加的 style
               val = val.replace(/;*display:table[^;]*/, '')
-              if (table.border)
+              if (table.border) {
                 val = val.replace(/border[^;]+;*/g, $ => $.includes('collapse') ? $ : '')
-              if (table.cellpadding)
+              }
+              if (table.cellpadding) {
                 val = val.replace(/padding[^;]+;*/g, '')
-              if (!val)
-                continue
+              }
+              if (!val) continue
             }
             html += ' ' + attr + '="' + val.replace(/"/g, '&quot;') + '"'
           }
@@ -382,20 +407,22 @@ function editable(vm) {
     })(vm.nodes)
 
     // 其他插件处理
-    for (let i = vm.plugins.length; i--;)
-      if (vm.plugins[i].onGetContent)
+    for (let i = vm.plugins.length; i--;) {
+      if (vm.plugins[i].onGetContent) {
         html = vm.plugins[i].onGetContent(html) || html
+      }
+    }
 
     return html
   }
 }
 
-editable.prototype.onUpdate = function (content, config) {
+Editable.prototype.onUpdate = function (content, config) {
   if (this.vm.editable) {
     this.vm._maskTap()
-    this.vm._edit = void 0
+    this.vm._edit = undefined
     config.entities.amp = '&'
-    if (!content)
+    if (!content) {
       setTimeout(() => {
         this.vm.$set(this.vm, 'nodes', [{
           name: 'p',
@@ -406,7 +433,8 @@ editable.prototype.onUpdate = function (content, config) {
           }]
         }])
       }, 0)
+    }
   }
 }
 
-module.exports = editable
+module.exports = Editable

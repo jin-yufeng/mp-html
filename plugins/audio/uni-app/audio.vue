@@ -24,7 +24,7 @@
  */
 const context = require('./context')
 export default {
-  data() {
+  data () {
     return {
       error: false,
       playing: false,
@@ -34,59 +34,63 @@ export default {
   },
   props: {
     aid: String,
-    name: String,       // 音乐名
-    author: String,     // 作者
-    poster: String,     // 海报图片地址
-    autoplay: null,     // 是否自动播放
-    controls: null,     // 是否显示控件
-    loop: null,         // 是否循环播放
-    src: String         // 源地址
+    name: String, // 音乐名
+    author: String, // 作者
+    poster: String, // 海报图片地址
+    autoplay: [Boolean, String], // 是否自动播放
+    controls: [Boolean, String], // 是否显示控件
+    loop: [Boolean, String], // 是否循环播放
+    src: String // 源地址
   },
   watch: {
-    src(src) {
+    src (src) {
       this.setSrc(src)
     }
   },
-  mounted() {
+  mounted () {
     this._ctx = uni.createInnerAudioContext()
     this._ctx.onError((err) => {
       this.error = true
       this.$emit('error', err)
     })
     this._ctx.onTimeUpdate(() => {
-      var time = this._ctx.currentTime,
-        min = parseInt(time / 60),
-        sec = Math.ceil(time % 60)
+      const time = this._ctx.currentTime
+      const min = parseInt(time / 60)
+      const sec = Math.ceil(time % 60)
       this.time = (min > 9 ? min : '0' + min) + ':' + (sec > 9 ? sec : '0' + sec)
-      if (!this.lastTime)
+      if (!this.lastTime) {
         this.value = time / this._ctx.duration * 100 // 不在拖动状态下
+      }
     })
     this._ctx.onEnded(() => {
-      if (!this.loop)
+      if (!this.loop) {
         this.playing = false
+      }
     })
     context.set(this.aid, this)
     this.setSrc(this.src)
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this._ctx.destroy()
     context.remove(this.properties.audioId)
   },
-  onPageShow() {
-    if (this.playing && this._ctx.paused)
+  onPageShow () {
+    if (this.playing && this._ctx.paused) {
       this._ctx.play()
+    }
   },
   methods: {
     // 设置源
-    setSrc(src) {
+    setSrc (src) {
       this._ctx.autoplay = this.autoplay
       this._ctx.loop = this.loop
       this._ctx.src = src
-      if (this.autoplay && !this.playing)
+      if (this.autoplay && !this.playing) {
         this.playing = true
+      }
     },
     // 播放
-    play() {
+    play () {
       this._ctx.play()
       this.playing = true
       this.$emit('play', {
@@ -96,33 +100,32 @@ export default {
       })
     },
     // 暂停
-    pause() {
+    pause () {
       this._ctx.pause()
       this.playing = false
       this.$emit('pause')
     },
     // 移动进度条
-    seek(sec) {
+    seek (sec) {
       this._ctx.seek(sec)
     },
     // 内部方法
-    _buttonTap() {
+    _buttonTap () {
       if (this.playing) this.pause()
       else this.play()
     },
-    _seeking(e) {
+    _seeking (e) {
       // 避免过于频繁 setData
-      if (e.timeStamp - this.lastTime < 200)
-        return
-      var time = Math.round(e.detail.value / 100 * this._ctx.duration),
-        min = parseInt(time / 60),
-        sec = time % 60
+      if (e.timeStamp - this.lastTime < 200) return
+      const time = Math.round(e.detail.value / 100 * this._ctx.duration)
+      const min = parseInt(time / 60)
+      const sec = time % 60
       this.time = (min > 9 ? min : '0' + min) + ':' + (sec > 9 ? sec : '0' + sec)
       this.lastTime = e.timeStamp
     },
-    _seeked(e) {
+    _seeked (e) {
       this.seek(e.detail.value / 100 * this._ctx.duration)
-      this.lastTime = void 0
+      this.lastTime = undefined
     }
   }
 }

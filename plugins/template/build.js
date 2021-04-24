@@ -54,10 +54,10 @@ module.exports = {
    * @param {Vinyl} file 关于该文件对象的格式可参考 https://github.com/gulpjs/vinyl#instance-methods
    * @param {String} platform 平台
    */
-  handler(file, platform) {
-    var content = file.contents.toString()
+  handler (file, platform) {
+    let content = file.contents.toString()
     // 进行处理
-    if (platform == 'xxx') {
+    if (platform === 'xxx') {
       content = content.replace('aaa', 'bbb')
     }
     file.contents = Buffer.from(content)

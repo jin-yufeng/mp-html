@@ -87,7 +87,7 @@
 示例：  
 ```javascript
 Page({
-  onLoad() {
+  onLoad () {
     // ctx 为组件实例，获取方法见上
     /**
      * @description 设置获取链接的方法
@@ -107,7 +107,7 @@ Page({
                 url: 'xxx', // 接口地址
                 filePath: res.tempFilePaths[0],
                 name: 'xxx',
-                success(res) {
+                success (res) {
                   resolve(res.data.path) // 返回线上地址
                 },
                 fail: reject
@@ -119,7 +119,7 @@ Page({
       })
     }
   },
-  finishEdit() {
+  finishEdit () {
     var html = ctx.getContent() // 获取编辑好的 html
     // 上传 html
     wx.request({
@@ -230,7 +230,7 @@ Page({
 
 示例：  
 ```javascript
-function search(key) {
+function search (key) {
   // ctx 为组件实例
   ctx.search(key, true).then(res => {
     res.highlight(1)
@@ -358,8 +358,8 @@ function search(key) {
 
 如果在插件中需要用到解析器（将 *html* 字符串解析为 *nodes* 数组），可以引入 *src/parser.js* 使用，方法如下：  
 ```javascript
-const parser = require('../parser.js')
-var instance = new parser(vm) // 实例化解析器，传入组件实例将自动获取相关配置
+const Parser = require('../parser.js')
+var instance = new Parser(vm) // 实例化解析器，传入组件实例将自动获取相关配置
 var nodes = instance.parse(content) // 解析完成
 ```
 

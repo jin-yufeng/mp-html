@@ -8,6 +8,7 @@
 ![downloads](https://badgen.net/npm/dt/mp-html)
 [![Coverage Status](https://coveralls.io/repos/github/jin-yufeng/mp-html/badge.svg?branch=master)](https://coveralls.io/github/jin-yufeng/mp-html?branch=master)
 ![license](https://badgen.net/github/license/jin-yufeng/mp-html)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## 📢 概况 :id=overview
 显示动态 *html* 富文本是很多应用必要的需求，小程序平台不支持 *dom* 操作使得这成为一个难题，其自带的 *rich-text* 组件支持的标签少且屏蔽所有事件，难以实际应用。因此就有了这样一个能够便捷的在小程序平台上处理富文本的组件，还支持丰富的扩展功能。  

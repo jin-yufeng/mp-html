@@ -69,7 +69,7 @@
 2. 在需要使用页面的 *js* 文件中添加  
    ```javascript
    Page({
-     onLoad() {
+     onLoad () {
        this.setData({
          html: '<div>Hello World!</div>'
        })
@@ -99,7 +99,7 @@
        components: {
          mpHtml
        },
-       data() {
+       data () {
          return {
            html: '<div>Hello World!</div>'
          }
@@ -124,7 +124,7 @@
        components: {
          mpHtml
        },
-       data() {
+       data () {
          return {
            html: '<div>Hello World!</div>'
          }

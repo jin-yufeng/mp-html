@@ -6,11 +6,11 @@ Component({
     ctrl: {} // 控制信号
   },
   properties: {
-    childs: Array,  // 子节点列表
-    opts: Array     // 设置 [是否开启懒加载, 加载中占位图, 错误占位图, 是否使用长按菜单]
+    childs: Array, // 子节点列表
+    opts: Array // 设置 [是否开启懒加载, 加载中占位图, 错误占位图, 是否使用长按菜单]
   },
   // #ifndef MP-TOUTIAO
-  attached() {
+  attached () {
     // #ifndef MP-ALIPAY
     this.triggerEvent('add', this, {
       bubbles: true,
@@ -23,34 +23,37 @@ Component({
   },
   // #endif
   methods: {
-    noop() { },
+    noop () { },
     /**
      * @description 获取标签
      * @param {String} path 路径
      */
-    getNode(path) {
-      var nums = path.split('_'),
-        node = this.properties.childs[nums[0]]
-      for (var i = 1; i < nums.length; i++)
+    getNode (path) {
+      const nums = path.split('_')
+      let node = this.properties.childs[nums[0]]
+      for (let i = 1; i < nums.length; i++) {
         node = node.children[nums[i]]
+      }
       return node
     },
     /**
      * @description 播放视频事件
-     * @param {Event} e 
+     * @param {Event} e
      */
-    play(e) {
+    play (e) {
       if (this.root.properties.pauseVideo) {
-        var flag = false, id = e.target.id
-        for (var i = this.root._videos.length; i--;) {
-          if (this.root._videos[i].id == id)
+        let flag = false
+        const id = e.target.id
+        for (let i = this.root._videos.length; i--;) {
+          if (this.root._videos[i].id === id) {
             flag = true
-          else
+          } else {
             this.root._videos[i].pause() // 自动暂停其他视频
+          }
         }
         // 将自己加入列表
         if (!flag) {
-          var ctx = wx.createVideoContext(id
+          const ctx = wx.createVideoContext(id
             // #ifndef MP-BAIDU
             , this
             // #endif
@@ -63,23 +66,21 @@ Component({
 
     /**
      * @description 图片点击事件
-     * @param {Event} e 
+     * @param {Event} e
      */
-    imgTap(e) {
-      var node = this.getNode(e.target.dataset.i)
+    imgTap (e) {
+      const node = this.getNode(e.target.dataset.i)
       // 父级中有链接
-      if (node.a)
-        return this.linkTap(node.a)
-      if (node.attrs.ignore)
-        return
+      if (node.a) return this.linkTap(node.a)
+      if (node.attrs.ignore) return
       this.root.triggerEvent('imgtap', node.attrs)
       if (this.root.properties.previewImg) {
-        var current =
+        const current =
           // #ifndef MP-ALIPAY
           this.root.imgList[node.i]
         // #endif
         // #ifdef MP-ALIPAY
-        node.i
+        node.i // eslint-disable-line
         // #endif
         // 自动预览图片
         wx.previewImage({
@@ -91,44 +92,47 @@ Component({
 
     /**
      * @description 图片加载完成事件
-     * @param {Event} e 
+     * @param {Event} e
      */
-    imgLoad(e) {
-      var i = e.target.dataset.i,
-        node = this.getNode(i), val
-      if (!node.w)
+    imgLoad (e) {
+      const i = e.target.dataset.i
+      const node = this.getNode(i)
+      let val
+      if (!node.w) {
         val = e.detail.width
-      // 加载完毕，取消加载中占位图
-      else if ((this.properties.opts[1] && !this.data.ctrl[i]) || this.data.ctrl[i] == -1)
+      } else if ((this.properties.opts[1] && !this.data.ctrl[i]) || this.data.ctrl[i] === -1) {
+        // 加载完毕，取消加载中占位图
         val = 1
+      }
       if (val
         // #ifdef MP-TOUTIAO
-        && val != this.data.ctrl[i]
+        && val !== this.data.ctrl[i] // eslint-disable-line
         // #endif
-      )
+      ) {
         this.setData({
           ['ctrl.' + i]: val
         })
+      }
     },
 
     /**
      * @description 链接点击事件
-     * @param {Event} e 
+     * @param {Event} e
      */
-    linkTap(e) {
-      var node = e.currentTarget ? this.getNode(e.currentTarget.dataset.i) : {},
-        attrs = node.attrs || e,
-        href = attrs.href
+    linkTap (e) {
+      const node = e.currentTarget ? this.getNode(e.currentTarget.dataset.i) : {}
+      const attrs = node.attrs || e
+      const href = attrs.href
       this.root.triggerEvent('linktap', Object.assign({
-        innerText: this.root.getText(node.children || []), // 链接内的文本内容
+        innerText: this.root.getText(node.children || []) // 链接内的文本内容
       }, attrs))
       if (href) {
-        // 跳转锚点
-        if (href[0] == '#')
+        if (href[0] === '#') {
+          // 跳转锚点
           this.root.navigateTo(href.substring(1)).catch(() => { })
-        // 复制外部链接
-        else if (href.includes('://')) {
-          if (this.root.properties.copyLink)
+        } else if (href.includes('://')) {
+          // 复制外部链接
+          if (this.root.properties.copyLink) {
             wx.setClipboardData({
               data: href,
               success: () =>
@@ -136,49 +140,53 @@ Component({
                   title: '链接已复制'
                 })
             })
-        }
-        // 跳转页面
-        else
+          }
+        } else {
+          // 跳转页面
           wx.navigateTo({
             url: href,
-            fail() {
+            fail () {
               wx.switchTab({
                 url: href,
-                fail() { }
+                fail () { }
               })
             }
           })
+        }
       }
     },
 
     /**
      * @description 错误事件
-     * @param {Event} e 
+     * @param {Event} e
      */
-    mediaError(e) {
-      var i = e.target.dataset.i,
-        node = this.getNode(i)
-      // 加载其他源
-      if (node.name == 'video' || node.name == 'audio') {
-        var index = (this.data.ctrl[i] || 0) + 1
-        if (index > node.src.length)
+    mediaError (e) {
+      const i = e.target.dataset.i
+      const node = this.getNode(i)
+      if (node.name === 'video' || node.name === 'audio') {
+        // 加载其他源
+        let index = (this.data.ctrl[i] || 0) + 1
+        if (index > node.src.length) {
           index = 0
-        if (index < node.src.length)
+        }
+        if (index < node.src.length) {
           return this.setData({
             ['ctrl.' + i]: index
           })
-      }
-      // 显示错误占位图
-      else if (node.name == 'img' && this.properties.opts[2])
+        }
+      } else if (node.name === 'img' && this.properties.opts[2]) {
+        // 显示错误占位图
         this.setData({
           ['ctrl.' + i]: -1
         })
-      if (this.root)
+      }
+      if (this.root) {
         this.root.triggerEvent('error', {
           source: node.name,
           attrs: node.attrs,
           errMsg: e.detail.errMsg
         })
+      }
     }
   }
 })

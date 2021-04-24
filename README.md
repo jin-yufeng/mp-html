@@ -8,6 +8,7 @@
 ![downloads](https://badgen.net/npm/dt/mp-html)
 [![Coverage Status](https://coveralls.io/repos/github/jin-yufeng/mp-html/badge.svg?branch=master)](https://coveralls.io/github/jin-yufeng/mp-html?branch=master)
 ![license](https://badgen.net/github/license/jin-yufeng/mp-html)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## 功能介绍
 - 支持在多个主流的小程序平台和 `uni-app` 中使用

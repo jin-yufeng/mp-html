@@ -59,11 +59,12 @@ module.exports = {
   background: transparent;
   border: 0;
 }`,
-  handler(file) {
+  handler (file) {
     // 添加 markdown 属性
-    if (file.path.includes('miniprogram' + path.sep + 'index.js'))
-      file.contents = Buffer.from(file.contents.toString().replace(/properties\s*:\s*{/, 'properties:{markdown:Boolean,')
-        // 处理中文 id
-        .replace(/navigateTo\s*\(id,\s*offset\)\s*{/, 'navigateTo(id, offset){id=this._ids[decodeURI(id)]||id'))
+    if (file.path.includes('miniprogram' + path.sep + 'index.js')) {
+      file.contents = Buffer.from(file.contents.toString().replace(/properties\s*:\s*{/, 'properties: {\n    markdown: Boolean,')
+      // 处理中文 id
+        .replace(/navigateTo\s*\(id,\s*offset\)\s*{/, 'navigateTo (id, offset) {\n      id = this._ids[decodeURI(id)] || id'))
+    }
   }
 }
