@@ -189,9 +189,9 @@ function Editable (vm) {
     if (vm._edit) {
       vm._edit.insert(node)
     } else {
-      vm.setData({
-        ['nodes[' + vm.data.nodes.length + ']']: node
-      })
+      const nodes = vm.data.nodes.slice(0)
+      nodes.push(node)
+      vm._editVal('nodes', vm.data.nodes, nodes, true)
     }
   }
 
