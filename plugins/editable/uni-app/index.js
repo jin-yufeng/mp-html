@@ -198,8 +198,10 @@ function Editable (vm) {
    * @description 在光标处插入指定 html 内容
    * @param {String} html 内容
    */
-  vm.insertHtml = function (html) {
+  vm.insertHtml = html => {
+    this.inserting = true
     const arr = new Parser(vm).parse(html)
+    this.inserting = undefined
     for (let i = 0; i < arr.length; i++) {
       insert(arr[i])
     }
@@ -422,19 +424,21 @@ function Editable (vm) {
 Editable.prototype.onUpdate = function (content, config) {
   if (this.vm.editable) {
     this.vm._maskTap()
-    this.vm._edit = undefined
     config.entities.amp = '&'
-    if (!content) {
-      setTimeout(() => {
-        this.vm.$set(this.vm, 'nodes', [{
-          name: 'p',
-          attrs: {},
-          children: [{
-            type: 'text',
-            text: ''
-          }]
-        }])
-      }, 0)
+    if (!this.inserting) {
+      this.vm._edit = undefined
+      if (!content) {
+        setTimeout(() => {
+          this.vm.$set(this.vm, 'nodes', [{
+            name: 'p',
+            attrs: {},
+            children: [{
+              type: 'text',
+              text: ''
+            }]
+          }])
+        }, 0)
+      }
     }
   }
 }
