@@ -74,6 +74,7 @@
 | redo | 重做一个操作 |
 | insertHtml | 在光标处插入指定 html 内容（[2.1.0+](changelog/changelog#v210)） |
 | insertImg | 在光标处插入一张图片 |
+| insertTable(rows, cols) | 在光标处插入一个 rows 行 cols 列的表格（[2.1.3+]()） |
 | insertVideo | 在光标处插入一个视频 |
 | insertAudio | 在光标处插入一个音频 |
 | insertLink | 在光标处插入一个链接 |

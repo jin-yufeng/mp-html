@@ -240,6 +240,42 @@ function Editable (vm) {
   }
 
   /**
+   * @description 在光标处插入一个表格
+   * @param {Number} rows 行数
+   * @param {Number} cols 列数
+   */
+  vm.insertTable = function (rows, cols) {
+    const table = {
+      name: 'table',
+      attrs: {
+        style: 'display:table;width:100%;margin:10px 0;text-align:center;border-spacing:0;border-collapse:collapse;border:1px solid gray'
+      },
+      children: []
+    }
+    for (let i = 0; i < rows; i++) {
+      const tr = {
+        name: 'tr',
+        attrs: {},
+        children: []
+      }
+      for (let j = 0; j < cols; j++) {
+        tr.children.push({
+          name: 'td',
+          attrs: {
+            style: 'padding:2px;border:1px solid gray'
+          },
+          children: [{
+            type: 'text',
+            text: ''
+          }]
+        })
+      }
+      table.children.push(tr)
+    }
+    insert(table)
+  }
+
+  /**
    * @description 在光标处插入一个视频
    */
   vm.insertVideo = function () {
