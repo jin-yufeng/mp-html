@@ -21,7 +21,7 @@ config.plugins.sort((a, b) => {
 const tagSelector = {}
 let tagI = 0
 if (config.externStyle) {
-  config.externStyle = config.externStyle.replace(/[.#[@]*([a-zA-Z]+)(?=[^}]*{)/g, ($, $1) => {
+  config.externStyle = config.externStyle.replace(/[.#[@:]*([a-zA-Z-]+)(?=[^}]*{)/g, ($, $1) => {
     if ($ !== $1) return $
     if (tagSelector[$]) return '.' + tagSelector[$]
     tagSelector[$] = '_' + tagI++
@@ -39,8 +39,8 @@ module.exports = {
     let plugins = '' // 插件列表
     let wxml = '' // 要引入到 node.wxml 中的内容
     let js = '' // 要引入到 node.js 中的内容
-    let wxss = config.externStyle; const // 要引入到 node.wxss 中的内容
-      json = {} // 要引入到 node.json 中的内容
+    let wxss = config.externStyle // 要引入到 node.wxss 中的内容
+    const json = {} // 要引入到 node.json 中的内容
 
     // 收集插件中要写入模板文件的内容
     for (let i = 0; i < config.plugins.length; i++) {
