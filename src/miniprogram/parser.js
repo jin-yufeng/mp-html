@@ -196,7 +196,7 @@ Parser.prototype.parseStyle = function (node) {
   const styleObj = {}
   let tmp = ''
 
-  if (attrs.id) {
+  if (attrs.id && !this.xml) {
     // 暴露锚点
     if (this.options.useAnchor) {
       this.expose()
