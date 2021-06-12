@@ -291,7 +291,9 @@ function Editable (vm) {
         },
         children: [{
           name: 'video',
-          attrs: {},
+          attrs: {
+            controls: 'T'
+          },
           src
         }]
       })
@@ -302,7 +304,16 @@ function Editable (vm) {
    * @description 在光标处插入一个音频
    */
   vm.insertAudio = function () {
-    vm.getSrc && vm.getSrc('audio').then(src => {
+    vm.getSrc && vm.getSrc('audio').then(attrs => {
+      let src
+      if (attrs.src) {
+        src = attrs.src
+        attrs.src = undefined
+      } else {
+        src = attrs
+        attrs = {}
+      }
+      attrs.controls = 'T'
       if (typeof src === 'string') {
         src = [src]
       }
@@ -313,7 +324,7 @@ function Editable (vm) {
         },
         children: [{
           name: 'audio',
-          attrs: {},
+          attrs,
           src
         }]
       })
