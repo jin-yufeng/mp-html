@@ -399,6 +399,7 @@ export default {
         // 点击
         case 'onClick':
           this.$emit('tap')
+          this.$emit('click')
           break
         // 出错
         case 'onError':
