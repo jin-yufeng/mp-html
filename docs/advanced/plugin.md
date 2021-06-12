@@ -11,6 +11,8 @@
 
 ?> 从 *uni-app* 的插件市场中导入的包中仅包含构建后的组件，不包含构建工具和插件，使用插件需要先 [获取完整的组件包](overview/quickstart#source)
 
+!> 直接将插件文件拷贝到项目中无法生效，必须使用上述方法构建包含插件的新组件包进行使用
+
 ## audio
 功能：音乐播放器  
 大小：*≈4KB*  
@@ -74,7 +76,7 @@
 | redo | 重做一个操作 |
 | insertHtml | 在光标处插入指定 html 内容（[2.1.0+](changelog/changelog#v210)） |
 | insertImg | 在光标处插入一张图片 |
-| insertTable(rows, cols) | 在光标处插入一个 rows 行 cols 列的表格（[2.1.3+]()） |
+| insertTable(rows, cols) | 在光标处插入一个 rows 行 cols 列的表格（[2.1.3+](changelog/changelog#v213)） |
 | insertVideo | 在光标处插入一个视频 |
 | insertAudio | 在光标处插入一个音频 |
 | insertLink | 在光标处插入一个链接 |
@@ -94,7 +96,9 @@ Page({
      * @description 设置获取链接的方法
      * @param {String} type 链接的类型（img/video/audio/link）
      * @param {String} value 修改链接时，这里会传入旧值
-     * @returns {Promise} 返回线上地址（type为音视频时可以返回一个数组作为源地址）
+     * @returns {Promise} 返回线上地址
+     *   type 为 audio/video 时，可以返回一个源地址数组
+     *   2.1.3 版本起 type 为 audio 时，可以返回一个 object，包含 author、name、poster、src 等字段
      */
     this.ctx.getSrc = (type, value) => {
       return new Promise((resolve, reject) => {
@@ -139,7 +143,7 @@ Page({
 ```
 
 **示例项目**：  
-微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/fPU7Yqmp7Ips) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
+微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/Mmwzd0mx79rN) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
 
 注意事项：  
 不要在 *editable* 属性被设置为 *true* 前通过 [setContent](advanced/api#setContent) 方法（用 [content](basic/prop#content) 属性）设置内容，否则在切换为 *true* 后会变成空白  

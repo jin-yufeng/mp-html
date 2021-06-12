@@ -1,5 +1,19 @@
 # 📖 更新日志 :id=changelog
 
+## v2.1.3
+发布时间：*2021-06-12*  
+主要更新：  
+1. `A` [editable](advanced/plugin#editable) 插件增加 `insertTable` 方法
+2. `U` [editable](advanced/plugin#editable) 插件支持编辑表格中的空白单元格 [详细](https://github.com/jin-yufeng/mp-html/issues/310)
+3. `F` 修复了 [externStyle](overview/quickstart#setting) 中使用伪类可能失效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/298)
+4. `F` 修复了多个组件同时使用时 [tag-style](basic/prop#tag-style) 属性时可能互相影响的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/305) by [@woodguoyu](https://github.com/woodguoyu)
+5. `F` 修复了包含 `linearGradient` 的 `svg` 可能无法显示的问题
+6. `F` 修复了 `uni-app` 包编译到头条小程序时可能报错的问题
+7. `F` 修复了 `uni-app` 包 `nvue` 端不触发 `click` 事件的问题
+8. `F` 修复了 [editable](advanced/plugin#editable) 插件尾部插入时无法撤销的问题
+9. `F` 修复了 [editable](advanced/plugin#editable) 插件的 `insertHtml` 方法只能在末尾插入的问题
+10. `F` 修复了 [editable](advanced/plugin#editable) 插件插入音频不显示的问题
+
 ## v2.1.2
 发布时间：*2021-04-24*  
 主要更新：  

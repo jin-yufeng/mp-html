@@ -2,12 +2,12 @@
 
 > 一个强大的小程序富文本组件
 
-![star](https://badgen.net/github/stars/jin-yufeng/mp-html)
-![forks](https://badgen.net/github/forks/jin-yufeng/mp-html)
-[![npm](https://badgen.net/npm/v/mp-html)](https://www.npmjs.com/package/mp-html)
-![downloads](https://badgen.net/npm/dt/mp-html)
+![star](https://img.shields.io/github/stars/jin-yufeng/mp-html)
+![forks](https://img.shields.io/github/forks/jin-yufeng/mp-html)
+[![npm](https://img.shields.io/npm/v/mp-html)](https://www.npmjs.com/package/mp-html)
+![downloads](https://img.shields.io/npm/dt/mp-html)
 [![Coverage Status](https://coveralls.io/repos/github/jin-yufeng/mp-html/badge.svg?branch=master)](https://coveralls.io/github/jin-yufeng/mp-html?branch=master)
-![license](https://badgen.net/github/license/jin-yufeng/mp-html)
+![license](https://img.shields.io/github/license/jin-yufeng/mp-html)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## 功能介绍
@@ -223,6 +223,18 @@
   ![支持](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.1.3 (20210612)
+  1. `A` `editable` 插件增加 `insertTable` 方法
+  2. `U` `editable` 插件支持编辑表格中的空白单元格 [详细](https://github.com/jin-yufeng/mp-html/issues/310)
+  3. `F` 修复了 `externStyle` 中使用伪类可能失效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/298)
+  4. `F` 修复了多个组件同时使用时 `tag-style` 属性时可能互相影响的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/305) by [@woodguoyu](https://github.com/woodguoyu)
+  5. `F` 修复了包含 `linearGradient` 的 `svg` 可能无法显示的问题
+  6. `F` 修复了 `uni-app` 包编译到头条小程序时可能报错的问题
+  7. `F` 修复了 `uni-app` 包 `nvue` 端不触发 `click` 事件的问题
+  8. `F` 修复了 `editable` 插件尾部插入时无法撤销的问题
+  9. `F` 修复了 `editable` 插件的 `insertHtml` 方法只能在末尾插入的问题
+  10. `F` 修复了 `editable` 插件插入音频不显示的问题
+
 - v2.1.2 (20210424)
   1. `A` 增加了 [img-cache](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin#img-cache) 插件，可以在 `uni-app` 的 `app` 端缓存图片 [详细](https://github.com/jin-yufeng/mp-html/issues/292) by [@PentaTea](https://github.com/PentaTea)
   2. `U` 支持通过 `container-style` 属性设置 `white-space` 来保留连续空格和换行符 [详细](https://jin-yufeng.gitee.io/mp-html/#/question/faq#space)
@@ -231,16 +243,6 @@
   5. `F` 修复了 `svg` 标签内嵌 `svg` 时无法显示的问题
   6. `F` 修复了微信原生包 `img` 标签的 `style` 中包含 `inline` 时不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/287)
   7. `F` 修复了支付宝和头条小程序部分区域不可复制的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/291)
-
-- v2.1.1 (20210409)
-  1. `F` 修复了对 `p` 标签设置 `tag-style` 可能不生效的问题
-  2. `F` 修复了 `svg` 标签中的文本无法显示的问题
-  3. `F` 修复了 `uni-app` 包的 `nvue` 端不设置 `container-style` 可能报错的问题
-  4. `F` 修复了 `uni-app` 包使用 `editable` 插件编辑表格时可能报错的问题
-  5. `F` 修复了 `uni-app` 包使用 `highlight` 插件运行到头条小程序时可能没有样式的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/280)
-  6. `F` 修复了 `uni-app` 包使用 `editable` 插件 `editable` 属性为 `false` 时会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/284)
-  7. `F` 修复了 `style` 插件连续子选择器失效的问题
-  8. `F` 修复了 `editable` 插件无法修改图片和字体大小的问题
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 

@@ -677,7 +677,7 @@ Parser.prototype.popNode = function () {
 
   Object.assign(styleObj, this.parseStyle(node))
 
-  if (parseInt(styleObj.width) > windowWidth) {
+  if (node.name !== 'table' && parseInt(styleObj.width) > windowWidth) {
     styleObj['max-width'] = '100%'
     styleObj['box-sizing'] = 'border-box'
   }
