@@ -479,4 +479,14 @@ Editable.prototype.onUpdate = function (content, config) {
   }
 }
 
+Editable.prototype.onParse = function (node) {
+  // 空白单元格可编辑
+  if (this.vm.editable && (node.name === 'td' || node.name === 'th') && !this.vm.getText(node.children)) {
+    node.children.push({
+      type: 'text',
+      text: ''
+    })
+  }
+}
+
 module.exports = Editable
