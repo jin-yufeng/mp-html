@@ -831,7 +831,7 @@ Parser.prototype.popNode = function () {
           children: [{
             name: 'div',
             attrs: {
-              style: 'font-size:50%;text-align:start'
+              style: 'font-size:50%;text-align:start;' + (children[i + 1].attrs.style || '')
             },
             children: children[i + 1].children
           }, children[i]]
