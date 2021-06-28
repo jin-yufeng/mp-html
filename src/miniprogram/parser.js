@@ -752,8 +752,10 @@ Parser.prototype.popNode = function () {
                 style += `;grid-column-start:${col};grid-column-end:${col + 1}`
               }
               // 记录下方单元格被占用
-              for (let k = 1; k < td.attrs.rowspan; k++) {
-                map[(row + k) + '.' + col] = 1
+              for (let rowspan = 1; rowspan < td.attrs.rowspan; rowspan++) {
+                for (let colspan = 0; colspan < (td.attrs.colspan || 1); colspan++) {
+                  map[(row + rowspan) + '.' + (col - colspan)] = 1
+                }
               }
             }
             if (style) {
