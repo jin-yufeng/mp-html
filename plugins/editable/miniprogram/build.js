@@ -605,14 +605,21 @@ module.exports = {
               })
             } else if (items[tapIndex] === '超链接') {
               // 将图片设置为链接
-              this.root.getSrc('link').then(url => {
-                this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + ']', node, {
-                  name: 'a',
-                  attrs: {
-                    href: url
-                  },
-                  children: [node]
-                }, true)
+              this.root.getSrc('link', node.a ? node.a.href : '').then(url => {
+                // 如果有 a 标签则替换 href
+                if (node.a) {
+                  this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].a.href', node.a.href, url, true)
+                } else {
+                  const link = {
+                    name: 'a',
+                    attrs: {
+                      href: url
+                    },
+                    children: [node]
+                  }
+                  node.a = link.attrs
+                  this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + ']', node, link, true)
+                }
                 wx.showToast({
                   title: '成功'
                 })
