@@ -537,14 +537,19 @@ function getTop(e) {
               })
             } else if (items[tapIndex] === '超链接') {
               // 将图片设置为链接
-              this.root.getSrc('link').then(url => {
-                this.root._editVal(this.opts[6] + '.' + i, node, {
-                  name: 'a',
-                  attrs: {
-                    href: url
-                  },
-                  children: [node]
-                }, true)
+              this.root.getSrc('link',node.a?.href).then(url => {
+                // 如果有a标签则替换href
+                if(node.a) {
+                  this.root._editVal(this.opts[6] + '.' + i + '.a.href', node.a.href, url, true);
+                } else {
+                  this.root._editVal(this.opts[6] + '.' + i, node, {
+                    name: 'a',
+                    attrs: {
+                      href: url
+                    },
+                    children: [node]
+                  }, true)
+                }
                 wx.showToast({
                   title: '成功'
                 })
