@@ -223,7 +223,7 @@ export default {
     imgLongTap (e) {
       // #ifdef APP-PLUS
       const attrs = this.childs[e.currentTarget.dataset.i].attrs
-      if (!attrs.ignore) {
+      if (this.opts[3] && !attrs.ignore) {
         uni.showActionSheet({
           itemList: ['保存图片'],
           success: () => {
