@@ -223,6 +223,12 @@
   ![支持](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.1.4 (20210714)
+  1. `F` 修复了 `rt` 标签无法设置样式的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/318)
+  2. `F` 修复了表格中有单元格同时合并行和列时可能显示不正确的问题
+  3. `F` 修复了 `uni-app` 包的 `app` 端无法关闭图片长按菜单的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/322)
+  4. `F` 修复了 `editable` 插件只能添加图片链接不能修改的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/312) by [@leeseett](https://github.com/leeseett)
+
 - v2.1.3 (20210612)
   1. `A` `editable` 插件增加 `insertTable` 方法
   2. `U` `editable` 插件支持编辑表格中的空白单元格 [详细](https://github.com/jin-yufeng/mp-html/issues/310)
@@ -234,15 +240,6 @@
   8. `F` 修复了 `editable` 插件尾部插入时无法撤销的问题
   9. `F` 修复了 `editable` 插件的 `insertHtml` 方法只能在末尾插入的问题
   10. `F` 修复了 `editable` 插件插入音频不显示的问题
-
-- v2.1.2 (20210424)
-  1. `A` 增加了 [img-cache](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin#img-cache) 插件，可以在 `uni-app` 的 `app` 端缓存图片 [详细](https://github.com/jin-yufeng/mp-html/issues/292) by [@PentaTea](https://github.com/PentaTea)
-  2. `U` 支持通过 `container-style` 属性设置 `white-space` 来保留连续空格和换行符 [详细](https://jin-yufeng.gitee.io/mp-html/#/question/faq#space)
-  3. `U` 代码风格符合 [standard](https://standardjs.com) 标准
-  4. `U` `uni-app` 包使用 `editable` 插件编辑状态下支持预览视频 [详细](https://github.com/jin-yufeng/mp-html/issues/286)
-  5. `F` 修复了 `svg` 标签内嵌 `svg` 时无法显示的问题
-  6. `F` 修复了微信原生包 `img` 标签的 `style` 中包含 `inline` 时不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/287)
-  7. `F` 修复了支付宝和头条小程序部分区域不可复制的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/291)
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 

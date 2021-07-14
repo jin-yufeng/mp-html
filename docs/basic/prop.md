@@ -15,8 +15,6 @@ white-space: pre-wrap; /* 保留空格和换行符 */
 white-space: pre-line; /* 保留换行符 */
 ```
 
-?> *uni-app* 的 *nvue* 端默认背景色是白色，可以通过本属性进行修改（*background-color*），但不能设置为透明
-
 ## content
 功能：用于渲染的 *html* 字符串  
 类型：*String*  
