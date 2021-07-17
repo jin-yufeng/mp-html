@@ -161,7 +161,7 @@ Parser.prototype.expose = function () {
   // #ifndef APP-PLUS-NVUE
   for (let i = this.stack.length; i--;) {
     const item = this.stack[i]
-    if (item.name === 'a' || item.c) return
+    if (item.c || item.name === 'a' || item.name === 'video' || item.name === 'audio') return
     item.c = 1
   }
   // #endif
