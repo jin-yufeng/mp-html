@@ -1,16 +1,16 @@
 module.exports = {
   style:
-    `/deep/ .md-p {
+    `.md-p {
   margin-block-start: 1em;
   margin-block-end: 1em;
 }
 
-/deep/ .md-table,
-/deep/ .md-blockquote {
+.md-table,
+.md-blockquote {
   margin-bottom: 16px;
 }
 
-/deep/ .md-table {
+.md-table {
   box-sizing: border-box;
   width: 100%;
   overflow: auto;
@@ -18,32 +18,32 @@ module.exports = {
   border-collapse: collapse;
 }
 
-/deep/ .md-tr {
+.md-tr {
   background-color: #fff;
   border-top: 1px solid #c6cbd1;
 }
 
-/deep/ .md-table .md-tr:nth-child(2n) {
+.md-table .md-tr:nth-child(2n) {
   background-color: #f6f8fa;
 }
 
-/deep/ .md-th,
-/deep/ .md-td {
+.md-th,
+.md-td {
   padding: 6px 13px !important;
   border: 1px solid #dfe2e5;
 }
 
-/deep/ .md-th {
+.md-th {
   font-weight: 600;
 }
 
-/deep/ .md-blockquote {
+.md-blockquote {
   padding: 0 1em;
   color: #6a737d;
   border-left: 0.25em solid #dfe2e5;
 }
 
-/deep/ .md-code {
+.md-code {
   padding: 0.2em 0.4em;
   font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
   font-size: 85%;
@@ -51,7 +51,7 @@ module.exports = {
   border-radius: 3px;
 }
 
-/deep/ .md-pre .md-code {
+.md-pre .md-code {
   padding: 0;
   font-size: 100%;
   background: transparent;

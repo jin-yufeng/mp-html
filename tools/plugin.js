@@ -118,7 +118,7 @@ module.exports = {
             // 引入 vue
             content = content.replace(/<!--\s*insert\s*-->/, wxml)
               .replace(/methods\s*:\s*{/, 'methods:{' + js)
-              .replace('<style>', '<style>' + wxss)
+              .replace('<style>', '<style>' + wxss.replace(/\.[a-z_][\s\S]*?[{,]/g, '/deep/ $&'))
             let importComp = ''
             let comps = ''
             for (let item in json) {
@@ -133,7 +133,7 @@ module.exports = {
               .replace(/components\s*:\s*{/, 'components: {\n' + comps)
           } else if (file.basename === 'local.html' && wxss) {
             // 引入样式
-            content = '<style>' + wxss.replace(/\/deep\/\s*/g, '') + '</style>' + content
+            content = '<style>' + wxss + '</style>' + content
           }
           file.contents = Buffer.from(content)
           for (const item in builds) {
@@ -192,7 +192,7 @@ module.exports = {
         if (file.basename === 'node.wxss') {
           content = css + content
         } else if (file.basename === 'node.vue') {
-          content = content.replace('<style>', '<style>' + css)
+          content = content.replace('<style>', '<style>' + css.replace(/\.[a-z_][\s\S]+?[{,]/g, '/deep/ $&'))
         } else if (file.basename === 'local.html' && css) {
           content = '<style>' + css.replace(/\/deep\/\s*/g, '') + '</style>' + content
         }
