@@ -24,7 +24,7 @@
    */
   module.exports = function (item) {
     if (item.c) return false
-    if (!item.children) return true
+    if (!item.children || item.name === 'a') return true
     // 微信小程序 rich-text 无法被设置为 inline 布局
     return !inlineTags[item.name] && (item.attrs.style || '').indexOf('inline') === -1
   }
