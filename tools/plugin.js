@@ -21,8 +21,8 @@ config.plugins.sort((a, b) => {
 const tagSelector = {}
 let tagI = 0
 if (config.externStyle) {
-  config.externStyle = config.externStyle.replace(/[.#[@:]*([a-zA-Z-]+)(?=[^}]*{)/g, ($, $1) => {
-    if ($ !== $1) return $
+  config.externStyle = config.externStyle.replace(/[^,\s}]+(?=[^}]*{)/g, $ => {
+    if (!/[a-zA-Z_]/.test($[0])) return $
     if (tagSelector[$]) return '.' + tagSelector[$]
     tagSelector[$] = '_' + tagI++
     return '.' + tagSelector[$]
