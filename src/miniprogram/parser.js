@@ -605,6 +605,12 @@ Parser.prototype.popNode = function () {
     attrs.align = undefined
   }
 
+  // 转换 dir 属性
+  if (attrs.dir) {
+    styleObj.direction = attrs.dir
+    attrs.dir = undefined
+  }
+
   // 转换 font 标签的属性
   if (node.name === 'font') {
     if (attrs.color) {
