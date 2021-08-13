@@ -1,5 +1,15 @@
 # 📖 更新日志 :id=changelog
 
+## v2.1.5
+发布时间：*2021-08-13*  
+主要更新：  
+1. `A` 增加支持标签的 `dir` 属性
+2. `F` 修复了 `ruby` 标签文字与拼音没有居中对齐的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/325)
+3. `F` 修复了音视频标签内有 `a` 标签时可能无法播放的问题
+4. `F` 修复了 [externStyle](overview/quickstart#setting) 中的 `class` 名包含下划线或数字时可能失效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/326)
+5. `F` 修复了 `uni-app` 包 `h5` 端引入 [externStyle](overview/quickstart#setting) 可能不生效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/326)
+6. `F` 修复了微信原生包 `a` 标签的 `style` 中包含 `inline` 时不响应事件的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/332)
+
 ## v2.1.4
 发布时间：*2021-07-14*  
 主要更新：  

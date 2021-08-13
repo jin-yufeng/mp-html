@@ -201,7 +201,7 @@
 | video | autoplay, controls, loop, muted, poster, src |
 
 说明：  
-1. 除上面列举的外，还支持 *svg* 系列的标签和 *id*、*style*、*class*、*align*、*height*、*width* 属性  
+1. 除上面列举的外，还支持 *svg* 系列的标签和 *id*、*style*、*class*、*align*、*height*、*width*、*dir* 属性  
 2. 对于不信任的标签，除个别将被直接移除（具体可见 [配置项](advanced/config#ignoreTags)），都会被转为一个行内标签，因此可以使用更多语义化标签  
 
 ## 🌟 稳定性 :id=stable  

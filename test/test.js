@@ -102,7 +102,7 @@ console.log('11')
 <![CDATA[<]]>
 <!-- 测试 flex 布局、未闭合标签、data- 属性处理 -->
 <div style="display:flex;width:1000px">
-  <div style="flex:1">123</div>
+  <div style="flex:1" dir="rtl">123</div>
 </div>
 </br><div data-test="xxx" style="display:flex;display:-webkit-flex;"><div>
   <img data-src="/xxx.jpg" style="width:100%;height:100px">  `, true) // 补充测试

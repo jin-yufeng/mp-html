@@ -133,6 +133,8 @@
    </script>
    ```
 
+!> 使用 *cli* 方式运行的项目，通过 *npm* 方式引入可能存在问题，详情可见 [#330](https://github.com/jin-yufeng/mp-html/issues/330)
+
 !> 如果在 *nvue* 中使用还要将 *dist/uni-app/static* 目录下的内容拷贝到项目的 *static* 目录下，否则无法运行  
 
 支持的 [属性](basic/prop) 和 [事件](basic/event) 见对应文档  

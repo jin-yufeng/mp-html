@@ -161,7 +161,7 @@ Parser.prototype.expose = function () {
   // #ifndef APP-PLUS-NVUE
   for (let i = this.stack.length; i--;) {
     const item = this.stack[i]
-    if (item.name === 'a' || item.c) return
+    if (item.c || item.name === 'a' || item.name === 'video' || item.name === 'audio') return
     item.c = 1
   }
   // #endif
@@ -645,6 +645,12 @@ Parser.prototype.popNode = function () {
     attrs.align = undefined
   }
 
+  // 转换 dir 属性
+  if (attrs.dir) {
+    styleObj.direction = attrs.dir
+    attrs.dir = undefined
+  }
+
   // 转换 font 标签的属性
   if (node.name === 'font') {
     if (attrs.color) {
@@ -884,12 +890,12 @@ Parser.prototype.popNode = function () {
         children[i] = {
           name: 'div',
           attrs: {
-            style: 'display:inline-block'
+            style: 'display:inline-block;text-align:center'
           },
           children: [{
             name: 'div',
             attrs: {
-              style: 'font-size:50%;text-align:start;' + (children[i + 1].attrs.style || '')
+              style: 'font-size:50%;' + (children[i + 1].attrs.style || '')
             },
             children: children[i + 1].children
           }, children[i]]

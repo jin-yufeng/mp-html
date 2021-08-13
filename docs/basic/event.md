@@ -110,8 +110,8 @@ Page({
 ```javascript
 Page({
   linktap (e) {
-    // 下载 doc 文件
-    if (e.detail.href.includes('.doc'))
+    if (e.detail.href.includes('.doc')) {
+      // 下载 doc 文件
       wx.downloadFile({
         url: e.detail.href,
         success (res) {
@@ -129,16 +129,17 @@ Page({
           })
         }
       })
-    // 跳转到 webview
-    else if (e.detail.href.includes('xxx.com'))
+    } else if (e.detail.href.includes('xxx.com')) {
+      // 跳转到 webview
       wx.navigateTo({
         url: 'pages/webview/webview?url=' + e.detail.href,
       })
-    // 跳转其他小程序
-    else if (e.detail['data-appid'])
+    } else if (e.detail['data-appid']) {
+      // 跳转其他小程序
       wx.navigateToMiniProgram({
         appId: e.detail['data-appid']
       })
+    }
   }
 })
 ```

@@ -1,5 +1,5 @@
 /*!
- * mp-html v2.1.4
+ * mp-html v2.1.5
  * https://github.com/jin-yufeng/mp-html
  *
  * Released under the MIT license

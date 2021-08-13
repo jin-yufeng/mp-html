@@ -56,6 +56,7 @@
      }
      ```
   
+  使用 *cli* 方式运行的项目，通过 *npm* 方式引入可能存在问题，详情可见 [#330](https://github.com/jin-yufeng/mp-html/issues/330)  
   如果在 **nvue** 中使用还要将 `dist/uni-app/static` 目录下的内容拷贝到项目的 `static` 目录下，否则无法运行  
 
 查看 [快速开始](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart) 了解更多
@@ -114,7 +115,7 @@
 | 名称 | 作用 |
 |:---:|---|
 | audio | 音乐播放器 |
-| editable | 富文本编辑 |
+| editable | 富文本编辑（[示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445)） |
 | emoji | 解析 emoji |
 | highlight | 代码块高亮显示 |
 | markdown | 渲染 markdown |
