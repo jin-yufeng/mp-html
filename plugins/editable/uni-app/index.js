@@ -128,6 +128,10 @@ function Editable (vm) {
       if (node.attrs.loop && i !== -1) {
         items[i] = '不循环'
       }
+      i = items.indexOf('自动播放')
+      if (node.attrs.autoplay && i !== -1) {
+        items[i] = '不自动播放'
+      }
     } else {
       items = config.node.slice(0)
     }
