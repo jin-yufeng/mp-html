@@ -212,16 +212,21 @@ function Editable (vm) {
   }
 
   /**
-   * @description 在光标处插入一张图片
+   * @description 在光标处插入图片
    */
   vm.insertImg = function () {
     vm.getSrc && vm.getSrc('img').then(src => {
-      insert({
-        name: 'img',
-        attrs: {
-          src
-        }
-      })
+      if (typeof src === 'string') {
+        src = [src]
+      }
+      for (let i = 0; i < src.length; i++) {
+        insert({
+          name: 'img',
+          attrs: {
+            src: src[i]
+          }
+        })
+      }
     }).catch(() => { })
   }
 
