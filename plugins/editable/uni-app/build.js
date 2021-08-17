@@ -244,19 +244,32 @@ module.exports = {
           top: e.target.offsetTop - 30,
           items,
           success: tapIndex => {
-            if (items[tapIndex] === '封面') {
-              // 设置封面
-              this.root.getSrc('img', node.attrs.poster).then(url => {
-                this.root._editVal(`${this.opts[6]}.${i}.attrs.poster`, node.attrs.poster, url, true)
-              }).catch(() => { })
-            } else if (items[tapIndex] === '删除') {
-              this.remove(i)
-            } else {
-              // 切换循环播放
-              this.root._setData(`${this.opts[6]}.${i}.attrs.loop`, !node.attrs.loop)
-              uni.showToast({
-                title: '成功'
-              })
+            switch (items[tapIndex]) {
+              case '封面':
+                // 设置封面
+                this.root.getSrc('img', node.attrs.poster).then(url => {
+                  this.root._editVal(`${this.opts[6]}.${i}.attrs.poster`, node.attrs.poster, url, true)
+                }).catch(() => { })
+                break
+              case '删除':
+                this.remove(i)
+                break
+              case '循环':
+              case '不循环':
+                // 切换循环播放
+                this.root._setData(`${this.opts[6]}.${i}.attrs.loop`, !node.attrs.loop)
+                uni.showToast({
+                  title: '成功'
+                })
+                break
+              case '自动播放':
+              case '不自动播放':
+                // 切换自动播放播放
+                this.root._setData(`${this.opts[6]}.${i}.attrs.autoplay`, !node.attrs.autoplay)
+                uni.showToast({
+                  title: '成功'
+                })
+                break
             }
           }
         })
