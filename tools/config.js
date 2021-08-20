@@ -8,7 +8,7 @@ module.exports = {
   plugins: [
     // 按需打开注释即可
     // 'audio',     // 音乐播放器
-    // 'editable',  // 内容编辑
+     'editable',  // 内容编辑
     // 'emoji',     // 小表情
     // 'highlight', // 代码高亮
     // 'markdown',  // 解析 md
