@@ -53,6 +53,15 @@ const config = {
     strike: 'text-decoration:line-through',
     u: 'text-decoration:underline'
     // #endif
+  },
+
+  // svg 大小写对照表
+  svgDict: {
+    animatetransform: 'animateTransform',
+    viewbox: 'viewBox',
+    attributename: 'attributeName',
+    repeatcount: 'repeatCount',
+    repeatdur: 'repeatDur'
   }
 }
 const tagSelector = {}
@@ -589,8 +598,26 @@ Parser.prototype.popNode = function () {
       this.xml--
       return
     }
+    // #ifdef APP-PLUS-NVUE
+    (function traversal (node) {
+      if (node.name) {
+        // 调整 svg 的大小写
+        node.name = config.svgDict[node.name] || node.name
+        for (const item in node.attrs) {
+          if (config.svgDict[item]) {
+            node.attrs[config.svgDict[item]] = node.attrs[item]
+            node.attrs[item] = undefined
+          }
+        }
+        for (let i = 0; i < node.children.length; i++) {
+          traversal(node.children[i])
+        }
+      }
+    })(node)
+    // #endif
     // #ifndef APP-PLUS-NVUE
-    let src = ''; const style = attrs.style
+    let src = ''
+    const style = attrs.style
     attrs.style = ''
     attrs.xmlns = 'http://www.w3.org/2000/svg';
     (function traversal (node) {
@@ -598,14 +625,12 @@ Parser.prototype.popNode = function () {
         src += node.text
         return
       }
-      src += '<' + node.name
-      for (let item in node.attrs) {
+      const name = config.svgDict[node.name] || node.name
+      src += '<' + name
+      for (const item in node.attrs) {
         const val = node.attrs[item]
         if (val) {
-          if (item === 'viewbox') {
-            item = 'viewBox'
-          }
-          src += ` ${item}="${val}"`
+          src += ` ${config.svgDict[item] || item}="${val}"`
         }
       }
       if (!node.children) {
@@ -615,7 +640,7 @@ Parser.prototype.popNode = function () {
         for (let i = 0; i < node.children.length; i++) {
           traversal(node.children[i])
         }
-        src += '</' + node.name + '>'
+        src += '</' + name + '>'
       }
     })(node)
     node.name = 'img'

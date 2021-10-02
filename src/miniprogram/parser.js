@@ -51,6 +51,15 @@ const config = {
     small: 'display:inline;font-size:0.8em',
     strike: 'text-decoration:line-through',
     u: 'text-decoration:underline'
+  },
+
+  // svg 大小写对照表
+  svgDict: {
+    animatetransform: 'animateTransform',
+    viewbox: 'viewBox',
+    attributename: 'attributeName',
+    repeatcount: 'repeatCount',
+    repeatdur: 'repeatDur'
   }
 }
 const tagSelector = {}
@@ -550,22 +559,21 @@ Parser.prototype.popNode = function () {
       this.xml--
       return
     }
-    let src = ''; const style = attrs.style
+    let src = ''
+    const style = attrs.style
     attrs.style = ''
-    if (attrs.viewbox) {
-      attrs.viewBox = attrs.viewbox
-    }
     attrs.xmlns = 'http://www.w3.org/2000/svg';
     (function traversal (node) {
       if (node.type === 'text') {
         src += node.text
         return
       }
-      src += '<' + node.name
+      const name = config.svgDict[node.name] || node.name
+      src += '<' + name
       for (const item in node.attrs) {
         const val = node.attrs[item]
         if (val) {
-          src += ` ${item}="${val}"`
+          src += ` ${config.svgDict[item] || item}="${val}"`
         }
       }
       if (!node.children) {
@@ -575,7 +583,7 @@ Parser.prototype.popNode = function () {
         for (let i = 0; i < node.children.length; i++) {
           traversal(node.children[i])
         }
-        src += '</' + node.name + '>'
+        src += '</' + name + '>'
       }
     })(node)
     node.name = 'img'
