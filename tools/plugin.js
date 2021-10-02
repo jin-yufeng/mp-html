@@ -82,7 +82,7 @@ module.exports = {
     // 加入 ad 标签
     if (config.ad) {
       if (platform === 'uni-app') {
-        wxml += '<ad v-else-if="n.name==\'ad\'" :class="n.attrs.class" style="n.attrs.style" :unit-id="n.attrs[\'unit-id\']" :appid="n.attrs.appid" :apid="n.attrs.apid" :data-i="i" @error="mediaError" />'
+        wxml += '<ad v-else-if="n.name==\'ad\'" :class="n.attrs.class" :style="n.attrs.style" :unit-id="n.attrs[\'unit-id\']" :appid="n.attrs.appid" :apid="n.attrs.apid" :data-i="i" @error="mediaError" />'
       } else {
         wxml += '<ad wx:elif="{{n.name==\'ad\'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" mp-weixin:mp-qq:mp-toutiao:unit-id="{{n.attrs[\'unit-id\']}}" mp-baidu:appid="{{n.attrs.appid}}" mp-baidu:apid="{{n.attrs.apid}}" data-i="{{i}}" binderror="mediaError" />'
       }
