@@ -220,11 +220,12 @@ function Editable (vm) {
       if (typeof src === 'string') {
         src = [src]
       }
+      const parser = new Parser(vm)
       for (let i = 0; i < src.length; i++) {
         insert({
           name: 'img',
           attrs: {
-            src: src[i]
+            src: parser.getUrl(src[i])
           }
         })
       }
@@ -286,25 +287,38 @@ function Editable (vm) {
   }
 
   /**
+   * @description 插入视频/音频
+   * @param {Object} node
+   */
+  function insertMedia (node) {
+    if (typeof node.src === 'string') {
+      node.src = [node.src]
+    }
+    const parser = new Parser(vm)
+    // 拼接主域名
+    for (let i = 0; i < node.src.length; i++) {
+      node.src[i] = parser.getUrl(node.src[i])
+    }
+    insert({
+      name: 'div',
+      attrs: {
+        style: 'text-align:center'
+      },
+      children: [node]
+    })
+  }
+
+  /**
    * @description 在光标处插入一个视频
    */
   vm.insertVideo = function () {
     vm.getSrc && vm.getSrc('video').then(src => {
-      if (typeof src === 'string') {
-        src = [src]
-      }
-      insert({
-        name: 'div',
+      insertMedia({
+        name: 'video',
         attrs: {
-          style: 'text-align:center'
+          controls: 'T'
         },
-        children: [{
-          name: 'video',
-          attrs: {
-            controls: 'T'
-          },
-          src
-        }]
+        src
       })
     }).catch(() => { })
   }
@@ -323,19 +337,10 @@ function Editable (vm) {
         attrs = {}
       }
       attrs.controls = 'T'
-      if (typeof src === 'string') {
-        src = [src]
-      }
-      insert({
-        name: 'div',
-        attrs: {
-          style: 'text-align:center'
-        },
-        children: [{
-          name: 'audio',
-          attrs,
-          src
-        }]
+      insertMedia({
+        name: 'audio',
+        attrs,
+        src
       })
     }).catch(() => { })
   }
