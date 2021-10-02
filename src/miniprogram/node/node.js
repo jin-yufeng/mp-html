@@ -130,7 +130,7 @@ Component({
         if (href[0] === '#') {
           // 跳转锚点
           this.root.navigateTo(href.substring(1)).catch(() => { })
-        } else if (href.includes('://')) {
+        } else if (href.split('?')[0].includes('://')) {
           // 复制外部链接
           if (this.root.properties.copyLink) {
             wx.setClipboardData({
