@@ -141,7 +141,17 @@ module.exports = {
       let path = arr.join('_')
       const children = path ? this.getNode(path).children : this.properties.childs
       const childs = children.slice(0)
-      childs.splice(j, 1)
+      const delEle = childs.splice(j, 1)[0]
+      if (delEle.name === 'img' || delEle.name === 'video' || delEle.name === 'audio') {
+        let src = delEle.attrs.src
+        if (delEle.src) {
+          src = delEle.src.length === 1 ? delEle.src[0] : delEle.src
+        }
+        this.root.triggerEvent('remove', {
+          type: delEle.name,
+          src
+        })
+      }
       this.root._edit = undefined
       this.root._maskTap()
       path = this.properties.opts[6] + path

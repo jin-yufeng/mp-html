@@ -119,7 +119,17 @@ module.exports = {
      */
     remove (i) {
       const arr = this.childs.slice(0)
-      arr.splice(i, 1)
+      const delEle = arr.splice(i, 1)[0]
+      if (delEle.name === 'img' || delEle.name === 'video' || delEle.name === 'audio') {
+        let src = delEle.attrs.src
+        if (delEle.src) {
+          src = delEle.src.length === 1 ? delEle.src[0] : delEle.src
+        }
+        this.root.$emit('remove', {
+          type: delEle.name,
+          src
+        })
+      }
       this.root._edit = undefined
       this.root._maskTap()
       this.root._editVal(this.opts[6], this.childs, arr, true)
