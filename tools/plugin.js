@@ -37,6 +37,7 @@ module.exports = {
   build (platform) {
     const builds = {} // 构建模块
     let plugins = '' // 插件列表
+    let voidTags = '' // 增加的自闭合标签
     let wxml = '' // 要引入到 node.wxml 中的内容
     let js = '' // 要引入到 node.js 中的内容
     let wxss = config.externStyle // 要引入到 node.wxss 中的内容
@@ -79,12 +80,42 @@ module.exports = {
       }
     }
 
-    // 加入 ad 标签
-    if (config.ad) {
+    // 加入其他自定义标签
+    for (const item of config.customElements) {
       if (platform === 'uni-app') {
-        wxml += '<ad v-else-if="n.name==\'ad\'" :class="n.attrs.class" :style="n.attrs.style" :unit-id="n.attrs[\'unit-id\']" :appid="n.attrs.appid" :apid="n.attrs.apid" :data-i="i" @error="mediaError" />'
-      } else {
-        wxml += '<ad wx:elif="{{n.name==\'ad\'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" mp-weixin:mp-qq:mp-toutiao:unit-id="{{n.attrs[\'unit-id\']}}" mp-baidu:appid="{{n.attrs.appid}}" mp-baidu:apid="{{n.attrs.apid}}" data-i="{{i}}" binderror="mediaError" />'
+        if (item.platforms) {
+          wxml += '<!-- #ifdef ' + item.platforms.join(' || ').toUpperCase() + ' -->'
+        }
+        voidTags += item.name + ','
+        wxml += '<' + item.name + ' v-else-if="n.name==\'' + item.name + '\'" :class="n.attrs.class" :style="n.attrs.style"'
+        if (item.attrs) {
+          for (const attr of item.attrs) {
+            wxml += ' :' + attr + '="n.attrs'
+            if (attr.includes('-')) {
+              wxml += '[\'' + attr + '\']"'
+            } else {
+              wxml += '.' + attr + '"'
+            }
+          }
+        }
+        wxml += ' />'
+        if (item.platforms) {
+          wxml += '<!-- #endif -->'
+        }
+      } else if (!item.platforms || item.platforms.join(',').toLowerCase().includes(platform)) {
+        voidTags += item.name + ','
+        wxml += '<' + item.name + ' wx:elif="{{n.name==\'' + item.name + '\'}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}"'
+        if (item.attrs) {
+          for (const attr of item.attrs) {
+            wxml += ' ' + attr + '="{{n.attrs'
+            if (attr.includes('-')) {
+              wxml += '[\'' + attr + '\']}}"'
+            } else {
+              wxml += '.' + attr + '}}"'
+            }
+          }
+        }
+        wxml += ' />'
       }
     }
 
@@ -96,9 +127,11 @@ module.exports = {
           if (file.basename === 'index.js' || file.basename === 'mp-html.vue') {
             // 注册插件列表
             content = content.replace(/plugins\s*=\s*\[\]/, `plugins=[${plugins}]`)
-          } else if (file.basename === 'parser.js' && tagI) {
+          } else if (file.basename === 'parser.js') {
             // 设置标签名选择器
             content = content.replace(/tagSelector\s*=\s*{}/, `tagSelector=${JSON.stringify(tagSelector)}`)
+            // 设置自闭合标签
+              .replace(/voidTags\s*:\s*makeMap\('/, 'voidTags: makeMap(\'' + voidTags)
           } else if (file.basename === 'node.wxml') {
             // 引入模板
             content = content.replace(/<!--\s*insert\s*-->/, wxml)

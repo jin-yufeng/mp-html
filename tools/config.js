@@ -19,15 +19,16 @@ module.exports = {
   ],
 
   /**
-   * @description 是否需要使用广告标签（ad）
-   */
-  ad: false,
-
-  /**
    * @description 要引入到组件中的外部样式（css）
    * 仅支持标签名和 class 选择器
    */
   externStyle: '',
+
+  /**
+   * @description 要引入到模板中的自定义标签（ad 等）
+   * 每个标签为一个 object，包含 name（标签名，必要）、attrs（属性列表，非必要）、platforms（需要添加的平台，非必要）
+   */
+  customElements: [],
 
   /**
    * @description babel 配置（es6 转 es5）
