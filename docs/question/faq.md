@@ -81,6 +81,7 @@ QQ：
 
 ## 图片底部缝隙 :id=img
 由于图片的默认 *display* 是 *inline-block*，多个图片连接时底部会有一条缝隙，可以通过设置 *vertical-align: bottom*, *display:block* 或 *float:left* 等方法去除  
+设置以上样式后仍有一个小缝隙的，可以进一步添加 *margin-top:-1px*  
 设置方法参考 [样式设置](overview/feature#style)  
 
 ## 标签原样显示 :id=entity

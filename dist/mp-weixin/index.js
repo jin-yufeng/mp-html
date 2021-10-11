@@ -1,5 +1,5 @@
 "use strict";function e(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}/*!
- * mp-html v2.1.5
+ * mp-html v2.2.0
  * https://github.com/jin-yufeng/mp-html
  *
  * Released under the MIT license

@@ -18,7 +18,7 @@
 - 支持锚点跳转、长按复制等丰富功能
 - 支持大部分 *html* 实体
 - 丰富的插件（关键词搜索、内容 **编辑** 等）
-- 效率高、容错性强且轻量化（`≈24.5KB`，`9KB gzipped`）
+- 效率高、容错性强且轻量化（`≈25KB`，`9KB gzipped`）
 
 查看 [功能介绍](https://jin-yufeng.gitee.io/mp-html/#/overview/feature) 了解更多
 
@@ -129,7 +129,7 @@
      </script>
      ```
 
-  使用 `cli` 方式运行的项目，通过 `npm` 方式引入可能存在问题，详情可见 [#330](https://github.com/jin-yufeng/mp-html/issues/330)  
+  使用 `cli` 方式运行的项目，通过 `npm` 方式引入时，需要在 `vue.config.js` 中配置 `transpileDependencies`，详情可见 [#330](https://github.com/jin-yufeng/mp-html/issues/330#issuecomment-913617687)  
   如果在 `nvue` 中使用还要将 `dist/uni-app/static` 目录下的内容拷贝到项目的 `static` 目录下，否则无法运行  
 
 查看 [快速开始](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart) 了解更多
@@ -201,17 +201,17 @@
 
 ## 使用案例
 
-| 官方示例 | 欢喜商城 | 多么生活 | 全品作业小助手 | 米兔旅行 |
-|:---:|:---:|:---:|:---:|:---:|
-| ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg) | ![欢喜商城](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/欢喜商城.png) | ![多么生活](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/多么生活.jpg) | ![全品作业小助手](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/全品作业小助手.jpg) | ![米兔旅行](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/米兔旅行.png) |
+| 官方示例 | 欢喜商城 | 多么生活 | 全品作业小助手 | 米兔旅行 | 食法查 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg) | ![欢喜商城](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/欢喜商城.png) | ![多么生活](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/多么生活.jpg) | ![全品作业小助手](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/全品作业小助手.jpg) | ![米兔旅行](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/米兔旅行.png) | ![食法查](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/食法查.png) |
 
-| 食法查 | 微慕 | 古典文学名著阅读 | 程序员技术之旅 | Geek 时代 |
-|:---:|:---:|:---:|:---:|:---:|
-| ![食法查](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/食法查.png) | ![微慕](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/微慕.jpg) | ![古典文学名著阅读](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/程序员技术之旅.jpg) | ![Geek时代](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/Geek时代.jpg) |
+| 微慕 | 古典文学名著阅读 | 程序员技术之旅 | 典典博客 | APP 比比 | Geek 时代 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| ![食法查](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/食法查.png) | ![微慕](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/微慕.jpg) | ![古典文学名著阅读](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/程序员技术之旅.jpg) | ![典典博客](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/典典博客.jpg) | ![APP比比](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/APP比比.jpg) | ![Geek时代](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/Geek时代.jpg) |
 
-| 源创智造 | 备忘录与记事本 | 优秀笔记 | 365刷题 | 同城共享书 |
-|:---:|:---:|:---:|:---:|:---:|
-| ![源创智造](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/源创智造.png) | ![备忘录与记事本](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/备忘录与记事本.jpg) | ![优秀笔记](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/优秀笔记.jpg) | ![365刷题](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/365刷题.jpg) | ![同城共享书](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/同城共享书.jpg) |
+| 源创智造 | 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 | 技术源 share |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| ![源创智造](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/源创智造.png) | ![备忘录与记事本](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/备忘录与记事本.jpg) | ![优秀笔记](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/优秀笔记.jpg) | ![365刷题](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/365刷题.jpg) | ![同城共享书](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/同城共享书.jpg) | ![技术源share](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/技术源share.jpg) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 
@@ -225,6 +225,17 @@
   ![支持](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.2.0 (20211011)
+  1. `A` 增加 `customElements` 配置项，便于添加自定义功能性标签 [详细](https://github.com/jin-yufeng/mp-html/issues/350)
+  2. `A` `editable` 插件增加切换音视频自动播放状态的功能 [详细](https://github.com/jin-yufeng/mp-html/pull/341) by [@leeseett](https://github.com/leeseett)
+  3. `A` `editable` 插件删除媒体标签时触发 `remove` 事件，便于删除已上传的文件
+  4. `U` `editable` 插件 `insertImg` 方法支持同时插入多张图片 [详细](https://github.com/jin-yufeng/mp-html/issues/342)
+  5. `U` `editable` 插入图片和音视频时支持拼接 `domian` 主域名
+  6. `F` 修复了内部链接参数中包含 `://` 时被认为是外部链接的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/356)
+  7. `F` 修复了部分 `svg` 标签名或属性名大小写不正确时不生效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/351)
+  8. `F` 修复了 `uni-app` 包 `nvue` 页面运行到非 `app` 平台时可能样式错误的问题
+  9. `D` 移除了 `ad` 配置项（由 `customElements` 代替）
+
 - v2.1.5 (20210813)
   1. `A` 增加支持标签的 `dir` 属性
   2. `F` 修复了 `ruby` 标签文字与拼音没有居中对齐的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/325)
@@ -232,12 +243,6 @@
   4. `F` 修复了 `externStyle` 中的 `class` 名包含下划线或数字时可能失效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/326)
   5. `F` 修复了 `uni-app` 包 `h5` 端引入 `externStyle` 可能不生效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/326)
   6. `F` 修复了微信原生包 `a` 标签的 `style` 中包含 `inline` 时不响应事件的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/332)
-
-- v2.1.4 (20210714)
-  1. `F` 修复了 `rt` 标签无法设置样式的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/318)
-  2. `F` 修复了表格中有单元格同时合并行和列时可能显示不正确的问题
-  3. `F` 修复了 `uni-app` 包的 `app` 端无法关闭图片长按菜单的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/322)
-  4. `F` 修复了 `editable` 插件只能添加图片链接不能修改的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/312) by [@leeseett](https://github.com/leeseett)
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 

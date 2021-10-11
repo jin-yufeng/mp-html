@@ -1,5 +1,5 @@
 <template>
-  <view :id="attrs.id" :class="'_'+name+' '+attrs.class" :style="attrs.style">
+  <view :id="attrs.id" :class="'_block _'+name+' '+attrs.class" :style="attrs.style">
     <block v-for="(n, i) in childs" v-bind:key="i">
       <!-- 图片 -->
       <!-- 占位图 -->
@@ -60,7 +60,7 @@
       <rich-text v-else-if="!n.c" :id="n.attrs.id" :style="n.f+';display:inline'" :preview="false" :nodes="[n]" />
       <!-- #endif -->
       <!-- 继续递归 -->
-      <view v-else-if="n.c===2" :id="n.attrs.id" :class="'_'+n.name+' '+n.attrs.class" :style="n.f+';'+n.attrs.style">
+      <view v-else-if="n.c===2" :id="n.attrs.id" :class="'_block _'+n.name+' '+n.attrs.class" :style="n.f+';'+n.attrs.style">
         <node v-for="(n2, j) in n.children" v-bind:key="j" :style="n2.f" :name="n2.name" :attrs="n2.attrs" :childs="n2.children" :opts="opts" />
       </view>
       <node v-else :style="n.f" :name="n.name" :attrs="n.attrs" :childs="n.children" :opts="opts" />
@@ -284,7 +284,7 @@ export default {
         if (href[0] === '#') {
           // 跳转锚点
           this.root.navigateTo(href.substring(1)).catch(() => { })
-        } else if (href.includes('://')) {
+        } else if (href.split('?')[0].includes('://')) {
           // 复制外部链接
           if (this.root.copyLink) {
             // #ifdef H5
@@ -371,6 +371,10 @@ export default {
 }
 
 /* 内部样式 */
+
+._block {
+  display: block;
+}
 
 ._b,
 ._strong {

@@ -9,7 +9,7 @@
 
 说明：  
 引入本插件后，会给组件添加一个 *img-cache* 属性，将该属性设置为 *true* 后，将自动下载引用的图片并将 *src* 属性更换为本地地址  
-同时在 [组件实例](advanced/api#getCompent) 上挂载了 *imgCache* 对象，扩充缓存控制能力  
+同时在组件实例上挂载了 *imgCache* 对象，扩充缓存控制能力  
 
 *imgCache* 对象属性和方法：  
 

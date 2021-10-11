@@ -291,8 +291,8 @@ module.exports = {
             switch (items[tapIndex]) {
               case '封面':
                 // 设置封面
-                this.root.getSrc('img', node.attrs.poster).then(url => {
-                  this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.poster', node.attrs.poster, url, true)
+                this.root.getSrc('img', node.attrs.poster || '').then(url => {
+                  this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.poster', node.attrs.poster, url instanceof Array ? url[0] : url, true)
                 }).catch(() => { })
                 break
               case '删除':
@@ -596,8 +596,8 @@ module.exports = {
           success: tapIndex => {
             if (items[tapIndex] === '换图') {
               // 换图
-              this.root.getSrc('img', node.attrs.src).then(src => {
-                this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.src', node.attrs.src, src, true)
+              this.root.getSrc('img', node.attrs.src || '').then(url => {
+                this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.src', node.attrs.src, url instanceof Array ? url[0] : url, true)
               }).catch(() => { })
             } else if (items[tapIndex] === '宽度') {
               // 更改宽度
@@ -651,8 +651,8 @@ module.exports = {
               }).catch(() => { })
             } else if (items[tapIndex] === '预览图') {
               // 设置预览图链接
-              this.root.getSrc('img', node.attrs['original-src']).then(url => {
-                this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.original-src', node.attrs['original-src'], url, true)
+              this.root.getSrc('img', node.attrs['original-src'] || '').then(url => {
+                this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.original-src', node.attrs['original-src'], url instanceof Array ? url[0] : url, true)
                 wx.showToast({
                   title: '成功'
                 })

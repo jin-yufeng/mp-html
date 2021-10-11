@@ -28,7 +28,15 @@ module.exports = {
    * @description 要引入到模板中的自定义标签（ad 等）
    * 每个标签为一个 object，包含 name（标签名，必要）、attrs（属性列表，非必要）、platforms（需要添加的平台，非必要）
    */
-  customElements: [],
+  customElements: [
+    /*
+    // 需要使用广告标签则打开此注释
+    {
+      name: 'ad',
+      attrs: ['unit-id']
+    }
+    */
+  ],
 
   /**
    * @description babel 配置（es6 转 es5）

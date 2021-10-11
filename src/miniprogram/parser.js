@@ -11,7 +11,7 @@ const config = {
   blockTags: makeMap('address,article,aside,body,caption,center,cite,footer,header,html,nav,pre,section'),
 
   // 要移除的标签
-  ignoreTags: makeMap('area,base,canvas,embed,frame,head,iframe,input,link,meta,param,rp,script,source,style,textarea,title,track,wbr'),
+  ignoreTags: makeMap('area,base,canvas,embed,frame,head,iframe,input,link,map,meta,param,rp,script,source,style,textarea,title,track,wbr'),
 
   // 自闭合标签
   voidTags: makeMap('area,base,br,col,circle,ellipse,embed,frame,hr,img,input,line,link,meta,param,path,polygon,rect,source,track,use,wbr'),
@@ -56,6 +56,7 @@ const config = {
   // svg 大小写对照表
   svgDict: {
     animatetransform: 'animateTransform',
+    lineargradient: 'linearGradient',
     viewbox: 'viewBox',
     attributename: 'attributeName',
     repeatcount: 'repeatCount',

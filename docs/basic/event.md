@@ -63,7 +63,7 @@
 
 ## error
 触发时机：发生渲染错误时  
-返回值：一个 *object*，其中 *source* 为错误来源（包括 *img*、*video*、*audio*、*ad*），*attrs* 为该标签的属性列表（包含 *src* 等信息），*errMsg* 是错误信息  
+返回值：一个 *object*，其中 *source* 为错误来源（包括 *img*、*video*、*audio*），*attrs* 为该标签的属性列表（包含 *src* 等信息），*errMsg* 是错误信息  
 用途：收集错误信息，减少使用出错率高的链接  
 
 ## imgtap

@@ -13,6 +13,7 @@
 ## 使用方法
 - 源码方式  
   1. 点击上方的使用 `HBuilder X` 导入插件或将下载的插件包拷贝到项目根目录下  
+     由于插件市场的 **非 uni_modules 版本** 无法更新，若需使用请从 [github](https://github.com/jin-yufeng/mp-html/tree/master/dist/uni-app) 或 [gitee](https://gitee.com/jin-yufeng/mp-html/tree/master/dist/uni-app) 获取最新版本
   2. 在需要使用页面的 `(n)vue` 文件中添加  
      ```html
      <mp-html :content="html" />
@@ -56,7 +57,7 @@
      }
      ```
   
-  使用 *cli* 方式运行的项目，通过 *npm* 方式引入可能存在问题，详情可见 [#330](https://github.com/jin-yufeng/mp-html/issues/330)  
+  使用 *cli* 方式运行的项目，通过 *npm* 方式引入时，需要在 *vue.config.js* 中配置 *transpileDependencies*，详情可见 [#330](https://github.com/jin-yufeng/mp-html/issues/330#issuecomment-913617687)  
   如果在 **nvue** 中使用还要将 `dist/uni-app/static` 目录下的内容拷贝到项目的 `static` 目录下，否则无法运行  
 
 查看 [快速开始](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart) 了解更多

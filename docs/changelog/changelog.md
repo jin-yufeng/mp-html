@@ -1,5 +1,18 @@
 # 📖 更新日志 :id=changelog
 
+## v2.2.0
+发布时间：*2021-10-11*  
+主要更新：  
+1. `A` 增加 [customElements](overview/quickstart#customelements) 配置项，便于添加自定义功能性标签 [详细](https://github.com/jin-yufeng/mp-html/issues/350)
+2. `A` [editable](advanced/plugin#editable) 插件增加切换音视频自动播放状态的功能 [详细](https://github.com/jin-yufeng/mp-html/pull/341) by [@leeseett](https://github.com/leeseett)
+3. `A` [editable](advanced/plugin#editable) 插件删除媒体标签时触发 `remove` 事件，便于删除已上传的文件
+4. `U` [editable](advanced/plugin#editable) 插件 `insertImg` 方法支持同时插入多张图片 [详细](https://github.com/jin-yufeng/mp-html/issues/342)
+5. `U` [editable](advanced/plugin#editable) 插入图片和音视频时支持拼接 [domian](basic/prop#domain) 主域名
+6. `F` 修复了内部链接参数中包含 `://` 时被认为是外部链接的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/356)
+7. `F` 修复了部分 `svg` 标签名或属性名大小写不正确时不生效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/351)
+8. `F` 修复了 `uni-app` 包 `nvue` 页面运行到非 `app` 平台时可能样式错误的问题
+9. `D` 移除了 `ad` 配置项（由 [customElements](overview/quickstart#customelements) 代替）
+
 ## v2.1.5
 发布时间：*2021-08-13*  
 主要更新：  
