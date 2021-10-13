@@ -207,7 +207,7 @@
 
 | 微慕 | 古典文学名著阅读 | 程序员技术之旅 | 典典博客 | APP 比比 | Geek 时代 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![食法查](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/食法查.png) | ![微慕](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/微慕.jpg) | ![古典文学名著阅读](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/程序员技术之旅.jpg) | ![典典博客](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/典典博客.jpg) | ![APP比比](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/APP比比.jpg) | ![Geek时代](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/Geek时代.jpg) |
+| ![微慕](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/微慕.jpg) | ![古典文学名著阅读](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/程序员技术之旅.jpg) | ![典典博客](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/典典博客.jpg) | ![APP比比](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/APP比比.jpg) | ![Geek时代](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/Geek时代.jpg) |
 
 | 源创智造 | 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 | 技术源 share |
 |:---:|:---:|:---:|:---:|:---:|:---:|
