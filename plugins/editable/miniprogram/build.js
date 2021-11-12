@@ -83,12 +83,15 @@ module.exports = {
     editEnd (e) {
       const i = e.target.dataset.i
       // 更新到视图
-      this.root.setData({
-        ['nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].text']: e.detail.value
-      })
       this.setData({
         ['ctrl.e' + i]: 0
       })
+      this.root.setData({
+        ['nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].text']: e.detail.value
+      })
+      if (e.detail.cursor !== undefined) {
+        this.cursor = e.detail.cursor
+      }
     },
     /**
      * @description 插入一个标签

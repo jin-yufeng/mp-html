@@ -79,6 +79,9 @@ module.exports = {
       this.$set(this.ctrl, 'e' + i, 0)
       // 更新到视图
       this.root._setData(`${this.opts[6]}.${i}.text`, e.detail.value)
+      if (e.detail.cursor !== undefined) {
+        this.cursor = e.detail.cursor
+      }
     },
     /**
      * @description 插入一个标签
