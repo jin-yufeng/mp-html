@@ -179,6 +179,11 @@ module.exports = {
         const node = this.getNode(i)
         if (this.data.ctrl['e' + this.i] === 3) return
         this.root._maskTap()
+        this.root._edit = this
+        const arr = i.split('_')
+        const j = parseInt(arr.pop())
+        let path = arr.join('_')
+        const siblings = path ? this.getNode(path).children : this.properties.childs
         // 显示实线框
         this.setData({
           ['ctrl.e' + i]: 1
@@ -188,7 +193,6 @@ module.exports = {
             ['ctrl.e' + i]: 0
           })
         })
-        this.root._edit = this
         if (node.children.length === 1 && node.children[0].type === 'text') {
           const ii = i + '_0'
           if (!this.data.ctrl['e' + ii]) {
@@ -206,7 +210,7 @@ module.exports = {
         } else if (!(this.i || '').includes(i)) {
           this.i = i + '_'
         }
-        const items = this.root._getItem(node)
+        const items = this.root._getItem(node, j !== 0, j !== siblings.length - 1)
         this.root._tooltip({
           top: getTop(e),
           items,
@@ -239,6 +243,21 @@ module.exports = {
                   this.root._editVal('nodes[' + (this.properties.opts[6] + i).replace(/_/g, '].children[') + '].attrs.style', style, this.getNode(i).attrs.style)
                 }
               })
+            } else if (items[tapIndex] === '上移' || items[tapIndex] === '下移') {
+              const arr = siblings.slice(0)
+              const item = arr[j]
+              if (items[tapIndex] === '上移') {
+                arr[j] = arr[j - 1]
+                arr[j - 1] = item
+              } else {
+                arr[j] = arr[j + 1]
+                arr[j + 1] = item
+              }
+              path = this.properties.opts[6] + path
+              if (path[path.length - 1] === '_') {
+                path = path.slice(0, -1)
+              }
+              this.root._editVal('nodes' + (path ? '[' + path.replace(/_/g, '].children[') + '].children' : ''), siblings, arr, true)
             } else if (items[tapIndex] === '删除') {
               this.remove(i)
             } else {
@@ -441,17 +460,22 @@ module.exports = {
         content += `/* 提示条 */
 ._tooltip_contain {
   position: absolute;
-  width: 100vw;
+  right: 20px;
+  left: 20px;
   text-align: center;
 }
 
 ._tooltip {
+  box-sizing: border-box;
   display: inline-block;
   width: auto;
+  max-width: 100%;
   height: 30px;
   padding: 0 3px;
+  overflow: scroll;
   font-size: 14px;
   line-height: 30px;
+  white-space: nowrap;
 }
 
 ._tooltip_item {

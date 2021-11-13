@@ -80,7 +80,7 @@ function Editable (vm) {
    * @description 获取菜单项
    * @private
    */
-  vm._getItem = function (node) {
+  vm._getItem = function (node, up, down) {
     let items
     let i
     if (node.name === 'img') {
@@ -127,6 +127,18 @@ function Editable (vm) {
       }
     } else {
       items = config.node.slice(0)
+    }
+    if (!up) {
+      i = items.indexOf('上移')
+      if (i !== -1) {
+        items.splice(i, 1)
+      }
+    }
+    if (!down) {
+      i = items.indexOf('下移')
+      if (i !== -1) {
+        items.splice(i, 1)
+      }
     }
     return items
   }

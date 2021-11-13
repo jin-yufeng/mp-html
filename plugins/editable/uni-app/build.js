@@ -172,7 +172,7 @@ module.exports = {
           this.i = 0
           this.cursor = this.childs[0].text.length
         }
-        const items = this.root._getItem(parent.childs[i])
+        const items = this.root._getItem(parent.childs[i], i !== 0, i !== parent.childs.length - 1)
         this.root._tooltip({
           top: getTop(e),
           items,
@@ -205,6 +205,17 @@ module.exports = {
                   this.root._editVal(`${parent.opts[6]}.${i}.attrs.style`, style, parent.childs[i].attrs.style)
                 }
               })
+            } else if (items[tapIndex] === '上移' || items[tapIndex] === '下移') {
+              const arr = parent.childs.slice(0)
+              const item = arr[i]
+              if (items[tapIndex] === '上移') {
+                arr[i] = arr[i - 1]
+                arr[i - 1] = item
+              } else {
+                arr[i] = arr[i + 1]
+                arr[i + 1] = item
+              }
+              this.root._editVal(parent.opts[6], parent.childs, arr, true)
             } else if (items[tapIndex] === '删除') {
               parent.remove(i)
             } else {
@@ -370,17 +381,22 @@ module.exports = {
 /* 提示条 */
 ._tooltip_contain {
   position: absolute;
-  width: 100vw;
+  right: 20px;
+  left: 20px;
   text-align: center;
 }
 
 ._tooltip {
+  box-sizing: border-box;
   display: inline-block;
   width: auto;
+  max-width: 100%;
   height: 30px;
   padding: 0 3px;
+  overflow: scroll;
   font-size: 14px;
   line-height: 30px;
+  white-space: nowrap;
 }
 
 ._tooltip_item {
