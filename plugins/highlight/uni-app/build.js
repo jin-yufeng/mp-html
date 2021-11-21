@@ -5,7 +5,7 @@ const build = {
   handler (file) {
     if (file.path.includes('prism.css')) {
       // 将标签名选择器和属性选择器转为 class 选择器（组件内仅支持 class 选择器）
-      file.contents = Buffer.from(file.contents.toString().replace(/pre([[)])/g, '.hl-pre$1').replace(/code/g, '.hl-code').replace(/\[class\*="language-"\]/g, '').replace(/:not[^,}]+[,}]*/g, '').replace(/\.token\./g, '.hl-'))
+      file.contents = Buffer.from(file.contents.toString().replace(/pre([[)])/g, '.hl-pre$1').replace(/code/g, '.hl-code').replace(/\[class\*="?language-"?\]/g, '').replace(/:not[^,}]+[,}]*/g, '').replace(/\.token\./g, '.hl-'))
     }
   }
 }
