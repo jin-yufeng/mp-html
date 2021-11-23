@@ -59,7 +59,10 @@ export default {
       type: String,
       default: ''
     },
-    content: String,
+    content: {
+      type: String,
+      default: ''
+    },
     copyLink: {
       type: [Boolean, String],
       default: true
