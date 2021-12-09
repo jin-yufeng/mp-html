@@ -461,7 +461,7 @@ module.exports = {
             // 修改文本块
             .replace(/<!--\s*文本\s*-->[\s\S]+?<!--\s*链接\s*-->/,
               `<!-- 文本 -->
-      <text v-else-if="n.type==='text'&&!ctrl['e'+i]" :data-i="i" @tap="editStart">{{n.text}}
+      <text v-else-if="n.type==='text'&&!ctrl['e'+i]" :data-i="i" :user-select="n.us" :decode="!opts[4]" @tap="editStart">{{n.text}}
         <text v-if="!n.text" style="color:gray">{{opts[5]||'请输入'}}</text>
       </text>
       <text v-else-if="n.type==='text'&&ctrl['e'+i]===1" :data-i="i" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" @tap.stop="editStart">{{n.text}}

@@ -533,7 +533,7 @@ module.exports = {
           // 修改文本块
           .replace(/<!--\s*文本\s*-->[\s\S]+?<!--\s*链接\s*-->/,
             `<block wx:elif="{{n.type==='text'}}">
-    <text wx:if="{{!ctrl['e'+i]}}" data-i="{{i}}" decode="{{!opts[4]}}" bindtap="editStart">{{n.text}}
+    <text wx:if="{{!ctrl['e'+i]}}" data-i="{{i}}" mp-weixin:user-select="{{n.us}}" decode="{{!opts[4]}}" bindtap="editStart">{{n.text}}
       <text wx:if="{{!n.text}}" style="color:gray">{{opts[5]||'请输入'}}</text>
     </text>
     <text wx:elif="{{ctrl['e'+i]===1}}" data-i="{{i}}" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" catchtap="editStart">{{n.text}}
