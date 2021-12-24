@@ -13,6 +13,8 @@
 - *showLanguageName* 是否在代码块右上角显示语言的名称  
 - *showLineNumber* 是否在左侧显示行号  
 
+> 修改该配置后需要重新生成组件包，在构建后的组件包中修改配置无法生效
+
 引入本插件后，*html* 中符合以下格式的 *pre* 将被高亮处理：  
 ```html
 <!-- pre 中内含一个 code，并在 pre 或 code 的 class 中设置 language- -->

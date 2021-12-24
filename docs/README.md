@@ -31,13 +31,13 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | ![富文本插件](assets/case/富文本插件.jpg) | ![欢喜商城](assets/case/欢喜商城.png) | ![多么生活](assets/case/多么生活.jpg) | ![全品作业小助手](assets/case/全品作业小助手.jpg) | ![米兔旅行](assets/case/米兔旅行.png) | ![食法查](assets/case/食法查.png) |
 
-| 微慕 | 古典文学名著阅读 | 程序员技术之旅 | 典典博客 | APP 比比 | Geek 时代 |
+| 微慕 | 古典文学名著阅读 | 程序员技术之旅 | 典典博客 | Geek 时代 | 源创智造 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![微慕](assets/case/微慕.jpg) | ![古典文学名著阅读](assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](assets/case/程序员技术之旅.jpg) | ![典典博客](assets/case/典典博客.jpg) | ![APP比比](assets/case/APP比比.jpg) | ![Geek时代](assets/case/Geek时代.jpg) |
+| ![微慕](assets/case/微慕.jpg) | ![古典文学名著阅读](assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](assets/case/程序员技术之旅.jpg) | ![典典博客](assets/case/典典博客.jpg) | ![Geek时代](assets/case/Geek时代.jpg) | ![源创智造](assets/case/源创智造.png) |
 
-| 源创智造 | 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 | 技术源 share |
+| 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 | 技术源 share | 周仙神 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![源创智造](assets/case/源创智造.png) | ![备忘录与记事本](assets/case/备忘录与记事本.jpg) | ![优秀笔记](assets/case/优秀笔记.jpg) | ![365刷题](assets/case/365刷题.jpg) | ![同城共享书](assets/case/同城共享书.jpg) | ![技术源share](assets/case/技术源share.jpg) |
+| ![源创智造](assets/case/源创智造.png) | ![备忘录与记事本](assets/case/备忘录与记事本.jpg) | ![优秀笔记](assets/case/优秀笔记.jpg) | ![365刷题](assets/case/365刷题.jpg) | ![同城共享书](assets/case/同城共享书.jpg) | ![技术源share](assets/case/技术源share.jpg) | ![周仙神](assets/case/周仙神.png) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 

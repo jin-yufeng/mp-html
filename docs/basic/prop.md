@@ -91,7 +91,8 @@ white-space: pre-line; /* 保留换行符 */
 
 !> 将本属性的值设置为 *true* 在微信 *iOS* 端可能失效，[2.0.5](changelog/changelog#v205) 版本起支持将本属性设置为 "*force*" 来支持，但会带来以下影响：  
 1、所有文本块会显示为 *inline-block*（通过 [text](https://developers.weixin.qq.com/miniprogram/dev/component/text.html) 标签的 *user-select* 属性实现），需要自行适配  
-2、所有文本块都无法被 *rich-text* 包含，一定程度上增加标签数，减慢渲染速度
+2、文字下划线、删除线等效果将失效（[详细](https://github.com/jin-yufeng/mp-html/issues/382)）  
+3、所有文本块都无法被 *rich-text* 包含，一定程度上增加标签数，减慢渲染速度
 
 ## set-title
 功能：是否将 *title* 标签的内容设置到页面标题  

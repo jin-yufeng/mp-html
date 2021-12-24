@@ -81,10 +81,34 @@
 
 ### 📘 uni-app 框架 :id=uni-app
 
+#### uni-modules 方式 :id=uni-modules
+?> 本方法需要使用 *3.1.0+* 版本的 *HBuilder X* 开发  
+
+1. 进入 [插件市场](https://ext.dcloud.net.cn/plugin?id=805)，点击右上角的 *使用 HBuilder X 导入插件* 按钮导入项目或点击 *下载插件ZIP* 按钮下载插件包并解压到项目的 *uni_modules/mp-html* 目录下  
+2. 在需要使用页面的 *(n)vue* 文件中添加  
+  ```vue
+   <template>
+     <view>
+       <!-- 不需要引入，可直接使用 -->
+       <mp-html :content="html" />
+     </view>
+   </template>
+   <script>
+     export default {
+       data () {
+         return {
+           html: '<div>Hello World!</div>'
+         }
+       }
+     }
+   </script>
+   ```
+3. 需要更新版本时在 *HBuilder X* 中右键 *uni_modules/mp-html* 目录选择 *从插件市场更新* 即可  
+
 #### 源码方式 :id=uni-app-source
-1. 将 [源码](#source) 中 *dist/uni-app* 内的内容拷贝到 **项目根目录** 下  
-   
-   ?> 使用 *HBuilder X* 开发时，可以直接通过 [插件市场](https://ext.dcloud.net.cn/plugin?id=805) 导入
+1. 将 [源码](#source) 中 *dist/uni-app* 内的内容拷贝到 **项目根目录** 下   
+
+   !> [插件市场](https://ext.dcloud.net.cn/plugin?id=805) 的 *非 uni_modules* 版本无法更新，请从其他方式获取 [源码](#source)
 2. 在需要使用页面的 *(n)vue* 文件中添加  
    ```vue
    <template>
@@ -151,7 +175,9 @@
 其他框架没有专用包，但也可以引入对应平台的原生包使用，具体方法参考各框架官方文档    
 
 - taro  
-  [https://taro-docs.jd.com/taro/docs/hybrid#使用原生组件](https://taro-docs.jd.com/taro/docs/hybrid#%E4%BD%BF%E7%94%A8%E5%8E%9F%E7%94%9F%E7%BB%84%E4%BB%B6)
+  [https://taro-docs.jd.com/taro/docs/hybrid#使用原生组件](https://taro-docs.jd.com/taro/docs/hybrid#%E4%BD%BF%E7%94%A8%E5%8E%9F%E7%94%9F%E7%BB%84%E4%BB%B6)  
+  
+  ?> 需要 *taro* 专用包的开发者欢迎参与 [需求调研](https://github.com/jin-yufeng/mp-html/issues/374)
 - kbone  
   [https://wechat-miniprogram.github.io/kbone/docs/guide/advanced.html#使用小程序自定义组件](https://wechat-miniprogram.github.io/kbone/docs/guide/advanced.html#%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6)  
 - chameleon  
@@ -211,7 +237,7 @@
 外部样式，一个 *css* 字符串，将被用于 *html* 的渲染，但仅支持 *class* 选择器  
 
 ?> [2.1.0](changelog/changelog#v210) 版本起增加支持 **标签名选择器**，通过这种方式给标签设置的样式全局有效，在样式较长或作用标签数量较大时这种方法的性能要高于 [tag-style](basic/prop#tag-style) 属性，且写法更加灵活（可以与伪类、*class* 配合等）  
-需要注意的是，由于[组件](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html#%E7%BB%84%E4%BB%B6%E6%A0%B7%E5%BC%8F) 内仅支持 *class* 选择器，直接将标签名选择器 **写在 wxss 中是无效的**，必须写在本字段中，构建过程中会自动转换为 *class* 选择器  
+需要注意的是，由于 [组件](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html#%E7%BB%84%E4%BB%B6%E6%A0%B7%E5%BC%8F) 内仅支持 *class* 选择器，直接将标签名选择器 **写在 wxss 中是无效的**，必须写在本字段中，构建过程中会自动转换为 *class* 选择器  
 
 #### customElements  
 自定义标签列表（[2.2.0](changelog/changelog#v220) 版本起支持），可以在这里注册需要使用的小程序功能标签（如 *ad*、*ad-custom*、*official-account*、*map* 等）  

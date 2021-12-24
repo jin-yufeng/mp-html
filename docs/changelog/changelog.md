@@ -1,5 +1,15 @@
 # 📖 更新日志 :id=changelog
 
+## v2.2.1
+发布时间：*2021-12-24*  
+主要更新：  
+1. `A` [editable](advanced/plugin#editable) 插件增加上下移动标签功能
+2. `U` [editable](advanced/plugin#editable) 插件支持在文本中间光标处插入内容
+3. `F` 修复了 `uni-app` 包 `nvue` 端设置 `margin` 后可能导致高度不正确的问题
+4. `F` 修复了 [highlight](advanced/plugin#highlight) 插件使用压缩版的 `prism.css` 可能导致背景失效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/367)
+5. `F` 修复了 `uni-app` 包编辑状态下使用 [emoji](advanced/plugin#emoji) 插件内容为空时可能报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/371)
+6. `F` 修复了使用 [editable](advanced/plugin#editable) 插件后将 [selectable](basic/prop#selectable) 属性设置为 `force` 不生效的问题
+
 ## v2.2.0
 发布时间：*2021-10-11*  
 主要更新：  

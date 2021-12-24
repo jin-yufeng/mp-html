@@ -41,7 +41,14 @@
 
 ## editable
 功能：富文本编辑  
-大小：*≈14KB*  
+下表列出了本插件与原生 *editor* 组件的功能差异，可按需选用
+
+| 组件 | 优点 | 缺点 |
+|:---:|:---:|:---:|
+| 原生 *editor* | 底层通过 *contenteditable* 实现，编辑流畅 | 支持标签少（不支持音视频、表格以及 *section* 等常用标签）、部分小程序平台不支持或低版本不兼容 |
+| 本插件 | 支持标签全面、支持平台全面 | 编辑灵活性不够强 |
+
+大小：*≈17.5KB*  
 支持平台：  
 
 | 微信小程序 | QQ 小程序 | 百度小程序 | 支付宝小程序 | 头条小程序 | uni-app |
@@ -69,8 +76,10 @@
 | 文本 | 修改 |
 | 图片 | 更换链接、调整宽度、设置成超链接（[2.0.4+](changelog/changelog#v204)）、设置预览图链接、禁用预览、删除 |
 | 链接 | 更换链接、删除 |
-| 音视频 | 设置封面、设置循环播放、、设置自动播放（[2.2.0+](changelog/changelog#v220)）删除 |
+| 音视频 | 设置封面、设置循环播放、设置自动播放（[2.2.0+](changelog/changelog#v220)）、删除 |
 | 普通标签 | 设置字体大小、斜体、粗体、下划线（[2.0.4+](changelog/changelog#v204)）、居中、缩进、删除 |
+
+?> [2.2.1](changelog/changelog#v221) 版本起所有标签支持上下移动操作，但仅限同级标签间移动，即在有同级标签且非第一个（或最后一个）时可以上移（或下移）
 
 ?> 菜单项可以通过编辑 *plugins/editable/config.js* 进行修改，仅可以删减或调整顺序，添加或更名无效
 
@@ -94,6 +103,9 @@
 [2.2.0](changelog/changelog#v220) 版本起设置了 [domain](basic/prop#domain) 属性时，返回的地址可以缺省主域名  
 
 编辑完成后，通过 *getContent* 方法获取编辑后的 *html*，最后将 *editable* 属性设置为 *false* 即可正常渲染  
+
+!> 点击保存按钮时，部分平台 *tap* 事件早于 *blur* 事件触发，直接获取内容可能导致无法获取当前编辑的文本内容，因此建议设置一个小的延时后获取（可参考下方示例，[详细](https://github.com/jin-yufeng/mp-html/issues/368)）  
+
 示例：  
 ```javascript
 Page({
@@ -138,25 +150,27 @@ Page({
     }
   },
   finishEdit () {
-    var html = ctx.getContent() // 获取编辑好的 html
-    // 上传 html
-    wx.request({
-      url: 'xxx',
-      data: {
-        html
-      },
-      success: () => {
-        this.setData({
-          editable: false // 结束编辑
-        })
-      }
-    })
+    setTimeout(() => {
+      var html = ctx.getContent() // 获取编辑好的 html
+      // 上传 html
+      wx.request({
+        url: 'xxx',
+        data: {
+          html
+        },
+        success: () => {
+          this.setData({
+            editable: false // 结束编辑
+          })
+        }
+      })
+    }, 50)
   }
 })
 ```
 
 ##### 示例项目 :id=editable_demo
-微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/3kfslXmG7FtU) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
+微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/LI0RnNmm77vO) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
 
 注意事项：  
 不要在 *editable* 属性被设置为 *true* 前通过 [setContent](advanced/api#setContent) 方法（用 [content](basic/prop#content) 属性）设置内容，否则在切换为 *true* 后会变成空白  
@@ -191,6 +205,8 @@ Page({
 - *copyByLongPress* 是否需要长按代码块时显示复制代码内容菜单（*uni-app nvue* 暂不支持）  
 - *showLanguageName* 是否在代码块右上角显示语言的名称  
 - *showLineNumber* 是否在左侧显示行号  
+
+!> 修改该配置后需要重新 [生成组件包](advanced/develop#pack)，在构建后的组件包中修改配置无法生效
 
 引入本插件后，*html* 中符合以下格式的 *pre* 将被高亮处理：  
 ```html

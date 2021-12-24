@@ -205,13 +205,13 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg) | ![欢喜商城](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/欢喜商城.png) | ![多么生活](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/多么生活.jpg) | ![全品作业小助手](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/全品作业小助手.jpg) | ![米兔旅行](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/米兔旅行.png) | ![食法查](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/食法查.png) |
 
-| 微慕 | 古典文学名著阅读 | 程序员技术之旅 | 典典博客 | APP 比比 | Geek 时代 |
+| 微慕 | 古典文学名著阅读 | 程序员技术之旅 | 典典博客 | Geek 时代 | 源创智造 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![微慕](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/微慕.jpg) | ![古典文学名著阅读](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/程序员技术之旅.jpg) | ![典典博客](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/典典博客.jpg) | ![APP比比](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/APP比比.jpg) | ![Geek时代](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/Geek时代.jpg) |
+| ![微慕](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/微慕.jpg) | ![古典文学名著阅读](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/程序员技术之旅.jpg) | ![典典博客](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/典典博客.jpg) | ![Geek时代](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/Geek时代.jpg) | ![源创智造](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/源创智造.png) |
 
-| 源创智造 | 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 | 技术源 share |
+| 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 | 技术源 share | 周仙神 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![源创智造](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/源创智造.png) | ![备忘录与记事本](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/备忘录与记事本.jpg) | ![优秀笔记](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/优秀笔记.jpg) | ![365刷题](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/365刷题.jpg) | ![同城共享书](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/同城共享书.jpg) | ![技术源share](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/技术源share.jpg) |
+| ![备忘录与记事本](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/备忘录与记事本.jpg) | ![优秀笔记](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/优秀笔记.jpg) | ![365刷题](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/365刷题.jpg) | ![同城共享书](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/同城共享书.jpg) | ![技术源share](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/技术源share.jpg) | ![周仙神](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/周仙神.png) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 
@@ -225,6 +225,14 @@
   ![支持](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.2.1 (20211224)
+  1. `A` `editable` 插件增加上下移动标签功能
+  2. `U` `editable` 插件支持在文本中间光标处插入内容
+  3. `F` 修复了 `uni-app` 包 `nvue` 端设置 `margin` 后可能导致高度不正确的问题
+  4. `F` 修复了 `highlight` 插件使用压缩版的 `prism.css` 可能导致背景失效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/367)
+  5. `F` 修复了 `uni-app` 包编辑状态下使用 `emoji` 插件内容为空时可能报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/371)
+  6. `F` 修复了使用 `editable` 插件后将 `selectable` 属性设置为 `force` 不生效的问题
+
 - v2.2.0 (20211011)
   1. `A` 增加 `customElements` 配置项，便于添加自定义功能性标签 [详细](https://github.com/jin-yufeng/mp-html/issues/350)
   2. `A` `editable` 插件增加切换音视频自动播放状态的功能 [详细](https://github.com/jin-yufeng/mp-html/pull/341) by [@leeseett](https://github.com/leeseett)
@@ -235,14 +243,6 @@
   7. `F` 修复了部分 `svg` 标签名或属性名大小写不正确时不生效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/351)
   8. `F` 修复了 `uni-app` 包 `nvue` 页面运行到非 `app` 平台时可能样式错误的问题
   9. `D` 移除了 `ad` 配置项（由 `customElements` 代替）
-
-- v2.1.5 (20210813)
-  1. `A` 增加支持标签的 `dir` 属性
-  2. `F` 修复了 `ruby` 标签文字与拼音没有居中对齐的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/325)
-  3. `F` 修复了音视频标签内有 `a` 标签时可能无法播放的问题
-  4. `F` 修复了 `externStyle` 中的 `class` 名包含下划线或数字时可能失效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/326)
-  5. `F` 修复了 `uni-app` 包 `h5` 端引入 `externStyle` 可能不生效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/326)
-  6. `F` 修复了微信原生包 `a` 标签的 `style` 中包含 `inline` 时不响应事件的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/332)
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 
