@@ -37,7 +37,7 @@
 
 | 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 | 技术源 share | 周仙神 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![源创智造](assets/case/源创智造.png) | ![备忘录与记事本](assets/case/备忘录与记事本.jpg) | ![优秀笔记](assets/case/优秀笔记.jpg) | ![365刷题](assets/case/365刷题.jpg) | ![同城共享书](assets/case/同城共享书.jpg) | ![技术源share](assets/case/技术源share.jpg) | ![周仙神](assets/case/周仙神.png) |
+| ![备忘录与记事本](assets/case/备忘录与记事本.jpg) | ![优秀笔记](assets/case/优秀笔记.jpg) | ![365刷题](assets/case/365刷题.jpg) | ![同城共享书](assets/case/同城共享书.jpg) | ![技术源share](assets/case/技术源share.jpg) | ![周仙神](assets/case/周仙神.png) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 
