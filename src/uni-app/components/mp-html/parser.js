@@ -959,6 +959,24 @@ Parser.prototype.popNode = function () {
   if (flex) {
     node.f = ';max-width:100%'
   }
+
+  // 优化长内容加载速度
+  if (children.length >= 50 && node.c && !(styleObj.display || '').includes('flex')) {
+    let i = children.length - 1
+    for (let j = i; j >= -1; j--) {
+      // 合并多个块级标签
+      if (j === -1 || children[j].c || !children[j].name || (children[j].name !== 'div' && children[j].name !== 'p' && children[j].name[0] !== 'h') || (children[j].attrs.style || '').includes('inline')) {
+        if (i - j >= 5) {
+          children.splice(j + 1, i - j, {
+            name: 'div',
+            attrs: {},
+            children: node.children.slice(j + 1, i + 1)
+          })
+        }
+        i = j - 1
+      }
+    }
+  }
   // #endif
 
   for (const key in styleObj) {
