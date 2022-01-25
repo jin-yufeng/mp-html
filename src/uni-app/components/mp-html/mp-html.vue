@@ -261,6 +261,24 @@ export default {
     },
 
     /**
+     * @description 暂停播放媒体
+     */
+    pauseMedia () {
+      for (let i = (this._videos || []).length; i--;) {
+        this._videos[i].pause()
+      }
+      // #ifdef APP-PLUS
+      const command = 'for(var e=document.getElementsByTagName("video"),i=e.length;i--;)e[i].pause()'
+      // #ifndef APP-PLUS-NVUE
+      this.$mp.page.$getAppWebview().evalJS(command)
+      // #endif
+      // #ifdef APP-PLUS-NVUE
+      this.$refs.web.evalJs(command)
+      // #endif
+      // #endif
+    },
+
+    /**
      * @description 设置内容
      * @param {String} content html 内容
      * @param {Boolean} append 是否在尾部追加

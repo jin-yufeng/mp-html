@@ -283,6 +283,15 @@ Component({
     },
 
     /**
+     * @description 暂停播放媒体
+     */
+    pauseMedia () {
+      for (let i = (this._videos || []).length; i--;) {
+        this._videos[i].pause()
+      }
+    },
+
+    /**
      * @description 设置富文本内容
      * @param {string} content 要渲染的 html 字符串
      * @param {boolean} append 是否在尾部追加
