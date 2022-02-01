@@ -54,7 +54,7 @@
       <!-- insert -->
       <!-- 富文本 -->
       <!-- #ifdef H5 || MP-WEIXIN || MP-QQ || APP-PLUS || MP-360 -->
-      <rich-text v-else-if="handler.use(n)" :id="n.attrs.id" :style="n.f" :nodes="[n]" />
+      <rich-text v-else-if="handlerUse(n)" :id="n.attrs.id" :style="n.f" :nodes="[n]" />
       <!-- #endif -->
       <!-- #ifndef H5 || MP-WEIXIN || MP-QQ || APP-PLUS || MP-360 -->
       <rich-text v-else-if="!n.c" :id="n.attrs.id" :style="n.f+';display:inline'" :preview="false" :nodes="[n]" />
@@ -67,7 +67,8 @@
     </block>
   </view>
 </template>
-<script module="handler" lang="wxs">
+<script>
+import node from './node'
 // 行内标签列表
 var inlineTags = {
   abbr: true,
@@ -86,19 +87,6 @@ var inlineTags = {
   sub: true,
   sup: true
 }
-/**
- * @description 是否使用 rich-text 显示剩余内容
- */
-module.exports = {
-  use: function (item) {
-    if (item.c) return false
-    // 微信和 QQ 的 rich-text inline 布局无效
-    return !inlineTags[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1
-  }
-}
-</script>
-<script>
-import node from './node'
 export default {
   name: 'node',
   options: {
@@ -161,6 +149,14 @@ export default {
     // #endif
   },
   methods: {
+    /**
+     * @description 是否使用 rich-text 显示剩余内容
+     */
+    handlerUse (item) {
+      if (item.c) return false
+      // 微信和 QQ 的 rich-text inline 布局无效
+      return !inlineTags[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1
+    },
     // #ifdef MP-WEIXIN
     toJSON () { },
     // #endif

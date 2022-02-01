@@ -40,7 +40,7 @@
 import node from './node/node'
 // #endif
 const plugins = []
-const Parser = require('./parser')
+import Parser from './parser'
 // #ifdef APP-PLUS-NVUE
 const dom = weex.requireModule('dom')
 // #endif
