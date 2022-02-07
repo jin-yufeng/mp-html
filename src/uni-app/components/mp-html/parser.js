@@ -1238,4 +1238,4 @@ Lexer.prototype.endTag = function () {
   }
 }
 
-module.exports = Parser
+export default Parser
