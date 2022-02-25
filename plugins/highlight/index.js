@@ -34,8 +34,12 @@ Highlight.prototype.onParse = function (node, vm) {
       if (className[j] === ' ') break
     }
     const lang = className.substring(i, j)
-    if (code.children.length && code.children[0].type === 'text') {
-      const text = code.children[0].text.replace(/&amp;/g, '&')
+    if (code.children.length) {
+      const text = this.vm.getText(code.children).replace(/&amp;/g, '&')
+      if (!text) return
+      if (node.c) {
+        node.c = undefined
+      }
       if (prism.languages[lang]) {
         code.children = (new Parser(this.vm).parse(
           // 加一层 pre 保留空白符
