@@ -39,8 +39,8 @@
 // #ifndef APP-PLUS-NVUE
 import node from './node/node'
 // #endif
-const plugins = []
 import Parser from './parser'
+const plugins = []
 // #ifdef APP-PLUS-NVUE
 const dom = weex.requireModule('dom')
 // #endif
@@ -101,6 +101,9 @@ export default {
     tagStyle: Object,
     useAnchor: [Boolean, Number]
   },
+  // #ifdef VUE3
+  emits: ['load', 'ready', 'imgtap', 'linktap', 'error'],
+  // #endif
   // #ifndef APP-PLUS-NVUE
   components: {
     node

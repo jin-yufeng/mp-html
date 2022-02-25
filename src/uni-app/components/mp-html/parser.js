@@ -10,6 +10,11 @@ const config = {
   // 块级标签（转为 div，其他的非信任标签转为 span）
   blockTags: makeMap('address,article,aside,body,caption,center,cite,footer,header,html,nav,pre,section'),
 
+  // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
+  // 行内标签
+  inlineTags: makeMap('abbr,b,big,code,del,em,i,ins,label,q,small,span,strong,sub,sup'),
+  // #endif
+
   // 要移除的标签
   ignoreTags: makeMap('area,base,canvas,embed,frame,head,iframe,input,link,map,meta,param,rp,script,source,style,textarea,title,track,wbr'),
 
@@ -932,7 +937,13 @@ Parser.prototype.popNode = function () {
   } else if (node.c) {
     node.c = 2
     for (let i = node.children.length; i--;) {
-      if (!node.children[i].c || node.children[i].name === 'table') {
+      const child = node.children[i]
+      // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
+      if (child.name && (config.inlineTags[child.name] || (child.attrs.style || '').includes('inline'))) {
+        child.c = 1
+      }
+      // #endif
+      if (!child.c || child.name === 'table') {
         node.c = 1
       }
     }
@@ -994,6 +1005,11 @@ Parser.prototype.popNode = function () {
     }
   }
   attrs.style = attrs.style.substr(1) || undefined
+  // #ifdef (MP-WEIXIN || MP-QQ) && VUE3
+  if (!attrs.style) {
+    delete attrs.style
+  }
+  // #endif
 }
 
 /**

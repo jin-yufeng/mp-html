@@ -36,6 +36,7 @@ module.exports = {
    */
   build (platform) {
     const builds = {} // 构建模块
+    let pluginImports = '' // 插件引入
     let plugins = '' // 插件列表
     let voidTags = '' // 增加的自闭合标签
     let wxml = '' // 要引入到 node.wxml 中的内容
@@ -62,7 +63,8 @@ module.exports = {
       // 可以在当前平台使用
       if (!build.platform || build.platform.includes(platform)) {
         builds[plugin] = build
-        plugins += `require('./${plugin}/${build.main ? build.main : 'index.js'}'),`
+        plugins += plugin.replace(/-([a-z])/g, ($, $1) => $1.toUpperCase()) + ','
+        pluginImports += `import ${plugin.replace(/-([a-z])/g, ($, $1) => $1.toUpperCase())} from './${plugin}/${build.main ? build.main : 'index.js'}'\n`
         if (build.template) {
           wxml += build.template.replace('wx:if', 'wx:elif').replace('v-if', 'v-else-if')
         }
@@ -126,7 +128,7 @@ module.exports = {
           let content = file.contents.toString()
           if (file.basename === 'index.js' || file.basename === 'mp-html.vue') {
             // 注册插件列表
-            content = content.replace(/plugins\s*=\s*\[\]/, `plugins=[${plugins}]`)
+            content = content.replace(/const\s*plugins\s*=\s*\[\]/, `${pluginImports}const plugins=[${plugins}]`)
           } else if (file.basename === 'parser.js') {
             // 设置标签名选择器
             content = content.replace(/tagSelector\s*=\s*{}/, `tagSelector=${JSON.stringify(tagSelector)}`)

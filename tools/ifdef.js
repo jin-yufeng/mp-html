@@ -28,8 +28,16 @@ module.exports = function (platform) {
           return
         }
       }
-      // 小程序平台进行进一步处理
-      if (platform !== 'uni-app') {
+      if (platform === 'uni-app') {
+        // uni-app 平台 vue3 要求使用 es6 模块
+        if (file.extname === '.js') {
+          let content = file.contents.toString()
+          content = content.replace(/module.exports\s*=\s*/, 'export default ')
+            .replace(/const\s+([^\s=]+)\s*=\s*require\(([^)]+)\)/g, 'import $1 from $2')
+          file.contents = Buffer.from(content)
+        }
+      } else {
+        // 小程序平台进行进一步处理
         let content = file.contents.toString()
         /**
          * 方式1：

@@ -8,7 +8,7 @@
 // 需要测试 nvue 时，将本文件后缀改为 .nvue 即可
 // 注意：此示例不包含编辑功能
 import mpHtml from '@/components/mp-html/mp-html'
-const html = require('../../content')
+import html from '../../content'
 export default {
   // HBuilderX 2.5.5+ 可以通过 easycom 自动引入
   components: {
