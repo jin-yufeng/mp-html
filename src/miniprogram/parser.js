@@ -464,7 +464,7 @@ Parser.prototype.onOpenTag = function (selfClose) {
           styleObj.width = ''
         } else {
           node.w = 'T'
-          if (!isNaN(parseInt(styleObj.height))) {
+          if (!isNaN(parseInt(styleObj.height)) && (!styleObj.height.includes('%') || (parent && (parent.attrs.style || '').includes('height')))) {
             node.h = 'T'
           }
         }
