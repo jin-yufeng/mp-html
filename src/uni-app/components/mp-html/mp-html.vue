@@ -12,7 +12,7 @@
 
 <script>
 /**
- * mp-html v2.2.1
+ * mp-html v2.2.2
  * @description 富文本组件
  * @tutorial https://github.com/jin-yufeng/mp-html
  * @property {String} container-style 容器的样式
@@ -273,7 +273,9 @@ export default {
       // #ifdef APP-PLUS
       const command = 'for(var e=document.getElementsByTagName("video"),i=e.length;i--;)e[i].pause()'
       // #ifndef APP-PLUS-NVUE
-      this.$mp.page.$getAppWebview().evalJS(command)
+      let page = this.$parent
+      while (!page.$scope) page = page.$parent
+      page.$scope.$getAppWebview().evalJS(command)
       // #endif
       // #ifdef APP-PLUS-NVUE
       this.$refs.web.evalJs(command)

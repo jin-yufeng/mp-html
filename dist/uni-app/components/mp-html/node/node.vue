@@ -5,8 +5,11 @@
       <!-- 占位图 -->
       <image v-if="n.name==='img'&&((opts[1]&&!ctrl[i])||ctrl[i]<0)" class="_img" :style="n.attrs.style" :src="ctrl[i]<0?opts[2]:opts[1]" mode="widthFix" />
       <!-- 显示图片 -->
-      <!-- #ifdef H5 || APP-PLUS -->
-      <img v-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+n.attrs.style" :src="n.attrs.src||(ctrl.load?n.attrs['data-src']:'')" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap"/>
+      <!-- #ifdef H5 || (APP-PLUS && VUE2) -->
+      <img v-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+n.attrs.style" :src="n.attrs.src||(ctrl.load?n.attrs['data-src']:'')" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
+      <!-- #endif -->
+      <!-- #ifdef APP-PLUS && VUE3 -->
+      <image v-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;'+n.attrs.style" :src="n.attrs.src||(ctrl.load?n.attrs['data-src']:'')" :mode="n.h?'':'widthFix'" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
       <!-- #endif -->
       <!-- #ifndef H5 || APP-PLUS -->
       <image v-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;height:1px;'+n.attrs.style" :src="n.attrs.src" :mode="n.h?'':'widthFix'" :lazy-load="opts[0]" :webp="n.webp" :show-menu-by-longpress="opts[3]&&!n.attrs.ignore" :image-menu-prevent="!opts[3]||n.attrs.ignore" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
@@ -31,7 +34,7 @@
       <iframe v-else-if="n.name==='iframe'" :style="n.attrs.style" :allowfullscreen="n.attrs.allowfullscreen" :frameborder="n.attrs.frameborder" :src="n.attrs.src" />
       <embed v-else-if="n.name==='embed'" :style="n.attrs.style" :src="n.attrs.src" />
       <!-- #endif -->
-      <!-- #ifndef MP-TOUTIAO -->
+      <!-- #ifndef MP-TOUTIAO || ((H5 || APP-PLUS) && VUE3) -->
       <!-- 音频 -->
       <audio v-else-if="n.name==='audio'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :author="n.attrs.author" :controls="n.attrs.controls" :loop="n.attrs.loop" :name="n.attrs.name" :poster="n.attrs.poster" :src="n.src[ctrl[i]||0]" :data-i="i" @play="play" @error="mediaError" />
       <!-- #endif -->
@@ -53,10 +56,10 @@
       </view>
       
       <!-- 富文本 -->
-      <!-- #ifdef H5 || MP-WEIXIN || MP-QQ || APP-PLUS || MP-360 -->
+      <!-- #ifdef H5 || ((MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE2) -->
       <rich-text v-else-if="handler.use(n)" :id="n.attrs.id" :style="n.f" :nodes="[n]" />
       <!-- #endif -->
-      <!-- #ifndef H5 || MP-WEIXIN || MP-QQ || APP-PLUS || MP-360 -->
+      <!-- #ifndef H5 || ((MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE2) -->
       <rich-text v-else-if="!n.c" :id="n.attrs.id" :style="n.f+';display:inline'" :preview="false" :nodes="[n]" />
       <!-- #endif -->
       <!-- 继续递归 -->
@@ -126,10 +129,12 @@ export default {
     childs: Array,
     opts: Array
   },
+  // #ifndef H5 && VUE3
   components: {
 
     node
   },
+  // #endif
   mounted () {
     this.$nextTick(() => {
       for (this.root = this.$parent; this.root.$options.name !== 'mp-html'; this.root = this.root.$parent);
@@ -259,7 +264,7 @@ export default {
      */
     imgLoad (e) {
       const i = e.currentTarget.dataset.i
-      /* #ifndef H5 || APP-PLUS */
+      /* #ifndef H5 || (APP-PLUS && VUE2) */
       if (!this.childs[i].w) {
         // 设置原宽度
         this.$set(this.ctrl, i, e.detail.width)
@@ -335,15 +340,22 @@ export default {
           this.$set(this.ctrl, i, index)
           return
         }
-      } else if (node.name === 'img' && this.opts[2]) {
+      } else if (node.name === 'img') {
+        // #ifdef H5 && VUE3
+        if (this.opts[0] && !this.ctrl.load) return
+        // #endif
         // 显示错误占位图
-        this.$set(this.ctrl, i, -1)
+        if (this.opts[2]) {
+          this.$set(this.ctrl, i, -1)
+        }
       }
       if (this.root) {
         this.root.$emit('error', {
           source: node.name,
           attrs: node.attrs,
+          // #ifndef H5 && VUE3
           errMsg: e.detail.errMsg
+          // #endif
         })
       }
     }

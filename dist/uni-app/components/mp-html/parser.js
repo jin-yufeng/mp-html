@@ -10,6 +10,11 @@ const config = {
   // 块级标签（转为 div，其他的非信任标签转为 span）
   blockTags: makeMap('address,article,aside,body,caption,center,cite,footer,header,html,nav,pre,section'),
 
+  // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
+  // 行内标签
+  inlineTags: makeMap('abbr,b,big,code,del,em,i,ins,label,q,small,span,strong,sub,sup'),
+  // #endif
+
   // 要移除的标签
   ignoreTags: makeMap('area,base,canvas,embed,frame,head,iframe,input,link,map,meta,param,rp,script,source,style,textarea,title,track,wbr'),
 
@@ -501,7 +506,7 @@ Parser.prototype.onOpenTag = function (selfClose) {
           styleObj.width = ''
         } else {
           node.w = 'T'
-          if (!isNaN(parseInt(styleObj.height))) {
+          if (!isNaN(parseInt(styleObj.height)) && (!styleObj.height.includes('%') || (parent && (parent.attrs.style || '').includes('height')))) {
             node.h = 'T'
           }
         }
@@ -932,7 +937,13 @@ Parser.prototype.popNode = function () {
   } else if (node.c) {
     node.c = 2
     for (let i = node.children.length; i--;) {
-      if (!node.children[i].c || node.children[i].name === 'table') {
+      const child = node.children[i]
+      // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
+      if (child.name && (config.inlineTags[child.name] || (child.attrs.style || '').includes('inline'))) {
+        child.c = 1
+      }
+      // #endif
+      if (!child.c || child.name === 'table') {
         node.c = 1
       }
     }
@@ -959,6 +970,24 @@ Parser.prototype.popNode = function () {
   if (flex) {
     node.f = ';max-width:100%'
   }
+
+  // 优化长内容加载速度
+  if (children.length >= 50 && node.c && !(styleObj.display || '').includes('flex')) {
+    let i = children.length - 1
+    for (let j = i; j >= -1; j--) {
+      // 合并多个块级标签
+      if (j === -1 || children[j].c || !children[j].name || (children[j].name !== 'div' && children[j].name !== 'p' && children[j].name[0] !== 'h') || (children[j].attrs.style || '').includes('inline')) {
+        if (i - j >= 5) {
+          children.splice(j + 1, i - j, {
+            name: 'div',
+            attrs: {},
+            children: node.children.slice(j + 1, i + 1)
+          })
+        }
+        i = j - 1
+      }
+    }
+  }
   // #endif
 
   for (const key in styleObj) {
@@ -976,6 +1005,11 @@ Parser.prototype.popNode = function () {
     }
   }
   attrs.style = attrs.style.substr(1) || undefined
+  // #ifdef (MP-WEIXIN || MP-QQ) && VUE3
+  if (!attrs.style) {
+    delete attrs.style
+  }
+  // #endif
 }
 
 /**
@@ -1005,6 +1039,9 @@ Parser.prototype.onText = function (text) {
   }
   const node = Object.create(null)
   node.type = 'text'
+  // #ifdef (MP-BAIDU || MP-ALIPAY || MP-TOUTIAO) && VUE3
+  node.attrs = {}
+  // #endif
   node.text = decodeEntity(text)
   if (this.hook(node)) {
     // #ifdef MP-WEIXIN
@@ -1220,4 +1257,4 @@ Lexer.prototype.endTag = function () {
   }
 }
 
-module.exports = Parser
+export default Parser

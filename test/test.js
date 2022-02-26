@@ -36,12 +36,12 @@ test('render', async () => {
   })
   await simulate.sleep(1000)
 
-  // api 测试
   const comp = page.querySelector('#article')
   expect(comp.dom.tagName).toBe('MP-HTML')
 
   await simulate.sleep(50)
 
+  // api 测试
   comp.instance.setContent(
     `<!-- 测试 base 标签 -->
 <base href="https://xxx.com">
@@ -129,6 +129,19 @@ console.log('11')
   await simulate.sleep(50)
   comp.instance.setContent('  空格\n换行')
   expect(comp.instance.getText().includes('\n')).toBe(true) // 检查换行是否被保留
+
+  // 长内容测试
+  let content = '<div>'
+  for (let i = 0; i < 50; i++) {
+    content += '<div>' + i + '</div>'
+  }
+  content += '<a>xxx</a>'
+  for (let i = 0; i < 50; i++) {
+    content += '<div>' + i + '</div>'
+  }
+  comp.instance.setContent(content)
+  simulate.sleep(50)
+  expect(comp.data.nodes[0].children.length).toBe(3) // 应该切分为 3 块
 
   await simulate.sleep(50) // 等待异步 api 执行完毕
 
@@ -264,6 +277,8 @@ test('event', async () => {
       }
     })
   }
+  // 暂停视频播放
+  comp.instance.pauseMedia()
   // 模拟视频出错
   node.instance.mediaError({
     target: {

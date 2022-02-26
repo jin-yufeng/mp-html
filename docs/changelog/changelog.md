@@ -1,5 +1,14 @@
 # 📖 更新日志 :id=changelog
 
+# v2.2.2
+发布时间：*2022-02-26*  
+主要更新：  
+1. `A` 增加了 [pauseMedia](advanced/api#pauseMedia) 的 `api`，可用于暂停播放音视频 [详细](https://github.com/jin-yufeng/mp-html/issues/317)
+2. `U` 优化了长内容的加载速度  
+3. `U` `uni-app` 包适配 `vue3` [#389](https://github.com/jin-yufeng/mp-html/issues/389)、[#398](https://github.com/jin-yufeng/mp-html/pull/398) by [@zhouhuafei](https://github.com/zhouhuafei)、[#400](https://github.com/jin-yufeng/mp-html/issues/400)
+4. `F` 修复了小程序端图片高度设置为百分比时可能不显示的问题
+5. `F` 修复了 [highlight](advanced/plugin#highlight) 插件部分情况下可能显示不完整的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/403)
+
 ## v2.2.1
 发布时间：*2021-12-24*  
 主要更新：  

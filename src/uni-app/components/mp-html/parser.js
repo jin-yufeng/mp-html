@@ -1039,6 +1039,9 @@ Parser.prototype.onText = function (text) {
   }
   const node = Object.create(null)
   node.type = 'text'
+  // #ifdef (MP-BAIDU || MP-ALIPAY || MP-TOUTIAO) && VUE3
+  node.attrs = {}
+  // #endif
   node.text = decodeEntity(text)
   if (this.hook(node)) {
     // #ifdef MP-WEIXIN

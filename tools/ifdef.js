@@ -30,7 +30,7 @@ module.exports = function (platform) {
       }
       if (platform === 'uni-app') {
         // uni-app 平台 vue3 要求使用 es6 模块
-        if (file.extname === '.js') {
+        if (file.extname === '.js' && !file.relative.includes('static')) {
           let content = file.contents.toString()
           content = content.replace(/module.exports\s*=\s*/, 'export default ')
             .replace(/const\s+([^\s=]+)\s*=\s*require\(([^)]+)\)/g, 'import $1 from $2')

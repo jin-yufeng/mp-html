@@ -12,7 +12,7 @@
 
 <script>
 /**
- * mp-html v2.2.1
+ * mp-html v2.2.2
  * @description 富文本组件
  * @tutorial https://github.com/jin-yufeng/mp-html
  * @property {String} container-style 容器的样式
@@ -39,8 +39,8 @@
 // #ifndef APP-PLUS-NVUE
 import node from './node/node'
 // #endif
+import Parser from './parser'
 const plugins=[]
-const Parser = require('./parser')
 // #ifdef APP-PLUS-NVUE
 const dom = weex.requireModule('dom')
 // #endif
@@ -101,6 +101,9 @@ export default {
     tagStyle: Object,
     useAnchor: [Boolean, Number]
   },
+  // #ifdef VUE3
+  emits: ['load', 'ready', 'imgtap', 'linktap', 'error'],
+  // #endif
   // #ifndef APP-PLUS-NVUE
   components: {
     node
@@ -258,6 +261,26 @@ export default {
           // #endif
           .select('#_root').boundingClientRect().exec(res => res[0] ? resolve(res[0]) : reject(Error('Root label not found')))
       })
+    },
+
+    /**
+     * @description 暂停播放媒体
+     */
+    pauseMedia () {
+      for (let i = (this._videos || []).length; i--;) {
+        this._videos[i].pause()
+      }
+      // #ifdef APP-PLUS
+      const command = 'for(var e=document.getElementsByTagName("video"),i=e.length;i--;)e[i].pause()'
+      // #ifndef APP-PLUS-NVUE
+      let page = this.$parent
+      while (!page.$scope) page = page.$parent
+      page.$scope.$getAppWebview().evalJS(command)
+      // #endif
+      // #ifdef APP-PLUS-NVUE
+      this.$refs.web.evalJs(command)
+      // #endif
+      // #endif
     },
 
     /**

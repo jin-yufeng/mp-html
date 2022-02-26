@@ -63,8 +63,12 @@ module.exports = {
       // 可以在当前平台使用
       if (!build.platform || build.platform.includes(platform)) {
         builds[plugin] = build
-        plugins += plugin.replace(/-([a-z])/g, ($, $1) => $1.toUpperCase()) + ','
-        pluginImports += `import ${plugin.replace(/-([a-z])/g, ($, $1) => $1.toUpperCase())} from './${plugin}/${build.main ? build.main : 'index.js'}'\n`
+        if (platform === 'uni-app') {
+          plugins += plugin.replace(/-([a-z])/g, ($, $1) => $1.toUpperCase()) + ','
+          pluginImports += `import ${plugin.replace(/-([a-z])/g, ($, $1) => $1.toUpperCase())} from './${plugin}/${build.main ? build.main : 'index.js'}'\n`
+        } else {
+          plugins += `require('./${plugin}/${build.main ? build.main : 'index.js'}'),`
+        }
         if (build.template) {
           wxml += build.template.replace('wx:if', 'wx:elif').replace('v-if', 'v-else-if')
         }
@@ -128,7 +132,11 @@ module.exports = {
           let content = file.contents.toString()
           if (file.basename === 'index.js' || file.basename === 'mp-html.vue') {
             // 注册插件列表
-            content = content.replace(/const\s*plugins\s*=\s*\[\]/, `${pluginImports}const plugins=[${plugins}]`)
+            if (platform === 'uni-app') {
+              content = content.replace(/const\s*plugins\s*=\s*\[\]/, `${pluginImports}const plugins=[${plugins}]`)
+            } else {
+              content = content.replace(/plugins\s*=\s*\[\]/, `plugins=[${plugins}]`)
+            }
           } else if (file.basename === 'parser.js') {
             // 设置标签名选择器
             content = content.replace(/tagSelector\s*=\s*{}/, `tagSelector=${JSON.stringify(tagSelector)}`)
