@@ -10,6 +10,12 @@
 ![license](https://img.shields.io/github/license/jin-yufeng/mp-html)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
+## 📰 news :id=news
+1. 欢迎加入 `QQ` 交流群：`699734691`  
+   ![group](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/group.jpg)  
+2. 示例微信小程序 `富文本插件` 添加 `获取组件包` 功能 [详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart?id=mp)  
+   ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg)
+
 ## 📢 概况 :id=overview
 显示动态 *html* 富文本是很多应用必要的需求，小程序平台不支持 *dom* 操作使得这成为一个难题，其自带的 *rich-text* 组件支持的标签少且屏蔽所有事件，难以实际应用。因此就有了这样一个能够便捷的在小程序平台上处理富文本的组件，还支持丰富的扩展功能。  
 
@@ -49,8 +55,7 @@
 
 ?> 您可以免费的使用（包括商用）、复制或修改本组件  
 
-!> 不得用于任何违法用途  
-在用于生产环境前，务必进行仔细测试，由本组件 *bug* 带来的损失概不负责  
+!> 在用于生产环境前，务必进行仔细测试，由本组件 *bug* 带来的损失概不负责  
 
 ---
 Powered by docsify

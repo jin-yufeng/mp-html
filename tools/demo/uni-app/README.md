@@ -1,3 +1,9 @@
+## news
+1. 欢迎加入 `QQ` 交流群：`699734691`  
+   ![group](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/group.jpg)  
+2. 示例微信小程序 `富文本插件` 添加 `获取组件包` 功能 [详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart?id=mp)  
+   ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg)
+
 ## 功能介绍
 - 全端支持（含 `v3、NVUE`）
 - 支持丰富的标签（包括 `table`、`video`、`svg` 等）
@@ -162,9 +168,6 @@
 4. 拷贝 `dist/uni-app` 中的内容到项目根目录  
 
 查看 [插件](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin) 了解更多
-
-## 示例体验
-![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg)
 
 ## 关于 nvue
 `nvue` 使用原生渲染，不支持部分 `css` 样式，为实现和 `html` 相同的效果，组件内部通过 `web-view` 进行渲染，性能上差于原生，根据 `weex` 官方建议，`web` 标签仅应用在非常规的降级场景。因此，如果通过原生的方式（如 `richtext`）能够满足需要，则不建议使用本组件，如果有较多的富文本内容，则可以直接使用 `vue` 页面  

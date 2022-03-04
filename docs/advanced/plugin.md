@@ -3,6 +3,9 @@
 > 可以在这里选择需要的插件以实现更加丰富的功能
 
 ## 使用插件 :id=use
+
+?> 不熟悉 *npm* 的用户可以通过 [小程序方式](overview/quickstart#mp) 获取包含扩展插件的组件包   
+
 1. 选择需要的插件  
    参考下方插件使用说明，确定要使用的插件，将其名称填入 [tools/config.js](https://github.com/jin-yufeng/mp-html/blob/master/tools/config.js#L8) 中的 *plugins* 中  
    如果想仅在部分平台使用该插件，可以在该插件目录下的 *build.js* 的 *platform* 字段中填入需要的平台名称  

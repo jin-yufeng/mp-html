@@ -10,6 +10,12 @@
 ![license](https://img.shields.io/github/license/jin-yufeng/mp-html)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
+## news
+1. 欢迎加入 `QQ` 交流群：`699734691`  
+   ![group](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/group.jpg)  
+2. 示例微信小程序 `富文本插件` 添加 `获取组件包` 功能 [详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart?id=mp)  
+   ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg)
+
 ## 功能介绍
 - 支持在多个主流的小程序平台和 `uni-app` 中使用
 - 支持丰富的标签（包括 `table`、`video`、`svg` 等）
@@ -218,7 +224,6 @@
 ## 许可与支持
 - 许可  
   您可以免费的使用（包括商用）、复制或修改本组件 [MIT License](https://github.com/jin-yufeng/mp-html/blob/master/LICENSE)  
-  不可用于任何违法用途  
   在用于生产环境前务必经过充分测试，由插件 `bug` 带来的损失概不负责（可以自行修改源码）  
 
 - 支持  
