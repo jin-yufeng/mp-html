@@ -481,6 +481,11 @@ Parser.prototype.onOpenTag = function (selfClose) {
       }
     }
     attrs.style = attrs.style.substr(1) || undefined
+    // #ifdef MP-BAIDU
+    if (!attrs.style) {
+      delete attrs.style
+    }
+    // #endif
   } else {
     if ((node.name === 'pre' || ((attrs.style || '').includes('white-space') && attrs.style.includes('pre'))) && this.pre !== 2) {
       this.pre = node.pre = 1
@@ -908,9 +913,11 @@ Parser.prototype.popNode = function () {
       }
     }
   }
-  attrs.style = attrs.style.substr(1)
-    // #ifndef MP-BAIDU
-    || undefined // eslint-disable-line
+  attrs.style = attrs.style.substr(1) || undefined
+  // #ifdef MP-BAIDU
+  if (!attrs.style) {
+    delete attrs.style
+  }
   // #endif
 }
 
