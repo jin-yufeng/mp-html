@@ -665,6 +665,9 @@ Parser.prototype.popNode = function () {
   } else if (node.name === 'a' || node.name === 'ad') {
     this.expose()
   } else if (node.name === 'video' || node.name === 'audio') {
+    if ((styleObj.height || '').includes('auto')) {
+      styleObj.height = undefined
+    }
     node.children = undefined
   } else if ((node.name === 'ul' || node.name === 'ol') && node.c) {
     // 列表处理

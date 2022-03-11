@@ -729,7 +729,11 @@ Parser.prototype.popNode = function () {
     // #endif
   ) {
     this.expose()
-  } /* #ifdef APP-PLUS */ else if (node.name === 'video') {
+  } else if (node.name === 'video') {
+    if ((styleObj.height || '').includes('auto')) {
+      styleObj.height = undefined
+    }
+    /* #ifdef APP-PLUS */
     let str = '<video style="width:100%;height:100%"'
     for (const item in attrs) {
       if (attrs[item]) {
@@ -745,7 +749,8 @@ Parser.prototype.popNode = function () {
     }
     str += '</video>'
     node.html = str
-  } /* #endif */ else if ((node.name === 'ul' || node.name === 'ol') && node.c) {
+    /* #endif */
+  } else if ((node.name === 'ul' || node.name === 'ol') && node.c) {
     // 列表处理
     const types = {
       a: 'lower-alpha',
