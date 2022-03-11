@@ -22,7 +22,7 @@
 /**
  * @fileoverview audio 组件
  */
-const context = require('./context')
+import context from './context'
 export default {
   data () {
     return {

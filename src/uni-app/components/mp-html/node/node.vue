@@ -128,11 +128,11 @@ export default {
     childs: Array,
     opts: Array
   },
-  // #ifndef H5 && VUE3
   components: {
+    // #ifndef H5 && VUE3
     node
+    // #endif
   },
-  // #endif
   mounted () {
     this.$nextTick(() => {
       for (this.root = this.$parent; this.root.$options.name !== 'mp-html'; this.root = this.root.$parent);

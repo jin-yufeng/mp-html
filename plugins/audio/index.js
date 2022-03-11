@@ -28,7 +28,7 @@ Audio.prototype.onLoad = function () {
       ctx.id = this.audios[i]
       this.vm._videos.push(ctx)
     }
-  }, 50)
+  }, 500)
 }
 
 module.exports = Audio
