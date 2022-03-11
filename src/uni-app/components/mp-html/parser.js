@@ -501,15 +501,11 @@ Parser.prototype.onOpenTag = function (selfClose) {
         styleObj.height = undefined
       }
       // 记录是否设置了宽高
-      if (styleObj.width) {
-        if (styleObj.width.includes('auto')) {
-          styleObj.width = ''
-        } else {
-          node.w = 'T'
-          if (!isNaN(parseInt(styleObj.height)) && (!styleObj.height.includes('%') || (parent && (parent.attrs.style || '').includes('height')))) {
-            node.h = 'T'
-          }
-        }
+      if (!isNaN(parseInt(styleObj.width))) {
+        node.w = 'T'
+      }
+      if (!isNaN(parseInt(styleObj.height)) && (!styleObj.height.includes('%') || (parent && (parent.attrs.style || '').includes('height')))) {
+        node.h = 'T'
       }
     } else if (node.name === 'svg') {
       siblings.push(node)
