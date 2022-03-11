@@ -30,12 +30,14 @@ module.exports = function (platform) {
       }
       if (platform === 'uni-app') {
         // uni-app 平台 vue3 要求使用 es6 模块
-        if (file.extname === '.js' && !file.relative.includes('static')) {
-          let content = file.contents.toString()
+        let content = file.contents.toString()
+        if (file.basename === 'prism.min.js') {
+          content = content.replace('"undefined"!=typeof module&&module.exports&&(module.exports=Prism),', 'export default Prism;')
+        } else if (file.extname === '.js' && !file.relative.includes('static')) {
           content = content.replace(/module.exports\s*=\s*/, 'export default ')
             .replace(/const\s+([^\s=]+)\s*=\s*require\(([^)]+)\)/g, 'import $1 from $2')
-          file.contents = Buffer.from(content)
         }
+        file.contents = Buffer.from(content)
       } else {
         // 小程序平台进行进一步处理
         let content = file.contents.toString()
