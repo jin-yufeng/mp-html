@@ -84,6 +84,13 @@ Component({
         // #endif
         // 自动预览图片
         wx.previewImage({
+          // #ifdef MP-WEIXIN
+          showmenu: this.root.properties.showImgMenu,
+          // #endif
+          // #ifdef MP-ALIPAY
+          enablesavephoto: this.root.properties.showImgMenu,
+          enableShowPhotoDownload: this.root.properties.showImgMenu,
+          // #endif
           current,
           urls: this.root.imgList
         })

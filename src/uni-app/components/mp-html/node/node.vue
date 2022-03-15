@@ -216,6 +216,13 @@ export default {
       // 自动预览图片
       if (this.root.previewImg) {
         uni.previewImage({
+          // #ifdef MP-WEIXIN
+          showmenu: this.root.showImgMenu,
+          // #endif
+          // #ifdef MP-ALIPAY
+          enablesavephoto: this.root.showImgMenu,
+          enableShowPhotoDownload: this.root.showImgMenu,
+          // #endif
           current: parseInt(node.attrs.i),
           urls: this.root.imgList
         })
