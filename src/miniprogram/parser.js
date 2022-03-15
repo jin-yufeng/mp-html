@@ -873,7 +873,7 @@ Parser.prototype.popNode = function () {
   }
 
   // flex 布局时部分样式需要提取到 rich-text 外层
-  const flex = parent && (parent.attrs.style || '').includes('flex') && !node.c
+  const flex = parent && ((parent.attrs.style || '').includes('flex') || (parent.attrs.style || '').includes('grid')) && !node.c
     // #ifdef MP-WEIXIN || MP-QQ
     && !(styleObj.display || '').includes('inline') // eslint-disable-line
   // #endif
@@ -902,7 +902,7 @@ Parser.prototype.popNode = function () {
   for (const key in styleObj) {
     if (styleObj[key]) {
       const val = `;${key}:${styleObj[key].replace(' !important', '')}`
-      if (flex && ((key.includes('flex') && key !== 'flex-direction') || key === 'align-self' || styleObj[key][0] === '-' || (key === 'width' && val.includes('%')))) {
+      if (flex && ((key.includes('flex') && key !== 'flex-direction') || key === 'align-self' || key.includes('grid') || styleObj[key][0] === '-' || (key.includes('width') && val.includes('%')))) {
         node.f += val
         if (key === 'width') {
           attrs.style += ';width:100%'

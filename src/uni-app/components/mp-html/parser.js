@@ -960,7 +960,7 @@ Parser.prototype.popNode = function () {
     }
   }
   // flex 布局时部分样式需要提取到 rich-text 外层
-  const flex = parent && (parent.attrs.style || '').includes('flex')
+  const flex = parent && ((parent.attrs.style || '').includes('flex') || (parent.attrs.style || '').includes('grid'))
     // #ifdef MP-WEIXIN
     // 检查基础库版本 virtualHost 是否可用
     && !(node.c && wx.getNFCAdapter) // eslint-disable-line
@@ -995,7 +995,7 @@ Parser.prototype.popNode = function () {
     if (styleObj[key]) {
       const val = `;${key}:${styleObj[key].replace(' !important', '')}`
       /* #ifndef APP-PLUS-NVUE */
-      if (flex && ((key.includes('flex') && key !== 'flex-direction') || key === 'align-self' || styleObj[key][0] === '-' || (key === 'width' && val.includes('%')))) {
+      if (flex && ((key.includes('flex') && key !== 'flex-direction') || key === 'align-self' || key.includes('grid') || styleObj[key][0] === '-' || (key.includes('width') && val.includes('%')))) {
         node.f += val
         if (key === 'width') {
           attrs.style += ';width:100%'
