@@ -56,10 +56,10 @@
       </view>
       
       <!-- 富文本 -->
-      <!-- #ifdef H5 || ((MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE2) -->
+      <!-- #ifdef H5 || MP-WEIXIN || MP-QQ || APP-PLUS || MP-360 -->
       <rich-text v-else-if="handler.use(n)" :id="n.attrs.id" :style="n.f" :nodes="[n]" />
       <!-- #endif -->
-      <!-- #ifndef H5 || ((MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE2) -->
+      <!-- #ifndef H5 || MP-WEIXIN || MP-QQ || APP-PLUS || MP-360 -->
       <rich-text v-else-if="!n.c" :id="n.attrs.id" :style="n.f+';display:inline'" :preview="false" :nodes="[n]" />
       <!-- #endif -->
       <!-- 继续递归 -->
