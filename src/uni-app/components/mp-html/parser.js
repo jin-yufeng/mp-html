@@ -813,7 +813,7 @@ Parser.prototype.popNode = function () {
 
       for (let row = 1; row <= trList.length; row++) {
         let col = 1
-        for (let j = 0; j < trList[row - 1].children.length; j++, col++) {
+        for (let j = 0; j < trList[row - 1].children.length; j++) {
           const td = trList[row - 1].children[j]
           if (td.name === 'td' || td.name === 'th') {
             // 这个格子被上面的单元格占用，则列号++
@@ -859,6 +859,7 @@ Parser.prototype.popNode = function () {
               td.attrs.style = style
             }
             cells.push(td)
+            col++
           }
         }
         if (row === 1) {
