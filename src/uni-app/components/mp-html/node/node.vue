@@ -57,7 +57,7 @@
       <!-- insert -->
       <!-- 富文本 -->
       <!-- #ifdef H5 || ((MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE2) -->
-      <rich-text v-else-if="handler.use(n)" :id="n.attrs.id" :style="n.f" :nodes="[n]" />
+      <rich-text v-else-if="!n.c&&!handler.isInline(n.name, n.attrs.style)" :id="n.attrs.id" :style="n.f" :nodes="[n]" />
       <!-- #endif -->
       <!-- #ifndef H5 || ((MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE2) -->
       <rich-text v-else-if="!n.c" :id="n.attrs.id" :style="n.f+';display:inline'" :preview="false" :nodes="[n]" />
@@ -90,13 +90,11 @@ var inlineTags = {
   sup: true
 }
 /**
- * @description 是否使用 rich-text 显示剩余内容
+ * @description 判断是否为行内标签
  */
 module.exports = {
-  use: function (item) {
-    if (item.c) return false
-    // 微信和 QQ 的 rich-text inline 布局无效
-    return !inlineTags[item.name] && (item.attrs.style || '').indexOf('display:inline') == -1
+  isInline: function (tagName, style) {
+    return inlineTags[tagName] || (style || '').indexOf('display:inline') !== -1
   }
 }
 </script>

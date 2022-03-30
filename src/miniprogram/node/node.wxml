@@ -1,6 +1,6 @@
 <!-- node 递归子组件 -->
 <!-- #ifdef MP-WEIXIN || MP-QQ -->
-<wxs module="use">
+<wxs module="isInline">
   // 行内标签列表
   var inlineTags = {
     abbr: true,
@@ -20,13 +20,10 @@
     sup: true
   }
   /**
-   * @description 是否使用 rich-text 显示剩余内容
+   * @description 判断是否为行内标签
    */
-  module.exports = function (item) {
-    if (item.c) return false
-    if (!item.children || item.name === 'a') return true
-    // 微信小程序 rich-text 无法被设置为 inline 布局
-    return !inlineTags[item.name] && (item.attrs.style || '').indexOf('inline') === -1
+  module.exports = function (tagName, style) {
+    return inlineTags[tagName] || (style || '').indexOf('inline') !== -1
   }
 </wxs>
 <!-- #endif -->
@@ -81,23 +78,23 @@
 <!-- #ifndef MP-ALIPAY || MP-TOUTIAO -->
 <!-- 第 1 层 -->
 <block wx:for="{{childs}}" wx:for-item="n1" wx:for-index="i1" wx:key="i1">
-  <template mp-weixin:mp-qq:wx:if="{{use(n1)}}" mp-baidu:wx:if="{{!n1.c}}" is="el" data="{{n:n1,i:''+i1,opts:opts,ctrl:ctrl}}" />
+  <template mp-weixin:mp-qq:wx:if="{{!n1.c&&(!n1.children||n1.name==='a'||!isInline(n1.name,n1.attrs.style))}}" mp-baidu:wx:if="{{!n1.c}}" is="el" data="{{n:n1,i:''+i1,opts:opts,ctrl:ctrl}}" />
   <view wx:else id="{{n1.attrs.id}}" class="_{{n1.name}} {{n1.attrs.class}}" style="{{n1.attrs.style}}">
     <!-- 第 2 层 -->
     <block wx:for="{{n1.children}}" wx:for-item="n2" wx:for-index="i2" wx:key="i2">
-      <template mp-weixin:mp-qq:wx:if="{{use(n2)}}" mp-baidu:wx:if="{{!n2.c}}" is="el" data="{{n:n2,i:i1+'_'+i2,opts:opts,ctrl:ctrl}}" />
+      <template mp-weixin:mp-qq:wx:if="{{!n2.c&&(!n2.children||n2.name==='a'||!isInline(n2.name,n2.attrs.style))}}" mp-baidu:wx:if="{{!n2.c}}" is="el" data="{{n:n2,i:i1+'_'+i2,opts:opts,ctrl:ctrl}}" />
       <view wx:else id="{{n2.attrs.id}}" class="_{{n2.name}} {{n2.attrs.class}}" style="{{n2.attrs.style}}">
         <!-- 第 3 层 -->
         <block wx:for="{{n2.children}}" wx:for-item="n3" wx:for-index="i3" wx:key="i3">
-          <template mp-weixin:mp-qq:wx:if="{{use(n3)}}" mp-baidu:wx:if="{{!n3.c}}" is="el" data="{{n:n3,i:i1+'_'+i2+'_'+i3,opts:opts,ctrl:ctrl}}" />
+          <template mp-weixin:mp-qq:wx:if="{{!n3.c&&(!n3.children||n3.name==='a'||!isInline(n3.name,n3.attrs.style))}}" mp-baidu:wx:if="{{!n3.c}}" is="el" data="{{n:n3,i:i1+'_'+i2+'_'+i3,opts:opts,ctrl:ctrl}}" />
           <view wx:else id="{{n3.attrs.id}}" class="_{{n3.name}} {{n3.attrs.class}}" style="{{n3.attrs.style}}">
             <!-- 第 4 层 -->
             <block wx:for="{{n3.children}}" wx:for-item="n4" wx:for-index="i4" wx:key="i4">
-              <template mp-weixin:mp-qq:wx:if="{{use(n4)}}" mp-baidu:wx:if="{{!n4.c}}" is="el" data="{{n:n4,i:i1+'_'+i2+'_'+i3+'_'+i4,opts:opts,ctrl:ctrl}}" />
+              <template mp-weixin:mp-qq:wx:if="{{!n4.c&&(!n4.children||n4.name==='a'||!isInline(n4.name,n4.attrs.style))}}" mp-baidu:wx:if="{{!n4.c}}" is="el" data="{{n:n4,i:i1+'_'+i2+'_'+i3+'_'+i4,opts:opts,ctrl:ctrl}}" />
               <view wx:else id="{{n4.attrs.id}}" class="_{{n4.name}} {{n4.attrs.class}}" style="{{n4.attrs.style}}">
                 <!-- 第 5 层 -->
                 <block wx:for="{{n4.children}}" wx:for-item="n5" wx:for-index="i5" wx:key="i5">
-                  <template mp-weixin:mp-qq:wx:if="{{use(n5)}}" mp-baidu:wx:if="{{!n5.c}}" is="el" data="{{n:n5,i:i1+'_'+i2+'_'+i3+'_'+i4+'_'+i5,opts:opts,ctrl:ctrl}}" />
+                  <template mp-weixin:mp-qq:wx:if="{{!n5.c&&(!n5.children||n5.name==='a'||!isInline(n5.name,n5.attrs.style))}}" mp-baidu:wx:if="{{!n5.c}}" is="el" data="{{n:n5,i:i1+'_'+i2+'_'+i3+'_'+i4+'_'+i5,opts:opts,ctrl:ctrl}}" />
                   <node wx:else id="{{n5.attrs.id}}" class="_{{n5.name}} {{n5.attrs.class}}" style="{{n5.attrs.style}}" childs="{{n5.children}}" opts="{{opts}}" />
                 </block>
               </view>
