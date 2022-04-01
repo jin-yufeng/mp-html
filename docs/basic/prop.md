@@ -3,7 +3,10 @@
 !> 需要将某个属性设置为 *false* 时，应写作 *attr="{{false}}"*  
 
 ## container-style
-功能：设置容器的样式（[2.1.0](changelog/changelog#v210) 版本起支持）  
+
+?> [2.1.0](changelog/changelog#v210) 版本起支持  
+
+功能：设置容器的样式  
 类型：*String*  
 示例：  
 ```css
@@ -100,6 +103,9 @@ white-space: pre-line; /* 保留换行符 */
 默认值：*true*  
 
 ## show-img-menu
+
+?> [2.3.0](changelog/changelog#v230) 版本起支持控制预览时是否长按显示菜单（仅微信、百度小程序有效）
+
 功能：是否允许图片被长按时显示菜单  
 类型：*Boolean*  
 默认值：*true*  

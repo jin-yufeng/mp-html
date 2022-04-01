@@ -198,7 +198,7 @@
 | tt |  |
 | u |  |
 | ul |  |
-| video | autoplay, controls, loop, muted, poster, src |
+| video | autoplay, controls, loop, muted, object-fit, poster, src |
 
 说明：  
 1. 除上面列举的外，还支持 *svg* 系列的标签和 *id*、*style*、*class*、*align*、*height*、*width*、*dir* 属性  

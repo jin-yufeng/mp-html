@@ -1,8 +1,8 @@
 ## news
 1. 欢迎加入 `QQ` 交流群：`699734691`  
-   ![group](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/group.jpg)  
+   ![group](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/group.jpg?sign=558401bccbd56b01debe1bfac6a3b55e&t=1648801090)  
 2. 示例微信小程序 `富文本插件` 添加 `获取组件包` 功能 [详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart?id=mp)  
-   ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg)
+   ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%AF%8C%E6%96%87%E6%9C%AC%E6%8F%92%E4%BB%B6.jpg?sign=200e28d06f36049c18d42cdd46270c35&t=1648801110)
 
 ## 功能介绍
 - 全端支持（含 `v3、NVUE`）

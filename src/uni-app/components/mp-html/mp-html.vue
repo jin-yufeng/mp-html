@@ -12,7 +12,7 @@
 
 <script>
 /**
- * mp-html v2.2.2
+ * mp-html v2.3.0
  * @description 富文本组件
  * @tutorial https://github.com/jin-yufeng/mp-html
  * @property {String} container-style 容器的样式
@@ -383,7 +383,7 @@ export default {
           }
           break
         // 链接点击
-        case 'onLinkTap':
+        case 'onLinkTap': {
           const href = message.attrs.href
           this.$emit('linktap', message.attrs)
           if (href) {
@@ -411,6 +411,7 @@ export default {
             }
           }
           break
+        }
         case 'onPlay':
           this.$emit('play')
           break

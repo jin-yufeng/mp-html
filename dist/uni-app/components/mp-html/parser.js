@@ -39,7 +39,11 @@ const config = {
     ldquo: '“',
     rdquo: '”',
     bull: '•',
-    hellip: '…'
+    hellip: '…',
+    larr: '←',
+    uarr: '↑',
+    rarr: '→',
+    darr: '↓'
   },
 
   // 默认的标签样式
@@ -501,15 +505,11 @@ Parser.prototype.onOpenTag = function (selfClose) {
         styleObj.height = undefined
       }
       // 记录是否设置了宽高
-      if (styleObj.width) {
-        if (styleObj.width.includes('auto')) {
-          styleObj.width = ''
-        } else {
-          node.w = 'T'
-          if (!isNaN(parseInt(styleObj.height)) && (!styleObj.height.includes('%') || (parent && (parent.attrs.style || '').includes('height')))) {
-            node.h = 'T'
-          }
-        }
+      if (!isNaN(parseInt(styleObj.width))) {
+        node.w = 'T'
+      }
+      if (!isNaN(parseInt(styleObj.height)) && (!styleObj.height.includes('%') || (parent && (parent.attrs.style || '').includes('height')))) {
+        node.h = 'T'
       }
     } else if (node.name === 'svg') {
       siblings.push(node)
@@ -733,7 +733,11 @@ Parser.prototype.popNode = function () {
     // #endif
   ) {
     this.expose()
-  } /* #ifdef APP-PLUS */ else if (node.name === 'video') {
+  } else if (node.name === 'video') {
+    if ((styleObj.height || '').includes('auto')) {
+      styleObj.height = undefined
+    }
+    /* #ifdef APP-PLUS */
     let str = '<video style="width:100%;height:100%"'
     for (const item in attrs) {
       if (attrs[item]) {
@@ -741,7 +745,7 @@ Parser.prototype.popNode = function () {
       }
     }
     if (this.options.pauseVideo) {
-      str += ' onplay="for(var e=document.getElementsByTagName(\'video\'),t=0;t<e.length;t++)e[t]!=this&&e[t].pause()"'
+      str += ' onplay="this.dispatchEvent(new CustomEvent(\'vplay\',{bubbles:!0}));for(var e=document.getElementsByTagName(\'video\'),t=0;t<e.length;t++)e[t]!=this&&e[t].pause()"'
     }
     str += '>'
     for (let i = 0; i < node.src.length; i++) {
@@ -749,7 +753,8 @@ Parser.prototype.popNode = function () {
     }
     str += '</video>'
     node.html = str
-  } /* #endif */ else if ((node.name === 'ul' || node.name === 'ol') && node.c) {
+    /* #endif */
+  } else if ((node.name === 'ul' || node.name === 'ol') && node.c) {
     // 列表处理
     const types = {
       a: 'lower-alpha',
@@ -812,7 +817,7 @@ Parser.prototype.popNode = function () {
 
       for (let row = 1; row <= trList.length; row++) {
         let col = 1
-        for (let j = 0; j < trList[row - 1].children.length; j++, col++) {
+        for (let j = 0; j < trList[row - 1].children.length; j++) {
           const td = trList[row - 1].children[j]
           if (td.name === 'td' || td.name === 'th') {
             // 这个格子被上面的单元格占用，则列号++
@@ -858,6 +863,7 @@ Parser.prototype.popNode = function () {
               td.attrs.style = style
             }
             cells.push(td)
+            col++
           }
         }
         if (row === 1) {
@@ -959,7 +965,7 @@ Parser.prototype.popNode = function () {
     }
   }
   // flex 布局时部分样式需要提取到 rich-text 外层
-  const flex = parent && (parent.attrs.style || '').includes('flex')
+  const flex = parent && ((parent.attrs.style || '').includes('flex') || (parent.attrs.style || '').includes('grid'))
     // #ifdef MP-WEIXIN
     // 检查基础库版本 virtualHost 是否可用
     && !(node.c && wx.getNFCAdapter) // eslint-disable-line
@@ -994,7 +1000,7 @@ Parser.prototype.popNode = function () {
     if (styleObj[key]) {
       const val = `;${key}:${styleObj[key].replace(' !important', '')}`
       /* #ifndef APP-PLUS-NVUE */
-      if (flex && ((key.includes('flex') && key !== 'flex-direction') || key === 'align-self' || styleObj[key][0] === '-' || (key === 'width' && val.includes('%')))) {
+      if (flex && ((key.includes('flex') && key !== 'flex-direction') || key === 'align-self' || key.includes('grid') || styleObj[key][0] === '-' || (key.includes('width') && val.includes('%')))) {
         node.f += val
         if (key === 'width') {
           attrs.style += ';width:100%'

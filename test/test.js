@@ -53,7 +53,7 @@ console.log('11')
 <embed src="xxx.mp4" />
 <embed autostart src="xxx.m4a" />
 <!-- 测试 source 标签 -->
-<video src="xxx.mp4" loop ></video>
+<video src="xxx.mp4" style="height:auto" loop ></video>
 <!-- 测试 table 标签 -->
 <table align="center"></table>
 <table align="left" border="1">

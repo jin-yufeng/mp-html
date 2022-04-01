@@ -86,7 +86,6 @@ Page({
 })
 ```
 
-
 ## linktap
 触发时机：链接被点击时  
 返回值：该 *a* 标签的属性列表  
@@ -140,6 +139,29 @@ Page({
         appId: e.detail['data-appid']
       })
     }
+  }
+})
+```
+
+## play
+
+?> [2.3.0](changelog/changelog#v230) 版本起支持  
+
+触发时机：音视频播放时  
+返回值：无  
+用途：和 [pauseMedia](advanced/api#pauseMedia) 的 `api` 配合可以实现与页面中其他音视频进行互斥播放  
+示例：  
+```javascript
+Page({
+  // 页面中的音视频播放事件
+  pagePlay() {
+    // ctx 为组件实例
+    ctx.pauseMedia() // 暂停组件内的音视频播放
+  },
+  // 组件的 play 事件
+  componentPlay() {
+    // media 为页面中的音视频实例
+    media.pause() // 暂停页面中的音视频播放
   }
 })
 ```

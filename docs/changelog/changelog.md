@@ -1,10 +1,27 @@
 # 📖 更新日志 :id=changelog
 
+# v2.3.0
+发布时间：*2022-04-01*  
+主要更新：  
+1. `A` 增加了 `play` 事件，音视频播放时触发，可用于与页面其他音视频进行互斥播放 [详细](basic/event#play)
+2. `U` [show-img-menu](basic/prop#show-img-menu) 属性支持控制预览时是否长按弹出菜单
+3. `U` 优化 `wxs` 处理，提高渲染性能 [详细](https://developers.weixin.qq.com/community/develop/article/doc/0006cc2b204740f601bd43fa25a413)  
+4. `U` `video` 标签支持 `object-fit` 属性
+5. `U` 增加支持一些常用实体编码 [详细](https://github.com/jin-yufeng/mp-html/issues/418)
+6. `F` 修复了图片仅设置高度可能不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/410)
+7. `F` 修复了 `video` 标签高度设置为 `auto` 不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/411)
+8. `F` 修复了使用 `grid` 布局时可能样式错误的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/413)
+9. `F` 修复了含有合并单元格的表格部分情况下显示异常的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/417)
+10. `F` 修复了百度小程序使用 `br` 标签可能部分不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/409)
+11. `F` 修复了 [editable](advanced/plugin#editable) 插件连续插入内容时顺序不正确的问题
+12. `F` 修复了 `uni-app` 包 `vue3` 使用 [audio](advanced/plugin#audio) 插件报错的问题
+13. `F` 修复了 `uni-app` 包 [highlight](advanced/plugin#highlight) 插件使用自定义的 `prism.min.js` 报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/416)
+
 # v2.2.2
 发布时间：*2022-02-26*  
 主要更新：  
 1. `A` 增加了 [pauseMedia](advanced/api#pauseMedia) 的 `api`，可用于暂停播放音视频 [详细](https://github.com/jin-yufeng/mp-html/issues/317)
-2. `U` 优化了长内容的加载速度  
+2. `U` 优化了长内容的加载速度
 3. `U` `uni-app` 包适配 `vue3` [#389](https://github.com/jin-yufeng/mp-html/issues/389)、[#398](https://github.com/jin-yufeng/mp-html/pull/398) by [@zhouhuafei](https://github.com/zhouhuafei)、[#400](https://github.com/jin-yufeng/mp-html/issues/400)
 4. `F` 修复了小程序端图片高度设置为百分比时可能不显示的问题
 5. `F` 修复了 [highlight](advanced/plugin#highlight) 插件部分情况下可能显示不完整的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/403)

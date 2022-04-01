@@ -12,9 +12,9 @@
 
 ## news
 1. 欢迎加入 `QQ` 交流群：`699734691`  
-   ![group](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/group.jpg)  
+   ![group](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/group.jpg?sign=5ccc928839526992be4f7187c5a65d54&t=1648800665)  
 2. 示例微信小程序 `富文本插件` 添加 `获取组件包` 功能 [详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart?id=mp)  
-   ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg)
+   ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%AF%8C%E6%96%87%E6%9C%AC%E6%8F%92%E4%BB%B6.jpg?sign=d58f89bcd2b9e4341f35a2bacfeb076c&t=1648800697)
 
 ## 功能介绍
 - 支持在多个主流的小程序平台和 `uni-app` 中使用
@@ -209,15 +209,15 @@
 
 | 官方示例 | 欢喜商城 | 多么生活 | 全品作业小助手 | 米兔旅行 | 食法查 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![富文本插件](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/富文本插件.jpg) | ![欢喜商城](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/欢喜商城.png) | ![多么生活](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/多么生活.jpg) | ![全品作业小助手](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/全品作业小助手.jpg) | ![米兔旅行](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/米兔旅行.png) | ![食法查](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/食法查.png) |
+| ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%AF%8C%E6%96%87%E6%9C%AC%E6%8F%92%E4%BB%B6.jpg?sign=d58f89bcd2b9e4341f35a2bacfeb076c&t=1648800697) | ![欢喜商城](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E6%AC%A2%E5%96%9C%E5%95%86%E5%9F%8E.png?sign=7a43951b960b9d4357bbfd1a14e00517&t=1648800783) | ![多么生活](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%A4%9A%E4%B9%88%E7%94%9F%E6%B4%BB.jpg?sign=20ace45a0de175749b8641f9faaedd99&t=1648800796) | ![全品作业小助手](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%85%A8%E5%93%81%E4%BD%9C%E4%B8%9A%E5%B0%8F%E5%8A%A9%E6%89%8B.jpg?sign=a72d0d0d10aade51ccf6c40bdd512d0d&t=1648800808) | ![米兔旅行](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E7%B1%B3%E5%85%94%E6%97%85%E8%A1%8C.png?sign=30a1076ff47cbf16574676e99ef38f5c&t=1648800822) | ![食法查](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E9%A3%9F%E6%B3%95%E6%9F%A5.png?sign=8439ce23400d333c9ef9ae1b9f6870bc&t=1648800833) |
 
-| 微慕 | 古典文学名著阅读 | 程序员技术之旅 | 典典博客 | Geek 时代 | 源创智造 |
+| 微慕 | 古典文学名著阅读 | 程序员技术之旅 | 典典博客 | Geek 时代 | 备忘录与记事本 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![微慕](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/微慕.jpg) | ![古典文学名著阅读](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/程序员技术之旅.jpg) | ![典典博客](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/典典博客.jpg) | ![Geek时代](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/Geek时代.jpg) | ![源创智造](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/源创智造.png) |
+| ![微慕](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%BE%AE%E6%85%95.jpg?sign=e6e748130bce0666348490ee5b8e9b18&t=1648800882) | ![古典文学名著阅读](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%8F%A4%E5%85%B8%E6%96%87%E5%AD%A6%E5%90%8D%E8%91%97%E9%98%85%E8%AF%BB.jpg?sign=1878b24fe48a6295a7dc68b5f96d6793&t=1648800892) | ![程序员技术之旅](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E7%A8%8B%E5%BA%8F%E5%91%98%E6%8A%80%E6%9C%AF%E4%B9%8B%E6%97%85.jpg?sign=112c3a6576be60cecf14cd848c87a9e4&t=1648800907) | ![典典博客](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%85%B8%E5%85%B8%E5%8D%9A%E5%AE%A2.jpg?sign=c847015206b62acb1439902c99482b19&t=1648800923) | ![Geek时代](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/Geek%E6%97%B6%E4%BB%A3.jpg?sign=4edb794fca522123748b12a9dc071b84&t=1648800937) | ![备忘录与记事本](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%A4%87%E5%BF%98%E5%BD%95%E4%B8%8E%E8%AE%B0%E4%BA%8B%E6%9C%AC.jpg?sign=363f2ee0876ad1a19153ce2cfc131488&t=1648800951) |
 
-| 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 | 技术源 share | 周仙神 |
+| 优秀笔记 | 365 刷题 | 同城共享书 | 技术源 share | 周仙神 | 你的代码写的真棒 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![备忘录与记事本](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/备忘录与记事本.jpg) | ![优秀笔记](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/优秀笔记.jpg) | ![365刷题](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/365刷题.jpg) | ![同城共享书](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/同城共享书.jpg) | ![技术源share](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/技术源share.jpg) | ![周仙神](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/case/周仙神.png) |
+| ![优秀笔记](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E4%BC%98%E7%A7%80%E7%AC%94%E8%AE%B0.jpg?sign=b8609db92f77a7ccdbecc30a099f49a0&t=1648800969) | ![365刷题](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/365%E5%88%B7%E9%A2%98.jpg?sign=c5dc0a8c2fd683d75216e2ae69ac9318&t=1648800982) | ![同城共享书](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%90%8C%E5%9F%8E%E5%85%B1%E4%BA%AB%E4%B9%A6.jpg?sign=bef1c6052405a1df83d6b14c486c23dd&t=1648800995) | ![技术源share](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E6%8A%80%E6%9C%AF%E6%BA%90share.jpg?sign=6a53a717a67f9a1d10beb23c5d982362&t=1648801059) | ![周仙神](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%91%A8%E4%BB%99%E7%A5%9E.png?sign=5bbb226921eabe92a3b7db9a6299436f&t=1648801009) | ![你的代码写的真棒](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E4%BD%A0%E7%9A%84%E4%BB%A3%E7%A0%81%E5%86%99%E7%9A%84%E7%9C%9F%E6%A3%92.jpg?sign=631ca57da7c4b28aef6b785fdcc596cd&t=1648801020) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 
@@ -227,23 +227,30 @@
   在用于生产环境前务必经过充分测试，由插件 `bug` 带来的损失概不负责（可以自行修改源码）  
 
 - 支持  
-  ![支持](https://gitee.com/jin-yufeng/mp-html/raw/master/docs/assets/sponsor.png)   
+  ![支持](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/sponsor.png?sign=a33f2ed22c74c9cfccfda6deebef108b&t=1648801034)   
 
 ## 更新日志
+- v2.3.0 (20220401)
+  1. `A` 增加了 `play` 事件，音视频播放时触发，可用于与页面其他音视频进行互斥播放 [详细](basic/event#play)
+  2. `U` `show-img-menu` 属性支持控制预览时是否长按弹出菜单
+  3. `U` 优化 `wxs` 处理，提高渲染性能 [详细](https://developers.weixin.qq.com/community/develop/article/doc/0006cc2b204740f601bd43fa25a413)  
+  4. `U` `video` 标签支持 `object-fit` 属性
+  5. `U` 增加支持一些常用实体编码 [详细](https://github.com/jin-yufeng/mp-html/issues/418)
+  6. `F` 修复了图片仅设置高度可能不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/410)
+  7. `F` 修复了 `video` 标签高度设置为 `auto` 不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/411)
+  8. `F` 修复了使用 `grid` 布局时可能样式错误的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/413)
+  9. `F` 修复了含有合并单元格的表格部分情况下显示异常的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/417)
+  10. `F` 修复了百度小程序使用 `br` 标签可能部分不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/409)
+  11. `F` 修复了 `editable` 插件连续插入内容时顺序不正确的问题
+  12. `F` 修复了 `uni-app` 包 `vue3` 使用 `audio` 插件报错的问题
+  13. `F` 修复了 `uni-app` 包 `highlight` 插件使用自定义的 `prism.min.js` 报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/416)
+
 - v2.2.2 (20220226)
   1. `A` 增加了 [pauseMedia](https://jin-yufeng.gitee.io/mp-html/#/advanced/api#pauseMedia) 的 `api`，可用于暂停播放音视频 [详细](https://github.com/jin-yufeng/mp-html/issues/317)
   2. `U` 优化了长内容的加载速度  
   3. `U` `uni-app` 包适配 `vue3` [#389](https://github.com/jin-yufeng/mp-html/issues/389)、[#398](https://github.com/jin-yufeng/mp-html/pull/398) by [@zhouhuafei](https://github.com/zhouhuafei)、[#400](https://github.com/jin-yufeng/mp-html/issues/400)
   4. `F` 修复了小程序端图片高度设置为百分比时可能不显示的问题
   5. `F` 修复了 `highlight` 插件部分情况下可能显示不完整的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/403)
-
-- v2.2.1 (20211224)
-  1. `A` `editable` 插件增加上下移动标签功能
-  2. `U` `editable` 插件支持在文本中间光标处插入内容
-  3. `F` 修复了 `uni-app` 包 `nvue` 端设置 `margin` 后可能导致高度不正确的问题
-  4. `F` 修复了 `highlight` 插件使用压缩版的 `prism.css` 可能导致背景失效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/367)
-  5. `F` 修复了 `uni-app` 包编辑状态下使用 `emoji` 插件内容为空时可能报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/371)
-  6. `F` 修复了使用 `editable` 插件后将 `selectable` 属性设置为 `force` 不生效的问题
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 
