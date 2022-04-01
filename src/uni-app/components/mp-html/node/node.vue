@@ -25,7 +25,7 @@
       </view>
       <!-- 视频 -->
       <!-- #ifdef APP-PLUS -->
-      <view v-else-if="n.html" :id="n.attrs.id" :class="'_video '+n.attrs.class" :style="n.attrs.style" v-html="n.html" />
+      <view v-else-if="n.html" :id="n.attrs.id" :class="'_video '+n.attrs.class" :style="n.attrs.style" v-html="n.html" @vplay.stop="play" />
       <!-- #endif -->
       <!-- #ifndef APP-PLUS -->
       <video v-else-if="n.name==='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay" :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :poster="n.attrs.poster" :src="n.src[ctrl[i]||0]" :data-i="i" @play="play" @error="mediaError" />
@@ -172,9 +172,11 @@ export default {
      * @param {Event} e
      */
     play (e) {
+      this.root.$emit('play')
       // #ifndef APP-PLUS
       if (this.root.pauseVideo) {
-        let flag = false; const id = e.target.id
+        let flag = false
+        const id = e.target.id
         for (let i = this.root._videos.length; i--;) {
           if (this.root._videos[i].id === id) {
             flag = true

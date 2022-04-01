@@ -135,8 +135,13 @@ function createDom (nodes, parent, namespace) {
         if (!node.attrs.autoplay && !node.attrs.controls) {
           ele.setAttribute('controls', 'true')
         }
-        if (options[3]) {
-          ele.onplay = function () {
+        ele.onplay = function () {
+          uni.postMessage({
+            data: {
+              action: 'onPlay'
+            }
+          })
+          if (options[3]) {
             for (let i = 0; i < medias.length; i++) {
               if (medias[i] !== this) {
                 medias[i].pause()

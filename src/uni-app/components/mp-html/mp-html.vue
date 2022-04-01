@@ -32,8 +32,9 @@
  * @property {Boolean | Number} use-anchor 是否使用锚点链接
  * @event {Function} load dom 结构加载完毕时触发
  * @event {Function} ready 所有图片加载完毕时触发
- * @event {Function} imgTap 图片被点击时触发
- * @event {Function} linkTap 链接被点击时触发
+ * @event {Function} imgtap 图片被点击时触发
+ * @event {Function} linktap 链接被点击时触发
+ * @event {Function} play 音视频播放时触发
  * @event {Function} error 媒体加载出错时触发
  */
 // #ifndef APP-PLUS-NVUE
@@ -102,7 +103,7 @@ export default {
     useAnchor: [Boolean, Number]
   },
   // #ifdef VUE3
-  emits: ['load', 'ready', 'imgtap', 'linktap', 'error'],
+  emits: ['load', 'ready', 'imgtap', 'linktap', 'play', 'error'],
   // #endif
   // #ifndef APP-PLUS-NVUE
   components: {
@@ -382,7 +383,7 @@ export default {
           }
           break
         // 链接点击
-        case 'onLinkTap': {
+        case 'onLinkTap':
           const href = message.attrs.href
           this.$emit('linktap', message.attrs)
           if (href) {
@@ -410,7 +411,9 @@ export default {
             }
           }
           break
-        }
+        case 'onPlay':
+          this.$emit('play')
+          break
         // 获取到锚点的偏移量
         case 'getOffset':
           if (typeof message.offset === 'number') {

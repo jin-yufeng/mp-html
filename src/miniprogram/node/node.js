@@ -41,6 +41,7 @@ Component({
      * @param {Event} e
      */
     play (e) {
+      this.root.triggerEvent('play')
       if (this.root.properties.pauseVideo) {
         let flag = false
         const id = e.target.id

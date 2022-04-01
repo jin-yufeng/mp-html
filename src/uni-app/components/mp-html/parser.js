@@ -741,7 +741,7 @@ Parser.prototype.popNode = function () {
       }
     }
     if (this.options.pauseVideo) {
-      str += ' onplay="for(var e=document.getElementsByTagName(\'video\'),t=0;t<e.length;t++)e[t]!=this&&e[t].pause()"'
+      str += ' onplay="this.dispatchEvent(new CustomEvent(\'vplay\',{bubbles:!0}));for(var e=document.getElementsByTagName(\'video\'),t=0;t<e.length;t++)e[t]!=this&&e[t].pause()"'
     }
     str += '>'
     for (let i = 0; i < node.src.length; i++) {
