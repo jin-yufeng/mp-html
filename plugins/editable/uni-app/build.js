@@ -114,6 +114,7 @@ module.exports = {
           childs.splice(parseInt(this.i) + 1, 0, node)
         }
         this.root._editVal(this.opts[6], this.childs, childs, true)
+        this.i = parseInt(this.i) + 1
       }, 200)
     },
     /**
@@ -455,7 +456,7 @@ module.exports = {
             .replace(/:childs\s*=\s*"td.children"\s*:opts="opts"/, ':childs="td.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children.\'+z+\'.children\']"')
             .replace(/opts\s*=\s*"opts"/g, 'opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children\']"')
             // 不使用 rich-text
-            .replace(/handler\.use\(n\)/g, '!opts[4]&&handler.use(n)').replace(/!n.c/g, '!opts[4]&&!n.c').replace('&&n.c', '&&(n.c||opts[4])')
+            .replace(/!n.c/g, '!opts[4]&&!n.c').replace('&&n.c', '&&(n.c||opts[4])')
             // 修改普通标签
             .replace(/<view\s+:id(.+?)style="/, '<view @tap="nodeTap" :id$1style="(ctrl.root?\'border:1px solid black;padding:5px;display:block;\':\'\')+')
             // 修改文本块
