@@ -34,7 +34,11 @@ const config = {
     ldquo: '“',
     rdquo: '”',
     bull: '•',
-    hellip: '…'
+    hellip: '…',
+    larr: '←',
+    uarr: '↑',
+    rarr: '→',
+    darr: '↓'
   },
 
   // 默认的标签样式
