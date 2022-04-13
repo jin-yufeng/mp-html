@@ -214,9 +214,15 @@ Parser.prototype.getUrl = function (url) {
     } else if (domain) {
       // 否则补充整个域名
       url = domain + url
-    }
-  } else if (domain && !url.includes('data:') && !url.includes('://')) {
-    url = domain + '/' + url
+    } /* #ifdef APP-PLUS */ else {
+      url = plus.io.convertLocalFileSystemURL(url)
+    } /* #endif */
+  } else if (!url.includes('data:') && !url.includes('://')) {
+    if (domain) {
+      url = domain + '/' + url
+    } /* #ifdef APP-PLUS */ else {
+      url = plus.io.convertLocalFileSystemURL(url)
+    } /* #endif */
   }
   return url
 }
