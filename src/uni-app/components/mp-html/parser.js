@@ -529,6 +529,11 @@ Parser.prototype.onOpenTag = function (selfClose) {
       }
     }
     attrs.style = attrs.style.substr(1) || undefined
+    // #ifdef (MP-WEIXIN || MP-QQ) && VUE3
+    if (!attrs.style) {
+      delete attrs.style
+    }
+    // #endif
   } else {
     if ((node.name === 'pre' || ((attrs.style || '').includes('white-space') && attrs.style.includes('pre'))) && this.pre !== 2) {
       this.pre = node.pre = 1
@@ -562,8 +567,8 @@ Parser.prototype.onCloseTag = function (name) {
     siblings.push({
       name,
       attrs: {
-        class: tagSelector[name],
-        style: this.tagStyle[name]
+        class: tagSelector[name] || '',
+        style: this.tagStyle[name] || ''
       }
     })
   }
@@ -1018,8 +1023,10 @@ Parser.prototype.popNode = function () {
   }
   attrs.style = attrs.style.substr(1) || undefined
   // #ifdef (MP-WEIXIN || MP-QQ) && VUE3
-  if (!attrs.style) {
-    delete attrs.style
+  for (const key in attrs) {
+    if (!attrs[key]) {
+      delete attrs[key]
+    }
   }
   // #endif
 }
