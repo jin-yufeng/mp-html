@@ -952,18 +952,20 @@ Parser.prototype.popNode = function () {
       }
     }
   } else if (node.c) {
-    node.c = 2
-    for (let i = node.children.length; i--;) {
-      const child = node.children[i]
-      // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
-      if (child.name && (config.inlineTags[child.name] || (child.attrs.style || '').includes('inline'))) {
-        child.c = 1
+    (function traversal (node) {
+      node.c = 2
+      for (let i = node.children.length; i--;) {
+        const child = node.children[i]
+        // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
+        if (child.name && (config.inlineTags[child.name] || (child.attrs.style || '').includes('inline')) && !child.c) {
+          traversal(child)
+        }
+        // #endif
+        if (!child.c || child.name === 'table') {
+          node.c = 1
+        }
       }
-      // #endif
-      if (!child.c || child.name === 'table') {
-        node.c = 1
-      }
-    }
+    })(node)
   }
 
   if ((styleObj.display || '').includes('flex') && !node.c) {
