@@ -36,7 +36,7 @@
      ```bash
      npm install mp-html
      ```
-  2. 开发者工具中勾选 `使用 npm 模块` 并点击 `工具 - 构建 npm`
+  2. 开发者工具中勾选 `使用 npm 模块`（若没有此选项则不需要）并点击 `工具 - 构建 npm`
   3. 在需要使用页面的 `json` 文件中添加
 
      ```json
@@ -231,7 +231,7 @@
 
 ## 更新日志
 - v2.3.0 (20220401)
-  1. `A` 增加了 `play` 事件，音视频播放时触发，可用于与页面其他音视频进行互斥播放 [详细](basic/event#play)
+  1. `A` 增加了 `play` 事件，音视频播放时触发，可用于与页面其他音视频进行互斥播放 [详细](https://jin-yufeng.gitee.io/mp-html/#/basic/event#play)
   2. `U` `show-img-menu` 属性支持控制预览时是否长按弹出菜单
   3. `U` 优化 `wxs` 处理，提高渲染性能 [详细](https://developers.weixin.qq.com/community/develop/article/doc/0006cc2b204740f601bd43fa25a413)  
   4. `U` `video` 标签支持 `object-fit` 属性

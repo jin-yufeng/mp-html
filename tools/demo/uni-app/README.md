@@ -121,6 +121,7 @@
 | error | 发生渲染错误时 |
 | imgtap | 图片被点击时 |
 | linktap | 链接被点击时 |
+| play | 音视频播放时 |
 
 查看 [事件](https://jin-yufeng.gitee.io/mp-html/#/basic/event) 了解更多
 

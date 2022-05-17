@@ -104,7 +104,6 @@ html = html.replace(/< img/g, '<img')
    连续空格可以使用 *&amp;nbsp;* *&amp;ensp;* *&amp;emsp;* 等实体编码  
    ```javascript
    html = html.replace(/\n/g, '<br>') // 替换换行符
-   html = html.replace(/ /g, '&nbsp;') // 替换空格
    ```
 2. 通过 *css* 设置 *white-space*  
    将 *css* 中的 *white-space* 设置为 *pre-line* 可以保留换行符，设置为 *pre-wrap* 可以保留空格和换行符  
