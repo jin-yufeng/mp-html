@@ -378,7 +378,7 @@ module.exports = {
       if (file.path.includes('miniprogram' + path.sep + 'index.wxml')) {
         // 传递 editable 属性和路径
         content = content.replace(/opts\s*=\s*"{{\[([^\]]+)\]}}"/, 'opts="{{[$1,editable,placeholder,\'\']}}"')
-          .replace(/<view(.*?)style\s*=\s*"{{containerStyle}}"/, '<view$1style="{{editable?\'position:relative;min-height:200px;\':\'\'}}{{containerStyle}}" bindtap="_containTap"')
+          .replace(/<view(.*?)style\s*=\s*"{{containerStyle}}"/, '<view$1style="{{editable?\'min-height:200px;\':\'\'}}{{containerStyle}}" bindtap="_containTap"')
           // 工具弹窗
           .replace('</view>', `  <view wx:if="{{tooltip}}" class="_tooltip_contain" style="top:{{tooltip.top}}px">
     <view class="_tooltip">
@@ -523,6 +523,7 @@ module.exports = {
       } else if (file.path.includes('node.wxml')) {
         content = content.replace(/opts\s*=\s*"{{opts}}"/, 'opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6],opts[7]+i+\'_\']}}"')
           .replace(/opts\s*=\s*"{{opts}}"/, 'opts="{{[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6],opts[7]+i1+\'_\'+i2+\'_\'+i3+\'_\'+i4+\'_\'+i5+\'_\']}}"')
+          .replace('!n.c', "opts[5]?(!n.children||n.name=='a'):!n.c")
           .replace(/!(n.?)\.c(?![a-z])/g, '(opts[5]?true:!$1.c)')
           .replace(/isInline\((.*?)\)/g, '(opts[5]?true:isInline($1))')
           // 修改普通标签
@@ -534,7 +535,7 @@ module.exports = {
           // 修改文本块
           .replace(/<!--\s*文本\s*-->[\s\S]+?<!--\s*链接\s*-->/,
             `<block wx:elif="{{n.type==='text'}}">
-    <text wx:if="{{!ctrl['e'+i]}}" data-i="{{i}}" mp-weixin:user-select="{{n.us}}" decode="{{!opts[5]}}" bindtap="editStart">{{n.text}}
+    <text wx:if="{{!ctrl['e'+i]}}" data-i="{{i}}" mp-weixin:user-select="{{opts[4]}}" decode="{{!opts[5]}}" bindtap="editStart">{{n.text}}
       <text wx:if="{{!n.text}}" style="color:gray">{{opts[6]||'请输入'}}</text>
     </text>
     <text wx:elif="{{ctrl['e'+i]===1}}" data-i="{{i}}" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" catchtap="editStart">{{n.text}}

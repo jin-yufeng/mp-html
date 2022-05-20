@@ -330,7 +330,7 @@ module.exports = {
       if (file.path.includes('mp-html.vue')) {
         // 传递 editable 属性和路径
         content = content.replace(/opts\s*=\s*"\[([^\]]+)\]"/, 'opts="[$1,editable,placeholder,\'nodes\']"')
-          .replace(/<view(.*?):style\s*=\s*"containerStyle"/, '<view$1:style="(editable?\'position:relative;min-height:200px;\':\'\')+containerStyle" @tap="_containTap"')
+          .replace(/<view(.*?):style\s*=\s*"containerStyle"/, '<view$1:style="(editable?\'min-height:200px;\':\'\')+containerStyle" @tap="_containTap"')
           // 工具弹窗
           .replace(/<\/view>\s*<\/template>/, `  <view v-if="tooltip" class="_tooltip_contain" :style="'top:'+tooltip.top+'px'">
       <view class="_tooltip">
@@ -462,7 +462,7 @@ module.exports = {
             // 修改文本块
             .replace(/<!--\s*文本\s*-->[\s\S]+?<!--\s*链接\s*-->/,
               `<!-- 文本 -->
-      <text v-else-if="n.type==='text'&&!ctrl['e'+i]" :data-i="i" :user-select="n.us" :decode="!opts[5]" @tap="editStart">{{n.text}}
+      <text v-else-if="n.type==='text'&&!ctrl['e'+i]" :data-i="i" :user-select="opts[4]" :decode="!opts[5]" @tap="editStart">{{n.text}}
         <text v-if="!n.text" style="color:gray">{{opts[6]||'请输入'}}</text>
       </text>
       <text v-else-if="n.type==='text'&&ctrl['e'+i]===1" :data-i="i" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" @tap.stop="editStart">{{n.text}}
