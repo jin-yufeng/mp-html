@@ -32,12 +32,20 @@ Component({
      * @param {String} path 路径
      */
     getNode (path) {
-      const nums = path.split('_')
-      let node = this.properties.childs[nums[0]]
-      for (let i = 1; i < nums.length; i++) {
-        node = node.children[nums[i]]
+      try {
+        const nums = path.split('_')
+        let node = this.properties.childs[nums[0]]
+        for (let i = 1; i < nums.length; i++) {
+          node = node.children[nums[i]]
+        }
+        return node
+      } catch {
+        return {
+          text: '',
+          attrs: {},
+          children: []
+        }
       }
-      return node
     },
     /**
      * @description 播放视频事件
