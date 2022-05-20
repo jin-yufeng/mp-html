@@ -11,9 +11,9 @@
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## 📰 news :id=news
-1. 欢迎加入 `QQ` 交流群：`699734691`  
+1. 欢迎加入 *QQ* 交流群：*699734691*  
    ![group](assets/group.jpg)  
-2. 示例微信小程序 `富文本插件` 添加 `获取组件包` 功能 [详细](overview/quickstart?id=mp)  
+2. 示例微信小程序 *富文本插件* 添加 *获取组件包* 功能 [详细](overview/quickstart?id=mp)  
    ![富文本插件](assets/case/富文本插件.jpg)
 
 ## 📢 概况 :id=overview

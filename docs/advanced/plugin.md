@@ -84,6 +84,8 @@
 
 ?> [2.2.1](changelog/changelog#v221) 版本起所有标签支持上下移动操作，但仅限同级标签间移动，即在有同级标签且非第一个（或最后一个）时可以上移（或下移）
 
+?> 在支付宝小程序中使用时需要在页面样式中添加 *page { position: relative; }* 避免 *tooltip* 错位
+
 ?> 菜单项可以通过编辑 *plugins/editable/config.js* 进行修改，仅可以删减或调整顺序，添加或更名无效
 
 [组件实例](advanced/api#getCompent) 上提供了以下方法（*editable* 属性为 *true* 时才可以调用）：  
@@ -173,7 +175,7 @@ Page({
 ```
 
 ##### 示例项目 :id=editable_demo
-微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/oZeHKcmg7gyP) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
+微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/QJSiuomf78z4) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
 
 注意事项：  
 不要在 *editable* 属性被设置为 *true* 前通过 [setContent](advanced/api#setContent) 方法（用 [content](basic/prop#content) 属性）设置内容，否则在切换为 *true* 后会变成空白  
@@ -286,6 +288,9 @@ function search (key) {
 
 ## style
 功能：解析和匹配 *style* 标签中的样式  
+
+?> 这里的 *style* 标签指的是传入 [content](basic/prop#content) 属性中的 *html* 里包含的 *style* 标签，且 *style* 标签要放在其他标签前面才能生效  
+
 大小：*≈3.5KB*  
 支持平台：  
 
@@ -329,7 +334,7 @@ function search (key) {
 
 同时，其可以被 [pause-video](basic/prop#pause-video) 属性控制  
 
-!> 本插件仅用于将官方 [腾讯视频插件](https://github.com/tvfe/txv-miniprogram-plugin) 应用于本组件，使用前请确认已经成功申请使用该插件并按要求在小程序 *app.json* 中配置完成（*uni-app* 中的配置方法可以参考 [#103](https://github.com/jin-yufeng/mp-html/issues/103#issuecomment-654586246)），否则无法生效  
+!> 本插件仅用于将官方 [腾讯视频插件](https://github.com/tvfe/txv-miniprogram-plugin) 应用于本组件，使用前请确认已经成功申请使用该插件并按要求在小程序 *app.json* 中配置完成（*uni-app* 中的配置方法可以参考 [#103](https://github.com/jin-yufeng/mp-html/issues/103#issuecomment-654586246)），否则可能报错 **This application has not registered any plugins yet** 且无法生效  
 
 ## img-cache
 功能：图片本地缓存  

@@ -230,6 +230,16 @@
   ![支持](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/sponsor.png?sign=a33f2ed22c74c9cfccfda6deebef108b&t=1648801034)   
 
 ## 更新日志
+- v2.3.1 (20220520)
+  1. `U` `uni-app` 包 `app` 端支持使用本地图片
+  2. `U` 优化了微信小程序 `selectable` 属性在 `ios` 端的处理 [详细](https://jin-yufeng.gitee.io/mp-html/#/basic/prop#selectable)
+  3. `U` 原生包取消样式隔离，部分平台可以直接引入页面样式 [#376](https://github.com/jin-yufeng/mp-html/issues/376)、[详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart#externStyle)
+  4. `F` 修复了 `editable` 插件不在顶部时 `tooltip` 位置可能错误的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/430)
+  5. `F` 修复了 `uni-app` 包 `vue3` 运行到微信小程序可能报错丢失内容的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/414)
+  6. `F` 修复了 `uni-app` 包 `vue3` 部分标签可能被错误换行的问题
+  7. `F` 修复了原生包个别情况下可能报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/428)
+  8. `F` 修复了 `editable` 插件 `uni-app` 包的 `app` 端插入视频无法预览的问题
+
 - v2.3.0 (20220401)
   1. `A` 增加了 `play` 事件，音视频播放时触发，可用于与页面其他音视频进行互斥播放 [详细](https://jin-yufeng.gitee.io/mp-html/#/basic/event#play)
   2. `U` `show-img-menu` 属性支持控制预览时是否长按弹出菜单
@@ -244,13 +254,6 @@
   11. `F` 修复了 `editable` 插件连续插入内容时顺序不正确的问题
   12. `F` 修复了 `uni-app` 包 `vue3` 使用 `audio` 插件报错的问题
   13. `F` 修复了 `uni-app` 包 `highlight` 插件使用自定义的 `prism.min.js` 报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/416)
-
-- v2.2.2 (20220226)
-  1. `A` 增加了 [pauseMedia](https://jin-yufeng.gitee.io/mp-html/#/advanced/api#pauseMedia) 的 `api`，可用于暂停播放音视频 [详细](https://github.com/jin-yufeng/mp-html/issues/317)
-  2. `U` 优化了长内容的加载速度  
-  3. `U` `uni-app` 包适配 `vue3` [#389](https://github.com/jin-yufeng/mp-html/issues/389)、[#398](https://github.com/jin-yufeng/mp-html/pull/398) by [@zhouhuafei](https://github.com/zhouhuafei)、[#400](https://github.com/jin-yufeng/mp-html/issues/400)
-  4. `F` 修复了小程序端图片高度设置为百分比时可能不显示的问题
-  5. `F` 修复了 `highlight` 插件部分情况下可能显示不完整的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/403)
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 

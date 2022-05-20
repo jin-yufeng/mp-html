@@ -40,6 +40,8 @@
 
 > `2.2.1` 版本起所有标签支持上下移动操作，但仅限同级标签间移动，即在有同级标签且非第一个（或最后一个）时可以上移（或下移）
 
+> 在支付宝小程序中使用时需要在页面样式中添加 *page { position: relative; }* 避免 *tooltip* 错位
+
 > 菜单项可以通过编辑 *plugins/editable/config.js* 进行修改，仅可以删减或调整顺序，添加或更名无效
 
 组件实例上提供了以下方法（*editable* 属性为 *true* 时才可以调用）：  
@@ -128,7 +130,7 @@ Page({
 ```
 
 **示例项目**：  
-微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/oZeHKcmg7gyP) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
+微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/QJSiuomf78z4) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
 
 注意事项：  
 1. 不要在 *editable* 属性被设置为 *true* 前通过 *setContent* 方法（用 *content* 属性）设置内容，否则在切换为 *true* 后会变成空白  

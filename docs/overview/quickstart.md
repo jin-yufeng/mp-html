@@ -180,6 +180,8 @@
 
 - taro  
   [https://taro-docs.jd.com/taro/docs/hybrid#使用原生组件](https://taro-docs.jd.com/taro/docs/hybrid#%E4%BD%BF%E7%94%A8%E5%8E%9F%E7%94%9F%E7%BB%84%E4%BB%B6)  
+
+  ?> 在 *taro* 中使用时属性名需用驼峰写法，如 *copy-link* 属性应写作 *copyLink*  
   
   ?> 需要 *taro* 专用包的开发者欢迎参与 [需求调研](https://github.com/jin-yufeng/mp-html/issues/374)
 - kbone  
@@ -232,16 +234,22 @@
    ```
 
 ## 🎈 个性化 :id=setting  
+?> 不熟悉 *npm* 的用户可以通过 [小程序方式](overview/quickstart#mp) 进行生成包含个性化配置的组件包  
+
 通过编辑 [tools/config.js](https://github.com/jin-yufeng/mp-html/blob/master/tools/config.js) 可以按需要生成个性化的组件包，主要的字段有：  
 
 #### plugins  
 需要使用的插件名称列表，关于插件的详细信息见 [插件](advanced/plugin)  
 
 #### externStyle  
+!> 暂不支持对图片设置宽高，详见 [#426](https://github.com/jin-yufeng/mp-html/issues/426)
+
 外部样式，一个 *css* 字符串，将被用于 *html* 的渲染，但仅支持 *class* 选择器  
 
 ?> [2.1.0](changelog/changelog#v210) 版本起增加支持 **标签名选择器**，通过这种方式给标签设置的样式全局有效，在样式较长或作用标签数量较大时这种方法的性能要高于 [tag-style](basic/prop#tag-style) 属性，且写法更加灵活（可以与伪类、*class* 配合等）  
 需要注意的是，由于 [组件](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html#%E7%BB%84%E4%BB%B6%E6%A0%B7%E5%BC%8F) 内仅支持 *class* 选择器，直接将标签名选择器 **写在 wxss 中是无效的**，必须写在本字段中，构建过程中会自动转换为 *class* 选择器  
+
+?> [2.3.1](changelog/changelog#v231) 版本起，组件取消样式隔离，部分平台（微信小程序 *2.11.0+* 基础库完全支持；*QQ*、百度小程序部分情况下支持）支持直接引入页面样式中的 *class* 选择器，无需使用本方法引入；若遇到样式无法生效或需要使用标签名选择器，则仍需要使用本方法
 
 #### customElements  
 自定义标签列表（[2.2.0](changelog/changelog#v220) 版本起支持），可以在这里注册需要使用的小程序功能标签（如 *ad*、*ad-custom*、*official-account*、*map* 等）  

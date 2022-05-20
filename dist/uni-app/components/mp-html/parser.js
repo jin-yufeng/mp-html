@@ -214,9 +214,15 @@ Parser.prototype.getUrl = function (url) {
     } else if (domain) {
       // 否则补充整个域名
       url = domain + url
-    }
-  } else if (domain && !url.includes('data:') && !url.includes('://')) {
-    url = domain + '/' + url
+    } /* #ifdef APP-PLUS */ else {
+      url = plus.io.convertLocalFileSystemURL(url)
+    } /* #endif */
+  } else if (!url.includes('data:') && !url.includes('://')) {
+    if (domain) {
+      url = domain + '/' + url
+    } /* #ifdef APP-PLUS */ else {
+      url = plus.io.convertLocalFileSystemURL(url)
+    } /* #endif */
   }
   return url
 }
@@ -523,6 +529,11 @@ Parser.prototype.onOpenTag = function (selfClose) {
       }
     }
     attrs.style = attrs.style.substr(1) || undefined
+    // #ifdef (MP-WEIXIN || MP-QQ) && VUE3
+    if (!attrs.style) {
+      delete attrs.style
+    }
+    // #endif
   } else {
     if ((node.name === 'pre' || ((attrs.style || '').includes('white-space') && attrs.style.includes('pre'))) && this.pre !== 2) {
       this.pre = node.pre = 1
@@ -556,8 +567,8 @@ Parser.prototype.onCloseTag = function (name) {
     siblings.push({
       name,
       attrs: {
-        class: tagSelector[name],
-        style: this.tagStyle[name]
+        class: tagSelector[name] || '',
+        style: this.tagStyle[name] || ''
       }
     })
   }
@@ -941,18 +952,20 @@ Parser.prototype.popNode = function () {
       }
     }
   } else if (node.c) {
-    node.c = 2
-    for (let i = node.children.length; i--;) {
-      const child = node.children[i]
-      // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
-      if (child.name && (config.inlineTags[child.name] || (child.attrs.style || '').includes('inline'))) {
-        child.c = 1
+    (function traversal (node) {
+      node.c = 2
+      for (let i = node.children.length; i--;) {
+        const child = node.children[i]
+        // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
+        if (child.name && (config.inlineTags[child.name] || (child.attrs.style || '').includes('inline')) && !child.c) {
+          traversal(child)
+        }
+        // #endif
+        if (!child.c || child.name === 'table') {
+          node.c = 1
+        }
       }
-      // #endif
-      if (!child.c || child.name === 'table') {
-        node.c = 1
-      }
-    }
+    })(node)
   }
 
   if ((styleObj.display || '').includes('flex') && !node.c) {
@@ -1012,8 +1025,10 @@ Parser.prototype.popNode = function () {
   }
   attrs.style = attrs.style.substr(1) || undefined
   // #ifdef (MP-WEIXIN || MP-QQ) && VUE3
-  if (!attrs.style) {
-    delete attrs.style
+  for (const key in attrs) {
+    if (!attrs[key]) {
+      delete attrs[key]
+    }
   }
   // #endif
 }
@@ -1051,9 +1066,8 @@ Parser.prototype.onText = function (text) {
   node.text = decodeEntity(text)
   if (this.hook(node)) {
     // #ifdef MP-WEIXIN
-    if (this.options.selectable === 'force' && system.includes('iOS')) {
+    if (this.options.selectable === 'force' && system.includes('iOS') && !uni.canIUse('rich-text.user-select')) {
       this.expose()
-      node.us = 'T'
     }
     // #endif
     const siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes

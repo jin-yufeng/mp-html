@@ -1,5 +1,17 @@
 # 📖 更新日志 :id=changelog
 
+# v2.3.1
+发布时间：*2022-05-20*  
+主要更新：
+1. `U` `uni-app` 包 `app` 端支持使用本地图片
+2. `U` 优化了微信小程序 `selectable` 属性在 `ios` 端的处理 [详细](basic/prop#selectable)
+3. `U` 原生包取消样式隔离，部分平台可以直接引入页面样式 [#376](https://github.com/jin-yufeng/mp-html/issues/376)、[详细](overview/quickstart#externStyle)
+4. `F` 修复了 [editable](advanced/plugin#editable) 插件不在顶部时 `tooltip` 位置可能错误的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/430)
+5. `F` 修复了 `uni-app` 包 `vue3` 运行到微信小程序可能报错丢失内容的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/414)
+6. `F` 修复了 `uni-app` 包 `vue3` 部分标签可能被错误换行的问题
+7. `F` 修复了原生包个别情况下可能报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/428)
+8. `F` 修复了 [editable](advanced/plugin#editable) 插件 `uni-app` 包的 `app` 端插入视频无法预览的问题
+
 # v2.3.0
 发布时间：*2022-04-01*  
 主要更新：  

@@ -46,6 +46,7 @@ white-space: pre-line; /* 保留换行符 */
 !> 该属性必须填写 协议名://域名 的完整链接  
 暂不支持拼接含有 *../* 的相对路径链接  
 *a* 标签的 *href* 属性可能需要跳转到小程序内路径，因此不进行 *domain* 拼接  
+设置该属性后将无法使用本地图片  
 
 ## error-img
 功能：图片出错时的占位图链接  
@@ -95,7 +96,8 @@ white-space: pre-line; /* 保留换行符 */
 !> 将本属性的值设置为 *true* 在微信 *iOS* 端可能失效，[2.0.5](changelog/changelog#v205) 版本起支持将本属性设置为 "*force*" 来支持，但会带来以下影响：  
 1、所有文本块会显示为 *inline-block*（通过 [text](https://developers.weixin.qq.com/miniprogram/dev/component/text.html) 标签的 *user-select* 属性实现），需要自行适配  
 2、文字下划线、删除线等效果将失效（[详细](https://github.com/jin-yufeng/mp-html/issues/382)）  
-3、所有文本块都无法被 *rich-text* 包含，一定程度上增加标签数，减慢渲染速度
+3、所有文本块都无法被 *rich-text* 包含，一定程度上增加标签数，减慢渲染速度  
+从 [2.3.1](changelog/changelog#v231) 版本起对此问题进行优化（通过 [rich-text](https://developers.weixin.qq.com/miniprogram/dev/component/rich-text.html) 标签的 *user-select* 属性实现，基础库 *2.24.0* 及以上生效），第 *3* 个问题已解决，第 *1*、*2* 个问题部分情况下还会存在
 
 ## set-title
 功能：是否将 *title* 标签的内容设置到页面标题  

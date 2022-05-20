@@ -15,4 +15,4 @@
 
 同时，其可以被 *pause-video* 属性控制  
 
-!> 本插件仅用于将官方 [腾讯视频插件](https://github.com/tvfe/txv-miniprogram-plugin) 应用于本组件，仅在微信和 *qq* 平台有效，使用前请确认已经成功申请使用该插件并按要求在小程序 *app.json* 中配置完成，否则无法生效  
+!> 本插件仅用于将官方 [腾讯视频插件](https://github.com/tvfe/txv-miniprogram-plugin) 应用于本组件，仅在微信和 *qq* 平台有效，使用前请确认已经成功申请使用该插件并按要求在小程序 *app.json* 中配置完成，否则可能报错 **This application has not registered any plugins yet** 且无法生效  

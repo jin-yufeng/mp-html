@@ -1068,7 +1068,6 @@ Parser.prototype.onText = function (text) {
     // #ifdef MP-WEIXIN
     if (this.options.selectable === 'force' && system.includes('iOS') && !uni.canIUse('rich-text.user-select')) {
       this.expose()
-      node.us = 'T'
     }
     // #endif
     const siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes

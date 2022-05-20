@@ -117,3 +117,15 @@ html = html.replace(/< img/g, '<img')
 如果富文本内容全部（或大部分）是图片，由于其图片未加载时大小为零，即使数量很多也会全部进入视图范围，导致懒加载失效，若出现这种情况，可通过以下方案解决  
 1. 通过 [tag-style](basic/prop#tag-style) 属性等方法给 *img* 父级标签的样式里设置 *min-height*（如果直接给图片本身设置 *min-height*，可能在加载过程中出现变形的情况）  
 2. 通过 [loading-img](basic/prop#loading-img) 属性设置加载过程中的占位图  
+
+## 多媒体内容不显示 :id=media
+若出现 图片不显示/无法预览、音频/视频无法播放 等问题，可通过以下方式检查：  
+- 将该 图片/音频/视频 的链接放在原生标签 [image](https://developers.weixin.qq.com/miniprogram/dev/component/image.html)、[audio](https://developers.weixin.qq.com/miniprogram/dev/component/audio.html)、[video](https://developers.weixin.qq.com/miniprogram/dev/component/video.html) 或 api [wx.previewImage](https://developers.weixin.qq.com/miniprogram/dev/api/media/image/wx.previewImage.html) 中进行测试，如果也不能显示，则链接存在问题  
+  若出现这种情况，可按照以下方法进行检查  
+  1. 检查链接是否完整（缺少域名可以设置 [domain](basic/prop#domain) 属性）、有效（可以放在浏览器中测试）  
+  2. 检查链接是否存在防盗链（可以参考 [#387](https://github.com/jin-yufeng/mp-html/issues/387)）  
+  3. 检查编码和格式是否支持（参考 [音频格式](https://developers.weixin.qq.com/miniprogram/dev/api/media/audio/InnerAudioContext.html#%E6%94%AF%E6%8C%81%E6%A0%BC%E5%BC%8F)、[视频格式和编码](https://developers.weixin.qq.com/miniprogram/dev/component/video.html#%E6%94%AF%E6%8C%81%E7%9A%84%E6%A0%BC%E5%BC%8F)）  
+  4. 查看 *error* 事件中的错误信息
+
+  如果以上都不能解决可以向小程序官方反馈  
+- 若上述方法可以显示但在组件中无法显示可以进行 [反馈](question/feedback#method)
