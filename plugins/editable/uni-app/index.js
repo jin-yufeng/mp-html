@@ -330,7 +330,10 @@ function Editable (vm) {
           controls: 'T'
         },
         children: [],
-        src
+        src,
+        // #ifdef APP-PLUS
+        html: `<video src="${src}" style="width:100%;height:100%"></video>`
+        // #endif
       })
     }).catch(() => { })
   }
