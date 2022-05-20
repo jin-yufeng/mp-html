@@ -1066,7 +1066,7 @@ Parser.prototype.onText = function (text) {
   node.text = decodeEntity(text)
   if (this.hook(node)) {
     // #ifdef MP-WEIXIN
-    if (this.options.selectable === 'force' && system.includes('iOS')) {
+    if (this.options.selectable === 'force' && system.includes('iOS') && !uni.canIUse('rich-text.user-select')) {
       this.expose()
       node.us = 'T'
     }

@@ -955,9 +955,8 @@ Parser.prototype.onText = function (text) {
   node.text = decodeEntity(text)
   if (this.hook(node)) {
     // #ifdef MP-WEIXIN
-    if (this.options.selectable === 'force' && system.includes('iOS')) {
+    if (this.options.selectable === 'force' && system.includes('iOS') && !wx.canIUse('rich-text.user-select')) {
       this.expose()
-      node.us = 'T'
     }
     // #endif
     const siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes

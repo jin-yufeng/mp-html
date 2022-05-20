@@ -30,7 +30,7 @@ module.exports = {
      * @param {Event} e
      */
     editStart (e) {
-      if (this.opts[4]) {
+      if (this.opts[5]) {
         const i = e.currentTarget.dataset.i
         if (!this.ctrl['e' + i]) {
           // 显示虚线框
@@ -67,7 +67,7 @@ module.exports = {
         }
         return res
       })
-      this.root._editVal(`${this.opts[6]}.${i}.text`, this.childs[i].text, value) // 记录编辑历史
+      this.root._editVal(`${this.opts[7]}.${i}.text`, this.childs[i].text, value) // 记录编辑历史
       this.cursor = e.detail.cursor
     },
     /**
@@ -78,7 +78,7 @@ module.exports = {
       const i = e.target.dataset.i
       this.$set(this.ctrl, 'e' + i, 0)
       // 更新到视图
-      this.root._setData(`${this.opts[6]}.${i}.text`, e.detail.value)
+      this.root._setData(`${this.opts[7]}.${i}.text`, e.detail.value)
       if (e.detail.cursor !== undefined) {
         this.cursor = e.detail.cursor
       }
@@ -113,7 +113,7 @@ module.exports = {
         } else {
           childs.splice(parseInt(this.i) + 1, 0, node)
         }
-        this.root._editVal(this.opts[6], this.childs, childs, true)
+        this.root._editVal(this.opts[7], this.childs, childs, true)
         this.i = parseInt(this.i) + 1
       }, 200)
     },
@@ -136,14 +136,14 @@ module.exports = {
       }
       this.root._edit = undefined
       this.root._maskTap()
-      this.root._editVal(this.opts[6], this.childs, arr, true)
+      this.root._editVal(this.opts[7], this.childs, arr, true)
     },
     /**
      * @description 标签被点击
      * @param {Event} e
      */
     nodeTap (e) {
-      if (this.opts[4]) {
+      if (this.opts[5]) {
         if (this.root._lock) return
         this.root._lock = true
         setTimeout(() => {
@@ -152,18 +152,18 @@ module.exports = {
         if (this.ctrl['e' + this.i] === 3) return
         this.root._maskTap()
         this.root._edit = this
-        let start = this.opts[6].lastIndexOf('children.')
+        let start = this.opts[7].lastIndexOf('children.')
         if (start !== -1) {
           start += 9
         } else {
           start = 6
         }
-        const i = parseInt(this.opts[6].substring(start, this.opts[6].lastIndexOf('.children')))
+        const i = parseInt(this.opts[7].substring(start, this.opts[7].lastIndexOf('.children')))
         let parent = this.$parent
         while (parent && parent.$options.name !== 'node') {
           parent = parent.$parent
         }
-        if (!parent || this.opts[6].length - parent.opts[6].length > 15) return
+        if (!parent || this.opts[7].length - parent.opts[7].length > 15) return
         // 显示实线框
         this.$set(this.ctrl, 'root', 1)
         this.root._mask.push(() => this.$set(this.ctrl, 'root', 0))
@@ -203,7 +203,7 @@ module.exports = {
                   if (val !== value) {
                     parent.changeStyle('font-size', i, val + 'px', value + 'px')
                   }
-                  this.root._editVal(`${parent.opts[6]}.${i}.attrs.style`, style, parent.childs[i].attrs.style)
+                  this.root._editVal(`${parent.opts[7]}.${i}.attrs.style`, style, parent.childs[i].attrs.style)
                 }
               })
             } else if (items[tapIndex] === '上移' || items[tapIndex] === '下移') {
@@ -216,7 +216,7 @@ module.exports = {
                 arr[i] = arr[i + 1]
                 arr[i + 1] = item
               }
-              this.root._editVal(parent.opts[6], parent.childs, arr, true)
+              this.root._editVal(parent.opts[7], parent.childs, arr, true)
             } else if (items[tapIndex] === '删除') {
               parent.remove(i)
             } else {
@@ -248,7 +248,7 @@ module.exports = {
                 // 没有则添加
                 newStyle = style + ';' + name + ':' + value
               }
-              this.root._editVal(`${parent.opts[6]}.${i}.attrs.style`, style, newStyle, true)
+              this.root._editVal(`${parent.opts[7]}.${i}.attrs.style`, style, newStyle, true)
             }
           }
         })
@@ -259,7 +259,7 @@ module.exports = {
      * @param {Event} e
      */
     mediaTap (e) {
-      if (this.opts[4]) {
+      if (this.opts[5]) {
         const i = e.target.dataset.i
         const node = this.childs[i]
         const items = this.root._getItem(node)
@@ -273,7 +273,7 @@ module.exports = {
               case '封面':
                 // 设置封面
                 this.root.getSrc('img', node.attrs.poster || '').then(url => {
-                  this.root._editVal(`${this.opts[6]}.${i}.attrs.poster`, node.attrs.poster, url instanceof Array ? url[0] : url, true)
+                  this.root._editVal(`${this.opts[7]}.${i}.attrs.poster`, node.attrs.poster, url instanceof Array ? url[0] : url, true)
                 }).catch(() => { })
                 break
               case '删除':
@@ -282,7 +282,7 @@ module.exports = {
               case '循环':
               case '不循环':
                 // 切换循环播放
-                this.root._setData(`${this.opts[6]}.${i}.attrs.loop`, !node.attrs.loop)
+                this.root._setData(`${this.opts[7]}.${i}.attrs.loop`, !node.attrs.loop)
                 uni.showToast({
                   title: '成功'
                 })
@@ -290,7 +290,7 @@ module.exports = {
               case '自动播放':
               case '不自动播放':
                 // 切换自动播放播放
-                this.root._setData(`${this.opts[6]}.${i}.attrs.autoplay`, !node.attrs.autoplay)
+                this.root._setData(`${this.opts[7]}.${i}.attrs.autoplay`, !node.attrs.autoplay)
                 uni.showToast({
                   title: '成功'
                 })
@@ -321,7 +321,7 @@ module.exports = {
         // 没有则新增
         style += ';' + name + ':' + value
       }
-      this.root._setData(`${this.opts[6]}.${i}.attrs.style`, style)
+      this.root._setData(`${this.opts[7]}.${i}.attrs.style`, style)
     }
   },
   handler (file) {
@@ -450,23 +450,23 @@ module.exports = {
       } else if (file.path.includes('node.vue')) {
         content =
           // 传递 opts
-          content.replace(/:childs\s*=\s*"tbody.children"\s*:opts="opts"/, ':childs="tbody.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children.\'+x+\'.children\']"')
-            .replace(/:childs\s*=\s*"n2.children"\s*:opts="opts"/, ':childs="n2.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children.\'+j+\'.children\']"')
-            .replace(/:childs\s*=\s*"tr.children"\s*:opts="opts"/, ':childs="tr.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children\']"')
-            .replace(/:childs\s*=\s*"td.children"\s*:opts="opts"/, ':childs="td.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children.\'+z+\'.children\']"')
-            .replace(/opts\s*=\s*"opts"/g, 'opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6]+\'.\'+i+\'.children\']"')
+          content.replace(/:childs\s*=\s*"tbody.children"\s*:opts="opts"/, ':childs="tbody.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6],opts[7]+\'.\'+i+\'.children.\'+x+\'.children\']"')
+            .replace(/:childs\s*=\s*"n2.children"\s*:opts="opts"/, ':childs="n2.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6],opts[7]+\'.\'+i+\'.children.\'+j+\'.children\']"')
+            .replace(/:childs\s*=\s*"tr.children"\s*:opts="opts"/, ':childs="tr.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6],opts[7]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children\']"')
+            .replace(/:childs\s*=\s*"td.children"\s*:opts="opts"/, ':childs="td.children" :opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6],opts[7]+\'.\'+i+\'.children.\'+x+\'.children.\'+y+\'.children.\'+z+\'.children\']"')
+            .replace(/opts\s*=\s*"opts"/g, 'opts="[opts[0],opts[1],opts[2],opts[3],opts[4],opts[5],opts[6],opts[7]+\'.\'+i+\'.children\']"')
             // 不使用 rich-text
-            .replace(/!n.c/g, '!opts[4]&&!n.c').replace('&&n.c', '&&(n.c||opts[4])')
+            .replace(/!n.c/g, '!opts[5]&&!n.c').replace('&&n.c', '&&(n.c||opts[5])')
             // 修改普通标签
             .replace(/<view\s+:id(.+?)style="/, '<view @tap="nodeTap" :id$1style="(ctrl.root?\'border:1px solid black;padding:5px;display:block;\':\'\')+')
             // 修改文本块
             .replace(/<!--\s*文本\s*-->[\s\S]+?<!--\s*链接\s*-->/,
               `<!-- 文本 -->
-      <text v-else-if="n.type==='text'&&!ctrl['e'+i]" :data-i="i" :user-select="n.us" :decode="!opts[4]" @tap="editStart">{{n.text}}
-        <text v-if="!n.text" style="color:gray">{{opts[5]||'请输入'}}</text>
+      <text v-else-if="n.type==='text'&&!ctrl['e'+i]" :data-i="i" :user-select="n.us" :decode="!opts[5]" @tap="editStart">{{n.text}}
+        <text v-if="!n.text" style="color:gray">{{opts[6]||'请输入'}}</text>
       </text>
       <text v-else-if="n.type==='text'&&ctrl['e'+i]===1" :data-i="i" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" @tap.stop="editStart">{{n.text}}
-        <text v-if="!n.text" style="color:gray">{{opts[5]||'请输入'}}</text>
+        <text v-if="!n.text" style="color:gray">{{opts[6]||'请输入'}}</text>
       </text>
       <textarea v-else-if="n.type==='text'" style="border:1px dashed black;min-width:50px;width:auto;padding:5px" auto-height maxlength="-1" :focus="ctrl['e'+i]===3" :value="n.text" :data-i="i" @input="editInput" @blur="editEnd" />
       <text v-else-if="n.name==='br'">\\n</text>
@@ -475,10 +475,10 @@ module.exports = {
             .replace(/<image(.+?)id="n.attrs.id/, '<image$1id="n.attrs.id||(\'n\'+i)')
             .replace('height:1px', "height:'+(ctrl['h'+i]||1)+'px")
             .replace(/:style\s*=\s*"\(ctrl\[i\]/g, ':style="(ctrl[\'e\'+i]?\'border:1px dashed black;padding:3px;\':\'\')+(ctrl[i]')
-            .replace(/show-menu-by-longpress\s*=\s*"(\S+?)"\s*:image-menu-prevent\s*=\s*"(\S+?)"/, 'show-menu-by-longpress="!opts[4]&&$1" :image-menu-prevent="opts[4]||$2"')
+            .replace(/show-menu-by-longpress\s*=\s*"(\S+?)"\s*:image-menu-prevent\s*=\s*"(\S+?)"/, 'show-menu-by-longpress="!opts[5]&&$1" :image-menu-prevent="opts[5]||$2"')
             // 修改音视频
             .replace('v-else-if="n.html"', 'v-else-if="n.html" :data-i="i" @tap="mediaTap"')
-            .replace('<video', '<video :show-center-play-btn="!opts[4]" @tap="mediaTap"')
+            .replace('<video', '<video :show-center-play-btn="!opts[5]" @tap="mediaTap"')
             .replace('audio ', 'audio @tap="mediaTap" ')
             .replace('<script>',
               `<script>
@@ -507,7 +507,7 @@ function getTop(e) {
             // 记录图片宽度
             .replace(/imgLoad\s*\(e\)\s*{/, `imgLoad(e) {
       // #ifdef MP-WEIXIN || MP-QQ
-      if (this.opts[4])
+      if (this.opts[5])
         this.$nextTick(() => {
           const id = this.childs[i].attrs.id || ('n' + i)
           uni.createSelectorQuery().in(this).select('#' + id).boundingClientRect().exec(res => {
@@ -518,8 +518,8 @@ function getTop(e) {
             .replace(/if\s*\(!this.childs\[i\].w\)\s*{[\s\S]+?}/,
               `if (!this.childs[i].w) {
         this.$set(this.ctrl, i, e.detail.width)
-        if (this.opts[4]) {
-          const path = this.opts[6] + '.' + i + '.attrs.'
+        if (this.opts[5]) {
+          const path = this.opts[7] + '.' + i + '.attrs.'
           if (e.detail.width < 150)
             this.root._setData(path + 'ignore', 'T')
           this.root._setData(path + 'width', e.detail.width.toString())
@@ -527,11 +527,11 @@ function getTop(e) {
       }`)
             // 处理图片长按
             .replace(/imgLongTap\s*\(\)\s*{/, `imgLongTap() {
-      if (this.opts[4]) return`)
+      if (this.opts[5]) return`)
             // 处理图片点击
             .replace(/imgTap\s*\(e\)\s*{([\s\S]+?)},\s*\/\*/,
               `imgTap (e) {
-      if (!this.opts[4]) {$1} else {
+      if (!this.opts[5]) {$1} else {
         const i = e.currentTarget.dataset.i
         const node = this.childs[i]
         const items = this.root._getItem(node)
@@ -547,7 +547,7 @@ function getTop(e) {
             if (items[tapIndex] === '换图') {
               // 换图
               this.root.getSrc('img', node.attrs.src || '').then(url => {
-                this.root._editVal(this.opts[6] + '.' + i + '.attrs.src', node.attrs.src, url instanceof Array ? url[0] : url, true)
+                this.root._editVal(this.opts[7] + '.' + i + '.attrs.src', node.attrs.src, url instanceof Array ? url[0] : url, true)
               }).catch(() => { })
             } else if (items[tapIndex] === '宽度') {
               // 更改宽度
@@ -575,7 +575,7 @@ function getTop(e) {
                     this.changeStyle('max-width', i, val + '%', value + '%')
                     value = val
                   }
-                  this.root._editVal(this.opts[6] + '.' + i + '.attrs.style', style, this.childs[i].attrs.style)
+                  this.root._editVal(this.opts[7] + '.' + i + '.attrs.style', style, this.childs[i].attrs.style)
                 }
               })
             } else if (items[tapIndex] === '超链接') {
@@ -583,7 +583,7 @@ function getTop(e) {
               this.root.getSrc('link', node.a ? node.a.href : '').then(url => {
                 // 如果有 a 标签则替换 href
                 if (node.a) {
-                  this.root._editVal(this.opts[6] + '.' + i + '.a.href', node.a.href, url, true)
+                  this.root._editVal(this.opts[7] + '.' + i + '.a.href', node.a.href, url, true)
                 } else {
                   const link = {
                     name: 'a',
@@ -593,7 +593,7 @@ function getTop(e) {
                     children: [node]
                   }
                   node.a = link.attrs
-                  this.root._editVal(this.opts[6] + '.' + i, node, link, true)
+                  this.root._editVal(this.opts[7] + '.' + i, node, link, true)
                 }
                 wx.showToast({
                   title: '成功'
@@ -602,7 +602,7 @@ function getTop(e) {
             } else if (items[tapIndex] === '预览图') {
               // 设置预览图链接
               this.root.getSrc('img', node.attrs['original-src'] || '').then(url => {
-                this.root._editVal(this.opts[6] + '.' + i + '.attrs.original-src', node.attrs['original-src'], url instanceof Array ? url[0] : url, true)
+                this.root._editVal(this.opts[7] + '.' + i + '.attrs.original-src', node.attrs['original-src'], url instanceof Array ? url[0] : url, true)
                 uni.showToast({
                   title: '成功'
                 })
@@ -611,7 +611,7 @@ function getTop(e) {
               this.remove(i)
             } else {
               // 禁用 / 启用预览
-              this.root._setData(this.opts[6] + '.' + i + '.attrs.ignore', !node.attrs.ignore)
+              this.root._setData(this.opts[7] + '.' + i + '.attrs.ignore', !node.attrs.ignore)
               uni.showToast({
                 title: '成功'
               })
@@ -628,7 +628,7 @@ function getTop(e) {
             // 处理链接点击
             .replace(/linkTap\s*\(e\)\s*{([\s\S]+?)},\s*\/\*/,
               `linkTap (e) {
-      if (!this.opts[4]) {$1} else {
+      if (!this.opts[5]) {$1} else {
         const i = e.currentTarget.dataset.i
         const node = this.childs[i]
         const items = this.root._getItem(node)
@@ -638,7 +638,7 @@ function getTop(e) {
           success: tapIndex => {
             if (items[tapIndex] === '更换链接') {
               this.root.getSrc('link', node.attrs.href).then(url => {
-                this.root._editVal(this.opts[6] + '.' + i + '.attrs.href', node.attrs.href, url, true)
+                this.root._editVal(this.opts[7] + '.' + i + '.attrs.href', node.attrs.href, url, true)
                 uni.showToast({
                   title: '成功'
                 })

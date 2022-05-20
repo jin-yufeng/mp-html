@@ -37,7 +37,7 @@
   </block>
   <!-- 文本 -->
   <!-- #ifdef MP-WEIXIN || MP-QQ -->
-  <text wx:elif="{{n.text}}" mp-weixin:user-select="{{n.us}}" decode>{{n.text}}</text>
+  <text wx:elif="{{n.text}}" mp-weixin:user-select="{{opts[4]}}" decode>{{n.text}}</text>
   <!-- #endif -->
   <text wx:elif="{{n.name==='br'}}">\n</text>
   <!-- 链接 -->
@@ -62,7 +62,7 @@
   <!-- #endif -->
   <!-- insert -->
   <!-- 富文本 -->
-  <rich-text wx:else id="{{n.attrs.id}}" mp-weixin:mp-qq:mp-baidu:mp-toutiao:style="{{n.f}}" mp-alipay:style="{{n.f}};display:inline" mp-baidu:selectable="{{false}}" nodes="{{[n]}}" />
+  <rich-text wx:else id="{{n.attrs.id}}" mp-weixin:mp-qq:mp-baidu:mp-toutiao:style="{{n.f}}" mp-alipay:style="{{n.f}};display:inline" mp-baidu:selectable="{{opts[4]}}" mp-weixin:user-select="{{opts[4]}}" nodes="{{[n]}}" />
 </template>
 <!-- #ifdef MP-ALIPAY || MP-TOUTIAO -->
 <template name="node">

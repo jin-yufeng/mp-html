@@ -3,5 +3,5 @@
   <!-- 加载完成前显示自定义 loading -->
   <slot wx:if="{{!nodes[0]}}" />
   <!-- 节点树 -->
-  <node id="_root" childs="{{nodes}}" opts="{{[lazyLoad,loadingImg,errorImg,showImgMenu]}}" mp-weixin:mp-qq:mp-baidu:catchadd="_add" mp-alipay:onAdd="_add" />
+  <node id="_root" childs="{{nodes}}" opts="{{[lazyLoad,loadingImg,errorImg,showImgMenu,selectable]}}" mp-weixin:mp-qq:mp-baidu:catchadd="_add" mp-alipay:onAdd="_add" />
 </view>
