@@ -87,7 +87,7 @@ module.exports = {
         ['ctrl.e' + i]: 0
       })
       this.root.setData({
-        ['nodes[' + (this.properties.opts[7] + i).replace(/_/g, '].children[') + '].text']: e.detail.value
+        ['nodes[' + (this.properties.opts[7] + i).replace(/_/g, '].children[') + '].text']: e.detail.value.replace(/ {2}/g, '\xa0 ')
       })
       if (e.detail.cursor !== undefined) {
         this.cursor = e.detail.cursor

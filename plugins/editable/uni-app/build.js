@@ -78,7 +78,7 @@ module.exports = {
       const i = e.target.dataset.i
       this.$set(this.ctrl, 'e' + i, 0)
       // 更新到视图
-      this.root._setData(`${this.opts[7]}.${i}.text`, e.detail.value)
+      this.root._setData(`${this.opts[7]}.${i}.text`, e.detail.value.replace(/ {2}/g, '\xa0 '))
       if (e.detail.cursor !== undefined) {
         this.cursor = e.detail.cursor
       }
