@@ -957,7 +957,7 @@ Parser.prototype.popNode = function () {
       for (let i = node.children.length; i--;) {
         const child = node.children[i]
         // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
-        if (child.name && (config.inlineTags[child.name] || (child.attrs.style || '').includes('inline')) && !child.c) {
+        if (child.name && (config.inlineTags[child.name] || ((child.attrs.style || '').includes('inline') && child.children)) && !child.c) {
           traversal(child)
         }
         // #endif
