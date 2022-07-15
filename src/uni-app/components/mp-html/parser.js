@@ -139,6 +139,26 @@ function decodeEntity (str, amp) {
 }
 
 /**
+ * @description 合并多个块级标签，加快长内容渲染
+ * @param {Array} nodes 要合并的标签数组
+ */
+function mergeNodes (nodes) {
+  let i = nodes.length - 1
+  for (let j = i; j >= -1; j--) {
+    if (j === -1 || nodes[j].c || !nodes[j].name || (nodes[j].name !== 'div' && nodes[j].name !== 'p' && nodes[j].name[0] !== 'h') || (nodes[j].attrs.style || '').includes('inline')) {
+      if (i - j >= 5) {
+        nodes.splice(j + 1, i - j, {
+          name: 'div',
+          attrs: {},
+          children: nodes.slice(j + 1, i + 1)
+        })
+      }
+      i = j - 1
+    }
+  }
+}
+
+/**
  * @description html 解析器
  * @param {Object} vm 组件实例
  */
@@ -169,6 +189,9 @@ Parser.prototype.parse = function (content) {
   // 出栈未闭合的标签
   while (this.stack.length) {
     this.popNode()
+  }
+  if (this.nodes.length > 50) {
+    mergeNodes(this.nodes)
   }
   return this.nodes
 }
@@ -990,22 +1013,8 @@ Parser.prototype.popNode = function () {
     node.f = ';max-width:100%'
   }
 
-  // 优化长内容加载速度
   if (children.length >= 50 && node.c && !(styleObj.display || '').includes('flex')) {
-    let i = children.length - 1
-    for (let j = i; j >= -1; j--) {
-      // 合并多个块级标签
-      if (j === -1 || children[j].c || !children[j].name || (children[j].name !== 'div' && children[j].name !== 'p' && children[j].name[0] !== 'h') || (children[j].attrs.style || '').includes('inline')) {
-        if (i - j >= 5) {
-          children.splice(j + 1, i - j, {
-            name: 'div',
-            attrs: {},
-            children: node.children.slice(j + 1, i + 1)
-          })
-        }
-        i = j - 1
-      }
-    }
+    mergeNodes(children)
   }
   // #endif
 
