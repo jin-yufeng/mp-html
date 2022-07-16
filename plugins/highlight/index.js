@@ -18,17 +18,19 @@ Highlight.prototype.onParse = function (node, vm) {
     }
     if (i === -1) return
     const code = node.children[i]
-    let className = code.attrs.class || ''
+    let className = code.attrs.class + ' ' + node.attrs.class
     i = className.indexOf('language-')
     if (i === -1) {
-      className = node.attrs.class || ''
-      i = className.indexOf('language-')
+      i = className.indexOf('lang-')
+      if (i === -1) {
+        className = 'language-text'
+        i = 9
+      } else {
+        i += 5
+      }
+    } else {
+      i += 9
     }
-    if (i === -1) {
-      className = 'language-text'
-      i = className.indexOf('language-')
-    }
-    i += 9
     let j
     for (j = i; j < className.length; j++) {
       if (className[j] === ' ') break
