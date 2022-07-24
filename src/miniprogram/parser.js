@@ -720,6 +720,8 @@ Parser.prototype.popNode = function () {
     let padding = parseFloat(attrs.cellpadding)
     let spacing = parseFloat(attrs.cellspacing)
     const border = parseFloat(attrs.border)
+    const bordercolor = styleObj["border-color"]||""
+    const borderstyle = styleObj["border-style"]||""
     if (node.c) {
       // padding 和 spacing 默认 2
       if (isNaN(padding)) {
@@ -730,7 +732,7 @@ Parser.prototype.popNode = function () {
       }
     }
     if (border) {
-      attrs.style += ';border:' + border + 'px solid gray'
+      attrs.style += `;border:${border}px ${borderstyle?borderstyle:"solid"} ${bordercolor?bordercolor:"gray"}`
     }
     if (node.flag && node.c) {
       node.flag = undefined
@@ -782,7 +784,7 @@ Parser.prototype.popNode = function () {
               }
               style = style.substr(0, start) + style.substr(end)
             }
-            style += (border ? `;border:${border}px solid gray` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '')
+            style += (border ? `;border:${border}px ${borderstyle?borderstyle:"solid"} ${bordercolor?bordercolor:"gray"}` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '')
             // 处理列合并
             if (td.attrs.colspan) {
               style += `;grid-column-start:${col};grid-column-end:${col + parseInt(td.attrs.colspan)}`
@@ -838,7 +840,7 @@ Parser.prototype.popNode = function () {
             }
             if (td.name === 'th' || td.name === 'td') {
               if (border) {
-                td.attrs.style = `border:${border}px solid gray;${td.attrs.style || ''}`
+                td.attrs.style = `border:${border}px ${borderstyle?borderstyle:"solid"} ${bordercolor?bordercolor:"gray"};${td.attrs.style || ''}`
               }
               if (padding) {
                 td.attrs.style = `padding:${padding}px;${td.attrs.style || ''}`
