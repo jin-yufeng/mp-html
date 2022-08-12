@@ -12,6 +12,7 @@ module.exports = {
     // 'emoji',     // 小表情
     // 'highlight', // 代码高亮
     // 'markdown',  // 解析 md
+    // 'latex',  // 解析 latex
     // 'search',    // 关键词搜索
     // 'style',     // 解析 style 标签
     // 'txv-video', // 使用腾讯视频
