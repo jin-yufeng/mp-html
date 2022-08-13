@@ -161,7 +161,7 @@ module.exports = {
             // 引入 vue
             content = content.replace(/<!--\s*insert\s*-->/, wxml)
               .replace(/methods\s*:\s*{/, 'methods:{' + js)
-              .replace('<style>', '<style>' + wxss.replace(/\.[a-zA-Z_][\s\S]*?[{,]/g, '/deep/ $&'))
+              .replace('<style>', '<style>' + wxss.replace(/\.[a-zA-Z_][^)}]*?[{,]/g, '/deep/ $&')).replace(/,url/g, ', url')
             let importComp = ''
             let comps = ''
             for (let item in json) {
@@ -235,7 +235,7 @@ module.exports = {
         if (file.basename === 'node.wxss') {
           content = css + content
         } else if (file.basename === 'node.vue') {
-          content = content.replace('<style>', '<style>' + css.replace(/\.[a-z_][\s\S]+?[{,]/g, '/deep/ $&'))
+          content = content.replace('<style>', '<style>' + css.replace(/\.[a-z_][^)}]+?[{,]/g, '/deep/ $&')).replace(/,url/g, ', url')
         } else if (file.basename === 'local.html' && css) {
           content = '<style>' + css + '</style>' + content
         }
