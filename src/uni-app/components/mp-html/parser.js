@@ -1066,7 +1066,15 @@ Parser.prototype.onText = function (text) {
       }
     }
     // 去除含有换行符的空串
-    if (trim === ' ' && flag) return
+    if (trim === ' ') {
+      if (flag) return
+      // #ifdef VUE3
+      else {
+        const parent = this.stack[this.stack.length - 1]
+        if (parent && parent.name[0] === 't') return
+      }
+      // #endif
+    }
     text = trim
   }
   const node = Object.create(null)
