@@ -1,6 +1,6 @@
 <template>
   <view>
-    <mp-html container-style="padding:20px" :content="html" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo" lazy-load scroll-table selectable use-anchor :tag-style="tagStyle" @load="load" @ready="ready" @imgtap="imgtap" @linktap="linktap" />
+    <mp-html container-style="padding:20px" :content="html" domain="https://mp-html.oss-cn-hangzhou.aliyuncs.com" lazy-load scroll-table selectable use-anchor :tag-style="tagStyle" @load="load" @ready="ready" @imgtap="imgtap" @linktap="linktap" />
   </view>
 </template>
 

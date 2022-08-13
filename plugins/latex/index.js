@@ -4,13 +4,13 @@
  */
 const parse = require('./katex.min')
 
-function Latex (vm) {
-  this.vm = vm
+function Latex () {
+
 }
 
 Latex.prototype.onParse = function (node, vm) {
   // $...$包裹的内容为latex公式
-  if (node.type === 'text' && /\$(.+?)\$/.test(node.text)) {
+  if (!vm.options.editable && node.type === 'text' && /\$(.+?)\$/.test(node.text)) {
     delete node.type
     node.name = 'span'
     node.attrs = {}

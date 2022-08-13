@@ -22,7 +22,7 @@ test('render', async () => {
     },
     template:
       `<scroll-view id="scroll" style="height:100px" scroll-y scroll-top="{{top}}">
-  <mp-html id="article" container-style="{{containerStyle}}" content="{{html}}" domain="https://6874-html-foe72-1259071903.tcb.qcloud.la/demo" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table use-anchor="{{useAnchor}}">加载中...</mp-html>
+  <mp-html id="article" container-style="{{containerStyle}}" content="{{html}}" domain="https://mp-html.oss-cn-hangzhou.aliyuncs.com" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table use-anchor="{{useAnchor}}">加载中...</mp-html>
 </scroll-view>`,
     usingComponents: {
       'mp-html': mpHtml
@@ -131,17 +131,18 @@ console.log('11')
   expect(comp.instance.getText().includes('\n')).toBe(true) // 检查换行是否被保留
 
   // 长内容测试
-  let content = '<div>'
+  let content = '<div>1</div>'.repeat(50) + '<div>'
   for (let i = 0; i < 50; i++) {
     content += '<div>' + i + '</div>'
   }
   content += '<a>xxx</a>'
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 3; i++) {
     content += '<div>' + i + '</div>'
   }
   comp.instance.setContent(content)
   simulate.sleep(50)
-  expect(comp.data.nodes[0].children.length).toBe(3) // 应该切分为 3 块
+  expect(comp.data.nodes.length).toBe(2) // 应该切分为 2 块
+  expect(comp.data.nodes[1].children.length).toBe(5) // 应该切分为 5 块
 
   await simulate.sleep(50) // 等待异步 api 执行完毕
 

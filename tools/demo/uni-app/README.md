@@ -1,8 +1,4 @@
-## news
-1. 欢迎加入 `QQ` 交流群：`699734691`  
-   ![group](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/group.jpg?sign=558401bccbd56b01debe1bfac6a3b55e&t=1648801090)  
-2. 示例微信小程序 `富文本插件` 添加 `获取组件包` 功能 [详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart?id=mp)  
-   ![富文本插件](https://6874-html-foe72-1259071903.tcb.qcloud.la/assets/case/%E5%AF%8C%E6%96%87%E6%9C%AC%E6%8F%92%E4%BB%B6.jpg?sign=200e28d06f36049c18d42cdd46270c35&t=1648801110)
+## 为减小组件包的大小，默认组件包中不包含编辑、latex 公式等扩展功能，需要使用扩展功能的请参考下方的 插件扩展 栏的说明
 
 ## 功能介绍
 - 全端支持（含 `v3、NVUE`）
@@ -11,7 +7,7 @@
 - 支持设置占位图（加载中、出错时、预览时）
 - 支持锚点跳转、长按复制等丰富功能
 - 支持大部分 *html* 实体
-- 丰富的插件（关键词搜索、内容 **编辑** 等）
+- 丰富的插件（关键词搜索、内容编辑、`latex` 公式等）
 - 效率高、容错性强且轻量化
 
 查看 [功能介绍](https://jin-yufeng.gitee.io/mp-html/#/overview/feature) 了解更多
@@ -145,7 +141,7 @@
 | 名称 | 作用 |
 |:---:|---|
 | audio | 音乐播放器 |
-| editable | 富文本 **编辑**（[示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445)） |
+| editable | 富文本 **编辑**（[示例项目](https://mp-html.oss-cn-hangzhou.aliyuncs.com/editable.zip)） |
 | emoji | 解析 emoji |
 | highlight | 代码块高亮显示 |
 | markdown | 渲染 markdown |
@@ -153,6 +149,7 @@
 | style | 匹配 style 标签中的样式 |
 | txv-video | 使用腾讯视频 |
 | img-cache | 图片缓存 by [@PentaTea](https://github.com/PentaTea) |
+| latex | 渲染 latex 公式 by [@Zeng-J](https://github.com/Zeng-J) |
 
 从插件市场导入的包中 **不含有** 扩展插件，需要使用插件参考以下方法：  
 1. 获取完整组件包  
@@ -175,12 +172,18 @@
 由于渲染方式与其他端不同，有以下限制：  
 1. 不支持 `lazy-load` 属性
 2. 视频不支持全屏播放
+3. 如果在 `flex-direction: row` 的容器中使用，需要给组件设置宽度或设置 `flex: 1` 占满剩余宽度
 
 纯 `nvue` 模式下，[此问题](https://ask.dcloud.net.cn/question/119678) 修复前，不支持通过 `uni_modules` 引入，需要本地引入（将 [dist/uni-app](https://github.com/jin-yufeng/mp-html/tree/master/dist/uni-app) 中的内容拷贝到项目根目录下）  
+
+## 立即体验
+![富文本插件](https://mp-html.oss-cn-hangzhou.aliyuncs.com/qrcode.jpg)
 
 ## 问题反馈
 遇到问题时，请先查阅 [常见问题](https://jin-yufeng.gitee.io/mp-html/#/question/faq) 和 [issue](https://github.com/jin-yufeng/mp-html/issues) 中是否已有相同的问题  
 可通过 [issue](https://github.com/jin-yufeng/mp-html/issues/new/choose) 、插件问答或发送邮件到 [mp_html@126.com](mailto:mp_html@126.com) 提问，不建议在评论区提问（不方便回复）  
 提问请严格按照 [issue 模板](https://github.com/jin-yufeng/mp-html/issues/new/choose) ，描述清楚使用环境、`html` 内容或可复现的 `demo` 项目以及复现方式，对于 **描述不清**、**无法复现** 或重复的问题将不予回复  
+
+欢迎加入 `QQ` 交流群：`699734691`  
 
 查看 [问题反馈](https://jin-yufeng.gitee.io/mp-html/#/question/feedback) 了解更多

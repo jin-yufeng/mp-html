@@ -125,6 +125,8 @@ white-space: pre-line; /* 保留换行符 */
 }
 ```
 
+?> 该属性非响应式，需要在设置 [content](#content) 属性前设置才能生效，动态修改不能实时生效
+
 !> 该属性的原理是解析到各标签的内联 *style* 属性中去，如果对特别常用的标签设置默认样式，将大大加大解析结果大小，减慢渲染速度，这种情况下建议通过 [外部样式](overview/quickstart#setting) 引入  
 
 ## use-anchor

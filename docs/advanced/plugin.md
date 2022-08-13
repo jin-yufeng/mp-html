@@ -4,17 +4,16 @@
 
 ## 使用插件 :id=use
 
-?> 不熟悉 *npm* 的用户可以通过 [小程序方式](overview/quickstart#mp) 获取包含扩展插件的组件包   
+!> 直接将插件文件夹拷贝到组件包中无法生效，请通过以下方式生成包含扩展的组件包
 
-1. 选择需要的插件  
+1. 获取完整的组件包  
+   通过 [npm](overview/quickstart#npm) 或 [git](overview/quickstart#git) 等方式获取 **包含完整项目** 的组件包（注意从 *uni-app* 的插件市场中导入的包中仅包含构建后的组件，**不包含** 构建工具和插件）
+2. 选择需要的插件  
    参考下方插件使用说明，确定要使用的插件，将其名称填入 [tools/config.js](https://github.com/jin-yufeng/mp-html/blob/master/tools/config.js#L8) 中的 *plugins* 中  
    如果想仅在部分平台使用该插件，可以在该插件目录下的 *build.js* 的 *platform* 字段中填入需要的平台名称  
-2. 生成组件包  
+3. 生成组件包  
    设置完成后，可通过项目提供的命令行工具生成新的组件包，具体见 [生成组件包](advanced/develop#pack)  
-
-?> 从 *uni-app* 的插件市场中导入的包中仅包含构建后的组件，不包含构建工具和插件，使用插件需要先 [获取完整的组件包](overview/quickstart#source)
-
-!> 直接将插件文件拷贝到项目中无法生效，必须使用上述方法构建包含插件的新组件包进行使用
+4. 按照源码或 *npm* 方式引入构建后的组件包进行使用即可，详见 [引入方式](overview/quickstart#use)
 
 ## audio
 功能：音乐播放器  
@@ -175,7 +174,7 @@ Page({
 ```
 
 ##### 示例项目 :id=editable_demo
-微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/QJSiuomf78z4) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://6874-html-foe72-1259071903.tcb.qcloud.la/editable.zip?sign=cc0017be203fb3dbca62d33a0c15792e&t=1608447445) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
+微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/GFbJKum77eBy) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://mp-html.oss-cn-hangzhou.aliyuncs.com/editable.zip) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
 
 注意事项：  
 不要在 *editable* 属性被设置为 *true* 前通过 [setContent](advanced/api#setContent) 方法（用 [content](basic/prop#content) 属性）设置内容，否则在切换为 *true* 后会变成空白  
@@ -361,6 +360,23 @@ function search (key) {
 | clear() | 清空所有缓存 |
 
 !> 请尽量确保 *src* 中含有文件后缀名，不以后缀结尾也没关系，插件会从路径中推测合理的图片后缀，如果完全不包含后缀信息可能会无法保存到相册  
+
+## latex
+功能：渲染 *latex* 公式  
+大小：**≈300KB**  
+作者：[@Zeng-J](https://github.com/Zeng-J)  
+支持平台：  
+
+| 微信小程序 | QQ 小程序 | 百度小程序 | 支付宝小程序 | 头条小程序 | uni-app |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| √ | √ | √ | √ | √ | √ |
+
+说明：  
+引入本插件后，会将 *$xxx$* 的文本内容按照 *latex* 规则进行解析和渲染   
+
+?> 与 [editable](#editable) 插件共用时，编辑状态下，公式不会渲染，可以直接修改公式文本
+
+?> 本插件通过 [katex-mini](https://github.com/rojer95/katex-mini) 解析 *latex* 文本，[字体文件](https://github.com/KaTeX/KaTeX/tree/main/fonts) 建议自行转存  
 
 ## 开发插件 :id=develop
 一个插件大致需要以下文件（*plugin/template* 中提供了一个模板） 

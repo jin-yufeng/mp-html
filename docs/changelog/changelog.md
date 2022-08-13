@@ -1,5 +1,16 @@
 # 📖 更新日志 :id=changelog
 
+# v2.3.2
+发布时间：*2022-08-13*  
+主要更新：
+1. `A` 增加 [latex](advanced/plugin#latex) 插件，可以渲染数学公式 [详细](https://github.com/jin-yufeng/mp-html/pull/447) by [@Zeng-J](https://github.com/Zeng-J)
+2. `U` 优化根节点下有很多标签的长内容渲染速度
+3. `U` [highlight](advanced/plugin#highlight) 插件适配 `lang-xxx` 格式
+4. `F` 修复了 `table` 标签设置 `border` 属性后可能无法修改边框样式的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/439) by [@zouxingjie](https://github.com/zouxingjie)
+5. `F` 修复了 [editable](advanced/plugin#editable) 插件输入连续空格无效的问题
+6. `F` 修复了 `uni-app` 包 `vue3` 图片设置 `inline` 会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/438)
+7. `F` 修复了 `uni-app` 包 `vue3` 使用 `table` 可能报错的问题
+
 # v2.3.1
 发布时间：*2022-05-20*  
 主要更新：

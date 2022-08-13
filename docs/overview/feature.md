@@ -55,10 +55,10 @@
    跳转方式 2：通过 [navigateTo](advanced/api#navigateTo) 的 *api* 进行跳转  
    默认情况下锚点跳转通过控制页面滚动的方式进行，如果要在 *scroll-view* 内使用，可以通过 [in](advanced/api#in) 的 *api* 进行配置  
 3. *跳转内部路径*  
-   如果需要点击 *a* 标签跳转到小程序内的一个页面，直接将其 *href* 属性设置为页面路径即可（包括 *tab* 页面）  
+   如果需要点击 *a* 标签跳转到小程序内的一个页面，直接将其 *href* 属性设置为页面路径即可（包括 *tab* 页面，需要使用绝对路径）  
    ```html
-   <!-- 该链接被点击后将跳转到 pages/test/test 页面 -->
-   <a href="pages/test/test">链接</a>
+   <!-- 该链接被点击后将跳转到 /pages/test/test 页面 -->
+   <a href="/pages/test/test">链接</a>
    ```
 4. *复制外部链接*  
    对于外部链接，由于小程序无法直接打开，将自动复制到剪贴板，如不需要，可通过 [copy-link](basic/prop#copy-link) 属性关闭  

@@ -189,8 +189,8 @@ module.exports = `<title>富文本示例</title>
     </section>
   </section>
   <section style="margin-top: 1.5em; text-align: center;">
-    <img src="/demo-thumb.jpg?sign=91b3e495d16f96a0df3d263c9ff95821&t=1609059235" original-src="/demo.jpg?sign=af7082bed28711177bd952dbab67373e&t=1609059255">
-    <div style="font-size: 12px; color: gray; margin-top: 5px;">点击预览高清图</div>
+    <img src="demo.jpg">
+    <div style="font-size: 12px; color: gray; margin-top: 5px;">点击预览</div>
   </section>
   <section style="margin-top: 1.5em; text-align: center;">
     <svg width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;">

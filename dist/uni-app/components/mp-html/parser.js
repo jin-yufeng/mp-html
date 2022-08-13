@@ -139,6 +139,26 @@ function decodeEntity (str, amp) {
 }
 
 /**
+ * @description 合并多个块级标签，加快长内容渲染
+ * @param {Array} nodes 要合并的标签数组
+ */
+function mergeNodes (nodes) {
+  let i = nodes.length - 1
+  for (let j = i; j >= -1; j--) {
+    if (j === -1 || nodes[j].c || !nodes[j].name || (nodes[j].name !== 'div' && nodes[j].name !== 'p' && nodes[j].name[0] !== 'h') || (nodes[j].attrs.style || '').includes('inline')) {
+      if (i - j >= 5) {
+        nodes.splice(j + 1, i - j, {
+          name: 'div',
+          attrs: {},
+          children: nodes.slice(j + 1, i + 1)
+        })
+      }
+      i = j - 1
+    }
+  }
+}
+
+/**
  * @description html 解析器
  * @param {Object} vm 组件实例
  */
@@ -169,6 +189,9 @@ Parser.prototype.parse = function (content) {
   // 出栈未闭合的标签
   while (this.stack.length) {
     this.popNode()
+  }
+  if (this.nodes.length > 50) {
+    mergeNodes(this.nodes)
   }
   return this.nodes
 }
@@ -788,6 +811,8 @@ Parser.prototype.popNode = function () {
     let padding = parseFloat(attrs.cellpadding)
     let spacing = parseFloat(attrs.cellspacing)
     const border = parseFloat(attrs.border)
+    const bordercolor = styleObj['border-color']
+    const borderstyle = styleObj['border-style']
     if (node.c) {
       // padding 和 spacing 默认 2
       if (isNaN(padding)) {
@@ -798,7 +823,7 @@ Parser.prototype.popNode = function () {
       }
     }
     if (border) {
-      attrs.style += ';border:' + border + 'px solid gray'
+      attrs.style += `;border:${border}px ${borderstyle || 'solid'} ${bordercolor || 'gray'}`
     }
     if (node.flag && node.c) {
       // 有 colspan 或 rowspan 且含有链接的表格通过 grid 布局实现
@@ -848,7 +873,7 @@ Parser.prototype.popNode = function () {
               }
               style = style.substr(0, start) + style.substr(end)
             }
-            style += (border ? `;border:${border}px solid gray` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '')
+            style = (border ? `;border:${border}px ${borderstyle || 'solid'} ${bordercolor || 'gray'}` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '') + ';' + style
             // 处理列合并
             if (td.attrs.colspan) {
               style += `;grid-column-start:${col};grid-column-end:${col + parseInt(td.attrs.colspan)}`
@@ -901,7 +926,7 @@ Parser.prototype.popNode = function () {
             const td = nodes[i]
             if (td.name === 'th' || td.name === 'td') {
               if (border) {
-                td.attrs.style = `border:${border}px solid gray;${td.attrs.style || ''}`
+                td.attrs.style = `border:${border}px ${borderstyle || 'solid'} ${bordercolor || 'gray'};${td.attrs.style || ''}`
               }
               if (padding) {
                 td.attrs.style = `padding:${padding}px;${td.attrs.style || ''}`
@@ -957,7 +982,7 @@ Parser.prototype.popNode = function () {
       for (let i = node.children.length; i--;) {
         const child = node.children[i]
         // #ifdef (MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE3
-        if (child.name && (config.inlineTags[child.name] || (child.attrs.style || '').includes('inline')) && !child.c) {
+        if (child.name && (config.inlineTags[child.name] || ((child.attrs.style || '').includes('inline') && child.children)) && !child.c) {
           traversal(child)
         }
         // #endif
@@ -990,22 +1015,8 @@ Parser.prototype.popNode = function () {
     node.f = ';max-width:100%'
   }
 
-  // 优化长内容加载速度
   if (children.length >= 50 && node.c && !(styleObj.display || '').includes('flex')) {
-    let i = children.length - 1
-    for (let j = i; j >= -1; j--) {
-      // 合并多个块级标签
-      if (j === -1 || children[j].c || !children[j].name || (children[j].name !== 'div' && children[j].name !== 'p' && children[j].name[0] !== 'h') || (children[j].attrs.style || '').includes('inline')) {
-        if (i - j >= 5) {
-          children.splice(j + 1, i - j, {
-            name: 'div',
-            attrs: {},
-            children: node.children.slice(j + 1, i + 1)
-          })
-        }
-        i = j - 1
-      }
-    }
+    mergeNodes(children)
   }
   // #endif
 
@@ -1055,7 +1066,15 @@ Parser.prototype.onText = function (text) {
       }
     }
     // 去除含有换行符的空串
-    if (trim === ' ' && flag) return
+    if (trim === ' ') {
+      if (flag) return
+      // #ifdef VUE3
+      else {
+        const parent = this.stack[this.stack.length - 1]
+        if (parent && parent.name[0] === 't') return
+      }
+      // #endif
+    }
     text = trim
   }
   const node = Object.create(null)

@@ -71,6 +71,8 @@ console.log('这不是微信平台')
 修改完成后，可按以下步骤生成新的组件包  
 在 *mp-html* 文件夹下执行：  
 
+?> 以下命令需要在组件包根目录下执行，即包含 [package.json](https://github.com/jin-yufeng/mp-html/blob/master/package.json) 的目录（如果通过 *npm* 获取就是 *node_modules/mp-html*）
+
 1. 安装依赖  
    ```bash
    # 通过 npm 安装
