@@ -151,7 +151,7 @@
 | img-cache | 图片缓存 by [@PentaTea](https://github.com/PentaTea) |
 | latex | 渲染 latex 公式 by [@Zeng-J](https://github.com/Zeng-J) |
 
-从插件市场导入的包中 **不含有** 扩展插件，需要使用插件参考以下方法：  
+从插件市场导入的包中 **不含有** 扩展插件，使用插件需通过微信小程序 `富文本插件` 获取或参考以下方法进行打包：  
 1. 获取完整组件包  
    ```bash
    npm install mp-html

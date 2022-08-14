@@ -2,6 +2,10 @@
 
 ## 📦 源码获取 :id=source
 
+#### 小程序方式 :id=mp
+打开微信小程序 *富文本插件*，点击 *获取组件包* 按钮，选择使用平台、[扩展插件](advanced/plugin) 以及 [个性化设置](#setting) 后即可生成组件包  
+![富文本插件](../assets/case/富文本插件.jpg)
+
 #### npm 方式 :id=npm
    ```bash
    # 通过 npm 获取
@@ -234,7 +238,7 @@
    ```
 
 ## 🎈 个性化 :id=setting  
-?> 本组件提供了以下配置项可以生成个性化的组件包，配置项在 [tools/config.js](https://github.com/jin-yufeng/mp-html/blob/master/tools/config.js) 中设置，设置完成后通过 [命令行工具](advanced/develop#pack) 构建组件包，具体可参考 [使用插件包](advanced/plugin#use) 
+?> 本组件提供了以下配置项可以生成个性化的组件包，配置项可以通过 [示例小程序](#mp) 进行设置，或参考 [使用插件包](advanced/plugin#use) 中的方式自行设置配置文件并进行打包  
 
 #### plugins  
 需要使用的插件名称列表，关于插件的详细信息见 [插件](advanced/plugin)  
