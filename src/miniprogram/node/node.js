@@ -3,7 +3,10 @@
  */
 Component({
   data: {
-    ctrl: {} // 控制信号
+    ctrl: {}, // 控制信号
+    // #ifdef MP-WEIXIN
+    isiOS: wx.getSystemInfoSync().system.includes('iOS')
+    // #endif
   },
   properties: {
     childs: Array, // 子节点列表

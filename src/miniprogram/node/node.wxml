@@ -37,7 +37,7 @@
   </block>
   <!-- 文本 -->
   <!-- #ifdef MP-WEIXIN || MP-QQ -->
-  <text wx:elif="{{n.text}}" mp-weixin:user-select="{{opts[4]}}" decode>{{n.text}}</text>
+  <text wx:elif="{{n.text}}" mp-weixin:user-select="{{opts[4]=='force'&&isiOS}}" decode>{{n.text}}</text>
   <!-- #endif -->
   <text wx:elif="{{n.name==='br'}}">\n</text>
   <!-- 链接 -->

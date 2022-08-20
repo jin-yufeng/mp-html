@@ -15,8 +15,11 @@
       <image v-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;'+n.attrs.style" :src="n.attrs.src||(ctrl.load?n.attrs['data-src']:'')" :mode="!n.h?'widthFix':(!n.w?'heightFix':'')" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
       <!-- #endif -->
       <!-- 文本 -->
-      <!-- #ifndef MP-BAIDU || MP-ALIPAY || MP-TOUTIAO -->
-      <text v-else-if="n.text" :user-select="opts[4]" decode>{{n.text}}</text>
+      <!-- #ifdef MP-WEIXIN -->
+      <text v-else-if="n.text" :user-select="opts[4]=='force'&&isiOS" decode>{{n.text}}</text>
+      <!-- #endif -->
+      <!-- #ifndef MP-WEIXIN || MP-BAIDU || MP-ALIPAY || MP-TOUTIAO -->
+      <text v-else-if="n.text" decode>{{n.text}}</text>
       <!-- #endif -->
       <text v-else-if="n.name==='br'">\n</text>
       <!-- 链接 -->
@@ -112,7 +115,10 @@ export default {
   },
   data () {
     return {
-      ctrl: {}
+      ctrl: {},
+      // #ifdef MP-WEIXIN
+      isiOS: uni.getSystemInfoSync().system.includes('iOS')
+      // #endif
     }
   },
   props: {
@@ -165,7 +171,7 @@ export default {
   },
   methods: {
     // #ifdef MP-WEIXIN
-    toJSON () { },
+    toJSON () { return this },
     // #endif
     /**
      * @description 播放视频事件
