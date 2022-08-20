@@ -24,7 +24,7 @@ function Search (vm) {
               name: 'span',
               attrs: {},
               type: 'node',
-              c: anchor ? 1 : undefined,
+              c: 1,
               s: 1,
               children: []
             }
@@ -44,6 +44,9 @@ function Search (vm) {
                     id: anchor ? 'search' + (res.length + 1) : undefined, // 用于锚点的 id
                     style: style
                   },
+                  // #ifdef VUE3
+                  c: 1,
+                  // #endif
                   children: [{
                     type: 'text',
                     text: key instanceof RegExp ? key.exec(text)[0] : key
