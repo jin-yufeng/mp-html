@@ -21,4 +21,6 @@
 <pre><code class="language-css">p { color: red }</code></pre>
 ```
 
+> 与 *editable* 插件共用时，编辑状态下，不会进行高亮，可以直接修改代码文本
+
 > 本插件的高亮功能依赖于 [prismjs](https://prismjs.com/)，默认配置中仅支持 *html*、*css*、*c-like*、*javascript* 语言和 *Tomorrow Night* 主题，如果需要更多语言或更换主题请前往 [官网](https://prismjs.com/download.html) 下载对应的 *prism.min.js* 和 *prism.css* 并替换 *plugins/highlight/* 目录下的文件  

@@ -12,6 +12,10 @@ function Highlight (vm) {
 
 Highlight.prototype.onParse = function (node, vm) {
   if (node.name === 'pre') {
+    if (vm.options.editable) {
+      node.attrs.class = (node.attrs.class || '') + ' hl-pre'
+      return
+    }
     let i
     for (i = node.children.length; i--;) {
       if (node.children[i].name === 'code') break
