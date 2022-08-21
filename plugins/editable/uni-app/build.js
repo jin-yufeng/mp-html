@@ -493,10 +493,12 @@ function getTop(e) {
   // #ifndef H5 || MP-ALIPAY || APP-PLUS
   top = e.detail.y
   // #endif
-  if (top - e.currentTarget.offsetTop < 150)
+  if (top - e.currentTarget.offsetTop < 150 || top < 600) {
     top = e.currentTarget.offsetTop
-  if (top < 30)
+  }
+  if (top < 30) {
     top += 70
+  }
   return top - 30
 }`)
             // 周期处理

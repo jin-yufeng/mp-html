@@ -561,7 +561,7 @@ module.exports = {
   // #ifdef MP-ALIPAY
   top = top = e.detail.pageY
   // #endif
-  if (top - e.currentTarget.offsetTop < 150) {
+  if (top - e.currentTarget.offsetTop < 150 || top < 600) {
     top = e.currentTarget.offsetTop
   }
   if (top < 30) {
