@@ -464,7 +464,9 @@ Parser.prototype.onOpenTag = function (selfClose) {
             const item = this.stack[i]
             if (item.name === 'a') {
               node.a = item.attrs
-              break
+            }
+            if (item.name === 'table') {
+              node.t = 1
             }
             // #ifndef H5 || APP-PLUS
             const style = item.attrs.style || ''

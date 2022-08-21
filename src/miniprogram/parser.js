@@ -426,7 +426,9 @@ Parser.prototype.onOpenTag = function (selfClose) {
             const item = this.stack[i]
             if (item.name === 'a') {
               node.a = item.attrs
-              break
+            }
+            if (item.name === 'table') {
+              node.t = 1
             }
             const style = item.attrs.style || ''
             if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || parseInt(styleObj.width) > 100)) {
