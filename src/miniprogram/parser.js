@@ -774,7 +774,7 @@ Parser.prototype.popNode = function () {
             }
             td.c = 1
             let style = td.attrs.style || ''
-            const start = style.indexOf('width') ? style.indexOf(';width') : 0
+            let start = style.indexOf('width') ? style.indexOf(';width') : 0
             // 提取出 td 的宽度
             if (start !== -1) {
               let end = style.indexOf(';', start + 6)
@@ -785,6 +785,18 @@ Parser.prototype.popNode = function () {
                 width[col] = style.substring(start ? start + 7 : 6, end)
               }
               style = style.substr(0, start) + style.substr(end)
+            }
+            // 设置竖直对齐
+            start = style.indexOf('vertical-align')
+            if (start !== -1) {
+              const val = style.substr(start + 15, 10)
+              if (val.includes('middle')) {
+                style += ';display:flex;align-items:center'
+              } else if (val.includes('bottom')) {
+                style += ';display:flex;align-items:flex-end'
+              }
+            } else {
+              style += ';display:flex;align-items:center'
             }
             style = (border ? `;border:${border}px ${borderstyle || 'solid'} ${bordercolor || 'gray'}` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '') + ';' + style
             // 处理列合并
