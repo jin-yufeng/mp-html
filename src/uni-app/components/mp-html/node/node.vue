@@ -202,6 +202,9 @@ export default {
             // #endif
           )
           ctx.id = id
+          if (this.root.playbackRate) {
+            ctx.playbackRate(this.root.playbackRate)
+          }
           this.root._videos.push(ctx)
         }
       }

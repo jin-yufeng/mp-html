@@ -105,6 +105,10 @@ export default {
       this.playing = false
       this.$emit('pause')
     },
+    // 设置播放速率
+    playbackRate (rate) {
+      this._ctx.playbackRate = rate
+    },
     // 移动进度条
     seek (sec) {
       this._ctx.seek(sec)

@@ -292,6 +292,17 @@ Component({
     },
 
     /**
+     * @description 设置媒体播放速率
+     * @param {Number} rate 播放速率
+     */
+    setPlaybackRate (rate) {
+      this.playbackRate = rate
+      for (let i = (this._videos || []).length; i--;) {
+        this._videos[i].playbackRate(rate)
+      }
+    },
+
+    /**
      * @description 设置富文本内容
      * @param {string} content 要渲染的 html 字符串
      * @param {boolean} append 是否在尾部追加

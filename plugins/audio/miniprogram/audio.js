@@ -127,6 +127,14 @@ Component({
     },
 
     /**
+     * @description 设置播放速率
+     * @param {Number} rate 播放速率
+     */
+    playbackRate (rate) {
+      this._ctx.playbackRate = rate
+    },
+
+    /**
      * @description 停止音乐
      */
     stop () {

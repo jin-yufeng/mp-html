@@ -285,6 +285,28 @@ export default {
     },
 
     /**
+     * @description 设置媒体播放速率
+     * @param {Number} rate 播放速率
+     */
+    setPlaybackRate (rate) {
+      this.playbackRate = rate
+      for (let i = (this._videos || []).length; i--;) {
+        this._videos[i].playbackRate(rate)
+      }
+      // #ifdef APP-PLUS
+      const command = 'for(var e=document.getElementsByTagName("video"),i=e.length;i--;)e[i].playbackRate=' + rate
+      // #ifndef APP-PLUS-NVUE
+      let page = this.$parent
+      while (!page.$scope) page = page.$parent
+      page.$scope.$getAppWebview().evalJS(command)
+      // #endif
+      // #ifdef APP-PLUS-NVUE
+      this.$refs.web.evalJs(command)
+      // #endif
+      // #endif
+    },
+
+    /**
      * @description 设置内容
      * @param {String} content html 内容
      * @param {Boolean} append 是否在尾部追加
