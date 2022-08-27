@@ -128,7 +128,6 @@ export default {
   },
   beforeDestroy () {
     this._hook('onDetached')
-    clearInterval(this._timer)
   },
   methods: {
     /**
@@ -330,19 +329,29 @@ export default {
         this.$emit('load')
       })
 
-      // 等待图片加载完毕
-      let height
-      clearInterval(this._timer)
-      this._timer = setInterval(() => {
-        this.getRect().then(rect => {
+      if (this.properties.lazyLoad || this.imgList._unloadimgs < this.imgList.length / 2) {
+        // 设置懒加载，每 350ms 获取高度，不变则认为加载完毕
+        let height
+        const callback = rect => {
           // 350ms 总高度无变化就触发 ready 事件
           if (rect.height === height) {
             this.$emit('ready', rect)
-            clearInterval(this._timer)
+          } else {
+            height = rect.height
+            setTimeout(() => {
+              this.getRect().then(callback)
+            }, 350)
           }
-          height = rect.height
-        }).catch(() => { })
-      }, 350)
+        }
+        this.getRect().then(callback)
+      } else {
+        // 未设置懒加载，等待所有图片加载完毕
+        if (!this.imgList._unloadimgs) {
+          this.getRect(rect => {
+            this.$emit('ready', rect)
+          })
+        }
+      }
       // #endif
     },
 

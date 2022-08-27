@@ -290,6 +290,23 @@ export default {
         // 加载完毕，取消加载中占位图
         this.$set(this.ctrl, i, 1)
       }
+      this.checkReady()
+    },
+
+    /**
+     * @description 检查是否所有图片加载完毕
+     */
+    checkReady () {
+      if (!this.root.lazyLoad) {
+        this.root._unloadimgs -= 1
+        if (!this.root._unloadimgs) {
+          setTimeout(() => {
+            this.root.getRect().then(rect => {
+              this.root.$emit('ready', rect)
+            })
+          }, 50)
+        }
+      }
     },
 
     /**
@@ -366,6 +383,7 @@ export default {
         if (this.opts[2]) {
           this.$set(this.ctrl, i, -1)
         }
+        this.checkReady()
       }
       if (this.root) {
         this.root.$emit('error', {

@@ -138,6 +138,23 @@ Component({
           ['ctrl.' + i]: val
         })
       }
+      this.checkReady()
+    },
+
+    /**
+     * @description 检查是否所有图片加载完毕
+     */
+    checkReady () {
+      if (!this.root.properties.lazyLoad) {
+        this.root.imgList._unloadimgs -= 1
+        if (!this.root.imgList._unloadimgs) {
+          setTimeout(() => {
+            this.root.getRect().then(rect => {
+              this.root.triggerEvent('ready', rect)
+            })
+          }, 50)
+        }
+      }
     },
 
     /**
@@ -199,11 +216,14 @@ Component({
             ['ctrl.' + i]: index
           })
         }
-      } else if (node.name === 'img' && this.properties.opts[2]) {
+      } else if (node.name === 'img') {
         // 显示错误占位图
-        this.setData({
-          ['ctrl.' + i]: -1
-        })
+        if (this.properties.opts[2]) {
+          this.setData({
+            ['ctrl.' + i]: -1
+          })
+        }
+        this.checkReady()
       }
       if (this.root) {
         this.root.triggerEvent('error', {

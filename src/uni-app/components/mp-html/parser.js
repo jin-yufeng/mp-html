@@ -166,6 +166,7 @@ function Parser (vm) {
   this.options = vm || {}
   this.tagStyle = Object.assign({}, config.tagStyle, this.options.tagStyle)
   this.imgList = vm.imgList || []
+  this.imgList._unloadimgs = 0
   this.plugins = vm.plugins || []
   this.attrs = Object.create(null)
   this.stack = []
@@ -514,6 +515,9 @@ Parser.prototype.onOpenTag = function (selfClose) {
           }
           // #endif
           this.imgList.push(src)
+          if (!node.t) {
+            this.imgList._unloadimgs += 1
+          }
           // #ifdef H5 || APP-PLUS
           if (this.options.lazyLoad) {
             attrs['data-src'] = attrs.src

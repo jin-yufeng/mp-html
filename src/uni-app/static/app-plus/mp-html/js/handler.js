@@ -49,6 +49,21 @@ function onImgError () {
 }
 
 /**
+ * @description 检查是否所有图片加载完毕
+ */
+function checkReady () {
+  window.unloadimgs -= 1
+  if (window.unloadimgs === 0) {
+    // 所有图片加载完毕
+    uni.postMessage({
+      data: {
+        action: 'onReady'
+      }
+    })
+  }
+}
+
+/**
  * @description 创建 dom 结构
  * @param {object[]} nodes 节点数组
  * @param {Element} parent 父节点
@@ -84,6 +99,9 @@ function createDom (nodes, parent, namespace) {
 
       // 处理图片
       if (name === 'img') {
+        window.unloadimgs += 1
+        ele.onload = checkReady
+        ele.onerror = checkReady
         if (!ele.src && ele.getAttribute('data-src')) {
           ele.src = ele.getAttribute('data-src')
         }
@@ -194,7 +212,7 @@ window.setContent = function (nodes, opts, append) {
   }
 
   options = opts
-
+  window.unloadimgs = 0
   const fragment = document.createDocumentFragment()
   createDom(nodes, fragment)
   ele.appendChild(fragment)
@@ -207,9 +225,16 @@ window.setContent = function (nodes, opts, append) {
       height
     }
   })
+  if (!window.unloadimgs) {
+    uni.postMessage({
+      data: {
+        action: 'onReady',
+        height
+      }
+    })
+  }
 
   clearInterval(window.timer)
-  let ready = false
   window.timer = setInterval(() => {
     if (ele.scrollHeight !== height) {
       height = ele.scrollHeight
@@ -217,13 +242,6 @@ window.setContent = function (nodes, opts, append) {
         data: {
           action: 'onHeightChange',
           height: height
-        }
-      })
-    } else if (!ready) {
-      ready = true
-      uni.postMessage({
-        data: {
-          action: 'onReady'
         }
       })
     }
