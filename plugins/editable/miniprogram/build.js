@@ -109,21 +109,29 @@ module.exports = {
         } else if (childs[i].text) {
           // 在文本中插入
           const text = childs[i].text
-          const list = []
-          if (this.cursor) {
-            list.push({
-              type: 'text',
-              text: text.substring(0, this.cursor)
-            })
+          if (node.type === 'text') {
+            if (this.cursor) {
+              childs[i].text = text.substring(0, this.cursor) + node.text + text.substring(this.cursor)
+            } else {
+              childs[i].text += node.text
+            }
+          } else {
+            const list = []
+            if (this.cursor) {
+              list.push({
+                type: 'text',
+                text: text.substring(0, this.cursor)
+              })
+            }
+            list.push(node)
+            if (this.cursor < text.length) {
+              list.push({
+                type: 'text',
+                text: text.substring(this.cursor)
+              })
+            }
+            childs.splice(i, 1, ...list)
           }
-          list.push(node)
-          if (this.cursor < text.length) {
-            list.push({
-              type: 'text',
-              text: text.substring(this.cursor)
-            })
-          }
-          childs.splice(i, 1, ...list)
         } else {
           childs.splice(i + 1, 0, node)
         }

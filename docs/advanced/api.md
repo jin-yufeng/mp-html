@@ -85,7 +85,7 @@ Page({
 
 | 参数名 | 类型 | 必填 | 默认值 | 说明 |
 |:---:|:---:|:---:|:---:|---|
-| id | string | 否 | - |要跳转的锚点 id，为空则跳转到开头 |
+| id | string | 否 | - | 要跳转的锚点 id，为空则跳转到开头 |
 | offset | number | 否 | 0 | 跳转位置的偏移量 |
 
 返回值：**Promise**  
@@ -182,6 +182,35 @@ Page({
   onHide () {
     // ctx 为组件实例
     ctx.pauseMedia() // 页面跳转或隐藏时暂停播放
+  }
+})
+```
+
+## setPlaybackRate
+?> [2.4.0](changelog/changelog#v240) 版本起支持  
+
+功能：设置音视频的播放速率
+
+输入值：  
+
+| 参数名 | 类型 | 必填 | 默认值 | 说明 |
+|:---:|:---:|:---:|:---:|---|
+| rate | number | 是 | - | 播放速率，一般支持 0.5~2.0 |
+
+返回值：无  
+示例：  
+```javascript
+Page({
+  // 点击设置速率按钮
+  setPlaybackRate () {
+    wx.showActionSheet({
+      itemList: ['0.5', '1.0', '1.25', '1.5', '2.0'],
+      success: res => {
+        const rate = [0.5, 1.0, 1.25, 1.5, 2.0][res.tapIndex]
+        // ctx 为组件实例
+        ctx.setPlaybackRate(rate)
+      }
+    })
   }
 })
 ```

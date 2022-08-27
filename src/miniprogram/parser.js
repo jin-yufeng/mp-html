@@ -428,8 +428,13 @@ Parser.prototype.onOpenTag = function (selfClose) {
             if (item.name === 'a') {
               node.a = item.attrs
             }
-            if (item.name === 'table') {
-              node.t = 1
+            if (item.name === 'table' && !node.webp && !attrs.src.includes('cloud://')) {
+              if (!styleObj.display || styleObj.display.includes('inline')) {
+                node.t = 'inline-block'
+              } else {
+                node.t = styleObj.display
+              }
+              styleObj.display = undefined
             }
             const style = item.attrs.style || ''
             if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || parseInt(styleObj.width) > 100)) {
@@ -791,16 +796,27 @@ Parser.prototype.popNode = function () {
               style = style.substr(0, start) + style.substr(end)
             }
             // 设置竖直对齐
+            style += ';display:flex'
             start = style.indexOf('vertical-align')
             if (start !== -1) {
               const val = style.substr(start + 15, 10)
               if (val.includes('middle')) {
-                style += ';display:flex;align-items:center'
+                style += ';align-items:center'
               } else if (val.includes('bottom')) {
-                style += ';display:flex;align-items:flex-end'
+                style += ';align-items:flex-end'
               }
             } else {
-              style += ';display:flex;align-items:center'
+              style += ';align-items:center'
+            }
+            // 设置水平对齐
+            start = style.indexOf('text-align')
+            if (start !== -1) {
+              const val = style.substr(start + 11, 10)
+              if (val.includes('center')) {
+                style += ';justify-content: center'
+              } else if (val.includes('right')) {
+                style += ';justify-content: right'
+              }
             }
             style = (border ? `;border:${border}px ${borderstyle || 'solid'} ${bordercolor || 'gray'}` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '') + ';' + style
             // 处理列合并

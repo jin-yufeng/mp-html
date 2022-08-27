@@ -56,6 +56,9 @@
 
 ## ready
 触发时机：图片加载完毕时（不包含懒加载的图片）  
+
+?> 判断方式是 *350ms* 总高度无变化就认为加载完毕，部分情况下可能不准确；[2.4.0](changelog/changelog#v240) 版本起 [lazy-load](basic/prop#lazy-load) 属性为 *false* 时根据图片的 *load* 事件判断，可以基本准确触发
+
 返回值：富文本区域的 *boundingClientRect* 结构体，包含大小位置信息  
 用途：此时进行 [锚点跳转](advanced/api#navigateTo) 可以基本保证跳转位置正确  
 

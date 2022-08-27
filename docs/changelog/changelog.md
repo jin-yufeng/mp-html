@@ -1,6 +1,20 @@
 # 📖 更新日志 :id=changelog
 
-# v2.3.2
+## v2.4.0
+发布时间：  
+主要更新：  
+1. `A` 增加了 [setPlaybackRate](advanced/api#setPlaybackRate) 的 `api`，可以设置音视频的播放速率 [详细](https://github.com/jin-yufeng/mp-html/issues/452)
+2. `A` 示例小程序代码开源 [详细](https://github.com/jin-yufeng/mp-html-demo)
+3. `U` 优化 [ready](basic/event#ready) 事件触发时机，未设置懒加载的情况下基本可以准确触发 [详细](https://github.com/jin-yufeng/mp-html/issues/195)
+4. `U` [highlight](advanced/plugin#highlight) 插件在编辑状态下不进行高亮处理，便于编辑
+5. `F` 修复了 `flex` 布局下图片大小可能不正确的问题
+6. `F` 修复了 [selectable](basic/prop#selectable) 属性没有设置 `force` 也可能出现渲染异常的问题
+7. `F` 修复了表格中的图片大小可能不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/448)
+8. `F` 修复了含有合并单元格的表格可能无法设置竖直对齐的问题
+9. `F` 修复了 [editable](advanced/plugin#editable) 插件在 `scroll-view` 中使用时工具条位置可能不正确的问题
+10. `F` 修复了 `uni-app` 包 `vue3` 使用 [search](advanced/plugin#search) 插件可能导致错误换行的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/449)
+
+## v2.3.2
 发布时间：*2022-08-13*  
 主要更新：
 1. `A` 增加 [latex](advanced/plugin#latex) 插件，可以渲染数学公式 [详细](https://github.com/jin-yufeng/mp-html/pull/447) by [@Zeng-J](https://github.com/Zeng-J)
@@ -11,11 +25,11 @@
 6. `F` 修复了 `uni-app` 包 `vue3` 图片设置 `inline` 会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/438)
 7. `F` 修复了 `uni-app` 包 `vue3` 使用 `table` 可能报错的问题
 
-# v2.3.1
+## v2.3.1
 发布时间：*2022-05-20*  
 主要更新：
 1. `U` `uni-app` 包 `app` 端支持使用本地图片
-2. `U` 优化了微信小程序 `selectable` 属性在 `ios` 端的处理 [详细](basic/prop#selectable)
+2. `U` 优化了微信小程序 [selectable](basic/prop#selectable) 属性在 `ios` 端的处理 [详细](basic/prop#selectable)
 3. `U` 原生包取消样式隔离，部分平台可以直接引入页面样式 [#376](https://github.com/jin-yufeng/mp-html/issues/376)、[详细](overview/quickstart#externStyle)
 4. `F` 修复了 [editable](advanced/plugin#editable) 插件不在顶部时 `tooltip` 位置可能错误的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/430)
 5. `F` 修复了 `uni-app` 包 `vue3` 运行到微信小程序可能报错丢失内容的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/414)
@@ -23,7 +37,7 @@
 7. `F` 修复了原生包个别情况下可能报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/428)
 8. `F` 修复了 [editable](advanced/plugin#editable) 插件 `uni-app` 包的 `app` 端插入视频无法预览的问题
 
-# v2.3.0
+## v2.3.0
 发布时间：*2022-04-01*  
 主要更新：  
 1. `A` 增加了 `play` 事件，音视频播放时触发，可用于与页面其他音视频进行互斥播放 [详细](basic/event#play)
@@ -40,7 +54,7 @@
 12. `F` 修复了 `uni-app` 包 `vue3` 使用 [audio](advanced/plugin#audio) 插件报错的问题
 13. `F` 修复了 `uni-app` 包 [highlight](advanced/plugin#highlight) 插件使用自定义的 `prism.min.js` 报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/416)
 
-# v2.2.2
+## v2.2.2
 发布时间：*2022-02-26*  
 主要更新：  
 1. `A` 增加了 [pauseMedia](advanced/api#pauseMedia) 的 `api`，可用于暂停播放音视频 [详细](https://github.com/jin-yufeng/mp-html/issues/317)

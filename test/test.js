@@ -63,11 +63,17 @@ console.log('11')
 </table>
 <table width="100%" border="1">
   <tr>
-    <th width="20%">标题1</th>
+    <th style="vertical-align: bottom;" width="20%">标题1</th>
     <th width="80%">标题2</th>
   </tr>
   <tr>
-    <td colspan="2"><a>内容1</a></td>
+    <td colspan="2" style="vertical-align:middle;text-align:right"><a>内容1</a></td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td><img src="xxx.jpg" style="display:block">图片<td>
+    <td><img src="xxx.jpg">图片<td>
   </tr>
 </table>
 <!-- 测试 font 标签、不同属性写法、实体 -->
@@ -156,7 +162,8 @@ test('event', async () => {
   wx.createVideoContext = function () {
     // 模拟视频 context
     return {
-      pause: function () { }
+      pause: function () { },
+      playbackRate: function () { }
     }
   }
   // 测试失败回调
@@ -278,6 +285,8 @@ test('event', async () => {
       }
     })
   }
+  // 视频倍速播放
+  comp.instance.setPlaybackRate(1.5)
   // 暂停视频播放
   comp.instance.pauseMedia()
   // 模拟视频出错

@@ -12,7 +12,7 @@
 
 <script>
 /**
- * mp-html v2.3.2
+ * mp-html v2.4.0
  * @description 富文本组件
  * @tutorial https://github.com/jin-yufeng/mp-html
  * @property {String} container-style 容器的样式
@@ -329,7 +329,7 @@ export default {
         this.$emit('load')
       })
 
-      if (this.properties.lazyLoad || this.imgList._unloadimgs < this.imgList.length / 2) {
+      if (this.lazyLoad || this.imgList._unloadimgs < this.imgList.length / 2) {
         // 设置懒加载，每 350ms 获取高度，不变则认为加载完毕
         let height
         const callback = rect => {

@@ -184,6 +184,8 @@ Page({
 ##### 示例项目 :id=editable_demo
 微信小程序点击 [代码片段](https://developers.weixin.qq.com/s/GFbJKum77eBy) 即可在微信开发者工具中导入；*uni-app* 下载 [示例项目](https://mp-html.oss-cn-hangzhou.aliyuncs.com/editable.zip) 在 *HBuilder X* 中打开即可体验；注意示例项目中不一定包含最新版本，仅供参考使用方法  
 
+?> 也可以参考示例小程序 [源代码](https://github.com/jin-yufeng/mp-html-demo)
+
 注意事项：  
 不要在 *editable* 属性被设置为 *true* 前通过 [setContent](advanced/api#setContent) 方法（用 [content](basic/prop#content) 属性）设置内容，否则在切换为 *true* 后会变成空白  
 
@@ -286,6 +288,8 @@ function search (key) {
   })
 }
 ```
+
+?> 具体用法可以参考示例小程序 [源代码](https://github.com/jin-yufeng/mp-html-demo)
 
 附加说明：  
 1. 不传入 *key*（或为空）时即可取消搜索，取消所有的高亮，还原到原来的效果  

@@ -132,6 +132,8 @@
 | getRect | 获取富文本内容的位置和大小 |
 | setContent | 设置富文本内容 |
 | imgList | 获取所有图片的数组 |
+| pauseMedia | 暂停播放音视频（[2.2.2+](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog#v222)） |
+| setPlaybackRate | 设置音视频播放速率（[2.4.0+](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog#v240)） |
 
 查看 [api](https://jin-yufeng.gitee.io/mp-html/#/advanced/api) 了解更多
 

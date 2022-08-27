@@ -152,7 +152,7 @@ Component({
             this.root.getRect().then(rect => {
               this.root.triggerEvent('ready', rect)
             })
-          }, 50)
+          }, 350)
         }
       }
     },

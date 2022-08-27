@@ -166,6 +166,7 @@ function Parser (vm) {
   this.options = vm || {}
   this.tagStyle = Object.assign({}, config.tagStyle, this.options.tagStyle)
   this.imgList = vm.imgList || []
+  this.imgList._unloadimgs = 0
   this.plugins = vm.plugins || []
   this.attrs = Object.create(null)
   this.stack = []
@@ -464,11 +465,18 @@ Parser.prototype.onOpenTag = function (selfClose) {
             const item = this.stack[i]
             if (item.name === 'a') {
               node.a = item.attrs
-              break
+            }
+            if (item.name === 'table' && !node.webp && !attrs.src.includes('cloud://')) {
+              if (!styleObj.display || styleObj.display.includes('inline')) {
+                node.t = 'inline-block'
+              } else {
+                node.t = styleObj.display
+              }
+              styleObj.display = undefined
             }
             // #ifndef H5 || APP-PLUS
             const style = item.attrs.style || ''
-            if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || !styleObj.width.includes('%'))) {
+            if (style.includes('flex:') && !style.includes('flex:0') && !style.includes('flex: 0') && (!styleObj.width || parseInt(styleObj.width) > 100)) {
               styleObj.width = '100% !important'
               styleObj.height = ''
               for (let j = i + 1; j < this.stack.length; j++) {
@@ -512,6 +520,9 @@ Parser.prototype.onOpenTag = function (selfClose) {
           }
           // #endif
           this.imgList.push(src)
+          if (!node.t) {
+            this.imgList._unloadimgs += 1
+          }
           // #ifdef H5 || APP-PLUS
           if (this.options.lazyLoad) {
             attrs['data-src'] = attrs.src
@@ -861,7 +872,7 @@ Parser.prototype.popNode = function () {
               col++
             }
             let style = td.attrs.style || ''
-            const start = style.indexOf('width') ? style.indexOf(';width') : 0
+            let start = style.indexOf('width') ? style.indexOf(';width') : 0
             // 提取出 td 的宽度
             if (start !== -1) {
               let end = style.indexOf(';', start + 6)
@@ -872,6 +883,29 @@ Parser.prototype.popNode = function () {
                 width[col] = style.substring(start ? start + 7 : 6, end)
               }
               style = style.substr(0, start) + style.substr(end)
+            }
+            // 设置竖直对齐
+            style += ';display:flex'
+            start = style.indexOf('vertical-align')
+            if (start !== -1) {
+              const val = style.substr(start + 15, 10)
+              if (val.includes('middle')) {
+                style += ';align-items:center'
+              } else if (val.includes('bottom')) {
+                style += ';align-items:flex-end'
+              }
+            } else {
+              style += ';align-items:center'
+            }
+            // 设置水平对齐
+            start = style.indexOf('text-align')
+            if (start !== -1) {
+              const val = style.substr(start + 11, 10)
+              if (val.includes('center')) {
+                style += ';justify-content: center'
+              } else if (val.includes('right')) {
+                style += ';justify-content: right'
+              }
             }
             style = (border ? `;border:${border}px ${borderstyle || 'solid'} ${bordercolor || 'gray'}` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '') + ';' + style
             // 处理列合并

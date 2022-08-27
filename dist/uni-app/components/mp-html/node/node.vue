@@ -3,20 +3,27 @@
     <block v-for="(n, i) in childs" v-bind:key="i">
       <!-- 图片 -->
       <!-- 占位图 -->
-      <image v-if="n.name==='img'&&((opts[1]&&!ctrl[i])||ctrl[i]<0)" class="_img" :style="n.attrs.style" :src="ctrl[i]<0?opts[2]:opts[1]" mode="widthFix" />
+      <image v-if="n.name==='img'&&!n.t&&((opts[1]&&!ctrl[i])||ctrl[i]<0)" class="_img" :style="n.attrs.style" :src="ctrl[i]<0?opts[2]:opts[1]" mode="widthFix" />
       <!-- 显示图片 -->
       <!-- #ifdef H5 || (APP-PLUS && VUE2) -->
       <img v-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+n.attrs.style" :src="n.attrs.src||(ctrl.load?n.attrs['data-src']:'')" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
       <!-- #endif -->
+      <!-- #ifndef H5 || (APP-PLUS && VUE2) -->
+      <!-- 表格中的图片，使用 rich-text 防止大小不正确 -->
+      <rich-text v-if="n.name==='img'&&n.t" :style="'display:'+n.t" :nodes="'<img class=\'_img\' style=\''+n.attrs.style+'\' src=\''+n.attrs.src+'\'>'" :data-i="i" @tap.stop="imgTap" />
+      <!-- #endif -->
       <!-- #ifndef H5 || APP-PLUS -->
-      <image v-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;height:1px;'+n.attrs.style" :src="n.attrs.src" :mode="!n.h?'widthFix':(!n.w?'heightFix':'')" :lazy-load="opts[0]" :webp="n.webp" :show-menu-by-longpress="opts[3]&&!n.attrs.ignore" :image-menu-prevent="!opts[3]||n.attrs.ignore" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
+      <image v-else-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;height:1px;'+n.attrs.style" :src="n.attrs.src" :mode="!n.h?'widthFix':(!n.w?'heightFix':'')" :lazy-load="opts[0]" :webp="n.webp" :show-menu-by-longpress="opts[3]&&!n.attrs.ignore" :image-menu-prevent="!opts[3]||n.attrs.ignore" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
       <!-- #endif -->
       <!-- #ifdef APP-PLUS && VUE3 -->
-      <image v-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;'+n.attrs.style" :src="n.attrs.src||(ctrl.load?n.attrs['data-src']:'')" :mode="!n.h?'widthFix':(!n.w?'heightFix':'')" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
+      <image v-else-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;'+n.attrs.style" :src="n.attrs.src||(ctrl.load?n.attrs['data-src']:'')" :mode="!n.h?'widthFix':(!n.w?'heightFix':'')" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
       <!-- #endif -->
       <!-- 文本 -->
-      <!-- #ifndef MP-BAIDU || MP-ALIPAY || MP-TOUTIAO -->
-      <text v-else-if="n.text" :user-select="opts[4]" decode>{{n.text}}</text>
+      <!-- #ifdef MP-WEIXIN -->
+      <text v-else-if="n.text" :user-select="opts[4]=='force'&&isiOS" decode>{{n.text}}</text>
+      <!-- #endif -->
+      <!-- #ifndef MP-WEIXIN || MP-BAIDU || MP-ALIPAY || MP-TOUTIAO -->
+      <text v-else-if="n.text" decode>{{n.text}}</text>
       <!-- #endif -->
       <text v-else-if="n.name==='br'">\n</text>
       <!-- 链接 -->
@@ -113,7 +120,10 @@ export default {
   },
   data () {
     return {
-      ctrl: {}
+      ctrl: {},
+      // #ifdef MP-WEIXIN
+      isiOS: uni.getSystemInfoSync().system.includes('iOS')
+      // #endif
     }
   },
   props: {
@@ -167,7 +177,7 @@ export default {
   },
   methods:{
     // #ifdef MP-WEIXIN
-    toJSON () { },
+    toJSON () { return this },
     // #endif
     /**
      * @description 播放视频事件
@@ -194,6 +204,9 @@ export default {
             // #endif
           )
           ctx.id = id
+          if (this.root.playbackRate) {
+            ctx.playbackRate(this.root.playbackRate)
+          }
           this.root._videos.push(ctx)
         }
       }
@@ -279,6 +292,23 @@ export default {
         // 加载完毕，取消加载中占位图
         this.$set(this.ctrl, i, 1)
       }
+      this.checkReady()
+    },
+
+    /**
+     * @description 检查是否所有图片加载完毕
+     */
+    checkReady () {
+      if (!this.root.lazyLoad) {
+        this.root._unloadimgs -= 1
+        if (!this.root._unloadimgs) {
+          setTimeout(() => {
+            this.root.getRect().then(rect => {
+              this.root.$emit('ready', rect)
+            })
+          }, 350)
+        }
+      }
     },
 
     /**
@@ -355,6 +385,7 @@ export default {
         if (this.opts[2]) {
           this.$set(this.ctrl, i, -1)
         }
+        this.checkReady()
       }
       if (this.root) {
         this.root.$emit('error', {

@@ -179,6 +179,8 @@
 | getRect | 获取富文本内容的位置和大小 |
 | setContent | 设置富文本内容 |
 | imgList | 获取所有图片的数组 |
+| pauseMedia | 暂停播放音视频（[2.2.2+](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog#v222)） |
+| setPlaybackRate | 设置音视频播放速率（[2.4.0+](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog#v240)） |
 
 查看 [api](https://jin-yufeng.gitee.io/mp-html/#/advanced/api) 了解更多
 
@@ -202,17 +204,17 @@
 
 ## 使用案例
 
-| 官方示例 | 欢喜商城 | 多么生活 | 全品作业小助手 | 米兔旅行 | 食法查 |
+| [官方示例](https://github.com/jin-yufeng/mp-html-demo) | 欢喜商城 | 多么生活 | 全品作业小助手 | 食法查 | 微慕 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![富文本插件](docs/assets/case/富文本插件.jpg) | ![欢喜商城](docs/assets/case/欢喜商城.png) | ![多么生活](docs/assets/case/多么生活.jpg) | ![全品作业小助手](docs/assets/case/全品作业小助手.jpg) | ![米兔旅行](docs/assets/case/米兔旅行.png) | ![食法查](docs/assets/case/食法查.png) |
+| ![富文本插件](docs/assets/case/富文本插件.jpg) | ![欢喜商城](docs/assets/case/欢喜商城.png) | ![多么生活](docs/assets/case/多么生活.jpg) | ![全品作业小助手](docs/assets/case/全品作业小助手.jpg) | ![食法查](docs/assets/case/食法查.png) | ![微慕](docs/assets/case/微慕.jpg) |
 
-| 微慕 | 古典文学名著阅读 | 程序员技术之旅 | 典典博客 | Geek 时代 | 备忘录与记事本 |
+| 古典文学名著阅读 | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 典典博客 | [Geek 时代](https://github.com/fuzui/GBlog-wx) | 备忘录与记事本 | 优秀笔记 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![微慕](docs/assets/case/微慕.jpg) | ![古典文学名著阅读](docs/assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](docs/assets/case/程序员技术之旅.jpg) | ![典典博客](docs/assets/case/典典博客.jpg) | ![Geek时代](docs/assets/case/Geek时代.jpg) | ![备忘录与记事本](docs/assets/case/备忘录与记事本.jpg) |
+| ![古典文学名著阅读](docs/assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](docs/assets/case/程序员技术之旅.jpg) | ![典典博客](docs/assets/case/典典博客.jpg) | ![Geek时代](docs/assets/case/Geek时代.jpg) | ![备忘录与记事本](docs/assets/case/备忘录与记事本.jpg) | ![优秀笔记](docs/assets/case/优秀笔记.jpg) |
 
-| 优秀笔记 | 365 刷题 | 同城共享书 | 技术源 share | 周仙神 | 你的代码写的真棒 |
+| 365 刷题 | 同城共享书 | [技术源 share](https://github.com/wangsrGit119/mini-blog-halo) | 周仙神 | 你的代码写的真棒 | 谛否 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![优秀笔记](docs/assets/case/优秀笔记.jpg) | ![365刷题](docs/assets/case/365刷题.jpg) | ![同城共享书](docs/assets/case/同城共享书.jpg) | ![技术源share](docs/assets/case/技术源share.jpg) | ![周仙神](docs/assets/case/周仙神.png) | ![你的代码写的真棒](docs/assets/case/你的代码写的真棒.jpg) |
+| ![365刷题](docs/assets/case/365刷题.jpg) | ![同城共享书](docs/assets/case/同城共享书.jpg) | ![技术源share](docs/assets/case/技术源share.jpg) | ![周仙神](docs/assets/case/周仙神.png) | ![你的代码写的真棒](docs/assets/case/你的代码写的真棒.jpg) | ![谛否](docs/assets/case/谛否.jpg) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 
@@ -229,6 +231,18 @@
   ![支持](docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.4.0 (20220827)
+  1. `A` 增加了 [setPlaybackRate](https://jin-yufeng.gitee.io/mp-html/#/advanced/api#setPlaybackRate) 的 `api`，可以设置音视频的播放速率 [详细](https://github.com/jin-yufeng/mp-html/issues/452)
+  2. `A` 示例小程序代码开源 [详细](https://github.com/jin-yufeng/mp-html-demo)
+  3. `U` 优化 `ready` 事件触发时机，未设置懒加载的情况下基本可以准确触发 [详细](https://github.com/jin-yufeng/mp-html/issues/195)
+  4. `U` `highlight` 插件在编辑状态下不进行高亮处理，便于编辑
+  5. `F` 修复了 `flex` 布局下图片大小可能不正确的问题
+  6. `F` 修复了 `selectable` 属性没有设置 `force` 也可能出现渲染异常的问题
+  7. `F` 修复了表格中的图片大小可能不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/448)
+  8. `F` 修复了含有合并单元格的表格可能无法设置竖直对齐的问题
+  9. `F` 修复了 `editable` 插件在 `scroll-view` 中使用时工具条位置可能不正确的问题
+  10. `F` 修复了 `uni-app` 包 `vue3` 使用 [search](advanced/plugin#search) 插件可能导致错误换行的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/449)
+
 - v2.3.2 (20220813)
   1. `A` 增加 [latex](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin#latex) 插件，可以渲染数学公式 [详细](https://github.com/jin-yufeng/mp-html/pull/447) by [@Zeng-J](https://github.com/Zeng-J)
   2. `U` 优化根节点下有很多标签的长内容渲染速度
@@ -237,16 +251,6 @@
   5. `F` 修复了 `editable` 插件输入连续空格无效的问题
   6. `F` 修复了 `uni-app` 包 `vue3` 图片设置 `inline` 会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/438)
   7. `F` 修复了 `uni-app` 包 `vue3` 使用 `table` 可能报错的问题
-
-- v2.3.1 (20220520)
-  1. `U` `uni-app` 包 `app` 端支持使用本地图片
-  2. `U` 优化了微信小程序 `selectable` 属性在 `ios` 端的处理 [详细](https://jin-yufeng.gitee.io/mp-html/#/basic/prop#selectable)
-  3. `U` 原生包取消样式隔离，部分平台可以直接引入页面样式 [#376](https://github.com/jin-yufeng/mp-html/issues/376)、[详细](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart#externStyle)
-  4. `F` 修复了 `editable` 插件不在顶部时 `tooltip` 位置可能错误的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/430)
-  5. `F` 修复了 `uni-app` 包 `vue3` 运行到微信小程序可能报错丢失内容的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/414)
-  6. `F` 修复了 `uni-app` 包 `vue3` 部分标签可能被错误换行的问题
-  7. `F` 修复了原生包个别情况下可能报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/428)
-  8. `F` 修复了 `editable` 插件 `uni-app` 包的 `app` 端插入视频无法预览的问题
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 
