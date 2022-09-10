@@ -22,7 +22,7 @@ if (config.showLanguageName || config.showLineNumber) {
 }
 
 if (config.copyByLongPress) {
-  build.template = '<rich-text v-if="n.attrs[\'data-content\']" :nodes="[n]" :data-content="n.attrs[\'data-content\']" :data-lang="n.attrs[\'data-lang\']" @longpress="copyCode" />'
+  build.template = '<rich-text v-if="n.attrs&&n.attrs[\'data-content\']" :nodes="[n]" :data-content="n.attrs[\'data-content\']" :data-lang="n.attrs[\'data-lang\']" @longpress="copyCode" />'
   build.methods = {
     copyCode (e) {
       uni.showActionSheet({
