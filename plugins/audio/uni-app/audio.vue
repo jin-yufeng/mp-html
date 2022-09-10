@@ -72,7 +72,7 @@ export default {
   },
   beforeDestroy () {
     this._ctx.destroy()
-    context.remove(this.properties.audioId)
+    context.remove(this.aid)
   },
   onPageShow () {
     if (this.playing && this._ctx.paused) {

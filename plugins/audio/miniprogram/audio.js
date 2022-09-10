@@ -68,7 +68,12 @@ Component({
   // #endif
   detached () {
     this._ctx.destroy()
-    context.remove(this.properties.audioId)
+    // #ifndef MP-ALIPAY
+    context.remove(this.id)
+    // #endif
+    // #ifdef MP_ALIPAY
+    context.remove(this.properties.id)
+    // #endif
   },
   // #ifndef ALIPAY | TOUTIAO
   pageLifetimes: {
