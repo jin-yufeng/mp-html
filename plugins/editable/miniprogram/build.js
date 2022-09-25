@@ -416,6 +416,11 @@ module.exports = {
               }]
             }]
           })
+          // #ifdef MP-TOUTIAO
+          this.selectComponent('#_root', child => {
+            child.root = this
+          })
+          // #endif
         }
         if (!val) {
           this._maskTap()
