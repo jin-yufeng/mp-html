@@ -1,7 +1,7 @@
 # 📖 更新日志 :id=changelog
 
 ## v2.4.0
-发布时间：  
+发布时间：*2022-08-27*  
 主要更新：  
 1. `A` 增加了 [setPlaybackRate](advanced/api#setPlaybackRate) 的 `api`，可以设置音视频的播放速率 [详细](https://github.com/jin-yufeng/mp-html/issues/452)
 2. `A` 示例小程序代码开源 [详细](https://github.com/jin-yufeng/mp-html-demo)

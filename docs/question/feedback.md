@@ -23,7 +23,7 @@
 1. *issue* 方式  
    在 *github* 中提出 [issue](https://github.com/jin-yufeng/mp-html/issues/new/choose)（推荐，解决方案可以给其他人参考）
 2. *QQ* 群方式  
-   加入 *QQ* 交流群 *699734691*，并发送和交流相关问题  
+   加入 *QQ* 交流群 *699734691* 或 *778239129*，并发送和交流相关问题  
 3. 邮箱方式  
    如果不希望公开问题，可以通过邮箱方式联系，发送邮件到 *mp_html@126.com*，邮件格式可参考 [issue 模板](https://github.com/jin-yufeng/mp-html/issues/new/choose)
 
