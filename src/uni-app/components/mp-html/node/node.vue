@@ -303,6 +303,8 @@ export default {
           setTimeout(() => {
             this.root.getRect().then(rect => {
               this.root.$emit('ready', rect)
+            }).catch(() => {
+              this.root.$emit('ready', {})
             })
           }, 350)
         }

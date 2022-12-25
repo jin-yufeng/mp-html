@@ -151,6 +151,8 @@ Component({
           setTimeout(() => {
             this.root.getRect().then(rect => {
               this.root.triggerEvent('ready', rect)
+            }).catch(() => {
+              this.root.triggerEvent('ready', {})
             })
           }, 350)
         }

@@ -341,24 +341,27 @@ Component({
 
       if (this.properties.lazyLoad || this.imgList._unloadimgs < this.imgList.length / 2) {
         // 设置懒加载，每 350ms 获取高度，不变则认为加载完毕
-        let height
+        let height = 0
         const callback = rect => {
+          if (!rect || !rect.height) rect = {}
           // 350ms 总高度无变化就触发 ready 事件
           if (rect.height === height) {
             this.triggerEvent('ready', rect)
           } else {
             height = rect.height
             setTimeout(() => {
-              this.getRect().then(callback)
+              this.getRect().then(callback).catch(callback)
             }, 350)
           }
         }
-        this.getRect().then(callback)
+        this.getRect().then(callback).catch(callback)
       } else {
         // 未设置懒加载，等待所有图片加载完毕
         if (!this.imgList._unloadimgs) {
           this.getRect().then(rect => {
             this.triggerEvent('ready', rect)
+          }).catch(() => {
+            this.triggerEvent('ready', {})
           })
         }
       }
