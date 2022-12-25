@@ -357,7 +357,7 @@ Component({
       } else {
         // 未设置懒加载，等待所有图片加载完毕
         if (!this.imgList._unloadimgs) {
-          this.getRect(rect => {
+          this.getRect().then(rect => {
             this.triggerEvent('ready', rect)
           })
         }
