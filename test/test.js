@@ -16,13 +16,14 @@ test('render', async () => {
     data: {
       containerStyle: '',
       copyLink: true,
+      lazyLoad: true,
       pauseVideo: true,
       previewImg: true,
       useAnchor: true
     },
     template:
       `<scroll-view id="scroll" style="height:100px" scroll-y scroll-top="{{top}}">
-  <mp-html id="article" container-style="{{containerStyle}}" content="{{html}}" domain="https://mp-html.oss-cn-hangzhou.aliyuncs.com" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table use-anchor="{{useAnchor}}">加载中...</mp-html>
+  <mp-html id="article" container-style="{{containerStyle}}" content="{{html}}" domain="https://mp-html.oss-cn-hangzhou.aliyuncs.com" copy-link="{{copyLink}}" loading-img="xxx" error-img="xxx" lazy-load="{{lazyLoad}}" pause-video="{{pauseVideo}}" preview-img="{{previewImg}}" scroll-table use-anchor="{{useAnchor}}">加载中...</mp-html>
 </scroll-view>`,
     usingComponents: {
       'mp-html': mpHtml
@@ -136,6 +137,14 @@ console.log('11')
   comp.instance.setContent('  空格\n换行')
   expect(comp.instance.getText().includes('\n')).toBe(true) // 检查换行是否被保留
 
+  // 无图测试
+  page.setData({
+    lazyLoad: false
+  })
+  await simulate.sleep(50)
+  comp.instance.setContent('<div>Hello world!</div>')
+  simulate.sleep(50)
+
   // 长内容测试
   let content = '<div>1</div>'.repeat(50) + '<div>'
   for (let i = 0; i < 50; i++) {
@@ -234,7 +243,7 @@ test('event', async () => {
   comp.setData({
     loadingImg: ''
   })
-  await simulate.sleep(50)
+  await simulate.sleep(350)
   node.instance.imgLoad({
     target: {
       dataset: {
@@ -287,6 +296,11 @@ test('event', async () => {
   }
   // 视频倍速播放
   comp.instance.setPlaybackRate(1.5)
+  node.instance.play({
+    target: {
+      id: 'v2'
+    }
+  })
   // 暂停视频播放
   comp.instance.pauseMedia()
   // 模拟视频出错

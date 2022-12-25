@@ -204,17 +204,17 @@
 
 ## 使用案例
 
-| [官方示例](https://github.com/jin-yufeng/mp-html-demo) | 欢喜商城 | 多么生活 | 全品作业小助手 | 食法查 | 微慕 |
+| [官方示例](https://github.com/jin-yufeng/mp-html-demo) | 欢喜商城 | 多么生活 | 食法查 | 微慕 | 古典文学名著阅读 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![富文本插件](docs/assets/case/富文本插件.jpg) | ![欢喜商城](docs/assets/case/欢喜商城.png) | ![多么生活](docs/assets/case/多么生活.jpg) | ![全品作业小助手](docs/assets/case/全品作业小助手.jpg) | ![食法查](docs/assets/case/食法查.png) | ![微慕](docs/assets/case/微慕.jpg) |
+| ![富文本插件](docs/assets/case/富文本插件.jpg) | ![欢喜商城](docs/assets/case/欢喜商城.png) | ![多么生活](docs/assets/case/多么生活.jpg) | ![食法查](docs/assets/case/食法查.png) | ![微慕](docs/assets/case/微慕.jpg) | ![古典文学名著阅读](docs/assets/case/古典文学名著阅读.jpg) |
 
-| 古典文学名著阅读 | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 典典博客 | [Geek 时代](https://github.com/fuzui/GBlog-wx) | 备忘录与记事本 | 优秀笔记 |
+| [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 典典博客 | 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![古典文学名著阅读](docs/assets/case/古典文学名著阅读.jpg) | ![程序员技术之旅](docs/assets/case/程序员技术之旅.jpg) | ![典典博客](docs/assets/case/典典博客.jpg) | ![Geek时代](docs/assets/case/Geek时代.jpg) | ![备忘录与记事本](docs/assets/case/备忘录与记事本.jpg) | ![优秀笔记](docs/assets/case/优秀笔记.jpg) |
+| ![程序员技术之旅](docs/assets/case/程序员技术之旅.jpg) | ![典典博客](docs/assets/case/典典博客.jpg) | ![备忘录与记事本](docs/assets/case/备忘录与记事本.jpg) | ![优秀笔记](docs/assets/case/优秀笔记.jpg) | ![365刷题](docs/assets/case/365刷题.jpg) | ![同城共享书](docs/assets/case/同城共享书.jpg) |
 
-| 365 刷题 | 同城共享书 | [技术源 share](https://github.com/wangsrGit119/mini-blog-halo) | 周仙神 | 你的代码写的真棒 | 谛否 |
+| [技术源 share](https://github.com/wangsrGit119/mini-blog-halo) | 周仙神 | 你的代码写的真棒 | 谛否 | 小莫唐尼 | [模版演示](https://github.com/zhihuifanqiechaodan/miniprogram-template) |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![365刷题](docs/assets/case/365刷题.jpg) | ![同城共享书](docs/assets/case/同城共享书.jpg) | ![技术源share](docs/assets/case/技术源share.jpg) | ![周仙神](docs/assets/case/周仙神.png) | ![你的代码写的真棒](docs/assets/case/你的代码写的真棒.jpg) | ![谛否](docs/assets/case/谛否.jpg) |
+| ![技术源share](docs/assets/case/技术源share.jpg) | ![周仙神](docs/assets/case/周仙神.png) | ![你的代码写的真棒](docs/assets/case/你的代码写的真棒.jpg) | ![谛否](docs/assets/case/谛否.jpg) | ![小莫唐尼](docs/assets/case/小莫唐尼.png) | ![MiniProgram模版演示](docs/assets/case/MiniProgram模版演示.jpg) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 
@@ -233,6 +233,16 @@
   ![支持](docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.4.1 (20221225)
+  1. `F` 修复了没有图片时 `ready` 事件可能不触发的问题
+  2. `F` 修复了加载过程中可能出现 `Root label not found` 错误的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/470)
+  3. `F` 修复了 `audio` 插件退出页面可能会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/457)
+  4. `F` 修复了 `uni-app` 包 `vue3` 运行到 `app` 在 `HBuilder X 3.6.10` 以上报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/480)
+  5. `F` 修复了原生包链接内有图片时可能错误换行的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/464)
+  6. `F` 修复了 `uni-app` 包 `nvue` 端链接中包含 `%22` 时可能无法显示的问题
+  7. `F` 修复了 `uni-app` 包 `vue3` 使用 `highlight` 插件可能报错的问题
+  8. `F` 修复了头条小程序使用 `editable` 插件内容为空时点击会报错的问题
+
 - v2.4.0 (20220827)
   1. `A` 增加了 [setPlaybackRate](https://jin-yufeng.gitee.io/mp-html/#/advanced/api#setPlaybackRate) 的 `api`，可以设置音视频的播放速率 [详细](https://github.com/jin-yufeng/mp-html/issues/452)
   2. `A` 示例小程序代码开源 [详细](https://github.com/jin-yufeng/mp-html-demo)
@@ -244,15 +254,6 @@
   8. `F` 修复了含有合并单元格的表格可能无法设置竖直对齐的问题
   9. `F` 修复了 `editable` 插件在 `scroll-view` 中使用时工具条位置可能不正确的问题
   10. `F` 修复了 `uni-app` 包 `vue3` 使用 [search](advanced/plugin#search) 插件可能导致错误换行的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/449)
-
-- v2.3.2 (20220813)
-  1. `A` 增加 [latex](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin#latex) 插件，可以渲染数学公式 [详细](https://github.com/jin-yufeng/mp-html/pull/447) by [@Zeng-J](https://github.com/Zeng-J)
-  2. `U` 优化根节点下有很多标签的长内容渲染速度
-  3. `U` `highlight` 插件适配 `lang-xxx` 格式
-  4. `F` 修复了 `table` 标签设置 `border` 属性后可能无法修改边框样式的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/439) by [@zouxingjie](https://github.com/zouxingjie)
-  5. `F` 修复了 `editable` 插件输入连续空格无效的问题
-  6. `F` 修复了 `uni-app` 包 `vue3` 图片设置 `inline` 会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/438)
-  7. `F` 修复了 `uni-app` 包 `vue3` 使用 `table` 可能报错的问题
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 

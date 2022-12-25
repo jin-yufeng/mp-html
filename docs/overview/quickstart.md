@@ -181,7 +181,7 @@
 其他框架没有专用包，但也可以引入对应平台的原生包使用，具体方法参考各框架官方文档    
 
 - taro  
-  [https://taro-docs.jd.com/taro/docs/hybrid#使用原生组件](https://taro-docs.jd.com/taro/docs/hybrid#%E4%BD%BF%E7%94%A8%E5%8E%9F%E7%94%9F%E7%BB%84%E4%BB%B6)  
+  [https://taro-docs.jd.com/docs/hybrid#使用原生组件](https://taro-docs.jd.com/docs/hybrid#%E4%BD%BF%E7%94%A8%E5%8E%9F%E7%94%9F%E7%BB%84%E4%BB%B6)  
 
   !> 在 *taro2* 中使用请使用 [示例项目](#demo) 中的非压缩组件包，否则可能出现异常，详见 [#301](https://github.com/jin-yufeng/mp-html/issues/301)
 

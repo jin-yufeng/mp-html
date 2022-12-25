@@ -139,7 +139,7 @@ export default {
   },
   components: {
 
-    // #ifndef H5 && VUE3
+    // #ifndef (H5 || APP-PLUS) && VUE3
     node
     // #endif
   },
@@ -305,6 +305,8 @@ export default {
           setTimeout(() => {
             this.root.getRect().then(rect => {
               this.root.$emit('ready', rect)
+            }).catch(() => {
+              this.root.$emit('ready', {})
             })
           }, 350)
         }

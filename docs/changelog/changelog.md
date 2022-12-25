@@ -1,5 +1,17 @@
 # 📖 更新日志 :id=changelog
 
+## v2.4.1
+发布时间：*2022-12-25*  
+主要更新：
+1. `F` 修复了没有图片时 [ready](basic/event#ready) 事件可能不触发的问题
+2. `F` 修复了加载过程中可能出现 `Root label not found` 错误的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/470)
+3. `F` 修复了 [audio](advanced/plugin#audio) 插件退出页面可能会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/457)
+4. `F` 修复了 `uni-app` 包 `vue3` 运行到 `app` 在 `HBuilder X 3.6.10` 以上报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/480)
+5. `F` 修复了原生包链接内有图片时可能错误换行的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/464)
+6. `F` 修复了 `uni-app` 包 `nvue` 端链接中包含 `%22` 时可能无法显示的问题
+7. `F` 修复了 `uni-app` 包 `vue3` 使用 [highlight](advanced/plugin#highlight) 插件可能报错的问题
+8. `F` 修复了头条小程序使用 [editable](advanced/plugin#editable) 插件内容为空时点击会报错的问题
+
 ## v2.4.0
 发布时间：*2022-08-27*  
 主要更新：  

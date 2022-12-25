@@ -186,6 +186,8 @@
 可通过 [issue](https://github.com/jin-yufeng/mp-html/issues/new/choose) 、插件问答或发送邮件到 [mp_html@126.com](mailto:mp_html@126.com) 提问，不建议在评论区提问（不方便回复）  
 提问请严格按照 [issue 模板](https://github.com/jin-yufeng/mp-html/issues/new/choose) ，描述清楚使用环境、`html` 内容或可复现的 `demo` 项目以及复现方式，对于 **描述不清**、**无法复现** 或重复的问题将不予回复  
 
-欢迎加入 `QQ` 交流群：`699734691`  
+欢迎加入 `QQ` 交流群：  
+群1（已满）：`699734691`  
+群2：`778239129`  
 
 查看 [问题反馈](https://jin-yufeng.gitee.io/mp-html/#/question/feedback) 了解更多
