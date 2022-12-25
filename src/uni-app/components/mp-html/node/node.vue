@@ -137,7 +137,7 @@ export default {
     opts: Array
   },
   components: {
-    // #ifndef H5 && VUE3
+    // #ifndef (H5 || APP-PLUS) && VUE3
     node
     // #endif
   },
