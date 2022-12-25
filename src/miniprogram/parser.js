@@ -425,9 +425,6 @@ Parser.prototype.onOpenTag = function (selfClose) {
         if (!attrs.ignore || node.webp || attrs.src.includes('cloud://')) {
           for (let i = this.stack.length; i--;) {
             const item = this.stack[i]
-            if (item.name === 'a') {
-              node.a = item.attrs
-            }
             if (item.name === 'table' && !node.webp && !attrs.src.includes('cloud://')) {
               if (!styleObj.display || styleObj.display.includes('inline')) {
                 node.t = 'inline-block'
@@ -459,7 +456,11 @@ Parser.prototype.onOpenTag = function (selfClose) {
                 item.attrs.style += ';max-width:100%'
               }
             }
-            item.c = 1
+            if (item.name === 'a') {
+              node.a = item.attrs
+            } else {
+              item.c = 1
+            }
           }
           node.i = this.imgList.length
           let src = attrs['original-src'] || attrs.src
