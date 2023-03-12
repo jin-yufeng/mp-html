@@ -556,8 +556,11 @@ function getTop(e) {
           success: tapIndex => {
             if (items[tapIndex] === '换图') {
               // 换图
+              const getImgUrl = (src) => {
+                return this.root.domain ? (this.root.domain + src) : src
+              }
               this.root.getSrc('img', node.attrs.src || '').then(url => {
-                this.root._editVal(this.opts[7] + '.' + i + '.attrs.src', node.attrs.src, url instanceof Array ? url[0] : url, true)
+                this.root._editVal(this.opts[7] + '.' + i + '.attrs.src', node.attrs.src, url instanceof Array ? getImgUrl(url[0]) : getImgUrl(url), true)
               }).catch(() => { })
             } else if (items[tapIndex] === '宽度') {
               // 更改宽度
