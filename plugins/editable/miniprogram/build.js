@@ -566,7 +566,9 @@ module.exports = {
           .replace('<video', '<video bindtap="mediaTap"')
           .replace('audio ', 'audio bindtap="mediaTap" ')
       } else if (file.path.includes('node.js') && file.extname === '.js') {
-        content = `function getTop(e) {
+        content = `
+        const Parser = require('./parser')
+        function getTop(e) {
   let top
   // #ifndef MP-ALIPAY
   top = e.detail.y
@@ -638,11 +640,10 @@ module.exports = {
           success: tapIndex => {
             if (items[tapIndex] === '换图') {
               // 换图
-              const getImgUrl = (src) => {
-                return this.root.domain ? (this.root.domain + src) : src
-              }
+              
+              const parser = new Parser(this.root)
               this.root.getSrc('img', node.attrs.src || '').then(url => {
-                this.root._editVal('nodes[' + (this.properties.opts[7] + i).replace(/_/g, '].children[') + '].attrs.src', node.attrs.src, url instanceof Array ? getImgUrl(url[0]) : getImgUrl(url), true)
+                this.root._editVal('nodes[' + (this.properties.opts[7] + i).replace(/_/g, '].children[') + '].attrs.src', node.attrs.src, parser.getUrl(url instanceof Array ? url[0] : url), true)
               }).catch(() => { })
             } else if (items[tapIndex] === '宽度') {
               // 更改宽度
