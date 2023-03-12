@@ -567,7 +567,7 @@ module.exports = {
           .replace('audio ', 'audio bindtap="mediaTap" ')
       } else if (file.path.includes('node.js') && file.extname === '.js') {
         content = `
-        const Parser = require('./parser')
+        const Parser = require('../parser')
         function getTop(e) {
   let top
   // #ifndef MP-ALIPAY
