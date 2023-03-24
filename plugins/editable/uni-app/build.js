@@ -490,6 +490,7 @@ module.exports = {
             .replace('audio ', 'audio @tap="mediaTap" ')
             .replace('<script>',
               `<script>
+import Parser from '../parser'
 function getTop(e) {
   let top
   // #ifdef H5 || APP-PLUS
@@ -545,6 +546,7 @@ function getTop(e) {
         const i = e.currentTarget.dataset.i
         const node = this.childs[i]
         const items = this.root._getItem(node)
+        const parser = new Parser(this.root)
         this.root._edit = this
         this.i = i
         this.root._maskTap()
@@ -557,7 +559,7 @@ function getTop(e) {
             if (items[tapIndex] === '换图') {
               // 换图
               this.root.getSrc('img', node.attrs.src || '').then(url => {
-                this.root._editVal(this.opts[7] + '.' + i + '.attrs.src', node.attrs.src, url instanceof Array ? url[0] : url, true)
+                this.root._editVal(this.opts[7] + '.' + i + '.attrs.src', node.attrs.src, parser.getUrl(url instanceof Array ? url[0] : url), true)
               }).catch(() => { })
             } else if (items[tapIndex] === '宽度') {
               // 更改宽度
@@ -593,12 +595,12 @@ function getTop(e) {
               this.root.getSrc('link', node.a ? node.a.href : '').then(url => {
                 // 如果有 a 标签则替换 href
                 if (node.a) {
-                  this.root._editVal(this.opts[7] + '.' + i + '.a.href', node.a.href, url, true)
+                  this.root._editVal(this.opts[7] + '.' + i + '.a.href', node.a.href, parser.getUrl(url), true)
                 } else {
                   const link = {
                     name: 'a',
                     attrs: {
-                      href: url
+                      href: parser.getUrl(url)
                     },
                     children: [node]
                   }
@@ -612,7 +614,7 @@ function getTop(e) {
             } else if (items[tapIndex] === '预览图') {
               // 设置预览图链接
               this.root.getSrc('img', node.attrs['original-src'] || '').then(url => {
-                this.root._editVal(this.opts[7] + '.' + i + '.attrs.original-src', node.attrs['original-src'], url instanceof Array ? url[0] : url, true)
+                this.root._editVal(this.opts[7] + '.' + i + '.attrs.original-src', node.attrs['original-src'], parser.getUrl(url instanceof Array ? url[0] : url), true)
                 uni.showToast({
                   title: '成功'
                 })
