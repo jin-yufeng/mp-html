@@ -293,6 +293,7 @@ Parser.prototype.onTagName = function (name) {
   this.tagName = this.xml ? name : name.toLowerCase()
   if (this.tagName === 'svg') {
     this.xml = (this.xml || 0) + 1 // svg 标签内大小写敏感
+    config.ignoreTags.style = undefined // svg 标签内 style 可用
   }
 }
 
@@ -635,6 +636,7 @@ Parser.prototype.popNode = function () {
     }
     node.children = undefined
     this.xml = false
+    config.ignoreTags.style = true
     return
   }
 
