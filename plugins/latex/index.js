@@ -18,8 +18,9 @@ Latex.prototype.onParse = function (node, vm) {
       // 偶数
       if ((index + 1) % 2 === 0) {
         return {
-          name: 'span',
+          name: 'div',
           attrs: {},
+          f: 'display:inline-block',
           children: parse.default(str)
         }
       }
@@ -27,7 +28,7 @@ Latex.prototype.onParse = function (node, vm) {
         type: 'text',
         text: str
       }
-    })
+    }).filter(node => node.name || node.text)
     delete node.text
   }
 }
