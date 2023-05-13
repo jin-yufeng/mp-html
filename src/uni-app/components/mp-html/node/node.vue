@@ -297,7 +297,7 @@ export default {
      * @description 检查是否所有图片加载完毕
      */
     checkReady () {
-      if (!this.root.lazyLoad) {
+      if (this.root && !this.root.lazyLoad) {
         this.root._unloadimgs -= 1
         if (!this.root._unloadimgs) {
           setTimeout(() => {
