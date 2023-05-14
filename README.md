@@ -233,6 +233,15 @@
   ![支持](docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.4.2 (20230514)
+  1. `A` `editable` 插件支持修改文字颜色 [详细](https://github.com/jin-yufeng/mp-html/issues/254)
+  2. `F` 修复了 `svg` 中有 `style` 不生效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/505)
+  3. `F` 修复了 `uni-app` 包使用旧版编译器可能报错 `Bad attr nodes` 的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/472)
+  4. `F` 修复了 `uni-app` 包 `app` 端可能出现无法读取 `lazyLoad` 的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/513)
+  5. `F` 修复了 `editable` 插件在点击换图时未拼接 `domain` 的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/497) by [@TwoKe945](https://github.com/TwoKe945)
+  6. `F` 修复了 `latex` 插件部分情况下不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/515) 
+  7. `F` 修复了 `editable` 插件点击音视频时其他标签框不消失的问题
+
 - v2.4.1 (20221225)
   1. `F` 修复了没有图片时 `ready` 事件可能不触发的问题
   2. `F` 修复了加载过程中可能出现 `Root label not found` 错误的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/470)
@@ -242,18 +251,6 @@
   6. `F` 修复了 `uni-app` 包 `nvue` 端链接中包含 `%22` 时可能无法显示的问题
   7. `F` 修复了 `uni-app` 包 `vue3` 使用 `highlight` 插件可能报错的问题
   8. `F` 修复了头条小程序使用 `editable` 插件内容为空时点击会报错的问题
-
-- v2.4.0 (20220827)
-  1. `A` 增加了 [setPlaybackRate](https://jin-yufeng.gitee.io/mp-html/#/advanced/api#setPlaybackRate) 的 `api`，可以设置音视频的播放速率 [详细](https://github.com/jin-yufeng/mp-html/issues/452)
-  2. `A` 示例小程序代码开源 [详细](https://github.com/jin-yufeng/mp-html-demo)
-  3. `U` 优化 `ready` 事件触发时机，未设置懒加载的情况下基本可以准确触发 [详细](https://github.com/jin-yufeng/mp-html/issues/195)
-  4. `U` `highlight` 插件在编辑状态下不进行高亮处理，便于编辑
-  5. `F` 修复了 `flex` 布局下图片大小可能不正确的问题
-  6. `F` 修复了 `selectable` 属性没有设置 `force` 也可能出现渲染异常的问题
-  7. `F` 修复了表格中的图片大小可能不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/448)
-  8. `F` 修复了含有合并单元格的表格可能无法设置竖直对齐的问题
-  9. `F` 修复了 `editable` 插件在 `scroll-view` 中使用时工具条位置可能不正确的问题
-  10. `F` 修复了 `uni-app` 包 `vue3` 使用 [search](advanced/plugin#search) 插件可能导致错误换行的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/449)
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 

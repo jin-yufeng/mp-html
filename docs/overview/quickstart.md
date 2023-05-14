@@ -185,6 +185,8 @@
 
   !> 在 *taro2* 中使用请使用 [示例项目](#demo) 中的非压缩组件包，否则可能出现异常，详见 [#301](https://github.com/jin-yufeng/mp-html/issues/301)
 
+  !> 在 *taro3* 的 *vue3* 中使用时需要修改 *content* 属性的属性名或使用 [setContent](advanced/api#setContent) 方法设置内容，详见 [taro#13146](https://github.com/NervJS/taro/issues/13146)
+
   ?> 在 *taro* 中使用时属性名需用驼峰写法，如 *copy-link* 属性应写作 *copyLink*  
   
   ?> 需要 *taro* 专用包的开发者欢迎参与 [需求调研](https://github.com/jin-yufeng/mp-html/issues/374)

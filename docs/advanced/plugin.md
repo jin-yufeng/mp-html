@@ -87,13 +87,13 @@
 | 图片 | 更换链接、调整宽度、设置成超链接（[2.0.4+](changelog/changelog#v204)）、设置预览图链接、禁用预览、删除 |
 | 链接 | 更换链接、删除 |
 | 音视频 | 设置封面、设置循环播放、设置自动播放（[2.2.0+](changelog/changelog#v220)）、删除 |
-| 普通标签 | 设置字体大小、斜体、粗体、下划线（[2.0.4+](changelog/changelog#v204)）、居中、缩进、删除 |
+| 普通标签 | 设置字体大小、颜色（[2.4.2+](changelog/changelog#v242)）、斜体、粗体、下划线（[2.0.4+](changelog/changelog#v204)）、居中、缩进、删除 |
 
 ?> [2.2.1](changelog/changelog#v221) 版本起所有标签支持上下移动操作，但仅限同级标签间移动，即在有同级标签且非第一个（或最后一个）时可以上移（或下移）
 
 ?> 在支付宝小程序中使用时需要在页面样式中添加 *page { position: relative; }* 避免 *tooltip* 错位
 
-?> 菜单项可以通过编辑 *plugins/editable/config.js* 进行修改，仅可以删减或调整顺序，添加或更名无效
+?> 菜单项可以通过编辑 *plugins/editable/config.js* 进行修改，仅可以删减或调整顺序，添加或更名无效（颜色设置除外）
 
 [组件实例](advanced/api#getCompent) 上提供了以下方法（*editable* 属性为 *true* 时才可以调用）：  
 
@@ -348,6 +348,8 @@ function search (key) {
 同时，其可以被 [pause-video](basic/prop#pause-video) 属性控制  
 
 !> 本插件仅用于将官方 [腾讯视频插件](https://github.com/tvfe/txv-miniprogram-plugin) 应用于本组件，使用前请确认已经成功申请使用该插件并按要求在小程序 *app.json* 中配置完成（*uni-app* 中的配置方法可以参考 [#103](https://github.com/jin-yufeng/mp-html/issues/103#issuecomment-654586246)），否则可能报错 **This application has not registered any plugins yet** 且无法生效  
+
+?> 腾讯视频插件 [v2](https://github.com/tvfe/txv-miniprogram-plugin) 默认自动播放，[v1](https://github.com/tvfe/txv-miniprogram-plugin/blob/master/archieve/readme.md) 不会，可按需选择  
 
 ## img-cache
 功能：图片本地缓存  

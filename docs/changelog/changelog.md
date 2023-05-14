@@ -1,5 +1,16 @@
 # 📖 更新日志 :id=changelog
 
+## v2.4.2
+发布时间：*2023-05-14*  
+主要更新：
+1. `A` [editable](advanced/plugin#editable) 插件支持修改文字颜色 [详细](https://github.com/jin-yufeng/mp-html/issues/254)
+2. `F` 修复了 `svg` 中有 `style` 不生效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/505)
+3. `F` 修复了 `uni-app` 包使用旧版编译器可能报错 `Bad attr nodes` 的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/472)
+4. `F` 修复了 `uni-app` 包 `app` 端可能出现无法读取 `lazyLoad` 的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/513)
+5. `F` 修复了 [editable](advanced/plugin#editable) 插件在点击换图时未拼接 [domain](basic/prop#domain) 的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/497) by [@TwoKe945](https://github.com/TwoKe945)
+6. `F` 修复了 [latex](advanced/plugin#latex) 插件部分情况下不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/515) 
+7. `F` 修复了 [editable](advanced/plugin#editable) 插件点击音视频时其他标签框不消失的问题
+
 ## v2.4.1
 发布时间：*2022-12-25*  
 主要更新：
