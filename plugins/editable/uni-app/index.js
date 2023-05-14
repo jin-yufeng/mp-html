@@ -90,6 +90,9 @@ function Editable (vm) {
   vm._getItem = function (node, up, down) {
     let items
     let i
+    if (node === 'color') {
+      return config.color
+    }
     if (node.name === 'img') {
       items = config.img.slice(0)
       if (!vm.getSrc) {
@@ -180,6 +183,19 @@ function Editable (vm) {
   }
 
   /**
+   * @description 显示颜色选择
+   * @param {object} obj
+   * @private
+   */
+  vm._color = function (obj) {
+    vm.$set(vm, 'color', {
+      items: obj.items,
+      top: obj.top
+    })
+    vm._colorcb = obj.success
+  }
+
+  /**
    * @description 点击蒙版
    * @private
    */
@@ -193,6 +209,9 @@ function Editable (vm) {
     }
     if (vm.slider) {
       vm.$set(vm, 'slider', null)
+    }
+    if (vm.color) {
+      vm.$set(vm, 'color', null)
     }
   }
 

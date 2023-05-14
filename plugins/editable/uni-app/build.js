@@ -214,6 +214,19 @@ module.exports = {
                   this.root._editVal(`${parent.opts[7]}.${i}.attrs.style`, style, parent.childs[i].attrs.style)
                 }
               })
+            } else if (items[tapIndex] === '颜色') {
+              // 改变文字颜色
+              const items = this.root._getItem('color')
+              this.root._color({
+                top: getTop(e),
+                items,
+                success: tapIndex => {
+                  const style = parent.childs[i].attrs.style || ''
+                  const value = style.match(/;color:([^;]+)/)
+                  parent.changeStyle('color', i, items[tapIndex], value ? value[1] : undefined)
+                  this.root._editVal(`${parent.opts[7]}.${i}.attrs.style`, style, parent.childs[i].attrs.style)
+                }
+              })
             } else if (items[tapIndex] === '上移' || items[tapIndex] === '下移') {
               const arr = parent.childs.slice(0)
               const item = arr[i]
@@ -348,13 +361,19 @@ module.exports = {
     <view v-if="slider" class="_slider" :style="'top:'+slider.top+'px'">
       <slider :value="slider.value" :min="slider.min" :max="slider.max" handle-size="14" block-size="14" show-value activeColor="white" style="padding:3px" @changing="_sliderChanging" @change="_sliderChange" />
     </view>
+    <view v-if="color" class="_tooltip_contain" :style="'top:'+color.top+'px'">
+      <view class="_tooltip" style="overflow-y: hidden;">
+        <view v-for="(item, index) in color.items" v-bind:key="index" class="_color_item" :style="'background-color:'+item" :data-i="index" @tap="_colorTap"></view>
+      </view>
+    </view>
   </view>
 </template>`)
           // 添加 data
           .replace(/data\s*\(\)\s*{\s*return\s*{/, `data() {
     return {
       tooltip: null,
-      slider: null,`)
+      slider: null,
+      color: null,`)
           // 添加 editable 属性
           .replace(/props\s*:\s*{/, `props: {
     editable: Boolean,
@@ -370,7 +389,7 @@ module.exports = {
           // 处理各类弹窗的事件
           .replace(/methods\s*:\s*{/, `methods: {
     _containTap() {
-      if (!this._lock && !this.slider) {
+      if (!this._lock && !this.slider && !this.color) {
         this._edit = undefined
         this._maskTap()
       }
@@ -384,6 +403,10 @@ module.exports = {
     },
     _sliderChange(e) {
       this._slidercb(e.detail.value)
+    },
+    _colorTap(e) {
+      this._colorcb(e.currentTarget.dataset.i)
+      this.$set(this, 'color', null)
     },`)
           // 工具弹窗的样式
           .replace('</style>', `
@@ -415,6 +438,15 @@ module.exports = {
   line-height: 30px;
   background-color: black;
   color: white;
+}
+
+._color_item {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin: 5px 2vw;
+  border:1px solid #dfe2e5;
+  border-radius: 50%;
 }
 
 /* 图片宽度滚动条 */

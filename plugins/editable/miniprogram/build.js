@@ -252,6 +252,19 @@ module.exports = {
                   this.root._editVal('nodes[' + (this.properties.opts[7] + i).replace(/_/g, '].children[') + '].attrs.style', style, this.getNode(i).attrs.style)
                 }
               })
+            } else if (items[tapIndex] === '颜色') {
+              // 改变文字颜色
+              const items = this.root._getItem('color')
+              this.root._color({
+                top: getTop(e),
+                items,
+                success: tapIndex => {
+                  const style = node.attrs.style || ''
+                  const value = style.match(/;color:([^;]+)/)
+                  this.changeStyle('color', i, items[tapIndex], value ? value[1] : undefined)
+                  this.root._editVal('nodes[' + (this.properties.opts[7] + i).replace(/_/g, '].children[') + '].attrs.style', style, this.getNode(i).attrs.style)
+                }
+              })
             } else if (items[tapIndex] === '上移' || items[tapIndex] === '下移') {
               const arr = siblings.slice(0)
               const item = arr[j]
@@ -396,6 +409,11 @@ module.exports = {
   <view wx:if="{{slider}}" class="_slider" style="top:{{slider.top}}px">
     <slider value="{{slider.value}}" min="{{slider.min}}" max="{{slider.max}}" block-size="14" show-value activeColor="white" mp-alipay:style="padding:10px" bindchanging="_sliderChanging" bindchange="_sliderChange" />
   </view>
+  <view wx:if="{{color}}" class="_tooltip_contain" style="top:{{color.top}}px">
+    <view class="_tooltip" style="overflow-y: hidden;">
+      <view wx:for="{{color.items}}" wx:key="index" class="_color_item" style="background-color:{{item}}" data-i="{{index}}" bindtap="_colorTap"></view>
+    </view>
+  </view>
 </view>`)
       } else if (file.path.includes('miniprogram' + path.sep + 'index.js')) {
         // 添加 editable 属性，发生变化时重新解析
@@ -452,7 +470,7 @@ module.exports = {
           // 处理各类弹窗的事件
           .replace(/methods\s*:\s*{/, `methods: {
     _containTap() {
-      if (!this._lock && !this.data.slider) {
+      if (!this._lock && !this.data.slider && !this.data.color) {
         this._edit = undefined
         this._maskTap()
       }
@@ -468,6 +486,12 @@ module.exports = {
     },
     _sliderChange(e) {
       this._slidercb(e.detail.value)
+    },
+    _colorTap(e) {
+      this._colorcb(e.currentTarget.dataset.i)
+      this.setData({
+        color: null
+      })
     },`)
       } else if (file.path.includes('miniprogram' + path.sep + 'index.wxss')) {
         // 工具弹窗的样式
@@ -499,6 +523,15 @@ module.exports = {
   line-height: 30px;
   background-color: black;
   color: white;
+}
+
+._color_item {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin: 5px 2vw;
+  border:1px solid #dfe2e5;
+  border-radius: 50%;
 }
 
 /* 图片宽度滚动条 */
