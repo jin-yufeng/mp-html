@@ -284,6 +284,7 @@ module.exports = {
         const i = e.target.dataset.i
         const node = this.childs[i]
         const items = this.root._getItem(node)
+        this.root._maskTap()
         this.root._edit = this
         this.i = i
         this.root._tooltip({
