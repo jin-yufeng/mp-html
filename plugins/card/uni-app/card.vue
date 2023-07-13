@@ -14,15 +14,28 @@
     // import context from './context';
     export default {
         props: {
-            mode: [Number, String],
+            mode: {
+                type: [Number, String],
+                default: "0",
+            },
             type: [Number, String],
             oid: String,
             src: String,
             title: String,
             desc: String,
             url: String,
-            color: String,
-            bgColor: String
+            color: {
+                type: String,
+                default: "#000"
+            },
+            bgColor: {
+                type: String,
+                default: "#a4d0ff"
+            },
+            border: {
+                type: String,
+                default: "1px solid #FFF"
+            }
         },
         data() {
             return {
@@ -33,6 +46,7 @@
             customStyle() {
                 return {
                     "background-color": this.bgColor,
+                    "border": this.border,
                     "color": this.color
                 } 
             }
@@ -91,13 +105,6 @@
         
         padding: 20rpx 0 20rpx 10rpx;
         border-radius: 12rpx;
-        
-        // color: #323233;
-        @include _border(cal-main-color);
-        @include _color(cal-reverse-color);
-        // background-color: #fff;
-        @include _background_color("cal-theme-light-color");
-        @include _border_bottom_color("cal-theme-color");
         
         &-img {
             width: 96rpx;
