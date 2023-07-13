@@ -1,5 +1,5 @@
 <template>
-    <view class="card" @click="onClick" :style="customStyle" :data-i="$attrs['data-i']">
+    <view class="card" @click="onClick" :style="[customStyle]" :data-i="$attrs['data-i']">
         <image class="card-img" mode="aspectFill" :src="src" />
         <view class="text-wrap text-wrap-width" v-if="!!desc">
             <view class="title one-t">{{title}}</view>
