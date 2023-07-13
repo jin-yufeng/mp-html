@@ -48,7 +48,9 @@
         methods: {
             onClick(e) {
                 // this.$emit("onClick", this.type, this.oid);
-                this.mode == 1 && uni.navigateTo({url: this.url})
+                if(this.url != null && this.url != undefined && this.url.trim().length > 6) {
+                    this.mode == 1 && uni.navigateTo({url: this.url})
+                }
                 this.$emit("onClick", e)
             },
         }
