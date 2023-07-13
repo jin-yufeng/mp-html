@@ -1,5 +1,5 @@
 <template>
-	<view v-if="controls" class="_contain">
+	<view v-if="controls" @click="onClick" class="_contain">
     <!-- 海报和按钮 -->
 		<view class="_poster" :style="'background-image:url('+poster+')'">
 			<view class="_button" @tap="_buttonTap">
@@ -130,6 +130,9 @@ export default {
     _seeked (e) {
       this.seek(e.detail.value / 100 * this._ctx.duration)
       this.lastTime = undefined
+    },
+    onClick(e) {
+        this.$emit("onClick", e);
     }
   }
 }

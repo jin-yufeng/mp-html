@@ -1,8 +1,8 @@
 /**
  * @fileoverview editable 插件
  */
-const config = require('./config')
-const Parser = require('../parser')
+import config from './config'
+import Parser from '../parser'
 
 function Editable (vm) {
   this.vm = vm
@@ -135,8 +135,6 @@ function Editable (vm) {
       if (node.attrs.autoplay && i !== -1) {
         items[i] = '不自动播放'
       }
-    } else if (node.name === 'card') {
-      items = config.card.slice(0);
     } else {
       items = config.node.slice(0)
     }
@@ -550,4 +548,4 @@ Editable.prototype.onParse = function (node) {
   }
 }
 
-module.exports = Editable
+export default Editable

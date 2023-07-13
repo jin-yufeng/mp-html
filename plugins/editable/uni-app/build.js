@@ -327,6 +327,37 @@ module.exports = {
         }, 50)
       }
     },
+    
+    /**
+     * @description 自定义Node被点击
+     * @param {Event} e
+     */
+    nodeClick (e, index) {
+      if (this.opts[5]) {
+        const i = index || e.currentTarget.dataset.i
+        const node = this.childs[i]
+        const items = this.root._getItem(node);
+        this.root._maskTap()
+        this.root._edit = this
+        this.i = i
+        this.root._tooltip({
+          top: e.currentTarget.offsetTop - 30,
+          items,
+          success: tapIndex => {
+            switch (items[tapIndex]) {
+              case '删除':
+                this.remove(i)
+                break
+            }
+          }
+        })
+        // 避免上层出现点击态
+        this.root._lock = true
+        setTimeout(() => {
+          this.root._lock = false
+        }, 50)
+      }
+    },
     /**
      * 改变样式
      * @param {String} name 属性名
@@ -521,6 +552,7 @@ module.exports = {
             .replace('v-else-if="n.html"', 'v-else-if="n.html" :data-i="i" @tap="mediaTap"')
             .replace('<video', '<video :show-center-play-btn="!opts[5]" @tap="mediaTap"')
             .replace('audio ', 'audio @tap="mediaTap" ')
+            .replace('card ', 'card @onClick="nodeClick($event, i)" ')
             .replace('<script>',
               `<script>
 import Parser from '../parser'
