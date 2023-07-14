@@ -12,22 +12,13 @@ Card.prototype.onUpdate = function () {
 }
 
 Card.prototype.onParse = function (node) {
-  // if (node.name === 'card') {
-  //   if (!node.attrs.oid) {
-  //     node.attrs.oid = 'a' + index++
-  //   }
-  //   this.cards.push(node.attrs.oid)
-  // }
+  if (node.name === 'card') {
+    node.attrs.mode = this.vm.editable? 0: 1;
+  }
 }
 
 Card.prototype.onLoad = function () {
-  // setTimeout(() => {
-  //   for (let i = 0; i < this.cards.length; i++) {
-  //     const ctx = context.get(this.cards[i])
-  //     ctx.id = this.cards[i]
-  //     this.vm._cards.push(ctx)
-  //   }
-  // }, 500)
+    
 }
 
 module.exports = Card

@@ -3,15 +3,28 @@
  */
 Component({
   props: {
-      mode: [Number, String],
+      mode: {
+          type: [Number, String],
+          default: "0",
+      },
       type: [Number, String],
       oid: String,
       src: String,
       title: String,
       desc: String,
       url: String,
-      color: String,
-      bgColor: String
+      color: {
+          type: String,
+          default: "#000"
+      },
+      bgColor: {
+          type: String,
+          default: "#a4d0ff"
+      },
+      border: {
+          type: String,
+          default: "1px solid #FFF"
+      }
   },
   data() {
       return {
@@ -22,8 +35,9 @@ Component({
       customStyle() {
           return {
               "background-color": this.bgColor,
+              "border": this.border,
               "color": this.color
-          } 
+          }
       }
   },
   mounted() {
