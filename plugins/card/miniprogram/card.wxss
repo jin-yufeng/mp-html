@@ -1,0 +1,55 @@
+.one-t {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: all linear 0.2s;
+}
+.more-t {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  transition: all linear 0.2s;
+}
+.card {
+  width: 80%;
+  margin: 10rpx auto;
+  max-width: 700rpx;
+  max-height: 140rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0 20rpx 10rpx;
+  border-radius: 12rpx;
+}
+.card-img {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 12rpx;
+  flex: 0 0 96rpx;
+}
+.card-icon {
+  width: 30rpx;
+  height: 96rpx;
+}
+.card .text-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.card .text-wrap-width {
+  width: 72%;
+}
+.card .title {
+  font-weight: bold;
+  font-size: 34rpx;
+  line-height: 48rpx;
+}
+.card .desc {
+  font-size: 27rpx;
+  line-height: 37rpx;
+}

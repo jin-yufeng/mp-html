@@ -279,16 +279,16 @@ module.exports = {
      * @description 音视频被点击
      * @param {Event} e
      */
-    mediaTap (e) {
+    mediaTap (e, index) {
       if (this.opts[5]) {
-        const i = e.target.dataset.i
+        const i = index || e.target.dataset.i
         const node = this.childs[i]
         const items = this.root._getItem(node)
         this.root._maskTap()
         this.root._edit = this
         this.i = i
         this.root._tooltip({
-          top: e.target.offsetTop - 30,
+          top: (index != undefined ? e.currentTarget.offsetTop: e.target.offsetTop) - 30,
           items,
           success: tapIndex => {
             switch (items[tapIndex]) {
@@ -316,6 +316,37 @@ module.exports = {
                 uni.showToast({
                   title: '成功'
                 })
+                break
+            }
+          }
+        })
+        // 避免上层出现点击态
+        this.root._lock = true
+        setTimeout(() => {
+          this.root._lock = false
+        }, 50)
+      }
+    },
+    
+    /**
+     * @description 自定义Node被点击
+     * @param {Event} e
+     */
+    nodeClick (e, index) {
+      if (this.opts[5]) {
+        const i = index || e.currentTarget.dataset.i
+        const node = this.childs[i]
+        const items = this.root._getItem(node);
+        this.root._maskTap()
+        this.root._edit = this
+        this.i = i
+        this.root._tooltip({
+          top: e.currentTarget.offsetTop - 30,
+          items,
+          success: tapIndex => {
+            switch (items[tapIndex]) {
+              case '删除':
+                this.remove(i)
                 break
             }
           }
@@ -520,7 +551,9 @@ module.exports = {
             // 修改音视频
             .replace('v-else-if="n.html"', 'v-else-if="n.html" :data-i="i" @tap="mediaTap"')
             .replace('<video', '<video :show-center-play-btn="!opts[5]" @tap="mediaTap"')
-            .replace('audio ', 'audio @tap="mediaTap" ')
+            .replace('<audio ', '<audio @tap="mediaTap" ')
+            .replace('<my-audio ', '<my-audio @onClick="mediaTap($event, i)" ')
+            .replace('card ', 'card @onClick="nodeClick($event, i)" ')
             .replace('<script>',
               `<script>
 import Parser from '../parser'
