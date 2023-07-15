@@ -1,25 +1,12 @@
 <template>
-  <view id="_root" :class="(selectable?'_select ':'')+'_root'" :style="(editable?'min-height:200px;':'')+containerStyle" @tap="_containTap">
+  <view id="_root" :class="(selectable?'_select ':'')+'_root'" :style="containerStyle">
     <slot v-if="!nodes[0]" />
     <!-- #ifndef APP-PLUS-NVUE -->
-    <node v-else :childs="nodes" :opts="[lazyLoad,loadingImg,errorImg,showImgMenu,selectable,editable,placeholder,'nodes']" name="span" />
+    <node v-else :childs="nodes" :opts="[lazyLoad,loadingImg,errorImg,showImgMenu,selectable]" name="span" />
     <!-- #endif -->
     <!-- #ifdef APP-PLUS-NVUE -->
     <web-view ref="web" src="/static/app-plus/mp-html/local.html" :style="'margin-top:-2px;height:' + height + 'px'" @onPostMessage="_onMessage" />
     <!-- #endif -->
-    <view v-if="tooltip" class="_tooltip_contain" :style="'top:'+tooltip.top+'px'">
-      <view class="_tooltip">
-        <view v-for="(item, index) in tooltip.items" v-bind:key="index" class="_tooltip_item" :data-i="index" @tap="_tooltipTap">{{item}}</view>
-      </view>
-    </view>
-    <view v-if="slider" class="_slider" :style="'top:'+slider.top+'px'">
-      <slider :value="slider.value" :min="slider.min" :max="slider.max" handle-size="14" block-size="14" show-value activeColor="white" style="padding:3px" @changing="_sliderChanging" @change="_sliderChange" />
-    </view>
-    <view v-if="color" class="_tooltip_contain" :style="'top:'+color.top+'px'">
-      <view class="_tooltip" style="overflow-y: hidden;">
-        <view v-for="(item, index) in color.items" v-bind:key="index" class="_color_item" :style="'background-color:'+item" :data-i="index" @tap="_colorTap"></view>
-      </view>
-    </view>
   </view>
 </template>
 
@@ -54,20 +41,14 @@
 import node from './node/node'
 // #endif
 import Parser from './parser'
-import emoji from './emoji/index.js'
-import card from './card/index.js'
-import editable from './editable/index.js'
-const plugins=[emoji,card,editable,]
+const plugins=[]
 // #ifdef APP-PLUS-NVUE
 const dom = weex.requireModule('dom')
 // #endif
 export default {
   name: 'mp-html',
-  data() {
+  data () {
     return {
-      tooltip: null,
-      slider: null,
-      color: null,
       nodes: [],
       // #ifdef APP-PLUS-NVUE
       height: 3
@@ -75,8 +56,6 @@ export default {
     }
   },
   props: {
-    editable: Boolean,
-    placeholder: String,
     containerStyle: {
       type: String,
       default: ''
@@ -132,11 +111,6 @@ export default {
   },
   // #endif
   watch: {
-    editable(val) {
-      this.setContent(val ? this.content : this.getContent())
-      if (!val)
-        this._maskTap()
-    },
     content (content) {
       this.setContent(content)
     }
@@ -148,7 +122,7 @@ export default {
     }
   },
   mounted () {
-    if ((this.content || this.editable) && !this.nodes.length) {
+    if (this.content && !this.nodes.length) {
       this.setContent(this.content)
     }
   },
@@ -156,26 +130,6 @@ export default {
     this._hook('onDetached')
   },
   methods: {
-    _containTap() {
-      if (!this._lock && !this.slider && !this.color) {
-        this._edit = undefined
-        this._maskTap()
-      }
-    },
-    _tooltipTap(e) {
-      this._tooltipcb(e.currentTarget.dataset.i)
-      this.$set(this, 'tooltip', null)
-    },
-    _sliderChanging(e) {
-      this._slideringcb(e.detail.value)
-    },
-    _sliderChange(e) {
-      this._slidercb(e.detail.value)
-    },
-    _colorTap(e) {
-      this._colorcb(e.currentTarget.dataset.i)
-      this.$set(this, 'color', null)
-    },
     /**
      * @description 将锚点跳转的范围限定在一个 scroll-view 内
      * @param {Object} page scroll-view 所在页面的示例
@@ -541,57 +495,4 @@ export default {
   user-select: text;
 }
 /* #endif */
-
-/* 提示条 */
-._tooltip_contain {
-  position: absolute;
-  right: 20px;
-  left: 20px;
-  text-align: center;
-}
-
-._tooltip {
-  box-sizing: border-box;
-  display: inline-block;
-  width: auto;
-  max-width: 100%;
-  height: 30px;
-  padding: 0 3px;
-  overflow: scroll;
-  font-size: 14px;
-  line-height: 30px;
-  white-space: nowrap;
-}
-
-._tooltip_item {
-  display: inline-block;
-  width: auto;
-  padding: 0 2vw;
-  line-height: 30px;
-  background-color: black;
-  color: white;
-}
-
-._color_item {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  margin: 5px 2vw;
-  border:1px solid #dfe2e5;
-  border-radius: 50%;
-}
-
-/* 图片宽度滚动条 */
-._slider {
-  position: absolute;
-  left: 20px;
-  width: 220px;
-}
-
-._tooltip,
-._slider {
-  background-color: black;
-  border-radius: 3px;
-  opacity: 0.75;
-}
 </style>
