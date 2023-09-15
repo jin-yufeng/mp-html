@@ -61,7 +61,7 @@
           </block>
         </view>
       </view>
-      <card v-else-if="n.name=='card'" :class="n.attrs.class" :style="n.attrs.style" />
+      
       <!-- 富文本 -->
       <!-- #ifdef H5 || ((MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE2) -->
       <rich-text v-else-if="!n.c&&!handler.isInline(n.name, n.attrs.style)" :id="n.attrs.id" :style="n.f" :user-select="opts[4]" :nodes="[n]" />
