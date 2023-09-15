@@ -17,6 +17,7 @@ module.exports = {
     // 'style',     // 解析 style 标签
     // 'txv-video', // 使用腾讯视频
     // 'img-cache'  // 图片缓存
+    // 'card',      //卡片展示
   ],
 
   /**
@@ -37,6 +38,9 @@ module.exports = {
       attrs: ['unit-id']
     }
     */
+   {
+       name: 'card',
+   }
   ],
 
   /**
