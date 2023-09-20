@@ -71,7 +71,8 @@ const config = {
     viewbox: 'viewBox',
     attributename: 'attributeName',
     repeatcount: 'repeatCount',
-    repeatdur: 'repeatDur'
+    repeatdur: 'repeatDur',
+    foreignobject: 'foreignObject'
   }
 }
 const tagSelector = {}
@@ -678,6 +679,14 @@ Parser.prototype.popNode = function () {
         return
       }
       const name = config.svgDict[node.name] || node.name
+      if (name === 'foreignObject') {
+        for (const child of (node.children || [])) {
+          if (child.attrs && !child.attrs.xmlns) {
+            child.attrs.xmlns = 'http://www.w3.org/1999/xhtml'
+            break
+          }
+        }
+      }
       src += '<' + name
       for (const item in node.attrs) {
         const val = node.attrs[item]
