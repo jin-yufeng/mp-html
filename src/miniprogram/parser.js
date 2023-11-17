@@ -761,6 +761,10 @@ Parser.prototype.popNode = function () {
       node.flag = undefined
       // 有 colspan 或 rowspan 且含有链接的表格通过 grid 布局实现
       styleObj.display = 'grid'
+      if (styleObj['border-collapse'] === 'collapse') {
+        styleObj['border-collapse'] = undefined
+        spacing = 0
+      }
       if (spacing) {
         styleObj['grid-gap'] = spacing + 'px'
         styleObj.padding = spacing + 'px'
@@ -778,6 +782,23 @@ Parser.prototype.popNode = function () {
         for (let i = 0; i < nodes.length; i++) {
           if (nodes[i].name === 'tr') {
             trList.push(nodes[i])
+          } else if (nodes[i].name === 'colgroup') {
+            let colI = 1
+            for (const col of (nodes[i].children || [])) {
+              if (col.name === 'col') {
+                const style = col.attrs.style || ''
+                const start = style.indexOf('width') ? style.indexOf(';width') : 0
+                // 提取出宽度
+                if (start !== -1) {
+                  let end = style.indexOf(';', start + 6)
+                  if (end === -1) {
+                    end = style.length
+                  }
+                  width[colI] = style.substring(start ? start + 7 : 6, end)
+                }
+                colI += 1
+              }
+            }
           } else {
             traversal(nodes[i].children || [])
           }
@@ -808,17 +829,17 @@ Parser.prototype.popNode = function () {
               style = style.substr(0, start) + style.substr(end)
             }
             // 设置竖直对齐
-            style += ';display:flex'
+            style += ';display:flex;flex-direction:column'
             start = style.indexOf('vertical-align')
             if (start !== -1) {
               const val = style.substr(start + 15, 10)
               if (val.includes('middle')) {
-                style += ';align-items:center'
+                style += ';justify-content:center'
               } else if (val.includes('bottom')) {
-                style += ';align-items:flex-end'
+                style += ';justify-content:flex-end'
               }
             } else {
-              style += ';align-items:center'
+              style += ';justify-content:center'
             }
             // 设置水平对齐
             start = style.indexOf('text-align')
