@@ -18,7 +18,7 @@ Latex.prototype.onParse = function (node, vm) {
       // 偶数
       if ((index + 1) % 2 === 0) {
         return {
-          name: 'div',
+          name: 'span',
           attrs: {},
           f: 'display:inline-block',
           children: parse.default(str)
