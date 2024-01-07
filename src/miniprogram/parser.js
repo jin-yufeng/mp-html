@@ -506,6 +506,13 @@ Parser.prototype.onOpenTag = function (selfClose) {
       if (!isNaN(parseInt(styleObj.height)) && (!styleObj.height.includes('%') || (parent && (parent.attrs.style || '').includes('height')))) {
         node.h = 'T'
       }
+      if (node.w && node.h && styleObj['object-fit']) {
+        if (styleObj['object-fit'] === 'contain') {
+          node.m = 'aspectFit'
+        } else if (styleObj['object-fit'] === 'cover') {
+          node.m = 'aspectFill'
+        }
+      }
     } else if (node.name === 'svg') {
       siblings.push(node)
       this.stack.push(node)
