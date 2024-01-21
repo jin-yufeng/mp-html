@@ -599,6 +599,7 @@ module.exports = {
           // 修改音视频
           .replace('<video', '<video bindtap="mediaTap"')
           .replace('audio ', 'audio bindtap="mediaTap" ')
+          .replace('card', 'card bindtap="mediaTap"')
       } else if (file.path.includes('node.js') && file.extname === '.js') {
         content = `
         const Parser = require('../parser')

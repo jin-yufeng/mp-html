@@ -11,62 +11,41 @@
 </template>
 
 <script>
-    // import context from './context';
     export default {
         props: {
             mode: {
-                type: [Number, String],
-                default: "0",
+                type: Boolean,
+                default: false
             },
-            type: [Number, String],
-            oid: String,
             src: String,
             title: String,
             desc: String,
             url: String,
-            color: {
-                type: String,
-                default: "#000"
-            },
-            bgColor: {
-                type: String,
-                default: "#a4d0ff"
-            },
-            border: {
-                type: String,
-                default: "1px solid #FFF"
-            }
+            color: String,
+            bgcolor: String,
+            border: String
         },
-        data() {
+        data () {
             return {
                 
-            };
+            }
         },
         computed: {
-            customStyle() {
+            customStyle () {
                 return {
-                    "background-color": this.bgColor,
-                    "border": this.border,
-                    "color": this.color
+                    'background-color': this.bgColor || '#a4d0ff',
+                    border: this.border || '1px solid #FFF',
+                    color: this.color || '#000'
                 } 
             }
         },
-        mounted() {
-            // console.log("this.oid: ", this.oid);
-            // context.set(this.oid, this)
-            
-        },
-        beforeDestroy() {
-            // context.remove(this.oid)
-        },
         methods: {
-            onClick(e) {
-                // this.$emit("onClick", this.type, this.oid);
-                if(this.url != null && this.url != undefined && this.url.trim().length > 6) {
-                    this.mode == 1 && uni.navigateTo({url: this.url})
-                }
-                this.$emit("onClick", e)
-            },
+            onClick (e) {
+              if (this.url && this.url.trim().length > 6 && !this.mode) {
+                  uni.navigateTo({ url: this.url })
+              }
+              this.$emit('click', e)
+            }
         }
     }
 </script>

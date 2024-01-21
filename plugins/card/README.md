@@ -13,13 +13,12 @@
 ### 参数列表  
 |参数名|是否必须|类型|说明|
 |:---- |:---|:----- |----- |
-|type|否|[Number, String]|实体类型|
 |src|是|String|图片Url|
 |title|是|String|标题|
 |desc|是|String|描述|
 |url|是|String|跳转url|
 |color|是|String|文字颜色|
-|bgColor|是|String|卡片背景颜色|
+|bgcolor|是|String|卡片背景颜色|
 |border|是|String|卡片边框颜色|
 
 ### 说明：  

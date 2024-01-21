@@ -14,6 +14,7 @@
 - 疑问解答
   - [📘 常见问题](question/faq)
   - [📩 反馈](question/feedback)
+  - [📝 贡献指南](question/contribution)
 
 - 更新日志
   - [📖 更新日志](changelog/changelog)

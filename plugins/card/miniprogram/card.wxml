@@ -1,9 +1,9 @@
-<view class="card" @click="onClick" :style="[customStyle]">
-    <image class="card-img" mode="aspectFill" :src="src" />
-    <view class="text-wrap text-wrap-width" v-if="!!desc">
+<view class="card" bindtap="onClick" style="background-color:{{bgcolor||'#a4d0ff'}};border:{{border||'1px solid #FFF'}};color:{{color||'#000'}}">
+    <image class="card-img" mode="aspectFill" src="{{src}}" />
+    <view class="text-wrap text-wrap-width" wx:if="{{!!desc}}">
         <view class="title one-t">{{title}}</view>
         <view class="desc one-t">{{desc}}</view>
     </view>
-    <view v-else class="text-wrap-width title more-t">{{title}}</view>
+    <view wx:else class="text-wrap-width title more-t">{{title}}</view>
     <image class="card-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAABCFBMVEUAAAC/v7+qqqqZmZmLi6KJnZ2ImZmHlpaGlKGMjJmSkp6Li5eQkJuKlZ+Pj5mOjpeJkpuNjZ6IkJmHj5eLi5uKkpmGjZqJj5uLi5eIjpmIjZiKj5qKj5mJjpiHjJqJjZaGj5iKj5eIjJmKjpqHi5eGjZeIi5eHjZiIi5eHjJiIjpaHjJeIjZiGjJeIjZiGjJaGjJeIi5aGjJeHi5eHi5aHjJeHjJaHjJeGi5eHjJaHjJeGi5aGi5aHjJeHjJaGjJeGjJeHjJaHi5eGi5eHjJaHjJeGjJaGjJeHi5aHjJeHjJeHi5aGjJeHi5aGjJaHi5eGjJaHi5eHjJaGi5eGi5aHjJeGi5aGi5apAvjmAAAAV3RSTlMABAYKCw0PERMUFRYXGBkbHB0eICEjJiksLS8wMjQ1ODk7PD9ATFZXWFlaW1xdXl+Hi6msu7/Dx8vMzs/R0tTV19na3N3f4uTn6evs7e7v8PHy9PX7/P18cCTXAAABEklEQVRo3u2YWU5CQRQFn4qCM4LzhIoDAorzrIgCigiCimf/O/Gj3UIlmJxaQFXSea/T90aRMcYYY4zpG0ZPu9cZMnAi6SsLBjqS9LnJBcqSpC53Sjs/kqSPNaxwGAqtFbrQXKILjQW68DpPF17m6EI9TRdqM3TheZouVCbpQnkcK5RC4T5BF27jdOFqhC5cDtOFixhdOB+iC2cDdOEoggttLrDbk6QW5/+WJB1T/r1e+FAHWT/2q/35scsiF/w3cdZ/R13Y+8H/MMb6Hycgfz74n6ZYfzXJ+mspyF8I/vos68cep0X4eV2EB4SD4H9bZP3vy+yTtL3KjrGddXgQ34BXCVvwMmT7P69zjDHGGGP6gF83lHISOctsKQAAAABJRU5ErkJggg=="></image>
 </view>

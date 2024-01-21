@@ -132,7 +132,7 @@ export default {
       this.lastTime = undefined
     },
     onClick(e) {
-        this.$emit("onClick", e);
+      this.$emit('onClick', e)
     }
   }
 }

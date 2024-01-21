@@ -128,6 +128,8 @@ function Editable (vm) {
       if (node.attrs.autoplay && i !== -1) {
         items[i] = '不自动播放'
       }
+    } else if (node.name === 'card') {
+      items = config.card.slice(0)
     } else {
       items = config.node.slice(0)
     }

@@ -31,13 +31,13 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | ![富文本插件](assets/case/富文本插件.jpg) | ![欢喜商城](assets/case/欢喜商城.png) | ![多么生活](assets/case/多么生活.jpg) | ![食法查](assets/case/食法查.png) | ![微慕](assets/case/微慕.jpg) | ![古典文学名著阅读](assets/case/古典文学名著阅读.jpg) |
 
-| [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 典典博客 | 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 |
+| 科学复习 | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 典典博客 | 优秀笔记 | 365 刷题 | 同城共享书 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![程序员技术之旅](assets/case/程序员技术之旅.jpg) | ![典典博客](assets/case/典典博客.jpg) | ![备忘录与记事本](assets/case/备忘录与记事本.jpg) | ![优秀笔记](assets/case/优秀笔记.jpg) | ![365刷题](assets/case/365刷题.jpg) | ![同城共享书](assets/case/同城共享书.jpg) |
+| ![科学复习](assets/case/科学复习.png) | ![程序员技术之旅](assets/case/程序员技术之旅.jpg) | ![典典博客](assets/case/典典博客.jpg) | ![优秀笔记](assets/case/优秀笔记.jpg) | ![365刷题](assets/case/365刷题.jpg) | ![同城共享书](assets/case/同城共享书.jpg) |
 
-| [技术源 share](https://github.com/wangsrGit119/mini-blog-halo) | 周仙神 | 你的代码写的真棒 | 谛否 | 小莫唐尼 | [模版演示](https://github.com/zhihuifanqiechaodan/miniprogram-template) |
+| [技术源 share](https://github.com/wangsrGit119/mini-blog-halo) | 你的代码写的真棒 | 谛否 | 小莫唐尼 | [模版演示](https://github.com/zhihuifanqiechaodan/miniprogram-template) | AI瓦力 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![技术源share](assets/case/技术源share.jpg) | ![周仙神](assets/case/周仙神.png) | ![你的代码写的真棒](assets/case/你的代码写的真棒.jpg) | ![谛否](assets/case/谛否.jpg) | ![小莫唐尼](assets/case/小莫唐尼.png) | ![MiniProgram模版演示](assets/case/MiniProgram模版演示.jpg) |
+| ![技术源share](assets/case/技术源share.jpg) | ![你的代码写的真棒](assets/case/你的代码写的真棒.jpg) | ![谛否](assets/case/谛否.jpg) | ![小莫唐尼](assets/case/小莫唐尼.png) | ![MiniProgram模版演示](assets/case/MiniProgram模版演示.jpg) | ![AI瓦力](assets/case/AI瓦力.jpg) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 

@@ -7,7 +7,21 @@ const TxvVideo = function (vm) {
 }
 
 // #ifdef MP-WEIXIN || MP-QQ
-const TxvContext = requirePlugin('tencentvideo')
+try {
+  const TxvContext = requirePlugin('tencentvideo')
+
+  TxvVideo.prototype.onLoad = function () {
+    setTimeout(() => {
+      for (let i = 0; i < this.videos.length; i++) {
+        const ctx = TxvContext.getTxvContext(this.videos[i])
+        ctx.id = this.videos[i]
+        this.vm._videos.push(ctx)
+      }
+    }, 50)
+  }
+} catch (e) {
+  console.error('使用txv-video扩展需注册腾讯视频插件')
+}
 
 TxvVideo.prototype.onUpdate = function (_, config) {
   config.trustTags['txv-video'] = true
@@ -27,15 +41,6 @@ TxvVideo.prototype.onParse = function (node, parser) {
   }
 }
 
-TxvVideo.prototype.onLoad = function () {
-  setTimeout(() => {
-    for (let i = 0; i < this.videos.length; i++) {
-      const ctx = TxvContext.getTxvContext(this.videos[i])
-      ctx.id = this.videos[i]
-      this.vm._videos.push(ctx)
-    }
-  }, 50)
-}
 // #endif
 
 module.exports = TxvVideo

@@ -199,6 +199,7 @@
 | txv-video | 使用腾讯视频 |
 | img-cache | 图片缓存 by [@PentaTea](https://github.com/PentaTea) |
 | latex | 渲染 latex 公式 by [@Zeng-J](https://github.com/Zeng-J) |
+| card | 卡片展示 by [@whoooami](https://github.com/whoooami) |
 
 查看 [插件](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin) 了解更多
 
@@ -208,13 +209,13 @@
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | ![富文本插件](docs/assets/case/富文本插件.jpg) | ![欢喜商城](docs/assets/case/欢喜商城.png) | ![多么生活](docs/assets/case/多么生活.jpg) | ![食法查](docs/assets/case/食法查.png) | ![微慕](docs/assets/case/微慕.jpg) | ![古典文学名著阅读](docs/assets/case/古典文学名著阅读.jpg) |
 
-| [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 典典博客 | 备忘录与记事本 | 优秀笔记 | 365 刷题 | 同城共享书 |
+| 科学复习 | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 典典博客 | 优秀笔记 | 365 刷题 | 同城共享书 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![程序员技术之旅](docs/assets/case/程序员技术之旅.jpg) | ![典典博客](docs/assets/case/典典博客.jpg) | ![备忘录与记事本](docs/assets/case/备忘录与记事本.jpg) | ![优秀笔记](docs/assets/case/优秀笔记.jpg) | ![365刷题](docs/assets/case/365刷题.jpg) | ![同城共享书](docs/assets/case/同城共享书.jpg) |
+| ![科学复习](docs/assets/case/科学复习.png) | ![程序员技术之旅](docs/assets/case/程序员技术之旅.jpg) | ![典典博客](docs/assets/case/典典博客.jpg) | ![优秀笔记](docs/assets/case/优秀笔记.jpg) | ![365刷题](docs/assets/case/365刷题.jpg) | ![同城共享书](docs/assets/case/同城共享书.jpg) |
 
-| [技术源 share](https://github.com/wangsrGit119/mini-blog-halo) | 周仙神 | 你的代码写的真棒 | 谛否 | 小莫唐尼 | [模版演示](https://github.com/zhihuifanqiechaodan/miniprogram-template) |
+| [技术源 share](https://github.com/wangsrGit119/mini-blog-halo) | 你的代码写的真棒 | 谛否 | 小莫唐尼 | [模版演示](https://github.com/zhihuifanqiechaodan/miniprogram-template) | AI瓦力 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![技术源share](docs/assets/case/技术源share.jpg) | ![周仙神](docs/assets/case/周仙神.png) | ![你的代码写的真棒](docs/assets/case/你的代码写的真棒.jpg) | ![谛否](docs/assets/case/谛否.jpg) | ![小莫唐尼](docs/assets/case/小莫唐尼.png) | ![MiniProgram模版演示](docs/assets/case/MiniProgram模版演示.jpg) |
+| ![技术源share](docs/assets/case/技术源share.jpg) | ![你的代码写的真棒](docs/assets/case/你的代码写的真棒.jpg) | ![谛否](docs/assets/case/谛否.jpg) | ![小莫唐尼](docs/assets/case/小莫唐尼.png) | ![MiniProgram模版演示](docs/assets/case/MiniProgram模版演示.jpg) | ![AI瓦力](docs/assets/case/AI瓦力.jpg) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 
@@ -233,6 +234,17 @@
   ![支持](docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.4.3 (20240121)
+  1. `A` 增加 [card](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin#card) 插件 [详细](https://github.com/jin-yufeng/mp-html/pull/533) by [@whoooami](https://github.com/whoooami)
+  2. `F` 修复了 `svg` 中包含 `foreignobject` 可能不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/523)
+  3. `F` 修复了合并单元格的表格部分情况下显示不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/561)
+  4. `F` 修复了 `img` 标签设置 `object-fit` 无效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/567)
+  5. `F` 修复了 `latex` 插件公式会换行的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/540) 
+  6. `F` 修复了 `uni-app` 包 `editable` 和 `audio` 插件共用时点击 `audio` 无法编辑的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/529) by [@whoooami](https://github.com/whoooami)
+  7. `F` 修复了支付宝小程序设置了宽高的图片可能显示不正常的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/544)
+  8. `F` 修复了 `uni-app` 包微信小程序部分情况下图片会报错 `replace of undefined` 的问题
+  9. `F` 修复了 `uni-app` 包快手小程序图片不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/571)
+
 - v2.4.2 (20230514)
   1. `A` `editable` 插件支持修改文字颜色 [详细](https://github.com/jin-yufeng/mp-html/issues/254)
   2. `F` 修复了 `svg` 中有 `style` 不生效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/505)
@@ -241,16 +253,6 @@
   5. `F` 修复了 `editable` 插件在点击换图时未拼接 `domain` 的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/497) by [@TwoKe945](https://github.com/TwoKe945)
   6. `F` 修复了 `latex` 插件部分情况下不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/515) 
   7. `F` 修复了 `editable` 插件点击音视频时其他标签框不消失的问题
-
-- v2.4.1 (20221225)
-  1. `F` 修复了没有图片时 `ready` 事件可能不触发的问题
-  2. `F` 修复了加载过程中可能出现 `Root label not found` 错误的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/470)
-  3. `F` 修复了 `audio` 插件退出页面可能会报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/457)
-  4. `F` 修复了 `uni-app` 包 `vue3` 运行到 `app` 在 `HBuilder X 3.6.10` 以上报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/480)
-  5. `F` 修复了原生包链接内有图片时可能错误换行的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/464)
-  6. `F` 修复了 `uni-app` 包 `nvue` 端链接中包含 `%22` 时可能无法显示的问题
-  7. `F` 修复了 `uni-app` 包 `vue3` 使用 `highlight` 插件可能报错的问题
-  8. `F` 修复了头条小程序使用 `editable` 插件内容为空时点击会报错的问题
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
 

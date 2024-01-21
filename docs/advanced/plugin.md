@@ -392,7 +392,42 @@ function search (key) {
 
 ?> 与 [editable](#editable) 插件共用时，编辑状态下，公式不会渲染，可以直接修改公式文本
 
+?> 在 *js* 的字符串中写 *latex* 公式时需注意 *\\* 会变成转义符，要使用 *\\\\* 或 *String.raw``* 的方式
+
 ?> 本插件通过 [katex-mini](https://github.com/rojer95/katex-mini) 解析 *latex* 文本，[字体文件](https://github.com/KaTeX/KaTeX/tree/main/fonts) 建议自行转存  
+
+## card
+功能：商品（联络人）信息卡  
+大小：*≈7KB*  
+作者：[@whoooami](https://github.com/whoooami)  
+支持平台：  
+
+| 微信小程序 | QQ 小程序 | 百度小程序 | 支付宝小程序 | 头条小程序 | uni-app |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| √ | √ | √ | √ | √ | √(nvue 不支持) |
+
+效果图：  
+![效果图](../assets/plugin/card.png)
+
+参数列表：  
+
+|参数名|是否必须|类型|说明|
+|:---- |:---|:----- |----- |
+|src|是|String|图片Url|
+|title|是|String|标题|
+|desc|是|String|描述|
+|url|是|String|跳转url|
+|color|是|String|文字颜色|
+|bgcolor|是|String|卡片背景颜色|
+|border|是|String|卡片边框颜色|
+
+说明：  
+1. 可以显示商品信息卡片/联络人信息卡片  
+
+基础库要求：    
+满足最低要求即可  
+
+?> 如果希望页面上使用本组件，组件的路径为 *path/to/mp-html/card/card*  
 
 ## 开发插件 :id=develop
 一个插件大致需要以下文件（*plugin/template* 中提供了一个模板） 

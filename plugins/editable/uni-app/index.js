@@ -136,7 +136,7 @@ function Editable (vm) {
         items[i] = '不自动播放'
       }
     } else if (node.name === 'card') {
-      items = config.card.slice(0);
+      items = config.card.slice(0)
     } else {
       items = config.node.slice(0)
     }
