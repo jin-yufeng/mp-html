@@ -20,6 +20,7 @@ Latex.prototype.onParse = function (node, vm) {
         return {
           name: 'span',
           attrs: {},
+          l: 'T',
           f: 'display:inline-block',
           children: parse.default(str)
         }
