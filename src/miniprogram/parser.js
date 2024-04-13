@@ -936,11 +936,26 @@ Parser.prototype.popNode = function () {
       node.children = [table]
       attrs = table.attrs
     }
+  } else if ((node.name === 'tbody' || node.name === 'tr') && node.flag && node.c) {
+    node.flag = undefined;
+    (function traversal (nodes) {
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].name === 'td') {
+          // 颜色样式设置给单元格避免丢失
+          for (const style of ['color', 'background', 'background-color']) {
+            if (styleObj[style]) {
+              nodes[i].attrs.style = style + ':' + styleObj[style] + ';' + (nodes[i].attrs.style || '')
+            }
+          }
+        } else {
+          traversal(nodes[i].children || [])
+        }
+      }
+    })(children)
   } else if ((node.name === 'td' || node.name === 'th') && (attrs.colspan || attrs.rowspan)) {
     for (let i = this.stack.length; i--;) {
-      if (this.stack[i].name === 'table') {
+      if (this.stack[i].name === 'table' || this.stack[i].name === 'tbody' || this.stack[i].name === 'tr') {
         this.stack[i].flag = 1 // 指示含有合并单元格
-        break
       }
     }
   } else if (node.name === 'ruby') {
