@@ -185,7 +185,15 @@ export default {
      * @param {Event} e
      */
     play (e) {
-      this.root.$emit('play')
+      const i = e.currentTarget.dataset.i
+      const node = this.childs[i]
+      this.root.$emit('play', {
+        source: node.name,
+        attrs: {
+          ...node.attrs,
+          src: node.src[this.ctrl[i] || 0]
+        }
+      })
       // #ifndef APP-PLUS
       if (this.root.pauseVideo) {
         let flag = false

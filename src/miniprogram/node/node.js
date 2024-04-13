@@ -55,7 +55,15 @@ Component({
      * @param {Event} e
      */
     play (e) {
-      this.root.triggerEvent('play')
+      const i = e.target.dataset.i
+      const node = this.getNode(i)
+      this.root.triggerEvent('play', {
+        source: node.name,
+        attrs: {
+          ...node.attrs,
+          src: node.src[this.data.ctrl[i] || 0]
+        }
+      })
       if (this.root.properties.pauseVideo) {
         let flag = false
         const id = e.target.id
