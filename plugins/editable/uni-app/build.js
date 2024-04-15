@@ -528,7 +528,10 @@ module.exports = {
 import Parser from '../parser'
 function getTop(e) {
   let top
-  // #ifdef H5 || APP-PLUS
+  // #ifdef H5 && VUE3
+  top = e.pageY
+  // #endif
+  // #ifdef (H5 && VUE2) || APP-PLUS
   top = e.touches[0].pageY
   // #endif
   // #ifdef MP-ALIPAY
