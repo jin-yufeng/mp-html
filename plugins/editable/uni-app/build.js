@@ -171,7 +171,28 @@ module.exports = {
         while (parent && parent.$options.name !== 'node') {
           parent = parent.$parent
         }
-        if (!parent || this.opts[7].length - parent.opts[7].length > 15) return
+        if (this.opts[7].length - parent.opts[7].length > 15) {
+          const parts = this.opts[7].split('.')
+          let childs = parent.childs
+          for (let i = parent.opts[7].split('.').length; i < parts.length - 2; i++) {
+            childs = childs[parts[i]]
+          }
+          const that = this
+          parent = {
+            childs,
+            opts: [undefined, undefined, undefined, undefined, undefined, undefined, undefined, parts.slice(0, parts.length - 2).join('.')],
+            changeStyle (name, i, value, oldVal) {
+              let style = this.childs[i].attrs.style || ''
+              if (style.includes(';' + name + ':' + oldVal)) {
+                style = style.replace(';' + name + ':' + oldVal, ';' + name + ':' + value)
+              } else {
+                style += ';' + name + ':' + value
+              }
+              that.root._setData(`${this.opts[7]}.${i}.attrs.style`, style)
+            }
+          }
+        }
+        if (!parent) return
         // 显示实线框
         this.$set(this.ctrl, 'root', 1)
         this.root._mask.push(() => this.$set(this.ctrl, 'root', 0))
