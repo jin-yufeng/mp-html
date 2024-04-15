@@ -27,7 +27,7 @@ module.exports = {
     editStart (e) {
       if (this.properties.opts[5]) {
         const i = e.currentTarget.dataset.i
-        if (!this.data.ctrl['e' + i]) {
+        if (!this.data.ctrl['e' + i] && this.properties.opts[5] !== 'simple') {
           // 显示虚线框
           this.setData({
             ['ctrl.e' + i]: 1
@@ -177,7 +177,7 @@ module.exports = {
      * @param {Event} e
      */
     nodeTap (e) {
-      if (this.properties.opts[5]) {
+      if (this.properties.opts[5] && this.properties.opts[5] !== 'simple') {
         if (this.root._lock) return
         // 阻止上层出现点击态
         this.root._lock = true
@@ -420,7 +420,7 @@ module.exports = {
         // 添加 editable 属性，发生变化时重新解析
         content = content.replace(/properties\s*:\s*{/, `properties: {
     editable: {
-      type: Boolean,
+      type: null,
       observer (val) {
         if (this.properties.content) {
           this.setContent(val ? this.properties.content : this.getContent())
@@ -574,11 +574,11 @@ module.exports = {
           .replace(/!(n.?)\.c(?![a-z])/g, '(opts[5]?true:!$1.c)')
           .replace(/isInline\((.*?)\)/g, '(opts[5]?true:isInline($1))')
           // 修改普通标签
-          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{path+i}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+path+i]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
-          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{\'\'+i1}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
-          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1+\'_\'+i2]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
-          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2+\'_\'+i3}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1+\'_\'+i2+\'_\'+i3]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
-          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2+\'_\'+i3+\'_\'+i4}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1+\'_\'+i2+\'_\'+i3+\'_\'+i4]?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
+          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{path+i}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+path+i]&&opts[5]!==\'simple\'?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
+          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{\'\'+i1}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1]&&opts[5]!==\'simple\'?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
+          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1+\'_\'+i2]&&opts[5]!==\'simple\'?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
+          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2+\'_\'+i3}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1+\'_\'+i2+\'_\'+i3]&&opts[5]!==\'simple\'?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
+          .replace(/<view\s*wx:else\s*id(.+?)style="/, '<view wx:else data-i="{{i1+\'_\'+i2+\'_\'+i3+\'_\'+i4}}" bindtap="nodeTap" id$1style="{{ctrl[\'e\'+i1+\'_\'+i2+\'_\'+i3+\'_\'+i4]&&opts[5]!==\'simple\'?\'border:1px solid black;padding:5px;display:block;\':\'\'}}')
           // 修改文本块
           .replace(/<!--\s*文本\s*-->[\s\S]+?<!--\s*链接\s*-->/,
             `<block wx:elif="{{n.type==='text'}}">
@@ -588,13 +588,13 @@ module.exports = {
     <text wx:elif="{{ctrl['e'+i]===1}}" data-i="{{i}}" style="border:1px dashed black;min-width:50px;width:auto;padding:5px;display:block" catchtap="editStart">{{n.text}}
       <text wx:if="{{!n.text}}" style="color:gray">{{opts[6]||'请输入'}}</text>
     </text>
-    <textarea wx:else style="border:1px dashed black;min-width:50px;width:auto;padding:5px" auto-height maxlength="-1" focus="{{ctrl['e'+i]===3}}" value="{{n.text}}" data-i="{{i}}" bindinput="editInput" bindblur="editEnd" />
+    <textarea wx:else style="{{opts[5]==='simple'?'':'border:1px dashed black;'}}min-width:50px;width:auto;padding:5px" auto-height maxlength="-1" focus="{{ctrl['e'+i]===3}}" value="{{n.text}}" data-i="{{i}}" bindinput="editInput" bindblur="editEnd" />
   </block>
   <text wx:elif="{{n.name==='br'}}">\\n</text>`)
           // 修改图片
           .replace(/<image(.+?)id="\{\{n.attrs.id/, '<image$1id="{{n.attrs.id||(\'n\'+i)')
           .replace('height:1px', "height:{{ctrl['h'+i]||1}}px")
-          .replace('style="{{ctrl[i]', 'style="{{ctrl[\'e\'+i]?\'border:1px dashed black;padding:3px;\':\'\'}}{{ctrl[i]')
+          .replace('style="{{ctrl[i]', 'style="{{ctrl[\'e\'+i]&&opts[5]!==\'simple\'?\'border:1px dashed black;padding:3px;\':\'\'}}{{ctrl[i]')
           .replace(/weixin:show-menu-by-longpress\s*=\s*"{{(\S+?)}}"\s*baidu:image-menu-prevent\s*=\s*"{{(\S+?)}}"/, 'weixin:show-menu-by-longpress="{{!opts[5]&&$1}}" baidu:image-menu-prevent="{{opts[5]||$2}}"')
           // 修改音视频
           .replace('<video', '<video bindtap="mediaTap"')
