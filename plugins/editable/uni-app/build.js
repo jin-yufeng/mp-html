@@ -171,9 +171,18 @@ module.exports = {
         while (parent && parent.$options.name !== 'node') {
           parent = parent.$parent
         }
+        let remove = () => {
+          parent.remove(i)
+        }
         if (this.opts[7].length - parent.opts[7].length > 15) {
           const parts = this.opts[7].split('.')
           let childs = parent.childs
+          const i = parseInt(parts[parent.opts[7].split('.').length])
+          const oldParent = parent
+          // 删除整个表格
+          remove = () => {
+            oldParent.remove(i)
+          }
           for (let i = parent.opts[7].split('.').length; i < parts.length - 2; i++) {
             childs = childs[parts[i]]
           }
@@ -260,7 +269,7 @@ module.exports = {
               }
               this.root._editVal(parent.opts[7], parent.childs, arr, true)
             } else if (items[tapIndex] === '删除') {
-              parent.remove(i)
+              remove()
             } else {
               const style = parent.childs[i].attrs.style || ''
               let newStyle = ''

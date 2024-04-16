@@ -178,14 +178,26 @@ module.exports = {
      */
     nodeTap (e) {
       if (this.properties.opts[5] && this.properties.opts[5] !== 'simple') {
+        const i = e.currentTarget.dataset.i
+        if (this.root._table) {
+          const node = this.getNode(i)
+          if (node.name === 'table') {
+            this.root._table = undefined
+            this.root._remove_table = () => {
+              this.remove(i)
+            }
+          }
+        }
         if (this.root._lock) return
         // 阻止上层出现点击态
         this.root._lock = true
         setTimeout(() => {
           this.root._lock = false
         }, 50)
-        const i = e.currentTarget.dataset.i
         const node = this.getNode(i)
+        if (node.name === 'td' || node.name === 'th') {
+          this.root._table = true
+        }
         if (this.data.ctrl['e' + this.i] === 3) return
         this.root._maskTap()
         this.root._edit = this
@@ -281,7 +293,12 @@ module.exports = {
               }
               this.root._editVal('nodes' + (path ? '[' + path.replace(/_/g, '].children[') + '].children' : ''), siblings, arr, true)
             } else if (items[tapIndex] === '删除') {
-              this.remove(i)
+              if ((node.name === 'td' || node.name === 'th') && this.root._remove_table) {
+                this.root._remove_table()
+                this.root._remove_table = undefined
+              } else {
+                this.remove(i)
+              }
             } else {
               const style = node.attrs.style || ''
               let newStyle = ''
