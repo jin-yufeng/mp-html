@@ -333,6 +333,12 @@ Parser.prototype.onTagName = function (name) {
  */
 Parser.prototype.onAttrName = function (name) {
   name = this.xml ? name : name.toLowerCase()
+  // #ifdef (VUE3 && (H5 || APP-PLUS)) || APP-PLUS-NVUE
+  if (name.includes('?') || name.includes(';')) {
+    this.attrName = undefined
+    return
+  }
+  // #endif
   if (name.substr(0, 5) === 'data-') {
     if (name === 'data-src' && !this.attrs.src) {
       // data-src 自动转为 src
