@@ -459,7 +459,7 @@ Parser.prototype.onOpenTag = function (selfClose) {
           node.webp = 'T'
         }
         // data url 图片如果没有设置 original-src 默认为不可预览的小图片
-        if (attrs.src.includes('data:') && !attrs['original-src']) {
+        if (attrs.src.includes('data:') && this.options.previewImg !== 'all' && !attrs['original-src']) {
           attrs.ignore = 'T'
         }
         if (!attrs.ignore || node.webp || attrs.src.includes('cloud://')) {

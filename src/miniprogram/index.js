@@ -78,11 +78,11 @@ Component({
 
     /**
      * @description 是否允许图片被点击时自动预览
-     * @type {Boolean}
+     * @type {Boolean | String}
      * @default true
      */
     previewImg: {
-      type: Boolean,
+      type: null,
       value: true
     },
 
