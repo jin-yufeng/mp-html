@@ -631,7 +631,7 @@ Parser.prototype.popNode = function () {
       for (const item in node.attrs) {
         const val = node.attrs[item]
         if (val) {
-          src += ` ${config.svgDict[item] || item}="${val}"`
+          src += ` ${config.svgDict[item] || item}="${val.replace(/"/g, '')}"`
         }
       }
       if (!node.children) {
