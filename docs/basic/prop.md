@@ -81,6 +81,8 @@ white-space: pre-line; /* 保留换行符 */
 
 ?> 自动预览允许左右滑动查看所有图片，如果不希望如此可以禁用自动预览并在 [imgtap](basic/event#imgtap) 事件中自行处理  
 
+!> 默认情况下 *base64* 图片无法点击预览，[2.5.0](changelog/changelog#v250) 版本起支持将本属性设置为 *"all"* 开启 *base64* 图片的预览，但需要注意各平台 *previewImage* 的 *api* 对 *base64* 图片支持度不高，需充分测试后使用，如果无法预览，可参考 [imgList](advanced/api#imgList) 中的方法进行转存
+
 ## scroll-table
 功能：是否给每个表格添加一个滚动层使其能单独横向滚动  
 类型：*Boolean*  

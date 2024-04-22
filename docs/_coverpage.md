@@ -1,6 +1,6 @@
 ![logo](assets/logo/logo.png)
 
-# mp-html <small>2.4.3</small>
+# mp-html <small>2.5.0</small>
 
 > 一个强大的小程序富文本组件
 

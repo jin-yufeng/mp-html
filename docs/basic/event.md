@@ -152,6 +152,9 @@ Page({
 
 触发时机：音视频播放时  
 返回值：无  
+
+?> [2.5.0](changelog/changelog#v250) 版本起返回值变更为一个 *object*，其中 *source* 为播放来源（包括 *video*、*audio*），*attrs* 为该标签的属性列表（包含 *src* 等信息），可以统计播放量等信息
+
 用途：和 [pauseMedia](advanced/api#pauseMedia) 的 `api` 配合可以实现与页面中其他音视频进行互斥播放  
 示例：  
 ```javascript

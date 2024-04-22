@@ -149,7 +149,10 @@ Page({
 
 ## imgList
 功能：获取所有图片的数组  
-该数组用于图片预览，对其进行修改可以在自动预览时生效（如修改为高清图链接）  
+该数组用于图片预览，对其进行修改可以在自动预览时生效（如修改为高清图链接或转存 *base64*）  
+
+!> 这是一个属性，不是一个函数  
+请不要增删此数组（可以修改），否则在自动预览时可能出现问题    
 
 ```javascript
 Page({
@@ -158,14 +161,25 @@ Page({
     var cover = ctx.imgList[0] // 首张图可以作为转发封面图
     ctx.imgList.forEach((src, i, array) => {
       console.log(src)
-      array[i] = src.replace('thumb', '') // 替换为高清图链接
+
+      // 替换为高清图链接
+      array[i] = src.replace('thumb', '')
+
+      // 转存 base64 便于预览
+      var fs = wx.getFileSystemManager && wx.getFileSystemManager()
+      var info = src.match(/data:image\/(\S+?);(\S+?),(.+)/)
+      if (!info) return
+      var filePath = `${wx.env.USER_DATA_PATH}/${Date.now()}.${info[1]}`
+      fs && fs.writeFile({
+        filePath,
+        data: info[3],
+        encoding: info[2],
+        success: () => array[i] = filePath
+      })
     })
   }
 })
 ```
-
-!> 这是一个属性，不是一个函数  
-请不要增删此数组（可以修改），否则在自动预览时可能出现问题    
 
 ## pauseMedia
 ?> [2.2.2](changelog/changelog#v222) 版本起支持  

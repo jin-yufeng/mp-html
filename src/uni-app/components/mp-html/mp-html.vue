@@ -12,7 +12,7 @@
 
 <script>
 /**
- * mp-html v2.4.3
+ * mp-html v2.5.0
  * @description 富文本组件
  * @tutorial https://github.com/jin-yufeng/mp-html
  * @property {String} container-style 容器的样式

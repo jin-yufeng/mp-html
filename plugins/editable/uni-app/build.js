@@ -42,6 +42,11 @@ module.exports = {
           this.i = i
           this.cursor = this.childs[i].text.length
         } else {
+          if (this.opts[5] === 'simple') {
+            this.root._edit = this
+            this.i = i
+            this.cursor = this.childs[i].text.length
+          }
           this.root._mask.pop()
           this.root._maskTap()
           // 将 text 转为 textarea
@@ -151,7 +156,7 @@ module.exports = {
      * @param {Event} e
      */
     nodeTap (e) {
-      if (this.opts[5] && this.opts[5] !== 'simple') {
+      if (this.opts[5]) {
         if (this.root._lock) return
         this.root._lock = true
         setTimeout(() => {
@@ -160,6 +165,7 @@ module.exports = {
         if (this.ctrl['e' + this.i] === 3) return
         this.root._maskTap()
         this.root._edit = this
+        if (this.opts[5] === 'simple') return
         let start = this.opts[7].lastIndexOf('children.')
         if (start !== -1) {
           start += 9

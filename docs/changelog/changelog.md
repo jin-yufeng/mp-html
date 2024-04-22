@@ -1,5 +1,20 @@
 # 📖 更新日志 :id=changelog
 
+## v2.5.0
+发布时间：*2024-04-22*  
+主要更新：
+1. `U` [play](basic/event#play) 事件增加返回 `src` 等信息 [详细](https://github.com/jin-yufeng/mp-html/issues/526)
+2. `U` [preview-img](basic/prop#preview-img) 属性支持设置为 `all` 开启 `base64` 图片预览 [详细](https://github.com/jin-yufeng/mp-html/issues/536)
+3. `U` [editable](advanced/plugin#editable) 插件增加简易模式（点击文字直接编辑）
+4. `U` [latex](advanced/plugin#latex) 插件支持块级公式 [详细](https://github.com/jin-yufeng/mp-html/issues/582)
+5. `F` 修复了表格部分情况下背景丢失的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/587)
+6. `F` 修复了部分 `svg` 无法显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/591)
+7. `F` 修复了 `uni-app` 包 `h5` 和 `app` 端部分情况下样式无法识别的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/518)
+8. `F` 修复了 [latex](advanced/plugin#latex) 插件部分情况下显示不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/580)
+9. `F` 修复了 [editable](advanced/plugin#editable) 插件表格无法删除的问题
+10. `F` 修复了 [editable](advanced/plugin#editable) 插件 `uni-app` 包 `vue3` `h5` 端点击图片报错的问题
+11. `F` 修复了 [editable](advanced/plugin#editable) 插件 `uni-app` 包点击表格没有菜单栏的问题
+
 ## v2.4.3
 发布时间：*2024-01-21*  
 主要更新：

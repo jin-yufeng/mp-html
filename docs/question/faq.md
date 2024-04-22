@@ -50,7 +50,7 @@ html = html.replace(/< img/g, '<img')
 2. 通过 [tag-style](basic/prop#tag-style) 属性或 [外部样式](overview/quickstart#externStyle) 给表格标签设置默认样式
    ```javascript
    tagStyle: {
-      table: 'border-top: 1px solid gray; border-left: 1px solid gray;',
+      table: 'border-top: 1px solid gray; border-left: 1px solid gray; border-collapse:collapse',
       th: 'border-right: 1px solid gray; border-bottom: 1px solid gray;',
       td: 'border-right: 1px solid gray; border-bottom: 1px solid gray;'
    }

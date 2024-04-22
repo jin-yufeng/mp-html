@@ -44,6 +44,11 @@ module.exports = {
           this.i = i
           this.cursor = this.getNode(i).text.length
         } else {
+          if (this.properties.opts[5] === 'simple') {
+            this.root._edit = this
+            this.i = i
+            this.cursor = this.getNode(i).text.length
+          }
           this.root._mask.pop()
           this.root._maskTap()
           // 将 text 转为 textarea
@@ -177,7 +182,7 @@ module.exports = {
      * @param {Event} e
      */
     nodeTap (e) {
-      if (this.properties.opts[5] && this.properties.opts[5] !== 'simple') {
+      if (this.properties.opts[5]) {
         const i = e.currentTarget.dataset.i
         if (this.root._table) {
           const node = this.getNode(i)
@@ -201,6 +206,7 @@ module.exports = {
         if (this.data.ctrl['e' + this.i] === 3) return
         this.root._maskTap()
         this.root._edit = this
+        if (this.properties.opts[5] === 'simple') return
         const arr = i.split('_')
         const j = parseInt(arr.pop())
         let path = arr.join('_')
