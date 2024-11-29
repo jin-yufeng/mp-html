@@ -306,6 +306,48 @@ export default {
     },
 
     /**
+     * 深度清理对象中value为null的item
+     * @param obj 要清理的对象
+     * @param cache 默认的缓存对象
+     * @returns {{}|*} 清理后的对象
+     */
+    deepClean(obj, cache = new WeakMap()) {
+      if (obj === null || typeof obj !== 'object') return obj;
+      if (cache.has(obj)) return cache.get(obj);
+      let clone;
+
+      if (obj instanceof Date) {
+        clone = new Date(obj.getTime());
+      } else if (obj instanceof RegExp) {
+        clone = new RegExp(obj);
+      } else if (obj instanceof Map) {
+        clone = new Map(Array.from(obj, ([key, value]) => {
+          return value ? [key, this.deepClean(value, cache)] : null;
+        }).filter(item => item !== null));
+      } else if (obj instanceof Set) {
+        clone = new Set(Array.from(obj, value => {
+          return value ? this.deepClean(value, cache) : null;
+        }).filter(item => item !== null));
+      } else if (Array.isArray(obj)) {
+        clone = obj.map(value => value ? this.deepClean(value, cache) : null)
+            .filter(item => item !== null);
+      } else if (Object.prototype.toString.call(obj) === '[object Object]') {
+        clone = Object.create(Object.getPrototypeOf(obj));
+        cache.set(obj, clone);
+        for (const [key, value] of Object.entries(obj)) {
+          if (value) {
+            clone[key] = this.deepClean(value, cache);
+          }
+        }
+      } else {
+        clone = Object.assign({}, obj);
+      }
+
+      cache.set(obj, clone);
+      return clone;
+    },
+
+    /**
      * @description 设置内容
      * @param {String} content html 内容
      * @param {Boolean} append 是否在尾部追加
@@ -320,7 +362,7 @@ export default {
         this._set(nodes, append)
       }
       // #endif
-      this.$set(this, 'nodes', append ? (this.nodes || []).concat(nodes) : nodes)
+      this.$set(this, 'nodes', append ? (this.nodes || []).concat(this.deepClean(nodes)) : this.deepClean(nodes))
 
       // #ifndef APP-PLUS-NVUE
       this._videos = []
