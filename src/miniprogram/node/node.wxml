@@ -43,7 +43,7 @@
   <!-- #ifdef MP-WEIXIN || MP-QQ || MP-TOUTIAO -->
   <text wx:elif="{{n.text}}" mp-weixin:user-select="{{opts[4]=='force'&&isiOS}}" decode>{{n.text}}</text>
   <!-- #endif -->
-  <text wx:elif="{{n.name==='br'}}">\n</text>
+  <text wx:elif="{{n.name==='br'}}">{{'\n'}}</text>
   <!-- 链接 -->
   <view wx:elif="{{n.name==='a'}}" id="{{n.attrs.id}}" class="{{n.attrs.href?'_a ':''}}{{n.attrs.class}}" hover-class="_hover" style="display:inline;{{n.attrs.style}}" data-i="{{i}}" catchtap="linkTap">
     <!-- #ifdef MP-WEIXIN || MP-QQ -->
