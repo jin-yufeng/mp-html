@@ -66,8 +66,8 @@ Latex.prototype.onParse = function (node, vm) {
         }
       }
     }
-    node.type = undefined
-    node.text = undefined
+    delete node.type
+    delete node.text
     node.name = 'span'
     node.attrs = {}
     node.children = children
