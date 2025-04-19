@@ -12,6 +12,9 @@
       <!-- 表格中的图片，使用 rich-text 防止大小不正确 -->
       <rich-text v-if="n.name==='img'&&n.t" :style="'display:'+n.t" :nodes="[{attrs:{style:n.attrs.style||'',src:n.attrs.src},name:'img'}]" :data-i="i" @tap.stop="imgTap" />
       <!-- #endif -->
+      <!-- #ifdef APP-HARMONY -->
+      <image v-else-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+'width:'+ctrl[i]+'px;'+n.attrs.style" :src="n.attrs.src||(ctrl.load?n.attrs['data-src']:'')" :mode="!n.h?'widthFix':(!n.w?'heightFix':(n.m||'scaleToFill'))" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
+      <!-- #endif -->
       <!-- #ifndef H5 || APP-PLUS || MP-KUAISHOU -->
       <image v-else-if="n.name==='img'" :id="n.attrs.id" :class="'_img '+n.attrs.class" :style="(ctrl[i]===-1?'display:none;':'')+'width:'+(ctrl[i]||1)+'px;height:1px;'+n.attrs.style" :src="n.attrs.src" :mode="!n.h?'widthFix':(!n.w?'heightFix':(n.m||'scaleToFill'))" :lazy-load="opts[0]" :webp="n.webp" :show-menu-by-longpress="opts[3]&&!n.attrs.ignore" :image-menu-prevent="!opts[3]||n.attrs.ignore" :data-i="i" @load="imgLoad" @error="mediaError" @tap.stop="imgTap" @longpress="imgLongTap" />
       <!-- #endif -->
@@ -140,7 +143,7 @@ export default {
     opts: Array
   },
   components: {
-    // #ifndef (H5 || APP-PLUS) && VUE3
+    // #ifndef ((H5 || APP-PLUS) && VUE3) || APP-HARMONY
     node
     // #endif
   },
@@ -236,7 +239,14 @@ export default {
       // #ifdef H5 || APP-PLUS
       node.attrs.src = node.attrs.src || node.attrs['data-src']
       // #endif
+      // #ifndef APP-HARMONY
       this.root.$emit('imgtap', node.attrs)
+      // #endif
+      // #ifdef APP-HARMONY
+      this.root.$emit('imgtap', {
+        ...node.attrs
+      })
+      // #endif
       // 自动预览图片
       if (this.root.previewImg) {
         uni.previewImage({
