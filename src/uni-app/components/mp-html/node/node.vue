@@ -31,7 +31,7 @@
       <!-- #ifndef MP-WEIXIN || MP-BAIDU || MP-ALIPAY || MP-TOUTIAO -->
       <text v-else-if="n.text" decode>{{n.text}}</text>
       <!-- #endif -->
-      <text v-else-if="n.name==='br'">\n</text>
+      <text v-else-if="n.name==='br'">{{'\n'}}</text>
       <!-- 链接 -->
       <view v-else-if="n.name==='a'" :id="n.attrs.id" :class="(n.attrs.href?'_a ':'')+n.attrs.class" hover-class="_hover" :style="'display:inline;'+n.attrs.style" :data-i="i" @tap.stop="linkTap">
         <node name="span" :childs="n.children" :opts="opts" style="display:inherit" />

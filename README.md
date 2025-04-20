@@ -205,17 +205,17 @@
 
 ## 使用案例
 
-| [官方示例](https://github.com/jin-yufeng/mp-html-demo) | 欢喜商城 | 多么生活 | 食法查 | 微慕 | 古典文学名著阅读 |
+| [官方示例](https://github.com/jin-yufeng/mp-html-demo) | 欢喜商城 | 多么生活 | 食法查 | 微慕 | 科学复习 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![富文本插件](docs/assets/case/富文本插件.jpg) | ![欢喜商城](docs/assets/case/欢喜商城.png) | ![多么生活](docs/assets/case/多么生活.jpg) | ![食法查](docs/assets/case/食法查.png) | ![微慕](docs/assets/case/微慕.jpg) | ![古典文学名著阅读](docs/assets/case/古典文学名著阅读.jpg) |
+| ![富文本插件](docs/assets/case/富文本插件.jpg) | ![欢喜商城](docs/assets/case/欢喜商城.png) | ![多么生活](docs/assets/case/多么生活.jpg) | ![食法查](docs/assets/case/食法查.png) | ![微慕](docs/assets/case/微慕.jpg) | ![科学复习](docs/assets/case/科学复习.png) |
 
-| 科学复习 | [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 典典博客 | 优秀笔记 | 365 刷题 | 同城共享书 |
+| [程序员技术之旅](https://github.com/fendoudebb/z-blog-wx) | 典典博客 | 优秀笔记 | 同城共享书 | [技术源 share](https://github.com/wangsrGit119/mini-blog-halo) | 你的代码写的真棒 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![科学复习](docs/assets/case/科学复习.png) | ![程序员技术之旅](docs/assets/case/程序员技术之旅.jpg) | ![典典博客](docs/assets/case/典典博客.jpg) | ![优秀笔记](docs/assets/case/优秀笔记.jpg) | ![365刷题](docs/assets/case/365刷题.jpg) | ![同城共享书](docs/assets/case/同城共享书.jpg) |
+| ![程序员技术之旅](docs/assets/case/程序员技术之旅.jpg) | ![典典博客](docs/assets/case/典典博客.jpg) | ![优秀笔记](docs/assets/case/优秀笔记.jpg) | ![同城共享书](docs/assets/case/同城共享书.jpg) | ![技术源share](docs/assets/case/技术源share.jpg) | ![你的代码写的真棒](docs/assets/case/你的代码写的真棒.jpg) |
 
-| [技术源 share](https://github.com/wangsrGit119/mini-blog-halo) | 你的代码写的真棒 | 谛否 | 小莫唐尼 | [模版演示](https://github.com/zhihuifanqiechaodan/miniprogram-template) | AI瓦力 |
+| 谛否 | 小莫唐尼 | [模版演示](https://github.com/zhihuifanqiechaodan/miniprogram-template) | AI瓦力 | 豆流便签 | 前端八股通 |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| ![技术源share](docs/assets/case/技术源share.jpg) | ![你的代码写的真棒](docs/assets/case/你的代码写的真棒.jpg) | ![谛否](docs/assets/case/谛否.jpg) | ![小莫唐尼](docs/assets/case/小莫唐尼.png) | ![MiniProgram模版演示](docs/assets/case/MiniProgram模版演示.jpg) | ![AI瓦力](docs/assets/case/AI瓦力.jpg) |
+| ![谛否](docs/assets/case/谛否.jpg) | ![小莫唐尼](docs/assets/case/小莫唐尼.png) | ![MiniProgram模版演示](docs/assets/case/MiniProgram模版演示.jpg) | ![AI瓦力](docs/assets/case/AI瓦力.jpg) | ![豆流便签](docs/assets/case/豆流便签.jpg) | ![前端八股通](docs/assets/case/前端八股通.jpg) |
 
 以上排名不分先后，更多可见 [使用案例收集](https://github.com/jin-yufeng/mp-html/issues/27)（欢迎添加）  
 
