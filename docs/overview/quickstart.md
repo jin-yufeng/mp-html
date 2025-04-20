@@ -3,6 +3,8 @@
 ## 📦 源码获取 :id=source
 
 #### 小程序方式 :id=mp
+!> 该方式暂不可用
+
 打开微信小程序 *富文本插件*，点击 *获取组件包* 按钮，选择使用平台、[扩展插件](advanced/plugin) 以及 [个性化设置](#setting) 后即可生成组件包  
 ![富文本插件](../assets/case/富文本插件.jpg)
 
@@ -30,6 +32,12 @@
 #### 下载 zip :id=zip
    *github releases*：[https://github.com/jin-yufeng/mp-html/releases](https://github.com/jin-yufeng/mp-html/releases)  
    *gitee releases*：[https://gitee.com/jin-yufeng/mp-html/releases](https://gitee.com/jin-yufeng/mp-html/releases)
+
+#### QQ 群 :id=qqgroup
+*QQ* 交流群的群文件中也可以获取组件包  
+交流群1: `699734691`  
+交流群2: `778239129`  
+交流群3: `960265313`  
 
 ## 📚 引入和使用 :id=use
 

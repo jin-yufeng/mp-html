@@ -20,7 +20,7 @@
 - 丰富的插件（关键词搜索、内容编辑、`latex` 公式等）
 - 效率高、容错性强且轻量化（`≈25KB`，`9KB gzipped`）
 
-查看 [功能介绍](https://jin-yufeng.gitee.io/mp-html/#/overview/feature) 了解更多
+查看 [功能介绍](https://jin-yufeng.github.io/mp-html/#/overview/feature) 了解更多
 
 ## 使用方法
 ### 原生平台
@@ -70,7 +70,7 @@
   
   后续步骤同上
 
-查看 [快速开始](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart) 了解更多
+查看 [快速开始](https://jin-yufeng.github.io/mp-html/#/overview/quickstart) 了解更多
 
 ### uni-app
 - 源码方式
@@ -132,13 +132,13 @@
   使用 `cli` 方式运行的项目，通过 `npm` 方式引入时，需要在 `vue.config.js` 中配置 `transpileDependencies`，详情可见 [#330](https://github.com/jin-yufeng/mp-html/issues/330#issuecomment-913617687)  
   如果在 `nvue` 中使用还要将 `dist/uni-app/static` 目录下的内容拷贝到项目的 `static` 目录下，否则无法运行  
 
-查看 [快速开始](https://jin-yufeng.gitee.io/mp-html/#/overview/quickstart) 了解更多
+查看 [快速开始](https://jin-yufeng.github.io/mp-html/#/overview/quickstart) 了解更多
 
 ## 组件属性
 
 | 属性 | 类型 | 默认值 | 说明 |
 |:---:|:---:|:---:|---|
-| container-style | String |  | 容器的样式（[2.1.0+](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog#v210)） |
+| container-style | String |  | 容器的样式（[2.1.0+](https://jin-yufeng.github.io/mp-html/#/changelog/changelog#v210)） |
 | content | String |  | 用于渲染的 html 字符串 |
 | copy-link | Boolean | true | 是否允许外部链接被点击时自动复制 |
 | domain | String |  | 主域名（用于链接拼接） |
@@ -154,7 +154,7 @@
 | tag-style | Object |  | 设置标签的默认样式 |
 | use-anchor | Boolean | false | 是否使用锚点链接 |
 
-查看 [属性](https://jin-yufeng.gitee.io/mp-html/#/basic/prop) 了解更多
+查看 [属性](https://jin-yufeng.github.io/mp-html/#/basic/prop) 了解更多
 
 ## 组件事件
 
@@ -166,7 +166,7 @@
 | imgtap | 图片被点击时 |
 | linktap | 链接被点击时 |
 
-查看 [事件](https://jin-yufeng.gitee.io/mp-html/#/basic/event) 了解更多
+查看 [事件](https://jin-yufeng.github.io/mp-html/#/basic/event) 了解更多
 
 ## api
 组件实例上提供了一些 `api` 方法可供调用
@@ -179,10 +179,10 @@
 | getRect | 获取富文本内容的位置和大小 |
 | setContent | 设置富文本内容 |
 | imgList | 获取所有图片的数组 |
-| pauseMedia | 暂停播放音视频（[2.2.2+](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog#v222)） |
-| setPlaybackRate | 设置音视频播放速率（[2.4.0+](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog#v240)） |
+| pauseMedia | 暂停播放音视频（[2.2.2+](https://jin-yufeng.github.io/mp-html/#/changelog/changelog#v222)） |
+| setPlaybackRate | 设置音视频播放速率（[2.4.0+](https://jin-yufeng.github.io/mp-html/#/changelog/changelog#v240)） |
 
-查看 [api](https://jin-yufeng.gitee.io/mp-html/#/advanced/api) 了解更多
+查看 [api](https://jin-yufeng.github.io/mp-html/#/advanced/api) 了解更多
 
 ## 插件扩展  
 除基本功能外，本组件还提供了丰富的扩展，可按照需要选用
@@ -201,7 +201,7 @@
 | latex | 渲染 latex 公式 by [@Zeng-J](https://github.com/Zeng-J) |
 | card | 卡片展示 by [@whoooami](https://github.com/whoooami) |
 
-查看 [插件](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin) 了解更多
+查看 [插件](https://jin-yufeng.github.io/mp-html/#/advanced/plugin) 了解更多
 
 ## 使用案例
 
@@ -235,6 +235,14 @@
   ![支持](docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.5.1 (20250420)
+  1. `U` `uni-app` 包适配鸿蒙 `APP` [详细](https://github.com/jin-yufeng/mp-html/issues/615)
+  2. `U` 微信小程序替换废弃 `api` `getSystemInfoSync` [详细](https://github.com/jin-yufeng/mp-html/issues/613)
+  3. `F` 修复了微信小程序 `glass-easel` 框架下真机换行异常的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/607) by [@PaperStrike](https://github.com/PaperStrike)
+  4. `F` 修复了 `uni-app` 包 `app` 端播放视频可能报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/617)
+  5. `F` 修复了 `latex` 插件可能出现 `xxx can be used only in display mode` 的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/632)
+  6. `F` 修复了 `uni-app` 包 `latex` 公式可能不显示的问题  [#599](https://github.com/jin-yufeng/mp-html/issues/599)、[#627](https://github.com/jin-yufeng/mp-html/issues/627)
+
 - v2.5.0 (20240422)
   1. `U` `play` 事件增加返回 `src` 等信息 [详细](https://github.com/jin-yufeng/mp-html/issues/526)
   2. `U` `preview-img` 属性支持设置为 `all` 开启 `base64` 图片预览 [详细](https://github.com/jin-yufeng/mp-html/issues/536)
@@ -248,17 +256,6 @@
   10. `F` 修复了 `editable` 插件 `uni-app` 包 `vue3` `h5` 端点击图片报错的问题
   11. `F` 修复了 `editable` 插件 `uni-app` 包点击表格没有菜单栏的问题
 
-- v2.4.3 (20240121)
-  1. `A` 增加 [card](https://jin-yufeng.gitee.io/mp-html/#/advanced/plugin#card) 插件 [详细](https://github.com/jin-yufeng/mp-html/pull/533) by [@whoooami](https://github.com/whoooami)
-  2. `F` 修复了 `svg` 中包含 `foreignobject` 可能不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/523)
-  3. `F` 修复了合并单元格的表格部分情况下显示不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/561)
-  4. `F` 修复了 `img` 标签设置 `object-fit` 无效的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/567)
-  5. `F` 修复了 `latex` 插件公式会换行的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/540) 
-  6. `F` 修复了 `uni-app` 包 `editable` 和 `audio` 插件共用时点击 `audio` 无法编辑的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/529) by [@whoooami](https://github.com/whoooami)
-  7. `F` 修复了支付宝小程序设置了宽高的图片可能显示不正常的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/544)
-  8. `F` 修复了 `uni-app` 包微信小程序部分情况下图片会报错 `replace of undefined` 的问题
-  9. `F` 修复了 `uni-app` 包快手小程序图片不显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/571)
+  从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.github.io/mp-html/#/changelog/changelog?id=v200)
 
-  从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog?id=v200)
-
-查看 [更新日志](https://jin-yufeng.gitee.io/mp-html/#/changelog/changelog) 了解更多
+查看 [更新日志](https://jin-yufeng.github.io/mp-html/#/changelog/changelog) 了解更多

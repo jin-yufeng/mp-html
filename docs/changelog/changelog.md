@@ -1,5 +1,15 @@
 # 📖 更新日志 :id=changelog
 
+## v2.5.1
+发布时间：*2025-04-20*  
+主要更新：
+1. `U` `uni-app` 包适配鸿蒙 `APP` [详细](https://github.com/jin-yufeng/mp-html/issues/615)
+2. `U` 微信小程序替换废弃 `api` `getSystemInfoSync` [详细](https://github.com/jin-yufeng/mp-html/issues/613)
+3. `F` 修复了微信小程序 `glass-easel` 框架下真机换行异常的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/607) by [@PaperStrike](https://github.com/PaperStrike)
+4. `F` 修复了 `uni-app` 包 `app` 端播放视频可能报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/617)
+5. `F` 修复了 [latex](advanced/plugin#latex) 插件可能出现 `xxx can be used only in display mode` 的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/632)
+6. `F` 修复了 `uni-app` 包 [latex](advanced/plugin#latex) 公式可能不显示的问题  [#599](https://github.com/jin-yufeng/mp-html/issues/599)、[#627](https://github.com/jin-yufeng/mp-html/issues/627)
+
 ## v2.5.0
 发布时间：*2024-04-22*  
 主要更新：

@@ -7,6 +7,17 @@ const simulate = require('miniprogram-simulate')
 const html = require('./content') // 测试 html
 const dist = '../dev/mp-weixin/components/mp-html/index' // 组件目录
 
+// 新 api 模拟
+wx.getWindowInfo = function () {
+  return {
+    windowWidth: 414
+  }
+}
+wx.getDeviceInfo = function () {
+  return {
+    system: 'iOS 10.0.1'
+  }
+}
 const mpHtml = simulate.load(path.resolve(__dirname, dist), 'mp-html')
 
 // 渲染测试
