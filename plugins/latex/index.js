@@ -24,9 +24,9 @@ Latex.prototype.onParse = function (node, vm) {
               text: part[i]
             })
           } else {
-            const nodes = parse.default(part[i])
             if (status === 1) {
               // 行内公式
+              const nodes = parse.default(part[i])
               children.push({
                 name: 'span',
                 attrs: {},
@@ -36,6 +36,9 @@ Latex.prototype.onParse = function (node, vm) {
               })
             } else {
               // 块公式
+              const nodes = parse.default(part[i], {
+                displayMode: true
+              })
               children.push({
                 name: 'div',
                 attrs: {
