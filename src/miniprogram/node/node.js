@@ -5,7 +5,7 @@ Component({
   data: {
     ctrl: {}, // 控制信号
     // #ifdef MP-WEIXIN
-    isiOS: wx.getSystemInfoSync().system.includes('iOS')
+    isiOS: wx.getDeviceInfo().system.includes('iOS')
     // #endif
   },
   properties: {
