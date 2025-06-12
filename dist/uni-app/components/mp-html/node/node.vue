@@ -67,7 +67,7 @@
           </block>
         </view>
       </view>
-      
+
       <!-- 富文本 -->
       <!-- #ifdef H5 || ((MP-WEIXIN || MP-QQ || APP-PLUS || MP-360) && VUE2) -->
       <rich-text v-else-if="!n.c&&!handler.isInline(n.name, n.attrs.style)" :id="n.attrs.id" :style="n.f" :user-select="opts[4]" :nodes="[n]" />
@@ -128,7 +128,7 @@ export default {
     return {
       ctrl: {},
       // #ifdef MP-WEIXIN
-      isiOS: uni.getSystemInfoSync().system.includes('iOS')
+      isiOS: uni.getDeviceInfo().system.includes('iOS')
       // #endif
     }
   },
