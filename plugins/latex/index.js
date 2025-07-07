@@ -10,8 +10,13 @@ function Latex () {
 
 Latex.prototype.onParse = function (node, vm) {
   // $...$包裹的内容为latex公式
-  if (!vm.options.editable && node.type === 'text' && node.text.includes('$')) {
-    const part = node.text.split(/(\${1,2})/)
+  if (!vm.options.editable && node.type === 'text' && (node.text.includes('$') || node.text.includes('\[') && node.text.includes('\\'))) {
+    let part
+    if (node.text.includes('\[')) {
+      part = node.text.split(/(\[|\])/)
+    } else {
+      part = node.text.split(/(\${1,2})/)
+    }
     const children = []
     let status = 0
     for (let i = 0; i < part.length; i++) {
@@ -26,7 +31,11 @@ Latex.prototype.onParse = function (node, vm) {
           } else {
             if (status === 1) {
               // 行内公式
-              const nodes = parse.default(part[i])
+              // 处理百分号和负间距
+              let formula = part[i].replace(/(?<!\\)%/g, '\\%')
+              // 匹配 LaTeX 中的 \! 和 \, 命令
+              formula = formula.replace(/\!|\\,/g, '')
+              const nodes = parse.default(formula)
               children.push({
                 name: 'span',
                 attrs: {},
@@ -36,7 +45,11 @@ Latex.prototype.onParse = function (node, vm) {
               })
             } else {
               // 块公式
-              const nodes = parse.default(part[i], {
+              // 处理百分号和负间距
+              let formula = part[i].replace(/(?<!\\)%/g, '\\%')
+              // 匹配 LaTeX 中的 \! 和 \, 命令
+              formula = formula.replace(/\!|\\,/g, '')
+              const nodes = parse.default(formula, {
                 displayMode: true
               })
               children.push({
@@ -55,7 +68,7 @@ Latex.prototype.onParse = function (node, vm) {
           // 行内公式
           status = 1
           part[i + 2] = ''
-        } else if (part[i] === '$$' && part[i + 2] === '$$') {
+        } else if ((part[i] === '$$' && part[i + 2] === '$$') || (part[i].includes('[') && part[i + 2].includes(']'))) {
           // 块公式
           status = 2
           part[i + 2] = ''
