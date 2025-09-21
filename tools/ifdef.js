@@ -35,7 +35,7 @@ module.exports = function (platform) {
           content = content.replace('"undefined"!=typeof module&&module.exports&&(module.exports=Prism),', 'export default Prism;')
         } else if (file.extname === '.js' && !file.relative.includes('static')) {
           content = content.replace(/module.exports\s*=\s*/, 'export default ')
-            .replace(/const\s+([^\s=]+)\s*=\s*require\(([^)]+)\)/g, 'import $1 from $2')
+            .replace(/const\s+([^=]+)\s*=\s*require\(([^)]+)\)/g, 'import $1 from $2')
         }
         file.contents = Buffer.from(content)
       } else {
