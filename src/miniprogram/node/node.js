@@ -4,12 +4,64 @@
 Component({
   data: {
     ctrl: {}, // 控制信号
+    nodes: [],
     // #ifdef MP-WEIXIN
     isiOS: wx.getDeviceInfo().system.includes('iOS')
     // #endif
   },
   properties: {
-    childs: Array, // 子节点列表
+    childs: {
+      type: Array,
+      value: [],
+      observer (nodes) {
+        const data = {}
+        function diff (a, b, path) {
+          let alen = a.length
+          // 列表变短，将多余的部分清空
+          while (alen > b.length) {
+            if (Object.keys(a[alen - 1]).length !== 0) {
+              data[path + '[' + (alen - 1) + ']'] = {}
+            }
+            alen -= 1
+          }
+          // 列表变长，插入新增的部分
+          while (alen < b.length) {
+            data[path + '[' + alen + ']'] = b[alen]
+            alen += 1
+          }
+          // 比较现有的部分
+          for (let i = 0; i < Math.min(a.length, b.length); i++) {
+            for (const key of Object.keys(a[i]).concat(Object.keys(b[i]))) {
+              if (Array.isArray(b[i][key])) {
+                if (!Array.isArray(a[i][key])) {
+                  data[path + '[' + i + '].' + key] = b[i][key]
+                } else {
+                  diff(a[i][key], b[i][key], path + '[' + i + '].' + key)
+                }
+              } else {
+                if (typeof b[i][key] !== 'object') {
+                  if (a[i][key] !== b[i][key]) {
+                    data[path + '[' + i + ']'] = b[i]
+                  }
+                } else {
+                  if (a[i][key] === undefined || b[i][key] === undefined) {
+                    data[path + '[' + i + '].' + key] = b[i][key]
+                  } else {
+                    for (const subKey of Object.keys(a[i][key]).concat(Object.keys(b[i][key]))) {
+                      if (a[i][key][subKey] !== b[i][key][subKey]) {
+                        data[path + '[' + i + '].' + key + '.' + subKey] = b[i][key][subKey]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        diff(this.data.nodes, nodes, 'nodes')
+        this.setData(data)
+      }
+    }, // 子节点列表
     opts: Array // 设置 [是否开启懒加载, 加载中占位图, 错误占位图, 是否使用长按菜单]
   },
   options: {
