@@ -141,6 +141,22 @@ Component({
         }
       }
     },
+    /**
+     * @description 音视频其他事件
+     * @param {Event} e
+     */
+    mediaEvent (e) {
+      const i = e.target.dataset.i
+      const node = this.getNode(i)
+      this.root.triggerEvent(e.type, {
+        ...e.detail,
+        source: node.name,
+        attrs: {
+          ...node.attrs,
+          src: node.src[this.data.ctrl[i] || 0]
+        }
+      })
+    },
 
     /**
      * @description 图片点击事件

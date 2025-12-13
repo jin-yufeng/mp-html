@@ -41,7 +41,7 @@
       <view v-else-if="n.html" :id="n.attrs.id" :class="'_video '+n.attrs.class" :style="n.attrs.style" v-html="n.html" :data-i="i" @vplay.stop="play" />
       <!-- #endif -->
       <!-- #ifndef APP-PLUS -->
-      <video v-else-if="n.name==='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay" :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :object-fit="n.attrs['object-fit']" :poster="n.attrs.poster" :src="n.src[ctrl[i]||0]" :data-i="i" @play="play" @error="mediaError" />
+      <video v-else-if="n.name==='video'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :autoplay="n.attrs.autoplay" :controls="n.attrs.controls" :loop="n.attrs.loop" :muted="n.attrs.muted" :object-fit="n.attrs['object-fit']" :poster="n.attrs.poster" :src="n.src[ctrl[i]||0]" :data-i="i" @play="play" @pause="mediaEvent" @fullscreenchange="mediaEvent" @error="mediaError" />
       <!-- #endif -->
       <!-- #ifdef H5 || APP-PLUS -->
       <iframe v-else-if="n.name==='iframe'" :style="n.attrs.style" :allowfullscreen="n.attrs.allowfullscreen" :frameborder="n.attrs.frameborder" :src="n.attrs.src" />
@@ -49,7 +49,7 @@
       <!-- #endif -->
       <!-- #ifndef MP-TOUTIAO || ((H5 || APP-PLUS) && VUE3) -->
       <!-- 音频 -->
-      <audio v-else-if="n.name==='audio'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :author="n.attrs.author" :controls="n.attrs.controls" :loop="n.attrs.loop" :name="n.attrs.name" :poster="n.attrs.poster" :src="n.src[ctrl[i]||0]" :data-i="i" @play="play" @error="mediaError" />
+      <audio v-else-if="n.name==='audio'" :id="n.attrs.id" :class="n.attrs.class" :style="n.attrs.style" :author="n.attrs.author" :controls="n.attrs.controls" :loop="n.attrs.loop" :name="n.attrs.name" :poster="n.attrs.poster" :src="n.src[ctrl[i]||0]" :data-i="i" @play="play" @pause="mediaEvent" @error="mediaError" />
       <!-- #endif -->
       <view v-else-if="(n.name==='table'&&n.c)||n.name==='li'" :id="n.attrs.id" :class="'_'+n.name+' '+n.attrs.class" :style="n.attrs.style">
         <node v-if="n.name==='li'" :childs="n.children" :opts="opts" />
@@ -236,6 +236,22 @@ export default {
         }
       }
       // #endif
+    },
+    /**
+     * @description 音视频其他事件
+     * @param {Event} e
+     */
+    mediaEvent (e) {
+      const i = e.currentTarget.dataset.i
+      const node = this.childs[i]
+      this.root.$emit(e.type, {
+        ...e.detail,
+        source: node.name,
+        attrs: {
+          ...node.attrs,
+          src: node.src[this.ctrl[i] || 0]
+        }
+      })
     },
 
     /**

@@ -36,6 +36,8 @@
  * @event {Function} linktap 链接被点击时触发
  * @event {Function} play 音视频播放时触发
  * @event {Function} error 媒体加载出错时触发
+ * @event {Function} pause 音视频暂停时触发
+ * @event {Function} fullscreenchange 视频全屏状态变化时触发
  */
 // #ifndef APP-PLUS-NVUE
 import node from './node/node'
