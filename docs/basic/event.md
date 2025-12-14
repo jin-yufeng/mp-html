@@ -171,3 +171,19 @@ Page({
   }
 })
 ```
+
+## pause
+
+?> [2.5.2](changelog/changelog#v252) 版本起支持
+
+触发时机：音视频暂停时  
+
+返回值：一个 *object*，其中 *source* 为播放来源（包括 *video*、*audio*），*attrs* 为该标签的属性列表（包含 *src* 等信息）
+
+## fullscreenchange
+
+?> [2.5.2](changelog/changelog#v252) 版本起支持
+
+触发时机：视频全屏状态变化时  
+
+返回值：一个 *object*，其中 *fullScreen* 为是否全屏（*true* / *false*），*direction* 为方向（*vertical* / *horizontal*），*attrs* 为该视频的属性列表（包含 *src* 等信息）

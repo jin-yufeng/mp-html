@@ -117,7 +117,9 @@
 | error | 发生渲染错误时 |
 | imgtap | 图片被点击时 |
 | linktap | 链接被点击时 |
-| play | 音视频播放时 |
+| play | 音视频播放时（[2.3.0+](https://jin-yufeng.github.io/mp-html/#/changelog/changelog#v230)） |
+| pause | 音视频暂停时（[2.5.2+](https://jin-yufeng.github.io/mp-html/#/changelog/changelog#v252)） |
+| fullscreenchange | 视频全屏变化时（[2.5.2+](https://jin-yufeng.github.io/mp-html/#/changelog/changelog#v252)） |
 
 查看 [事件](https://jin-yufeng.github.io/mp-html/#/basic/event) 了解更多
 

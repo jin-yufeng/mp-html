@@ -106,6 +106,12 @@
 3. *自动添加控件*  
    对于既没有设置 *controls* 也没有设置 *autoplay* 的标签将自动把 *controls* 属性设置为 *true*，避免无法播放，影响体验  
 
+## ⌨️ 流式输出 :id=stream
+
+本组件从 [2.5.2](changelog/changelog#v252) 版本起对流式输出做了性能优化，实现了差量更新，可以避免流式更新时的闪烁和卡顿问题。[示例项目](https://github.com/jin-yufeng/mp-html/issues/657#issuecomment-3361391352)  
+
+<img src="/mp-html/assets/tutorials/stream.gif" width="300" alt="流式输出">
+
 ## 📡 样式设置 :id=style
 样式（*css*）是富文本中最重要的内容之一，本组件提供多种样式设置的方法，可以进行灵活的设置  
 
@@ -115,7 +121,7 @@
    这是本组件独有的一种样式设置方式，可以给某一种标签名设置默认的样式  
    可以通过 [tag-style](basic/prop#tag-style) 属性设置，具体用法见对应说明  
 3. *外部样式*  
-   如果希望将某些样式固定的用于渲染，可以添加到 *tools/config.js* 的 *externStyle* 字段中，该方法仅支持 *class* 选择器（[2.1.0](changelog/changlog#v210) 版本起支持标签名选择器），优先级最低，具体见 [个性化](overview/quickstart#setting)  
+   如果希望将某些样式固定的用于渲染，可以添加到 *tools/config.js* 的 *externStyle* 字段中，该方法仅支持 *class* 选择器（[2.1.0](changelog/changelog#v210) 版本起支持标签名选择器），优先级最低，具体见 [个性化](overview/quickstart#setting)  
 
 需要调整优先级时，可以通过设置 *!important* 实现  
 

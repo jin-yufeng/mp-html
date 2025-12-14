@@ -1,5 +1,14 @@
 # 📖 更新日志 :id=changelog
 
+## v2.5.2
+发布时间：*2025-12-14*
+1. `A` 增加了音视频暂停 [pause](basic/event#pause) 和视频全屏 [fullscreenchange](basic/event#fullscreenchange) 事件 [#495](https://github.com/jin-yufeng/mp-html/issues/495) [#595](https://github.com/jin-yufeng/mp-html/issues/595)
+2. `U` 优化了 [流式输出](overview/feature#stream) 效果，通过差量更新解决闪烁问题 [详细](https://github.com/jin-yufeng/mp-html/issues/657) 
+3. `U` [latex](advanced/plugin#latex) 插件更新字体文件 [详细](https://github.com/jin-yufeng/mp-html/pull/647) by [@JiuyeXD](https://github.com/JiuyeXD) 
+4. `U` 更新 [markdown](advanced/plugin#markdown) 插件中 `marked.js` 版本 [详细](https://github.com/jin-yufeng/mp-html/issues/672)
+5. `U` 微信小程序替换遗漏的废弃 `api` `getSystemInfoSync` [详细](https://github.com/jin-yufeng/mp-html/pull/653) by [@zcSkr](https://github.com/zcSkr)
+6. `F` 修复了 [markdown](advanced/plugin#markdown) 插件加粗文本遇到中文符号无效的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/664) by [@qp666](https://github.com/qp666)
+
 ## v2.5.1
 发布时间：*2025-04-20*  
 主要更新：

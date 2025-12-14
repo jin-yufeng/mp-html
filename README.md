@@ -165,6 +165,9 @@
 | error | 发生渲染错误时 |
 | imgtap | 图片被点击时 |
 | linktap | 链接被点击时 |
+| play | 音视频播放时（[2.3.0+](https://jin-yufeng.github.io/mp-html/#/changelog/changelog#v230)） |
+| pause | 音视频暂停时（[2.5.2+](https://jin-yufeng.github.io/mp-html/#/changelog/changelog#v252)） |
+| fullscreenchange | 视频全屏变化时（[2.5.2+](https://jin-yufeng.github.io/mp-html/#/changelog/changelog#v252)） |
 
 查看 [事件](https://jin-yufeng.github.io/mp-html/#/basic/event) 了解更多
 
@@ -235,6 +238,14 @@
   ![支持](docs/assets/sponsor.png)   
 
 ## 更新日志
+- v2.5.2 (20251214)
+  1. `A` 增加了音视频暂停 [pause](https://jin-yufeng.github.io/mp-html/#/basic/event?id=pause) 和视频全屏 [fullscreenchange](https://jin-yufeng.github.io/mp-html/#/basic/event?id=fullscreenchange) 事件 [#495](https://github.com/jin-yufeng/mp-html/issues/495) [#595](https://github.com/jin-yufeng/mp-html/issues/595)
+  2. `U` 优化了 [流式输出](https://jin-yufeng.github.io/mp-html/#/overview/feature?id=stream) 效果，通过差量更新解决闪烁问题 [详细](https://github.com/jin-yufeng/mp-html/issues/657) 
+  3. `U` `latex` 插件更新字体文件 [详细](https://github.com/jin-yufeng/mp-html/pull/647) by [@JiuyeXD](https://github.com/JiuyeXD) 
+  4. `U` 更新 `markdown` 插件中 `marked.js` 版本 [详细](https://github.com/jin-yufeng/mp-html/issues/672)
+  5. `U` 微信小程序替换遗漏的废弃 `api` `getSystemInfoSync` [详细](https://github.com/jin-yufeng/mp-html/pull/653) by [@zcSkr](https://github.com/zcSkr)
+  6. `F` 修复了 `markdown` 插件加粗文本遇到中文符号无效的问题 [详细](https://github.com/jin-yufeng/mp-html/pull/664) by [@qp666](https://github.com/qp666)
+
 - v2.5.1 (20250420)
   1. `U` `uni-app` 包适配鸿蒙 `APP` [详细](https://github.com/jin-yufeng/mp-html/issues/615)
   2. `U` 微信小程序替换废弃 `api` `getSystemInfoSync` [详细](https://github.com/jin-yufeng/mp-html/issues/613)
@@ -242,19 +253,6 @@
   4. `F` 修复了 `uni-app` 包 `app` 端播放视频可能报错的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/617)
   5. `F` 修复了 `latex` 插件可能出现 `xxx can be used only in display mode` 的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/632)
   6. `F` 修复了 `uni-app` 包 `latex` 公式可能不显示的问题  [#599](https://github.com/jin-yufeng/mp-html/issues/599)、[#627](https://github.com/jin-yufeng/mp-html/issues/627)
-
-- v2.5.0 (20240422)
-  1. `U` `play` 事件增加返回 `src` 等信息 [详细](https://github.com/jin-yufeng/mp-html/issues/526)
-  2. `U` `preview-img` 属性支持设置为 `all` 开启 `base64` 图片预览 [详细](https://github.com/jin-yufeng/mp-html/issues/536)
-  3. `U` `editable` 插件增加简易模式（点击文字直接编辑）
-  4. `U` `latex` 插件支持块级公式 [详细](https://github.com/jin-yufeng/mp-html/issues/582)
-  5. `F` 修复了表格部分情况下背景丢失的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/587)
-  6. `F` 修复了部分 `svg` 无法显示的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/591)
-  7. `F` 修复了 `uni-app` 包 `h5` 和 `app` 端部分情况下样式无法识别的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/518)
-  8. `F` 修复了 `latex` 插件部分情况下显示不正确的问题 [详细](https://github.com/jin-yufeng/mp-html/issues/580)
-  9. `F` 修复了 `editable` 插件表格无法删除的问题
-  10. `F` 修复了 `editable` 插件 `uni-app` 包 `vue3` `h5` 端点击图片报错的问题
-  11. `F` 修复了 `editable` 插件 `uni-app` 包点击表格没有菜单栏的问题
 
   从 `1.x` 的升级方法可见 [更新指南](https://jin-yufeng.github.io/mp-html/#/changelog/changelog?id=v200)
 

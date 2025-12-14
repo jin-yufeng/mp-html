@@ -132,6 +132,9 @@ console.log('11')
   await comp.instance.getRect()
 
   await comp.instance.navigateTo('anchor') // 基于页面跳转
+  try {
+    await comp.instance.navigateTo('anchor2') // 锚点不存在
+  } catch {}
   comp.instance.in(page.instance) // 错误设置
   comp.instance.in(page.instance, '#scroll', 'top')
   await comp.instance.navigateTo('anchor') // 基于 scroll-view 滚动
@@ -157,8 +160,9 @@ console.log('11')
     lazyLoad: false
   })
   await simulate.sleep(50)
-  comp.instance.setContent('<div>Hello world!</div>')
+  comp.instance.setContent('<div style="color:red">Hello world!</div>')
   simulate.sleep(50)
+  comp.instance.setContent('<div style="color:green">Hello world!</div>') // 差量更新
 
   // 长内容测试
   let content = '<div>1</div>'.repeat(50) + '<div>'
@@ -312,6 +316,16 @@ test('event', async () => {
       }
     })
   }
+  // 视频暂停
+  node.instance.mediaEvent({
+    type: 'pause',
+    target: {
+      id: 'v2',
+      dataset: {
+        i: '6'
+      }
+    }
+  })
   // 视频倍速播放
   comp.instance.setPlaybackRate(1.5)
   node.instance.play({

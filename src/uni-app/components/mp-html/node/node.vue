@@ -128,7 +128,7 @@ export default {
       ctrl: {},
       nodes: [],
       // #ifdef MP-WEIXIN
-      isiOS: uni.getDeviceInfo().system.includes('iOS')
+      isiOS: (uni.canIUse('getDeviceInfo') ? uni.getDeviceInfo() : uni.getSystemInfoSync()).system.includes('iOS')
       // #endif
     }
   },
