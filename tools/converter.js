@@ -165,7 +165,7 @@ module.exports = function (platform) {
                   if (typeof props[item].value === 'boolean') {
                     propsStr += props[item].value ? '!0' : '!1'
                   } else {
-                    propsStr += props[item].value
+                    propsStr += JSON.stringify(props[item].value)
                   }
                 } else {
                   // 没有设置默认值
