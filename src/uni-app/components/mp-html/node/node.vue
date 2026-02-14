@@ -148,7 +148,7 @@ export default {
 		  handler (nodes) {
         // 列表缩短会刷新整个列表，因此进行空填充
         while (this.nodes.length > nodes.length) {
-			    nodes.push({})
+			    nodes.push({ attrs: {} })
 		    }
         this.nodes = nodes
       },
