@@ -149,6 +149,18 @@ function mergeNodes (nodes) {
 }
 
 /**
+ * @description 截取含emoji的字符传
+ * @param {string} str 要截取的字符串
+ * @param {number} start 开始
+ * @param {number} end 结束
+ */
+function substringWithEmojis (str, start, end) {
+  const characters = Array.from(str)
+  const slicedCharacters = characters.slice(start, end)
+  return slicedCharacters.join('')
+}
+
+/**
  * @description html 解析器
  * @param {Object} vm 组件实例
  */
@@ -1084,7 +1096,7 @@ function Lexer (handler) {
  * @param {String} content 要解析的文本
  */
 Lexer.prototype.parse = function (content) {
-  this.content = content || ''
+  this.content = Array.from(content) || [] // 从纯字符转成Array，后续substring使用substringWithEmojis进行处理，解决emoji在content.length中占2长度，substring时却只算1长度的问题
   this.i = 0 // 标记解析位置
   this.start = 0 // 标记一个单词的开始位置
   this.state = this.text // 当前状态
@@ -1103,7 +1115,7 @@ Lexer.prototype.checkClose = function (method) {
   const selfClose = this.content[this.i] === '/'
   if (this.content[this.i] === '>' || (selfClose && this.content[this.i + 1] === '>')) {
     if (method) {
-      this.handler[method](this.content.substring(this.start, this.i))
+      this.handler[method](substringWithEmojis(this.content, this.start, this.i))
     }
     this.i += selfClose ? 2 : 1
     this.start = this.i
@@ -1132,7 +1144,7 @@ Lexer.prototype.text = function () {
   if (this.i === -1) {
     // 没有标签了
     if (this.start < this.content.length) {
-      this.handler.onText(this.content.substring(this.start, this.content.length))
+      this.handler.onText(substringWithEmojis(this.content, this.start, this.content.length))
     }
     return
   }
@@ -1140,13 +1152,13 @@ Lexer.prototype.text = function () {
   if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
     // 标签开头
     if (this.start !== this.i) {
-      this.handler.onText(this.content.substring(this.start, this.i))
+      this.handler.onText(substringWithEmojis(this.content, this.start, this.i))
     }
     this.start = ++this.i
     this.state = this.tagName
   } else if (c === '/' || c === '!' || c === '?') {
     if (this.start !== this.i) {
-      this.handler.onText(this.content.substring(this.start, this.i))
+      this.handler.onText(substringWithEmojis(this.content, this.start, this.i))
     }
     const next = this.content[this.i + 2]
     if (c === '/' && ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z'))) {
@@ -1178,7 +1190,7 @@ Lexer.prototype.text = function () {
 Lexer.prototype.tagName = function () {
   if (blankChar[this.content[this.i]]) {
     // 解析到标签名
-    this.handler.onTagName(this.content.substring(this.start, this.i))
+    this.handler.onTagName(substringWithEmojis(this.content, this.start, this.i))
     while (blankChar[this.content[++this.i]]);
     if (this.i < this.content.length && !this.checkClose()) {
       this.start = this.i
@@ -1197,7 +1209,7 @@ Lexer.prototype.attrName = function () {
   let c = this.content[this.i]
   if (blankChar[c] || c === '=') {
     // 解析到属性名
-    this.handler.onAttrName(this.content.substring(this.start, this.i))
+    this.handler.onAttrName(substringWithEmojis(this.content, this.start, this.i))
     let needVal = c === '='
     const len = this.content.length
     while (++this.i < len) {
@@ -1236,12 +1248,12 @@ Lexer.prototype.attrVal = function () {
     this.start = ++this.i
     this.i = this.content.indexOf(c, this.i)
     if (this.i === -1) return
-    this.handler.onAttrVal(this.content.substring(this.start, this.i))
+    this.handler.onAttrVal(substringWithEmojis(this.content, this.start, this.i))
   } else {
     // 没有冒号的属性
     for (; this.i < len; this.i++) {
       if (blankChar[this.content[this.i]]) {
-        this.handler.onAttrVal(this.content.substring(this.start, this.i))
+        this.handler.onAttrVal(substringWithEmojis(this.content, this.start, this.i))
         break
       } else if (this.checkClose('onAttrVal')) return
     }
@@ -1261,7 +1273,7 @@ Lexer.prototype.attrVal = function () {
 Lexer.prototype.endTag = function () {
   const c = this.content[this.i]
   if (blankChar[c] || c === '>' || c === '/') {
-    this.handler.onCloseTag(this.content.substring(this.start, this.i))
+    this.handler.onCloseTag(substringWithEmojis(this.content, this.start, this.i))
     if (c !== '>') {
       this.i = this.content.indexOf('>', this.i)
       if (this.i === -1) return
