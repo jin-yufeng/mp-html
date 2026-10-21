@@ -855,16 +855,13 @@ Parser.prototype.popNode = function () {
             } else {
               style += ';justify-content:center'
             }
-            // 设置水平对齐
-            start = style.indexOf('text-align')
-            if (start !== -1) {
-              const val = style.substr(start + 11, 10)
-              if (val.includes('center')) {
-                style += ';justify-content: center'
-              } else if (val.includes('right')) {
-                style += ';justify-content: right'
-              }
-            }
+            // 内容单独放入普通流容器，避免文字和链接分别成为 flex 项
+            td.children = [{
+              name: 'div',
+              attrs: { style: 'width:100%' },
+              children: td.children,
+              c: 1
+            }]
             style = (border ? `;border:${border}px ${borderstyle || 'solid'} ${bordercolor || 'gray'}` + (spacing ? '' : ';border-right:0;border-bottom:0') : '') + (padding ? `;padding:${padding}px` : '') + ';' + style
             // 处理列合并
             if (td.attrs.colspan) {
