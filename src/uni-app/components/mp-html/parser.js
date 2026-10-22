@@ -132,7 +132,10 @@ function decodeEntity (str, amp) {
       // &#123; 形式的实体
       code = parseInt((str[i + 2] === 'x' ? '0' : '') + str.substring(i + 2, j))
       if (!isNaN(code)) {
-        str = str.substr(0, i) + String.fromCharCode(code) + str.substr(j + 1)
+        const value = code > 0xffff && code <= 0x10ffff
+          ? String.fromCharCode(0xd800 + ((code - 0x10000) >> 10), 0xdc00 + ((code - 0x10000) & 0x3ff))
+          : String.fromCharCode(code)
+        str = str.substr(0, i) + value + str.substr(j + 1)
       }
     } else {
       // &nbsp; 形式的实体
