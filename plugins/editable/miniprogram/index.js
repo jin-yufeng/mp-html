@@ -15,11 +15,11 @@ function Editable (vm) {
    * @param {Number} num 移动距离
    */
   const move = num => {
-    const item = this.editHistory[this.editI + num]
+    const item = this.editHistory[num < 0 ? this.editI : this.editI + 1]
     if (item) {
       this.editI += num
       vm.setData({
-        [item.key]: item.value
+        [item.key]: num < 0 ? item.oldValue : item.value
       })
     }
   }
@@ -36,37 +36,22 @@ function Editable (vm) {
    */
   vm._editVal = (path, oldVal, newVal, set) => {
     // 当前指针后的内容去除
-    while (this.editI < this.editHistory.length - 1) {
-      this.editHistory.pop()
-    }
+    this.editHistory.splice(this.editI + 1)
 
-    // 最多存储 30 条操作记录
-    while (this.editHistory.length > 30) {
-      this.editHistory.pop()
-      this.editI--
-    }
-
-    const last = this.editHistory[this.editHistory.length - 1]
-    if (!last || last.key !== path) {
-      if (last) {
-        // 去掉上一次的新值
-        this.editHistory.pop()
-        this.editI--
-      }
-      // 存入这一次的旧值
-      this.editHistory.push({
-        key: path,
-        value: oldVal
-      })
-      this.editI++
-    }
-
-    // 存入本次的新值
+    // 连续输入时，视图可能尚未同步到节点数据
+    const last = this.editHistory[this.editI]
+    // 每条操作同时保留旧值和新值，供撤销和重做使用
     this.editHistory.push({
       key: path,
+      oldValue: last && last.key === path ? last.value : oldVal,
       value: newVal
     })
-    this.editI++
+
+    // 最多存储最近 30 条操作记录
+    if (this.editHistory.length > 30) {
+      this.editHistory.shift()
+    }
+    this.editI = this.editHistory.length - 1
 
     // 更新到视图
     if (set) {
